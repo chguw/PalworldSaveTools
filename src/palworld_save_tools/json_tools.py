@@ -1,7 +1,23 @@
+import base64
 import json
 import math
 import uuid
 from palworld_save_tools.archive import UUID
+
+_BYTE_TAG = '~b'
+
+def _tag_bytes(obj: bytes) -> dict[str, str]:
+    return {_BYTE_TAG: base64.b64encode(obj).decode('ascii')}
+
+def _decode_byte_tags(obj):
+    if isinstance(obj, dict):
+        if len(obj) == 1 and _BYTE_TAG in obj:
+            return list(base64.b64decode(obj[_BYTE_TAG]))
+        return {k: _decode_byte_tags(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_decode_byte_tags(v) for v in obj]
+    return obj
+
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, UUID):
@@ -9,7 +25,7 @@ class CustomEncoder(json.JSONEncoder):
         if isinstance(obj, uuid.UUID):
             return str(obj)
         if isinstance(obj, (bytes, bytearray)):
-            return list(bytes(obj))
+            return _tag_bytes(bytes(obj))
         return super(CustomEncoder, self).default(obj)
 try:
     import orjson
@@ -19,7 +35,7 @@ try:
         if isinstance(obj, uuid.UUID):
             return str(obj)
         if isinstance(obj, (bytes, bytearray)):
-            return list(bytes(obj))
+            return _tag_bytes(bytes(obj))
         raise TypeError(f'Object of type {type(obj).__name__} is not JSON serializable')
     def _sanitize_nonfinite(obj):
         if isinstance(obj, float):
@@ -46,7 +62,8 @@ try:
             f.write(buf)
     def load(path):
         with open(path, 'rb') as f:
-            return orjson.loads(f.read())
+            data = orjson.loads(f.read())
+        return _decode_byte_tags(data)
 except ImportError:
     def dump(data, path, minify=False, allow_nan=True, **kwargs):
         with open(path, 'w', encoding='utf8') as f:
@@ -56,4 +73,5 @@ except ImportError:
             json.dump(data, f, indent=indent, cls=cls, allow_nan=allow_nan, ensure_ascii=ensure_ascii)
     def load(path):
         with open(path, 'r', encoding='utf8') as f:
-            return json.load(f)
+            data = json.load(f)
+        return _decode_byte_tags(data)
