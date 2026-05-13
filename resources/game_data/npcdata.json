@@ -1,0 +1,1882 @@
+{
+    "npcs": [
+        {
+            "name": "TestNPC",
+            "asset": "TestNPC",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Gunner",
+            "asset": "Hunter_Rifle",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Thug",
+            "asset": "Hunter_Handgun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Hunter",
+            "asset": "Hunter_Shotgun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Elite",
+            "asset": "Hunter_RocketLauncher",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Interceptor",
+            "asset": "Hunter_MissileLauncher",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Veteran",
+            "asset": "Hunter_GrenadeLauncher",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Thug",
+            "asset": "Hunter_Bat",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Grenadier",
+            "asset": "Hunter_Grenade",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Cleaner",
+            "asset": "Hunter_FlameThrower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Hunter_Fat_GatlingGun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Infantry",
+            "asset": "Police_Rifle",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Guard",
+            "asset": "Police_Handgun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Elite",
+            "asset": "Police_Shotgun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "MobuCitizen",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "MobuVillager",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Quest Client",
+            "asset": "QuestMan",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Wandering Merchant",
+            "asset": "SalesPerson",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Visitor",
+            "asset": "VisitingMerchant",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Weapons Dealer",
+            "asset": "WeaponsDealer",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "PalDealer",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "Inspector",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "PalTrader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "GoodwillAmbassador",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "Robbery_Leader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "Robbery_Minion",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Guard_Rifle",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Guard_Shotgun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "TestAssassin",
+            "asset": "TestAssassin",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Thug",
+            "asset": "Visitor_Hunter_Rifle",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Wandering Merchant",
+            "asset": "Visitor_Present",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Attack Chopper",
+            "asset": "SecurityDrone",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brothers of the Eternal Pyre Martyr",
+            "asset": "FireCult_Rifle",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brothers of the Eternal Pyre Martyr",
+            "asset": "FireCult_FlameThrower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Devout",
+            "asset": "Believer_Bat",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Devout",
+            "asset": "Believer_CrossBow",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Male_People02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Male_People03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Female_People02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Female_People03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Male_Trader01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Male_Trader02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Male_Trader03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Black Marketeer",
+            "asset": "Male_DarkTrader01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Male_DesertPeople01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Villager",
+            "asset": "Female_DesertPeople02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "MobuCitizen_Male",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Soldier01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Soldier01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Police_old",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PAL Genetic Research Unit Executioner",
+            "asset": "Male_Scientist01_LaserRifle",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PAL Genetic Research Unit Executioner",
+            "asset": "Scientist_FlameThrower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Wandering Merchant",
+            "asset": "SalesPerson_Desert",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Wandering Merchant",
+            "asset": "SalesPerson_Desert2",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "PalDealer_Desert",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Wandering Merchant",
+            "asset": "SalesPerson_Volcano",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Wandering Merchant",
+            "asset": "SalesPerson_Volcano2",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "PalDealer_Volcano",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Wandering Merchant",
+            "asset": "SalesPerson_Wander",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Merchant",
+            "asset": "RandomEventShop",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Gunner",
+            "asset": "Hunter_Rifle_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Thug",
+            "asset": "Hunter_Handgun_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Hunter",
+            "asset": "Hunter_Shotgun_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Elite",
+            "asset": "Hunter_RocketLauncher_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Thug",
+            "asset": "Hunter_Bat_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Grenadier",
+            "asset": "Hunter_Grenade_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Cleaner",
+            "asset": "Hunter_FlameThrower_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Hunter_Fat_GatlingGun_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Devout",
+            "asset": "Believer_Bat_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Devout",
+            "asset": "Believer_CrossBow_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brothers of the Eternal Pyre Martyr",
+            "asset": "FireCult_Rifle_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brothers of the Eternal Pyre Martyr",
+            "asset": "FireCult_FlameThrower_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PAL Genetic Research Unit Executioner",
+            "asset": "Male_Scientist01_LaserRifle_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PAL Genetic Research Unit Executioner",
+            "asset": "Scientist_FlameThrower_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Judicator",
+            "asset": "Believer_Fat_GatlingGun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Soldier02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Soldier02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Soldier03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Soldier03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Soldier04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Soldier04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Gunner",
+            "asset": "Hunter_Rifle_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Hunter",
+            "asset": "Hunter_Shotgun_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Grenadier",
+            "asset": "Hunter_Grenade_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Cleaner",
+            "asset": "Hunter_FlameThrower_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Elite",
+            "asset": "Hunter_RocketLauncher_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Veteran",
+            "asset": "Hunter_GrenadeLauncher_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Interceptor",
+            "asset": "Hunter_MissileLauncher_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Hunter_Fat_GatlingGun_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Medal Merchant",
+            "asset": "Male_DarkTrader02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Genin",
+            "asset": "Male_Ninja01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Jonin",
+            "asset": "Male_NinjaElite01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Hunter_Fat_GatlingGun_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Devout",
+            "asset": "Believer_CrossBow_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Genin",
+            "asset": "Ninja01_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Jonin",
+            "asset": "NinjaElite01_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Infantry",
+            "asset": "Police_Rifle_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Elite",
+            "asset": "Police_Shotgun_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Hawk",
+            "asset": "BOSS_Hunter_Rifle",
+            "icon": "/icons/npcs/T_BOSS_NPC_Hunter.webp",
+            "elements": {}
+        },
+        {
+            "name": "Grill",
+            "asset": "BOSS_Hunter_Fat_GatlingGun",
+            "icon": "/icons/npcs/T_BOSS_NPC_Hunter_Fat.webp",
+            "elements": {}
+        },
+        {
+            "name": "Ego",
+            "asset": "BOSS_Believer_CrossBow",
+            "icon": "/icons/npcs/T_BOSS_NPC_Believer.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brick",
+            "asset": "BOSS_Believer_Fat_GiantClub",
+            "icon": "/icons/npcs/T_BOSS_NPC_Believer_Fat.webp",
+            "elements": {}
+        },
+        {
+            "name": "Whip",
+            "asset": "BOSS_Police_Rifle",
+            "icon": "/icons/npcs/T_BOSS_NPC_Police.webp",
+            "elements": {}
+        },
+        {
+            "name": "Shadow",
+            "asset": "BOSS_FireCult_FlameThrower",
+            "icon": "/icons/npcs/T_BOSS_NPC_FireCult.webp",
+            "elements": {}
+        },
+        {
+            "name": "Whisk",
+            "asset": "BOSS_Scientist_LaserRifle",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Scientist.webp",
+            "elements": {}
+        },
+        {
+            "name": "Fumble",
+            "asset": "BOSS_Ninja",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Ninja.webp",
+            "elements": {}
+        },
+        {
+            "name": "Urchin",
+            "asset": "BOSS_Male_NinjaElite",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_NinjaElite.webp",
+            "elements": {}
+        },
+        {
+            "name": "Gnaw",
+            "asset": "BOSS_Viking",
+            "icon": "/icons/npcs/T_BOSS_NPC_Viking.webp",
+            "elements": {}
+        },
+        {
+            "name": "Cache",
+            "asset": "BOSS_VikingElite",
+            "icon": "/icons/npcs/T_BOSS_NPC_VikingElite.webp",
+            "elements": {}
+        },
+        {
+            "name": "Jade",
+            "asset": "BOSS_Female_Soldier",
+            "icon": "/icons/npcs/T_BOSS_NPC_Female_Soldier.webp",
+            "elements": {}
+        },
+        {
+            "name": "Dazzle",
+            "asset": "BOSS_Female_Soldier02",
+            "icon": "/icons/npcs/T_BOSS_NPC_Female_Soldier02.webp",
+            "elements": {}
+        },
+        {
+            "name": "Aloha",
+            "asset": "BOSS_Female_Soldier03",
+            "icon": "/icons/npcs/T_BOSS_NPC_Female_Soldier03.webp",
+            "elements": {}
+        },
+        {
+            "name": "Nimble",
+            "asset": "BOSS_Female_Soldier04",
+            "icon": "/icons/npcs/T_BOSS_NPC_Female_Soldier04.webp",
+            "elements": {}
+        },
+        {
+            "name": "Crash",
+            "asset": "BOSS_Male_Soldier",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Soldier.webp",
+            "elements": {}
+        },
+        {
+            "name": "Dart",
+            "asset": "BOSS_Male_Soldier02",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Soldier02.webp",
+            "elements": {}
+        },
+        {
+            "name": "Clint",
+            "asset": "BOSS_Male_Soldier03",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Soldier03.webp",
+            "elements": {}
+        },
+        {
+            "name": "Lasso",
+            "asset": "BOSS_Male_Soldier04",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Soldier04.webp",
+            "elements": {}
+        },
+        {
+            "name": "Flare",
+            "asset": "BOSS_Female_People",
+            "icon": "/icons/npcs/T_BOSS_NPC_Female.webp",
+            "elements": {}
+        },
+        {
+            "name": "Siren",
+            "asset": "BOSS_Female_People02",
+            "icon": "/icons/npcs/T_BOSS_NPC_Female02.webp",
+            "elements": {}
+        },
+        {
+            "name": "Turncoat",
+            "asset": "BOSS_Female_People03",
+            "icon": "/icons/npcs/T_BOSS_NPC_Female03.webp",
+            "elements": {}
+        },
+        {
+            "name": "Dyna",
+            "asset": "BOSS_Male_People",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male.webp",
+            "elements": {}
+        },
+        {
+            "name": "Mite",
+            "asset": "BOSS_Male_People2",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male.webp",
+            "elements": {}
+        },
+        {
+            "name": "Quill",
+            "asset": "BOSS_Male_People02",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male02.webp",
+            "elements": {}
+        },
+        {
+            "name": "Scoot",
+            "asset": "BOSS_Male_People03",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male03.webp",
+            "elements": {}
+        },
+        {
+            "name": "Phantom",
+            "asset": "BOSS_Male_DesertPeople",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_DesertPeople.webp",
+            "elements": {}
+        },
+        {
+            "name": "Whisper",
+            "asset": "BOSS_Female_DesertPeople",
+            "icon": "/icons/npcs/T_BOSS_NPC_Female_DesertPeople.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pinch",
+            "asset": "BOSS_Police_old",
+            "icon": "/icons/npcs/T_BOSS_NPC_Police_Old.webp",
+            "elements": {}
+        },
+        {
+            "name": "Ram",
+            "asset": "BOSS_DarkTrader",
+            "icon": "/icons/npcs/T_BOSS_NPC_DarkTrader.webp",
+            "elements": {}
+        },
+        {
+            "name": "Skim",
+            "asset": "BOSS_Male_Trader01",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Trader01.webp",
+            "elements": {}
+        },
+        {
+            "name": "Mimic",
+            "asset": "BOSS_Male_Trader02",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Trader02.webp",
+            "elements": {}
+        },
+        {
+            "name": "Billy",
+            "asset": "BOSS_Male_Trader03",
+            "icon": "/icons/npcs/T_BOSS_NPC_Male_Trader03.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Thug",
+            "asset": "Hunter_Handgun_MiniOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Gunner",
+            "asset": "Hunter_Rifle_MiniOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Hunter",
+            "asset": "Hunter_Shotgun_MiniOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Grenadier",
+            "asset": "Hunter_Grenade_MiniOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Cleaner",
+            "asset": "Hunter_FlameThrower_MiiniOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Elite",
+            "asset": "Hunter_RocketLauncher_MiniOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Hunter_Fat_GatlingGun_MiniOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Sturdy Mercenary",
+            "asset": "Male_Soldier01_EnemyGroup",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Sturdy Mercenary",
+            "asset": "Male_Soldier02_EnemyGroup",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Laser Rifleman",
+            "asset": "Hunter_LaserRifle_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crossbowman",
+            "asset": "Hunter_BowGun_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Swordsman",
+            "asset": "Hunter_Katana_Oilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Elite",
+            "asset": "Hunter_RocketLauncher_Oilrig_LD",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Gunner",
+            "asset": "Hunter_Rifle_LargeOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Hunter",
+            "asset": "Hunter_Shotgun_LargeOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Grenadier",
+            "asset": "Hunter_Grenade_LargeOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Cleaner",
+            "asset": "Hunter_FlameThrower_LargeOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Elite",
+            "asset": "Hunter_RocketLauncher_LargeOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Veteran",
+            "asset": "Hunter_GrenadeLauncher_LargeOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Interceptor",
+            "asset": "Hunter_MissileLauncher_LargeOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Hunter_Fat_GatlingGun_LargeOilrig",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Feybreak Warrior",
+            "asset": "Viking",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Feybreak Berserker",
+            "asset": "Viking_Elite",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Recruiter",
+            "asset": "Visitor_Recruiter",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Judicator",
+            "asset": "Believer_Fat_Cane",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Emote_Tester",
+            "asset": "Emote_Tester",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Doctor",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "PalPassive_Doctor",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Food",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_Paldex",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_BossDefeat",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalCaptureCount",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_A_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_B_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_C_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_D_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_E_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_F_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_G_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_H_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "Reward_PalDisplay_I_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Friendly Pal Tamer",
+            "asset": "Female_Presenter01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Caravan Leader",
+            "asset": "CaravanLeader01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Caravan Leader",
+            "asset": "CaravanLeader02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Caravan Leader",
+            "asset": "CaravanLeader03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "NPC_FoodRequire_1",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "NPC_PalDisplay_1",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Guard",
+            "asset": "BountyTrader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Desert Town Ambassador",
+            "asset": "Ambassador01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Blacksmith in Training",
+            "asset": "Blacksmith01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Gourmet Hunter",
+            "asset": "Epicure01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Bodyguard Mercenary",
+            "asset": "Escort_Warrior01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Bodyguard Pal Tamer",
+            "asset": "Escort_PalTamer01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Feybreak Warrior",
+            "asset": "Viking_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Feybreak Berserker",
+            "asset": "VikingElite_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Jonin",
+            "asset": "Male_NinjaElite01_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Feybreak Berserker",
+            "asset": "Viking_Elite_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Fiery Pal Tamer",
+            "asset": "Male_Soldier02_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Gemini Tamers",
+            "asset": "Female_Soldier03_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Gemini Tamers",
+            "asset": "Female_Soldier04_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Yamishima_guide1",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Yamishima_guide2",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Yamishima_guide3",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Yamishima_guide4",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Bodyguard Mercenary",
+            "asset": "Yamishima_guide5",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_A_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_B_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_C_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_D_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_E_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_F_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_G_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_H_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Reward_Emote_I_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_A_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_A_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_B_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_B_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_C_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_C_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_D_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_D_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_E_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_E_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_F_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_F_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_G_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_G_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_H_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_H_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_I_01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Emote_location_I_02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Help01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Help02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Help03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Help04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Veteran Pal Tamer",
+            "asset": "DeathPenalty_guide",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Friendly Pal Tamer",
+            "asset": "Respawn_guide",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Infantry",
+            "asset": "Police_TreasureGuard_NarrowSite",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Infantry",
+            "asset": "Police_Vigilance",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Infantry",
+            "asset": "Police_BowGun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Thug",
+            "asset": "Hunter_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Devout",
+            "asset": "Believer_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brothers of the Eternal Pyre Martyr",
+            "asset": "FireCult_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Jailed Ex-Chief",
+            "asset": "Police_old_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PAL Genetic Research Unit Executioner",
+            "asset": "Scientist_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Genin",
+            "asset": "Ninja_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Feybreak Warrior",
+            "asset": "Viking_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Judicator",
+            "asset": "Believer_Fat_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Hunter_Fat_Prisoner",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Police_Chief",
+            "asset": "Police_Chief",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brothers of the Eternal Pyre Martyr",
+            "asset": "FireCult_Rifle_Relax",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brothers of the Eternal Pyre Martyr",
+            "asset": "FireCult_FlameThrower_Relax",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Laser Rifleman",
+            "asset": "Hunter_LaserRifle",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crossbowman",
+            "asset": "Hunter_BowGun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Swordsman",
+            "asset": "Hunter_Katana",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Genin",
+            "asset": "Ninja_NoEquip",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Jonin",
+            "asset": "NinjaElite_NoEquip",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Genin",
+            "asset": "Ninja_Bowgun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Jonin",
+            "asset": "NinjaElite_Bowgun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Zoe",
+            "asset": "GrassBoss",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "ForestBoss",
+            "asset": "ForestBoss",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "DesertBoss",
+            "asset": "DesertBoss",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "ElectricBoss",
+            "asset": "ElectricBoss",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "SnowBoss",
+            "asset": "SnowBoss",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "SakurajimaBoss",
+            "asset": "SakurajimaBoss",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "VikingBoss",
+            "asset": "VikingBoss",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "ArenaShop",
+            "asset": "ArenaShop",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Newbie Pal Tamer",
+            "asset": "Arena_Male_Soldier02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Up-and-Coming Pal Tamer",
+            "asset": "Arena_Female_Soldier02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Cruel Pal Tamer",
+            "asset": "Arena_Male_Soldier03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Veteran Pal Tamer",
+            "asset": "Arena_Female_Soldier03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Sturdy Mercenary",
+            "asset": "Arena_Soldier",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Arena_Hunter_Fat_GatlingGun",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Brothers of the Eternal Pyre Martyr",
+            "asset": "Arena_FireCult_FlameThrower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Genin",
+            "asset": "Arena_Ninja",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Messenger of Love",
+            "asset": "Arena_Reward_Emote",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PAL Genetic Research Unit Executioner",
+            "asset": "Arena_Scientist_LaserRifle",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Feybreak Warrior",
+            "asset": "Arena_Viking",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Vigorous Pal Tamer",
+            "asset": "Arena_Male_Soldier04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Pal Ecological Researcher",
+            "asset": "Arena_Reward_Paldex",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Sweet-Smelling Hunter",
+            "asset": "Arena_Ranger04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Reincarnated Guy",
+            "asset": "Arena_Male_Police_old",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Friendly Pal Tamer",
+            "asset": "Arena_Female_Presenter",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Dr. Brawn",
+            "asset": "Arena_PalPassive_Doctor",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Medal Merchant",
+            "asset": "Arena_Male_DarkTrader02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Master Pal Tamer",
+            "asset": "Arena_Female_Soldier04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Fiery Pal Tamer",
+            "asset": "Arena_Male_Soldier02_Invader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Moonflower Jonin",
+            "asset": "Arena_NinjaElite",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Feybreak Berserker",
+            "asset": "Arena_VikingElite",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Legend-Loving Researcher",
+            "asset": "Arena_Scholar01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Veteran Hunter",
+            "asset": "Arena_BossDefeat",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Black Marketeer",
+            "asset": "Arena_DarkTrader",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Farmer01_v01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Farmer01_v02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Farmer01_v03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Farmer01_v04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Scholar01_v01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Scholar01_v02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Scholar01_v03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Scholar01_v04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Breeder01_v01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Breeder01_v02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Breeder01_v03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Breeder01_v04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Ranger01_v01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Ranger01_v02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Ranger01_v03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Ranger01_v04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Nomad01_v01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Nomad01_v02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Nomad01_v03",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Female_Nomad01_v04",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Angler01_v01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Swordsman",
+            "asset": "Quest_Hunter_Katana01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Elite",
+            "asset": "Quest_Hunter_RocketLauncher01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Crusher",
+            "asset": "Quest_Hunter_Fat_GatlingGun01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Syndicate Cleaner",
+            "asset": "Quest_Hunter_FlameThrower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Devout",
+            "asset": "Believer_Bat_Camp02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Free Pal Alliance Devout",
+            "asset": "Believer_CrossBow_Camp02",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "PIDF Infantry",
+            "asset": "Police_Shield_Tower",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        },
+        {
+            "name": "Islander",
+            "asset": "Male_Kigurumi01_v01",
+            "icon": "/icons/npcs/T_CommonHuman_icon_normal.webp",
+            "elements": {}
+        }
+    ]
+}

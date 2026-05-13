@@ -1,0 +1,17 @@
+{
+  "lang": "en_US",
+  "showiconinlist": true,
+  "checkstartlogs": false,
+  "base.radius.adjust": "Adjust Radius",
+  "base.radius.current": "Current Radius:",
+  "base.radius.menu": "Adjust Radius",
+  "base.radius.preview.title": "Adjust Base Radius",
+  "base.radius.range": "Radius Range: 50% - 1000%",
+  "base.radius.actual": "Actual Value:",
+  "base.radius.preview.ready": "Ready to Apply",
+  "base.radius.reset": "Reset to Default",
+  "base.radius.title": "Adjust Base Radius",
+  "base.radius.updated": "Base radius updated to {radius}\n\n⚠ Load this save in-game for structures to be reassigned.",
+  "base.radius.warning": "⚠ Note: You must load this save in-game for the game to reassign structures within the new radius.",
+  "base.radius.prompt": "Enter new radius percentage (50-1000):"
+}

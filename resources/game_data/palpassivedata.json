@@ -1,0 +1,556 @@
+{
+    "passives": [
+        {
+            "name": "Remarkable Craftsmanship",
+            "asset": "CraftSpeed_up3",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Diamond Body",
+            "asset": "Deffence_up3",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Lucky",
+            "asset": "Rare",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Legend",
+            "asset": "Legend",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Siren of the Void",
+            "asset": "Witch",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Eternal Flame",
+            "asset": "EternalFlame",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Invader",
+            "asset": "Invader",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Demon God",
+            "asset": "PAL_ALLAttack_up3",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Mastery of Fasting",
+            "asset": "PAL_FullStomach_Down_3",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Heart of the Immovable King",
+            "asset": "PAL_Sanity_Down_3",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Swift",
+            "asset": "MoveSpeed_up_3",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Eternal Engine",
+            "asset": "Stamina_Up_3",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Vampiric",
+            "asset": "Vampire",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Lunker",
+            "asset": "Nushi",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "King of the Waves",
+            "asset": "SwimSpeed_up_3",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Savior",
+            "asset": "Salvation",
+            "rank": 4,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
+        },
+        {
+            "name": "Artisan",
+            "asset": "CraftSpeed_up2",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Burly Body",
+            "asset": "Deffence_up2",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Ferocious",
+            "asset": "PAL_ALLAttack_up2",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Vanguard",
+            "asset": "TrainerATK_UP_1",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Stronghold Strategist",
+            "asset": "TrainerDEF_UP_1",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Motivational Leader",
+            "asset": "TrainerWorkSpeed_UP_1",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Mine Foreman",
+            "asset": "TrainerMining_up1",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Logging Foreman",
+            "asset": "TrainerLogging_up1",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Diet Lover",
+            "asset": "PAL_FullStomach_Down_2",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Workaholic",
+            "asset": "PAL_Sanity_Down_2",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Celestial Emperor",
+            "asset": "ElementBoost_Normal_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Flame Emperor",
+            "asset": "ElementBoost_Fire_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Lord of the Sea",
+            "asset": "ElementBoost_Aqua_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Lord of Lightning",
+            "asset": "ElementBoost_Thunder_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Spirit Emperor",
+            "asset": "ElementBoost_Leaf_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Ice Emperor",
+            "asset": "ElementBoost_Ice_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Earth Emperor",
+            "asset": "ElementBoost_Earth_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Lord of the Underworld",
+            "asset": "ElementBoost_Dark_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Divine Dragon",
+            "asset": "ElementBoost_Dragon_2_PAL",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Runner",
+            "asset": "MoveSpeed_up_2",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Philanthropist",
+            "asset": "Test_PalEgg_HatchingSpeed_Up",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Serenity",
+            "asset": "CoolTimeReduction_Up_1",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Infinite Stamina",
+            "asset": "Stamina_Up_1",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Noble",
+            "asset": "SalePrice_Up_1",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Ace Swimmer",
+            "asset": "SwimSpeed_up_2",
+            "rank": 3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
+        },
+        {
+            "name": "Musclehead",
+            "asset": "Noukin",
+            "rank": 2,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_02.png"
+        },
+        {
+            "name": "Serious",
+            "asset": "CraftSpeed_up1",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Hard Skin",
+            "asset": "Deffence_up1",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Brave",
+            "asset": "PAL_ALLAttack_up1",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Hooligan",
+            "asset": "PAL_rude",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Conceited",
+            "asset": "PAL_conceited",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Sadist",
+            "asset": "PAL_sadist",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Masochist",
+            "asset": "PAL_masochist",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Work Slave",
+            "asset": "PAL_CorporateSlave",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Aggressive",
+            "asset": "PAL_oraora",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Abnormal",
+            "asset": "ElementResist_Normal_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Suntan Lover",
+            "asset": "ElementResist_Fire_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Waterproof",
+            "asset": "ElementResist_Aqua_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Insulated Body",
+            "asset": "ElementResist_Thunder_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Botanical Barrier",
+            "asset": "ElementResist_Leaf_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Heated Body",
+            "asset": "ElementResist_Ice_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Earthquake Resistant",
+            "asset": "ElementResist_Earth_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Cheery",
+            "asset": "ElementResist_Dark_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Dragonkiller",
+            "asset": "ElementResist_Dragon_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Zen Mind",
+            "asset": "ElementBoost_Normal_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Pyromaniac",
+            "asset": "ElementBoost_Fire_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Hydromaniac",
+            "asset": "ElementBoost_Aqua_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Capacitor",
+            "asset": "ElementBoost_Thunder_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Fragrant Foliage",
+            "asset": "ElementBoost_Leaf_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Coldblooded",
+            "asset": "ElementBoost_Ice_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Power of Gaia",
+            "asset": "ElementBoost_Earth_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Veil of Darkness",
+            "asset": "ElementBoost_Dark_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Blood of the Dragon",
+            "asset": "ElementBoost_Dragon_1_PAL",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Dainty Eater",
+            "asset": "PAL_FullStomach_Down_1",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Positive Thinker",
+            "asset": "PAL_Sanity_Down_1",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Nimble",
+            "asset": "MoveSpeed_up_1",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Nocturnal",
+            "asset": "Nocturnal",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Impatient",
+            "asset": "CoolTimeReduction_Up_2",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Fit as a Fiddle",
+            "asset": "Stamina_Up_2",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Fine Furs",
+            "asset": "SalePrice_Up_2",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Otherworldly Cells",
+            "asset": "Alien",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Sleek Stroke",
+            "asset": "SwimSpeed_up_1",
+            "rank": 1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
+        },
+        {
+            "name": "Clumsy",
+            "asset": "CraftSpeed_down1",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Downtrodden",
+            "asset": "Deffence_down1",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Coward",
+            "asset": "PAL_ALLAttack_down1",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Glutton",
+            "asset": "PAL_FullStomach_Up_1",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Unstable",
+            "asset": "PAL_Sanity_Up_1",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Mercy Hit",
+            "asset": "NonKilling",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Easygoing",
+            "asset": "CoolTimeReduction_Down_1",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Sickly",
+            "asset": "Stamina_Down_1",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Shabby",
+            "asset": "SalePrice_Down_1",
+            "rank": -1,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01_negative.png"
+        },
+        {
+            "name": "Bottomless Stomach",
+            "asset": "PAL_FullStomach_Up_2",
+            "rank": -2,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_02_negative.png"
+        },
+        {
+            "name": "Destructive",
+            "asset": "PAL_Sanity_Up_2",
+            "rank": -2,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_02_negative.png"
+        },
+        {
+            "name": "Slacker",
+            "asset": "CraftSpeed_down2",
+            "rank": -3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03_negative.png"
+        },
+        {
+            "name": "Brittle",
+            "asset": "Deffence_down2",
+            "rank": -3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03_negative.png"
+        },
+        {
+            "name": "Pacifist",
+            "asset": "PAL_ALLAttack_down2",
+            "rank": -3,
+            "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03_negative.png"
+        }
+    ]
+}
