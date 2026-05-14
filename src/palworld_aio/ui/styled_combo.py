@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import QWidget, QPushButton, QFrame, QVBoxLayout, QListWidget, QListWidgetItem, QLineEdit
-from PySide6.QtCore import Qt, Signal, QPoint, QEvent, QTimer
+from PySide6.QtCore import Qt, Signal, QPoint, QEvent, QTimer, QObject
 from PySide6.QtGui import QColor, QKeyEvent
-class _SearchEditKeyHandler:
+class _SearchEditKeyHandler(QObject):
     def __init__(self, search_edit, combo):
+        super().__init__(search_edit)
         self._search_edit = search_edit
         self._combo = combo
         search_edit.installEventFilter(self)
