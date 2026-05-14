@@ -14,7 +14,7 @@ dependencies = [
     "cityhash",
     "numpy",
     "pyside6-essentials",
-    "pyooz @ git+https://github.com/oMaN-Rod/pyooz.git",
+    "pyooz",
     "cx-freeze>=8.3.0",
     "nerdfont",
     "pydantic",
