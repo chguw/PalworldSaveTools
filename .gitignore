@@ -11,6 +11,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!src/palworld_save_tools/lib/windows/
 lib64/
 parts/
 sdist/

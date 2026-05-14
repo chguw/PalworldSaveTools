@@ -4,6 +4,9 @@ sys.path.insert(0, os.path.abspath('resources'))
 sys.path.insert(0, os.path.abspath('resources'))
 from cx_Freeze import setup, Executable
 def find_ooz_library():
+    vendored_path = os.path.join('src', 'palworld_save_tools', 'lib', 'windows')
+    if os.path.isdir(vendored_path):
+        return (vendored_path, 'src/palworld_save_tools/lib/windows')
     try:
         import ooz
         return (os.path.dirname(ooz.__file__), 'src/palworld_save_tools/lib/windows')
@@ -27,4 +30,4 @@ if ooz_l:
 ps6_a = find_pyside6_assets()
 if ps6_a:
     build_exe_options['include_files'].append(ps6_a)
-setup(name='PalworldSaveTools', version='1.1.87', options={'build_exe': build_exe_options}, executables=[Executable('src/palworld_aio/main.py', base='gui', target_name='PalworldSaveTools.exe', icon='resources/pal.ico')])
+setup(name='PalworldSaveTools', version="1.1.88", options={'build_exe': build_exe_options}, executables=[Executable('src/palworld_aio/main.py', base='gui', target_name='PalworldSaveTools.exe', icon='resources/pal.ico')])
