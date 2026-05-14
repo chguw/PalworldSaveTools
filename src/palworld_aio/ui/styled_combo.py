@@ -45,6 +45,8 @@ class StyledCombo(QWidget):
         self._search_edit.setFocusPolicy(Qt.StrongFocus)
         self._search_edit.hide()
         self._search_edit.textChanged.connect(self._on_search_text_changed)
+        self._search_edit.installEventFilter(self)
+        self._search_edit_key_handler = _SearchEditKeyHandler(self._search_edit, self)
         self._popup = QFrame(self, Qt.Popup)
         self._popup.setFixedWidth(300)
         self._popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
@@ -66,13 +68,11 @@ class StyledCombo(QWidget):
         main_layout.addWidget(self._button)
         main_layout.addWidget(self._search_edit)
         self._popup.installEventFilter(self)
-        self._search_edit.installEventFilter(self)
-        self._search_edit_key_handler = _SearchEditKeyHandler(self._search_edit, self)
         self._focus_out_timer = QTimer()
         self._focus_out_timer.setSingleShot(True)
         self._focus_out_timer.timeout.connect(self._check_focus_out)
     def eventFilter(self, obj, event):
-        if hasattr(self, '_popup') and obj == self._popup:
+        if obj == self._popup:
             if event.type() == QEvent.MouseButtonPress:
                 pos = self.mapFromGlobal(event.globalPosition().toPoint())
                 if not self._popup.geometry().contains(pos):
