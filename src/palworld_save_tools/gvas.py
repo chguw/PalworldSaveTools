@@ -1,4 +1,5 @@
 import base64
+import copy
 from typing import Any, Callable
 from loguru import logger
 from palworld_save_tools.archive import FArchiveReader, FArchiveWriter
@@ -99,6 +100,6 @@ class GvasFile:
     def write(self, custom_properties: dict[str, tuple[Callable, Callable]]={}) -> bytes:
         writer = FArchiveWriter(custom_properties)
         self.header.write(writer)
-        writer.properties(self.properties)
+        writer.properties(copy.deepcopy(self.properties))
         writer.write(self.trailer)
         return writer.bytes()
