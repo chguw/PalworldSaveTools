@@ -30,5 +30,7 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
     writer.guid(p['item']['dynamic_id']['created_world_id'])
     writer.guid(p['item']['dynamic_id']['local_id_in_created_world'])
     writer.write(bytes(p['trailing_bytes']))
+    if 'unknown_bytes' in p:
+        writer.write(bytes(p['unknown_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

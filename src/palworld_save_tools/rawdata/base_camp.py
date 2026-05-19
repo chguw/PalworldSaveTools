@@ -12,7 +12,7 @@ def decode_bytes(parent_reader: FArchiveReader, b_bytes: Sequence[int]) -> dict[
     data = {'id': reader.guid(), 'name': reader.fstring(), 'state': reader.byte(), 'transform': reader.ftransform(), 'area_range': reader.float(), 'group_id_belong_to': reader.guid(), 'fast_travel_local_transform': reader.ftransform(), 'owner_map_object_instance_id': reader.guid()}
     data['trailing_bytes'] = reader.byte_list(4)
     if not reader.eof():
-        raise Exception('Warning: EOF not reached')
+        data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
     return data
 def encode(writer: FArchiveWriter, property_type: str, properties: dict[str, Any]) -> int:
     if property_type != 'ArrayProperty':
@@ -32,5 +32,7 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
     writer.ftransform(p['fast_travel_local_transform'])
     writer.guid(p['owner_map_object_instance_id'])
     writer.write(bytes(p['trailing_bytes']))
+    if 'unknown_bytes' in p:
+        writer.write(bytes(p['unknown_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

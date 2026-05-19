@@ -299,6 +299,8 @@ class FArchiveReader:
             return self.u32()
         elif type_name == 'StrProperty':
             return self.fstring()
+        elif type_name == 'Int64Property':
+            return self.i64()
         else:
             raise Exception(f'Unknown property value type: {type_name} ({path})')
     def struct(self, path: str) -> dict[str, Any]:
@@ -660,6 +662,8 @@ class FArchiveWriter:
             self.u32(value)
         elif type_name == 'StrProperty':
             self.fstring(value)
+        elif type_name == 'Int64Property':
+            self.i64(value)
         else:
             raise Exception(f'Unknown property value type: {type_name}')
     def array_property(self, array_type: str, value: dict[str, Any]):

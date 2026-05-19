@@ -154,7 +154,7 @@ def decode_bytes(parent_reader: FArchiveReader, m_bytes: Sequence[int], object_i
             logger.debug(f'Unknown map object concrete model {map_object_concrete_model}, skipping')
             return {'values': m_bytes}
     if not reader.eof():
-        raise Exception(f"Warning: EOF not reached for {object_id} {map_object_concrete_model}: ori: {''.join((f'{b:02x}' for b in m_bytes))} remaining: {reader.size - reader.data.tell()}")
+        data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
     return data
 def encode_bytes(p: Optional[dict[str, Any]]) -> bytes:
     if p is None:

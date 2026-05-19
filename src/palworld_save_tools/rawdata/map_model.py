@@ -55,5 +55,7 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
     writer.u32(1 if p['stage_instance_id_belong_to']['valid'] else 0)
     if 'unknown_bytes' in p:
         writer.write(bytes(p['unknown_bytes']))
+    if 'trailing_bytes' in p:
+        writer.write(bytes(p['trailing_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

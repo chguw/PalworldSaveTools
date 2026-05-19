@@ -47,7 +47,7 @@ def decode_bytes(parent_reader: FArchiveReader, m_bytes: Sequence[int], module_t
             data['unlock_item'] = reader.fstring()
             data['trailing_bytes'] = reader.byte_list(12)
     if not reader.eof():
-        raise Exception(f'Warning: EOF not reached for module type {module_type}')
+        data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
     return data
 def module_slot_indexes_writer(writer: FArchiveWriter, value: dict[str, Any]) -> None:
     writer.byte(value['attribute'])
@@ -85,5 +85,7 @@ def encode_bytes(p: dict[str, Any], module_type: str) -> bytes:
         case 'EPalMapObjectConcreteModelModuleType::RequireElementalAction':
             writer.fstring(p['unlock_item'])
             writer.write(bytes(p['trailing_bytes']))
+        case _:
+            writer.write(bytes(p.get('unknown_bytes', [])))
     encoded_bytes = writer.bytes()
     return encoded_bytes

@@ -32,7 +32,7 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
         indie = {'player_uid': reader.guid(), 'guild_name_2': reader.fstring(), 'player_info': {'last_online_real_time': reader.i64(), 'player_name': reader.fstring()}}
         group_data |= indie
     if not reader.eof():
-        raise Exception('Warning: EOF not reached')
+        group_data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
     return group_data
 def encode(writer: FArchiveWriter, property_type: str, properties: dict[str, Any]) -> int:
     if property_type != 'MapProperty':
@@ -72,5 +72,7 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
         writer.guid(p['admin_player_uid'])
         writer.tarray(player_info_writer, p['players'])
         writer.write(bytes(p['trailing_bytes']))
+    if 'unknown_bytes' in p:
+        writer.write(bytes(p['unknown_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

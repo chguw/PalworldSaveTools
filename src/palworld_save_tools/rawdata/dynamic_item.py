@@ -25,7 +25,7 @@ def decode_bytes(parent_reader: FArchiveReader, c_bytes: Sequence[int]) -> Optio
         data['durability'] = reader.float()
         data['trailing_bytes'] = reader.byte_list(4)
         if not reader.eof():
-            raise Exception('Warning: EOF not reached')
+            data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
     else:
         cur_pos = reader.data.tell()
         temp_data: dict[str, Any] = {'type': 'weapon'}
@@ -52,7 +52,7 @@ def try_read_egg(reader: FArchiveReader) -> Optional[dict[str, Any]]:
         data['object'] = reader.properties_until_end()
         data['trailing_bytes'] = reader.byte_list(28)
         if not reader.eof():
-            raise Exception('Warning: EOF not reached')
+            data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
         return data
     except Exception as e:
         if e.args[0] == 'Warning: EOF not reached':
@@ -90,5 +90,7 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
         writer.i32(p['remaining_bullets'])
         writer.tarray(lambda w, d: (w.fstring(d), None)[1], p['passive_skill_list'])
         writer.write(bytes(p['trailing_bytes']))
+    if 'unknown_bytes' in p:
+        writer.write(bytes(p['unknown_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

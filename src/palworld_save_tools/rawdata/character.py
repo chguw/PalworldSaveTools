@@ -12,7 +12,7 @@ def decode_bytes(parent_reader: FArchiveReader, char_bytes: Sequence[int]) -> di
     char_data = {'object': reader.properties_until_end(), 'unknown_bytes': reader.byte_list(4), 'group_id': reader.guid()}
     char_data['trailing_bytes'] = reader.byte_list(4)
     if not reader.eof():
-        raise Exception('Warning: EOF not reached')
+        char_data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
     return char_data
 def encode(writer: FArchiveWriter, property_type: str, properties: dict[str, Any]) -> int:
     if property_type != 'ArrayProperty':
@@ -27,5 +27,7 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
     writer.write(bytes(p['unknown_bytes']))
     writer.guid(p['group_id'])
     writer.write(bytes(p['trailing_bytes']))
+    if 'unknown_bytes' in p:
+        writer.write(bytes(p['unknown_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

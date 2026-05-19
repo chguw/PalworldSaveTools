@@ -27,5 +27,7 @@ def encode_bytes(p: Optional[dict[str, Any]]) -> bytes:
     writer.guid(p['container_id'])
     if 'trailing_bytes' in p:
         writer.write(bytes(p['trailing_bytes']))
+    if 'unknown_bytes' in p:
+        writer.write(bytes(p['unknown_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

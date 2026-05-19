@@ -70,7 +70,7 @@ def decode_bytes(parent_reader: FArchiveReader, b_bytes: Sequence[int], work_typ
             data['transform']['map_object_instance_id'] = reader.guid()
             data['transform']['trailing_bytes'] = reader.byte_list(8)
     if not reader.eof():
-        raise Exception(f'Warning: EOF not reached for {work_type}, remaining bytes: {reader.read_to_end()!r}')
+        data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
     return data
 def decode_work_assign_bytes(parent_reader: FArchiveReader, b_bytes: Sequence[int]) -> dict[str, Any]:
     reader = parent_reader.internal_copy(bytes(b_bytes), debug=False)

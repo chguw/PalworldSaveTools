@@ -32,5 +32,7 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
     writer.tarray(lambda w, d: (w.fstring(d), None)[1], p['permission']['item_static_ids'])
     if 'trailing_unparsed_data' in p:
         writer.write(bytes(p['trailing_unparsed_data']))
+    if 'unknown_bytes' in p:
+        writer.write(bytes(p['unknown_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes
