@@ -1326,6 +1326,6 @@
   "player_technology.select_tech_prompt": "アクションを実行するテクノロジーを選択してください",
   "tool.convert.any.to_json": "SAV から JSON への変換",
   "tool.convert.any.to_sav": "JSON を SAV に変換する",
-  "inventory.unlock_hint_weapon": "Click to unlock with Weapon Slot Item",
-  "inventory.max_weapon_slots": "All weapon slots are already unlocked!"
+  "inventory.unlock_hint_weapon": "クリックして武器スロットアイテムのロックを解除します",
+  "inventory.max_weapon_slots": "すべての武器スロットはすでにロック解除されています。"
 }

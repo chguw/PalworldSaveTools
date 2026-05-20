@@ -667,7 +667,7 @@ class PlayerInventoryTab(QWidget):
         left_layout.addWidget(self.inv_tabs)
         inner_content.addWidget(self.left_panel, 2)
         self.center_outer = QFrame()
-        self.center_outer.setMinimumWidth(320)
+        self.center_outer.setMinimumWidth(420)
         self.center_outer.setStyleSheet('QFrame { background-color: rgba(20, 20, 30, 200); border-radius: 8px; }')
         center_outer_layout = QVBoxLayout(self.center_outer)
         center_outer_layout.setContentsMargins(6, 6, 6, 6)

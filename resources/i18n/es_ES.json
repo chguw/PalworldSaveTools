@@ -1319,6 +1319,6 @@
   "player_technology.select_tech_prompt": "Seleccionar una tecnología para realizar acciones",
   "tool.convert.any.to_json": "Convertir SAV a JSON",
   "tool.convert.any.to_sav": "Convertir JSON a SAV",
-  "inventory.unlock_hint_weapon": "Click to unlock with Weapon Slot Item",
-  "inventory.max_weapon_slots": "All weapon slots are already unlocked!"
+  "inventory.unlock_hint_weapon": "Haga clic para desbloquear con el elemento de ranura para arma",
+  "inventory.max_weapon_slots": "¡Todas las ranuras para armas ya están desbloqueadas!"
 }

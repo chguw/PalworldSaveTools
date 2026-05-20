@@ -1324,6 +1324,6 @@
   "player_technology.select_tech_prompt": "Выберите технологию для выполнения действий",
   "tool.convert.any.to_json": "Конвертировать SAV в JSON",
   "tool.convert.any.to_sav": "Конвертировать JSON в SAV",
-  "inventory.unlock_hint_weapon": "Click to unlock with Weapon Slot Item",
-  "inventory.max_weapon_slots": "All weapon slots are already unlocked!"
+  "inventory.unlock_hint_weapon": "Нажмите, чтобы разблокировать с помощью предмета из слота для оружия.",
+  "inventory.max_weapon_slots": "Все слоты для оружия уже разблокированы!"
 }

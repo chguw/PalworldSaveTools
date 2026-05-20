@@ -1350,6 +1350,6 @@
   "player_technology.select_tech_prompt": "Wählen Sie eine Technologie aus, um Aktionen auszuführen",
   "tool.convert.any.to_json": "Konvertieren Sie SAV in JSON",
   "tool.convert.any.to_sav": "Konvertieren Sie JSON in SAV",
-  "inventory.unlock_hint_weapon": "Click to unlock with Weapon Slot Item",
-  "inventory.max_weapon_slots": "All weapon slots are already unlocked!"
+  "inventory.unlock_hint_weapon": "Klicken Sie hier, um den Waffenslot-Gegenstand freizuschalten",
+  "inventory.max_weapon_slots": "Alle Waffenplätze sind bereits freigeschaltet!"
 }

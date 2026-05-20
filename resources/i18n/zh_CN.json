@@ -1328,6 +1328,6 @@
   "player_technology.select_tech_prompt": "选择一种技术来执行操作",
   "tool.convert.any.to_json": "将 SAV 转换为 JSON",
   "tool.convert.any.to_sav": "将 JSON 转换为 SAV",
-  "inventory.unlock_hint_weapon": "Click to unlock with Weapon Slot Item",
-  "inventory.max_weapon_slots": "All weapon slots are already unlocked!"
+  "inventory.unlock_hint_weapon": "单击以使用武器槽物品解锁",
+  "inventory.max_weapon_slots": "所有武器槽位均已解锁！"
 }
