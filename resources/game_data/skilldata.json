@@ -631,7 +631,7 @@
             "cooldown": 24.0
         },
         {
-            "name": "en Text (Scratch)",
+            "name": "en Text",
             "asset": "Scratch",
             "element": "Normal",
             "power": 100,
@@ -743,7 +743,7 @@
             "cooldown": 12.0
         },
         {
-            "name": "en Text (Throw)",
+            "name": "en Text",
             "asset": "Throw",
             "element": "Normal",
             "power": 60,
@@ -820,28 +820,28 @@
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_AmaterasuWolf_Bite)",
+            "name": "Blazing Wild Fang",
             "asset": "Unique_AmaterasuWolf_Bite",
             "element": "Fire",
             "power": 50,
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_AmaterasuWolf_BiteV2)",
+            "name": "Blazing Double Fang",
             "asset": "Unique_AmaterasuWolf_BiteV2",
             "element": "Fire",
             "power": 40,
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_AmaterasuWolf_Dark_Bite)",
+            "name": "Umbral Wild Fang",
             "asset": "Unique_AmaterasuWolf_Dark_Bite",
             "element": "Dark",
             "power": 50,
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_AmaterasuWolf_Dark_BiteV2)",
+            "name": "Umbral Double Fang",
             "asset": "Unique_AmaterasuWolf_Dark_BiteV2",
             "element": "Dark",
             "power": 40,
@@ -883,7 +883,7 @@
             "cooldown": 20.0
         },
         {
-            "name": "Unknown Skill (Unique_Baphomet_Dark_DarkKite)",
+            "name": "Nightmare Claw",
             "asset": "Unique_Baphomet_Dark_DarkKite",
             "element": "Dark",
             "power": 400,
@@ -939,14 +939,14 @@
             "cooldown": 20.0
         },
         {
-            "name": "Unknown Skill (Unique_BlackPuppy_Bite)",
+            "name": "Umbral Wild Fang",
             "asset": "Unique_BlackPuppy_Bite",
             "element": "Dark",
             "power": 50,
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_BlackPuppy_BiteV2)",
+            "name": "Umbral Double Fang",
             "asset": "Unique_BlackPuppy_BiteV2",
             "element": "Dark",
             "power": 40,
@@ -1002,7 +1002,7 @@
             "cooldown": 30.0
         },
         {
-            "name": "Unknown Skill (Unique_BlueThunderHorse_Tossin)",
+            "name": "Flash Charge",
             "asset": "Unique_BlueThunderHorse_Tossin",
             "element": "Electricity",
             "power": 500,
@@ -1107,7 +1107,7 @@
             "cooldown": 16.0
         },
         {
-            "name": "Unknown Skill (Unique_Deer_Ground_DirtyHorn)",
+            "name": "Mud Horn",
             "asset": "Unique_Deer_Ground_DirtyHorn",
             "element": "Earth",
             "power": 120,
@@ -1226,7 +1226,7 @@
             "cooldown": 4.0
         },
         {
-            "name": "Unknown Skill (Unique_FlowerDinosaur_Electric_ThunderWhip)",
+            "name": "Lightning Smash",
             "asset": "Unique_FlowerDinosaur_Electric_ThunderWhip",
             "element": "Electricity",
             "power": 300,
@@ -1261,7 +1261,7 @@
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_Garm_BiteV2)",
+            "name": "Double Fang",
             "asset": "Unique_Garm_BiteV2",
             "element": "Normal",
             "power": 40,
@@ -1303,14 +1303,14 @@
             "cooldown": 24.0
         },
         {
-            "name": "Unknown Skill (Unique_GoldenHorse_Bite)",
+            "name": "Seismic Wild Fang",
             "asset": "Unique_GoldenHorse_Bite",
             "element": "Earth",
             "power": 50,
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_GoldenHorse_BiteV2)",
+            "name": "Seismic Double Fang",
             "asset": "Unique_GoldenHorse_BiteV2",
             "element": "Earth",
             "power": 40,
@@ -1324,7 +1324,7 @@
             "cooldown": 24.0
         },
         {
-            "name": "Unknown Skill (Unique_Gorilla_Ground_EarthPunch)",
+            "name": "Rumble Combo",
             "asset": "Unique_Gorilla_Ground_EarthPunch",
             "element": "Earth",
             "power": 300,
@@ -1422,14 +1422,14 @@
             "cooldown": 24.0
         },
         {
-            "name": "Unknown Skill (Unique_GuardianDog_Bite)",
+            "name": "Wild Fang",
             "asset": "Unique_GuardianDog_Bite",
             "element": "Normal",
             "power": 50,
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_GuardianDog_BiteV2)",
+            "name": "Double Fang",
             "asset": "Unique_GuardianDog_BiteV2",
             "element": "Normal",
             "power": 40,
@@ -1485,7 +1485,7 @@
             "cooldown": 8.0
         },
         {
-            "name": "Unknown Skill (Unique_IceHorse_Dark_DarkBladeAttack)",
+            "name": "Dark Wing",
             "asset": "Unique_IceHorse_Dark_DarkBladeAttack",
             "element": "Dark",
             "power": 700,
@@ -1520,7 +1520,7 @@
             "cooldown": 12.0
         },
         {
-            "name": "Unknown Skill (Unique_KingAlpaca_Ice_IcePress)",
+            "name": "Frozen Press",
             "asset": "Unique_KingAlpaca_Ice_IcePress",
             "element": "Ice",
             "power": 400,
@@ -1814,7 +1814,7 @@
             "cooldown": 30.0
         },
         {
-            "name": "Unknown Skill (Unique_NightBlueHorse_Tossin)",
+            "name": "Spectral Steed",
             "asset": "Unique_NightBlueHorse_Tossin",
             "element": "Dark",
             "power": 450,
@@ -1968,7 +1968,7 @@
             "cooldown": 8.0
         },
         {
-            "name": "Unknown Skill (Unique_SakuraSaurus_Water_SplashTackle)",
+            "name": "Splash Tackle",
             "asset": "Unique_SakuraSaurus_Water_SplashTackle",
             "element": "Water",
             "power": 250,
@@ -2010,14 +2010,14 @@
             "cooldown": 16.0
         },
         {
-            "name": "Unknown Skill (Unique_Sekhmet_RollingScratch)",
+            "name": "Rolling Scratch",
             "asset": "Unique_Sekhmet_RollingScratch",
             "element": "Earth",
             "power": 400,
             "cooldown": 20.0
         },
         {
-            "name": "Unknown Skill (Unique_Sekhmet_SomersaultScratch)",
+            "name": "Somersault Scratch",
             "asset": "Unique_Sekhmet_SomersaultScratch",
             "element": "Earth",
             "power": 300,
@@ -2101,14 +2101,14 @@
             "cooldown": 8.0
         },
         {
-            "name": "Unknown Skill (Unique_ThunderDog_Bite)",
+            "name": "Electirc Wild Fang",
             "asset": "Unique_ThunderDog_Bite",
             "element": "Electricity",
             "power": 50,
             "cooldown": 2.0
         },
         {
-            "name": "Unknown Skill (Unique_ThunderDog_BiteV2)",
+            "name": "Electirc Double Fang",
             "asset": "Unique_ThunderDog_BiteV2",
             "element": "Electricity",
             "power": 40,
@@ -2213,14 +2213,14 @@
             "cooldown": 30.0
         },
         {
-            "name": "Unknown Skill (Unique_VolcanoDragon_MagmaSpit)",
+            "name": "Magma Spit",
             "asset": "Unique_VolcanoDragon_MagmaSpit",
             "element": "Fire",
             "power": 600,
             "cooldown": 30.0
         },
         {
-            "name": "Unknown Skill (Unique_VolcanoDragon_VolcanicLaser)",
+            "name": "Magma Laser",
             "asset": "Unique_VolcanoDragon_VolcanicLaser",
             "element": "Fire",
             "power": 600,
@@ -2624,42 +2624,6 @@
             "element": "Normal",
             "power": 100,
             "cooldown": 1.0
-        },
-        {
-            "name": "en Text (TidalWave)",
-            "asset": "TidalWave"
-        },
-        {
-            "name": "Unknown Skill (WaterWave)",
-            "asset": "WaterWave"
-        },
-        {
-            "name": "Intimidate",
-            "asset": "Intimidate"
-        },
-        {
-            "name": "en Text (SnowStorm)",
-            "asset": "SnowStorm"
-        },
-        {
-            "name": "Ice Missile",
-            "asset": "EnergyShot"
-        },
-        {
-            "name": "Cross Lightning",
-            "asset": "CrossThunder"
-        },
-        {
-            "name": "Unknown Skill (WaterBalloon)",
-            "asset": "WaterBalloon"
-        },
-        {
-            "name": "Flare Twister",
-            "asset": "FlareTwister"
-        },
-        {
-            "name": "Unknown Skill (HealingTree)",
-            "asset": "HealingTree"
         }
     ]
 }

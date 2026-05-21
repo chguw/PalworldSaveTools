@@ -22,7 +22,8 @@ for search_dir in [str(EXPORT_TEXTURES_DIR), str(OTHER_ICON_DIR)]:
 print(f"  Found {len(icon_name_to_path)} icon files")
 
 from update_game_data import (
-    update_pal_data, update_item_data, update_npc_data,
+    update_pal_data, update_item_data, update_npc_data, update_structure_data,
+    update_passive_data, update_skill_data, update_technology_data, update_pal_passive_data,
     ensure_dir, RESOURCES_DIR, ICONS_DIR,
 )
 
@@ -83,6 +84,26 @@ def fast_find_and_copy(search_name, target_subdir, export_subdirs):
                 shutil.copy2(full_path, str(target_file))
             return f'/icons/{target_subdir}/{os.path.basename(full_path)}'
     
+    # Step 3b: Exact match with T_icon_buildobject_ prefix (structure icons)
+    for term in unique_terms:
+        with_ibo = f't_icon_buildobject_{term}'
+        full_path = icon_name_to_path.get(with_ibo)
+        if full_path:
+            target_file = target_dir / os.path.basename(full_path)
+            if not target_file.exists():
+                shutil.copy2(full_path, str(target_file))
+            return f'/icons/{target_subdir}/{os.path.basename(full_path)}'
+    
+    # Step 3c: Exact match with T_icon_ prefix
+    for term in unique_terms:
+        with_ic = f't_icon_{term}'
+        full_path = icon_name_to_path.get(with_ic)
+        if full_path:
+            target_file = target_dir / os.path.basename(full_path)
+            if not target_file.exists():
+                shutil.copy2(full_path, str(target_file))
+            return f'/icons/{target_subdir}/{os.path.basename(full_path)}'
+    
     # Step 4: Try stripping trailing _{digit} tier suffix, then try exact match
     # (only try this if the original didn't have _T_itemicon_ prefix already)
     if not name_lower.startswith('t_itemicon_'):
@@ -128,5 +149,76 @@ update_item_data()
 
 print("\n=== Updating NPC Data ===")
 update_npc_data()
+
+print("\n=== Updating Structure Data ===")
+update_structure_data()
+
+print("\n=== Updating Passive Data ===")
+update_passive_data()
+
+print("\n=== Updating Skill Data ===")
+update_skill_data()
+
+print("\n=== Updating Technology Data ===")
+update_technology_data()
+
+print("\n=== Updating Pal Passive Data ===")
+update_pal_passive_data()
+
+# Clean up stale icons not referenced by any data file
+print("\n=== Cleaning up unused icons ===")
+referenced = set()
+json_files = {
+    'paldata.json': 'pals',
+    'itemdata.json': 'items',
+    'npcdata.json': 'npcs',
+    'structuredata.json': 'structures',
+    'passivedata.json': 'passives',
+    'technologydata.json': 'technology',
+    'skilldata.json': None,
+    'palpassivedata.json': 'passives',
+}
+for fname, _ in json_files.items():
+    fpath = RESOURCES_DIR / fname
+    if not fpath.exists():
+        continue
+    try:
+        with open(fpath, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except:
+        continue
+    if isinstance(data, dict):
+        for key, entries in data.items():
+            if isinstance(entries, list):
+                for entry in entries:
+                    if isinstance(entry, dict):
+                        icon = entry.get('icon', '')
+                        if icon and icon.startswith('/icons/'):
+                            referenced.add(icon)
+
+# Extract unique icon filenames with their subdirectories
+referenced_local = set()
+for icon_path in referenced:
+    # Path format: /icons/{subdir}/{filename}
+    parts = icon_path.lstrip('/').split('/', 2)
+    if len(parts) == 3:
+        referenced_local.add(f'{parts[1]}/{parts[2]}')
+
+removed_count = 0
+for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements']:
+    subdir_path = ICONS_DIR / subdir
+    if not subdir_path.exists():
+        continue
+    for f in subdir_path.iterdir():
+        if f.is_file():
+            rel_path = f'{subdir}/{f.name}'
+            if rel_path not in referenced_local:
+                f.unlink()
+                removed_count += 1
+
+if removed_count:
+    print(f"  Removed {removed_count} stale icon file{'s' if removed_count != 1 else ''}")
+else:
+    print("  No stale icons to remove")
 
 print("\n=== Done ===")

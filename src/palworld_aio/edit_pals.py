@@ -227,6 +227,7 @@ class PalIcon(QFrame):
             is_boss = cid.upper().startswith('BOSS_')
             is_predator = extract_value(raw, 'IsRarePal', False)
             is_lucky = extract_value(raw, 'IsRarePal', False)
+            is_awake = extract_value(raw, 'bIsAwakening', False)
             image_label = QLabel(self)
             image_label.setAlignment(Qt.AlignCenter)
             image_label.setFixedSize(64, 64)
@@ -276,7 +277,7 @@ class PalIcon(QFrame):
             pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
             if nick:
                 pal_name = f'{pal_name}({nick})'
-            self._add_overlays(level, gender, is_boss, is_predator, is_lucky, image_label, pal_name)
+            self._add_overlays(level, gender, is_boss, is_predator, is_lucky, is_awake, image_label, pal_name)
             image_label.move((self.width() - image_label.width()) // 2, (self.height() - image_label.height()) // 2)
         except Exception as e:
             print(f'Error setting up PalIcon: {e}')
@@ -295,7 +296,9 @@ class PalIcon(QFrame):
             self.boss_label.hide()
         if hasattr(self, 'shiny_label'):
             self.shiny_label.hide()
-    def _add_overlays(self, level, gender, is_boss, is_predator, is_lucky, image_label, pal_name):
+        if hasattr(self, 'awake_label'):
+            self.awake_label.hide()
+    def _add_overlays(self, level, gender, is_boss, is_predator, is_lucky, is_awake, image_label, pal_name):
         level_label = StrokedLabel(f'Lvl {level}')
         level_label.setStyleSheet('font-size: 9px; font-weight: bold; background-color: transparent;')
         level_label.setFixedSize(35, 15)
@@ -339,6 +342,12 @@ class PalIcon(QFrame):
         self.boss_label.setParent(self)
         self.boss_label.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.boss_label.raise_()
+        self.awake_label = QLabel('\U0001f525', self)
+        self.awake_label.setStyleSheet('\n            color: #FF6B35;\n            font-size: 14px;\n            font-weight: bold;\n            background: transparent;\n        ')
+        self.awake_label.setFixedSize(20, 20)
+        self.awake_label.setAlignment(Qt.AlignCenter)
+        self.awake_label.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self.awake_label.raise_()
         self.shiny_label = QLabel(self)
         shiny_icon_path = os.path.join(base_dir, 'resources', 'boss_shiny.webp')
         try:
@@ -375,6 +384,11 @@ class PalIcon(QFrame):
         else:
             self.boss_label.hide()
             self.shiny_label.hide()
+        if is_awake:
+            self.awake_label.move(self.width() - 22, self.height() - 22)
+            self.awake_label.show()
+        else:
+            self.awake_label.hide()
         if is_predator:
             predator_label = QLabel('🦹')
             predator_label.setStyleSheet('\n                color: #EF4444;\n                font-size: 14px;\n                background-color: rgba(0,0,0,0.8);\n                border-radius: 10px;\n            ')
@@ -410,6 +424,7 @@ class PalIcon(QFrame):
             is_boss = cid.upper().startswith('BOSS_')
             is_predator = extract_value(raw, 'IsRarePal', False)
             is_lucky = extract_value(raw, 'IsRarePal', False)
+            is_awake = extract_value(raw, 'bIsAwakening', False)
             if hasattr(self, 'level_label'):
                 self.level_label.setText(f'Lvl {level}')
             gender_icon = (nf.icons['nf-md-gender_male'] if nf else '\U000f0202') if gender.endswith('::Male') else nf.icons['nf-md-gender_female'] if nf else '\U000f0203'
@@ -429,6 +444,12 @@ class PalIcon(QFrame):
                 else:
                     self.boss_label.hide()
                     self.shiny_label.hide()
+            if hasattr(self, 'awake_label'):
+                if is_awake:
+                    self.awake_label.move(self.width() - 22, self.height() - 22)
+                    self.awake_label.show()
+                else:
+                    self.awake_label.hide()
         except Exception as e:
             pass
     def contextMenuEvent(self, event):
@@ -990,6 +1011,12 @@ class PalEditorWidget(QWidget):
         rare_toggle_btn.setFixedSize(32, 28)
         rare_toggle_btn.setStyleSheet('QPushButton { background-color: #333; border: 1px solid #666; } QPushButton:checked { background-color: #555; } QPushButton:hover { background-color: #555; }')
         name_layout.addWidget(rare_toggle_btn)
+        awake_toggle_btn = QPushButton('\U0001f525')
+        awake_toggle_btn.setIconSize(QSize(24, 24))
+        awake_toggle_btn.setCheckable(True)
+        awake_toggle_btn.setFixedSize(32, 28)
+        awake_toggle_btn.setStyleSheet('QPushButton { background-color: #333; border: 1px solid #666; font-size: 16px; } QPushButton:checked { background-color: #FF6B35; border: 1px solid #FF8C00; } QPushButton:hover { background-color: #555; }')
+        name_layout.addWidget(awake_toggle_btn)
         gender_icon_btn = QPushButton(nf.icons['nf-md-gender_female'] if nf else '\U000f0203')
         gender_icon_btn.setCheckable(False)
         gender_icon_btn.setFixedSize(32, 28)
@@ -1048,6 +1075,8 @@ class PalEditorWidget(QWidget):
         boss_toggle_btn.clicked.connect(lambda: self._toggle_boss(tab))
         tab.rare_toggle_btn = rare_toggle_btn
         rare_toggle_btn.clicked.connect(lambda: self._toggle_rare(tab))
+        tab.awake_toggle_btn = awake_toggle_btn
+        awake_toggle_btn.clicked.connect(lambda: self._toggle_awakening(tab))
         tab.level_spin.valueChanged.connect(lambda v: self._update_level(tab, v))
         tab.talent_hp_spin.valueChanged.connect(lambda v: self._update_talent(tab, 'hp', v))
         tab.talent_shot_spin.valueChanged.connect(lambda v: self._update_talent(tab, 'shot', v))
@@ -1482,6 +1511,9 @@ class PalEditorWidget(QWidget):
             if hasattr(tab, 'rare_toggle_btn'):
                 tab.rare_toggle_btn.setEnabled(has_boss_variant)
                 tab.rare_toggle_btn.setChecked(is_lucky)
+            is_awake = extract_value(raw, 'bIsAwakening', False)
+            if hasattr(tab, 'awake_toggle_btn'):
+                tab.awake_toggle_btn.setChecked(is_awake)
             moves = [None] * 3
             for i in range(min(3, len(e_list))):
                 if e_list[i]:
@@ -2425,6 +2457,31 @@ class PalEditorWidget(QWidget):
             tab.pal_nickname_label.setText(nick_display if nick_display else '')
         except Exception as e:
             print(f'Error toggling rare status: {e}')
+    def _toggle_awakening(self, tab):
+        pal_index = getattr(tab, 'selected_pal_index', -1)
+        if pal_index < 0 or pal_index >= len(tab.pal_data):
+            return
+        pal_item = tab.pal_data[pal_index]
+        try:
+            if 'data' in pal_item:
+                raw = pal_item['data']
+            else:
+                raw = pal_item['value']['RawData']['value']['object']['SaveParameter']['value']
+            current = extract_value(raw, 'bIsAwakening', False)
+            raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': not current}
+            self._update_tab_pal_display(tab, pal_index)
+            slot_index = None
+            for i in range(tab.pal_layout.count()):
+                widget = tab.pal_layout.itemAt(i).widget()
+                if widget and hasattr(widget, 'pal_data') and (widget.pal_data is pal_item):
+                    slot_index = widget.slot_index
+                    break
+            if slot_index is not None:
+                widget = self._find_widget_by_slot(tab, slot_index)
+                if widget:
+                    widget.update_display()
+        except Exception as e:
+            print(f'Error toggling awakening: {e}')
     def _max_stats(self):
         self._max_ivs()
         self._max_souls()
@@ -3290,6 +3347,7 @@ class PalEditorWidget(QWidget):
         raw['OwnerPlayerUId'] = {'struct_type': 'Guid', 'struct_id': empty_uuid, 'id': None, 'value': self.player_uid, 'type': 'StructProperty'}
         raw['IsRarePal'] = {'value': False, 'id': None, 'type': 'BoolProperty'}
         raw['IsPlayer'] = {'value': False, 'id': None, 'type': 'BoolProperty'}
+        raw['bIsAwakening'] = {'value': False, 'id': None, 'type': 'BoolProperty'}
         raw['OwnedTime'] = {'struct_type': 'DateTime', 'struct_id': empty_uuid, 'id': None, 'value': time_val, 'type': 'StructProperty'}
         raw['OldOwnerPlayerUIds'] = {'array_type': 'StructProperty', 'id': None, 'value': {'prop_name': 'OldOwnerPlayerUIds', 'prop_type': 'StructProperty', 'values': [self.player_uid], 'type_name': 'Guid', 'id': empty_uuid}, 'type': 'ArrayProperty'}
         raw['LastNickNameModifierPlayerUid'] = {'struct_type': 'Guid', 'struct_id': empty_uuid, 'id': None, 'value': self.player_uid, 'type': 'StructProperty'}

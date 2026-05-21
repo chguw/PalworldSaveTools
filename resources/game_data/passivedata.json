@@ -703,25 +703,25 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "AirDash_1",
+            "name": "Aerial Dash +1",
             "asset": "AirDash_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "AirDash_2",
+            "name": "Aerial Dash +2",
             "asset": "AirDash_2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "AirDash_3",
+            "name": "Aerial Dash +3",
             "asset": "AirDash_3",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "AirDash_4",
+            "name": "Aerial Dash +4",
             "asset": "AirDash_4",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1333,7 +1333,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Attack_ACC_up1",
+            "name": "Attack Up Lv. 1",
             "asset": "Attack_ACC_up1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1351,7 +1351,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Attack_ACC_up1_Otomo_Only_Equip",
+            "name": "Pal Attack Up Lv. 1",
             "asset": "Attack_ACC_up1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1363,7 +1363,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Attack_ACC_up2",
+            "name": "Attack Up Lv. 2",
             "asset": "Attack_ACC_up2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1381,7 +1381,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Attack_ACC_up2_Otomo_Only_Equip",
+            "name": "Pal Attack Up Lv. 2",
             "asset": "Attack_ACC_up2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1393,7 +1393,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Attack_ACC_up3",
+            "name": "Attack Up Lv. 3",
             "asset": "Attack_ACC_up3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1411,7 +1411,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Attack_ACC_up3_Otomo_Only_Equip",
+            "name": "Pal Attack Up Lv. 3",
             "asset": "Attack_ACC_up3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1651,55 +1651,55 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_AmaterasuWolf_Dark",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_AmaterasuWolf_Dark",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Anubis",
+            "name": "Ground Damage Enhancement (Small)",
             "asset": "BossDefeatReward_Anubis",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_BadCatgirl",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_BadCatgirl",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_BerryGoat_Dark",
+            "name": "Grass Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_BerryGoat_Dark",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_BlackMetalDragon",
+            "name": "Dragon Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_BlackMetalDragon",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_BlackPuppy",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_BlackPuppy",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_BlueDragon",
+            "name": "Water Damage Enhancement (Small)",
             "asset": "BossDefeatReward_BlueDragon",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_BlueThunderHorse",
+            "name": "Electric Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_BlueThunderHorse",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_BlueberryFairy",
+            "name": "Grass Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_BlueberryFairy",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1711,31 +1711,31 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_CaptainPenguin",
+            "name": "Water Damage Enhancement (Small)",
             "asset": "BossDefeatReward_CaptainPenguin",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_CatMage",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_CatMage",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_CatVampire",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_CatVampire",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_DarkScorpion",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_DarkScorpion",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_DarkScorpion_Ground",
+            "name": "Ground Damage Enhancement (Small)",
             "asset": "BossDefeatReward_DarkScorpion_Ground",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1759,19 +1759,19 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_FairyDragon",
+            "name": "Dragon Damage Enhancement (Small)",
             "asset": "BossDefeatReward_FairyDragon",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_FengyunDeeper",
+            "name": "Neutral Damage Enhancement (Small)",
             "asset": "BossDefeatReward_FengyunDeeper",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_FengyunDeeper_Electric",
+            "name": "Electric Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_FengyunDeeper_Electric",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1789,13 +1789,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_FlowerDinosaur_Electric",
+            "name": "Electric Damage Enhancement (Small)",
             "asset": "BossDefeatReward_FlowerDinosaur_Electric",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_FlowerDoll",
+            "name": "Grass Damage Enhancement (Small)",
             "asset": "BossDefeatReward_FlowerDoll",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1819,13 +1819,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_GhostRabbit",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_GhostRabbit",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_GoldenHorse",
+            "name": "Ground Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_GoldenHorse",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1843,49 +1843,49 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_GrassMammoth",
+            "name": "Grass Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_GrassMammoth",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_GrassPanda_Electric",
+            "name": "Electric Damage Enhancement (Small)",
             "asset": "BossDefeatReward_GrassPanda_Electric",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_GrassRabbitMan",
+            "name": "Grass Damage Enhancement (Small)",
             "asset": "BossDefeatReward_GrassRabbitMan",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_GrimGirl",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_GrimGirl",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_HawkBird",
+            "name": "Neutral Damage Enhancement (Small)",
             "asset": "BossDefeatReward_HawkBird",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_HerculesBeetle",
+            "name": "Ground Damage Enhancement (Small)",
             "asset": "BossDefeatReward_HerculesBeetle",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_HerculesBeetle_Ground",
+            "name": "Ground Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_HerculesBeetle_Ground",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Horus_Water",
+            "name": "Water Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_Horus_Water",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1897,31 +1897,31 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_IceHorse",
+            "name": "Ice Damage Enhancement (Large)",
             "asset": "BossDefeatReward_IceHorse",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_IceHorse_Dark",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_IceHorse_Dark",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_IceNarwhal",
+            "name": "Ice Damage Enhancement (Large)",
             "asset": "BossDefeatReward_IceNarwhal",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_IceNarwhal_Fire",
+            "name": "Fire Damage Enhancement (Large)",
             "asset": "BossDefeatReward_IceNarwhal_Fire",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_JetDragon",
+            "name": "Dragon Damage Enhancement (Large)",
             "asset": "BossDefeatReward_JetDragon",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1933,43 +1933,43 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_KingAlpaca",
+            "name": "Neutral Damage Enhancement (Small)",
             "asset": "BossDefeatReward_KingAlpaca",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_KingAlpaca_Ice",
+            "name": "Ice Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_KingAlpaca_Ice",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_KingBahamut",
+            "name": "Fire Damage Enhancement (Large)",
             "asset": "BossDefeatReward_KingBahamut",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Kirin",
+            "name": "Electric Damage Enhancement (Small)",
             "asset": "BossDefeatReward_Kirin",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Kitsunebi_Ice",
+            "name": "Ice Damage Enhancement (Large)",
             "asset": "BossDefeatReward_Kitsunebi_Ice",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_LazyCatfish",
+            "name": "Ground Damage Enhancement (Small)",
             "asset": "BossDefeatReward_LazyCatfish",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_LazyDragon_Electric",
+            "name": "Dragon Damage Enhancement (Small)",
             "asset": "BossDefeatReward_LazyDragon_Electric",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -1981,7 +1981,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_LilyQueen_Dark",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_LilyQueen_Dark",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2005,7 +2005,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_MopKing",
+            "name": "Ice Damage Enhancement (Small)",
             "asset": "BossDefeatReward_MopKing",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2017,49 +2017,49 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Mutant",
+            "name": "Neutral Damage Enhancement (Small)",
             "asset": "BossDefeatReward_Mutant",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_MysteryMask",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_MysteryMask",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_NaughtyCat",
+            "name": "Neutral Damage Enhancement (Small)",
             "asset": "BossDefeatReward_NaughtyCat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_NightBlueHorse",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_NightBlueHorse",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_PinkRabbit_Grass",
+            "name": "Grass Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_PinkRabbit_Grass",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_PlantSlime",
+            "name": "Ground Damage Enhancement (Small)",
             "asset": "BossDefeatReward_PlantSlime",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_PoseidonOrca",
+            "name": "Water Damage Enhancement (Large)",
             "asset": "BossDefeatReward_PoseidonOrca",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_PurpleSpider",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_PurpleSpider",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2077,13 +2077,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_QueenBee",
+            "name": "Grass Damage Enhancement (Small)",
             "asset": "BossDefeatReward_QueenBee",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_RaijinDaughter_Water",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_RaijinDaughter_Water",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2101,31 +2101,31 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Ronin",
+            "name": "Fire Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_Ronin",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_SaintCentaur_1",
+            "name": "Neutral Damage Enhancement (Large)",
             "asset": "BossDefeatReward_SaintCentaur_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_SaintCentaur_2",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "BossDefeatReward_SaintCentaur_2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_SakuraSaurus",
+            "name": "Grass Damage Enhancement (Small)",
             "asset": "BossDefeatReward_SakuraSaurus",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_SakuraSaurus_Water",
+            "name": "Water Damage Enhancement (Small)",
             "asset": "BossDefeatReward_SakuraSaurus_Water",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2137,19 +2137,19 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_SkyDragon",
+            "name": "Dragon Damage Enhancement (Small)",
             "asset": "BossDefeatReward_SkyDragon",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Suzaku",
+            "name": "Fire Damage Enhancement (Large)",
             "asset": "BossDefeatReward_Suzaku",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_ThunderBird",
+            "name": "Electric Damage Enhancement (Small)",
             "asset": "BossDefeatReward_ThunderBird",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2161,13 +2161,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Umihebi",
+            "name": "Water Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_Umihebi",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_VioletFairy",
+            "name": "Grass Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_VioletFairy",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2191,19 +2191,19 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_WeaselDragon",
+            "name": "Ice Damage Enhancement (Small)",
             "asset": "BossDefeatReward_WeaselDragon",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Werewolf_Ice",
+            "name": "Ice Damage Enhancement (Large)",
             "asset": "BossDefeatReward_Werewolf_Ice",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_WhiteDeer",
+            "name": "Neutral Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_WhiteDeer",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2215,31 +2215,31 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_WhiteMoth",
+            "name": "Ice Damage Enhancement (Small)",
             "asset": "BossDefeatReward_WhiteMoth",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_WhiteShieldDragon",
+            "name": "Dragon Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_WhiteShieldDragon",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_WhiteTiger_Ground",
+            "name": "Ground Damage Enhancement (Medium)",
             "asset": "BossDefeatReward_WhiteTiger_Ground",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_WingGolem",
+            "name": "Ground Damage Enhancement (Small)",
             "asset": "BossDefeatReward_WingGolem",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "BossDefeatReward_Yeti_Grass",
+            "name": "Grass Damage Enhancement (Small)",
             "asset": "BossDefeatReward_Yeti_Grass",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2413,37 +2413,37 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CaptureLevel_Up_1",
+            "name": "Capture Strength +1",
             "asset": "CaptureLevel_Up_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CaptureLevel_Up_2",
+            "name": "Capture Strength +2",
             "asset": "CaptureLevel_Up_2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CaptureLevel_Up_3",
+            "name": "Capture Strength +3",
             "asset": "CaptureLevel_Up_3",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CaptureLevel_Up_4",
+            "name": "Capture Strength +4",
             "asset": "CaptureLevel_Up_4",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CaptureLevel_Up_5",
+            "name": "Capture Strength +5",
             "asset": "CaptureLevel_Up_5",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CaptureLevel_Up_6",
+            "name": "Capture Strength +6",
             "asset": "CaptureLevel_Up_6",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2755,7 +2755,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CollectItem_Berries",
+            "name": "Berry Picker",
             "asset": "CollectItem_Berries",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2767,43 +2767,43 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CollectItem_Egg",
+            "name": "Egg Layer",
             "asset": "CollectItem_Egg",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CollectItem_Milk",
+            "name": "Milk Maker",
             "asset": "CollectItem_Milk",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CollectItem_Money",
+            "name": "Gold Digger",
             "asset": "CollectItem_Money",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CollectItem_Sweets",
+            "name": "Confectioner",
             "asset": "CollectItem_Sweets",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CollectItem_Wool_Alpaca",
+            "name": "Wool Maker",
             "asset": "CollectItem_Wool_Alpaca",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CollectItem_Wool_SheepBall",
+            "name": "Wool Maker",
             "asset": "CollectItem_Wool_SheepBall",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "CollectItem_Wool_WhiteMoth",
+            "name": "Silk Spinner",
             "asset": "CollectItem_Wool_WhiteMoth",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -2827,7 +2827,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "CoolTimeReduction_Up_3",
+            "name": "Tempest Fury",
             "asset": "CoolTimeReduction_Up_3",
             "rank": 4,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -3769,19 +3769,19 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Defense_ACC_up1_Otomo_Only_Equip",
+            "name": "Pal Defense Up Lv. 1",
             "asset": "Defense_ACC_up1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Defense_ACC_up2_Otomo_Only_Equip",
+            "name": "Pal Defense Up Lv. 2",
             "asset": "Defense_ACC_up2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Defense_ACC_up3_Otomo_Only_Equip",
+            "name": "Pal Defense Up Lv. 3",
             "asset": "Defense_ACC_up3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -3907,7 +3907,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "Deffence_up2_2",
+            "name": "Heavy Weight",
             "asset": "Deffence_up2_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4669,13 +4669,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "ElementBoost_Dark_1_BossDefeat",
+            "name": "Dark Damage Enhancement (Small)",
             "asset": "ElementBoost_Dark_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Dark_1_Otomo_Only_Equip",
+            "name": "Pal Dark Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Dark_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4687,13 +4687,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementBoost_Dark_2_BossDefeat",
+            "name": "Dark Damage Enhancement (Medium)",
             "asset": "ElementBoost_Dark_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Dark_2_Otomo_Only_Equip",
+            "name": "Pal Dark Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Dark_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4705,13 +4705,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "ElementBoost_Dark_3_BossDefeat",
+            "name": "Dark Damage Enhancement (Large)",
             "asset": "ElementBoost_Dark_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Dark_3_Otomo_Only_Equip",
+            "name": "Pal Dark Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Dark_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4753,13 +4753,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Dragon_1_BossDefeat",
+            "name": "Dragon Damage Enhancement (Small)",
             "asset": "ElementBoost_Dragon_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Dragon_1_Otomo_Only_Equip",
+            "name": "Pal Dragon Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Dragon_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4771,13 +4771,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementBoost_Dragon_2_BossDefeat",
+            "name": "Dragon Damage Enhancement (Medium)",
             "asset": "ElementBoost_Dragon_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Dragon_2_Otomo_Only_Equip",
+            "name": "Pal Dragon Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Dragon_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4789,13 +4789,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "ElementBoost_Dragon_3_BossDefeat",
+            "name": "Dragon Damage Enhancement (Large)",
             "asset": "ElementBoost_Dragon_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Dragon_3_Otomo_Only_Equip",
+            "name": "Pal Dragon Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Dragon_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4837,13 +4837,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Earth_1_BossDefeat",
+            "name": "Ground Damage Enhancement (Small)",
             "asset": "ElementBoost_Earth_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Earth_1_Otomo_Only_Equip",
+            "name": "Pal Ground Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Earth_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4855,13 +4855,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementBoost_Earth_2_BossDefeat",
+            "name": "Ground Damage Enhancement (Medium)",
             "asset": "ElementBoost_Earth_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Earth_2_Otomo_Only_Equip",
+            "name": "Pal Ground Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Earth_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4873,13 +4873,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "ElementBoost_Earth_3_BossDefeat",
+            "name": "Ground Damage Enhancement (Large)",
             "asset": "ElementBoost_Earth_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Earth_3_Otomo_Only_Equip",
+            "name": "Pal Ground Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Earth_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4921,37 +4921,37 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Electricity_1_BossDefeat",
+            "name": "Electric Damage Enhancement (Small)",
             "asset": "ElementBoost_Electricity_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Electricity_1_Otomo_Only_Equip",
+            "name": "Pal Electric Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Electricity_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Electricity_2_BossDefeat",
+            "name": "Electric Damage Enhancement (Medium)",
             "asset": "ElementBoost_Electricity_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Electricity_2_Otomo_Only_Equip",
+            "name": "Pal Electric Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Electricity_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Electricity_3_BossDefeat",
+            "name": "Electric Damage Enhancement (Large)",
             "asset": "ElementBoost_Electricity_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Electricity_3_Otomo_Only_Equip",
+            "name": "Pal Electric Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Electricity_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -4993,13 +4993,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Fire_1_BossDefeat",
+            "name": "Fire Damage Enhancement (Small)",
             "asset": "ElementBoost_Fire_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Fire_1_Otomo_Only_Equip",
+            "name": "Pal Fire Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Fire_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5011,13 +5011,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementBoost_Fire_2_BossDefeat",
+            "name": "Fire Damage Enhancement (Medium)",
             "asset": "ElementBoost_Fire_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Fire_2_Otomo_Only_Equip",
+            "name": "Pal Fire Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Fire_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5029,13 +5029,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "ElementBoost_Fire_3_BossDefeat",
+            "name": "Fire Damage Enhancement (Large)",
             "asset": "ElementBoost_Fire_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Fire_3_Otomo_Only_Equip",
+            "name": "Pal Fire Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Fire_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5077,13 +5077,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Ice_1_BossDefeat",
+            "name": "Ice Damage Enhancement (Small)",
             "asset": "ElementBoost_Ice_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Ice_1_Otomo_Only_Equip",
+            "name": "Pal Ice Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Ice_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5095,13 +5095,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementBoost_Ice_2_BossDefeat",
+            "name": "Ice Damage Enhancement (Medium)",
             "asset": "ElementBoost_Ice_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Ice_2_Otomo_Only_Equip",
+            "name": "Pal Ice Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Ice_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5113,13 +5113,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "ElementBoost_Ice_3_BossDefeat",
+            "name": "Ice Damage Enhancement (Large)",
             "asset": "ElementBoost_Ice_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Ice_3_Otomo_Only_Equip",
+            "name": "Pal Ice Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Ice_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5161,13 +5161,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Leaf_1_BossDefeat",
+            "name": "Grass Damage Enhancement (Small)",
             "asset": "ElementBoost_Leaf_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Leaf_1_Otomo_Only_Equip",
+            "name": "Pal Grass Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Leaf_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5179,13 +5179,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementBoost_Leaf_2_BossDefeat",
+            "name": "Grass Damage Enhancement (Medium)",
             "asset": "ElementBoost_Leaf_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Leaf_2_Otomo_Only_Equip",
+            "name": "Pal Grass Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Leaf_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5197,13 +5197,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "ElementBoost_Leaf_3_BossDefeat",
+            "name": "Grass Damage Enhancement (Large)",
             "asset": "ElementBoost_Leaf_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Leaf_3_Otomo_Only_Equip",
+            "name": "Pal Grass Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Leaf_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5245,13 +5245,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Normal_1_BossDefeat",
+            "name": "Neutral Damage Enhancement (Small)",
             "asset": "ElementBoost_Normal_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Normal_1_Otomo_Only_Equip",
+            "name": "Pal Neutral Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Normal_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5263,13 +5263,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementBoost_Normal_2_BossDefeat",
+            "name": "Neutral Damage Enhancement (Medium)",
             "asset": "ElementBoost_Normal_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Normal_2_Otomo_Only_Equip",
+            "name": "Pal Neutral Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Normal_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5281,13 +5281,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.png"
         },
         {
-            "name": "ElementBoost_Normal_3_BossDefeat",
+            "name": "Neutral Damage Enhancement (Large)",
             "asset": "ElementBoost_Normal_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Normal_3_Otomo_Only_Equip",
+            "name": "Pal Neutral Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Normal_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5347,37 +5347,37 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Water_1_BossDefeat",
+            "name": "Water Damage Enhancement (Small)",
             "asset": "ElementBoost_Water_1_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Water_1_Otomo_Only_Equip",
+            "name": "Pal Water Damage Enhancement Lv. 1",
             "asset": "ElementBoost_Water_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Water_2_BossDefeat",
+            "name": "Water Damage Enhancement (Medium)",
             "asset": "ElementBoost_Water_2_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Water_2_Otomo_Only_Equip",
+            "name": "Pal Water Damage Enhancement Lv. 2",
             "asset": "ElementBoost_Water_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Water_3_BossDefeat",
+            "name": "Water Damage Enhancement (Large)",
             "asset": "ElementBoost_Water_3_BossDefeat",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementBoost_Water_3_Otomo_Only_Equip",
+            "name": "Pal Water Damage Enhancement Lv. 3",
             "asset": "ElementBoost_Water_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5419,7 +5419,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Aqua_1",
+            "name": "Water Damage Reduction Lv. 1",
             "asset": "ElementResist_Aqua_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5431,13 +5431,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Aqua_2",
+            "name": "Water Damage Reduction Lv. 2",
             "asset": "ElementResist_Aqua_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Aqua_3",
+            "name": "Water Damage Reduction Lv. 3",
             "asset": "ElementResist_Aqua_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5449,7 +5449,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Dark_1",
+            "name": "Dark Damage Reduction Lv. 1",
             "asset": "ElementResist_Dark_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5467,13 +5467,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Dark_2",
+            "name": "Dark Damage Reduction Lv. 2",
             "asset": "ElementResist_Dark_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Dark_3",
+            "name": "Dark Damage Reduction Lv. 3",
             "asset": "ElementResist_Dark_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5485,7 +5485,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Dragon_1",
+            "name": "Dragon Damage Reduction Lv. 1",
             "asset": "ElementResist_Dragon_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5503,13 +5503,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Dragon_2",
+            "name": "Dragon Damage Reduction Lv. 2",
             "asset": "ElementResist_Dragon_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Dragon_3",
+            "name": "Dragon Damage Reduction Lv. 3",
             "asset": "ElementResist_Dragon_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5521,7 +5521,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Earth_1",
+            "name": "Earth Damage Reduction Lv. 1",
             "asset": "ElementResist_Earth_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5539,13 +5539,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Earth_2",
+            "name": "Earth Damage Reduction Lv. 2",
             "asset": "ElementResist_Earth_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Earth_3",
+            "name": "Earth Damage Reduction Lv. 3",
             "asset": "ElementResist_Earth_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5563,7 +5563,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Fire_1",
+            "name": "Fire Damage Reduction Lv. 1",
             "asset": "ElementResist_Fire_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5581,13 +5581,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Fire_2",
+            "name": "Fire Damage Reduction Lv. 2",
             "asset": "ElementResist_Fire_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Fire_3",
+            "name": "Fire Damage Reduction Lv. 3",
             "asset": "ElementResist_Fire_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5599,7 +5599,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Ice_1",
+            "name": "Ice Damage Reduction Lv. 1",
             "asset": "ElementResist_Ice_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5617,13 +5617,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Ice_2",
+            "name": "Ice Damage Reduction Lv. 2",
             "asset": "ElementResist_Ice_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Ice_3",
+            "name": "Ice Damage Reduction Lv. 3",
             "asset": "ElementResist_Ice_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5635,7 +5635,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Leaf_1",
+            "name": "Grass Damage Reduction Lv. 1",
             "asset": "ElementResist_Leaf_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5653,13 +5653,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Leaf_2",
+            "name": "Grass Damage Reduction Lv. 2",
             "asset": "ElementResist_Leaf_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Leaf_3",
+            "name": "Grass Damage Reduction Lv. 3",
             "asset": "ElementResist_Leaf_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5671,7 +5671,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Normal_1",
+            "name": "Neutral Damage Reduction Lv. 1",
             "asset": "ElementResist_Normal_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5689,13 +5689,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Normal_2",
+            "name": "Neutral Damage Reduction Lv. 2",
             "asset": "ElementResist_Normal_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Normal_3",
+            "name": "Neutral Damage Reduction Lv. 3",
             "asset": "ElementResist_Normal_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5707,7 +5707,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Thunder_1",
+            "name": "Electric Damage Reduction Lv. 1",
             "asset": "ElementResist_Thunder_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -5719,13 +5719,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
         },
         {
-            "name": "ElementResist_Thunder_2",
+            "name": "Electric Damage Reduction Lv. 2",
             "asset": "ElementResist_Thunder_2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "ElementResist_Thunder_3",
+            "name": "Electric Damage Reduction Lv. 3",
             "asset": "ElementResist_Thunder_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -6409,43 +6409,43 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "GYM_NAME_Desert",
+            "name": "PIDF Officer",
             "asset": "GYM_NAME_Desert",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "GYM_NAME_Forest",
+            "name": "Free Pal Alliance Founder",
             "asset": "GYM_NAME_Forest",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "GYM_NAME_Meadow",
+            "name": "Rayne Syndicate Officer",
             "asset": "GYM_NAME_Meadow",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "GYM_NAME_Sakurajima",
+            "name": "Leader of the Moonflowers",
             "asset": "GYM_NAME_Sakurajima",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "GYM_NAME_Snow",
+            "name": "PAL Genetic Research Unit Commander",
             "asset": "GYM_NAME_Snow",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "GYM_NAME_Viking",
+            "name": "Jarl of Feybreak ",
             "asset": "GYM_NAME_Viking",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "GYM_NAME_Volcano",
+            "name": "Brothers of the Eternal Pyre Soul Leader",
             "asset": "GYM_NAME_Volcano",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -6709,19 +6709,19 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "HP_ACC_up1",
+            "name": "Health Up Lv. 1",
             "asset": "HP_ACC_up1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "HP_ACC_up2",
+            "name": "Health Up Lv. 2",
             "asset": "HP_ACC_up2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "HP_ACC_up3",
+            "name": "Health Up Lv. 3",
             "asset": "HP_ACC_up3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -7255,7 +7255,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "JumpCount_Increase1",
+            "name": "Jump Count Increase +1",
             "asset": "JumpCount_Increase1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -7267,19 +7267,19 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "JumpCount_Increase2",
+            "name": "Jump Count Increase +2",
             "asset": "JumpCount_Increase2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "JumpCount_Increase3",
+            "name": "Jump Count Increase +3",
             "asset": "JumpCount_Increase3",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "JumpPower_Increase",
+            "name": "Jump Power Boost",
             "asset": "JumpPower_Increase",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -7585,37 +7585,37 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "MaxInventoryWeight_up",
+            "name": "Max Carrying Capacity Lv. 1",
             "asset": "MaxInventoryWeight_up",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "MaxInventoryWeight_up2",
+            "name": "Max Carrying Capacity Lv. 2",
             "asset": "MaxInventoryWeight_up2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "MaxInventoryWeight_up3",
+            "name": "Max Carrying Capacity Lv. 3",
             "asset": "MaxInventoryWeight_up3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "MaxInventoryWeight_up_Equip_1",
+            "name": "Max Carrying Capacity Lv. 1",
             "asset": "MaxInventoryWeight_up_Equip_1",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "MaxInventoryWeight_up_Equip_2",
+            "name": "Max Carrying Capacity Lv. 2",
             "asset": "MaxInventoryWeight_up_Equip_2",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "MaxInventoryWeight_up_Equip_3",
+            "name": "Max Carrying Capacity Lv. 3",
             "asset": "MaxInventoryWeight_up_Equip_3",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -7813,7 +7813,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "MiniNushi",
+            "name": "Whopper",
             "asset": "MiniNushi",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -8461,13 +8461,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "NightOwl",
+            "name": "Nocturnal",
             "asset": "NightOwl",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "Nocturnal",
+            "name": "Insomnia",
             "asset": "Nocturnal",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.png"
@@ -8491,7 +8491,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "OctaviaArmorVampire",
+            "name": "Blood Is Fuel",
             "asset": "OctaviaArmorVampire",
             "rank": 4,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -8653,7 +8653,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_02_negative.png"
         },
         {
-            "name": "PAL_SpiritualInst",
+            "name": "Mentally unstable",
             "asset": "PAL_SpiritualInst",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -8725,7 +8725,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "PalExp_Increase_1_Otomo_Only_Equip",
+            "name": "Pal EXP Up Lv. 1",
             "asset": "PalExp_Increase_1_Otomo_Only_Equip",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -8737,7 +8737,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "PalExp_Increase_2_Otomo_Only_Equip",
+            "name": "Pal EXP Up Lv. 2",
             "asset": "PalExp_Increase_2_Otomo_Only_Equip",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -8749,7 +8749,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "PalExp_Increase_3_Otomo_Only_Equip",
+            "name": "Pal EXP Up Lv. 3",
             "asset": "PalExp_Increase_3_Otomo_Only_Equip",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -9697,25 +9697,25 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "SphereModule_Curve",
+            "name": "Sphere Curve +1",
             "asset": "SphereModule_Curve",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "SphereModule_Curve2",
+            "name": "Sphere Slider",
             "asset": "SphereModule_Curve2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "SphereModule_Heavy",
+            "name": "Sphere Weight +1",
             "asset": "SphereModule_Heavy",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "SphereModule_Homing",
+            "name": "Sphere Homing",
             "asset": "SphereModule_Homing",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -9727,13 +9727,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "SphereModule_Sniper",
+            "name": "Sphere Range +1",
             "asset": "SphereModule_Sniper",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "SphereModule_Sniper2",
+            "name": "Sphere Range +2",
             "asset": "SphereModule_Sniper2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -9787,31 +9787,31 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "StonDrop_Boost_1",
+            "name": "Mining +1",
             "asset": "StonDrop_Boost_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "StonDrop_Boost_2",
+            "name": "Mining +2",
             "asset": "StonDrop_Boost_2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "StonDrop_Boost_3",
+            "name": "Mining +3",
             "asset": "StonDrop_Boost_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "StonDrop_Boost_4",
+            "name": "Mining +4",
             "asset": "StonDrop_Boost_4",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "StonDrop_Boost_5",
+            "name": "Mining +5",
             "asset": "StonDrop_Boost_5",
             "rank": 4,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -9961,13 +9961,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Cold1",
+            "name": "Cold Resistant Lv. 1",
             "asset": "TemperatureResist_Cold1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Cold2",
+            "name": "Cold Resistant Lv. 2",
             "asset": "TemperatureResist_Cold2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -9979,7 +9979,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Cold3",
+            "name": "Cold Resistant Lv. 3",
             "asset": "TemperatureResist_Cold3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -9991,25 +9991,25 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Heat1",
+            "name": "Heat Resistant Lv. 1",
             "asset": "TemperatureResist_Heat1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Heat1Cold1",
+            "name": "Heat Resistant Lv. 1 / Cold Resistant Lv. 1",
             "asset": "TemperatureResist_Heat1Cold1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Heat2",
+            "name": "Heat Resistant Lv. 2",
             "asset": "TemperatureResist_Heat2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Heat2Cold2",
+            "name": "Heat Resistant Lv. 2 / Cold Resistant Lv. 2",
             "asset": "TemperatureResist_Heat2Cold2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -10021,13 +10021,13 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Heat3",
+            "name": "Heat Resistant Lv. 3",
             "asset": "TemperatureResist_Heat3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "TemperatureResist_Heat3Cold3",
+            "name": "Heat Resistant Lv. 3 / Cold Resistant Lv. 3",
             "asset": "TemperatureResist_Heat3Cold3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -10801,31 +10801,31 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WoodDrop_Boost_1",
+            "name": "Logging +1",
             "asset": "WoodDrop_Boost_1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WoodDrop_Boost_2",
+            "name": "Logging +2",
             "asset": "WoodDrop_Boost_2",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WoodDrop_Boost_3",
+            "name": "Logging +3",
             "asset": "WoodDrop_Boost_3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WoodDrop_Boost_4",
+            "name": "Logging +4",
             "asset": "WoodDrop_Boost_4",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WoodDrop_Boost_5",
+            "name": "Logging +5",
             "asset": "WoodDrop_Boost_5",
             "rank": 4,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -11011,19 +11011,19 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorkSpeed_ACC_up1",
+            "name": "Speedy Worker Lv. 1",
             "asset": "WorkSpeed_ACC_up1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorkSpeed_ACC_up2",
+            "name": "Speedy Worker Lv. 2",
             "asset": "WorkSpeed_ACC_up2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorkSpeed_ACC_up3",
+            "name": "Speedy Worker Lv. 3",
             "asset": "WorkSpeed_ACC_up3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -11143,73 +11143,73 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorldTree_ATK",
+            "name": "Wrath of the World Tree",
             "asset": "WorldTree_ATK",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorldTree_ATK_DEF",
+            "name": "Bane of the World Tree",
             "asset": "WorldTree_ATK_DEF",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorldTree_CraftSpeed",
+            "name": "Thrall of the World Tree",
             "asset": "WorldTree_CraftSpeed",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorldTree_DEF",
+            "name": "Aegis of the World Tree",
             "asset": "WorldTree_DEF",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorldTree_FullStomach",
+            "name": "Bounty of the World Tree",
             "asset": "WorldTree_FullStomach",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorldTree_MoveSpeed",
+            "name": "Surge of the World Tree",
             "asset": "WorldTree_MoveSpeed",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "WorldTree_Sanity",
+            "name": "Insight of the World Tree",
             "asset": "WorldTree_Sanity",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "YakushimaDagameBoost_Magic_Equip",
+            "name": "Hallowed Power: Magic",
             "asset": "YakushimaDagameBoost_Magic_Equip",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "YakushimaDagameBoost_Melee_Equip",
+            "name": "Hallowed Power: Close Range",
             "asset": "YakushimaDagameBoost_Melee_Equip",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "YakushimaDagameBoost_Ranged_Equip",
+            "name": "Hallowed Power: Ranged",
             "asset": "YakushimaDagameBoost_Ranged_Equip",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "YakushimaDagameBoost_Summon_Equip",
+            "name": "Hallowed Power: Summon",
             "asset": "YakushimaDagameBoost_Summon_Equip",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "YakushimaProtection_Equip",
+            "name": "Hallowed Guard",
             "asset": "YakushimaProtection_Equip",
             "rank": -1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -11245,7 +11245,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "defense_ACC_up1",
+            "name": "Defense Up Lv. 1",
             "asset": "defense_ACC_up1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -11257,7 +11257,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "defense_ACC_up2",
+            "name": "Defense Up Lv. 2",
             "asset": "defense_ACC_up2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
@@ -11269,7 +11269,7 @@
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"
         },
         {
-            "name": "defense_ACC_up3",
+            "name": "Defense Up Lv. 3",
             "asset": "defense_ACC_up3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.png"

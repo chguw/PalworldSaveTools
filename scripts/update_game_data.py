@@ -583,12 +583,6 @@ def update_pal_data():
             print(f"  Added new variant from MonsterParameter: {pal_id}")
     
     # Phase 3: Add any existing pals that might not be in the new export but we want to keep
-    existing_assets = {p['asset'].lower() for p in updated_pals}
-    for pal_id, entry in existing_pals.items():
-        if pal_id not in existing_assets:
-            print(f"  Keeping existing pal not in new exports: {entry.get('name', pal_id)}")
-            updated_pals.append(entry)
-    
     result = {'pals': updated_pals}
     save_resource_json('paldata.json', result)
     print(f"  Total pals: {len(updated_pals)}")
@@ -671,12 +665,6 @@ def update_npc_data():
         }
         updated_npcs.append(npc_entry)
     
-    existing_assets = {n['asset'].lower() for n in updated_npcs}
-    for npc_id, entry in existing_npcs.items():
-        if npc_id not in existing_assets:
-            print(f"  Keeping existing NPC not in new exports: {entry.get('name', npc_id)}")
-            updated_npcs.append(entry)
-    
     result = {'npcs': updated_npcs}
     save_resource_json('npcdata.json', result)
 
@@ -747,6 +735,12 @@ def update_item_data():
         EXPORT_TEXTURES_DIR.parent.parent / 'Others' / 'InventoryItemIcon' / 'Texture',
     ]
     
+    def _is_valid_l10n_name(name: str) -> bool:
+        """Check if a localized name is a valid display name (not placeholder)."""
+        if not name:
+            return False
+        return name.strip() not in ('', '-', 'en_text', 'en Text', 'None', 'none', 'ex Text')
+
     def resolve_item_name(item_id: str, item_row: dict) -> str:
         """Resolve item display name from localization data.
         
@@ -759,16 +753,22 @@ def update_item_data():
         if isinstance(item_row, dict):
             override = item_row.get('OverrideName', '')
         if override and override != 'None' and override in item_name_l10n:
-            return item_name_l10n[override]
+            val = item_name_l10n[override]
+            if _is_valid_l10n_name(val):
+                return val
         
         # Standard lookup: ITEM_NAME_{item_id}
         standard_key = f'ITEM_NAME_{item_id}'
         if standard_key in item_name_l10n:
-            return item_name_l10n[standard_key]
+            val = item_name_l10n[standard_key]
+            if _is_valid_l10n_name(val):
+                return val
         
         # Also try item_id directly as a key
         if item_id in item_name_l10n:
-            return item_name_l10n[item_id]
+            val = item_name_l10n[item_id]
+            if _is_valid_l10n_name(val):
+                return val
         
         return item_id
     
@@ -781,7 +781,14 @@ def update_item_data():
         item_row = all_item_rows.get(item_id, {})
         item_name = resolve_item_name(item_id, item_row)
         
-        # Get icon from icon table
+        # Extract IconName from item data (tells us which icon template to use)
+        icon_name_field = ''
+        if isinstance(item_row, dict):
+            icon_name_field = item_row.get('IconName', '')
+        if not icon_name_field or icon_name_field == 'None':
+            icon_name_field = ''
+        
+        # Get icon from icon table (direct mapping)
         icon_row = all_icon_rows.get(item_id, {})
         icon_path = ''
         if isinstance(icon_row, dict):
@@ -789,13 +796,41 @@ def update_item_data():
             if isinstance(icon_data, dict):
                 icon_path = icon_data.get('AssetPathName', '')
         
-        # Try to find and copy the icon
         copied_icon = None
+        
+        # Strategy 1: Try direct icon path from icon data table
         if icon_path:
             icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
             copied_icon = find_and_copy_icon(icon_filename, 'items', item_icon_subdirs)
         
-        # Also try to find icon by L10N name or alternative patterns
+        # Strategy 2: If item has IconName pointing to another item, try that item's icon
+        if not copied_icon and icon_name_field and icon_name_field != item_id:
+            icon_name_row = all_icon_rows.get(icon_name_field, {})
+            if isinstance(icon_name_row, dict):
+                icon_data = icon_name_row.get('Icon', {})
+                if isinstance(icon_data, dict):
+                    icon_path2 = icon_data.get('AssetPathName', '')
+                    if icon_path2:
+                        icon_filename2 = icon_path2.split('/')[-1].split('.')[0] if '.' in icon_path2 else icon_path2.split('/')[-1]
+                        copied_icon = find_and_copy_icon(icon_filename2, 'items', item_icon_subdirs)
+                        if copied_icon:
+                            print(f"    Found icon for {item_id} via IconName '{icon_name_field}'")
+        
+        # Strategy 3: Try to find icon by IconName field directly
+        if not copied_icon and icon_name_field:
+            for try_name in [icon_name_field, item_name.replace(' ', '')]:
+                for alt_fn in [f'T_itemicon_{try_name}', f'T_{try_name}', try_name]:
+                    for ext in ['.webp', '.png']:
+                        found = find_and_copy_icon(alt_fn, 'items', item_icon_subdirs)
+                        if found:
+                            copied_icon = found
+                            break
+                    if copied_icon:
+                        break
+            if copied_icon:
+                print(f"    Found icon for {item_id} via IconName fallback: {copied_icon}")
+        
+        # Strategy 4: Try to find icon by item_id or item name (original alt search)
         if not copied_icon:
             for try_name in [item_id, item_name.replace(' ', '')]:
                 for alt_fn in [f'T_itemicon_{try_name}', f'T_{try_name}', try_name]:
@@ -809,18 +844,19 @@ def update_item_data():
             if copied_icon:
                 print(f"    Found icon for {item_id} via alt search: {copied_icon}")
         
+        # Strategy 5: Use existing icon or generate fallback
+        final_icon = copied_icon or existing_entry.get('icon', f'/icons/items/{item_id}.webp')
+        
+        # If we still have a placeholder icon, try a generic icon
+        if not final_icon.startswith('/icons/'):
+            final_icon = f'/icons/items/{item_id}.webp'
+        
         item_entry = {
-            'name': existing_entry.get('name', item_name),
+            'name': item_name,
             'asset': item_id,
-            'icon': copied_icon or existing_entry.get('icon', f'/icons/items/{item_id}.webp')
+            'icon': final_icon
         }
         updated_items.append(item_entry)
-    
-    existing_assets = {i['asset'].lower() for i in updated_items}
-    for item_id, entry in existing_items.items():
-        if item_id not in existing_assets:
-            print(f"  Keeping existing item not in new exports: {entry.get('name', item_id)}")
-            updated_items.append(entry)
     
     result = {'items': updated_items}
     save_resource_json('itemdata.json', result)
@@ -831,34 +867,78 @@ def update_item_data():
 # STRUCTURE DATA UPDATE
 # ============================================================================
 
+def load_single_table(data) -> dict:
+    """Extract rows from export data regardless of format."""
+    rows = {}
+    if data:
+        if isinstance(data, list):
+            for table in data:
+                if isinstance(table, dict):
+                    r = table.get('Rows', {})
+                    if r:
+                        rows.update(r)
+        elif isinstance(data, dict):
+            r = data.get('Rows', {})
+            if r:
+                rows.update(r)
+    return rows
+
+
 def update_structure_data():
-    """Update structuredata.json based on exported data tables."""
+    """Update structuredata.json based on exported data tables.
+    
+    Sources:
+      - DT_MapObjectMasterDataTable.json (all map objects with OverrideNameMsgID)
+      - DT_BuildObjectDataTable.json (buildable structures with category info)
+      - DT_BuildObjectIconDataTable.json (icon paths for buildable structures)
+      - DT_MapObjectNameText_Common.json (localized names)
+    """
     print("\n=== Updating Structure Data ===")
     
-    # Structures are found in MapObject and BaseCamp data tables
-    mapobj_data = load_export_json('MapObject/DT_MapObjectDataTable.json')
-    basecamp_data = load_export_json('BaseCamp/DT_BaseCampMapObjectDataTable.json')
+    # Load map object master data (primary structure list)
+    master_data = load_export_json('MapObject/DT_MapObjectMasterDataTable.json')
+    master_common = load_export_json('MapObject/DT_MapObjectMasterDataTable_Common.json')
+    master_enemy = load_export_json('MapObject/DT_MapObjectMasterDataTable_EnemyCamp.json')
+    
+    # Load build object data (subset that are buildable, with category info)
+    build_data = load_export_json('MapObject/Building/DT_BuildObjectDataTable.json')
+    build_data_common = load_export_json('MapObject/Building/DT_BuildObjectDataTable_Common.json')
+    
+    # Load build object icon data (icon paths)
+    icon_table = load_export_json('MapObject/Building/DT_BuildObjectIconDataTable.json')
+    icon_table_common = load_export_json('MapObject/Building/DT_BuildObjectIconDataTable_Common.json')
+    
+    # Load localization for structure names
+    struct_name_l10n = load_l10n_table('DT_MapObjectNameText_Common.json')
     
     existing = load_resource_json('structuredata.json')
     existing_structures = {s.get('asset', '').lower(): s for s in existing.get('structures', [])}
     
-    all_rows = {}
-    for data in [mapobj_data, basecamp_data]:
-        if data:
-            if isinstance(data, list):
-                for table in data:
-                    if isinstance(table, dict):
-                        rows = table.get('Rows', {})
-                        if rows:
-                            all_rows.update(rows)
-            elif isinstance(data, dict):
-                rows = data.get('Rows', {})
-                if rows:
-                    all_rows.update(rows)
+    # Merge all map object master rows
+    master_rows = {}
+    for d in [master_data, master_common, master_enemy]:
+        master_rows.update(load_single_table(d))
     
-    if not all_rows:
-        print("  No structure rows found. Skipping.")
+    # Merge build object data - just need to know which IDs are buildable
+    build_rows = {}
+    for d in [build_data, build_data_common]:
+        build_rows.update(load_single_table(d))
+    
+    # Merge icon data
+    icon_rows = {}
+    for d in [icon_table, icon_table_common]:
+        icon_rows.update(load_single_table(d))
+    
+    if not master_rows:
+        print("  No map object rows found. Skipping.")
         return
+    
+    # Collect all structure IDs: from master data, build data (by MapObjectId), and icon data
+    all_struct_ids = set(master_rows.keys())
+    for r in build_rows.values():
+        if isinstance(r, dict) and r.get('MapObjectId', '') not in ('None', ''):
+            all_struct_ids.add(r['MapObjectId'])
+    all_struct_ids.update(icon_rows.keys())
     
     structure_icon_subdirs = [
         EXPORT_TEXTURES_DIR / 'BuildObject' / 'Icon',
@@ -866,32 +946,52 @@ def update_structure_data():
         EXPORT_TEXTURES_DIR / 'MapObject',
     ]
     
+    def resolve_struct_name(struct_id: str) -> str:
+        """Resolve structure display name from L10N data.
+        
+        L10N key pattern: MAPOBJECT_NAME_{struct_id}
+        e.g. MAPOBJECT_NAME_BlastFurnace -> 'Primitive Furnace'
+        """
+        key = f'MAPOBJECT_NAME_{struct_id}'
+        name = struct_name_l10n.get(key, '')
+        if name and name.lower() not in ('en_text', 'none', '-', ''):
+            return name
+        return struct_id
+    
     updated_structures = []
-    for struct_id, row_data in sorted(all_rows.items()):
+    for struct_id in sorted(all_struct_ids):
         struct_id_lower = struct_id.lower()
         existing_entry = existing_structures.get(struct_id_lower, {})
         
-        # Extract icon info
-        icon_data = row_data.get('Icon', row_data.get('MapObjectIcon', {}))
-        icon_path = icon_data.get('AssetPathName', '') if isinstance(icon_data, dict) else ''
+        # Resolve name from L10N
+        display_name = resolve_struct_name(struct_id)
         
+        # Determine icon
+        # 1. Try icon data table first
         copied_icon = None
-        if icon_path:
-            icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
-            copied_icon = find_and_copy_icon(icon_filename, 'structures', structure_icon_subdirs)
+        icon_row = icon_rows.get(struct_id, {})
+        if icon_row:
+            soft_icon = icon_row.get('SoftIcon', {})
+            if isinstance(soft_icon, dict):
+                icon_path = soft_icon.get('AssetPathName', '')
+                if icon_path and icon_path != 'None':
+                    icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
+                    copied_icon = find_and_copy_icon(icon_filename, 'structures', structure_icon_subdirs)
+        
+        # 2. Try existing icon
+        if not copied_icon:
+            existing_icon = existing_entry.get('icon', '')
+            if existing_icon and existing_icon.startswith('/icons/'):
+                copied_icon = existing_icon
+        
+        final_icon = copied_icon or f'/icons/structures/{struct_id}.webp'
         
         struct_entry = {
-            'name': existing_entry.get('name', struct_id),
+            'name': display_name,
             'asset': struct_id,
-            'icon': copied_icon or existing_entry.get('icon', f'/icons/structures/{struct_id}.webp')
+            'icon': final_icon
         }
         updated_structures.append(struct_entry)
-    
-    existing_assets = {s['asset'].lower() for s in updated_structures}
-    for struct_id, entry in existing_structures.items():
-        if struct_id not in existing_assets:
-            print(f"  Keeping existing structure not in new exports: {entry.get('name', struct_id)}")
-            updated_structures.append(entry)
     
     result = {'structures': updated_structures}
     save_resource_json('structuredata.json', result)
@@ -912,6 +1012,17 @@ def update_passive_data():
     existing = load_resource_json('passivedata.json')
     existing_passives = {p.get('asset', '').lower(): p for p in existing.get('passives', [])}
     
+    # Load passive name localization from SkillNameText (PASSIVE_ prefix)
+    # Try English L10N first, then fall back to raw (Japanese) text table
+    raw_skill_l10n = load_l10n_table('DT_SkillNameText_Common.json')
+    passive_name_l10n = {}
+    _invalid_l10n = {'', 'en_text', 'en text', 'en', '-', 'none', 'ex text'}
+    for uid_key, display_name in raw_skill_l10n.items():
+        if uid_key.startswith('PASSIVE_'):
+            passive_asset = uid_key[len('PASSIVE_'):]
+            if display_name and display_name.strip().lower() not in _invalid_l10n:
+                passive_name_l10n[passive_asset] = display_name
+
     all_rows = {}
     for data in [passive_main, passive_main_common]:
         if data:
@@ -958,19 +1069,17 @@ def update_passive_data():
             icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
             copied_icon = find_and_copy_icon(icon_filename, 'passives', passive_icon_subdirs)
         
+        # Resolve display name: L10N or raw ID (no existing fallback for fresh data)
+        l10n_name = passive_name_l10n.get(passive_id, None)
+        display_name = l10n_name or passive_id
+        
         passive_entry = {
-            'name': existing_entry.get('name', passive_id),
+            'name': display_name,
             'asset': passive_id,
             'rank': rank,
             'icon': copied_icon or existing_entry.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.png')
         }
         updated_passives.append(passive_entry)
-    
-    existing_assets = {p['asset'].lower() for p in updated_passives}
-    for passive_id, entry in existing_passives.items():
-        if passive_id not in existing_assets:
-            print(f"  Keeping existing passive not in new exports: {entry.get('name', passive_id)}")
-            updated_passives.append(entry)
     
     result = {'passives': updated_passives}
     save_resource_json('passivedata.json', result)
@@ -982,65 +1091,149 @@ def update_passive_data():
 # ============================================================================
 
 def update_technology_data():
-    """Update technologydata.json based on exported data tables."""
+    """Update technologydata.json based on exported data tables.
+    
+    Source: DT_TechnologyRecipeUnlock.json (has Name, IconName, Tier, Cost)
+    L10N: DT_TechnologyNameText_Common.json (NAME_RECIPE_{Name} pattern)
+    """
     print("\n=== Updating Technology Data ===")
     
-    tech_data = load_export_json('Technology/DT_PalTechnologyDataTable.json')
+    tech_data = load_export_json('Technology/DT_TechnologyRecipeUnlock.json')
+    tech_data_common = load_export_json('Technology/DT_TechnologyRecipeUnlock_Common.json')
     
-    existing = load_resource_json('technologydata.json')
-    existing_techs = {t.get('asset', '').lower(): t for t in existing.get('technologies', [])}
+    # Load item and structure data to resolve <itemName>/<mapObjectName> tags and find icons
+    item_data = load_resource_json('itemdata.json')
+    item_name_map = {}
+    item_icon_map = {}
+    for i in item_data.get('items', []):
+        if isinstance(i, dict) and 'asset' in i and 'name' in i:
+            item_name_map[i['asset'].lower()] = i['name']
+            if 'icon' in i:
+                item_icon_map[i['asset'].lower()] = i['icon']
+    struct_data = load_resource_json('structuredata.json')
+    struct_name_map = {}
+    struct_icon_map = {}
+    for s in struct_data.get('structures', []):
+        if isinstance(s, dict) and 'asset' in s and 'name' in s:
+            struct_name_map[s['asset'].lower()] = s['name']
+            if 'icon' in s:
+                struct_icon_map[s['asset'].lower()] = s['icon']
+    
+    # Load technology name localization
+    tech_l10n = load_l10n_table('DT_TechnologyNameText_Common.json')
     
     all_rows = {}
-    if tech_data:
-        if isinstance(tech_data, list):
-            for table in tech_data:
-                if isinstance(table, dict):
-                    rows = table.get('Rows', {})
-                    if rows:
-                        all_rows.update(rows)
-        elif isinstance(tech_data, dict):
-            rows = tech_data.get('Rows', {})
-            if rows:
-                all_rows.update(rows)
+    for data in [tech_data, tech_data_common]:
+        if data:
+            if isinstance(data, list):
+                for table in data:
+                    if isinstance(table, dict):
+                        rows = table.get('Rows', {})
+                        if rows:
+                            all_rows.update(rows)
+            elif isinstance(data, dict):
+                rows = data.get('Rows', {})
+                if rows:
+                    all_rows.update(rows)
     
     if not all_rows:
         print("  No technology rows found. Skipping.")
         return
     
+    def _resolve_rich_text(text: str) -> str:
+        """Resolve <itemName id=|X|/> and <mapObjectName id=|X|/> tags to actual names."""
+        import re
+        def _replace_item(m):
+            asset = m.group(1).lower()
+            name = item_name_map.get(asset, '')
+            if name and '<' not in name:
+                return name
+            return asset
+        def _replace_struct(m):
+            asset = m.group(1).lower()
+            name = struct_name_map.get(asset, '')
+            if name and '<' not in name:
+                return name
+            return asset
+        text = re.sub(r'<itemName\s+id=\|([^|]+)\|/>', _replace_item, text, flags=re.I)
+        text = re.sub(r'<mapObjectName\s+id=\|([^|]+)\|/>', _replace_struct, text, flags=re.I)
+        return text
+    
     tech_icon_subdirs = [
         EXPORT_TEXTURES_DIR / 'UI' / 'Common',
         EXPORT_TEXTURES_DIR / 'UI' / 'InGame',
+        EXPORT_TEXTURES_DIR / 'StatusParameterIcon',
     ]
     
     updated_techs = []
     for tech_id, row_data in sorted(all_rows.items()):
-        tech_id_lower = tech_id.lower()
-        existing_entry = existing_techs.get(tech_id_lower, {})
+        if not isinstance(row_data, dict):
+            continue
         
-        icon_data = row_data.get('Icon', {})
-        icon_path = icon_data.get('AssetPathName', '') if isinstance(icon_data, dict) else ''
+        # Get recipe Name field (used as L10N key)
+        recipe_name = row_data.get('Name', '')
+        icon_name = row_data.get('IconName', '')
+        tier = row_data.get('Tier', 0)
+        tech_type = row_data.get('IsBossTechnology', False)
         
+        # Resolve display name from L10N (Name field IS the L10N key)
+        display_name = tech_id
+        if recipe_name and recipe_name != 'None':
+            l10n_name = tech_l10n.get(recipe_name, '')
+            if l10n_name and l10n_name.strip().lower() not in ('', 'en_text', 'en', '-', 'none', 'ex text'):
+                display_name = _resolve_rich_text(l10n_name)
+        
+        # Find icon: prefer unlocked item/structure icon over IconName
         copied_icon = None
-        if icon_path:
-            icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
-            copied_icon = find_and_copy_icon(icon_filename, 'technologies', tech_icon_subdirs)
+        unlock_items = row_data.get('UnlockItemRecipes', [])
+        unlock_builds = row_data.get('UnlockBuildObjects', [])
+        # Try unlock items first (gives proper saddle/weapon icons, not pal faces)
+        for item_id in unlock_items:
+            item_icon = item_icon_map.get(item_id.lower(), '')
+            if item_icon:
+                item_filename = item_icon.rsplit('/', 1)[-1] if '/' in item_icon else item_icon
+                src_path = ICONS_DIR / 'items' / item_filename
+                if src_path.exists():
+                    import shutil
+                    target_dir = ICONS_DIR / 'technologies'
+                    target_file = target_dir / item_filename
+                    if not target_file.exists():
+                        shutil.copy2(str(src_path), str(target_file))
+                    copied_icon = f'/icons/technologies/{item_filename}'
+                    break
+        # Try unlock structures next
+        if not copied_icon:
+            for struct_id in unlock_builds:
+                struct_icon = struct_icon_map.get(struct_id.lower(), '')
+                if struct_icon:
+                    struct_filename = struct_icon.rsplit('/', 1)[-1] if '/' in struct_icon else struct_icon
+                    src_path = ICONS_DIR / 'structures' / struct_filename
+                    if src_path.exists():
+                        import shutil
+                        target_dir = ICONS_DIR / 'technologies'
+                        target_file = target_dir / struct_filename
+                        if not target_file.exists():
+                            shutil.copy2(str(src_path), str(target_file))
+                        copied_icon = f'/icons/technologies/{struct_filename}'
+                        break
+        # Fallback to IconName search in exports
+        if not copied_icon and icon_name:
+            for try_fn in [f'T_itemicon_{icon_name}', f'T_{icon_name}', icon_name]:
+                copied_icon = find_and_copy_icon(try_fn, 'technologies', tech_icon_subdirs)
+                if copied_icon:
+                    break
         
         tech_entry = {
-            'name': existing_entry.get('name', tech_id),
+            'name': display_name,
             'asset': tech_id,
-            'icon': copied_icon or existing_entry.get('icon', f'/icons/technologies/{tech_id}.webp'),
-            'type': existing_entry.get('type', '')
+            'icon': copied_icon or f'/icons/technologies/{tech_id}.webp',
+            'type': 'boss' if tech_type else 'standard'
         }
         updated_techs.append(tech_entry)
     
-    existing_assets = {t['asset'].lower() for t in updated_techs}
-    for tech_id, entry in existing_techs.items():
-        if tech_id not in existing_assets:
-            print(f"  Keeping existing technology not in new exports: {entry.get('name', tech_id)}")
-            updated_techs.append(entry)
-    
-    result = {'technologies': updated_techs}
+    result = {'technology': updated_techs}
     save_resource_json('technologydata.json', result)
+    print(f"  Total technologies: {len(updated_techs)}")
 
 
 # ============================================================================
@@ -1177,20 +1370,13 @@ def update_skill_data():
         l10n_name = skill_name_l10n.get(entry['asset'], None)
         
         skill_entry = {
-            'name': existing_entry.get('name', l10n_name or entry['name']),
+            'name': l10n_name or existing_entry.get('name', entry['name']),
             'asset': entry['asset'],
             'element': existing_entry.get('element', entry['element']),
             'power': existing_entry.get('power', entry['power']),
             'cooldown': existing_entry.get('cooldown', entry['cooldown'])
         }
         updated_skills.append(skill_entry)
-    
-    # Add any existing skills not in new exports
-    existing_assets = {s['asset'].lower() for s in updated_skills}
-    for skill_id, entry in existing_skills.items():
-        if skill_id not in existing_assets:
-            print(f"  Keeping existing skill not in new exports: {entry.get('name', skill_id)}")
-            updated_skills.append(entry)
     
     result = {'skills': updated_skills}
     save_resource_json('skilldata.json', result)
@@ -1320,7 +1506,12 @@ def update_items_psp():
 # ============================================================================
 
 def update_pal_passive_data():
-    """Update palpassivedata.json based on exported data."""
+    """Update palpassivedata.json based on exported data.
+    
+    This file is used by the PST editor UI for the passive skill dropdown.
+    It combines partner skills from DT_PartnerSkillParameter with
+    all general passives from passivedata.json that have valid names.
+    """
     print("\n=== Updating Pal Passive Data ===")
     
     # Partner skill data often contains pal-specific passives
@@ -1328,6 +1519,9 @@ def update_pal_passive_data():
     
     existing = load_resource_json('palpassivedata.json')
     existing_passives = {p.get('asset', '').lower(): p for p in existing.get('passives', [])}
+    
+    # Load partner skill name localization
+    partner_l10n = load_l10n_table('DT_PartnerSkillAppendText.json')
     
     all_rows = {}
     if partner_data:
@@ -1342,27 +1536,85 @@ def update_pal_passive_data():
             if rows:
                 all_rows.update(rows)
     
-    if not all_rows:
-        print("  No partner skill rows found. Skipping.")
-        return
+    # Build category lookup from passive main table (which passives are SortDisplayable)
+    passive_categories = {}
+    try:
+        passive_main = load_export_json('PassiveSkill/DT_PassiveSkill_Main.json')
+        passive_common = load_export_json('PassiveSkill/DT_PassiveSkill_Main_Common.json')
+        for src in [passive_main, passive_common]:
+            if src:
+                if isinstance(src, list):
+                    for table in src:
+                        if isinstance(table, dict):
+                            for k, v in table.get('Rows', {}).items():
+                                if isinstance(v, dict) and v.get('Category') == 'EPalPassiveCategory::SortDisplayable':
+                                    passive_categories[k.lower()] = True
+                elif isinstance(src, dict):
+                    for k, v in src.get('Rows', {}).items():
+                        if isinstance(v, dict) and v.get('Category') == 'EPalPassiveCategory::SortDisplayable':
+                            passive_categories[k.lower()] = True
+    except Exception:
+        pass
     
     updated_passives = []
+    seen_assets = set()
+    _invalid_names = {'', 'en_text', 'en text', 'en', '-', 'none', 'unknown skill', 'unknown skills'}
+    
+    # Phase 1: Add partner skills from DT_PartnerSkillParameter
     for skill_id, row_data in sorted(all_rows.items()):
         skill_id_lower = skill_id.lower()
+        if skill_id_lower in seen_assets:
+            continue
+        seen_assets.add(skill_id_lower)
         existing_entry = existing_passives.get(skill_id_lower, {})
         
+        # Try to resolve name from partner skill L10N
+        l10n_name = partner_l10n.get(skill_id, '') if skill_id in partner_l10n else None
+        if l10n_name and l10n_name.strip().lower() not in _invalid_names:
+            display_name = l10n_name
+        else:
+            display_name = existing_entry.get('name', skill_id)
+        
         passive_entry = {
-            'name': existing_entry.get('name', skill_id),
+            'name': display_name,
             'asset': skill_id,
             'icon': existing_entry.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.png')
         }
         updated_passives.append(passive_entry)
     
-    existing_assets = {p['asset'].lower() for p in updated_passives}
-    for passive_id, entry in existing_passives.items():
-        if passive_id not in existing_assets:
-            print(f"  Keeping existing pal passive not in new exports: {entry.get('name', passive_id)}")
-            updated_passives.append(entry)
+    def _clean_asset_name(asset: str) -> str:
+        """Convert an asset name like 'MutationPal_Immortal' to readable 'MutationPal Immortal'."""
+        cleaned = asset.replace('_', ' ').strip()
+        # Remove trailing numbers that are rank indicators
+        import re
+        cleaned = re.sub(r'\s+\d+$', '', cleaned)
+        return cleaned
+
+    # Phase 2: Add general passives from passivedata.json
+    # Only include SortDisplayable passives (pal passives, not equipment/ACC/hidden)
+    try:
+        general_data = load_resource_json('passivedata.json')
+        for p in general_data.get('passives', []):
+            asset_lower = p.get('asset', '').lower()
+            if not asset_lower or asset_lower in seen_assets:
+                continue
+            # Skip non-displayable passives (equipment, ACC, hidden)
+            if asset_lower not in passive_categories:
+                continue
+            # Use L10N name, or fall back to cleaned asset name
+            name = p.get('name', '')
+            if name and name.strip().lower() not in _invalid_names and name != p.get('asset', ''):
+                display_name = name
+            else:
+                display_name = _clean_asset_name(p['asset'])
+            seen_assets.add(asset_lower)
+            updated_passives.append({
+                'name': display_name,
+                'asset': p['asset'],
+                'icon': p.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.png')
+            })
+    except Exception as e:
+        print(f"    Warning: Could not merge passives: {e}")
     
     result = {'passives': updated_passives}
     save_resource_json('palpassivedata.json', result)
