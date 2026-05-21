@@ -1309,5 +1309,7 @@
   "tool.convert.any.to_json": "Convertir SAV en JSON",
   "tool.convert.any.to_sav": "Convertir JSON en SAV",
   "inventory.unlock_hint_weapon": "Cliquez pour débloquer avec l'objet d'emplacement d'arme",
-  "inventory.max_weapon_slots": "Tous les emplacements d'armes sont déjà débloqués !"
+  "inventory.max_weapon_slots": "Tous les emplacements d'armes sont déjà débloqués !",
+  "map.toggle.world_map": "Carte du monde",
+  "map.toggle.tree_map": "Carte des arbres"
 }

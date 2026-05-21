@@ -1347,14 +1347,19 @@ class MainWindow(QMainWindow):
             self._show_warning(t('Error') if t else 'Error', t('error.no_save_loaded') if t else 'No save file loaded.')
             return
         def task():
-            return generate_world_map()
-        def on_finished(path):
-            if path:
+            world_path = generate_world_map(map_type='world')
+            tree_path = generate_world_map(map_type='tree')
+            return (world_path, tree_path)
+        def on_finished(paths):
+            world_path, tree_path = paths
+            paths_generated = [p for p in (world_path, tree_path) if p]
+            if paths_generated:
                 from common import open_file_with_default_app
-                open_file_with_default_app(path)
+                open_file_with_default_app(paths_generated[0])
+                msg_text = '\n'.join(paths_generated)
                 msg_box = QMessageBox(self)
                 msg_box.setWindowTitle(t('Done') if t else 'Done')
-                msg_box.setText(t('map_saved', path=path) if t else f'Map saved to {path}')
+                msg_box.setText(t('map_saved', path=msg_text) if t else f'Map saved to:\n{msg_text}')
                 msg_box.setIcon(QMessageBox.Information)
                 msg_box.addButton(t('button.ok') if t else 'OK', QMessageBox.AcceptRole)
                 msg_box.exec()

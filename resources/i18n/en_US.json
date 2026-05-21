@@ -1616,5 +1616,7 @@
   "tool.convert.any.to_json": "Convert SAV to JSON",
   "tool.convert.any.to_sav": "Convert JSON to SAV",
   "inventory.unlock_hint_weapon": "Click to unlock with Weapon Slot Item",
-  "inventory.max_weapon_slots": "All weapon slots are already unlocked!"
+  "inventory.max_weapon_slots": "All weapon slots are already unlocked!",
+  "map.toggle.world_map": "World Map",
+  "map.toggle.tree_map": "Tree Map"
 }

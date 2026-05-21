@@ -1325,5 +1325,7 @@
   "tool.convert.any.to_json": "Конвертировать SAV в JSON",
   "tool.convert.any.to_sav": "Конвертировать JSON в SAV",
   "inventory.unlock_hint_weapon": "Нажмите, чтобы разблокировать с помощью предмета из слота для оружия.",
-  "inventory.max_weapon_slots": "Все слоты для оружия уже разблокированы!"
+  "inventory.max_weapon_slots": "Все слоты для оружия уже разблокированы!",
+  "map.toggle.world_map": "Карта мира",
+  "map.toggle.tree_map": "Карта дерева"
 }

@@ -1327,5 +1327,7 @@
   "tool.convert.any.to_json": "SAV から JSON への変換",
   "tool.convert.any.to_sav": "JSON を SAV に変換する",
   "inventory.unlock_hint_weapon": "クリックして武器スロットアイテムのロックを解除します",
-  "inventory.max_weapon_slots": "すべての武器スロットはすでにロック解除されています。"
+  "inventory.max_weapon_slots": "すべての武器スロットはすでにロック解除されています。",
+  "map.toggle.world_map": "世界地図",
+  "map.toggle.tree_map": "ツリーマップ"
 }

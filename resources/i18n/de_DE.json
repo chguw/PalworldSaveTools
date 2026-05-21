@@ -1351,5 +1351,7 @@
   "tool.convert.any.to_json": "Konvertieren Sie SAV in JSON",
   "tool.convert.any.to_sav": "Konvertieren Sie JSON in SAV",
   "inventory.unlock_hint_weapon": "Klicken Sie hier, um den Waffenslot-Gegenstand freizuschalten",
-  "inventory.max_weapon_slots": "Alle Waffenplätze sind bereits freigeschaltet!"
+  "inventory.max_weapon_slots": "Alle Waffenplätze sind bereits freigeschaltet!",
+  "map.toggle.world_map": "Weltkarte",
+  "map.toggle.tree_map": "Baumkarte"
 }

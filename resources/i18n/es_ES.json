@@ -1320,5 +1320,7 @@
   "tool.convert.any.to_json": "Convertir SAV a JSON",
   "tool.convert.any.to_sav": "Convertir JSON a SAV",
   "inventory.unlock_hint_weapon": "Haga clic para desbloquear con el elemento de ranura para arma",
-  "inventory.max_weapon_slots": "¡Todas las ranuras para armas ya están desbloqueadas!"
+  "inventory.max_weapon_slots": "¡Todas las ranuras para armas ya están desbloqueadas!",
+  "map.toggle.world_map": "Mapa mundial",
+  "map.toggle.tree_map": "Mapa de árbol"
 }

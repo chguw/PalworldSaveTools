@@ -1329,5 +1329,7 @@
   "tool.convert.any.to_json": "将 SAV 转换为 JSON",
   "tool.convert.any.to_sav": "将 JSON 转换为 SAV",
   "inventory.unlock_hint_weapon": "单击以使用武器槽物品解锁",
-  "inventory.max_weapon_slots": "所有武器槽位均已解锁！"
+  "inventory.max_weapon_slots": "所有武器槽位均已解锁！",
+  "map.toggle.world_map": "世界地图",
+  "map.toggle.tree_map": "树图"
 }

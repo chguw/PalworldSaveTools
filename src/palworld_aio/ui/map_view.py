@@ -50,6 +50,10 @@ class MapGraphicsView(QGraphicsView):
         self.target_center = None
         self.is_animating = False
         self.base_scale = 1.0
+        self.current_map = 'world'
+        self.coord_range = 1000
+        self.tree_cursor_offset_x = -1075
+        self.tree_cursor_offset_y = 1568
         self.coords_label = QLabel(f"{(t('cursor_coords') if t else 'Cursor')}: 0,0", self)
         self.coords_label.setStyleSheet('background-color: rgba(0,0,0,150); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; min-width: 120px;')
         self.coords_label.move(10, self.height() - 30)
@@ -192,23 +196,61 @@ class MapGraphicsView(QGraphicsView):
                 self.zone_double_clicked.emit(item)
                 return
         super().mouseDoubleClickEvent(event)
+    def set_map_type(self, map_type, coord_range=1000):
+        self.current_map = map_type
+        self.coord_range = coord_range
     def mouseMoveEvent(self, event):
-        if self.zone_drawing_mode:
+        super().mouseMoveEvent(event)
+        if self.zone_drawing_mode and self.zone_shape_type == 'rect' and self.zone_point_a is not None:
             scene_pos = self.mapToScene(event.pos())
-            if self.zone_shape_type == 'rect':
-                self._update_zone_preview(scene_pos)
-            elif self.zone_shape_type == 'polygon' and self.polygon_preview_item:
-                self.polygon_preview_item.set_preview_point(scene_pos)
+            if self.zone_preview_item:
+                self.zone_preview_item.set_preview_point(scene_pos)
             if self.scene() and self.scene().sceneRect().contains(scene_pos):
                 rect = self.scene().sceneRect()
                 width, height = (rect.width(), rect.height())
                 img_x, img_y = (scene_pos.x(), scene_pos.y())
+                if self.current_map == 'tree':
+                    x_world = img_x / width * (self.coord_range * 2) - self.coord_range
+                    y_world = self.coord_range - img_y / height * (self.coord_range * 2)
+                else:
+                    x_world = img_x / width * 2000 - 1000
+                    y_world = 1000 - img_y / height * 2000
+                    save_x, save_y = palworld_coord.map_to_sav(x_world, y_world, new=True)
+                    x_world, y_world = palworld_coord.sav_to_map(save_x, save_y, new=False)
+                self.coords_label.setText(f"{(t('cursor_coords') if t else 'Cursor')}: {int(x_world)},{int(y_world)}")
+            return
+        item = self.itemAt(event.pos())
+        if isinstance(item, BaseMarker):
+            if self._hovered_marker != item:
+                if self._hovered_marker is not None:
+                    self.marker_hover_left.emit()
+                self._hovered_marker = item
+                global_pos = self.mapToGlobal(event.pos())
+                self.marker_hover_entered.emit(item.base_data, QPointF(global_pos.x(), global_pos.y()))
+        elif isinstance(item, PlayerMarker):
+            if self._hovered_marker != item:
+                if self._hovered_marker is not None:
+                    self.marker_hover_left.emit()
+                self._hovered_marker = item
+                global_pos = self.mapToGlobal(event.pos())
+                self.marker_hover_entered.emit(item.player_data, QPointF(global_pos.x(), global_pos.y()))
+        elif self._hovered_marker is not None:
+            self._hovered_marker = None
+            self.marker_hover_left.emit()
+        scene_pos = self.mapToScene(event.pos())
+        if self.scene() and self.scene().sceneRect().contains(scene_pos):
+            rect = self.scene().sceneRect()
+            width, height = (rect.width(), rect.height())
+            img_x, img_y = (scene_pos.x(), scene_pos.y())
+            if self.current_map == 'tree':
+                x_world = img_x / width * (self.coord_range * 2) - self.coord_range + self.tree_cursor_offset_x
+                y_world = self.coord_range - img_y / height * (self.coord_range * 2) + self.tree_cursor_offset_y
+            else:
                 x_world = img_x / width * 2000 - 1000
                 y_world = 1000 - img_y / height * 2000
                 save_x, save_y = palworld_coord.map_to_sav(x_world, y_world, new=True)
-                old_x, old_y = palworld_coord.sav_to_map(save_x, save_y, new=False)
-                self.coords_label.setText(f"{(t('cursor_coords') if t else 'Cursor')}: {int(old_x)},{int(old_y)}")
-            super().mouseMoveEvent(event)
+                x_world, y_world = palworld_coord.sav_to_map(save_x, save_y, new=False)
+            self.coords_label.setText(f"{(t('cursor_coords') if t else 'Cursor')}: {int(x_world)},{int(y_world)}")
             return
         item = self.itemAt(event.pos())
         if isinstance(item, BaseMarker):

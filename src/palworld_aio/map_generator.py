@@ -36,7 +36,7 @@ def extract_guild_bases_from_save():
                 try:
                     translation = base_map[bid_str]['RawData']['value']['transform']['translation']
                     x, y = palworld_coord.sav_to_map(translation['x'], translation['y'], new=True)
-                    guild_bases.append({'guild': guild_name, 'leader': leader_name, 'x': x, 'y': y})
+                    guild_bases.append({'guild': guild_name, 'leader': leader_name, 'x': x, 'y': y, 'z': translation['z'], 'raw_x': translation['x'], 'raw_y': translation['y']})
                 except:
                     continue
     return guild_bases
@@ -62,7 +62,7 @@ def get_cjk_font():
         if QFontDatabase.WritingSystem.Korean in writing_systems:
             return family
     return None
-def generate_world_map(output_path=None):
+def generate_world_map(output_path=None, map_type='world'):
     if not constants.loaded_level_json:
         print(t('error.no_save_loaded') if t else 'No save file loaded.')
         return None
@@ -80,10 +80,11 @@ def generate_world_map(output_path=None):
     guild_bases = extract_guild_bases_from_save()
     stats = extract_stats_from_save()
     font_family = get_cjk_font()
-    worldmap_path = os.path.join(base_dir, 'resources', 'worldmap.png')
+    map_filename = 'T_WorldMap.png' if map_type == 'world' else 'T_TreeMap.png'
+    worldmap_path = os.path.join(base_dir, 'resources', map_filename)
     marker_path = os.path.join(base_dir, 'resources', 'baseicon.png')
     if not os.path.exists(worldmap_path):
-        print(f'World map not found: {worldmap_path}')
+        print(f'Map not found: {worldmap_path}')
         return None
     if not os.path.exists(marker_path):
         print(f'Marker icon not found: {marker_path}')
@@ -91,7 +92,7 @@ def generate_world_map(output_path=None):
     base_map = QImage(worldmap_path)
     marker = QImage(marker_path)
     if base_map.isNull():
-        print(f'Failed to load world map')
+        print(f'Failed to load map image')
         return None
     if marker.isNull():
         print(f'Failed to load marker')
@@ -114,18 +115,36 @@ def generate_world_map(output_path=None):
         font = QFont()
     font.setPointSize(font_size)
     painter.setFont(font)
+    coord_range = 2500 if map_type == 'tree' else 1000
+    tree_marker_offset_x = 1760
+    tree_marker_offset_y = 2571
+    tree_cursor_offset_x = -1075
+    tree_cursor_offset_y = 1568
     def to_image_coordinates(x_world, y_world):
-        x_min, x_max = (-1000, 1000)
-        y_min, y_max = (-1000, 1000)
+        x_min, x_max = (-coord_range, coord_range)
+        y_min, y_max = (-coord_range, coord_range)
         x_scale = base_map.width() / (x_max - x_min)
         y_scale = base_map.height() / (y_max - y_min)
         x_img = int((x_world - x_min) * x_scale)
         y_img = int((y_max - y_world) * y_scale)
+        if map_type == 'tree':
+            x_img += tree_marker_offset_x
+            y_img += tree_marker_offset_y
         return (x_img, y_img)
+    map_z_threshold = 5000
     base_count = 0
     for base_data in guild_bases:
+        base_z = base_data.get('z', 0)
+        if map_type == 'world' and base_z >= map_z_threshold:
+            continue
+        if map_type == 'tree' and base_z < map_z_threshold:
+            continue
         try:
-            xi, yi = to_image_coordinates(base_data['x'], base_data['y'])
+            if map_type == 'tree' and 'raw_x' in base_data:
+                pt = palworld_coord.sav_to_treemap(base_data['raw_x'], base_data['raw_y'])
+                xi, yi = to_image_coordinates(pt.x, pt.y)
+            else:
+                xi, yi = to_image_coordinates(base_data['x'], base_data['y'])
             x_img = xi * scale
             y_img = yi * scale
             painter.setPen(QPen(QColor(255, 0, 0), 4 * scale))
@@ -174,7 +193,8 @@ def generate_world_map(output_path=None):
     painter.end()
     final_image = output_image.scaled(QSize(base_map.width(), base_map.height()), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
     if output_path is None:
-        output_path = os.path.join(base_dir, 'updated_worldmap.png')
+        suffix = 'worldmap' if map_type == 'world' else 'treemap'
+        output_path = os.path.join(base_dir, f'updated_{suffix}.png')
     try:
         final_image.save(output_path, 'PNG', quality=50)
         duration = time.time() - start_time

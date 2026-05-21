@@ -18,6 +18,8 @@ from .map_markers import BaseMarker, PlayerMarker
 from .map_effects import DeleteEffect, ImportEffect, ExportEffect
 from .map_items import ExclusionZoneItem, PolygonExclusionZoneItem, BaseRadiusRing, ZonePreviewItem
 from .map_view import MapGraphicsView
+MAP_Z_THRESHOLD = 5000
+MAP_TREEMAP_RANGE = 2500
 class MapTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -41,6 +43,7 @@ class MapTab(QWidget):
         self._zone_shape_type = 'rect'
         self._zone_count = 0
         self._load_config()
+        self.current_map = 'world'
         self.map_width = 2048
         self.map_height = 2048
         self._load_base_icon()
@@ -59,6 +62,11 @@ class MapTab(QWidget):
             self.toggle_base_radius_rings.setText(t('map.toggle.base_radius_rings') if t else 'Base Radius Rings')
         if hasattr(self, 'toggle_map_zones'):
             self.toggle_map_zones.setText(t('map.toggle.zones') if t else 'Zones')
+        if hasattr(self, 'toggle_map_type'):
+            if t:
+                self.toggle_map_type.setText(t('map.toggle.tree_map') if self.current_map == 'tree' else t('map.toggle.world_map'))
+            else:
+                self.toggle_map_type.setText('Tree Map' if self.current_map == 'tree' else 'World Map')
         if hasattr(self, 'base_tree'):
             self.base_tree.setHeaderLabels([t('map.header.guild') if t else 'Guild', t('map.header.leader') if t else 'Leader', t('map.header.lastseen') if t else 'Last Seen', t('map.header.bases') if t else 'Bases'])
         if hasattr(self, 'player_tree'):
@@ -170,6 +178,12 @@ class MapTab(QWidget):
         self.toggle_map_zones.stateChanged.connect(self._on_zones_toggle)
         self.toggle_map_zones.setStyleSheet('\n            QCheckBox {\n                color: white;\n                background: rgba(0, 0, 0, 150);\n                padding: 4px 8px;\n                border-radius: 4px;\n            }\n        ')
         overlay_layout.addWidget(self.toggle_map_zones)
+        self.toggle_map_type = QPushButton(t('map.toggle.world_map') if t else 'World Map')
+        self.toggle_map_type.setCheckable(True)
+        self.toggle_map_type.setChecked(False)
+        self.toggle_map_type.clicked.connect(self._on_map_type_toggle)
+        self.toggle_map_type.setStyleSheet('\n            QPushButton {\n                color: white;\n                background: rgba(0, 0, 0, 150);\n                padding: 4px 8px;\n                border-radius: 4px;\n                border: none;\n            }\n            QPushButton:checked {\n                color: #7dd3fc;\n                background: rgba(0, 0, 0, 180);\n                border: 1px solid #7dd3fc;\n            }\n        ')
+        overlay_layout.addWidget(self.toggle_map_type)
         overlay_layout.addStretch()
         self.view.overlay_position_callback = self._reposition_map_overlay
         self._sidebar_widget = QWidget()
@@ -251,7 +265,7 @@ class MapTab(QWidget):
                 scale = max(scale_x, scale_y)
                 self.view.base_scale = scale
                 self.view.resetTransform()
-            self.view.scale(scale, scale)
+                self.view.scale(scale, scale)
             self.view.current_zoom = 1.0
             self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
             self.view.zoom_changed.emit(1.0)
@@ -260,7 +274,8 @@ class MapTab(QWidget):
             players_width = self.toggle_map_players.sizeHint().width()
             rings_width = self.toggle_base_radius_rings.sizeHint().width()
             zones_width = self.toggle_map_zones.sizeHint().width()
-            overlay_width = bases_width + players_width + rings_width + zones_width + 20
+            map_type_width = self.toggle_map_type.sizeHint().width()
+            overlay_width = bases_width + players_width + rings_width + zones_width + map_type_width + 20
             self.map_overlay.setGeometry(self.view.width() - overlay_width - 10, 10, overlay_width, 30)
     def _on_marker_hover_enter(self, data, global_pos):
         if 'base_id' in data:
@@ -270,9 +285,10 @@ class MapTab(QWidget):
     def _on_marker_hover_leave(self):
         self.hover_overlay.hide_overlay()
         self.player_hover_overlay.hide_overlay()
-    def _load_map(self):
+    def _load_map(self, map_type='world'):
         base_dir = constants.get_base_path()
-        map_path = os.path.join(base_dir, 'resources', 'worldmap.png')
+        map_filename = 'T_WorldMap.png' if map_type == 'world' else 'T_TreeMap.png'
+        map_path = os.path.join(base_dir, 'resources', map_filename)
         if os.path.exists(map_path):
             pixmap = QPixmap(map_path)
         else:
@@ -280,15 +296,21 @@ class MapTab(QWidget):
             pixmap.fill(QColor(30, 30, 30))
         self.map_width = pixmap.width()
         self.map_height = pixmap.height()
+        if hasattr(self, 'map_item') and self.map_item is not None:
+            self.scene.removeItem(self.map_item)
         self.map_item = QGraphicsPixmapItem(pixmap)
+        self.map_item.setZValue(-1)
         self.scene.addItem(self.map_item)
         self.scene.setSceneRect(self.map_item.boundingRect())
+        coord_range = MAP_TREEMAP_RANGE if map_type == 'tree' else 1000
+        self.view.set_map_type(map_type, coord_range)
         if self.map_width > 0 and self.map_height > 0:
             viewport = self.view.viewport()
             scale_x = viewport.width() / self.map_width
             scale_y = viewport.height() / self.map_height
             scale = max(scale_x, scale_y)
             self.view.base_scale = scale
+            self.view.resetTransform()
             self.view.scale(scale, scale)
             self.view.current_zoom = 1.0
             self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
@@ -299,7 +321,8 @@ class MapTab(QWidget):
             players_width = self.toggle_map_players.sizeHint().width()
             rings_width = self.toggle_base_radius_rings.sizeHint().width()
             zones_width = self.toggle_map_zones.sizeHint().width()
-            overlay_width = bases_width + players_width + rings_width + zones_width + 20
+            map_type_width = self.toggle_map_type.sizeHint().width()
+            overlay_width = bases_width + players_width + rings_width + zones_width + map_type_width + 20
             self.map_overlay.setGeometry(self.view.width() - overlay_width - 10, 10, overlay_width, 30)
             self.map_overlay.raise_()
     def resizeEvent(self, event):
@@ -322,6 +345,39 @@ class MapTab(QWidget):
         show_base_markers = hasattr(self, 'toggle_map_bases') and self.toggle_map_bases.isChecked()
         if not show_base_markers:
             self._hide_all_radius_rings()
+    def _on_map_type_toggle(self, checked):
+        self.current_map = 'tree' if checked else 'world'
+        if t:
+            self.toggle_map_type.setText(t('map.toggle.tree_map') if checked else t('map.toggle.world_map'))
+        else:
+            self.toggle_map_type.setText('Tree Map' if checked else 'World Map')
+        self.view.set_map_type(self.current_map, MAP_TREEMAP_RANGE if checked else 1000)
+        self._recalc_img_coords()
+        self._load_map(self.current_map)
+        self._update_markers()
+        self._update_tree()
+    def _recalc_img_coords(self):
+        is_tree = self.current_map == 'tree'
+        coord_range = MAP_TREEMAP_RANGE if is_tree else 1000
+        for guild in self.guilds_data.values():
+            for base in guild['bases']:
+                if 'raw_x' in base:
+                    if is_tree:
+                        pt = palworld_coord.sav_to_treemap(base['raw_x'], base['raw_y'])
+                    else:
+                        pt = palworld_coord.sav_to_map(base['raw_x'], base['raw_y'], new=True)
+                    ix, iy = self._to_image_coordinates(pt.x, pt.y, self.map_width, self.map_height, coord_range, is_tree)
+                    base['img_coords'] = (ix, iy)
+        for player in self.players_data:
+            if 'save_coords' in player:
+                rx, ry = player['save_coords'][0], player['save_coords'][1]
+                if is_tree:
+                    pt = palworld_coord.sav_to_treemap(rx, ry)
+                else:
+                    pt = palworld_coord.sav_to_map(rx, ry, new=True)
+                ix, iy = self._to_image_coordinates(pt.x, pt.y, self.map_width, self.map_height, coord_range, is_tree)
+                player['img_coords'] = (ix, iy)
+                player['coords'] = (pt.x, pt.y)
     def _on_tab_changed(self, index):
         if index == 0:
             self.info_label.setText(t('map.info.select_base') if t else 'Click on a base marker or list item to view details')
@@ -334,6 +390,7 @@ class MapTab(QWidget):
         self.filtered_guilds = self.guilds_data
         self.players_data = self._get_players()
         self.filtered_players_data = self.players_data
+        self._recalc_img_coords()
         self._update_markers()
         self._update_tree()
     def _get_guild_bases(self):
@@ -396,7 +453,7 @@ class MapTab(QWidget):
                                 img_x, img_y = self._to_image_coordinates(bx, by, self.map_width, self.map_height)
                                 save_x, save_y = palworld_coord.map_to_sav(bx, by, new=True)
                                 old_bx, old_by = palworld_coord.sav_to_map(save_x, save_y, new=False)
-                                valid_bases.append({'base_id': bid, 'coords': (old_bx, old_by), 'img_coords': (img_x, img_y), 'data': {'key': bid, 'value': base_val}, 'guild_id': gid, 'guild_name': g_val['RawData']['value'].get('guild_name', t('map.unknown.guild') if t else 'Unknown'), 'leader_name': leader_name, 'guild_level': guild_level, 'member_count': member_count, 'total_bases': total_bases, 'base_position': base_position})
+                                valid_bases.append({'base_id': bid, 'coords': (old_bx, old_by), 'img_coords': (img_x, img_y), 'z': translation['z'], 'raw_x': translation['x'], 'raw_y': translation['y'], 'data': {'key': bid, 'value': base_val}, 'guild_id': gid, 'guild_name': g_val['RawData']['value'].get('guild_name', t('map.unknown.guild') if t else 'Unknown'), 'leader_name': leader_name, 'guild_level': guild_level, 'member_count': member_count, 'total_bases': total_bases, 'base_position': base_position})
                                 base_position += 1
                         except:
                             pass
@@ -431,7 +488,7 @@ class MapTab(QWidget):
                 x, y, z = (translation.get('x', 0), translation.get('y', 0), translation.get('z', 0))
                 bx, by = palworld_coord.sav_to_map(x, y, new=True)
                 if bx is not None:
-                    img_x, img_y = self._to_image_coordinates(bx, by, self.map_width, self.map_height)
+                    img_x, img_y = self._to_image_coordinates(bx, by, self.map_width, self.map_height, 1000, False)
                     save_x, save_y = palworld_coord.map_to_sav(bx, by, new=True)
                     old_bx, old_by = palworld_coord.sav_to_map(save_x, save_y, new=False)
                     pal_count = constants.PLAYER_PAL_COUNTS.get(player_uid, 0)
@@ -440,13 +497,18 @@ class MapTab(QWidget):
             except Exception as e:
                 continue
         return players
-    def _to_image_coordinates(self, x_world, y_world, width, height):
-        x_min, x_max = (-1000, 1000)
-        y_min, y_max = (-1000, 1000)
+    def _to_image_coordinates(self, x_world, y_world, width, height, coord_range=1000, is_tree=False):
+        x_min, x_max = (-coord_range, coord_range)
+        y_min, y_max = (-coord_range, coord_range)
         x_scale = width / (x_max - x_min)
         y_scale = height / (y_max - y_min)
         img_x = int((x_world - x_min) * x_scale)
         img_y = int((y_max - y_world) * y_scale)
+        if is_tree:
+            img_x += 1760
+            img_y += 2571
+        img_x = max(0, min(width - 1, img_x))
+        img_y = max(0, min(height - 1, img_y))
         return (img_x, img_y)
     def _update_markers(self):
         for marker in self.base_markers:
@@ -464,6 +526,11 @@ class MapTab(QWidget):
                 marker_pixmap = self.base_icon_pixmap
             for guild in self.filtered_guilds.values():
                 for base in guild['bases']:
+                    base_z = base.get('z', 0)
+                    if self.current_map == 'world' and base_z >= MAP_Z_THRESHOLD:
+                        continue
+                    if self.current_map == 'tree' and base_z < MAP_Z_THRESHOLD:
+                        continue
                     img_x, img_y = base['img_coords']
                     marker = BaseMarker(base, img_x, img_y, marker_pixmap, self.config)
                     marker.scale_to_zoom(self.view.current_zoom)
@@ -472,6 +539,11 @@ class MapTab(QWidget):
                     self.base_markers.append(marker)
         if show_player_markers:
             for player in self.filtered_players_data:
+                player_z = player.get('save_coords', (0, 0, 0))[2]
+                if self.current_map == 'world' and player_z >= MAP_Z_THRESHOLD:
+                    continue
+                if self.current_map == 'tree' and player_z < MAP_Z_THRESHOLD:
+                    continue
                 img_x, img_y = player['img_coords']
                 marker = PlayerMarker(player, img_x, img_y, self.player_icon_pixmap)
                 self.scene.addItem(marker)

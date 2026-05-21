@@ -1326,5 +1326,7 @@
   "tool.convert.any.to_json": "SAV를 JSON으로 변환",
   "tool.convert.any.to_sav": "JSON을 SAV로 변환",
   "inventory.unlock_hint_weapon": "무기 슬롯 아이템으로 잠금을 해제하려면 클릭하세요.",
-  "inventory.max_weapon_slots": "모든 무기 슬롯이 이미 잠금 해제되었습니다!"
+  "inventory.max_weapon_slots": "모든 무기 슬롯이 이미 잠금 해제되었습니다!",
+  "map.toggle.world_map": "세계지도",
+  "map.toggle.tree_map": "트리 맵"
 }
