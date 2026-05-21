@@ -43,7 +43,7 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
         remaining = reader.read_to_end()
         guild['_opaque_all_remaining_bytes'] = remaining
         
-        # Try NEW format first (more specific structure with player tails)
+        # Try NEW format: read header (prefix, admin_uid, u3-u9), then parse players from raw[0:4] as count
         try:
             new_r = FArchiveReader(remaining, debug=False)
             if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
@@ -57,22 +57,27 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
             guild['unknown_8'] = new_r.i32()
             guild['unknown_9'] = new_r.i32()
             raw = new_r.read_to_end()
+            guild['_opaque_raw'] = raw
             
+            nplayers = []
             if len(raw) >= 4:
                 pr = FArchiveReader(raw, debug=False)
                 count = pr.i32()
                 if 0 <= count <= 1000:
-                    nplayers = []
                     for _ in range(count):
                         try:
                             lo = pr.i64()
                             nm = pr.fstring()
                             pr.byte_list(31)
-                            nplayers.append({'player_uid': '', 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                            if _is_valid_player_name(nm):
+                                nplayers.append({'player_uid': '', 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                            else:
+                                break
                         except Exception:
                             break
-                    guild['players'] = nplayers
-                    guild['_format_version'] = 'new'
+            if nplayers:
+                guild['players'] = nplayers
+                guild['_format_version'] = 'new'
         except Exception:
             pass
         
@@ -95,9 +100,27 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
                             nplayers.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
                         except Exception:
                             break
-                guild['players'] = nplayers
-                guild['trailing_bytes'] = [int(b) for b in old_r.read_to_end()]
-                guild['_format_version'] = 'old'
+                if nplayers:
+                    guild['players'] = nplayers
+                    guild['trailing_bytes'] = [int(b) for b in old_r.read_to_end()]
+                    guild['_format_version'] = 'old'
+            except Exception:
+                pass
+        
+        # If both failed and remaining is large, try scanning for embedded player data
+        if '_format_version' not in guild and len(remaining) >= 100:
+            try:
+                scan_r = FArchiveReader(remaining, debug=False)
+                if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
+                    scan_r.byte_list(4)
+                scan_admin = scan_r.guid()
+                guild['admin_player_uid'] = str(scan_admin)
+                scan_r = FArchiveReader(remaining, debug=False)
+                nplayers = _scan_players_from_raw(remaining)
+                if nplayers:
+                    guild['players'] = nplayers
+                    guild['_opaque_all_remaining_for_encode'] = remaining
+                    guild['_format_version'] = 'new'
             except Exception:
                 pass
         
@@ -119,6 +142,106 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
         group_data['unknown_bytes'] = reader.read_to_end()
     
     return group_data
+
+def _scan_players_from_raw(data: bytes) -> list[dict[str, Any]]:
+    """Scan data for i64+fstring pairs that look like player names."""
+    players = []
+    idx = 0
+    while idx < len(data) - 16:
+        marker = data.find(b'\x01\x00\x00\x00', idx)
+        if marker < 0:
+            break
+        if marker + 16 > len(data):
+            break
+        try:
+            pr = FArchiveReader(data[marker + 4:], debug=False)
+            lo = pr.i64()
+            nm = pr.fstring()
+            if _is_valid_player_name(nm):
+                players.append({'player_uid': '', 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                rest = pr.read_to_end()
+                more = _scan_more_players(rest)
+                players.extend(more)
+                break
+        except Exception:
+            pass
+        idx = marker + 4
+    
+    if not players:
+        brute_off = 0
+        while brute_off < len(data) - 12:
+            try:
+                pr = FArchiveReader(data[brute_off:], debug=False)
+                lo = pr.i64()
+                nm = pr.fstring()
+                if _is_valid_player_name(nm):
+                    players.append({'player_uid': '', 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                    brute_off += len(data[brute_off:]) - len(pr.read_to_end())
+                else:
+                    brute_off += 1
+            except Exception:
+                brute_off += 1
+    return players
+
+
+def _scan_more_players(data: bytes) -> list[dict[str, Any]]:
+    """Scan remaining data after a player entry for additional player entries.
+    
+    Handles: flag_byte(1) + guid(16) + i64(8) + fstring(name) + tail(variable)
+    or: i64(8) + fstring(name) + tail(variable)
+    """
+    players = []
+    # Skip inter-player flag byte (01) if present
+    start = 1 if len(data) > 0 and data[0] == 1 else 0
+    pos = start
+    while pos < len(data) - 12:
+        try:
+            # Try guid(16) + i64(8) + fstring first (common for non-admin players)
+            pr = FArchiveReader(data[pos:], debug=False)
+            uid = pr.guid()
+            lo = pr.i64()
+            nm = pr.fstring()
+            if _is_valid_player_name(nm):
+                players.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                consumed = len(data[pos:]) - len(pr.read_to_end())
+                pos += consumed
+                continue
+        except Exception:
+            pass
+        try:
+            # Fallback: i64(8) + fstring(name) only (no guid)
+            pr = FArchiveReader(data[pos:], debug=False)
+            lo = pr.i64()
+            nm = pr.fstring()
+            if _is_valid_player_name(nm):
+                players.append({'player_uid': '', 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                consumed = len(data[pos:]) - len(pr.read_to_end())
+                pos += consumed
+                continue
+        except Exception:
+            pass
+        pos += 1
+    return players
+
+
+def _is_valid_player_name(name: str) -> bool:
+    """Check if a string looks like a valid player name."""
+    if not name or len(name) < 1 or len(name) > 50:
+        return False
+    stripped = name.rstrip('\x00')
+    if not stripped or len(stripped) < 1:
+        return False
+    has_printable = any(c.isalnum() or c in ' _-.:' for c in stripped)
+    if not has_printable:
+        return False
+    if any(c in '\x00\x01\x02\x03\x04\x05\x06\x07\x08\x0b\x0c\x0e\x0f' for c in stripped):
+        return False
+    try:
+        stripped.encode('utf-8')
+        return True
+    except Exception:
+        return False
+
 
 def encode(writer: FArchiveWriter, property_type: str, properties: dict[str, Any]) -> int:
     if property_type != 'MapProperty':
@@ -187,6 +310,8 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
                 writer.write(bytes(p['trailing_bytes']))
             if '_trailing_unknown' in p:
                 writer.write(bytes(p['_trailing_unknown']))
+        elif '_opaque_all_remaining_for_encode' in p:
+            writer.write(bytes(p['_opaque_all_remaining_for_encode']))
         else:
             if 'unknown_guild_field' in p:
                 writer.write(bytes(p['unknown_guild_field']))
@@ -198,12 +323,15 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
             writer.i32(p.get('unknown_7', 0))
             writer.i32(p.get('unknown_8', 0))
             writer.i32(p.get('unknown_9', 0))
-            players = p.get('players', [])
-            writer.i32(len(players))
-            for player in players:
-                writer.i64(player['player_info']['last_online_real_time'])
-                writer.fstring(player['player_info']['player_name'])
-                writer.write(bytes(31))
+            if '_opaque_raw' in p:
+                writer.write(bytes(p['_opaque_raw']))
+            else:
+                players = p.get('players', [])
+                writer.i32(len(players))
+                for player in players:
+                    writer.i64(player['player_info']['last_online_real_time'])
+                    writer.fstring(player['player_info']['player_name'])
+                    writer.write(bytes(31))
     
     if 'trailing_bytes' in p and p['group_type'] != 'EPalGroupType::Guild':
         writer.write(bytes(p['trailing_bytes']))
