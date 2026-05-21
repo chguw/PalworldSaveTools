@@ -14,6 +14,28 @@ from palworld_save_tools.paltypes import PALWORLD_TYPE_HINTS
 from common import get_versions, get_base_directory
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palworld_aio import constants
+
+
+def resolve_name(character_id: str, name_map: dict) -> str | None:
+    """
+    Resolve a character ID to a display name using a name map.
+    Attempts exact match first, then strips numeric-instance suffixes
+    like _v1, _v22, etc. for broader matching.
+    """
+    if not character_id:
+        return None
+    key = character_id.lower()
+    name = name_map.get(key)
+    if name is not None:
+        return name
+    stripped = re.sub(r'_v\d+$', '', key)
+    if stripped != key:
+        name = name_map.get(stripped)
+        if name is not None:
+            return name
+    return None
+
+
 def check_for_update():
     try:
         context = ssl._create_unverified_context()

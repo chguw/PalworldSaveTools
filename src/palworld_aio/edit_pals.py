@@ -11,7 +11,7 @@ from i18n import t
 from loading_manager import show_information, show_warning, show_question
 import nerdfont as nf
 from palworld_aio import constants
-from palworld_aio.utils import sav_to_json, sav_to_gvasfile, gvasfile_to_sav, extract_value, format_character_key, json_to_sav, calculate_max_hp, get_pal_data, safe_dict_get, safe_nested_get
+from palworld_aio.utils import sav_to_json, sav_to_gvasfile, gvasfile_to_sav, extract_value, format_character_key, json_to_sav, calculate_max_hp, get_pal_data, safe_dict_get, safe_nested_get, resolve_name
 class FramelessDialog(QDialog):
     def __init__(self, title_key='edit_pals.title', parent=None):
         super().__init__(parent)
@@ -135,45 +135,50 @@ class StrokedLabel(QLabel):
 _ICON_CACHE = {}
 _PIXMAP_CACHE = {}
 _CACHE_LOCK = threading.Lock()
-def _get_pal_icon_path(character_id):
-    base_dir = constants.get_base_path()
-    cid_lower = character_id.lower()
-    cid_for_icon = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
-    with _CACHE_LOCK:
-        if cid_for_icon in _ICON_CACHE:
-            return _ICON_CACHE[cid_for_icon]
-    icon_path = None
+def _lookup_icon_in_data(asset_name: str, base_dir: str) -> str | None:
+    """Look up an icon path in paldata.json and npcdata.json by asset name."""
     try:
         paldata_path = os.path.join(base_dir, 'resources', 'game_data', 'paldata.json')
         paldata = json_tools.load(paldata_path)
         for pal in paldata.get('pals', []):
-            if pal.get('asset', '').lower() == cid_for_icon:
-                icon_rel_path = pal.get('icon', '')
-                if icon_rel_path:
-                    icon_rel_path = icon_rel_path.lstrip('/')
-                    icon_path = os.path.join(base_dir, 'resources', 'game_data', icon_rel_path)
-                    break
+            if pal.get('asset', '').lower() == asset_name:
+                icon_rel = pal.get('icon', '')
+                if icon_rel:
+                    return os.path.join(base_dir, 'resources', 'game_data', icon_rel.lstrip('/'))
     except Exception:
         pass
-    if not icon_path:
-        try:
-            npcdata_path = os.path.join(base_dir, 'resources', 'game_data', 'npcdata.json')
-            npcdata = json_tools.load(npcdata_path)
-            for npc in npcdata.get('npcs', []):
-                if npc.get('asset', '').lower() == cid_for_icon:
-                    icon_rel_path = npc.get('icon', '')
-                    if icon_rel_path:
-                        icon_rel_path = icon_rel_path.lstrip('/')
-                        icon_path = os.path.join(base_dir, 'resources', 'game_data', icon_rel_path)
-                        break
-        except Exception:
-            pass
+    try:
+        npcdata_path = os.path.join(base_dir, 'resources', 'game_data', 'npcdata.json')
+        npcdata = json_tools.load(npcdata_path)
+        for npc in npcdata.get('npcs', []):
+            if npc.get('asset', '').lower() == asset_name:
+                icon_rel = npc.get('icon', '')
+                if icon_rel:
+                    return os.path.join(base_dir, 'resources', 'game_data', icon_rel.lstrip('/'))
+    except Exception:
+        pass
+    return None
+
+
+def _get_pal_icon_path(character_id):
+    base_dir = constants.get_base_path()
+    cid_lower = character_id.lower()
+    with _CACHE_LOCK:
+        if cid_lower in _ICON_CACHE:
+            return _ICON_CACHE[cid_lower]
+    # Try original CID first, then stripped (for BOSS_ variants)
+    icon_path = _lookup_icon_in_data(cid_lower, base_dir)
     if not icon_path or not os.path.exists(icon_path):
-        icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', f'{cid_for_icon}.webp')
+        cid_stripped = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
+        if cid_stripped != cid_lower:
+            icon_path = _lookup_icon_in_data(cid_stripped, base_dir)
+    if not icon_path or not os.path.exists(icon_path):
+        cid_for_guess = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
+        icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', f'{cid_for_guess}.webp')
         if not os.path.exists(icon_path):
             icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', 'T_icon_unknown.webp')
     with _CACHE_LOCK:
-        _ICON_CACHE[cid_for_icon] = icon_path
+        _ICON_CACHE[cid_lower] = icon_path
     return icon_path
 class PalIcon(QFrame):
     clicked = Signal()
@@ -229,43 +234,24 @@ class PalIcon(QFrame):
             image_label.setAttribute(Qt.WA_TransparentForMouseEvents)
             base_dir = constants.get_base_path()
             cid_lower = cid.lower()
-            cid_for_icon = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
             icon_path = None
-            if cid_for_icon not in _ICON_CACHE:
-                try:
-                    paldata_path = os.path.join(base_dir, 'resources', 'game_data', 'paldata.json')
-                    paldata = json_tools.load(paldata_path)
-                    for pal in paldata.get('pals', []):
-                        if pal.get('asset', '').lower() == cid_for_icon:
-                            icon_rel_path = pal.get('icon', '')
-                            if icon_rel_path:
-                                icon_rel_path = icon_rel_path.lstrip('/')
-                                icon_path = os.path.join(base_dir, 'resources', 'game_data', icon_rel_path)
-                                break
-                except Exception:
-                    pass
-                if not icon_path:
-                    try:
-                        npcdata_path = os.path.join(base_dir, 'resources', 'game_data', 'npcdata.json')
-                        npcdata = json_tools.load(npcdata_path)
-                        for npc in npcdata.get('npcs', []):
-                            if npc.get('asset', '').lower() == cid_for_icon:
-                                icon_rel_path = npc.get('icon', '')
-                                if icon_rel_path:
-                                    icon_rel_path = icon_rel_path.lstrip('/')
-                                    icon_path = os.path.join(base_dir, 'resources', 'game_data', icon_rel_path)
-                                    break
-                    except Exception:
-                        pass
+            if cid_lower not in _ICON_CACHE:
+                # Try original CID first, then stripped (for BOSS_ variants)
+                icon_path = _lookup_icon_in_data(cid_lower, base_dir)
                 if not icon_path or not os.path.exists(icon_path):
-                    icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', f'{cid_for_icon}.webp')
+                    cid_stripped = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
+                    if cid_stripped != cid_lower:
+                        icon_path = _lookup_icon_in_data(cid_stripped, base_dir)
+                if not icon_path or not os.path.exists(icon_path):
+                    cid_for_guess = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
+                    icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', f'{cid_for_guess}.webp')
                     if not os.path.exists(icon_path):
                         icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', 'T_icon_unknown.webp')
                 with _CACHE_LOCK:
-                    _ICON_CACHE[cid_for_icon] = icon_path
+                    _ICON_CACHE[cid_lower] = icon_path
             else:
                 with _CACHE_LOCK:
-                    icon_path = _ICON_CACHE.get(cid_for_icon)
+                    icon_path = _ICON_CACHE.get(cid_lower)
             if icon_path and os.path.exists(icon_path):
                 pixmap_key = f'{icon_path}_64x64'
                 with _CACHE_LOCK:
@@ -287,7 +273,7 @@ class PalIcon(QFrame):
                         pass
                     self.update()
                     self.repaint()
-            pal_name = PalFrame._NAMEMAP.get(cid.lower(), cid)
+            pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
             if nick:
                 pal_name = f'{pal_name}({nick})'
             self._add_overlays(level, gender, is_boss, is_predator, is_lucky, image_label, pal_name)
@@ -544,7 +530,7 @@ class PalCardWidget(QFrame):
             stomach = extract_value(raw, 'FullStomach', 0)
             cid_lower = cid.lower()
             cid_for_icon = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
-            pal_name = PalFrame._NAMEMAP.get(cid.lower(), cid)
+            pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
             if nick:
                 pal_name = f'{pal_name}({nick})'
             layout = QHBoxLayout(self)
@@ -601,21 +587,14 @@ class PalCardWidget(QFrame):
             image_label.setFixedSize(48, 48)
             image_label.setStyleSheet('border: none; background: transparent;')
             base_dir = constants.get_base_path()
-            icon_path = None
-            try:
-                paldata_path = os.path.join(base_dir, 'resources', 'game_data', 'paldata.json')
-                paldata = json_tools.load(paldata_path)
-                for pal in paldata.get('pals', []):
-                    if pal.get('asset', '').lower() == cid_for_icon:
-                        icon_rel_path = pal.get('icon', '')
-                        if icon_rel_path:
-                            icon_rel_path = icon_rel_path.lstrip('/')
-                            icon_path = os.path.join(base_dir, 'resources', 'game_data', icon_rel_path)
-                            break
-            except Exception:
-                pass
+            icon_path = _lookup_icon_in_data(cid_lower, base_dir)
             if not icon_path or not os.path.exists(icon_path):
-                icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', f'{cid_for_icon}.webp')
+                cid_stripped = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
+                if cid_stripped != cid_lower:
+                    icon_path = _lookup_icon_in_data(cid_stripped, base_dir)
+            if not icon_path or not os.path.exists(icon_path):
+                cid_for_guess = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
+                icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', f'{cid_for_guess}.webp')
                 if not os.path.exists(icon_path):
                     icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'pals', 'T_icon_unknown.webp')
             if os.path.exists(icon_path):
@@ -1305,7 +1284,7 @@ class PalEditorWidget(QWidget):
                 raw = pal_item['value']['RawData']['value']['object']['SaveParameter']['value']
             cid = extract_value(raw, 'CharacterID', '')
             nick = extract_value(raw, 'NickName', '')
-            pal_name = PalFrame._NAMEMAP.get(cid.lower(), cid)
+            pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
             tab.pal_name_label.setText(pal_name)
             tab.pal_nickname_label.setText(nick if nick else '')
         else:
@@ -1903,7 +1882,7 @@ class PalEditorWidget(QWidget):
                     raw = pal_item['value']['RawData']['value']['object']['SaveParameter']['value']
                     cid = extract_value(raw, 'CharacterID', '')
                     nick = extract_value(raw, 'NickName', '')
-                    pal_name = PalFrame._NAMEMAP.get(cid.lower(), cid)
+                    pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
                     if nick:
                         pal_name = f'{pal_name}({nick})'
                     self.pal_selector.addItem(pal_name)
@@ -2268,7 +2247,7 @@ class PalEditorWidget(QWidget):
             self._update_tab_pal_display(tab, pal_index)
             cid_display = extract_value(raw, 'CharacterID', '')
             nick_display = extract_value(raw, 'NickName', '')
-            pal_name = PalFrame._NAMEMAP.get(cid_display.lower(), cid_display)
+            pal_name = resolve_name(cid_display, PalFrame._NAMEMAP) or cid_display
             tab.pal_name_label.setText(pal_name)
             tab.pal_nickname_label.setText(nick_display if nick_display else '')
         except Exception as e:
@@ -2287,7 +2266,7 @@ class PalEditorWidget(QWidget):
             self._update_tab_pal_display(tab, pal_index)
             cid_display = extract_value(raw, 'CharacterID', '')
             nick_display = extract_value(raw, 'NickName', '')
-            pal_name = PalFrame._NAMEMAP.get(cid_display.lower(), cid_display)
+            pal_name = resolve_name(cid_display, PalFrame._NAMEMAP) or cid_display
             tab.pal_name_label.setText(pal_name)
             tab.pal_nickname_label.setText(nick_display if nick_display else '')
         except Exception as e:
@@ -2398,7 +2377,7 @@ class PalEditorWidget(QWidget):
                     widget.update_rare_status(False)
             cid_display = extract_value(raw, 'CharacterID', '')
             nick_display = extract_value(raw, 'NickName', '')
-            pal_name = PalFrame._NAMEMAP.get(cid_display.lower(), cid_display)
+            pal_name = resolve_name(cid_display, PalFrame._NAMEMAP) or cid_display
             tab.pal_name_label.setText(pal_name)
             tab.pal_nickname_label.setText(nick_display if nick_display else '')
         except Exception as e:
@@ -2425,7 +2404,7 @@ class PalEditorWidget(QWidget):
             self._update_tab_pal_display(tab, pal_index)
             nick_display = extract_value(raw, 'NickName', '')
             cid = extract_value(raw, 'CharacterID', '')
-            pal_name = PalFrame._NAMEMAP.get(cid.lower(), cid)
+            pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
             if nick_display:
                 pal_name = f'{pal_name}({nick_display})'
             tab.pal_name_label.setText(pal_name)
@@ -2441,7 +2420,7 @@ class PalEditorWidget(QWidget):
                     widget.update_display()
             cid_display = extract_value(raw, 'CharacterID', '')
             nick_display = extract_value(raw, 'NickName', '')
-            pal_name = PalFrame._NAMEMAP.get(cid_display.lower(), cid_display)
+            pal_name = resolve_name(cid_display, PalFrame._NAMEMAP) or cid_display
             tab.pal_name_label.setText(pal_name)
             tab.pal_nickname_label.setText(nick_display if nick_display else '')
         except Exception as e:
@@ -2853,7 +2832,7 @@ class PalEditorWidget(QWidget):
                     self._update_tab_pal_display(tab, pal_index)
                     cid = extract_value(raw, 'CharacterID', '')
                     nick = extract_value(raw, 'NickName', '')
-                    pal_name = PalFrame._NAMEMAP.get(cid.lower(), cid)
+                    pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
                     tab.pal_name_label.setText(pal_name)
                     tab.pal_nickname_label.setText(nick if nick else '')
                     tab.pal_name_label.repaint()
@@ -3625,7 +3604,7 @@ class PalFrame(QFrame):
             elif isinstance(passive_skill_data, list):
                 p_list = passive_skill_data
             nick = extract_value(raw, 'NickName', '')
-            pal_name = self._NAMEMAP.get(cid.lower(), cid)
+            pal_name = resolve_name(cid, self._NAMEMAP) or cid
             if nick:
                 pal_name = f'{pal_name}({nick})'
             self.name_label.setText(pal_name)

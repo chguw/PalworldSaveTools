@@ -1680,7 +1680,7 @@ def _process_dps_file_worker(args):
     file_path = os.path.join(players_dir, filename)
     result = {'filename': filename, 'actual_pals': 0, 'illegals_fixed': 0, 'illegal_entries': [], 'changed': False, 'gvas_file': None}
     try:
-        from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
+        from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav, resolve_name
         gvas_file = sav_to_gvasfile(file_path)
         save_param_array = gvas_file.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
         if not save_param_array:
@@ -1709,7 +1709,7 @@ def _process_dps_file_worker(args):
                 rank_craftspeed = extract_value(sp, 'Rank_CraftSpeed', 0)
                 cid = extract_value(sp, 'CharacterID', '')
                 nick = extract_value(sp, 'NickName', '')
-                pal_name = NAMEMAP.get(cid.lower(), cid)
+                pal_name = resolve_name(cid, NAMEMAP) or cid
                 inst_id = sp.get('InstanceId', {}).get('value', 'Unknown')
                 slot_id_obj = sp.get('SlotId', {})
                 if isinstance(slot_id_obj, dict):
@@ -1886,7 +1886,7 @@ def fix_illegal_pals_in_save(parent=None):
                 rank_craftspeed = extract_value(sp, 'Rank_CraftSpeed', 0)
                 cid = extract_value(sp, 'CharacterID', '')
                 nick = extract_value(sp, 'NickName', '')
-                pal_name = NAMEMAP.get(cid.lower(), cid)
+                pal_name = resolve_name(cid, NAMEMAP) or cid
                 inst_id = entry.get('key', {}).get('InstanceId', {}).get('value', 'Unknown')
                 slot_id_obj = sp.get('SlotId', {})
                 if isinstance(slot_id_obj, dict):

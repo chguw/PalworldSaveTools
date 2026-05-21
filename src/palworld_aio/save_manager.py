@@ -20,7 +20,7 @@ from import_libs import backup_whole_directory, run_with_loading
 import palworld_coord
 from i18n import t
 from palworld_aio import constants
-from palworld_aio.utils import sav_to_json, json_to_sav, sav_to_gvas_wrapper, wrapper_to_sav, sav_to_gvasfile, extract_value, sanitize_filename, format_duration_short
+from palworld_aio.utils import sav_to_json, json_to_sav, sav_to_gvas_wrapper, wrapper_to_sav, sav_to_gvasfile, extract_value, sanitize_filename, format_duration_short, resolve_name
 from palworld_aio.guild_manager import rebuild_all_guilds
 from palworld_aio.func_manager import check_is_illegal_pal
 class SaveManager(QObject):
@@ -291,11 +291,11 @@ class SaveManager(QObject):
             if is_worker and target_id not in owner_nicknames:
                 owner_nicknames[target_id] = f'Base_{base}'
             cid = raw.get('CharacterID', {}).get('value', '')
-            if cid and cid.lower() not in NAMEMAP:
+            if cid and not resolve_name(cid, NAMEMAP):
                 miss['Pals'].add(cid)
                 pal_name = cid
                 invalid_objects['Invalid Pals'][pal_name] += 1
-            name = NAMEMAP.get(cid.lower(), cid)
+            name = resolve_name(cid, NAMEMAP) or cid
             lvl = extract_value(raw, 'Level', 1)
             rk = extract_value(raw, 'Rank', 1)
             gv = raw.get('Gender', {}).get('value', {}).get('value', '')
@@ -990,7 +990,7 @@ def _process_dps_scan_worker(args):
                 container_id = str(slot_id.get('ContainerId', {}).get('value', {}).get('ID', {}).get('value', 'Unknown')).lower()
                 raw_data_val = entry.get('value', {}).get('RawData', {}).get('value', {})
                 guild_id = str(raw_data_val.get('group_id', 'Unknown')).lower()
-                name = NAMEMAP.get(char_id.lower(), char_id)
+                name = resolve_name(char_id, NAMEMAP) or char_id
                 dn = f'{name}(Nickname: {nick})' if nick != 'Unknown' and nick else name
                 passive_count = len(p_list) if isinstance(p_list, list) else 0
                 active_count = sum((1 for s in e_list if s and s.strip())) if isinstance(e_list, list) else 0

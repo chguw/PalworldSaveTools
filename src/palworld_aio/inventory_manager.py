@@ -1,4 +1,5 @@
 import os
+import re
 from palworld_save_tools import json_tools
 import sys
 import uuid
@@ -35,27 +36,116 @@ class ItemData:
             cls._item_data = []
             return cls._item_data
     @classmethod
+    def _friendly_name(cls, asset_name: str) -> str:
+        """Generate a human-readable name from an asset name."""
+        name = asset_name.replace('_', ' ')
+        name = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', name)
+        name = name.strip()
+        return name if name else asset_name
+
+    @classmethod
     def get_item_by_asset(cls, asset_name: str) -> dict:
         cls.load_item_data()
         if not asset_name:
             return {'name': 'Unknown', 'asset': '', 'icon': '/icons/items/T_icon_unknown.webp'}
         item = cls._asset_to_item.get(asset_name)
+        if not item:
+            item = cls._asset_to_item_lower.get(asset_name.lower())
         if item:
-            return item
-        item = cls._asset_to_item_lower.get(asset_name.lower())
-        if item:
-            return item
-        return {'name': asset_name, 'asset': asset_name, 'icon': '/icons/items/T_icon_unknown.webp'}
+            name = item.get('name', '')
+            if not name or name == item.get('asset', ''):
+                name = cls._friendly_name(asset_name)
+            return {'name': name, 'asset': item.get('asset', asset_name), 'icon': item.get('icon', '/icons/items/T_icon_unknown.webp')}
+        return {'name': cls._friendly_name(asset_name), 'asset': asset_name, 'icon': '/icons/items/T_icon_unknown.webp'}
+    @classmethod
+    def _resolve_icon_path(cls, icon_path: str) -> str:
+        """Try to find the icon file, with fallback to alternative patterns."""
+        base_path = constants.get_base_path()
+        if icon_path.startswith('/'):
+            full_path = os.path.join(base_path, 'resources', 'game_data', icon_path[1:])
+        else:
+            full_path = os.path.join(base_path, 'resources', 'game_data', icon_path)
+        if os.path.exists(full_path):
+            return full_path
+        
+        filedir = os.path.dirname(full_path)
+        name_no_ext = os.path.splitext(os.path.basename(full_path))[0]
+        
+        # Build a case-insensitive index of icon files in this directory (with hash suffixes stripped)
+        name_to_file = {}
+        if os.path.isdir(filedir):
+            for f in os.listdir(filedir):
+                stem = os.path.splitext(f)[0]
+                clean = re.sub(r'\.[A-Za-z0-9_-]{8,}$', '', stem, flags=re.IGNORECASE)
+                name_to_file[clean.lower()] = os.path.join(filedir, f)
+        
+        def _try(pattern: str) -> str | None:
+            match = name_to_file.get(pattern.lower())
+            if match and os.path.exists(match):
+                return match
+            return None
+        
+        # Try with T_itemicon_ prefix
+        result = _try(f'T_itemicon_{name_no_ext}')
+        if result:
+            return result
+        # Try with T_ prefix
+        result = _try(f'T_{name_no_ext}')
+        if result:
+            return result
+        # Try with T_icon_item_ prefix
+        result = _try(f'T_icon_item_{name_no_ext}')
+        if result:
+            return result
+        # Try .png extension
+        result = _try(f'{name_no_ext}.png')
+        if result:
+            return result
+        # Try without prefix
+        for prefix in ['T_itemicon_', 'T_icon_item_', 'T_']:
+            if name_no_ext.lower().startswith(prefix.lower()):
+                stripped = name_no_ext[len(prefix):]
+                result = _try(stripped) or _try(f'{stripped}.webp') or _try(f'{stripped}.png')
+                if result:
+                    return result
+                # Also try in parent icon dir
+                parent_dir = os.path.dirname(filedir)
+                if os.path.isdir(parent_dir):
+                    for f in os.listdir(parent_dir):
+                        pstem = os.path.splitext(f)[0]
+                        pclean = re.sub(r'\.[A-Za-z0-9_-]{8,}$', '', pstem, flags=re.IGNORECASE)
+                        if pclean.lower() == stripped.lower():
+                            trial = os.path.join(parent_dir, f)
+                            if os.path.exists(trial):
+                                return trial
+                break
+        # Last resort: scan for any file containing the name
+        if os.path.isdir(filedir):
+            name_lower = name_no_ext.lower()
+            for f in os.listdir(filedir):
+                f_lower = f.lower()
+                if name_lower in f_lower:
+                    trial = os.path.join(filedir, f)
+                    if os.path.exists(trial):
+                        return trial
+            # Also scan technologies dir (some items share icons with techs)
+            tech_dir = os.path.join(os.path.dirname(filedir), 'technologies')
+            if os.path.isdir(tech_dir):
+                for f in os.listdir(tech_dir):
+                    f_lower = f.lower()
+                    if name_lower in f_lower:
+                        trial = os.path.join(tech_dir, f)
+                        if os.path.exists(trial):
+                            return trial
+        
+        return full_path  # Return original even if not found
     @classmethod
     def get_item_icon(cls, icon_path: str, size: QSize=QSize(48, 48)) -> QPixmap:
         cache_key = f'{icon_path}_{size.width()}x{size.height()}'
         if cache_key in cls._icon_cache:
             return cls._icon_cache[cache_key]
         base_path = constants.get_base_path()
-        if icon_path.startswith('/'):
-            full_path = os.path.join(base_path, 'resources', 'game_data', icon_path[1:])
-        else:
-            full_path = os.path.join(base_path, 'resources', 'game_data', icon_path)
+        full_path = cls._resolve_icon_path(icon_path)
         if os.path.exists(full_path):
             pixmap = QPixmap(full_path)
             if not pixmap.isNull():

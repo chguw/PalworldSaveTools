@@ -1,6 +1,2631 @@
 {
     "skills": [
         {
+            "name": "Acid Rain",
+            "asset": "AcidRain",
+            "element": "Water",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Air Blade",
+            "asset": "AirBlade",
+            "element": "Normal",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Air Cannon",
+            "asset": "AirCanon",
+            "element": "Normal",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Apocalypse",
+            "asset": "Apocalypse",
+            "element": "Dark",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Hydro Jet",
+            "asset": "AquaJet",
+            "element": "Water",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Beam Slicer",
+            "asset": "BeamSlicer",
+            "element": "Dragon",
+            "power": 350,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Blast Cannon",
+            "asset": "BlastCanon",
+            "element": "Dragon",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Iceberg",
+            "asset": "BlizzardLance",
+            "element": "Ice",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Unknown Skill (BlueThunderHorse_PartnerSkill)",
+            "asset": "BlueThunderHorse_PartnerSkill",
+            "element": "Electricity",
+            "power": 30,
+            "cooldown": 55.0
+        },
+        {
+            "name": "Bubble Blast",
+            "asset": "BubbleShot",
+            "element": "Water",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Poison Shower",
+            "asset": "BubbleShower",
+            "element": "Dark",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Charge Cannon",
+            "asset": "ChargeCanon",
+            "element": "Dragon",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Comet Strike",
+            "asset": "Commet",
+            "element": "Dragon",
+            "power": 180,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Meteorain",
+            "asset": "CommetRain",
+            "element": "Dragon",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Bubble March",
+            "asset": "CreepingBubble",
+            "element": "Water",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Crosswind",
+            "asset": "CrossWind",
+            "element": "Leaf",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Dark Arrow",
+            "asset": "DarkArrow",
+            "element": "Dark",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Dark Ball",
+            "asset": "DarkBall",
+            "element": "Dark",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Dark Cannon",
+            "asset": "DarkCanon",
+            "element": "Dark",
+            "power": 70,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Dark Laser",
+            "asset": "DarkLaser",
+            "element": "Dark",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Dark Whisp",
+            "asset": "DarkLegion",
+            "element": "Dark",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Umbral Surge",
+            "asset": "DarkPulse",
+            "element": "Dark",
+            "power": 60,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Shadow Burst",
+            "asset": "DarkWave",
+            "element": "Dark",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Diamond Rain",
+            "asset": "DiamondFall",
+            "element": "Ice",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Torrential Blast",
+            "asset": "DiversionLaser",
+            "element": "Water",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Double Blizzard Spike",
+            "asset": "DoubleIcicleThrow",
+            "element": "Ice",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Draconic Breath",
+            "asset": "DragonBreath",
+            "element": "Dragon",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Dragon Cannon",
+            "asset": "DragonCanon",
+            "element": "Dragon",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Dragon Meteor",
+            "asset": "DragonMeteor",
+            "element": "Dragon",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Dragon Burst",
+            "asset": "DragonWave",
+            "element": "Dragon",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Shockwave",
+            "asset": "ElecWave",
+            "element": "Electricity",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Volcanic Rain",
+            "asset": "Eruption",
+            "element": "Fire",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Fire Ball",
+            "asset": "FireBall",
+            "element": "Fire",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Ignis Blast",
+            "asset": "FireBlast",
+            "element": "Fire",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Spirit Fire",
+            "asset": "FireSeed",
+            "element": "Fire",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Flame Funnel",
+            "asset": "FlameFunnel",
+            "element": "Fire",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Ignis Breath",
+            "asset": "Flamethrower",
+            "element": "Fire",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Flame Wall",
+            "asset": "FlameWall",
+            "element": "Fire",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Flare Arrow",
+            "asset": "FlareArrow",
+            "element": "Fire",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Flare Storm",
+            "asset": "FlareTornado",
+            "element": "Fire",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Crystal Breath",
+            "asset": "FrostBreath",
+            "element": "Ice",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Unknown Skill (Funnel_DreamDemon)",
+            "asset": "Funnel_DreamDemon",
+            "element": "Dark",
+            "power": 20,
+            "cooldown": 5.0
+        },
+        {
+            "name": "Unknown Skill (Funnel_RaijinDaughter)",
+            "asset": "Funnel_RaijinDaughter",
+            "element": "Electricity",
+            "power": 30,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Unknown Skill (Funnel_RaijinDaughter_Water)",
+            "asset": "Funnel_RaijinDaughter_Water",
+            "element": "Dark",
+            "power": 30,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Spirit Flame",
+            "asset": "GhostFlame",
+            "element": "Dark",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "GrassGolem_Dark_PartnerSkill",
+            "asset": "GrassGolem_Dark_PartnerSkill",
+            "element": "Dark",
+            "power": 600,
+            "cooldown": 0
+        },
+        {
+            "name": "GrassGolem_PartnerSkill",
+            "asset": "GrassGolem_PartnerSkill",
+            "element": "Leaf",
+            "power": 600,
+            "cooldown": 0
+        },
+        {
+            "name": "Grass Tornado",
+            "asset": "GrassTornado",
+            "element": "Leaf",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Dark Shot",
+            "asset": "GravityShot",
+            "element": "Dark",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Holy Burst",
+            "asset": "HolyBlast",
+            "element": "Normal",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Punch",
+            "asset": "Human_Punch",
+            "element": "Normal",
+            "power": 12,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Unknown Skill (Human_Rolling)",
+            "asset": "Human_Rolling",
+            "element": "Normal",
+            "power": 0,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Hydro Laser",
+            "asset": "HydroPump",
+            "element": "Water",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Hydro Slicer",
+            "asset": "HydroSlicer",
+            "element": "Water",
+            "power": 350,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Pal Blast",
+            "asset": "HyperBeam",
+            "element": "Normal",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Absolute Frost",
+            "asset": "IceAge",
+            "element": "Ice",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Icicle Cutter",
+            "asset": "IceBlade",
+            "element": "Ice",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Ice Missile",
+            "asset": "IceMissile",
+            "element": "Ice",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Freeze Wall",
+            "asset": "IceWall",
+            "element": "Ice",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Icicle Line",
+            "asset": "IcicleLine",
+            "element": "Ice",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Icicle Bullet",
+            "asset": "IciclePierce",
+            "element": "Ice",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Blizzard Spike",
+            "asset": "IcicleThrow",
+            "element": "Ice",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Ignis Rage",
+            "asset": "Inferno",
+            "element": "Fire",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Lightning Strike",
+            "asset": "LightningStrike",
+            "element": "Electricity",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Splash",
+            "asset": "LineGeyser",
+            "element": "Water",
+            "power": 140,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Lightning Streak",
+            "asset": "LineThunder",
+            "element": "Electricity",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Lock-on Laser",
+            "asset": "LockonLaser",
+            "element": "Electricity",
+            "power": 140,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Bog Blast",
+            "asset": "MudShot",
+            "element": "Earth",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Poison Fog",
+            "asset": "PoisonFog",
+            "element": "Dark",
+            "power": 0,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Poison Blast",
+            "asset": "PoisonShot",
+            "element": "Dark",
+            "power": 30,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (PoseidonOrca_PartnerSkill)",
+            "asset": "PoseidonOrca_PartnerSkill",
+            "element": "Water",
+            "power": 60,
+            "cooldown": 55.0
+        },
+        {
+            "name": "Unknown Skill (PoseidonOrca_PartnerSkill_SpearBullet)",
+            "asset": "PoseidonOrca_PartnerSkill_SpearBullet",
+            "element": "Water",
+            "power": 50,
+            "cooldown": 55.0
+        },
+        {
+            "name": "Power Bomb",
+            "asset": "PowerBall",
+            "element": "Normal",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Power Shot",
+            "asset": "PowerShot",
+            "element": "Normal",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Predator Blast",
+            "asset": "PredatorBeam",
+            "element": "Normal",
+            "power": 600,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Predator Mark",
+            "asset": "PredatorLockon",
+            "element": "Normal",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Predator Surge",
+            "asset": "PredatorWave",
+            "element": "Normal",
+            "power": 200,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Psycho Gravity",
+            "asset": "Psychokinesis",
+            "element": "Dark",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Radiant Barrage",
+            "asset": "RadiantBarrage",
+            "element": "Normal",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Raid Cutter",
+            "asset": "RaidCutter",
+            "element": "Leaf",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Thunder Rail",
+            "asset": "Railbolt",
+            "element": "Electricity",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "All Range Thunder",
+            "asset": "RangeThunder",
+            "element": "Electricity",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Reflect Leaf",
+            "asset": "ReflectiveShuriken",
+            "element": "Leaf",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Aqua Surge",
+            "asset": "RipTide",
+            "element": "Water",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Stone Beat",
+            "asset": "RockBeat",
+            "element": "Earth",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Rock Lance",
+            "asset": "RockLance",
+            "element": "Earth",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Spine Vine",
+            "asset": "RootAttack",
+            "element": "Leaf",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Circle Vine",
+            "asset": "RootLance",
+            "element": "Leaf",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Sand Tornado",
+            "asset": "SandTornado",
+            "element": "Earth",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Sand Twister",
+            "asset": "SandTwister",
+            "element": "Earth",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "en Text (Scratch)",
+            "asset": "Scratch",
+            "element": "Normal",
+            "power": 100,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Geyser Gush",
+            "asset": "SeaGush",
+            "element": "Water",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Seed Machine Gun",
+            "asset": "SeedMachinegun",
+            "element": "Leaf",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Seed Mine",
+            "asset": "SeedMine",
+            "element": "Leaf",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Implode",
+            "asset": "SelfDestruct",
+            "element": "Normal",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Bee Quiet",
+            "asset": "SelfDestruct_Bee",
+            "element": "Leaf",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Megaton Implode",
+            "asset": "SelfExplosion",
+            "element": "Normal",
+            "power": 1200,
+            "cooldown": 60.0
+        },
+        {
+            "name": "Nightmare Ball",
+            "asset": "ShadowBall",
+            "element": "Dark",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Lethal Laser",
+            "asset": "ShokeiLaser",
+            "element": "Electricity",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Solar Blast",
+            "asset": "SolarBeam",
+            "element": "Leaf",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Multicutter",
+            "asset": "SpecialCutter",
+            "element": "Leaf",
+            "power": 140,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Spark Blast",
+            "asset": "SpreadPulse",
+            "element": "Electricity",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Star Mine",
+            "asset": "StarMine",
+            "element": "Normal",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Stone Blast",
+            "asset": "StoneShotgun",
+            "element": "Earth",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Comet Barrage",
+            "asset": "ThreeCommet",
+            "element": "Dragon",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Tri-Lightning",
+            "asset": "ThreeThunder",
+            "element": "Electricity",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "en Text (Throw)",
+            "asset": "Throw",
+            "element": "Normal",
+            "power": 60,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Stone Cannon",
+            "asset": "ThrowRock",
+            "element": "Earth",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Electric Ball",
+            "asset": "ThunderBall",
+            "element": "Electricity",
+            "power": 100,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Lightning Bolt",
+            "asset": "Thunderbolt",
+            "element": "Electricity",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Plasma Funnel",
+            "asset": "ThunderFunnel",
+            "element": "Electricity",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Thunder Rain",
+            "asset": "ThunderRain",
+            "element": "Electricity",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Thunder Spear",
+            "asset": "ThunderSpear",
+            "element": "Electricity",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Thunderstorm",
+            "asset": "ThunderStorm",
+            "element": "Electricity",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Rockburst",
+            "asset": "Tremor",
+            "element": "Earth",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "TriSpark",
+            "asset": "TriSpark",
+            "element": "Electricity",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Fluffy Tackle",
+            "asset": "Unique_Alpaca_Tackle",
+            "element": "Normal",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_AmaterasuWolf_Bite)",
+            "asset": "Unique_AmaterasuWolf_Bite",
+            "element": "Fire",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_AmaterasuWolf_BiteV2)",
+            "asset": "Unique_AmaterasuWolf_BiteV2",
+            "element": "Fire",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_AmaterasuWolf_Dark_Bite)",
+            "asset": "Unique_AmaterasuWolf_Dark_Bite",
+            "element": "Dark",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_AmaterasuWolf_Dark_BiteV2)",
+            "asset": "Unique_AmaterasuWolf_Dark_BiteV2",
+            "element": "Dark",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Daring Shadowstorm",
+            "asset": "Unique_AmaterasuWolf_Dark_DarkCharge",
+            "element": "Dark",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Daring Flames",
+            "asset": "Unique_AmaterasuWolf_FireCharge",
+            "element": "Fire",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Ground Smash",
+            "asset": "Unique_Anubis_GroundPunch",
+            "element": "Earth",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Spinning Roundhouse",
+            "asset": "Unique_Anubis_LowRoundKick",
+            "element": "Earth",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Forceful Charge",
+            "asset": "Unique_Anubis_Tackle",
+            "element": "Earth",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Unknown Skill (Unique_Baphomet_Dark_DarkKite)",
+            "asset": "Unique_Baphomet_Dark_DarkKite",
+            "element": "Dark",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Hellfire Claw",
+            "asset": "Unique_Baphomet_SwallowKite",
+            "element": "Fire",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Flame Breath",
+            "asset": "Unique_BirdDragon_FireBreath",
+            "element": "Fire",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Tempest Blizzard",
+            "asset": "Unique_BirdDragon_Ice_IceBreath",
+            "element": "Ice",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Twin Spears",
+            "asset": "Unique_BlackCentaur_TwoSpearRushes",
+            "element": "Dark",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Divine Disaster",
+            "asset": "Unique_BlackGriffon_TackleLaser",
+            "element": "Dark",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Divine Disaster II",
+            "asset": "Unique_BlackGriffon_TackleLaser2",
+            "element": "Dark",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Firefist Breathstorm",
+            "asset": "Unique_BlackMetalDragon_FirePunch",
+            "element": "Dragon",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Unknown Skill (Unique_BlackPuppy_Bite)",
+            "asset": "Unique_BlackPuppy_Bite",
+            "element": "Dark",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_BlackPuppy_BiteV2)",
+            "asset": "Unique_BlackPuppy_BiteV2",
+            "element": "Dark",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Surfing Slam",
+            "asset": "Unique_BluePlatypus_Toboggan",
+            "element": "Water",
+            "power": 100,
+            "cooldown": 120.0
+        },
+        {
+            "name": "Fire Tackle",
+            "asset": "Unique_BluePlatypus_Toboggan_Fire",
+            "element": "Fire",
+            "power": 115,
+            "cooldown": 120.0
+        },
+        {
+            "name": "Celestial Vortex",
+            "asset": "Unique_BlueSkyDragon_DrainStorm",
+            "element": "Water",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Unique_BlueSkyDragon_GYM_Act",
+            "asset": "Unique_BlueSkyDragon_GYM_Act",
+            "element": "Water",
+            "power": 700,
+            "cooldown": 0
+        },
+        {
+            "name": "Azure Dracoflare",
+            "asset": "Unique_BlueSkyDragon_SweepBreath",
+            "element": "Dragon",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Hydra Charge",
+            "asset": "Unique_BlueSkyDragon_Tossin",
+            "element": "Water",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Bolt Blink",
+            "asset": "Unique_BlueThunderHorse_FlashDash",
+            "element": "Electricity",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Unknown Skill (Unique_BlueThunderHorse_Tossin)",
+            "asset": "Unique_BlueThunderHorse_Tossin",
+            "element": "Electricity",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Reckless Charge",
+            "asset": "Unique_Boar_Tackle",
+            "element": "Earth",
+            "power": 60,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Thunderslide",
+            "asset": "Unique_CaptainPenguin_Black_BodySlide_Electric",
+            "element": "Electricity",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Emperor Slide",
+            "asset": "Unique_CaptainPenguin_BodySlide",
+            "element": "Ice",
+            "power": 140,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Chicken Rush",
+            "asset": "Unique_ChickenPal_ChickenPeck",
+            "element": "Normal",
+            "power": 30,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Trick Show",
+            "asset": "Unique_ClownRabbit_TrickShow",
+            "element": "Fire",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Fuddler Tunneler",
+            "asset": "Unique_CuteMole_DiggingAttack",
+            "element": "Earth",
+            "power": 60,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Evil Slash",
+            "asset": "Unique_DarkAlien_JumpScractch",
+            "element": "Dark",
+            "power": 350,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Phantom Peck",
+            "asset": "Unique_DarkCrow_TelePoke",
+            "element": "Dark",
+            "power": 70,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Beam Slash",
+            "asset": "Unique_DarkMechaDragon_BeamSlash",
+            "element": "Dragon",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Astral Ray",
+            "asset": "Unique_DarkMechaDragon_ConvergentBeam",
+            "element": "Dark",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Omega Laser",
+            "asset": "Unique_DarkMechaDragon_FunnelLaser",
+            "element": "Dragon",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Satellite Bit",
+            "asset": "Unique_DarkMechaDragon_SetFunnel",
+            "element": "Dragon",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Cosmic Meteor",
+            "asset": "Unique_DarkMechaDragon_WarpComet",
+            "element": "Dragon",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Jumping Stinger",
+            "asset": "Unique_DarkScorpion_Pierce",
+            "element": "Earth",
+            "power": 350,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Unknown Skill (Unique_Deer_Ground_DirtyHorn)",
+            "asset": "Unique_Deer_Ground_DirtyHorn",
+            "element": "Earth",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Antler Uppercut",
+            "asset": "Unique_Deer_PushupHorn",
+            "element": "Normal",
+            "power": 90,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_DomeArmorDragon_ExplosiveMissile",
+            "element": "Earth",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Shell Spin",
+            "asset": "Unique_DrillGame_ShellAttack",
+            "element": "Earth",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Gale Claw",
+            "asset": "Unique_Eagle_GlidingNail",
+            "element": "Normal",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Lightning Claw",
+            "asset": "Unique_ElecPanda_ElecScratch",
+            "element": "Electricity",
+            "power": 150,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Heavy Thunder Tank",
+            "asset": "Unique_ElecPanda_GatlingAttack",
+            "element": "Electricity",
+            "power": 550,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Electirc Wild Fang",
+            "asset": "Unique_ElecPomeranian_Bite",
+            "element": "Electricity",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Electirc Double Fang",
+            "asset": "Unique_ElecPomeranian_BiteV2",
+            "element": "Electricity",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_ElecSnail_ShellCharge",
+            "element": "Electricity",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Mystic Whirlwind",
+            "asset": "Unique_FairyDragon_FairyTornado",
+            "element": "Dragon",
+            "power": 150,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Earth Dash",
+            "asset": "Unique_FeatherOstrich_Tossin",
+            "element": "Earth",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Cloud Tempest",
+            "asset": "Unique_FengyunDeeper_CloudTempest",
+            "element": "Normal",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Thunder Tempest",
+            "asset": "Unique_FengyunDeeper_Electric_ThunderTempest",
+            "element": "Electricity",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Dark Charge",
+            "asset": "Unique_FireKirin_Dark_DarkTossin",
+            "element": "Dark",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Ignis Charge",
+            "asset": "Unique_FireKirin_Tackle",
+            "element": "Fire",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Blazing Horn",
+            "asset": "Unique_FlameBuffalo_FlameHorn",
+            "element": "Fire",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Unknown Skill (Unique_FlowerDinosaur_Electric_ThunderWhip)",
+            "asset": "Unique_FlowerDinosaur_Electric_ThunderWhip",
+            "element": "Electricity",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Botanical Smash",
+            "asset": "Unique_FlowerDinosaur_Whip",
+            "element": "Leaf",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "en",
+            "asset": "Unique_FlowerPrince_PoisonGasDance",
+            "element": "Dark",
+            "power": 800,
+            "cooldown": 30.0
+        },
+        {
+            "name": "en",
+            "asset": "Unique_FlowerPrince_PoisonGasTackle",
+            "element": "Dark",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Fierce Fang",
+            "asset": "Unique_Garm_Bite",
+            "element": "Normal",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_Garm_BiteV2)",
+            "asset": "Unique_Garm_BiteV2",
+            "element": "Normal",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Scorching Lantern Sweep",
+            "asset": "Unique_GhostAnglerfish_Fire_SweepBait_Fire",
+            "element": "Fire",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Lantern Sweep",
+            "asset": "Unique_GhostAnglerfish_SweepBait",
+            "element": "Water",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Spirit Dash",
+            "asset": "Unique_GhostBeast_Tossin",
+            "element": "Dark",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_GhostDragon_PhosphorousBeam",
+            "element": "Dragon",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_GhostDragon_TailSlash",
+            "element": "Dragon",
+            "power": 550,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Unknown Skill (Unique_GoldenHorse_Bite)",
+            "asset": "Unique_GoldenHorse_Bite",
+            "element": "Earth",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_GoldenHorse_BiteV2)",
+            "asset": "Unique_GoldenHorse_BiteV2",
+            "element": "Earth",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Crash Dash",
+            "asset": "Unique_GoldenHorse_StoneDash",
+            "element": "Earth",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Unknown Skill (Unique_Gorilla_Ground_EarthPunch)",
+            "asset": "Unique_Gorilla_Ground_EarthPunch",
+            "element": "Earth",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Ground Pound",
+            "asset": "Unique_Gorilla_GroundPunch",
+            "element": "Normal",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Root Cannon",
+            "asset": "Unique_GrassGolem_ArmCannon",
+            "element": "Leaf",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Dark Root",
+            "asset": "Unique_GrassGolem_Dark_DarkArmCannon",
+            "element": "Dark",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Rocket Arm",
+            "asset": "Unique_GrassGolem_RocketPunch",
+            "element": "Earth",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Earth Impact",
+            "asset": "Unique_Grassmammoth_Earthquake",
+            "element": "Earth",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_GrassMinotaur_BullRush",
+            "element": "Leaf",
+            "power": 650,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_GrassMinotaur_BullRush_Lower",
+            "element": "Leaf",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_GrassMinotaur_Ice_BullRush",
+            "element": "Ice",
+            "power": 650,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_GrassMinotaur_Ice_BullRush_Lower",
+            "element": "Ice",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Blast Punch",
+            "asset": "Unique_GrassPanda_Electric_ElectricPunch",
+            "element": "Electricity",
+            "power": 180,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Crushing Punch",
+            "asset": "Unique_GrassPanda_MusclePunch",
+            "element": "Leaf",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Leaping Roundhouse",
+            "asset": "Unique_GrassRabbitMan_GrassRoundKick",
+            "element": "Leaf",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Grudge Barrage",
+            "asset": "Unique_GrimGirl_BrutalMachete",
+            "element": "Dark",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Unknown Skill (Unique_GuardianDog_Bite)",
+            "asset": "Unique_GuardianDog_Bite",
+            "element": "Normal",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_GuardianDog_BiteV2)",
+            "asset": "Unique_GuardianDog_BiteV2",
+            "element": "Normal",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Tornado Attack",
+            "asset": "Unique_HawkBird_Storm",
+            "element": "Normal",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Giga Horn",
+            "asset": "Unique_HerculesBeetle_BeetleTackle",
+            "element": "Earth",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Phoenix Flare",
+            "asset": "Unique_Horus_FlareBird",
+            "element": "Fire",
+            "power": 320,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Raging Flame Wave",
+            "asset": "Unique_Horus_PerfectStorm",
+            "element": "Fire",
+            "power": 650,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Phoenix Tide",
+            "asset": "Unique_Horus_Water_AquaStorm",
+            "element": "Water",
+            "power": 320,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Chaotic Spray",
+            "asset": "Unique_IceCrocodile_SpitAttack",
+            "element": "Ice",
+            "power": 180,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Freezing Charge",
+            "asset": "Unique_IceDeer_IceHorn",
+            "element": "Ice",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Unknown Skill (Unique_IceHorse_Dark_DarkBladeAttack)",
+            "asset": "Unique_IceHorse_Dark_DarkBladeAttack",
+            "element": "Dark",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Crystal Wing",
+            "asset": "Unique_IceHorse_IceBladeAttack",
+            "element": "Ice",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "High Breach",
+            "asset": "Unique_IceNarwhal_JumpingHorn",
+            "element": "Ice",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Beam Comet",
+            "asset": "Unique_JetDragon_JumpBeam",
+            "element": "Dragon",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Kingly Slam",
+            "asset": "Unique_KingAlpaca_BodyPress",
+            "element": "Normal",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Unknown Skill (Unique_KingAlpaca_Ice_IcePress)",
+            "asset": "Unique_KingAlpaca_Ice_IcePress",
+            "element": "Ice",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Magna Crush",
+            "asset": "Unique_KingBahamut_AirCrash",
+            "element": "Dragon",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Brawn Impact",
+            "asset": "Unique_KingBahamut_ArmSmash",
+            "element": "Fire",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Marine Blade",
+            "asset": "Unique_KingWhale_AquaBlade",
+            "element": "Water",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Aqua Tornado",
+            "asset": "Unique_KingWhale_AquaTornado",
+            "element": "Water",
+            "power": 800,
+            "cooldown": 40.0
+        },
+        {
+            "name": "Grand Breach",
+            "asset": "Unique_KingWhale_Breaching",
+            "element": "Water",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Bubble Rain",
+            "asset": "Unique_KingWhale_HomingBubble",
+            "element": "Water",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Maelstrom",
+            "asset": "Unique_KingWhale_Maelstrom",
+            "element": "Water",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Unique_KingWhale_SuperTidalBore",
+            "asset": "Unique_KingWhale_SuperTidalBore",
+            "element": "Water",
+            "power": 1000,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Unique_KingWhale_TidalBore",
+            "asset": "Unique_KingWhale_TidalBore",
+            "element": "Water",
+            "power": 1000,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Tidal Charge",
+            "asset": "Unique_KingWhale_WaveTackle",
+            "element": "Water",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Ice Gale Strike",
+            "asset": "Unique_Kirin_Ice_IceTackle",
+            "element": "Ice",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Lightning Gale",
+            "asset": "Unique_Kirin_LightningTackle",
+            "element": "Electricity",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Lantern Flame",
+            "asset": "Unique_LanternButler_LanternFlame",
+            "element": "Dark",
+            "power": 650,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Konoha Flip",
+            "asset": "Unique_LeafMomonga_SomerSault",
+            "element": "Leaf",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Grass)",
+            "asset": "Unique_LegendDeer_BarrierRelease_Grass",
+            "element": "Leaf",
+            "power": 220,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Normal)",
+            "asset": "Unique_LegendDeer_BarrierRelease_Normal",
+            "element": "Normal",
+            "power": 300,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Water)",
+            "asset": "Unique_LegendDeer_BarrierRelease_Water",
+            "element": "Water",
+            "power": 220,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Unique_LegendDeer_RadiantPurge",
+            "asset": "Unique_LegendDeer_RadiantPurge",
+            "element": "Normal",
+            "power": 1250,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Purifying Light",
+            "asset": "Unique_LegendDeer_RadiantPurge_Otomo",
+            "element": "Normal",
+            "power": 250,
+            "cooldown": 100.0
+        },
+        {
+            "name": "Divine Wing",
+            "asset": "Unique_LegendDeer_RadiantWingRush",
+            "element": "Normal",
+            "power": 700,
+            "cooldown": 35.0
+        },
+        {
+            "name": "Sacred Rain",
+            "asset": "Unique_LegendDeer_WarpPillarBurst",
+            "element": "Normal",
+            "power": 800,
+            "cooldown": 60.0
+        },
+        {
+            "name": "Unique_LilyQueen_GYM_Act",
+            "asset": "Unique_LilyQueen_GYM_Act",
+            "element": "Leaf",
+            "power": 1,
+            "cooldown": 60.0
+        },
+        {
+            "name": "Bountiful Protection",
+            "asset": "Unique_LilyQueen_LilyHealing",
+            "element": "Leaf",
+            "power": 0,
+            "cooldown": 240.0
+        },
+        {
+            "name": "Unique_LilyQueen_LilyHealing_Boss",
+            "asset": "Unique_LilyQueen_LilyHealing_Boss",
+            "element": "Leaf",
+            "power": 0,
+            "cooldown": 300.0
+        },
+        {
+            "name": "Wind Barrier",
+            "asset": "Unique_LilyQueen_WindBarrier",
+            "element": "Leaf",
+            "power": 60,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_LotusDragon_LotusBloom",
+            "element": "Leaf",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Volcanic Fang",
+            "asset": "Unique_Manticore_InfernoStrike",
+            "element": "Fire",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Ballet of the Black Quill",
+            "asset": "Unique_MonochromeQueen_BalletJump",
+            "element": "Dark",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Unique_MoonQueen_GYM_Act",
+            "asset": "Unique_MoonQueen_GYM_Act",
+            "element": "Normal",
+            "power": 1,
+            "cooldown": 300.0
+        },
+        {
+            "name": "Unique_MoonQueen_GYM_Hard_Act",
+            "asset": "Unique_MoonQueen_GYM_Hard_Act",
+            "element": "Normal",
+            "power": 1,
+            "cooldown": 300.0
+        },
+        {
+            "name": "Seigetsu Flash",
+            "asset": "Unique_MoonQueen_IceMoonBlade",
+            "element": "Normal",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Moonlight Beam",
+            "asset": "Unique_MoonQueen_MoonBeam",
+            "element": "Normal",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Seigetsu Blade",
+            "asset": "Unique_MoonQueen_MoonBlade",
+            "element": "Normal",
+            "power": 350,
+            "cooldown": 16.0
+        },
+        {
+            "name": "en",
+            "asset": "Unique_Mothman_GiantSpore",
+            "element": "Leaf",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "en",
+            "asset": "Unique_Mothman_SporeScatter",
+            "element": "Leaf",
+            "power": 800,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Mummy Rush",
+            "asset": "Unique_MummyPal_MummyAttack",
+            "element": "Dark",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Soul Drain",
+            "asset": "Unique_MysteryMask_LifeSteal",
+            "element": "Dark",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Cat Press",
+            "asset": "Unique_NaughtyCat_CatPress",
+            "element": "Normal",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Lethal Step",
+            "asset": "Unique_NightBlueHorse_DeathStep",
+            "element": "Dark",
+            "power": 550,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Royal Step",
+            "asset": "Unique_NightBlueHorse_Neutral_AirStep",
+            "element": "Normal",
+            "power": 800,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Silver Steed",
+            "asset": "Unique_NightBlueHorse_Neutral_Tossin",
+            "element": "Normal",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Unknown Skill (Unique_NightBlueHorse_Tossin)",
+            "asset": "Unique_NightBlueHorse_Tossin",
+            "element": "Dark",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Flame Waltz",
+            "asset": "Unique_NightLady_FlameNightmare",
+            "element": "Dark",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Nightmare Bloom",
+            "asset": "Unique_NightLady_WarpBeam",
+            "element": "Dark",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Nightmare Ray",
+            "asset": "Unique_NightLady_WarpBeam_Straight",
+            "element": "Dark",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Smoke Jet",
+            "asset": "Unique_OctopursGirl_InkJet",
+            "element": "Water",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_PandaGirl_RapidKick",
+            "element": "Leaf",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Punch Flurry",
+            "asset": "Unique_PinkCat_CatPunch",
+            "element": "Normal",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Deep Breath",
+            "asset": "Unique_Plesiosaur_LongBreath",
+            "element": "Leaf",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Thalassonic Laser",
+            "asset": "Unique_PoseidonOrca_TorrentLaser",
+            "element": "Water",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Webstrike Impact",
+            "asset": "Unique_PurpleSpider_SpiderRaid",
+            "element": "Dark",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Holy Press",
+            "asset": "Unique_PyramidTurtle_Neutral_HolyPress",
+            "element": "Normal",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Pyramid Press",
+            "asset": "Unique_PyramidTurtle_PyramidPress",
+            "element": "Earth",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Spinning Staff",
+            "asset": "Unique_QueenBee_SpinLance",
+            "element": "Leaf",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Rush Beak",
+            "asset": "Unique_RedArmorBird_TriplePeck",
+            "element": "Fire",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "en",
+            "asset": "Unique_RedFlowerBird_JumpKick",
+            "element": "Leaf",
+            "power": 550,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Focus Shot",
+            "asset": "Unique_RobinHood_BowSnipe",
+            "element": "Leaf",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Ice Burst",
+            "asset": "Unique_RockBeast_Ice_IceHorn",
+            "element": "Ice",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Horn Burst",
+            "asset": "Unique_RockBeast_RockHorn",
+            "element": "Earth",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Iaigiri",
+            "asset": "Unique_Ronin_Iai",
+            "element": "Fire",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Iaigiri",
+            "asset": "Unique_Ronin_Iai_PartnerSkill",
+            "element": "Fire",
+            "power": 160,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Spear Thrust",
+            "asset": "Unique_SaintCentaur_OneSpearRushes",
+            "element": "Normal",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Muscle Slam",
+            "asset": "Unique_SakuraSaurus_SideTackle",
+            "element": "Leaf",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Unknown Skill (Unique_SakuraSaurus_Water_SplashTackle)",
+            "asset": "Unique_SakuraSaurus_Water_SplashTackle",
+            "element": "Water",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Seismic Wild Fang",
+            "asset": "Unique_SamuraiDog_Bite",
+            "element": "Earth",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Seismic Double Fang",
+            "asset": "Unique_SamuraiDog_BiteV2",
+            "element": "Earth",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "[WIP] Try-Hard Slash",
+            "asset": "Unique_SamuraiDog_DashSlash",
+            "element": "Earth",
+            "power": 90,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Upper Flash",
+            "asset": "Unique_ScorpionMan_Erectric_UpperThunder",
+            "element": "Electricity",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Upper Smash",
+            "asset": "Unique_ScorpionMan_Uppercut",
+            "element": "Dark",
+            "power": 350,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Unknown Skill (Unique_Sekhmet_RollingScratch)",
+            "asset": "Unique_Sekhmet_RollingScratch",
+            "element": "Earth",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Unknown Skill (Unique_Sekhmet_SomersaultScratch)",
+            "asset": "Unique_Sekhmet_SomersaultScratch",
+            "element": "Earth",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Roly Poly",
+            "asset": "Unique_SheepBall_Roll",
+            "element": "Normal",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Wholehearted Stance",
+            "asset": "Unique_SifuDog_Counter",
+            "element": "Normal",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "en",
+            "asset": "Unique_SnakeGirl_SnakeShot",
+            "element": "Dark",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Glacial Impact",
+            "asset": "Unique_SnowTigerBeastman_SnowImpact",
+            "element": "Ice",
+            "power": 500,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Frost Talon",
+            "asset": "Unique_SnowTigerBeastman_TrampleSlash",
+            "element": "Ice",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Needle Spear",
+            "asset": "Unique_SoldierBee_NeedleLance",
+            "element": "Leaf",
+            "power": 120,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Trigger Happy",
+            "asset": "Unique_StuffedShark_HiddenWeapon",
+            "element": "Water",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Dosukoi Stomp",
+            "asset": "Unique_SumoDog_SumoStomp",
+            "element": "Earth",
+            "power": 550,
+            "cooldown": 24.0
+        },
+        {
+            "name": "Hydro Spin",
+            "asset": "Unique_TentacleTurtle_HydroSpin",
+            "element": "Water",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Glacial Plunge",
+            "asset": "Unique_ThunderBird_Ice_SnowStrom",
+            "element": "Ice",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Lightning Dive",
+            "asset": "Unique_ThunderBird_ThunderStorm",
+            "element": "Electricity",
+            "power": 180,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Unknown Skill (Unique_ThunderDog_Bite)",
+            "asset": "Unique_ThunderDog_Bite",
+            "element": "Electricity",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Unknown Skill (Unique_ThunderDog_BiteV2)",
+            "asset": "Unique_ThunderDog_BiteV2",
+            "element": "Electricity",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Glacial Wild Fang",
+            "asset": "Unique_ThunderDog_Ice_Bite",
+            "element": "Ice",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Glacial Double Fang",
+            "asset": "Unique_ThunderDog_Ice_BiteV2",
+            "element": "Ice",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Winter’s Call",
+            "asset": "Unique_ThunderDog_Ice_KoriShorai",
+            "element": "Ice",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Beckon Lightning",
+            "asset": "Unique_ThunderDog_InazumaShorai",
+            "element": "Electricity",
+            "power": 100,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Unique_ThunderDragonMan_GYM_Act",
+            "asset": "Unique_ThunderDragonMan_GYM_Act",
+            "element": "Electricity",
+            "power": 1,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Polykeraunos",
+            "asset": "Unique_ThunderDragonMan_NumerousSwordAttack",
+            "element": "Electricity",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Kerauno",
+            "asset": "Unique_ThunderDragonMan_ThunderSwordAttack",
+            "element": "Electricity",
+            "power": 250,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Dash Kick",
+            "asset": "Unique_TropicalOstrich_DashKick",
+            "element": "Leaf",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Magma Serpent",
+            "asset": "Unique_Umihebi_Fire_FireWindingTackle",
+            "element": "Fire",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Slither Slam",
+            "asset": "Unique_Umihebi_WindingTackle",
+            "element": "Water",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Frost Burst",
+            "asset": "Unique_VolcanicMonster_Ice_IceAttack",
+            "element": "Ice",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Volcanic Burst",
+            "asset": "Unique_VolcanicMonster_MagmaAttack",
+            "element": "Fire",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Ice Laser",
+            "asset": "Unique_VolcanoDragon_Ice_IceLaser",
+            "element": "Ice",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Ice Spit",
+            "asset": "Unique_VolcanoDragon_Ice_IcicleSpit",
+            "element": "Ice",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Unknown Skill (Unique_VolcanoDragon_MagmaSpit)",
+            "asset": "Unique_VolcanoDragon_MagmaSpit",
+            "element": "Fire",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Unknown Skill (Unique_VolcanoDragon_VolcanicLaser)",
+            "asset": "Unique_VolcanoDragon_VolcanicLaser",
+            "element": "Fire",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Rocket Slam",
+            "asset": "Unique_WeaselDragon_FlyingTackle",
+            "element": "Dragon",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Snow Claw",
+            "asset": "Unique_Werewolf_Ice_SnowScratch",
+            "element": "Ice",
+            "power": 160,
+            "cooldown": 8.0
+        },
+        {
+            "name": "Jumping Claw",
+            "asset": "Unique_Werewolf_Scratch",
+            "element": "Dark",
+            "power": 80,
+            "cooldown": 4.0
+        },
+        {
+            "name": "Dark Nova",
+            "asset": "Unique_WhiteDeer_Dark_DarkPillar",
+            "element": "Dark",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Holy Nova",
+            "asset": "Unique_WhiteDeer_HolyPillar",
+            "element": "Normal",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Aegis Charge",
+            "asset": "Unique_WhiteShieldDragon_ShieldTackle",
+            "element": "Dragon",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Stone Claw",
+            "asset": "Unique_WhiteTiger_Ground_IronScratch",
+            "element": "Earth",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Blizzard Claw",
+            "asset": "Unique_WhiteTiger_IceScratch",
+            "element": "Ice",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Flame Cutter",
+            "asset": "Unique_WingGolem_Fire_FlameCutter",
+            "element": "Fire",
+            "power": 700,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Ground Cutter",
+            "asset": "Unique_WingGolem_RoundCutter",
+            "element": "Earth",
+            "power": 450,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_BigBang",
+            "asset": "Unique_WorldTreeDragon_BigBang",
+            "element": "None",
+            "power": 900,
+            "cooldown": 60.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_HaloBeam",
+            "asset": "Unique_WorldTreeDragon_HaloBeam",
+            "element": "None",
+            "power": 750,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_HaloCutter",
+            "asset": "Unique_WorldTreeDragon_HaloCutter",
+            "element": "None",
+            "power": 600,
+            "cooldown": 10.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_LaserGliding",
+            "asset": "Unique_WorldTreeDragon_LaserGliding",
+            "element": "None",
+            "power": 550,
+            "cooldown": 5.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_PaldiumCannon",
+            "asset": "Unique_WorldTreeDragon_PaldiumCannon",
+            "element": "None",
+            "power": 700,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_PaldiumExplosion",
+            "asset": "Unique_WorldTreeDragon_PaldiumExplosion",
+            "element": "None",
+            "power": 800,
+            "cooldown": 60.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_PaldiumRain",
+            "asset": "Unique_WorldTreeDragon_PaldiumRain",
+            "element": "None",
+            "power": 500,
+            "cooldown": 5.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_PaldiumShot",
+            "asset": "Unique_WorldTreeDragon_PaldiumShot",
+            "element": "None",
+            "power": 400,
+            "cooldown": 5.0
+        },
+        {
+            "name": "Unique_WorldTreeDragon_Supernova",
+            "asset": "Unique_WorldTreeDragon_Supernova",
+            "element": "None",
+            "power": 1000,
+            "cooldown": 99.0
+        },
+        {
+            "name": "Lock-On Lunge",
+            "asset": "Unique_Yakushima_EyeTossin",
+            "element": "Dark",
+            "power": 300,
+            "cooldown": 15.0
+        },
+        {
+            "name": "Frenzied Charge",
+            "asset": "Unique_Yakushima_MouthTossin",
+            "element": "Dark",
+            "power": 300,
+            "cooldown": 15.0
+        },
+        {
+            "name": "Servant Call",
+            "asset": "Unique_Yakushima_SummonServant",
+            "element": "Dark",
+            "power": 300,
+            "cooldown": 10.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalBolt)",
+            "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalBolt",
+            "element": "None",
+            "power": 40,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalDeathray)",
+            "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalDeathray",
+            "element": "None",
+            "power": 200,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalEye)",
+            "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalEye",
+            "element": "None",
+            "power": 10,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalSphere)",
+            "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalSphere",
+            "element": "None",
+            "power": 90,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalBolt)",
+            "asset": "Unique_YakushimaBoss001_Green_PhantasmalBolt",
+            "element": "None",
+            "power": 40,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalDeathray)",
+            "asset": "Unique_YakushimaBoss001_Green_PhantasmalDeathray",
+            "element": "None",
+            "power": 200,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalEye)",
+            "asset": "Unique_YakushimaBoss001_Green_PhantasmalEye",
+            "element": "None",
+            "power": 10,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalSphere)",
+            "asset": "Unique_YakushimaBoss001_Green_PhantasmalSphere",
+            "element": "None",
+            "power": 90,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Ocular Rush",
+            "asset": "Unique_YakushimaBoss001_Small_DemonEyeCharge",
+            "element": "Dark",
+            "power": 60,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalBolt)",
+            "asset": "Unique_YakushimaBoss002_2_PhantasmalBolt",
+            "element": "None",
+            "power": 80,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalDeathray)",
+            "asset": "Unique_YakushimaBoss002_2_PhantasmalDeathray",
+            "element": "None",
+            "power": 450,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalEye)",
+            "asset": "Unique_YakushimaBoss002_2_PhantasmalEye",
+            "element": "None",
+            "power": 25,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalSphere)",
+            "asset": "Unique_YakushimaBoss002_2_PhantasmalSphere",
+            "element": "None",
+            "power": 180,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalBolt)",
+            "asset": "Unique_YakushimaBoss002_PhantasmalBolt",
+            "element": "None",
+            "power": 80,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalDeathray)",
+            "asset": "Unique_YakushimaBoss002_PhantasmalDeathray",
+            "element": "None",
+            "power": 450,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalEye)",
+            "asset": "Unique_YakushimaBoss002_PhantasmalEye",
+            "element": "None",
+            "power": 25,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalSphere)",
+            "asset": "Unique_YakushimaBoss002_PhantasmalSphere",
+            "element": "None",
+            "power": 180,
+            "cooldown": 45.0
+        },
+        {
+            "name": "Slime Press (Dark)",
+            "asset": "Unique_YakushimaMonster001_SlimePress_Dark",
+            "element": "Dark",
+            "power": 50,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Slime Press (Fire)",
+            "asset": "Unique_YakushimaMonster001_SlimePress_Fire",
+            "element": "Fire",
+            "power": 50,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Slime Press (Grass)",
+            "asset": "Unique_YakushimaMonster001_SlimePress_Leaf",
+            "element": "Leaf",
+            "power": 50,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Slime Press (Neutral)",
+            "asset": "Unique_YakushimaMonster001_SlimePress_Normal",
+            "element": "Normal",
+            "power": 50,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Slime Press (Rainbow)",
+            "asset": "Unique_YakushimaMonster001_SlimePress_Rainbow",
+            "element": "Normal",
+            "power": 100,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Slime Press (Water)",
+            "asset": "Unique_YakushimaMonster001_SlimePress_Water",
+            "element": "Water",
+            "power": 50,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Sword Charge",
+            "asset": "Unique_YakushimaMonster002_SwordCharge",
+            "element": "Normal",
+            "power": 80,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Winged Assault",
+            "asset": "Unique_YakushimaMonster003_BatCharge",
+            "element": "Normal",
+            "power": 70,
+            "cooldown": 1.0
+        },
+        {
+            "name": "Lawn Bowling",
+            "asset": "Unique_Yeti_Grass_GrassBall",
+            "element": "Leaf",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Snow Bowling",
+            "asset": "Unique_Yeti_SnowBall",
+            "element": "Ice",
+            "power": 400,
+            "cooldown": 20.0
+        },
+        {
+            "name": "Curtain Splash",
+            "asset": "WallSplash",
+            "element": "Water",
+            "power": 300,
+            "cooldown": 16.0
+        },
+        {
+            "name": "Aqua Burst",
+            "asset": "WaterBall",
+            "element": "Water",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Aqua Gun",
+            "asset": "WaterGun",
+            "element": "Water",
+            "power": 50,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Use Weapon",
+            "asset": "Weapon_Use",
+            "element": "Normal",
+            "power": 50,
+            "cooldown": 5.0
+        },
+        {
+            "name": "Wind Burst",
+            "asset": "WindBurst",
+            "element": "Leaf",
+            "power": 600,
+            "cooldown": 30.0
+        },
+        {
+            "name": "Wind Cutter",
+            "asset": "WindCutter",
+            "element": "Leaf",
+            "power": 40,
+            "cooldown": 2.0
+        },
+        {
+            "name": "Wind Edge",
+            "asset": "WindEdge",
+            "element": "Leaf",
+            "power": 200,
+            "cooldown": 12.0
+        },
+        {
+            "name": "Unknown Skill (WorkAttack)",
+            "asset": "WorkAttack",
+            "element": "Normal",
+            "power": 100,
+            "cooldown": 1.0
+        },
+        {
             "name": "en Text (TidalWave)",
             "asset": "TidalWave"
         },
@@ -9,184 +2634,8 @@
             "asset": "WaterWave"
         },
         {
-            "name": "Hydro Jet",
-            "asset": "AquaJet"
-        },
-        {
-            "name": "Aqua Gun",
-            "asset": "WaterGun"
-        },
-        {
-            "name": "Bubble Blast",
-            "asset": "BubbleShot"
-        },
-        {
-            "name": "Acid Rain",
-            "asset": "AcidRain"
-        },
-        {
-            "name": "Aqua Burst",
-            "asset": "WaterBall"
-        },
-        {
-            "name": "Surfing Slam",
-            "asset": "Unique_BluePlatypus_Toboggan"
-        },
-        {
-            "name": "Hydro Laser",
-            "asset": "HydroPump"
-        },
-        {
             "name": "Intimidate",
             "asset": "Intimidate"
-        },
-        {
-            "name": "Punch",
-            "asset": "Human_Punch"
-        },
-        {
-            "name": "Air Cannon",
-            "asset": "AirCanon"
-        },
-        {
-            "name": "Chicken Rush",
-            "asset": "Unique_ChickenPal_ChickenPeck"
-        },
-        {
-            "name": "Power Shot",
-            "asset": "PowerShot"
-        },
-        {
-            "name": "Roly Poly",
-            "asset": "Unique_SheepBall_Roll"
-        },
-        {
-            "name": "Punch Flurry",
-            "asset": "Unique_PinkCat_CatPunch"
-        },
-        {
-            "name": "Fluffy Tackle",
-            "asset": "Unique_Alpaca_Tackle"
-        },
-        {
-            "name": "Fierce Fang",
-            "asset": "Unique_Garm_Bite"
-        },
-        {
-            "name": "Antler Uppercut",
-            "asset": "Unique_Deer_PushupHorn"
-        },
-        {
-            "name": "Reckless Charge",
-            "asset": "Unique_Boar_Tackle"
-        },
-        {
-            "name": "Gale Claw",
-            "asset": "Unique_Eagle_GlidingNail"
-        },
-        {
-            "name": "Cat Press",
-            "asset": "Unique_NaughtyCat_CatPress"
-        },
-        {
-            "name": "en Text (Throw)",
-            "asset": "Throw"
-        },
-        {
-            "name": "Tornado Attack",
-            "asset": "Unique_HawkBird_Storm"
-        },
-        {
-            "name": "Power Bomb",
-            "asset": "PowerBall"
-        },
-        {
-            "name": "Muscle Slam",
-            "asset": "Unique_SakuraSaurus_SideTackle"
-        },
-        {
-            "name": "Ground Pound",
-            "asset": "Unique_Gorilla_GroundPunch"
-        },
-        {
-            "name": "Cloud Tempest",
-            "asset": "Unique_FengyunDeeper_CloudTempest"
-        },
-        {
-            "name": "en Text (Scratch)",
-            "asset": "Scratch"
-        },
-        {
-            "name": "Unknown Skill (WorkAttack)",
-            "asset": "WorkAttack"
-        },
-        {
-            "name": "Kingly Slam",
-            "asset": "Unique_KingAlpaca_BodyPress"
-        },
-        {
-            "name": "Spear Thrust",
-            "asset": "Unique_SaintCentaur_OneSpearRushes"
-        },
-        {
-            "name": "Pal Blast",
-            "asset": "HyperBeam"
-        },
-        {
-            "name": "Implode",
-            "asset": "SelfDestruct"
-        },
-        {
-            "name": "Bee Quiet",
-            "asset": "SelfDestruct_Bee"
-        },
-        {
-            "name": "Megaton Implode",
-            "asset": "SelfExplosion"
-        },
-        {
-            "name": "Wind Cutter",
-            "asset": "WindCutter"
-        },
-        {
-            "name": "Seed Machine Gun",
-            "asset": "SeedMachinegun"
-        },
-        {
-            "name": "Botanical Smash",
-            "asset": "Unique_FlowerDinosaur_Whip"
-        },
-        {
-            "name": "Multicutter",
-            "asset": "SpecialCutter"
-        },
-        {
-            "name": "Seed Mine",
-            "asset": "SeedMine"
-        },
-        {
-            "name": "Focus Shot",
-            "asset": "Unique_RobinHood_BowSnipe"
-        },
-        {
-            "name": "Spinning Staff",
-            "asset": "Unique_QueenBee_SpinLance"
-        },
-        {
-            "name": "Grass Tornado",
-            "asset": "GrassTornado"
-        },
-        {
-            "name": "Crushing Punch",
-            "asset": "Unique_GrassPanda_MusclePunch"
-        },
-        {
-            "name": "Spine Vine",
-            "asset": "RootAttack"
-        },
-        {
-            "name": "Solar Blast",
-            "asset": "SolarBeam"
         },
         {
             "name": "en Text (SnowStorm)",
@@ -197,1032 +2646,20 @@
             "asset": "EnergyShot"
         },
         {
-            "name": "Ice Missile",
-            "asset": "IceMissile"
-        },
-        {
-            "name": "Icicle Cutter",
-            "asset": "IceBlade"
-        },
-        {
-            "name": "Freezing Charge",
-            "asset": "Unique_IceDeer_IceHorn"
-        },
-        {
-            "name": "Iceberg",
-            "asset": "BlizzardLance"
-        },
-        {
-            "name": "Emperor Slide",
-            "asset": "Unique_CaptainPenguin_BodySlide"
-        },
-        {
-            "name": "Crystal Breath",
-            "asset": "FrostBreath"
-        },
-        {
-            "name": "Frost Burst",
-            "asset": "Unique_VolcanicMonster_Ice_IceAttack"
-        },
-        {
-            "name": "Crystal Wing",
-            "asset": "Unique_IceHorse_IceBladeAttack"
-        },
-        {
-            "name": "Blizzard Spike",
-            "asset": "IcicleThrow"
-        },
-        {
-            "name": "Ignis Blast",
-            "asset": "FireBlast"
-        },
-        {
-            "name": "Spirit Fire",
-            "asset": "FireSeed"
-        },
-        {
-            "name": "Blazing Horn",
-            "asset": "Unique_FlameBuffalo_FlameHorn"
-        },
-        {
-            "name": "Flare Arrow",
-            "asset": "FlareArrow"
-        },
-        {
-            "name": "Iaigiri",
-            "asset": "Unique_Ronin_Iai"
-        },
-        {
-            "name": "Ignis Breath",
-            "asset": "Flamethrower"
-        },
-        {
-            "name": "Hellfire Claw",
-            "asset": "Unique_Baphomet_SwallowKite"
-        },
-        {
-            "name": "Daring Flames",
-            "asset": "Unique_AmaterasuWolf_FireCharge"
-        },
-        {
-            "name": "Flare Storm",
-            "asset": "FlareTornado"
-        },
-        {
-            "name": "Ignis Charge",
-            "asset": "Unique_FireKirin_Tackle"
-        },
-        {
-            "name": "Volcanic Burst",
-            "asset": "Unique_VolcanicMonster_MagmaAttack"
-        },
-        {
-            "name": "Ignis Rage",
-            "asset": "Inferno"
-        },
-        {
-            "name": "Phoenix Flare",
-            "asset": "Unique_Horus_FlareBird"
-        },
-        {
-            "name": "Fire Ball",
-            "asset": "FireBall"
-        },
-        {
             "name": "Cross Lightning",
             "asset": "CrossThunder"
-        },
-        {
-            "name": "Thunder Rain",
-            "asset": "ThunderRain"
-        },
-        {
-            "name": "Spark Blast",
-            "asset": "SpreadPulse"
-        },
-        {
-            "name": "Unknown Skill (Funnel_RaijinDaughter)",
-            "asset": "Funnel_RaijinDaughter"
-        },
-        {
-            "name": "Shockwave",
-            "asset": "ElecWave"
-        },
-        {
-            "name": "Electric Ball",
-            "asset": "ThunderBall"
-        },
-        {
-            "name": "Plasma Funnel",
-            "asset": "ThunderFunnel"
-        },
-        {
-            "name": "Lock-on Laser",
-            "asset": "LockonLaser"
-        },
-        {
-            "name": "Lightning Claw",
-            "asset": "Unique_ElecPanda_ElecScratch"
-        },
-        {
-            "name": "Lightning Streak",
-            "asset": "LineThunder"
-        },
-        {
-            "name": "Blast Punch",
-            "asset": "Unique_GrassPanda_Electric_ElectricPunch"
-        },
-        {
-            "name": "Tri-Lightning",
-            "asset": "ThreeThunder"
-        },
-        {
-            "name": "Lightning Gale",
-            "asset": "Unique_Kirin_LightningTackle"
-        },
-        {
-            "name": "Kerauno",
-            "asset": "Unique_ThunderDragonMan_ThunderSwordAttack"
-        },
-        {
-            "name": "Lightning Strike",
-            "asset": "LightningStrike"
-        },
-        {
-            "name": "Lightning Bolt",
-            "asset": "Thunderbolt"
-        },
-        {
-            "name": "Bog Blast",
-            "asset": "MudShot"
-        },
-        {
-            "name": "Stone Blast",
-            "asset": "StoneShotgun"
-        },
-        {
-            "name": "Shell Spin",
-            "asset": "Unique_DrillGame_ShellAttack"
-        },
-        {
-            "name": "Stone Cannon",
-            "asset": "ThrowRock"
-        },
-        {
-            "name": "Giga Horn",
-            "asset": "Unique_HerculesBeetle_BeetleTackle"
-        },
-        {
-            "name": "Sand Tornado",
-            "asset": "SandTornado"
-        },
-        {
-            "name": "Spinning Roundhouse",
-            "asset": "Unique_Anubis_LowRoundKick"
-        },
-        {
-            "name": "Earth Impact",
-            "asset": "Unique_Grassmammoth_Earthquake"
-        },
-        {
-            "name": "Forceful Charge",
-            "asset": "Unique_Anubis_Tackle"
-        },
-        {
-            "name": "Ground Smash",
-            "asset": "Unique_Anubis_GroundPunch"
-        },
-        {
-            "name": "Rock Lance",
-            "asset": "RockLance"
-        },
-        {
-            "name": "Dragon Cannon",
-            "asset": "DragonCanon"
-        },
-        {
-            "name": "Dragon Burst",
-            "asset": "DragonWave"
-        },
-        {
-            "name": "Draconic Breath",
-            "asset": "DragonBreath"
-        },
-        {
-            "name": "Mystic Whirlwind",
-            "asset": "Unique_FairyDragon_FairyTornado"
-        },
-        {
-            "name": "Beam Comet",
-            "asset": "Unique_JetDragon_JumpBeam"
-        },
-        {
-            "name": "Dragon Meteor",
-            "asset": "DragonMeteor"
-        },
-        {
-            "name": "Poison Fog",
-            "asset": "PoisonFog"
-        },
-        {
-            "name": "Unknown Skill (Funnel_DreamDemon)",
-            "asset": "Funnel_DreamDemon"
-        },
-        {
-            "name": "Poison Blast",
-            "asset": "PoisonShot"
-        },
-        {
-            "name": "Dark Ball",
-            "asset": "DarkBall"
-        },
-        {
-            "name": "Shadow Burst",
-            "asset": "DarkWave"
-        },
-        {
-            "name": "Phantom Peck",
-            "asset": "Unique_DarkCrow_TelePoke"
-        },
-        {
-            "name": "Jumping Claw",
-            "asset": "Unique_Werewolf_Scratch"
-        },
-        {
-            "name": "Spirit Flame",
-            "asset": "GhostFlame"
-        },
-        {
-            "name": "Dark Charge",
-            "asset": "Unique_FireKirin_Dark_DarkTossin"
-        },
-        {
-            "name": "Nightmare Ball",
-            "asset": "ShadowBall"
-        },
-        {
-            "name": "Psycho Gravity",
-            "asset": "Psychokinesis"
-        },
-        {
-            "name": "Twin Spears",
-            "asset": "Unique_BlackCentaur_TwoSpearRushes"
-        },
-        {
-            "name": "Dark Laser",
-            "asset": "DarkLaser"
-        },
-        {
-            "name": "Divine Disaster",
-            "asset": "Unique_BlackGriffon_TackleLaser"
-        },
-        {
-            "name": "Dark Whisp",
-            "asset": "DarkLegion"
-        },
-        {
-            "name": "Rocket Slam",
-            "asset": "Unique_WeaselDragon_FlyingTackle"
-        },
-        {
-            "name": "Rockburst",
-            "asset": "Tremor"
-        },
-        {
-            "name": "Diamond Rain",
-            "asset": "DiamondFall"
-        },
-        {
-            "name": "Beam Slicer",
-            "asset": "BeamSlicer"
-        },
-        {
-            "name": "Nightmare Bloom",
-            "asset": "Unique_NightLady_WarpBeam"
-        },
-        {
-            "name": "Flame Waltz",
-            "asset": "Unique_NightLady_FlameNightmare"
-        },
-        {
-            "name": "Comet Strike",
-            "asset": "Commet"
-        },
-        {
-            "name": "Umbral Surge",
-            "asset": "DarkPulse"
-        },
-        {
-            "name": "Dark Cannon",
-            "asset": "DarkCanon"
-        },
-        {
-            "name": "Dark Arrow",
-            "asset": "DarkArrow"
-        },
-        {
-            "name": "Apocalypse",
-            "asset": "Apocalypse"
-        },
-        {
-            "name": "Nightmare Ray",
-            "asset": "Unique_NightLady_WarpBeam_Straight"
-        },
-        {
-            "name": "Jumping Stinger",
-            "asset": "Unique_DarkScorpion_Pierce"
-        },
-        {
-            "name": "Star Mine",
-            "asset": "StarMine"
-        },
-        {
-            "name": "Earth Dash",
-            "asset": "Unique_FeatherOstrich_Tossin"
-        },
-        {
-            "name": "Circle Vine",
-            "asset": "RootLance"
-        },
-        {
-            "name": "Polykeraunos",
-            "asset": "Unique_ThunderDragonMan_NumerousSwordAttack"
-        },
-        {
-            "name": "Magna Crush",
-            "asset": "Unique_KingBahamut_AirCrash"
-        },
-        {
-            "name": "Splash",
-            "asset": "LineGeyser"
-        },
-        {
-            "name": "Charge Cannon",
-            "asset": "ChargeCanon"
-        },
-        {
-            "name": "Brawn Impact",
-            "asset": "Unique_KingBahamut_ArmSmash"
-        },
-        {
-            "name": "Ground Cutter",
-            "asset": "Unique_WingGolem_RoundCutter"
-        },
-        {
-            "name": "Blast Cannon",
-            "asset": "BlastCanon"
-        },
-        {
-            "name": "Comet Barrage",
-            "asset": "ThreeCommet"
-        },
-        {
-            "name": "Meteorain",
-            "asset": "CommetRain"
-        },
-        {
-            "name": "Volcanic Rain",
-            "asset": "Eruption"
-        },
-        {
-            "name": "Heavy Thunder Tank",
-            "asset": "Unique_ElecPanda_GatlingAttack"
-        },
-        {
-            "name": "Bountiful Protection",
-            "asset": "Unique_LilyQueen_LilyHealing"
-        },
-        {
-            "name": "Holy Burst",
-            "asset": "HolyBlast"
-        },
-        {
-            "name": "Evil Slash",
-            "asset": "Unique_DarkAlien_JumpScractch"
-        },
-        {
-            "name": "Moonlight Beam",
-            "asset": "Unique_MoonQueen_MoonBeam"
-        },
-        {
-            "name": "Flame Wall",
-            "asset": "FlameWall"
-        },
-        {
-            "name": "Air Blade",
-            "asset": "AirBlade"
-        },
-        {
-            "name": "Seigetsu Blade",
-            "asset": "Unique_MoonQueen_MoonBlade"
-        },
-        {
-            "name": "Wholehearted Stance",
-            "asset": "Unique_SifuDog_Counter"
-        },
-        {
-            "name": "Curtain Splash",
-            "asset": "WallSplash"
-        },
-        {
-            "name": "TriSpark",
-            "asset": "TriSpark"
-        },
-        {
-            "name": "Thunderstorm",
-            "asset": "ThunderStorm"
-        },
-        {
-            "name": "Upper Smash",
-            "asset": "Unique_ScorpionMan_Uppercut"
-        },
-        {
-            "name": "Flame Funnel",
-            "asset": "FlameFunnel"
-        },
-        {
-            "name": "Sand Twister",
-            "asset": "SandTwister"
-        },
-        {
-            "name": "All Range Thunder",
-            "asset": "RangeThunder"
-        },
-        {
-            "name": "Thunder Rail",
-            "asset": "Railbolt"
-        },
-        {
-            "name": "Lethal Laser",
-            "asset": "ShokeiLaser"
-        },
-        {
-            "name": "Poison Shower",
-            "asset": "BubbleShower"
         },
         {
             "name": "Unknown Skill (WaterBalloon)",
             "asset": "WaterBalloon"
         },
         {
-            "name": "Icicle Bullet",
-            "asset": "IciclePierce"
-        },
-        {
-            "name": "Double Blizzard Spike",
-            "asset": "DoubleIcicleThrow"
-        },
-        {
-            "name": "Absolute Frost",
-            "asset": "IceAge"
-        },
-        {
-            "name": "Raid Cutter",
-            "asset": "RaidCutter"
-        },
-        {
-            "name": "Wind Edge",
-            "asset": "WindEdge"
-        },
-        {
             "name": "Flare Twister",
             "asset": "FlareTwister"
         },
         {
-            "name": "Raging Flame Wave",
-            "asset": "Unique_Horus_PerfectStorm"
-        },
-        {
-            "name": "Divine Disaster II",
-            "asset": "Unique_BlackGriffon_TackleLaser2"
-        },
-        {
-            "name": "Seigetsu Flash",
-            "asset": "Unique_MoonQueen_IceMoonBlade"
-        },
-        {
-            "name": "Icicle Line",
-            "asset": "IcicleLine"
-        },
-        {
-            "name": "Volcanic Fang",
-            "asset": "Unique_Manticore_InfernoStrike"
-        },
-        {
-            "name": "Lightning Dive",
-            "asset": "Unique_ThunderBird_ThunderStorm"
-        },
-        {
-            "name": "Wind Barrier",
-            "asset": "Unique_LilyQueen_WindBarrier"
-        },
-        {
-            "name": "Firefist Breathstorm",
-            "asset": "Unique_BlackMetalDragon_FirePunch"
-        },
-        {
-            "name": "Leaping Roundhouse",
-            "asset": "Unique_GrassRabbitMan_GrassRoundKick"
-        },
-        {
-            "name": "Snow Bowling",
-            "asset": "Unique_Yeti_SnowBall"
-        },
-        {
-            "name": "Slither Slam",
-            "asset": "Unique_Umihebi_WindingTackle"
-        },
-        {
-            "name": "Needle Spear",
-            "asset": "Unique_SoldierBee_NeedleLance"
-        },
-        {
-            "name": "Rush Beak",
-            "asset": "Unique_RedArmorBird_TriplePeck"
-        },
-        {
-            "name": "Beckon Lightning",
-            "asset": "Unique_ThunderDog_InazumaShorai"
-        },
-        {
-            "name": "Spirit Dash",
-            "asset": "Unique_GhostBeast_Tossin"
-        },
-        {
-            "name": "Flame Breath",
-            "asset": "Unique_BirdDragon_FireBreath"
-        },
-        {
-            "name": "Blizzard Claw",
-            "asset": "Unique_WhiteTiger_IceScratch"
-        },
-        {
-            "name": "Satellite Bit",
-            "asset": "Unique_DarkMechaDragon_SetFunnel"
-        },
-        {
-            "name": "Omega Laser",
-            "asset": "Unique_DarkMechaDragon_FunnelLaser"
-        },
-        {
-            "name": "Astral Ray",
-            "asset": "Unique_DarkMechaDragon_ConvergentBeam"
-        },
-        {
-            "name": "Beam Slash",
-            "asset": "Unique_DarkMechaDragon_BeamSlash"
-        },
-        {
-            "name": "Cosmic Meteor",
-            "asset": "Unique_DarkMechaDragon_WarpComet"
-        },
-        {
-            "name": "Tempest Blizzard",
-            "asset": "Unique_BirdDragon_Ice_IceBreath"
-        },
-        {
-            "name": "Magma Serpent",
-            "asset": "Unique_Umihebi_Fire_FireWindingTackle"
-        },
-        {
-            "name": "Predator Surge",
-            "asset": "PredatorWave"
-        },
-        {
-            "name": "Predator Blast",
-            "asset": "PredatorBeam"
-        },
-        {
-            "name": "Predator Mark",
-            "asset": "PredatorLockon"
-        },
-        {
-            "name": "Stone Claw",
-            "asset": "Unique_WhiteTiger_Ground_IronScratch"
-        },
-        {
-            "name": "Thunder Tempest",
-            "asset": "Unique_FengyunDeeper_Electric_ThunderTempest"
-        },
-        {
-            "name": "Snow Claw",
-            "asset": "Unique_Werewolf_Ice_SnowScratch"
-        },
-        {
-            "name": "Phoenix Tide",
-            "asset": "Unique_Horus_Water_AquaStorm"
-        },
-        {
-            "name": "Daring Shadowstorm",
-            "asset": "Unique_AmaterasuWolf_Dark_DarkCharge"
-        },
-        {
-            "name": "Stone Beat",
-            "asset": "RockBeat"
-        },
-        {
-            "name": "Lawn Bowling",
-            "asset": "Unique_Yeti_Grass_GrassBall"
-        },
-        {
-            "name": "Glacial Impact",
-            "asset": "Unique_SnowTigerBeastman_SnowImpact"
-        },
-        {
-            "name": "Webstrike Impact",
-            "asset": "Unique_PurpleSpider_SpiderRaid"
-        },
-        {
-            "name": "Frost Talon",
-            "asset": "Unique_SnowTigerBeastman_TrampleSlash"
-        },
-        {
-            "name": "Soul Drain",
-            "asset": "Unique_MysteryMask_LifeSteal"
-        },
-        {
-            "name": "Grudge Barrage",
-            "asset": "Unique_GrimGirl_BrutalMachete"
-        },
-        {
-            "name": "Aegis Charge",
-            "asset": "Unique_WhiteShieldDragon_ShieldTackle"
-        },
-        {
-            "name": "Bolt Blink",
-            "asset": "Unique_BlueThunderHorse_FlashDash"
-        },
-        {
-            "name": "Holy Nova",
-            "asset": "Unique_WhiteDeer_HolyPillar"
-        },
-        {
-            "name": "Lethal Step",
-            "asset": "Unique_NightBlueHorse_DeathStep"
-        },
-        {
-            "name": "Crash Dash",
-            "asset": "Unique_GoldenHorse_StoneDash"
-        },
-        {
-            "name": "Unknown Skill (Funnel_RaijinDaughter_Water)",
-            "asset": "Funnel_RaijinDaughter_Water"
-        },
-        {
-            "name": "Unknown Skill (BlueThunderHorse_PartnerSkill)",
-            "asset": "BlueThunderHorse_PartnerSkill"
-        },
-        {
-            "name": "Geyser Gush",
-            "asset": "SeaGush"
-        },
-        {
-            "name": "Aqua Surge",
-            "asset": "RipTide"
-        },
-        {
-            "name": "Hydro Slicer",
-            "asset": "HydroSlicer"
-        },
-        {
-            "name": "Torrential Blast",
-            "asset": "DiversionLaser"
-        },
-        {
-            "name": "Crosswind",
-            "asset": "CrossWind"
-        },
-        {
-            "name": "Freeze Wall",
-            "asset": "IceWall"
-        },
-        {
-            "name": "Smoke Jet",
-            "asset": "Unique_OctopursGirl_InkJet"
-        },
-        {
-            "name": "Hydro Spin",
-            "asset": "Unique_TentacleTurtle_HydroSpin"
-        },
-        {
-            "name": "Konoha Flip",
-            "asset": "Unique_LeafMomonga_SomerSault"
-        },
-        {
-            "name": "High Breach",
-            "asset": "Unique_IceNarwhal_JumpingHorn"
-        },
-        {
-            "name": "Lantern Sweep",
-            "asset": "Unique_GhostAnglerfish_SweepBait"
-        },
-        {
-            "name": "Trigger Happy",
-            "asset": "Unique_StuffedShark_HiddenWeapon"
-        },
-        {
-            "name": "Dark Shot",
-            "asset": "GravityShot"
-        },
-        {
-            "name": "Thunder Spear",
-            "asset": "ThunderSpear"
-        },
-        {
-            "name": "Reflect Leaf",
-            "asset": "ReflectiveShuriken"
-        },
-        {
             "name": "Unknown Skill (HealingTree)",
             "asset": "HealingTree"
-        },
-        {
-            "name": "Chaotic Spray",
-            "asset": "Unique_IceCrocodile_SpitAttack"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalDeathray)",
-            "asset": "Unique_YakushimaBoss002_PhantasmalDeathray"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalEye)",
-            "asset": "Unique_YakushimaBoss002_PhantasmalEye"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalBolt)",
-            "asset": "Unique_YakushimaBoss002_PhantasmalBolt"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalSphere)",
-            "asset": "Unique_YakushimaBoss002_PhantasmalSphere"
-        },
-        {
-            "name": "Lock-On Lunge",
-            "asset": "Unique_Yakushima_EyeTossin"
-        },
-        {
-            "name": "Servant Call",
-            "asset": "Unique_Yakushima_SummonServant"
-        },
-        {
-            "name": "Scorching Lantern Sweep",
-            "asset": "Unique_GhostAnglerfish_Fire_SweepBait_Fire"
-        },
-        {
-            "name": "Thunderslide",
-            "asset": "Unique_CaptainPenguin_Black_BodySlide_Electric"
-        },
-        {
-            "name": "Deep Breath",
-            "asset": "Unique_Plesiosaur_LongBreath"
-        },
-        {
-            "name": "Dash Kick",
-            "asset": "Unique_TropicalOstrich_DashKick"
-        },
-        {
-            "name": "Frenzied Charge",
-            "asset": "Unique_Yakushima_MouthTossin"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalBolt)",
-            "asset": "Unique_YakushimaBoss001_Green_PhantasmalBolt"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalEye)",
-            "asset": "Unique_YakushimaBoss001_Green_PhantasmalEye"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalSphere)",
-            "asset": "Unique_YakushimaBoss001_Green_PhantasmalSphere"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalDeathray)",
-            "asset": "Unique_YakushimaBoss001_Green_PhantasmalDeathray"
-        },
-        {
-            "name": "Thalassonic Laser",
-            "asset": "Unique_PoseidonOrca_TorrentLaser"
-        },
-        {
-            "name": "Slime Press (Neutral)",
-            "asset": "Unique_YakushimaMonster001_SlimePress_Normal"
-        },
-        {
-            "name": "Slime Press (Grass)",
-            "asset": "Unique_YakushimaMonster001_SlimePress_Leaf"
-        },
-        {
-            "name": "Slime Press (Water)",
-            "asset": "Unique_YakushimaMonster001_SlimePress_Water"
-        },
-        {
-            "name": "Slime Press (Fire)",
-            "asset": "Unique_YakushimaMonster001_SlimePress_Fire"
-        },
-        {
-            "name": "Slime Press (Dark)",
-            "asset": "Unique_YakushimaMonster001_SlimePress_Dark"
-        },
-        {
-            "name": "Slime Press (Rainbow)",
-            "asset": "Unique_YakushimaMonster001_SlimePress_Rainbow"
-        },
-        {
-            "name": "Ocular Rush",
-            "asset": "Unique_YakushimaBoss001_Small_DemonEyeCharge"
-        },
-        {
-            "name": "Sword Charge",
-            "asset": "Unique_YakushimaMonster002_SwordCharge"
-        },
-        {
-            "name": "Winged Assault",
-            "asset": "Unique_YakushimaMonster003_BatCharge"
-        },
-        {
-            "name": "Fire Tackle",
-            "asset": "Unique_BluePlatypus_Toboggan_Fire"
-        },
-        {
-            "name": "Unknown Skill (PoseidonOrca_PartnerSkill)",
-            "asset": "PoseidonOrca_PartnerSkill"
-        },
-        {
-            "name": "Unknown Skill (PoseidonOrca_PartnerSkill_SpearBullet)",
-            "asset": "PoseidonOrca_PartnerSkill_SpearBullet"
-        },
-        {
-            "name": "Unknown Skill (Human_Rolling)",
-            "asset": "Human_Rolling"
-        },
-        {
-            "name": "Use Weapon",
-            "asset": "Weapon_Use"
-        },
-        {
-            "name": "Unknown Skill (Unique_FlowerDinosaur_Electric_ThunderWhip)",
-            "asset": "Unique_FlowerDinosaur_Electric_ThunderWhip"
-        },
-        {
-            "name": "Unknown Skill (Unique_KingAlpaca_Ice_IcePress)",
-            "asset": "Unique_KingAlpaca_Ice_IcePress"
-        },
-        {
-            "name": "Unknown Skill (Unique_Baphomet_Dark_DarkKite)",
-            "asset": "Unique_Baphomet_Dark_DarkKite"
-        },
-        {
-            "name": "Unknown Skill (Unique_SakuraSaurus_Water_SplashTackle)",
-            "asset": "Unique_SakuraSaurus_Water_SplashTackle"
-        },
-        {
-            "name": "Unknown Skill (Unique_Deer_Ground_DirtyHorn)",
-            "asset": "Unique_Deer_Ground_DirtyHorn"
-        },
-        {
-            "name": "Unknown Skill (Unique_Gorilla_Ground_EarthPunch)",
-            "asset": "Unique_Gorilla_Ground_EarthPunch"
-        },
-        {
-            "name": "Unknown Skill (Unique_IceHorse_Dark_DarkBladeAttack)",
-            "asset": "Unique_IceHorse_Dark_DarkBladeAttack"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalDeathray)",
-            "asset": "Unique_YakushimaBoss002_2_PhantasmalDeathray"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalEye)",
-            "asset": "Unique_YakushimaBoss002_2_PhantasmalEye"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalBolt)",
-            "asset": "Unique_YakushimaBoss002_2_PhantasmalBolt"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalSphere)",
-            "asset": "Unique_YakushimaBoss002_2_PhantasmalSphere"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalBolt)",
-            "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalBolt"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalEye)",
-            "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalEye"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalSphere)",
-            "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalSphere"
-        },
-        {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalDeathray)",
-            "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalDeathray"
-        },
-        {
-            "name": "Unknown Skill (Unique_Garm_BiteV2)",
-            "asset": "Unique_Garm_BiteV2"
-        },
-        {
-            "name": "Unknown Skill (Unique_ThunderDog_BiteV2)",
-            "asset": "Unique_ThunderDog_BiteV2"
-        },
-        {
-            "name": "Unknown Skill (Unique_ThunderDog_Bite)",
-            "asset": "Unique_ThunderDog_Bite"
-        },
-        {
-            "name": "Unknown Skill (Unique_GuardianDog_Bite)",
-            "asset": "Unique_GuardianDog_Bite"
-        },
-        {
-            "name": "Unknown Skill (Unique_GuardianDog_BiteV2)",
-            "asset": "Unique_GuardianDog_BiteV2"
-        },
-        {
-            "name": "Unknown Skill (Unique_GoldenHorse_Bite)",
-            "asset": "Unique_GoldenHorse_Bite"
-        },
-        {
-            "name": "Unknown Skill (Unique_GoldenHorse_BiteV2)",
-            "asset": "Unique_GoldenHorse_BiteV2"
-        },
-        {
-            "name": "Unknown Skill (Unique_AmaterasuWolf_Bite)",
-            "asset": "Unique_AmaterasuWolf_Bite"
-        },
-        {
-            "name": "Unknown Skill (Unique_AmaterasuWolf_BiteV2)",
-            "asset": "Unique_AmaterasuWolf_BiteV2"
-        },
-        {
-            "name": "Unknown Skill (Unique_AmaterasuWolf_Dark_Bite)",
-            "asset": "Unique_AmaterasuWolf_Dark_Bite"
-        },
-        {
-            "name": "Unknown Skill (Unique_AmaterasuWolf_Dark_BiteV2)",
-            "asset": "Unique_AmaterasuWolf_Dark_BiteV2"
-        },
-        {
-            "name": "Unknown Skill (Unique_BlackPuppy_Bite)",
-            "asset": "Unique_BlackPuppy_Bite"
-        },
-        {
-            "name": "Unknown Skill (Unique_BlackPuppy_BiteV2)",
-            "asset": "Unique_BlackPuppy_BiteV2"
-        },
-        {
-            "name": "Unknown Skill (Unique_VolcanoDragon_VolcanicLaser)",
-            "asset": "Unique_VolcanoDragon_VolcanicLaser"
-        },
-        {
-            "name": "Unknown Skill (Unique_VolcanoDragon_MagmaSpit)",
-            "asset": "Unique_VolcanoDragon_MagmaSpit"
-        },
-        {
-            "name": "Unknown Skill (Unique_Sekhmet_SomersaultScratch)",
-            "asset": "Unique_Sekhmet_SomersaultScratch"
-        },
-        {
-            "name": "Unknown Skill (Unique_Sekhmet_RollingScratch)",
-            "asset": "Unique_Sekhmet_RollingScratch"
-        },
-        {
-            "name": "Unknown Skill (Unique_NightBlueHorse_Tossin)",
-            "asset": "Unique_NightBlueHorse_Tossin"
-        },
-        {
-            "name": "Unknown Skill (Unique_BlueThunderHorse_Tossin)",
-            "asset": "Unique_BlueThunderHorse_Tossin"
-        },
-        {
-            "name": "Sacred Rain",
-            "asset": "Unique_LegendDeer_WarpPillarBurst"
-        },
-        {
-            "name": "Divine Wing",
-            "asset": "Unique_LegendDeer_RadiantWingRush"
-        },
-        {
-            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Normal)",
-            "asset": "Unique_LegendDeer_BarrierRelease_Normal"
-        },
-        {
-            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Grass)",
-            "asset": "Unique_LegendDeer_BarrierRelease_Grass"
-        },
-        {
-            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Water)",
-            "asset": "Unique_LegendDeer_BarrierRelease_Water"
-        },
-        {
-            "name": "Purifying Light",
-            "asset": "Unique_LegendDeer_RadiantPurge_Otomo"
-        },
-        {
-            "name": "Radiant Barrage",
-            "asset": "RadiantBarrage"
         }
     ]
 }
