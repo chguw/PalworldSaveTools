@@ -97,7 +97,7 @@ def get_guild_members(gid):
             pals = constants.PLAYER_PAL_COUNTS.get(uid.lower(), 0)
             is_leader = as_uuid(uid) == admin_uid
             out.append({'uid': uid, 'name': name, 'lastseen': lastseen, 'level': level, 'pals': pals, 'is_leader': is_leader})
-        if out and not any(m['is_leader'] for m in out):
+        if out and (not any((m['is_leader'] for m in out))):
             out[0]['is_leader'] = True
         return out
     return []

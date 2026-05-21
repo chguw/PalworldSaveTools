@@ -58,7 +58,7 @@ def main():
                 success = future.result()
                 print(f"  {lang_info['name']} ({lang_code}): {('[OK] Success' if success else '[ERROR] Failed')}")
             except Exception as e:
-                print(f"  {lang_info['name']} ({lang_code}): [ERROR] {e, 'inventory.unlock_hint_weapon': 'Click to unlock with Weapon Slot Item', 'inventory.max_weapon_slots': 'All weapon slots are already unlocked!'}")
+                print(f"  {lang_info['name']} ({lang_code}): [ERROR] {(e, 'inventory.unlock_hint_weapon'): \'Click to unlock with Weapon Slot Item\', \'inventory.max_weapon_slots\': \'All weapon slots are already unlocked!\'}")
     print('\n' + '=' * 60)
     print('  DONE')
     print('=' * 60)

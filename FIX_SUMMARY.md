@@ -10,7 +10,7 @@ Fixes for compatibility with the latest Palworld game patch (May 2026). The upda
 
 ### Root Cause
 
-The latest game patch (v1.0) changed the Guild `RawData` remaining-bytes structure. There are now **three distinct formats** depending on how the save was created:
+The latest game patch (v1.0) changed the Guild `RawData` remaining-bytes structure. There are now **four distinct formats** depending on how the save was created and how many players are in the guild:
 
 | Feature | Pre-v1.0 (OldSave) | Upgraded pre-v1.0 (PylarSave) | Created on v1.0, 1 player (NewSave) | Created on v1.0, 2+ players (PrimaSave) |
 |---------|-------------------|-------------------------------|---------------------------|---------------------------|
@@ -23,6 +23,8 @@ The latest game patch (v1.0) changed the Guild `RawData` remaining-bytes structu
 
 The **upgraded** format (PylarSave) was missed by the original fix: it has the v1.0 prefix but keeps OLD-style player entries with GUIDs, and uses 31-byte tails. The OLD format path was reading the prefix as part of the admin_uid, producing a wrong UID (e.g. `00000000-4e6d-acb6-...` instead of `4e6dacb6-...`) and count=0.
 
+**Important**: In v1.0 native formats, the `admin_player_uid` field in guild data is NOT the player's real `CharacterSaveParameterMap` UID. For example, NewSave's admin_uid is `00000002-0000-0302-...` but the actual player UID is `00000000-0000-0000-0000-000000000001`. Player UIDs must be enriched from `CharacterSaveParameterMap` by matching player names.
+
 ### Changes Made
 
 **`src/palworld_save_tools/rawdata/group.py`:**
@@ -31,25 +33,29 @@ The **upgraded** format (PylarSave) was missed by the original fix: it has the v
 
 2. **Removed per-player GUID parsing in NEW path** — v1.0 native format stores `last_online_real_time(i64)` + `player_name(fstring)` + 31-byte tail per player, with no per-player GUID.
 
-3. **Left `player_uid` as empty string `''`** in NEW path — PST's `_enrich_guild_player_uids()` (in `save_manager.py`) cross-references names against `CharacterSaveParameterMap` to fill in the real UID.
+3. **Left `player_uid` as empty string `''`** in NEW path — the real UID is filled later by enrichment from `CharacterSaveParameterMap` (see Issue 4).
 
 4. **Added prefix skipping to OLD format path** — checks for and reads the 4-byte `00000000` prefix before reading `admin_player_uid`, so it correctly handles upgraded pre-v1.0 saves.
 
-5. **Try-new-format-first** — NEW format path runs first; if it fails, OLD (with prefix awareness) handles it; if both fail, `opaque_full` preserves raw bytes.
+5. **Try-new-format-first** — NEW format path runs first; if it fails, OLD (with prefix awareness) handles it; if both fail, opaque preservation as last resort.
 
 6. **Added player name validation** (`_is_valid_player_name`) — rejects garbage strings from misaligned parsing, ensures only real player names pass.
 
-7. **Added extended player scan** (`_scan_players_from_raw`, `_scan_more_players`) — as a last resort for large guild remainders (>100 bytes), scans for `01000000` subsection markers followed by `i64+fstring` pairs to extract players from v1.0 multi-player guilds.
+7. **Added extended player scan** (`_scan_players_from_raw`, `_scan_more_players`) — for large guild remainders (>100 bytes) when both NEW and OLD paths fail, scans for `01000000` subsection markers followed by `i64+fstring` pairs to extract players from v1.0 multi-player guilds.
 
 8. **Added `_opaque_raw` / `_opaque_all_remaining_for_encode`** — preserves exact raw bytes for round-trip encoding of complex multi-player guild structures.
 
 ### File Changes
 
-| File | Lines Changed | Description |
-|------|-------------|-------------|
-| `group.py` decode | 56-75 | NEW decode: 3 extra i32, empty player_uid, no per-player guid |
-| `group.py` decode | 82-84 | OLD decode: skip 4-byte prefix before reading admin_uid |
-| `group.py` encode | 197-205 | NEW encode: writes 3 extra i32, no per-player guid write |
+| File | Lines | Description |
+|------|-------|-------------|
+| `group.py` decode | | NEW decode: 3 extra i32, empty player_uid, no per-player guid |
+| `group.py` decode | | OLD decode: skip 4-byte prefix before reading admin_uid |
+| `group.py` decode | | Extended scan: multi-player guild detection |
+| `group.py` encode | | NEW encode: writes 3 extra i32, uses `_opaque_raw` for round-trip |
+| `gvas.py` read | 89 | Added `_enrich_guild_player_uids()` call after property decode |
+| `gvas.py` | new | `_enrich_guild_player_uids()` function |
+| `save_manager.py` | removed 213–257 | Removed enrichment function (moved to gvas.py) |
 
 ---
 
@@ -112,6 +118,42 @@ These files had the explicit write removed to eliminate the duplication, keeping
 | `guild_lab.py` | Already clean |
 | `item_container.py` | Already clean |
 | `map_concrete_model.py` | Already clean |
+
+---
+
+## Issue 4: Player UID Enrichment Moved to Core Library (`gvas.py`)
+
+### Root Cause
+
+v1.0 native saves (`NewSave`, `PrimaSave`) do not store per-player UIDs in guild data. The `admin_player_uid` field is a different identifier (e.g. `00000002-0000-0302-...`), not the player's `CharacterSaveParameterMap` PlayerUId (e.g. `00000000-0000-0000-0000-000000000001`). Downstream tools (Character Transfer, Scan Save Logger) need the correct UIDs to function.
+
+### Changes Made
+
+**`src/palworld_save_tools/gvas.py`:**
+
+| Change | Location | Description |
+|--------|----------|-------------|
+| Added `_enrich_guild_player_uids()` | module-level function (after `GvasFile`) | Builds `name → uid` mapping from `CharacterSaveParameterMap`, fills empty `player_uid` in guild data by matching player names |
+| Called enrichment in `GvasFile.read()` | line 89 | Runs automatically after all properties are decoded — every consumer of `GvasFile.read()` gets enriched UIDs |
+
+**`src/palworld_aio/save_manager.py`:**
+
+| Change | Lines | Description |
+|--------|-------|-------------|
+| Removed `_enrich_guild_player_uids()` | former 213–257 | No longer needed — enrichment moved to core `gvas.py` |
+| Removed 2 call sites | former 112, 157 | `self._enrich_guild_player_uids()` calls deleted |
+
+### How It Works
+
+1. `GvasFile.read()` decodes all properties (Guild data + CharacterSaveParameterMap)
+2. `_enrich_guild_player_uids()` scans `CharacterSaveParameterMap` for player entries with `IsPlayer=true`
+3. Builds `NickName → PlayerUId` mapping
+4. Iterates all guild groups, fills empty `player_uid` with the matched UID
+5. Case-insensitive fallback for name matching
+
+### Key Insight
+
+The `admin_player_uid` in v1.0 guild data is NOT the player's CharacterSaveParameterMap UID. The enrichment function correctly maps by name, which is the only reliable way to get the real UID for v1.0 native saves.
 
 ---
 
@@ -188,4 +230,4 @@ For each player (P1 = admin, P2+ = additional):
 | Parse → pal counts | ✅ | ✅ | ✅ (943) | ✅ (many) |
 | Round-trip (read → encode → read) | ✅ | ✅ | ✅ | ✅ |
 | Full compressed `.sav` round-trip | ✅ | ✅ | ✅ | ✅ |
-| UID matches player .sav filename | ✅ | ✅ | N/A (enriched) | ✅ (Primarina=F8829FDD) |
+ | UID matches player .sav filename | ✅ | ✅ | ✅ (enriched, Pylar uid=00000000-...-000000000001) | ✅ (Primarina=F8829FDD) |

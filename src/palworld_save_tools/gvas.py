@@ -86,6 +86,7 @@ class GvasFile:
             gvas_file.trailer = reader.read_to_end()
             if gvas_file.trailer != b'\x00\x00\x00\x00':
                 logger.debug(f'{len(gvas_file.trailer)} bytes of trailer data, file may not have fully parsed')
+        _enrich_guild_player_uids(gvas_file.properties)
         return gvas_file
     @staticmethod
     def load(dict: dict[str, Any]) -> 'GvasFile':
@@ -102,3 +103,49 @@ class GvasFile:
         writer.properties(self.properties)
         writer.write(self.trailer)
         return writer.bytes()
+
+def _enrich_guild_player_uids(properties: dict[str, Any]) -> None:
+    wsd = properties.get('worldSaveData', {}).get('value')
+    if not wsd:
+        return
+    char_map = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
+    gsm = wsd.get('GroupSaveDataMap', {}).get('value', [])
+    if not char_map or not gsm:
+        return
+    name_to_uid = {}
+    for entry in char_map:
+        try:
+            sp = entry['value']['RawData']['value']['object']['SaveParameter']
+            if sp.get('struct_type') != 'PalIndividualCharacterSaveParameter':
+                continue
+            sp_val = sp.get('value', {})
+            if not sp_val.get('IsPlayer', {}).get('value', False):
+                continue
+            key = entry.get('key', {})
+            uid_obj = key.get('PlayerUId', {})
+            uid = str(uid_obj.get('value', '') if isinstance(uid_obj, dict) else uid_obj)
+            if not uid:
+                continue
+            nick = sp_val.get('NickName', {}).get('value', '')
+            name = nick if nick else sp_val.get('CharacterID', {}).get('value', '')
+            if name and name not in name_to_uid:
+                name_to_uid[name] = uid
+        except Exception:
+            continue
+    if not name_to_uid:
+        return
+    for g in gsm:
+        players = g.get('value', {}).get('RawData', {}).get('value', {}).get('players', [])
+        for player in players:
+            uid = player.get('player_uid', '')
+            if not uid or (isinstance(uid, str) and not uid.strip()):
+                pname = player.get('player_info', {}).get('player_name', '')
+                if pname:
+                    direct = name_to_uid.get(pname)
+                    if direct:
+                        player['player_uid'] = direct
+                    else:
+                        for alt_name, alt_uid in name_to_uid.items():
+                            if pname.lower() == alt_name.lower():
+                                player['player_uid'] = alt_uid
+                                break

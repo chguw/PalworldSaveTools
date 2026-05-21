@@ -109,7 +109,6 @@ class SaveManager(QObject):
                     guild_name_map[gid.lower()] = guild_name
                     for base_id_uuid in gdata['value']['RawData']['value'].get('base_ids', []):
                         constants.base_guild_lookup[str(base_id_uuid)] = {'GuildName': guild_name, 'GuildID': gid}
-            self._enrich_guild_player_uids()
             log_folder = os.path.join(base_path, 'Logs', 'Scan Save Logger')
             os.makedirs(log_folder, exist_ok=True)
             player_pals_count = {}
@@ -154,7 +153,6 @@ class SaveManager(QObject):
                 guild_name_map[gid.lower()] = guild_name
                 for base_id_uuid in gdata['value']['RawData']['value'].get('base_ids', []):
                     constants.base_guild_lookup[str(base_id_uuid)] = {'GuildName': guild_name, 'GuildID': gid}
-        self._enrich_guild_player_uids()
         log_folder = os.path.join(base_path, 'Logs', 'Scan Save Logger')
         os.makedirs(log_folder, exist_ok=True)
         player_pals_count = {}
@@ -212,74 +210,6 @@ class SaveManager(QObject):
             except Exception:
                 continue
         constants.player_levels = dict(uid_level_map)
-    def _enrich_guild_player_uids(self):
-        if not constants.loaded_level_json or not constants.srcGuildMapping:
-            return
-        wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
-        char_map = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
-        name_to_uid = {}
-        for entry in char_map:
-            try:
-                sp = entry['value']['RawData']['value']['object']['SaveParameter']
-                if sp['struct_type'] != 'PalIndividualCharacterSaveParameter':
-                    continue
-                sp_val = sp['value']
-                if not sp_val.get('IsPlayer', {}).get('value', False):
-                    continue
-                key = entry.get('key', {})
-                uid_obj = key.get('PlayerUId', {})
-                uid = str(uid_obj.get('value', '') if isinstance(uid_obj, dict) else uid_obj)
-                if not uid:
-                    continue
-                nick = sp_val.get('NickName', {}).get('value', '')
-                if nick:
-                    name = nick
-                else:
-                    name = sp_val.get('CharacterID', {}).get('value', '')
-                if name and name not in name_to_uid:
-                    name_to_uid[name] = str(uid)
-            except Exception:
-                continue
-        if not name_to_uid:
-            return
-        enriched = 0
-        for gdata in constants.srcGuildMapping.GroupSaveDataMap.values():
-            players = gdata['value']['RawData']['value'].get('players', [])
-            for player in players:
-                uid = player.get('player_uid', '')
-                if not uid or (isinstance(uid, str) and not uid.strip()):
-                    pname = player.get('player_info', {}).get('player_name', '')
-                    if pname and pname in name_to_uid:
-                        player['player_uid'] = name_to_uid[pname]
-                        enriched += 1
-                    elif pname and pname not in name_to_uid:
-                        for alt_name, alt_uid in name_to_uid.items():
-                            if pname.lower() == alt_name.lower():
-                                player['player_uid'] = alt_uid
-                                enriched += 1
-                                break
-        if enriched:
-            print(f'[Enrich] Filled {enriched} missing player UIDs in guild data')
-        fixed_admin = 0
-        for gdata in constants.srcGuildMapping.GroupSaveDataMap.values():
-            raw = gdata['value']['RawData']['value']
-            players = raw.get('players', [])
-            if not players:
-                continue
-            admin_uid_raw = raw.get('admin_player_uid', '')
-            admin_str = str(admin_uid_raw).replace('-', '').lower()
-            if not admin_str:
-                continue
-            admin_matches = any(
-                str(p.get('player_uid', '')).replace('-', '').lower() == admin_str
-                for p in players
-            )
-            if admin_matches:
-                continue
-            first_puid = str(players[0].get('player_uid', '')).replace('-', '').lower()
-            if first_puid:
-                raw['admin_player_uid'] = players[0]['player_uid']
-                fixed_admin += 1
     def _count_pals_found(self, data, player_pals_count, log_folder, current_save_path, guild_name_map, illegal_pals_by_owner=None):
         base_dir = constants.get_base_path()
         if illegal_pals_by_owner is None:
