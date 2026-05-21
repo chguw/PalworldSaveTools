@@ -34,7 +34,5 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
     writer.write(bytes(p['trailing_bytes']))
     if 'unknown_bytes' in p:
         writer.write(bytes(p['unknown_bytes']))
-    if 'trailing_bytes' in p:
-        writer.write(bytes(p['trailing_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

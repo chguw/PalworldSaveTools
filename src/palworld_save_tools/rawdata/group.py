@@ -41,121 +41,71 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
         }
         
         remaining = reader.read_to_end()
+        guild['_opaque_all_remaining_bytes'] = remaining
         
-        def detect_format():
-            if len(remaining) < 16:
-                return 'unknown'
-            print(f"[GROUP_DEBUG] First 4 bytes: {remaining[:4].hex()}")
+        # Try NEW format first (more specific structure with player tails)
+        try:
+            new_r = FArchiveReader(remaining, debug=False)
             if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
-                return 'new'
-            return 'old'
-        
-        format_version = detect_format()
-        
-        if format_version == 'old':
-            guild['_opaque_players_bytes'] = remaining
+                guild['unknown_guild_field'] = new_r.byte_list(4)
+            guild['admin_player_uid'] = new_r.guid()
+            guild['unknown_3'] = new_r.i32()
+            guild['unknown_4'] = new_r.byte_list(4)
+            guild['unknown_5'] = new_r.u16()
+            guild['unknown_6'] = new_r.i32()
+            guild['unknown_7'] = new_r.i32()
+            guild['unknown_8'] = new_r.i32()
+            guild['unknown_9'] = new_r.i32()
+            raw = new_r.read_to_end()
             
-            r = FArchiveReader(remaining, debug=False)
-            guild['admin_player_uid'] = r.guid()
-            
-            try:
-                type_name = r.fstring()
-            except:
-                type_name = ""
-            
-            try:
-                count = r.i32()
-                
-                players = []
-                for i in range(count):
-                    try:
-                        uid = r.guid()
-                        last_online = r.i64()
-                        name = r.fstring()
-                        players.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': last_online, 'player_name': name}})
-                    except Exception as e:
-                        print(f"[GROUP_DEBUG] Error reading player {i}: {e}")
-                        break
-                
-                trailing = r.byte_list(4)
-                
-                guild['players'] = players
-                guild['trailing_bytes'] = trailing
-            except Exception as e:
-                print(f"[GROUP_DEBUG] OLD parsing failed: {e}")
-                players = []
-                guild['players'] = players
-                guild['trailing_bytes'] = []
-            
-            if not r.eof():
-                guild['_trailing_unknown'] = r.read_to_end()
-            guild['_format_version'] = 'old'
-            print(f"[GROUP_DEBUG] OLD format: {guild['guild_name']} parsed {len(guild['players'])} players")
-            for i, p in enumerate(guild['players']):
-                print(f"[GROUP_DEBUG]   Player {i}: {p.get('player_info', {}).get('player_name', 'Unknown')} ({p.get('player_uid', 'No UID')})")
-        else:
-            try:
-                if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
-                    guild['unknown_guild_field'] = reader.byte_list(4)
-                guild['admin_player_uid'] = reader.guid()
-                guild['unknown_3'] = reader.i32()
-                guild['unknown_4'] = reader.byte_list(4)
-                guild['unknown_5'] = reader.u16()
-                guild['unknown_6'] = reader.i32()
-                raw = reader.read_to_end()
-                
-                players = []
-                if len(raw) >= 4:
-                    pr = FArchiveReader(raw, debug=False)
-                    count = pr.i32()
-                    for i in range(count):
+            if len(raw) >= 4:
+                pr = FArchiveReader(raw, debug=False)
+                count = pr.i32()
+                if 0 <= count <= 1000:
+                    nplayers = []
+                    admin_uid_str = str(guild['admin_player_uid'])
+                    for _ in range(count):
                         try:
-                            uid = pr.guid()
-                            last_online = pr.i64()
-                            name = pr.fstring()
-                            try:
-                                pr.byte_list(31)
-                            except:
-                                pass
-                            players.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': last_online, 'player_name': name}})
+                            lo = pr.i64()
+                            nm = pr.fstring()
+                            pr.byte_list(31)
+                            nplayers.append({'player_uid': admin_uid_str, 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
                         except Exception:
-                            pass
-                guild['players'] = players
-                guild['_format_version'] = 'new'
-                print(f"[GROUP_DEBUG] NEW format: {guild['guild_name']} parsed {len(guild['players'])} players")
-            except Exception as e:
-                print(f"[GROUP_DEBUG] NEW format parsing failed: {e}, falling back to OLD format")
-                r = FArchiveReader(remaining, debug=False)
-                guild['admin_player_uid'] = r.guid()
-                remaining_after_admin = r.read_to_end()
-                
-                try:
-                    type_name = r.fstring()
-                except:
-                    type_name = ""
-                
-                count = r.i32()
-                
-                players = []
-                for i in range(count):
-                    try:
-                        uid = r.guid()
-                        last_online = r.i64()
-                        name = r.fstring()
-                        players.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': last_online, 'player_name': name}})
-                    except Exception:
-                        break
-                
-                trailing = r.byte_list(4)
-                
-                guild['players'] = players
-                guild['trailing_bytes'] = trailing
-                guild['_opaque_players_bytes'] = remaining_after_admin
-                if not r.eof():
-                    guild['_trailing_unknown'] = r.read_to_end()
-                guild['_format_version'] = 'old'
-                print(f"[GROUP_DEBUG] OLD fallback: {guild['guild_name']} parsed {len(guild['players'])} players")
+                            break
+                    guild['players'] = nplayers
+                    guild['_format_version'] = 'new'
+        except Exception:
+            pass
         
+        # If new format got 0 players, try OLD format
+        if '_format_version' not in guild or guild.get('players', []) == []:
+            try:
+                old_r = FArchiveReader(remaining, debug=False)
+                guild['admin_player_uid'] = old_r.guid()
+                guild['_opaque_players_bytes'] = remaining
+                nplayers = []
+                count = old_r.u32()
+                if 0 <= count <= 1000:
+                    for _ in range(count):
+                        try:
+                            uid = old_r.guid()
+                            lo = old_r.i64()
+                            nm = old_r.fstring()
+                            nplayers.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                        except Exception:
+                            break
+                guild['players'] = nplayers
+                guild['trailing_bytes'] = [int(b) for b in old_r.read_to_end()]
+                guild['_format_version'] = 'old'
+            except Exception:
+                pass
+        
+        # If still no format detected, use opaque preservation
+        if '_format_version' not in guild:
+            guild['players'] = []
+            guild['trailing_bytes'] = []
+            guild['_format_version'] = 'opaque_full'
+    
         group_data |= guild
     
     if group_type == 'EPalGroupType::IndependentGuild':
@@ -211,9 +161,10 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
         writer.write(bytes(p['unknown_2']))
         
         format_version = p.get('_format_version', 'new')
-        was_modified = p.get('_was_modified', False)
         
-        if format_version == 'old' and '_opaque_players_bytes' in p:
+        if format_version == 'opaque_full' and '_opaque_all_remaining_bytes' in p:
+            writer.write(bytes(p['_opaque_all_remaining_bytes']))
+        elif format_version == 'old' and '_opaque_players_bytes' in p:
             writer.write(bytes(p['_opaque_players_bytes']))
             if '_trailing_unknown' in p:
                 writer.write(bytes(p['_trailing_unknown']))
@@ -240,20 +191,15 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
                 writer.write(bytes(p['unknown_guild_field']))
             writer.guid(p['admin_player_uid'])
             writer.i32(p.get('unknown_3', 0))
-            writer.write(bytes(p.get('unknown_4', [0, 0, 1, 0])))
+            writer.write(bytes(p.get('unknown_4', [0, 1, 0, 0])))
             writer.u16(p.get('unknown_5', 0))
             writer.i32(p.get('unknown_6', 0))
+            writer.i32(p.get('unknown_7', 0))
+            writer.i32(p.get('unknown_8', 0))
+            writer.i32(p.get('unknown_9', 0))
             players = p.get('players', [])
             writer.i32(len(players))
             for player in players:
-                uid = player.get('player_uid', '')
-                if isinstance(uid, str) and uid:
-                    uid = _stdlib_uuid.UUID(uid)
-                elif isinstance(uid, _stdlib_uuid.UUID):
-                    pass
-                else:
-                    uid = _stdlib_uuid.UUID('00000000-0000-0000-0000-000000000000')
-                writer.guid(uid)
                 writer.i64(player['player_info']['last_online_real_time'])
                 writer.fstring(player['player_info']['player_name'])
                 writer.write(bytes(31))
