@@ -1,7 +1,8 @@
 import os
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QScrollArea, QLabel, QPushButton, QFrame, QDialog, QLineEdit, QListWidget, QListWidgetItem, QSpinBox, QMessageBox, QTabWidget, QSizePolicy, QAbstractItemView, QMenu, QToolTip, QListView, QProgressBar, QComboBox, QApplication
 from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer
-from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor
+from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen
+from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t
 DARK_THEME_STYLE = '\nQDialog {\n    background: qlineargradient(spread:pad, x1:0.0, y1:0.0, x2:1.0, y2:1.0,\n                stop:0 rgba(12,14,18,0.98), stop:0.5 rgba(10,16,22,0.98), stop:1 rgba(8,12,18,0.98));\n    color: #e2e8f0;\n}\nQLabel {\n    color: #e2e8f0;\n}\nQLineEdit {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 10px;\n}\nQLineEdit:focus {\n    border-color: rgba(125,211,252,0.4);\n}\nQSpinBox {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 4px 8px;\n}\nQSpinBox:focus {\n    border-color: rgba(125,211,252,0.4);\n}\nQComboBox {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 10px;\n}\nQComboBox:hover {\n    border-color: rgba(125,211,252,0.3);\n}\nQComboBox QAbstractItemView {\n    background-color: rgba(18,20,24,0.98);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    selection-background-color: rgba(59,142,208,0.3);\n    border-radius: 4px;\n}\nQPushButton {\n    background: rgba(125,211,252,0.12);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 8px 16px;\n    font-weight: 600;\n}\nQPushButton:hover {\n    background: rgba(125,211,252,0.2);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}\nQListWidget {\n    background: rgba(255,255,255,0.03);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 6px;\n}\nQListWidget::item {\n    padding: 4px;\n    border: 1px solid rgba(125,211,252,0.12);\n    border-radius: 4px;\n    margin: 2px;\n}\nQListWidget::item:hover {\n    border: 1px solid rgba(125,211,252,0.3);\n    background: rgba(125,211,252,0.05);\n}\nQListWidget::item:selected {\n    background: rgba(59,142,208,0.3);\n    border: 1px solid rgba(59,142,208,0.5);\n}\nQMenu {\n    background-color: rgba(18,20,24,0.95);\n    border: 1px solid rgba(125,211,252,0.3);\n    border-radius: 4px;\n    color: #e2e8f0;\n    padding: 4px;\n}\nQMenu::item {\n    padding: 6px 12px;\n    border-radius: 3px;\n}\nQMenu::item:selected {\n    background-color: rgba(59,142,208,0.3);\n}\nQMenu::separator {\n    height: 1px;\n    background: rgba(125,211,252,0.2);\n    margin: 4px 8px;\n}\nQMessageBox {\n    background: qlineargradient(spread:pad, x1:0.0, y1:0.0, x2:1.0, y2:1.0,\n                stop:0 rgba(12,14,18,0.98), stop:0.5 rgba(10,16,22,0.98), stop:1 rgba(8,12,18,0.98));\n    color: #e2e8f0;\n}\nQMessageBox QLabel {\n    color: #e2e8f0;\n}\nQMessageBox QPushButton {\n    background: rgba(125,211,252,0.12);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 8px 16px;\n    min-width: 70px;\n    font-weight: 600;\n}\nQMessageBox QPushButton:hover {\n    background: rgba(125,211,252,0.2);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}\n'
 STATS_PANEL_STYLE = '\nStatsPanelWidget {\n    background: rgba(18,20,24,0.95);\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 8px;\n}\nStatsPanelWidget QLabel {\n    color: #e2e8f0;\n}\nStatsPanelWidget QLineEdit {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 4px;\n    padding: 2px 4px;\n}\nStatsPanelWidget QLineEdit:focus {\n    border-color: rgba(125,211,252,0.4);\n}\nStatsPanelWidget QPushButton {\n    background: rgba(125,211,252,0.1);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 3px;\n    font-weight: bold;\n}\nStatsPanelWidget QPushButton:hover {\n    background: rgba(125,211,252,0.2);\n}\nStatsPanelWidget QProgressBar {\n    background: rgba(255,255,255,0.05);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 3px;\n}\nStatsPanelWidget QProgressBar::chunk {\n    background: rgba(34,197,94,0.6);\n    border-radius: 2px;\n}\n'
@@ -56,11 +57,19 @@ class ItemSlotWidget(QFrame):
             self.qty_label.setText(str(stack_count))
         else:
             self.qty_label.clear()
-        category = slot_data.get('category', 'misc')
-        self._apply_category_style(category)
-    def _apply_category_style(self, category: str):
-        category_colors = {'weapon': '#ff6b35', 'armor': '#4ecdc4', 'accessory': '#a855f7', 'food': '#90be6d', 'material': '#f9c74f', 'sphere': '#43b581', 'ammo': '#7289da', 'key_item': '#faa61a', 'tool': '#00bcd4', 'misc': '#888888'}
-        color = category_colors.get(category, '#888888')
+        rarity = slot_data.get('rarity', 0)
+        self._apply_rarity_style(rarity)
+    def _apply_rarity_style(self, rarity: int):
+        if rarity <= 0:
+            color = '#aaaaaa'  # Common - White/Gray
+        elif rarity <= 1:
+            color = '#4ade80'  # Uncommon - Green
+        elif rarity <= 2:
+            color = '#60a5fa'  # Rare - Blue
+        elif rarity <= 3:
+            color = '#a855f7'  # Epic - Purple
+        else:
+            color = '#fbbf24'  # Legendary+ - Yellow/Gold
         self.setStyleSheet(f'ItemSlotWidget {{ background-color: rgba(30, 30, 40, 200); border: 2px solid {color}; border-radius: 4px; }} ItemSlotWidget:hover {{ background-color: rgba(60, 60, 70, 220); border: 2px solid {color}; }}')
     def clear_item(self):
         self.slot_data = None
@@ -148,8 +157,17 @@ class EquipmentSlotWidget(QFrame):
             self.qty_label.setText(str(stack_count))
         else:
             self.qty_label.clear()
-        category_colors = {'weapon': '#ff6b35', 'armor': '#4ecdc4', 'accessory': '#a855f7', 'tool': '#00bcd4', 'food': '#90be6d'}
-        color = category_colors.get(category, '#888888')
+        rarity = slot_data.get('rarity', 0)
+        if rarity <= 0:
+            color = '#aaaaaa'
+        elif rarity <= 1:
+            color = '#4ade80'
+        elif rarity <= 2:
+            color = '#60a5fa'
+        elif rarity <= 3:
+            color = '#a855f7'
+        else:
+            color = '#fbbf24'
         self.setStyleSheet(f'EquipmentSlotWidget {{ background-color: rgba(40, 40, 50, 200); border: 2px solid {color}; border-radius: 4px; }} EquipmentSlotWidget:hover {{ background-color: rgba(60, 60, 70, 220); }}')
     def set_locked(self, locked: bool, lock_type: str=None):
         self._locked = locked
@@ -503,6 +521,29 @@ class InventoryGridWidget(QWidget):
             if slot_data:
                 return slot_data.get('stack_count', 0)
         return 0
+class RarityBorderDelegate(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        super().paint(painter, option, index)
+        rarity = index.data(Qt.UserRole + 2)
+        if rarity is None:
+            return
+        if rarity <= 0:
+            color = QColor('#aaaaaa')
+        elif rarity <= 1:
+            color = QColor('#4ade80')
+        elif rarity <= 2:
+            color = QColor('#60a5fa')
+        elif rarity <= 3:
+            color = QColor('#a855f7')
+        else:
+            color = QColor('#fbbf24')
+        painter.save()
+        painter.setPen(QPen(color, 3))
+        painter.setBrush(Qt.NoBrush)
+        rect = option.rect.adjusted(1, 1, -1, -1)
+        painter.drawRoundedRect(rect, 4, 4)
+        painter.restore()
+
 class ItemPickerDialog(QDialog):
     item_selected = Signal(str, int)
     def __init__(self, parent=None):
@@ -533,6 +574,7 @@ class ItemPickerDialog(QDialog):
         self.results_list.setDragEnabled(False)
         self.results_list.setAcceptDrops(False)
         self.results_list.setDragDropMode(QAbstractItemView.NoDragDrop)
+        self.results_list.setItemDelegate(RarityBorderDelegate(self.results_list))
         self.results_list.itemClicked.connect(self._on_item_clicked)
         self.results_list.itemDoubleClicked.connect(self._on_item_double_clicked)
         layout.addWidget(self.results_list)
@@ -569,9 +611,10 @@ class ItemPickerDialog(QDialog):
         for item in items:
             list_item = QListWidgetItem(item.get('name', 'Unknown'))
             list_item.setData(Qt.UserRole, item.get('asset', ''))
+            list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
             icon_path = item.get('icon', '')
             if icon_path:
-                pixmap = ItemData.get_item_icon(icon_path, QSize(40, 40))
+                pixmap = ItemData.get_item_icon(icon_path, QSize(48, 48))
                 list_item.setIcon(QIcon(pixmap))
             item_name = item.get('name', 'Unknown')
             item_id = item.get('asset', '')

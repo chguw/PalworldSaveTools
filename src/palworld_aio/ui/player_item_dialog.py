@@ -1,13 +1,38 @@
 import os
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QScrollArea, QGroupBox, QCheckBox, QMessageBox, QSpinBox, QButtonGroup, QRadioButton, QFrame, QGridLayout, QAbstractItemView, QListView, QTabWidget, QComboBox
 from PySide6.QtCore import Qt, Signal, QSize, QTimer
-from PySide6.QtGui import QPixmap, QIcon, QFont
+from PySide6.QtGui import QPixmap, QIcon, QFont, QColor, QPainter, QPen
+from PySide6.QtWidgets import QStyledItemDelegate
+from PySide6.QtCore import Qt
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.inventory_manager import ItemData, search_items
 from palworld_aio.data_manager import get_guilds, get_guild_members
 from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
 DARK_THEME_STYLE = '\nQDialog {\n    background: qlineargradient(spread:pad, x1:0.0, y1:0.0, x2:1.0, y2:1.0,\n                stop:0 rgba(12,14,18,0.98), stop:0.5 rgba(10,16,22,0.98), stop:1 rgba(8,12,18,0.98));\n    color: #e2e8f0;\n}\nQLabel {\n    color: #e2e8f0;\n}\nQLineEdit {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 10px;\n}\nQLineEdit:focus {\n    border-color: rgba(125,211,252,0.4);\n}\nQListWidget {\n    background: rgba(255,255,255,0.03);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 6px;\n}\nQListWidget::item {\n    padding: 4px;\n    border: 1px solid rgba(125,211,252,0.12);\n    border-radius: 4px;\n    margin: 2px;\n}\nQListWidget::item:hover {\n    border: 1px solid rgba(125,211,252,0.3);\n    background: rgba(125,211,252,0.05);\n}\nQListWidget::item:selected {\n    background: rgba(59,142,208,0.3);\n    border: 1px solid rgba(59,142,208,0.5);\n}\nQPushButton {\n    background: rgba(125,211,252,0.12);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 8px 16px;\n    font-weight: 600;\n}\nQPushButton:hover {\n    background: rgba(125,211,252,0.2);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}\nQPushButton:pressed {\n    background: rgba(125,211,252,0.3);\n}\nQGroupBox {\n    color: #e2e8f0;\n    border: 1px solid rgba(255,255,255,0.1);\n    border-radius: 6px;\n    margin-top: 8px;\n    padding-top: 8px;\n}\nQGroupBox::title {\n    subcontrol-origin: margin;\n    left: 10px;\n    padding: 0 5px;\n}\nQSpinBox {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 4px 8px;\n}\n'
+class RarityBorderDelegate(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        super().paint(painter, option, index)
+        rarity = index.data(Qt.UserRole + 2)
+        if rarity is None:
+            return
+        if rarity <= 0:
+            color = QColor('#aaaaaa')
+        elif rarity <= 1:
+            color = QColor('#4ade80')
+        elif rarity <= 2:
+            color = QColor('#60a5fa')
+        elif rarity <= 3:
+            color = QColor('#a855f7')
+        else:
+            color = QColor('#fbbf24')
+        painter.save()
+        painter.setPen(QPen(color, 3))
+        painter.setBrush(Qt.NoBrush)
+        rect = option.rect.adjusted(1, 1, -1, -1)
+        painter.drawRoundedRect(rect, 4, 4)
+        painter.restore()
+
 class PlayerItemActionDialog(QDialog):
     item_action_selected = Signal(str, str, list)
     def __init__(self, parent=None):
@@ -43,6 +68,7 @@ class PlayerItemActionDialog(QDialog):
         self.results_list.setSelectionMode(QAbstractItemView.SingleSelection)
         self.results_list.setDragEnabled(False)
         self.results_list.setAcceptDrops(False)
+        self.results_list.setItemDelegate(RarityBorderDelegate(self.results_list))
         self.results_list.itemClicked.connect(self._on_item_clicked)
         search_layout.addWidget(self.results_list)
         self.item_info_label = QLabel(t('player_item.select_item') if t else 'Select an item to perform actions')
@@ -108,6 +134,7 @@ class PlayerItemActionDialog(QDialog):
             asset = item.get('asset', '')
             list_item = QListWidgetItem(name)
             list_item.setData(Qt.UserRole, asset)
+            list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
             list_item.setToolTip(f'{name}\n({asset})')
             icon_path = item.get('icon', '')
             if icon_path:

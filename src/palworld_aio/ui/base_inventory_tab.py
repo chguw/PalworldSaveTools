@@ -5,6 +5,7 @@ import time
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox, QTreeWidget, QTreeWidgetItem, QSplitter, QFrame, QScrollArea, QGridLayout, QGroupBox, QMenu, QHeaderView, QMessageBox, QFileDialog, QInputDialog, QDialog, QCheckBox, QSpinBox, QDoubleSpinBox, QSizePolicy, QAbstractItemView, QSpacerItem, QTabWidget, QTabBar, QStyleOptionTab, QStyle, QApplication, QStyledItemDelegate, QListWidget, QListWidgetItem, QLineEdit, QListView
 from PySide6.QtCore import Qt, Signal, QTimer, QPropertyAnimation, QEasingCurve, QSize, QPoint, QRect, QEvent, QMargins
 from PySide6.QtGui import QPixmap, QIcon, QFont, QAction, QCursor, QPainter, QColor, QBrush, QPen, QLinearGradient, QPalette, QMouseEvent, QWheelEvent, QResizeEvent, QPaintEvent, QContextMenuEvent, QDragEnterEvent, QDragMoveEvent, QDropEvent, QDrag
+from PySide6.QtWidgets import QStyledItemDelegate
 from PySide6.QtCore import QMimeData
 resources_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources')
 if resources_path not in sys.path:
@@ -18,6 +19,29 @@ from palworld_aio.ui.styled_combo import StyledCombo
 from palworld_aio.utils import format_duration_short
 from i18n import t
 from palworld_aio.inventory_manager import ItemData
+class RarityBorderDelegate(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        super().paint(painter, option, index)
+        rarity = index.data(Qt.UserRole + 2)
+        if rarity is None:
+            return
+        if rarity <= 0:
+            color = QColor('#aaaaaa')
+        elif rarity <= 1:
+            color = QColor('#4ade80')
+        elif rarity <= 2:
+            color = QColor('#60a5fa')
+        elif rarity <= 3:
+            color = QColor('#a855f7')
+        else:
+            color = QColor('#fbbf24')
+        painter.save()
+        painter.setPen(QPen(color, 3))
+        painter.setBrush(Qt.NoBrush)
+        rect = option.rect.adjusted(1, 1, -1, -1)
+        painter.drawRoundedRect(rect, 4, 4)
+        painter.restore()
+
 class GuildItemPickerDialog(QDialog):
     item_action_selected = Signal(str, str, list)
     def __init__(self, parent=None):
@@ -47,7 +71,7 @@ class GuildItemPickerDialog(QDialog):
         self.results_list.setUniformItemSizes(True)
         self.results_list.setGridSize(QSize(80, 80))
         self.results_list.setResizeMode(QListWidget.Adjust)
-        self.results_list.setStyleSheet('\nQListWidget::item {\n    padding: 4px;\n    border: 1px solid rgba(125,211,252,0.12);\n    border-radius: 4px;\n    margin: 2px;\n}\nQListWidget::item:hover {\n    border: 1px solid rgba(125,211,252,0.3);\n    background: rgba(125,211,252,0.05);\n}\nQListWidget::item:selected {\n    background: rgba(59,142,208,0.3);\n    border: 1px solid rgba(59,142,208,0.5);\n}\n')
+        self.results_list.setItemDelegate(RarityBorderDelegate(self.results_list))
         self.results_list.setSelectionMode(QAbstractItemView.SingleSelection)
         self.results_list.setDragEnabled(False)
         self.results_list.viewport().setAcceptDrops(False)
@@ -140,6 +164,7 @@ class GuildItemPickerDialog(QDialog):
             list_item = QListWidgetItem(name)
             list_item.setData(Qt.UserRole, asset)
             list_item.setData(Qt.UserRole + 1, name)
+            list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
             list_item.setToolTip(f'{name}\n({asset})')
             icon_path = item.get('icon', '')
             if icon_path:

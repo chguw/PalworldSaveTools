@@ -910,10 +910,18 @@ def update_item_data():
         if not final_icon.startswith('/icons/'):
             final_icon = f'/icons/items/{item_id}.webp'
         
+        rarity = 0
+        if isinstance(item_row, dict):
+            rarity_val = item_row.get('Rarity', 0)
+            if isinstance(rarity_val, dict):
+                rarity_val = rarity_val.get('value', 0)
+            rarity = int(rarity_val) if rarity_val else 0
+        
         item_entry = {
             'name': item_name,
             'asset': item_id,
-            'icon': final_icon
+            'icon': final_icon,
+            'rarity': rarity
         }
         updated_items.append(item_entry)
     
