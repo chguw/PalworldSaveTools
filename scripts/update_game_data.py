@@ -12,6 +12,17 @@ EXPORT_TEXTURES_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Pal' / 'Textur
 EXPORT_L10N_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'L10N' / 'en' / 'Pal' / 'DataTable' / 'Text'
 EXPORT_TEXTURES_DIR_FAST = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Pal' / 'Texture'
 OTHER_ICON_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Others'
+_ELEMENT_DEFS = [
+    {'name': 'Normal', 'display': 'Neutral', 'index': 0, 'color': '#9CA3AF'},
+    {'name': 'Fire', 'display': 'Fire', 'index': 1, 'color': '#EF4444'},
+    {'name': 'Water', 'display': 'Water', 'index': 2, 'color': '#3B82F6'},
+    {'name': 'Electricity', 'display': 'Electric', 'index': 3, 'color': '#FBBF24'},
+    {'name': 'Leaf', 'display': 'Grass', 'index': 4, 'color': '#4ADE80'},
+    {'name': 'Dark', 'display': 'Dark', 'index': 5, 'color': '#6B21A8'},
+    {'name': 'Dragon', 'display': 'Dragon', 'index': 6, 'color': '#818CF8'},
+    {'name': 'Earth', 'display': 'Earth', 'index': 7, 'color': '#A78BFA'},
+    {'name': 'Ice', 'display': 'Ice', 'index': 8, 'color': '#67E8F9'},
+]
 icon_name_to_path = {}
 for search_dir in [str(EXPORT_TEXTURES_DIR_FAST), str(OTHER_ICON_DIR)]:
     if os.path.exists(search_dir):
@@ -394,7 +405,45 @@ def update_pal_data():
                 t_png = f'/icons/pals/T_{pal_id}_icon_normal.png'
                 if (RESOURCES_DIR / t_png.lstrip('/')).exists():
                     final_icon = t_png
-        pal_entry = {'name': display_name, 'asset': pal_id, 'icon': final_icon, 'elements': existing_entry.get('elements', {})}
+        pal_entry = {
+            'name': display_name,
+            'asset': pal_id,
+            'icon': final_icon,
+            'elements': _build_element_icons(monster_row),
+        }
+        if monster_row and isinstance(monster_row, dict):
+            el1 = monster_row.get('ElementType1', '')
+            el2 = monster_row.get('ElementType2', '')
+            if isinstance(el1, str) and el1.startswith('EPalElementType::'):
+                el1 = el1.replace('EPalElementType::', '')
+            if isinstance(el2, str) and el2.startswith('EPalElementType::'):
+                el2 = el2.replace('EPalElementType::', '')
+            ws_fields = ['EmitFlame','Watering','Seeding','GenerateElectricity','Handcraft','Collection','Deforest','Mining','OilExtraction','ProductMedicine','Cool','Transport','MonsterFarm']
+            work_suit = {}
+            for w in ws_fields:
+                key = f'WorkSuitability_{w}'
+                val = monster_row.get(key, 0)
+                if isinstance(val, dict):
+                    val = val.get('value', 0)
+                work_suit[w] = int(val) if val else 0
+            pal_entry['stats'] = {
+                'hp': monster_row.get('Hp', 100),
+                'melee_attack': monster_row.get('MeleeAttack', 100),
+                'shot_attack': monster_row.get('ShotAttack', 100),
+                'defense': monster_row.get('Defense', 100),
+                'support': monster_row.get('Support', 100),
+                'craft_speed': monster_row.get('CraftSpeed', 100),
+                'max_full_stomach': monster_row.get('MaxFullStomach', 300),
+                'food_amount': monster_row.get('FoodAmount', 5),
+                'element_type1': el1,
+                'element_type2': el2,
+                'zukan_index': monster_row.get('ZukanIndex', 0),
+                'rarity': monster_row.get('Rarity', 0),
+                'size': monster_row.get('Size', 'EPalSizeType::XS') if isinstance(monster_row.get('Size', ''), str) else 'EPalSizeType::XS',
+                'run_speed': monster_row.get('RunSpeed', 400),
+                'ride_sprint_speed': monster_row.get('RideSprintSpeed', 700),
+            }
+            pal_entry['work_suitabilities'] = work_suit
         updated_pals.append(pal_entry)
     for pal_id in sorted(monster_rows.keys()):
         pal_id_lower = pal_id.lower()
@@ -457,9 +506,45 @@ def update_pal_data():
             t_file = RESOURCES_DIR / t_prefixed.lstrip('/')
             if t_file.exists():
                 final_icon = t_prefixed
-        pal_entry = {'name': display_name, 'asset': pal_id, 'icon': final_icon, 'elements': existing_entry.get('elements', {})}
-        if not pal_entry['elements']:
-            pal_entry['elements'] = {}
+        pal_entry = {
+            'name': display_name,
+            'asset': pal_id,
+            'icon': final_icon,
+            'elements': _build_element_icons(monster_row),
+        }
+        if monster_row and isinstance(monster_row, dict):
+            el1 = monster_row.get('ElementType1', '')
+            el2 = monster_row.get('ElementType2', '')
+            if isinstance(el1, str) and el1.startswith('EPalElementType::'):
+                el1 = el1.replace('EPalElementType::', '')
+            if isinstance(el2, str) and el2.startswith('EPalElementType::'):
+                el2 = el2.replace('EPalElementType::', '')
+            ws_fields = ['EmitFlame','Watering','Seeding','GenerateElectricity','Handcraft','Collection','Deforest','Mining','OilExtraction','ProductMedicine','Cool','Transport','MonsterFarm']
+            work_suit = {}
+            for w in ws_fields:
+                key = f'WorkSuitability_{w}'
+                val = monster_row.get(key, 0)
+                if isinstance(val, dict):
+                    val = val.get('value', 0)
+                work_suit[w] = int(val) if val else 0
+            pal_entry['stats'] = {
+                'hp': monster_row.get('Hp', 100),
+                'melee_attack': monster_row.get('MeleeAttack', 100),
+                'shot_attack': monster_row.get('ShotAttack', 100),
+                'defense': monster_row.get('Defense', 100),
+                'support': monster_row.get('Support', 100),
+                'craft_speed': monster_row.get('CraftSpeed', 100),
+                'max_full_stomach': monster_row.get('MaxFullStomach', 300),
+                'food_amount': monster_row.get('FoodAmount', 5),
+                'element_type1': el1,
+                'element_type2': el2,
+                'zukan_index': monster_row.get('ZukanIndex', 0),
+                'rarity': monster_row.get('Rarity', 0),
+                'size': monster_row.get('Size', 'EPalSizeType::XS') if isinstance(monster_row.get('Size', ''), str) else 'EPalSizeType::XS',
+                'run_speed': monster_row.get('RunSpeed', 400),
+                'ride_sprint_speed': monster_row.get('RideSprintSpeed', 700),
+            }
+            pal_entry['work_suitabilities'] = work_suit
         updated_pals.append(pal_entry)
         if display_name != pal_id:
             print(f"  Added new variant from MonsterParameter: {pal_id} -> '{display_name}'")
@@ -1128,6 +1213,67 @@ def update_pal_passive_data():
         print(f'    Warning: Could not merge passives: {e}')
     result = {'passives': updated_passives}
     save_resource_json('palpassivedata.json', result)
+def update_ui_icons():
+    print('\n=== Updating UI Icons ===')
+    target_subdir = 'ui'
+    target_dir = ICONS_DIR / target_subdir
+    ensure_dir(target_dir)
+    main_menu_dir = EXPORT_TEXTURES_DIR / 'UI' / 'Main_Menu'
+    ingame_dir = EXPORT_TEXTURES_DIR / 'UI' / 'InGame'
+    ui_icons = {}
+    for num in range(0, 14):
+        src = ingame_dir / f'T_icon_palwork_{num:02d}.png'
+        path = copy_icon_to_resources(src, target_subdir)
+        if path:
+            ui_icons[f'palwork_{num:02d}'] = path
+        else:
+            print(f'    WARNING: palwork icon not found: T_icon_palwork_{num:02d}.png')
+    src90 = ingame_dir / 'T_icon_palwork_90.png'
+    path90 = copy_icon_to_resources(src90, target_subdir)
+    if path90:
+        ui_icons['palwork_90'] = path90
+    else:
+        print('    WARNING: palwork icon not found: T_icon_palwork_90.png')
+    src_trust = main_menu_dir / 'T_Icon_PalFriendship_Color.png'
+    path_trust = copy_icon_to_resources(src_trust, target_subdir)
+    if path_trust:
+        ui_icons['friendship'] = path_trust
+    else:
+        print('    WARNING: Trust icon not found: T_Icon_PalFriendship_Color.png')
+    src_gf = main_menu_dir / 'T_Icon_PanGender_Female.png'
+    path_gf = copy_icon_to_resources(src_gf, target_subdir)
+    if path_gf:
+        ui_icons['gender_female'] = path_gf
+    else:
+        print('    WARNING: Gender icon not found: T_Icon_PanGender_Female.png')
+    src_gm = main_menu_dir / 'T_Icon_PanGender_Male.png'
+    path_gm = copy_icon_to_resources(src_gm, target_subdir)
+    if path_gm:
+        ui_icons['gender_male'] = path_gm
+    else:
+        print('    WARNING: Gender icon not found: T_Icon_PanGender_Male.png')
+    src_dna = main_menu_dir / 'T_Icon_PalGlobalInport.png'
+    path_dna = copy_icon_to_resources(src_dna, target_subdir)
+    if path_dna:
+        ui_icons['dna'] = path_dna
+    else:
+        print('    WARNING: DNA icon not found: T_Icon_PalGlobalInport.png')
+    src_food_on = main_menu_dir / 'T_Icon_foodamount_on.png'
+    path_food_on = copy_icon_to_resources(src_food_on, target_subdir)
+    if path_food_on:
+        ui_icons['food_on'] = path_food_on
+    else:
+        print('    WARNING: Food icon not found: T_Icon_foodamount_on.png')
+    src_food_off = main_menu_dir / 'T_Icon_foodamount_off.png'
+    path_food_off = copy_icon_to_resources(src_food_off, target_subdir)
+    if path_food_off:
+        ui_icons['food_off'] = path_food_off
+    else:
+        print('    WARNING: Food icon not found: T_Icon_foodamount_off.png')
+    result = {'ui_icons': ui_icons}
+    save_resource_json('uidata.json', result)
+    print(f'  Total UI icons: {len(ui_icons)}')
+
 def update_lab_research_data():
     print('\n=== Updating Lab Research Data ===')
     lab_data = load_export_json('Lab/DT_LabResearchDataTable.json')
@@ -1187,6 +1333,72 @@ def update_map_data():
                 os.remove(target_png)
             except Exception:
                 pass
+def _build_element_icons(monster_row: dict) -> dict:
+    if not monster_row or not isinstance(monster_row, dict):
+        return {}
+    el1 = monster_row.get('ElementType1', '')
+    el2 = monster_row.get('ElementType2', '')
+    if isinstance(el1, str) and el1.startswith('EPalElementType::'):
+        el1 = el1.replace('EPalElementType::', '')
+    if isinstance(el2, str) and el2.startswith('EPalElementType::'):
+        el2 = el2.replace('EPalElementType::', '')
+    elem_map = {}
+    try:
+        elem_data = load_resource_json('elementdata.json')
+        for e in elem_data.get('elements', []):
+            if isinstance(e, dict) and 'name' in e:
+                elem_map[e['name'].lower()] = e
+    except Exception:
+        pass
+    elements = {}
+    for el_name in [el1, el2]:
+        if not el_name or el_name == 'None':
+            continue
+        ed = elem_map.get(el_name.lower())
+        if ed:
+            icons = ed.get('icons', {})
+            entry = {
+                'name': ed.get('display', ed['name']),
+                'icon': icons.get('small', ''),
+                'icon_large': icons.get('large', ''),
+                'icon_passive_base': icons.get('passive_base', ''),
+            }
+            elements[ed['name']] = entry
+    return elements
+
+def update_element_data():
+    print('\n=== Updating Element Data ===')
+    target_dir = ICONS_DIR / 'elements'
+    ensure_dir(target_dir)
+    main_menu_dir = EXPORT_TEXTURES_DIR / 'UI' / 'Main_Menu'
+    ingame_dir = EXPORT_TEXTURES_DIR / 'UI' / 'InGame'
+    for edef in _ELEMENT_DEFS:
+        idx_str = f"{edef['index']:02d}"
+        icon_sets = [
+            ('passive_base', main_menu_dir, f'T_prt_pal_skill_base_element_{idx_str}'),
+            ('large', main_menu_dir, f'T_Icon_element_{idx_str}'),
+            ('palstatus', main_menu_dir, f'T_prt_palstatus_element_{idx_str}'),
+            ('small', ingame_dir, f'T_Icon_element_s_{idx_str}'),
+        ]
+        edef['icons'] = {}
+        for key, src_dir, stem in icon_sets:
+            found = None
+            for ext in ['.png', '.PNG']:
+                src = src_dir / f'{stem}{ext}'
+                if src.exists():
+                    found = src
+                    break
+            if found:
+                dst = target_dir / found.name
+                if not dst.exists() or found.stat().st_mtime > dst.stat().st_mtime:
+                    shutil.copy2(str(found), str(dst))
+                edef['icons'][key] = f'/icons/elements/{found.name}'
+            else:
+                edef['icons'][key] = f'/icons/elements/{stem}.png'
+                print(f'    WARNING: Element icon not found: {stem}.png')
+    save_resource_json('elementdata.json', {'elements': _ELEMENT_DEFS})
+    print(f'  Total elements: {len(_ELEMENT_DEFS)}')
+
 def main():
     print('=' * 60)
     print('  Palworld Save Tools - Game Data Resource Updater')
@@ -1196,13 +1408,14 @@ def main():
     print(f'  Exports directory: {EXPORTS_DIR}')
     print('=' * 60)
     ensure_dir(RESOURCES_DIR)
-    for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements']:
+    for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements', 'ui']:
         ensure_dir(ICONS_DIR / subdir)
     if not EXPORTS_DIR.exists():
         print(f'\nWARNING: Exports directory not found at {EXPORTS_DIR}')
         print('Please run the Palworld exporter first to generate the required export files.')
         print('The script will attempt to use existing resources as-is and only update ')
         print("what's available from exports.\n")
+    update_element_data()
     update_pal_data()
     update_npc_data()
     update_item_data()
@@ -1215,10 +1428,11 @@ def main():
     update_items_psp()
     update_pal_passive_data()
     update_lab_research_data()
+    update_ui_icons()
     update_map_data()
     print('\n=== Cleaning up unused icons ===')
     referenced = set()
-    json_files = {'paldata.json': 'pals', 'itemdata.json': 'items', 'npcdata.json': 'npcs', 'structuredata.json': 'structures', 'passivedata.json': 'passives', 'technologydata.json': 'technology', 'skilldata.json': None, 'palpassivedata.json': 'passives'}
+    json_files = {'paldata.json': 'pals', 'itemdata.json': 'items', 'npcdata.json': 'npcs', 'structuredata.json': 'structures', 'passivedata.json': 'passives', 'technologydata.json': 'technology', 'skilldata.json': None, 'palpassivedata.json': 'passives', 'elementdata.json': 'elements', 'uidata.json': 'ui'}
     for fname, _ in json_files.items():
         fpath = RESOURCES_DIR / fname
         if not fpath.exists():
@@ -1233,16 +1447,25 @@ def main():
                 if isinstance(entries, list):
                     for entry in entries:
                         if isinstance(entry, dict):
+                            icns = entry.get('icons', {})
+                            if isinstance(icns, dict):
+                                for ikey, ival in icns.items():
+                                    if isinstance(ival, str) and ival.startswith('/icons/'):
+                                        referenced.add(ival)
                             icon = entry.get('icon', '')
                             if icon and icon.startswith('/icons/'):
                                 referenced.add(icon)
+                elif isinstance(entries, dict):
+                    for ikey, ival in entries.items():
+                        if isinstance(ival, str) and ival.startswith('/icons/'):
+                            referenced.add(ival)
     referenced_local = set()
     for icon_path in referenced:
         parts = icon_path.lstrip('/').split('/', 2)
         if len(parts) == 3:
             referenced_local.add(f'{parts[1]}/{parts[2]}')
     removed_count = 0
-    for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements']:
+    for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements', 'ui']:
         subdir_path = ICONS_DIR / subdir
         if not subdir_path.exists():
             continue
@@ -1261,7 +1484,7 @@ def main():
         from PIL import Image
         optimized = 0
         saved_bytes = 0
-        for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements']:
+        for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements', 'ui']:
             subdir_path = ICONS_DIR / subdir
             if not subdir_path.exists():
                 continue
@@ -1307,15 +1530,26 @@ def main():
                     for key, entries in data.items():
                         if isinstance(entries, list):
                             for entry in entries:
-                                if isinstance(entry, dict) and 'icon' in entry:
-                                    icon = entry['icon']
-                                    if icon.endswith('.png'):
-                                        webp_icon = icon[:-4] + '.webp'
-                                        webp_path = RESOURCES_DIR / webp_icon.lstrip('/')
-                                        if webp_path.exists():
-                                            entry['icon'] = webp_icon
-                                            modified = True
-                                            updated_refs += 1
+                                if isinstance(entry, dict):
+                                    if 'icon' in entry:
+                                        icon = entry['icon']
+                                        if icon.endswith('.png'):
+                                            webp_icon = icon[:-4] + '.webp'
+                                            webp_path = RESOURCES_DIR / webp_icon.lstrip('/')
+                                            if webp_path.exists():
+                                                entry['icon'] = webp_icon
+                                                modified = True
+                                                updated_refs += 1
+                                    icns = entry.get('icons', {})
+                                    if isinstance(icns, dict):
+                                        for ikey, ival in list(icns.items()):
+                                            if isinstance(ival, str) and ival.endswith('.png'):
+                                                webp_val = ival[:-4] + '.webp'
+                                                webp_path = RESOURCES_DIR / webp_val.lstrip('/')
+                                                if webp_path.exists():
+                                                    icns[ikey] = webp_val
+                                                    modified = True
+                                                    updated_refs += 1
                 if modified:
                     with open(fpath, 'w', encoding='utf-8') as f:
                         json.dump(data, f, indent=4, ensure_ascii=False)

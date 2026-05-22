@@ -1,0 +1,112 @@
+{
+    "elements": [
+        {
+            "name": "Normal",
+            "display": "Neutral",
+            "index": 0,
+            "color": "#9CA3AF",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_00.webp",
+                "large": "/icons/elements/T_Icon_element_00.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_00.webp",
+                "small": "/icons/elements/T_Icon_element_s_00.webp"
+            }
+        },
+        {
+            "name": "Fire",
+            "display": "Fire",
+            "index": 1,
+            "color": "#EF4444",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_01.webp",
+                "large": "/icons/elements/T_Icon_element_01.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_01.webp",
+                "small": "/icons/elements/T_Icon_element_s_01.webp"
+            }
+        },
+        {
+            "name": "Water",
+            "display": "Water",
+            "index": 2,
+            "color": "#3B82F6",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_02.webp",
+                "large": "/icons/elements/T_Icon_element_02.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_02.webp",
+                "small": "/icons/elements/T_Icon_element_s_02.webp"
+            }
+        },
+        {
+            "name": "Electricity",
+            "display": "Electric",
+            "index": 3,
+            "color": "#FBBF24",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_03.webp",
+                "large": "/icons/elements/T_Icon_element_03.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_03.webp",
+                "small": "/icons/elements/T_Icon_element_s_03.webp"
+            }
+        },
+        {
+            "name": "Leaf",
+            "display": "Grass",
+            "index": 4,
+            "color": "#4ADE80",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_04.webp",
+                "large": "/icons/elements/T_Icon_element_04.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_04.webp",
+                "small": "/icons/elements/T_Icon_element_s_04.webp"
+            }
+        },
+        {
+            "name": "Dark",
+            "display": "Dark",
+            "index": 5,
+            "color": "#6B21A8",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_05.webp",
+                "large": "/icons/elements/T_Icon_element_05.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_05.webp",
+                "small": "/icons/elements/T_Icon_element_s_05.webp"
+            }
+        },
+        {
+            "name": "Dragon",
+            "display": "Dragon",
+            "index": 6,
+            "color": "#818CF8",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_06.webp",
+                "large": "/icons/elements/T_Icon_element_06.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_06.webp",
+                "small": "/icons/elements/T_Icon_element_s_06.webp"
+            }
+        },
+        {
+            "name": "Earth",
+            "display": "Earth",
+            "index": 7,
+            "color": "#A78BFA",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_07.webp",
+                "large": "/icons/elements/T_Icon_element_07.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_07.webp",
+                "small": "/icons/elements/T_Icon_element_s_07.webp"
+            }
+        },
+        {
+            "name": "Ice",
+            "display": "Ice",
+            "index": 8,
+            "color": "#67E8F9",
+            "icons": {
+                "passive_base": "/icons/elements/T_prt_pal_skill_base_element_08.webp",
+                "large": "/icons/elements/T_Icon_element_08.webp",
+                "palstatus": "/icons/elements/T_prt_palstatus_element_08.webp",
+                "small": "/icons/elements/T_Icon_element_s_08.webp"
+            }
+        }
+    ]
+}

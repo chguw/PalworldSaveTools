@@ -1,0 +1,25 @@
+{
+    "ui_icons": {
+        "palwork_00": "/icons/ui/T_icon_palwork_00.png",
+        "palwork_01": "/icons/ui/T_icon_palwork_01.png",
+        "palwork_02": "/icons/ui/T_icon_palwork_02.png",
+        "palwork_03": "/icons/ui/T_icon_palwork_03.png",
+        "palwork_04": "/icons/ui/T_icon_palwork_04.png",
+        "palwork_05": "/icons/ui/T_icon_palwork_05.png",
+        "palwork_06": "/icons/ui/T_icon_palwork_06.png",
+        "palwork_07": "/icons/ui/T_icon_palwork_07.png",
+        "palwork_08": "/icons/ui/T_icon_palwork_08.png",
+        "palwork_09": "/icons/ui/T_icon_palwork_09.png",
+        "palwork_10": "/icons/ui/T_icon_palwork_10.png",
+        "palwork_11": "/icons/ui/T_icon_palwork_11.png",
+        "palwork_12": "/icons/ui/T_icon_palwork_12.png",
+        "palwork_13": "/icons/ui/T_icon_palwork_13.png",
+        "palwork_90": "/icons/ui/T_icon_palwork_90.png",
+        "friendship": "/icons/ui/T_Icon_PalFriendship_Color.png",
+        "gender_female": "/icons/ui/T_Icon_PanGender_Female.png",
+        "gender_male": "/icons/ui/T_Icon_PanGender_Male.png",
+        "dna": "/icons/ui/T_Icon_PalGlobalInport.png",
+        "food_on": "/icons/ui/T_Icon_foodamount_on.png",
+        "food_off": "/icons/ui/T_Icon_foodamount_off.png"
+    }
+}
