@@ -857,6 +857,61 @@ class PalboxSlotWidget(QFrame):
             self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; } QFrame#palboxSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
     def update_display(self):
         self._build()
+class _ShinyStar(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._filled = True
+        self._shining = False
+        self._phase = 0.0
+        self.setFixedSize(16, 16)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setStyleSheet('background: transparent;')
+    def set_filled(self, filled):
+        self._filled = filled
+        self.update()
+    def set_phase(self, phase):
+        self._phase = phase
+        if self._shining:
+            self.update()
+    def start_shine(self):
+        self._shining = True
+        self.update()
+    def stop_shine(self):
+        self._shining = False
+        self.update()
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.TextAntialiasing)
+        font = QFont()
+        font.setPixelSize(14)
+        painter.setFont(font)
+        rect = self.rect()
+        if not self._filled:
+            painter.setPen(QColor(255, 215, 0, 40))
+            painter.drawText(rect, Qt.AlignCenter, '★')
+            painter.end()
+            return
+        painter.setPen(QColor('#FFD700'))
+        painter.drawText(rect, Qt.AlignCenter, '★')
+        if self._shining:
+            w = rect.width()
+            h = rect.height()
+            text_path = QPainterPath()
+            text_path.addText(0, 0, font, '★')
+            br = text_path.boundingRect()
+            ox = (w - br.width()) / 2 - br.x()
+            oy = (h - br.height()) / 2 - br.y()
+            text_path.translate(ox, oy)
+            painter.setClipPath(text_path)
+            sweep_x = self._phase * w * 1.4 - w * 0.2
+            band = w * 0.14
+            grad = QLinearGradient(sweep_x, rect.bottom(), sweep_x + band, rect.top())
+            grad.setColorAt(0, QColor(255, 255, 200, 0))
+            grad.setColorAt(0.5, QColor(255, 255, 255, 200))
+            grad.setColorAt(1, QColor(255, 255, 200, 0))
+            painter.fillRect(rect, grad)
+        painter.end()
 class _CircularIcon(QWidget):
     def __init__(self, size=80, parent=None):
         super().__init__(parent)
@@ -1402,8 +1457,14 @@ class PalInfoWidget(QFrame):
                 parent_frame.setStyleSheet('QFrame#passiveCard { background: rgba(255,255,255,0.03); border: none; border-radius: 4px; }')
         for i in range(len(self.passive_cards)):
             self._set_passive_overlay(i, None)
-        self.star_rating.setText('☆☆☆☆')
         self.stat_plus_lbl.setText('--')
+        self.soul_buildup_icon.clear()
+        self.iv_icon.clear()
+        self.soul_row_icon.clear()
+        self._stop_star_shine()
+        for sl in self.star_labels:
+            sl.set_filled(False)
+            sl.stop_shine()
         self.portrait_icon.clear()
         self.dna_overlay.hide()
         self.lock_overlay.hide()
@@ -1550,6 +1611,17 @@ class PalInfoWidget(QFrame):
         self.info_awake_btn.setCursor(Qt.PointingHandCursor)
         self.info_awake_btn.clicked.connect(self._on_awake_toggle)
         name_row.addWidget(self.info_awake_btn)
+        self.info_dna_btn = QPushButton()
+        self.info_dna_btn.setCheckable(True)
+        self.info_dna_btn.setFixedSize(22, 22)
+        self.info_dna_btn.setIconSize(QSize(18, 18))
+        dna_icon = _get_ui_icon_pixmap('dna', 18)
+        if dna_icon:
+            self.info_dna_btn.setIcon(QIcon(dna_icon))
+        self.info_dna_btn.setStyleSheet('QPushButton { background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; } QPushButton:checked { background: rgba(34,211,238,0.2); border-color: #22D3EE; } QPushButton:hover { background: rgba(255,255,255,0.08); }')
+        self.info_dna_btn.setCursor(Qt.PointingHandCursor)
+        self.info_dna_btn.clicked.connect(self._on_dna_toggle)
+        name_row.addWidget(self.info_dna_btn)
         self.info_fav_btn = QPushButton()
         self.info_fav_btn.setFixedSize(22, 22)
         self.info_fav_btn.setIconSize(QSize(18, 18))
@@ -1590,16 +1662,26 @@ class PalInfoWidget(QFrame):
         body_layout.setSpacing(4)
         left_col = QWidget()
         left_col.setStyleSheet('background: transparent; border: none;')
-        left_col.setFixedWidth(112)
+        left_col.setFixedWidth(140)
         left_layout = QVBoxLayout(left_col)
         left_layout.setContentsMargins(0, 0, 0, 0)
         left_layout.setSpacing(1)
-        self.star_rating = QLabel('★★★★')
-        self.star_rating.setAlignment(Qt.AlignCenter)
-        self.star_rating.setStyleSheet('font-size: 13px; color: #FFD700; letter-spacing: 2px; background: transparent; border: none;')
-        self.star_rating.setCursor(Qt.PointingHandCursor)
-        self.star_rating.installEventFilter(self)
-        left_layout.addWidget(self.star_rating)
+        self.star_container = QWidget()
+        self.star_container.setCursor(Qt.PointingHandCursor)
+        self.star_container.installEventFilter(self)
+        star_layout = QHBoxLayout(self.star_container)
+        star_layout.setContentsMargins(0, 0, 0, 0)
+        star_layout.setSpacing(1)
+        star_layout.setAlignment(Qt.AlignCenter)
+        self.star_labels = []
+        for i in range(4):
+            sl = _ShinyStar()
+            self.star_labels.append(sl)
+            star_layout.addWidget(sl)
+        self._star_shine_timer = QTimer(self)
+        self._star_shine_timer.timeout.connect(self._tick_star_shine)
+        self._star_shine_phase = 0.0
+        left_layout.addWidget(self.star_container)
         portrait_frame = QFrame()
         portrait_frame.setFixedSize(104, 104)
         portrait_frame.setObjectName('portraitGlow')
@@ -1665,52 +1747,90 @@ class PalInfoWidget(QFrame):
         self.rotating_circle.lower()
         pf_layout.addWidget(self.bracket_wrapper, 0, Qt.AlignCenter)
         left_layout.addWidget(portrait_frame, 0, Qt.AlignCenter)
+        soul_row = QHBoxLayout()
+        soul_row.setContentsMargins(0, 0, 0, 0)
+        soul_row.setSpacing(2)
+        soul_row.setAlignment(Qt.AlignCenter)
+        self.soul_buildup_icon = QLabel()
+        self.soul_buildup_icon.setFixedSize(14, 14)
+        self.soul_buildup_icon.setStyleSheet('background: transparent; border: none;')
+        buildup_pix = _get_ui_icon_pixmap('buildup', 14)
+        if buildup_pix:
+            self.soul_buildup_icon.setPixmap(buildup_pix)
+        soul_row.addWidget(self.soul_buildup_icon)
         self.stat_plus_lbl = QLabel('+60')
         self.stat_plus_lbl.setAlignment(Qt.AlignCenter)
         self.stat_plus_lbl.setStyleSheet('font-size: 12px; font-weight: 700; color: #7DD3FC; background: transparent; border: none;')
         self.stat_plus_lbl.setCursor(Qt.PointingHandCursor)
         self.stat_plus_lbl.installEventFilter(self)
-        left_layout.addWidget(self.stat_plus_lbl)
+        soul_row.addWidget(self.stat_plus_lbl)
+        left_layout.addLayout(soul_row)
         ivs_row = QHBoxLayout()
-        ivs_row.setSpacing(4)
-        ivs_row.addWidget(QLabel('🧬'))
+        ivs_row.setSpacing(6)
+        self.iv_icon = QLabel()
+        self.iv_icon.setFixedSize(14, 14)
+        self.iv_icon.setStyleSheet('background: transparent; border: none;')
+        iv_pix = _get_ui_icon_pixmap('talent_checker', 14)
+        if iv_pix:
+            self.iv_icon.setPixmap(iv_pix)
+        ivs_row.addWidget(self.iv_icon)
         self.ivs_hp_lbl = QLabel('100')
-        self.ivs_hp_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #EF4444; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 3px; padding: 1px 4px;')
+        self.ivs_hp_lbl.setFixedWidth(28)
+        self.ivs_hp_lbl.setAlignment(Qt.AlignCenter)
+        self.ivs_hp_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #EF4444; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 3px; padding: 2px 0px;')
         self.ivs_hp_lbl.setCursor(Qt.PointingHandCursor)
         self.ivs_hp_lbl.installEventFilter(self)
         ivs_row.addWidget(self.ivs_hp_lbl)
         self.ivs_atk_lbl = QLabel('100')
-        self.ivs_atk_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #F59E0B; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 3px; padding: 1px 4px;')
+        self.ivs_atk_lbl.setFixedWidth(28)
+        self.ivs_atk_lbl.setAlignment(Qt.AlignCenter)
+        self.ivs_atk_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #F59E0B; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 3px; padding: 2px 0px;')
         self.ivs_atk_lbl.setCursor(Qt.PointingHandCursor)
         self.ivs_atk_lbl.installEventFilter(self)
         ivs_row.addWidget(self.ivs_atk_lbl)
         self.ivs_def_lbl = QLabel('100')
-        self.ivs_def_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #3B82F6; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 3px; padding: 1px 4px;')
+        self.ivs_def_lbl.setFixedWidth(28)
+        self.ivs_def_lbl.setAlignment(Qt.AlignCenter)
+        self.ivs_def_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #3B82F6; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 3px; padding: 2px 0px;')
         self.ivs_def_lbl.setCursor(Qt.PointingHandCursor)
         self.ivs_def_lbl.installEventFilter(self)
         ivs_row.addWidget(self.ivs_def_lbl)
         ivs_row.addStretch()
         left_layout.addLayout(ivs_row)
         souls_row = QHBoxLayout()
-        souls_row.setSpacing(4)
-        souls_row.addWidget(QLabel('💎'))
+        souls_row.setSpacing(6)
+        self.soul_row_icon = QLabel()
+        self.soul_row_icon.setFixedSize(14, 14)
+        self.soul_row_icon.setStyleSheet('background: transparent; border: none;')
+        srp = _get_ui_icon_pixmap('buildup', 14)
+        if srp:
+            self.soul_row_icon.setPixmap(srp)
+        souls_row.addWidget(self.soul_row_icon)
         self.soul_hp_lbl = QLabel('0')
-        self.soul_hp_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #A78BFA; background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2); border-radius: 3px; padding: 1px 4px;')
+        self.soul_hp_lbl.setFixedWidth(24)
+        self.soul_hp_lbl.setAlignment(Qt.AlignCenter)
+        self.soul_hp_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #A78BFA; background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2); border-radius: 3px; padding: 2px 0px;')
         self.soul_hp_lbl.setCursor(Qt.PointingHandCursor)
         self.soul_hp_lbl.installEventFilter(self)
         souls_row.addWidget(self.soul_hp_lbl)
         self.soul_atk_lbl = QLabel('0')
-        self.soul_atk_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #F59E0B; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 3px; padding: 1px 4px;')
+        self.soul_atk_lbl.setFixedWidth(24)
+        self.soul_atk_lbl.setAlignment(Qt.AlignCenter)
+        self.soul_atk_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #F59E0B; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 3px; padding: 2px 0px;')
         self.soul_atk_lbl.setCursor(Qt.PointingHandCursor)
         self.soul_atk_lbl.installEventFilter(self)
         souls_row.addWidget(self.soul_atk_lbl)
         self.soul_def_lbl = QLabel('0')
-        self.soul_def_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #3B82F6; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 3px; padding: 1px 4px;')
+        self.soul_def_lbl.setFixedWidth(24)
+        self.soul_def_lbl.setAlignment(Qt.AlignCenter)
+        self.soul_def_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #3B82F6; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 3px; padding: 2px 0px;')
         self.soul_def_lbl.setCursor(Qt.PointingHandCursor)
         self.soul_def_lbl.installEventFilter(self)
         souls_row.addWidget(self.soul_def_lbl)
         self.soul_craft_lbl = QLabel('0')
-        self.soul_craft_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #4ADE80; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); border-radius: 3px; padding: 1px 4px;')
+        self.soul_craft_lbl.setFixedWidth(24)
+        self.soul_craft_lbl.setAlignment(Qt.AlignCenter)
+        self.soul_craft_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #4ADE80; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); border-radius: 3px; padding: 2px 0px;')
         self.soul_craft_lbl.setCursor(Qt.PointingHandCursor)
         self.soul_craft_lbl.installEventFilter(self)
         souls_row.addWidget(self.soul_craft_lbl)
@@ -2046,7 +2166,7 @@ class PalInfoWidget(QFrame):
                 full = f'{nick} ({pal_name})'
             else:
                 full = pal_name
-            display_name = full[:12] + ('...' if len(full) > 12 else '')
+            display_name = full[:6] + ('…' if len(full) > 6 else '')
             self.name_lbl.setText(display_name)
             self.name_lbl.setToolTip(full)
             self.level_num_lbl.setText(str(level))
@@ -2245,6 +2365,9 @@ class PalInfoWidget(QFrame):
             self.info_awake_btn.blockSignals(True)
             self.info_awake_btn.setChecked(bool(is_awakening))
             self.info_awake_btn.blockSignals(False)
+            self.info_dna_btn.blockSignals(True)
+            self.info_dna_btn.setChecked(bool(is_imported))
+            self.info_dna_btn.blockSignals(False)
             fav_idx_val = int(fav_idx) if fav_idx else 0
             lock_icon_key = f'lock_{min(fav_idx_val, 3)}' if fav_idx_val > 0 else 'lock_0'
             fav_pix = _get_ui_icon_pixmap(lock_icon_key, 18) or _get_ui_icon_pixmap('lock_0', 18)
@@ -2260,10 +2383,21 @@ class PalInfoWidget(QFrame):
                 self.info_fav_btn.setStyleSheet('QPushButton { background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; } QPushButton:hover { background: rgba(255,255,255,0.08); }')
             soul_total = sum((int(x) for x in (rank_hp_val, rank_atk_val, rank_def_val, rank_craft_val) if str(x).isdigit()))
             self.stat_plus_lbl.setText(f'+{soul_total}')
+            bp = _get_ui_icon_pixmap('buildup', 14)
+            if bp:
+                self.soul_buildup_icon.setPixmap(bp)
+                self.soul_row_icon.setPixmap(bp)
+            ivp = _get_ui_icon_pixmap('talent_checker', 14)
+            if ivp:
+                self.iv_icon.setPixmap(ivp)
             rank_raw = extract_value(raw, 'Rank', 1)
             rank_int = int(rank_raw) if isinstance(rank_raw, (int, float)) else 1
-            stars = ''.join(['★' if i < min(rank_int, 4) else '☆' for i in range(4)])
-            self.star_rating.setText(stars)
+            for i, sl in enumerate(self.star_labels):
+                sl.set_filled(i < min(rank_int, 4))
+            if rank_int >= 4:
+                self._start_star_shine()
+            else:
+                self._stop_star_shine()
             icon_path = _get_pal_icon_path(cid)
             pix = _get_cached_pixmap(icon_path, 80)
             if pix:
@@ -2373,7 +2507,7 @@ class PalInfoWidget(QFrame):
             if obj is self.gender_icon:
                 self._on_gender_click()
                 return True
-            if obj is self.star_rating:
+            if obj is self.star_container:
                 self._on_star_click()
                 return True
             if obj is self.level_num_lbl or obj is self.stat_plus_lbl:
@@ -2422,6 +2556,19 @@ class PalInfoWidget(QFrame):
         new_r = cur + 1 if cur < 4 else 0
         self._raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': new_r}}
         self._refresh()
+    def _start_star_shine(self):
+        self._star_shine_phase = 0.0
+        for sl in self.star_labels:
+            sl.start_shine()
+        self._star_shine_timer.start(16)
+    def _stop_star_shine(self):
+        self._star_shine_timer.stop()
+        for sl in self.star_labels:
+            sl.stop_shine()
+    def _tick_star_shine(self):
+        self._star_shine_phase = (self._star_shine_phase + 0.0032) % 1.0
+        for sl in self.star_labels:
+            sl.set_phase(self._star_shine_phase)
     def _on_level_click(self):
         if not self._raw:
             return
@@ -2690,6 +2837,12 @@ class PalInfoWidget(QFrame):
         cur = int(extract_value(self._raw, 'FavoriteIndex', 0))
         nxt = cur + 1 if cur < 3 else 0
         self._raw['FavoriteIndex'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': nxt}}
+        self._refresh()
+    def _on_dna_toggle(self):
+        if not self._raw:
+            return
+        is_dna = self.info_dna_btn.isChecked()
+        self._raw['bImportedCharacter'] = {'id': None, 'type': 'BoolProperty', 'value': is_dna}
         self._refresh()
     def _refresh(self):
         if self.last_clicked_data:

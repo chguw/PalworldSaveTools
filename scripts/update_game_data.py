@@ -1243,6 +1243,20 @@ def update_ui_icons():
         ui_icons['lock_3'] = path_lock3
     else:
         print('    WARNING: Lock icon not found: T_icon_PalLock_3.png')
+    src_buildup = EXPORT_TEXTURES_DIR / 'UI' / 'IngameMenu' / 'T_icon_buildup.png'
+    path_buildup = copy_icon_to_resources(src_buildup, target_subdir)
+    if path_buildup:
+        ui_icons['buildup'] = path_buildup
+    else:
+        print('    WARNING: Buildup icon not found: T_icon_buildup.png')
+    src_talent = EXPORT_TEXTURES_DIR / 'UI' / 'IngameMenu' / 'T_itemicon_Accessory_TalentChecker.png'
+    if not src_talent.exists():
+        src_talent = OTHER_ICON_DIR / 'InventoryItemIcon' / 'Texture' / 'T_itemicon_Accessory_TalentChecker.png'
+    path_talent = copy_icon_to_resources(src_talent, target_subdir)
+    if path_talent:
+        ui_icons['talent_checker'] = path_talent
+    else:
+        print('    WARNING: Talent checker icon not found')
     result = {'ui_icons': ui_icons}
     save_resource_json('uidata.json', result)
     print(f'  Total UI icons: {len(ui_icons)}')

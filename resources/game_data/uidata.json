@@ -25,6 +25,8 @@
         "lock_1": "/icons/ui/T_icon_PalLock.png",
         "lock_0": "/icons/ui/T_icon_PalLock_Unlock.png",
         "lock_2": "/icons/ui/T_icon_PalLock_2.png",
-        "lock_3": "/icons/ui/T_icon_PalLock_3.png"
+        "lock_3": "/icons/ui/T_icon_PalLock_3.png",
+        "buildup": "/icons/ui/T_icon_buildup.png",
+        "talent_checker": "/icons/ui/T_itemicon_Accessory_TalentChecker.png"
     }
 }
