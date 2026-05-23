@@ -5,7 +5,7 @@ import uuid
 import threading
 from functools import partial
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QSpinBox, QComboBox, QTextEdit, QFileDialog, QGroupBox, QFormLayout, QCheckBox, QFrame, QTabWidget, QScrollArea, QWidget, QGridLayout, QListWidget, QListWidgetItem, QInputDialog, QTableWidget, QApplication, QProgressBar, QAbstractItemView, QCompleter, QGraphicsOpacityEffect, QMenu
-from PySide6.QtCore import Qt, QTimer, Signal, QPoint, QPointF, QEvent, QSize, QRect, QRectF, QEventLoop
+from PySide6.QtCore import Qt, QTimer, Signal, QPoint, QPointF, QEvent, QSize, QRect, QRectF, QThread
 from PySide6.QtWidgets import QSizePolicy
 from PySide6.QtGui import QIcon, QFont, QPixmap, QRegion, QCursor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics, QPalette, QColor, QShortcut, QKeySequence, QLinearGradient
 from i18n import t
@@ -2370,7 +2370,7 @@ class PalInfoWidget(QFrame):
             self.stat_plus_lbl.setText(f'+{soul_total}')
             rank_raw = extract_value(raw, 'Rank', 1)
             rank_int = int(rank_raw) if isinstance(rank_raw, (int, float)) else 1
-            stars = ''.join(['\u2605' if i < min(rank_int - 1, 4) else '\u2606' for i in range(4)])
+            stars = ''.join(['\u2605' if i < min(rank_int, 4) else '\u2606' for i in range(4)])
             self.star_rating.setText(stars)
             icon_path = _get_pal_icon_path(cid)
             pix = _get_cached_pixmap(icon_path, 80)
@@ -2523,8 +2523,8 @@ class PalInfoWidget(QFrame):
     def _on_star_click(self):
         if not self._raw:
             return
-        cur = int(extract_value(self._raw, 'Rank', 1))
-        new_r = cur + 1 if cur < 4 else 1
+        cur = int(extract_value(self._raw, 'Rank', 0))
+        new_r = cur + 1 if cur < 4 else 0
         self._raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': new_r}}
         self._refresh()
 
@@ -2601,9 +2601,11 @@ class PalInfoWidget(QFrame):
 
     def _show_skill_picker(self, title, skill_map, slot_idx, is_active):
         try:
+            import gc
+            gc.collect()
             popup = QWidget()
             popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-            popup.setAttribute(Qt.WA_DeleteOnClose)
+            self._popup = popup
             popup.setStyleSheet('QWidget { background: rgba(18,20,24,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
             layout = QVBoxLayout(popup)
             layout.setContentsMargins(4, 4, 4, 4)
@@ -2619,9 +2621,38 @@ class PalInfoWidget(QFrame):
             clear_item = QListWidgetItem('-- clear --')
             lst.addItem(clear_item)
             names = sorted(skill_map.values())
+            _ensure_skill_data()
             for name in names:
-                if name:
-                    lst.addItem(name)
+                if not name:
+                    continue
+                item = QListWidgetItem(name)
+                if is_active:
+                    asset = None
+                    for a, n in skill_map.items():
+                        if n == name:
+                            asset = a
+                            break
+                    if asset:
+                        key = asset.split('::')[-1].lower()
+                        info = _SKILL_DATA.get(key, {}) if isinstance(_SKILL_DATA, dict) else {}
+                        elem = info.get('element', 'Normal')
+                        pwr = info.get('power', 0)
+                        epix = _get_element_pixmap(elem, 'small', 16)
+                        if epix:
+                            item.setIcon(QIcon(epix))
+                        item.setText(f'{pwr} - {name}')
+                        item.setData(Qt.UserRole, name)
+                else:
+                    asset = None
+                    for a, n in skill_map.items():
+                        if n == name:
+                            asset = a
+                            break
+                    if asset:
+                        bg, bd, tc = PalFrame._passive_rank_color(asset.lower())
+                        item.setForeground(QColor(tc))
+                        item.setBackground(QColor(bd).darker(300))
+                lst.addItem(item)
             cur_data = self._raw.get('EquipWaza' if is_active else 'PassiveSkillList', {})
             cur_list = cur_data.get('value', {}).get('values', []) if isinstance(cur_data, dict) else (cur_data if isinstance(cur_data, list) else [])
             cur_val = cur_list[slot_idx] if slot_idx < len(cur_list) else ''
@@ -2631,7 +2662,13 @@ class PalInfoWidget(QFrame):
                 if cur_val and hasattr(cur_val, 'lower'):
                     display = skill_map.get(cur_val.lower(), cur_val)
                     for i in range(lst.count()):
-                        if lst.item(i).text() == display:
+                        item = lst.item(i)
+                        found = False
+                        if is_active:
+                            found = (item.data(Qt.UserRole) == display)
+                        else:
+                            found = (item.text() == display)
+                        if found:
                             lst.setCurrentRow(i)
                             break
             search.textChanged.connect(lambda t, l=lst: [l.item(i).setHidden(t.lower() not in l.item(i).text().lower()) for i in range(l.count())])
@@ -2642,13 +2679,19 @@ class PalInfoWidget(QFrame):
             def on_select():
                 nonlocal chosen
                 sel = lst.currentItem()
-                chosen = sel.text() if sel else None
-                popup.close()
+                chosen = None
+                if sel:
+                    if is_active and sel.data(Qt.UserRole):
+                        chosen = sel.data(Qt.UserRole)
+                    else:
+                        chosen = sel.text()
+                popup.hide()
             lst.itemDoubleClicked.connect(on_select)
             search.returnPressed.connect(on_select)
-            loop = QEventLoop()
-            popup.destroyed.connect(loop.quit)
-            loop.exec()
+            while popup.isVisible():
+                QApplication.processEvents()
+                QThread.msleep(5)
+            self._popup = None
             if not chosen:
                 return
             if chosen.startswith('--'):
@@ -2661,13 +2704,11 @@ class PalInfoWidget(QFrame):
                         break
                 if not asset:
                     return
-            if is_active:
-                self._set_active_skill(slot_idx, asset)
-            else:
-                self._set_passive_skill(slot_idx, asset)
+            QTimer.singleShot(0, lambda a=asset, s=slot_idx, ia=is_active: (self._set_active_skill(s, a) if ia else self._set_passive_skill(s, a)))
         except Exception:
             import traceback
             traceback.print_exc()
+            return
 
     def _set_active_skill(self, slot_idx, asset):
         ew_data = self._raw.get('EquipWaza', {})
