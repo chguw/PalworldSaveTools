@@ -851,10 +851,18 @@ class PalboxSlotWidget(QFrame):
                 badge.show()
                 self._children.append(badge)
         if is_awake:
-            awake_badge = QLabel('🔥', self)
-            awake_badge.setStyleSheet('font-size: 9px; background: transparent;')
-            awake_badge.setFixedSize(12, 12)
-            awake_badge.setAlignment(Qt.AlignCenter)
+            awake_pix = _get_awake_pixmap(12)
+            if awake_pix:
+                awake_badge = QLabel(self)
+                awake_badge.setPixmap(awake_pix)
+                awake_badge.setFixedSize(12, 12)
+                awake_badge.setAlignment(Qt.AlignCenter)
+                awake_badge.setStyleSheet('background: transparent; border: none;')
+            else:
+                awake_badge = QLabel('🔥', self)
+                awake_badge.setStyleSheet('font-size: 9px; background: transparent;')
+                awake_badge.setFixedSize(12, 12)
+                awake_badge.setAlignment(Qt.AlignCenter)
             awake_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
             awake_badge._slot_child_kind = 'awake'
             awake_badge.show()
@@ -1046,6 +1054,10 @@ def _get_boss_alpha_pixmap(size=14):
 def _get_boss_shiny_pixmap(size=14):
     base_dir = constants.get_base_path()
     path = os.path.join(base_dir, 'resources', 'boss_shiny.webp')
+    return _get_cached_pixmap(path, size)
+def _get_awake_pixmap(size=14):
+    base_dir = constants.get_base_path()
+    path = os.path.join(base_dir, 'resources', 'UI', 'pst_flame_icon.webp')
     return _get_cached_pixmap(path, size)
 def _get_ui_icon_pixmap(icon_key, size=16):
     data = _ensure_ui_icons_data()
@@ -1649,9 +1661,15 @@ class PalInfoWidget(QFrame):
         self.info_lucky_btn.setCursor(Qt.PointingHandCursor)
         self.info_lucky_btn.clicked.connect(self._on_lucky_toggle)
         name_row.addWidget(self.info_lucky_btn)
-        self.info_awake_btn = QPushButton('🔥')
+        self.info_awake_btn = QPushButton()
         self.info_awake_btn.setCheckable(True)
         self.info_awake_btn.setFixedSize(22, 22)
+        self.info_awake_btn.setIconSize(QSize(18, 18))
+        awake_icon = _get_awake_pixmap(18)
+        if awake_icon:
+            self.info_awake_btn.setIcon(QIcon(awake_icon))
+        else:
+            self.info_awake_btn.setText('🔥')
         self.info_awake_btn.setStyleSheet('QPushButton { background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-size: 12px; } QPushButton:checked { background: rgba(251,191,36,0.2); border-color: #FBBF24; } QPushButton:hover { background: rgba(255,255,255,0.08); }')
         self.info_awake_btn.setCursor(Qt.PointingHandCursor)
         self.info_awake_btn.clicked.connect(self._on_awake_toggle)
@@ -1781,8 +1799,13 @@ class PalInfoWidget(QFrame):
         self.awake_overlay.setFixedSize(16, 16)
         self.awake_overlay.setAlignment(Qt.AlignCenter)
         self.awake_overlay.setAttribute(Qt.WA_TranslucentBackground)
-        self.awake_overlay.setStyleSheet('font-size: 10px; background: transparent; border: none;')
-        self.awake_overlay.setText('🔥')
+        self.awake_overlay.setStyleSheet('background: transparent; border: none;')
+        awake_overlay_pix = _get_awake_pixmap(14)
+        if awake_overlay_pix:
+            self.awake_overlay.setPixmap(awake_overlay_pix)
+        else:
+            self.awake_overlay.setStyleSheet('font-size: 10px; background: transparent; border: none;')
+            self.awake_overlay.setText('🔥')
         self.awake_overlay.move(74, 74)
         self.awake_overlay.hide()
         self.rotating_circle = RotatingCircleWidget(self.bracket_wrapper)
