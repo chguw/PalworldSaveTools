@@ -5,7 +5,7 @@ import uuid
 import threading
 from functools import partial
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QSpinBox, QComboBox, QTextEdit, QFileDialog, QGroupBox, QFormLayout, QCheckBox, QFrame, QTabWidget, QScrollArea, QWidget, QGridLayout, QListWidget, QListWidgetItem, QInputDialog, QTableWidget, QApplication, QProgressBar, QAbstractItemView, QCompleter, QGraphicsOpacityEffect
-from PySide6.QtCore import Qt, QTimer, Signal, QPoint, QPointF, QEvent, QSize, QRect
+from PySide6.QtCore import Qt, QTimer, Signal, QPoint, QPointF, QEvent, QSize, QRect, QRectF
 from PySide6.QtWidgets import QSizePolicy
 from PySide6.QtGui import QIcon, QFont, QPixmap, QRegion, QCursor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics, QPalette, QColor, QShortcut, QKeySequence, QLinearGradient
 from i18n import t
@@ -178,7 +178,19 @@ def _load_pal_base_data():
         data = json_tools.load(path)
         for p in data.get('pals', []):
             a = p.get('asset', '').lower()
-            if a:
+            if not a:
+                continue
+            _PAL_BASE_DATA_CACHE[a] = p
+        for a, p in list(_PAL_BASE_DATA_CACHE.items()):
+            if p.get('elements') or 'boss_' in a:
+                continue
+            boss_key = f'boss_{a}'
+            boss_entry = _PAL_BASE_DATA_CACHE.get(boss_key)
+            if boss_entry and boss_entry.get('elements'):
+                p = dict(p)
+                p['elements'] = boss_entry['elements']
+                if boss_entry.get('stats'):
+                    p['stats'] = {**boss_entry['stats'], **p.get('stats', {})}
                 _PAL_BASE_DATA_CACHE[a] = p
         return _PAL_BASE_DATA_CACHE
     except Exception as e:
@@ -308,12 +320,19 @@ class StrokedLabel(QLabel):
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
+        rect = QRectF(0.5, 0.5, self.width() - 1, self.height() - 1)
+        bg = QColor(0, 0, 0, 180)
+        border = QColor(125, 211, 252, 64)
+        painter.setBrush(bg)
+        painter.setPen(QPen(border, 1))
+        painter.drawRoundedRect(rect, 3, 3)
         path = QPainterPath()
         font = self.font()
         pen = QPen(Qt.black, 2)
         pen.setJoinStyle(Qt.RoundJoin)
         metrics = QFontMetrics(font)
-        x = self.contentsRect().x() + 3
+        text_w = metrics.horizontalAdvance(self.text())
+        x = (self.width() - text_w) // 2
         y = (self.height() + metrics.ascent() - metrics.descent()) // 2
         path.addText(x, y, font, self.text())
         painter.strokePath(path, pen)
@@ -730,6 +749,7 @@ class PartySlotWidget(QFrame):
             pal_name = f'{nick}'
         is_boss = cid.upper().startswith('BOSS_')
         is_lucky = extract_value(raw, 'IsRarePal', False)
+        is_imported = extract_value(raw, 'bImportedCharacter', False)
         layout = QHBoxLayout(self)
         layout.setContentsMargins(6, 3, 6, 3)
         layout.setSpacing(6)
@@ -742,6 +762,13 @@ class PartySlotWidget(QFrame):
             icon_lbl.setPixmap(pix)
         icon_lbl.setStyleSheet('background: transparent; border: none;')
         layout.addWidget(icon_lbl)
+        lvl_overlay = QLabel(f'{level}', self)
+        lvl_overlay.setFixedSize(20, 12)
+        lvl_overlay.setAlignment(Qt.AlignCenter)
+        lvl_overlay.setStyleSheet('color: #7DD3FC; font-size: 9px; font-weight: bold; background: rgba(0,0,0,0.7); border: 1px solid rgba(125,211,252,0.25); border-radius: 3px;')
+        lvl_overlay.move(8, 38)
+        lvl_overlay.setAttribute(Qt.WA_TransparentForMouseEvents)
+        lvl_overlay.show()
         info = QVBoxLayout()
         info.setSpacing(1)
         name_row = QHBoxLayout()
@@ -750,13 +777,32 @@ class PartySlotWidget(QFrame):
         name_lbl.setStyleSheet('color: #E2E8F0; font-size: 12px; font-weight: 600; background: transparent;')
         name_row.addWidget(name_lbl)
         if is_boss:
-            boss_badge = QLabel('\u03b1')
-            boss_badge.setStyleSheet('color: #F59E0B; font-size: 11px; font-weight: bold; background: rgba(245,158,11,0.15); border-radius: 3px; padding: 0 4px;')
-            name_row.addWidget(boss_badge)
+            boss_pix = _get_boss_alpha_pixmap(14)
+            if boss_pix:
+                boss_badge = QLabel()
+                boss_badge.setPixmap(boss_pix)
+                boss_badge.setFixedSize(14, 14)
+                boss_badge.setAlignment(Qt.AlignCenter)
+                boss_badge.setStyleSheet('background: transparent; border: none;')
+                name_row.addWidget(boss_badge)
         elif is_lucky:
-            lucky_badge = QLabel('\u2606')
-            lucky_badge.setStyleSheet('color: #A78BFA; font-size: 12px; font-weight: bold; background: rgba(167,139,250,0.15); border-radius: 3px; padding: 0 4px;')
-            name_row.addWidget(lucky_badge)
+            shiny_pix = _get_boss_shiny_pixmap(14)
+            if shiny_pix:
+                lucky_badge = QLabel()
+                lucky_badge.setPixmap(shiny_pix)
+                lucky_badge.setFixedSize(14, 14)
+                lucky_badge.setAlignment(Qt.AlignCenter)
+                lucky_badge.setStyleSheet('background: transparent; border: none;')
+                name_row.addWidget(lucky_badge)
+        if is_imported:
+            dna_pix = _get_ui_icon_pixmap('dna', 12)
+            if dna_pix:
+                dna_icon = QLabel()
+                dna_icon.setFixedSize(14, 14)
+                dna_icon.setAlignment(Qt.AlignCenter)
+                dna_icon.setPixmap(dna_pix)
+                dna_icon.setStyleSheet('background: transparent; border: none;')
+                name_row.addWidget(dna_icon)
         base_el_data = get_pal_base_data(cid)
         if base_el_data:
             els = base_el_data.get('elements', {})
@@ -768,7 +814,6 @@ class PartySlotWidget(QFrame):
                     el_icon.setPixmap(ep)
                     el_icon.setStyleSheet('background: transparent; border: none;')
                     name_row.addWidget(el_icon)
-                break
         name_row.addStretch()
         lock_btn = QPushButton('🔓')
         lock_btn.setFixedSize(20, 20)
@@ -881,49 +926,84 @@ class PalboxSlotWidget(QFrame):
         icon_lbl.move(9, 4)
         icon_lbl.setAttribute(Qt.WA_TransparentForMouseEvents)
         icon_lbl.show()
-        self._elem_badge = QLabel(self)
-        self._elem_badge.setFixedSize(10, 10)
-        self._elem_badge.move(44, 2)
-        self._elem_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
         base_el_data = get_pal_base_data(cid)
         if base_el_data:
-            els = base_el_data.get('elements', {})
-            if els:
-                en = next(iter(els))
-                ep = _get_element_pixmap(en, 'small', 10)
+            els = list(base_el_data.get('elements', {}))
+            for ei, en in enumerate(els[:2]):
+                ep = _get_element_pixmap(en, 'small', 8 if len(els) > 1 else 10)
                 if ep:
-                    self._elem_badge.setPixmap(ep)
-        self._elem_badge.show()
-        level_lbl = StrokedLabel(f'{level}')
-        level_lbl.setStyleSheet('color: #FFFFFF; font-size: 8px; font-weight: bold; background: transparent;')
-        level_lbl.setFixedSize(16, 10)
-        level_lbl.move(3, 44)
+                    eb = QLabel(self)
+                    eb.setFixedSize(10, 10)
+                    eb.setAlignment(Qt.AlignCenter)
+                    eb.setPixmap(ep)
+                    eb.setStyleSheet('background: transparent; border: none;')
+                    eb.setAttribute(Qt.WA_TransparentForMouseEvents)
+                    eb.move(44, 2 + ei * 10)
+                    eb.show()
+        level_lbl = StrokedLabel(f'{level}', self)
+        level_lbl.setStyleSheet('color: #7DD3FC; font-size: 8px; font-weight: bold; background: rgba(0,0,0,0.7); border: 1px solid rgba(125,211,252,0.25); border-radius: 3px; padding: 0 3px;')
+        level_lbl.setFixedSize(18, 11)
+        level_lbl.move(19, 43)
         level_lbl.setAttribute(Qt.WA_TransparentForMouseEvents)
         level_lbl.show()
         if is_boss:
-            badge = QLabel('α', self)
-            badge.setStyleSheet('color: #F59E0B; font-size: 10px; font-weight: bold; background: rgba(0,0,0,0.6); border: 1px solid rgba(245,158,11,0.3); border-radius: 7px;')
-            badge.setFixedSize(14, 14)
-            badge.setAlignment(Qt.AlignCenter)
-            badge.move(3, 3)
-            badge.setAttribute(Qt.WA_TransparentForMouseEvents)
-            badge.show()
+            boss_pix = _get_boss_alpha_pixmap(14)
+            if boss_pix:
+                badge = QLabel(self)
+                badge.setPixmap(boss_pix)
+                badge.setFixedSize(14, 14)
+                badge.setAlignment(Qt.AlignCenter)
+                badge.setStyleSheet('background: transparent; border: none;')
+                badge.move(3, 3)
+                badge.setAttribute(Qt.WA_TransparentForMouseEvents)
+                badge.show()
         elif is_lucky:
-            badge = QLabel('☆', self)
-            badge.setStyleSheet('color: #A78BFA; font-size: 10px; font-weight: bold; background: rgba(0,0,0,0.6); border: 1px solid rgba(167,139,250,0.3); border-radius: 7px;')
-            badge.setFixedSize(14, 14)
-            badge.setAlignment(Qt.AlignCenter)
-            badge.move(3, 3)
-            badge.setAttribute(Qt.WA_TransparentForMouseEvents)
-            badge.show()
+            shiny_pix = _get_boss_shiny_pixmap(14)
+            if shiny_pix:
+                badge = QLabel(self)
+                badge.setPixmap(shiny_pix)
+                badge.setFixedSize(14, 14)
+                badge.setAlignment(Qt.AlignCenter)
+                badge.setStyleSheet('background: transparent; border: none;')
+                badge.move(3, 3)
+                badge.setAttribute(Qt.WA_TransparentForMouseEvents)
+                badge.show()
         if is_awake:
-            awake_badge = QLabel('🔥', self)
+            awake_badge = QLabel('\U0001F525', self)
             awake_badge.setStyleSheet('font-size: 9px; background: transparent;')
             awake_badge.setFixedSize(12, 12)
             awake_badge.setAlignment(Qt.AlignCenter)
             awake_badge.move(42, 40)
             awake_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
             awake_badge.show()
+        is_imported = extract_value(raw, 'bImportedCharacter', False)
+        if is_imported:
+            dna_pix = _get_ui_icon_pixmap('dna', 12)
+            if dna_pix:
+                dna_badge = QLabel(self)
+                dna_badge.setPixmap(dna_pix)
+                dna_badge.setFixedSize(14, 14)
+                dna_badge.setAlignment(Qt.AlignCenter)
+                dna_badge.setAttribute(Qt.WA_TranslucentBackground)
+                dna_badge.setStyleSheet('background: transparent; border: none;')
+                dna_badge.move(3, 38)
+                dna_badge.show()
+        fav_idx = extract_value(raw, 'FavoriteIndex', 0)
+        if fav_idx and int(fav_idx) > 0:
+            lock_pix = _get_ui_icon_pixmap('lock', 14)
+            if not lock_pix:
+                lock_badge = QLabel('\U0001F512', self)
+                lock_badge.setStyleSheet('font-size: 9px; color: rgba(255,255,255,0.65); background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.12); border-radius: 7px;')
+                lock_badge.setFixedSize(14, 14)
+                lock_badge.setAlignment(Qt.AlignCenter)
+            else:
+                lock_badge = QLabel(self)
+                lock_badge.setPixmap(lock_pix)
+                lock_badge.setFixedSize(14, 14)
+                lock_badge.setStyleSheet('background: transparent; border: none;')
+            lock_badge.move(21, 1)
+            lock_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
+            lock_badge.show()
         pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
         self.setToolTip(f'{pal_name} [Lv.{level}]')
         self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; } QFrame#palboxSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
@@ -1022,6 +1102,16 @@ def _ensure_ui_icons_data():
     except Exception:
         pass
     return _UI_ICONS_DATA
+
+def _get_boss_alpha_pixmap(size=14):
+    base_dir = constants.get_base_path()
+    path = os.path.join(base_dir, 'resources', 'boss_alpha.webp')
+    return _get_cached_pixmap(path, size)
+
+def _get_boss_shiny_pixmap(size=14):
+    base_dir = constants.get_base_path()
+    path = os.path.join(base_dir, 'resources', 'boss_shiny.webp')
+    return _get_cached_pixmap(path, size)
 
 def _get_ui_icon_pixmap(icon_key, size=16):
     data = _ensure_ui_icons_data()
@@ -1188,6 +1278,101 @@ class GlowRing(QFrame):
             painter.setBrush(Qt.NoBrush)
             painter.drawEllipse(QPointF(cx, cy), radius, radius)
 
+class RotatingCircleWidget(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._angle = 0.0
+        self._pixmap = None
+        base_dir = constants.get_base_path()
+        path = os.path.join(base_dir, 'resources', 'outer_frame_circle.webp')
+        self._pixmap = QPixmap(path)
+        self._timer = QTimer(self)
+        self._timer.timeout.connect(self._tick)
+        self._timer.setInterval(33)
+        self._timer.start()
+        self.setStyleSheet('background: transparent; border: none;')
+    def _tick(self):
+        self._angle = (self._angle - 1.8) % 360.0
+        self.update()
+    def paintEvent(self, event):
+        if self._pixmap.isNull():
+            return
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.SmoothPixmapTransform)
+        pw, ph = self._pixmap.width(), self._pixmap.height()
+        scaled = self._pixmap.scaled(self.width(), self.height(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        sw, sh = scaled.width(), scaled.height()
+        cx, cy = self.width() / 2.0, self.height() / 2.0
+        painter.translate(cx, cy)
+        painter.rotate(self._angle)
+        painter.drawPixmap(int(-sw / 2), int(-sh / 2), scaled)
+        painter.end()
+
+class PassiveEffectOverlay(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._anim_mode = None
+        self._phase = 0.0
+        self._timer = QTimer(self)
+        self._timer.timeout.connect(self._tick)
+        self._timer.setInterval(33)
+        self.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setStyleSheet('background: transparent; border: none;')
+        self.hide()
+    def set_mode(self, mode):
+        self._anim_mode = mode
+        self._phase = 0.0
+        if mode:
+            self._timer.start()
+            self.show()
+        else:
+            self._timer.stop()
+            self.hide()
+        self.update()
+    def _tick(self):
+        self._phase = (self._phase + 0.03) % 10000.0
+        self.update()
+    def paintEvent(self, event):
+        if not self._anim_mode:
+            return
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        w, h = self.width(), self.height()
+        painter.setClipRect(QRectF(2, 2, w - 4, h - 4).toAlignedRect())
+        if self._anim_mode == 'world_tree':
+            cols = 6
+            col_w = w / cols
+            trail_h = h * 0.55
+            cycle = h + trail_h
+            speed = h * 0.9
+            for c in range(cols):
+                cx = c * col_w + 2
+                head_y = (self._phase * speed + c * h * 0.18) % cycle
+                for i in range(15):
+                    y = head_y - i * 5.5
+                    if y < 0:
+                        y += cycle
+                    if 0 <= y < h:
+                        alpha = max(0, 160 - i * 13)
+                        painter.fillRect(QRectF(cx, y, col_w - 3, 2.2), QColor(168, 85, 247, alpha))
+                for i in range(4):
+                    y = head_y + i * 3.5
+                    if y >= cycle:
+                        y -= cycle
+                    if 0 <= y < h:
+                        alpha = 180 - i * 45
+                        painter.fillRect(QRectF(cx, y, col_w - 3, 2.2), QColor(192, 132, 252, alpha))
+        elif self._anim_mode == 'legend':
+            sweep_x = (self._phase * 1.04 * w) % (w * 1.4) - w * 0.2
+            grad = QLinearGradient(sweep_x, 0, sweep_x + w * 0.35, 0)
+            grad.setColorAt(0, QColor(125, 211, 252, 0))
+            grad.setColorAt(0.5, QColor(125, 211, 252, 50))
+            grad.setColorAt(1, QColor(125, 211, 252, 0))
+            painter.fillRect(QRectF(0, 0, w, h), grad)
+        painter.end()
+
 class PalInfoWidget(QFrame):
     _ELEMENT_MAP = {
         'Normal': ('\u26AA', '#9CA3AF'), 'Fire': ('\U0001F525', '#EF4444'),
@@ -1291,12 +1476,24 @@ class PalInfoWidget(QFrame):
             parent_frame = s.parentWidget()
             if parent_frame and parent_frame.objectName() == 'passiveCard':
                 parent_frame.setStyleSheet('QFrame#passiveCard { background: rgba(255,255,255,0.03); border: none; border-radius: 4px; }')
+        for i in range(len(self.passive_cards)):
+            self._set_passive_overlay(i, None)
         self.star_rating.setText('\u2606\u2606\u2606\u2606')
         self.stat_plus_lbl.setText('--')
         self.portrait_icon.clear()
         self.dna_overlay.hide()
         self.lock_overlay.hide()
+        self.boss_overlay.hide()
+        self.lucky_overlay.hide()
+        self.awake_overlay.hide()
         self.portrait_ring.set_awakened(False)
+    def _set_passive_overlay(self, index, mode):
+        if index >= len(self.passive_cards) or index >= len(self.passive_overlays):
+            return
+        card = self.passive_cards[index]
+        overlay = self.passive_overlays[index]
+        overlay.setGeometry(0, 0, card.width(), card.height())
+        overlay.set_mode(mode)
     def _build(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -1471,6 +1668,33 @@ class PalInfoWidget(QFrame):
         self.lock_overlay.setText('\U0001F512')
         self.lock_overlay.move(74, 6)
         self.lock_overlay.hide()
+        self.boss_overlay = QLabel(self.bracket_wrapper)
+        self.boss_overlay.setFixedSize(16, 16)
+        self.boss_overlay.setAlignment(Qt.AlignCenter)
+        self.boss_overlay.setAttribute(Qt.WA_TranslucentBackground)
+        self.boss_overlay.setStyleSheet('background: transparent; border: none;')
+        self.boss_overlay.move(6, 6)
+        self.boss_overlay.hide()
+        self.lucky_overlay = QLabel(self.bracket_wrapper)
+        self.lucky_overlay.setFixedSize(16, 16)
+        self.lucky_overlay.setAlignment(Qt.AlignCenter)
+        self.lucky_overlay.setAttribute(Qt.WA_TranslucentBackground)
+        self.lucky_overlay.setStyleSheet('background: transparent; border: none;')
+        self.lucky_overlay.move(6, 6)
+        self.lucky_overlay.hide()
+        self.awake_overlay = QLabel(self.bracket_wrapper)
+        self.awake_overlay.setFixedSize(16, 16)
+        self.awake_overlay.setAlignment(Qt.AlignCenter)
+        self.awake_overlay.setAttribute(Qt.WA_TranslucentBackground)
+        self.awake_overlay.setStyleSheet('font-size: 10px; background: transparent; border: none;')
+        self.awake_overlay.setText('\U0001F525')
+        self.awake_overlay.move(74, 74)
+        self.awake_overlay.hide()
+        self.rotating_circle = RotatingCircleWidget(self.bracket_wrapper)
+        self.rotating_circle.setFixedSize(96, 96)
+        self.rotating_circle.move(0, 0)
+        self.rotating_circle.show()
+        self.rotating_circle.lower()
         pf_layout.addWidget(self.bracket_wrapper, 0, Qt.AlignCenter)
         left_layout.addWidget(portrait_frame, 0, Qt.AlignCenter)
         self.stat_plus_lbl = QLabel('+60')
@@ -1753,6 +1977,7 @@ class PalInfoWidget(QFrame):
         default_bg = PalFrame._RANK_COLORS[1][0]
         placeholder_names = ['Runner', 'Swift', 'Legend', 'Surge of the World Tree']
         self.passive_slots = []
+        self.passive_cards = []
         for i, pname in enumerate(placeholder_names):
             card = QFrame()
             card.setObjectName('passiveCard')
@@ -1769,6 +1994,12 @@ class PalInfoWidget(QFrame):
             row, col = i // 2, i % 2
             pg_layout.addWidget(card, row, col)
             self.passive_slots.append(plbl)
+            self.passive_cards.append(card)
+        self.passive_overlays = []
+        for i, card in enumerate(self.passive_cards):
+            overlay = PassiveEffectOverlay(card)
+            self.passive_overlays.append(overlay)
+        so_layout.addWidget(pg)
         so_layout.addWidget(pg)
         parent.addWidget(skill_outer)
     def _update_display(self, pal_data):
@@ -1830,18 +2061,6 @@ class PalInfoWidget(QFrame):
                             badge.setAlignment(Qt.AlignCenter)
                             badge.setStyleSheet(f'font-size: 11px; font-weight: bold; color: {elem_color}; background: transparent; border: 1px solid {elem_color}40; border-radius: 8px;')
                         self.type_icons_layout.addWidget(badge)
-                else:
-                    dud = QLabel('\u2606')
-                    dud.setFixedSize(16, 16)
-                    dud.setAlignment(Qt.AlignCenter)
-                    dud.setStyleSheet('font-size: 11px; font-weight: bold; color: #A78BFA; background: transparent; border-radius: 8px; border: 1px solid rgba(167,139,250,0.2);')
-                    self.type_icons_layout.addWidget(dud)
-            else:
-                dud = QLabel('\u2606')
-                dud.setFixedSize(16, 16)
-                dud.setAlignment(Qt.AlignCenter)
-                dud.setStyleSheet('font-size: 11px; font-weight: bold; color: #A78BFA; background: transparent; border-radius: 8px; border: 1px solid rgba(167,139,250,0.2);')
-                self.type_icons_layout.addWidget(dud)
             talent_hp = extract_value(raw, 'Talent_HP', 0)
             rank_hp = extract_value(raw, 'Rank_HP', 0)
             is_boss = cid.upper().startswith('BOSS_')
@@ -1948,7 +2167,23 @@ class PalInfoWidget(QFrame):
                 self.dna_overlay.show()
             else:
                 self.dna_overlay.hide()
+            if is_boss:
+                bp = _get_boss_alpha_pixmap(16)
+                if bp:
+                    self.boss_overlay.setPixmap(bp)
+                self.boss_overlay.show()
+                self.lucky_overlay.hide()
+            elif is_lucky:
+                sp = _get_boss_shiny_pixmap(16)
+                if sp:
+                    self.lucky_overlay.setPixmap(sp)
+                self.lucky_overlay.show()
+                self.boss_overlay.hide()
+            else:
+                self.boss_overlay.hide()
+                self.lucky_overlay.hide()
             is_awakening = extract_value(raw, 'bIsAwakening', False)
+            self.awake_overlay.setVisible(bool(is_awakening))
             if fav_idx and int(fav_idx) > 0:
                 self.lock_overlay.show()
             else:
@@ -2027,15 +2262,24 @@ class PalInfoWidget(QFrame):
                 tc = 'rgba(255,255,255,0.3)'
                 bg = 'rgba(255,255,255,0.03)'
                 bd = 'rgba(255,255,255,0.06)'
+                anim_mode = None
                 if i < len(p_list) and p_list[i]:
                     p_clean = p_list[i].lower()
                     display_name = PalFrame._PASSMAP.get(p_clean, p_list[i])
                     bg, bd, tc = PalFrame._passive_rank_color(p_clean)
+                    rank = PalFrame._PASSRANK.get(p_clean, 1)
+                    is_world_tree = 'world' in display_name.lower() and 'tree' in display_name.lower()
+                    if is_world_tree:
+                        anim_mode = 'world_tree'
+                    elif rank >= 4:
+                        anim_mode = 'legend'
                 self.passive_slots[i].setText(display_name)
                 self.passive_slots[i].setStyleSheet(f'font-size: 9px; font-weight: 700; color: {tc}; background: transparent; border: none;')
                 parent_frame = self.passive_slots[i].parentWidget()
                 if parent_frame and parent_frame.objectName() == 'passiveCard':
                     parent_frame.setStyleSheet(f'QFrame#passiveCard {{ background: {bg}; border: 1.5px solid {bd}; border-radius: 4px; padding: 3px 6px; }}')
+                if i < len(self.passive_cards):
+                    self._set_passive_overlay(i, anim_mode)
             self.partner_name_lbl.setText(pal_name)
             self.partner_lvl_lbl.setText(f'Lv {level}')
             self.partner_desc_lbl.setText(f'Partner skill for {pal_name}. Effects scale with level.')
