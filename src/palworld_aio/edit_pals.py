@@ -1483,10 +1483,10 @@ class PalInfoWidget(QFrame):
             val_lbl.setText('')
             val_lbl.setStyleSheet('font-size: 8px; font-weight: 700; color: transparent; background: transparent; border: none;')
             val_badge.setStyleSheet('background: transparent; border: none;')
-        gender_def = _get_ui_icon_pixmap('gender_female', 14)
+        gender_def = _get_ui_icon_pixmap('gender_female', 18)
         if gender_def:
-            self.gender_icon.setPixmap(gender_def)
-        self.gender_icon.setStyleSheet('background: transparent; border-radius: 8px; border: 1px solid rgba(251,113,133,0.2);')
+            self.gender_icon.setIcon(QIcon(gender_def))
+        self.gender_icon.setStyleSheet('QPushButton { background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; } QPushButton:hover { background: rgba(255,255,255,0.08); }')
         while self.type_icons_layout.count():
             item = self.type_icons_layout.takeAt(0)
             if item and item.widget():
@@ -1595,6 +1595,7 @@ class PalInfoWidget(QFrame):
         hrow = QHBoxLayout()
         hrow.setContentsMargins(0, 0, 0, 0)
         hrow.setSpacing(4)
+        hrow.setAlignment(Qt.AlignRight)
         level_box = CornerBracketWidget('#7DD3FC')
         lv_layout = QVBoxLayout(level_box)
         lv_layout.setContentsMargins(4, 5, 4, 4)
@@ -1612,36 +1613,38 @@ class PalInfoWidget(QFrame):
         hrow.addWidget(level_box)
         name_col = QWidget()
         name_col.setStyleSheet('background: transparent; border: none;')
+        name_col.setMinimumWidth(180)
+        name_col.setMaximumWidth(350)
         nc_layout = QVBoxLayout(name_col)
         nc_layout.setContentsMargins(0, 0, 0, 0)
         nc_layout.setSpacing(0)
-        name_row = QHBoxLayout()
-        name_row.setContentsMargins(0, 0, 0, 0)
-        name_row.setSpacing(4)
         self.name_lbl = QLabel('Gobfinned')
-        self.name_lbl.setStyleSheet('font-size: 14px; font-weight: 700; color: #FFFFFF; background: transparent; border: none;')
+        self.name_lbl.setStyleSheet('font-size: 14px; font-weight: 700; color: #FFFFFF; background: transparent; border: none; qproperty-alignment: AlignRight;')
         self.name_lbl.setCursor(Qt.PointingHandCursor)
+        self.name_lbl.setWordWrap(True)
+        self.name_lbl.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.name_lbl.installEventFilter(self)
-        name_row.addWidget(self.name_lbl)
-        self.gender_icon = QLabel()
-        self.gender_icon.setFixedSize(16, 16)
-        self.gender_icon.setAlignment(Qt.AlignCenter)
-        self.gender_icon.setAttribute(Qt.WA_TranslucentBackground)
-        self.gender_icon.setCursor(Qt.PointingHandCursor)
-        self.gender_icon.installEventFilter(self)
-        gender_def = _get_ui_icon_pixmap('gender_female', 14)
-        if gender_def:
-            self.gender_icon.setPixmap(gender_def)
-        self.gender_icon.setStyleSheet('background: transparent; border-radius: 8px; border: 1px solid rgba(251,113,133,0.2);')
-        name_row.addWidget(self.gender_icon)
+        nc_layout.addWidget(self.name_lbl)
         self.type_icons_container = QWidget()
         self.type_icons_container.setStyleSheet('background: transparent; border: none;')
         self.type_icons_layout = QHBoxLayout(self.type_icons_container)
         self.type_icons_layout.setContentsMargins(0, 0, 0, 0)
         self.type_icons_layout.setSpacing(2)
-        self.type_icons_layout.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        name_row.addWidget(self.type_icons_container)
+        self.type_icons_layout.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        name_row = QHBoxLayout()
+        name_row.setContentsMargins(0, 0, 0, 0)
+        name_row.setSpacing(4)
         name_row.addStretch()
+        self.gender_icon = QPushButton()
+        self.gender_icon.setFixedSize(22, 22)
+        self.gender_icon.setIconSize(QSize(18, 18))
+        gender_def = _get_ui_icon_pixmap('gender_female', 18)
+        if gender_def:
+            self.gender_icon.setIcon(QIcon(gender_def))
+        self.gender_icon.setStyleSheet('QPushButton { background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; } QPushButton:hover { background: rgba(255,255,255,0.08); }')
+        self.gender_icon.setCursor(Qt.PointingHandCursor)
+        self.gender_icon.clicked.connect(self._on_gender_click)
+        name_row.addWidget(self.gender_icon)
         base_dir = constants.get_base_path()
         self.info_boss_btn = QPushButton()
         self.info_boss_btn.setIcon(QIcon(os.path.join(base_dir, 'resources', 'boss_alpha.webp')))
@@ -1703,8 +1706,9 @@ class PalInfoWidget(QFrame):
         self.next_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #E2E8F0; background: transparent; border: none;')
         next_row.addWidget(self.next_lbl)
         next_row.addStretch()
+        next_row.addWidget(self.type_icons_container)
         nc_layout.addLayout(next_row)
-        hrow.addWidget(name_col, 1)
+        hrow.addWidget(name_col)
         header_layout = QVBoxLayout(header)
         header_layout.setContentsMargins(0, 0, 0, 0)
         header_layout.setSpacing(1)
@@ -2232,12 +2236,10 @@ class PalInfoWidget(QFrame):
             nick = extract_value(raw, 'NickName', '')
             pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
             if nick:
-                full = f'{nick} ({pal_name})'
+                full = nick
             else:
                 full = pal_name
-            display_name = full[:6] + ('…' if len(full) > 6 else '')
-            self.name_lbl.setText(display_name)
-            self.name_lbl.setToolTip(full)
+            self.name_lbl.setText(full)
             self.level_num_lbl.setText(str(level))
             gender_data = extract_value(raw, 'Gender', {})
             if isinstance(gender_data, dict) and 'value' in gender_data:
@@ -2249,10 +2251,9 @@ class PalInfoWidget(QFrame):
             is_male = 'Male' in gender
             gender_key = 'gender_male' if is_male else 'gender_female'
             gender_color = '#7DD3FC' if is_male else '#FB7185'
-            gender_pix = _get_ui_icon_pixmap(gender_key, 14)
+            gender_pix = _get_ui_icon_pixmap(gender_key, 18)
             if gender_pix:
-                self.gender_icon.setPixmap(gender_pix)
-            self.gender_icon.setStyleSheet(f'background: transparent; border-radius: 8px; border: 1px solid {gender_color}40;')
+                self.gender_icon.setIcon(QIcon(gender_pix))
             base = get_pal_base_data(cid)
             while self.type_icons_layout.count():
                 item = self.type_icons_layout.takeAt(0)
@@ -2574,9 +2575,6 @@ class PalInfoWidget(QFrame):
         if event.type() == QEvent.Type.MouseButtonPress and event.button() == Qt.LeftButton:
             if obj is self.name_lbl:
                 self._on_name_click()
-                return True
-            if obj is self.gender_icon:
-                self._on_gender_click()
                 return True
             if obj is self.star_container:
                 self._on_star_click()
@@ -3617,6 +3615,7 @@ class PalFrame(QFrame):
         cls._PASSMAP = {k: v for k, v in cls._PASSMAP.items() if not any((exc in v.lower() for exc in skill_exclusions))}
         pal_exclusions = ['en_text', 'en text', 'blackfurdragon', 'eleclion', 'darkmutant', 'gym']
         cls._NAMEMAP = {k: v for k, v in cls._NAMEMAP.items() if not any((exc in v.lower() for exc in pal_exclusions)) and (not k.lower().startswith('raid_')) and (not '_oilrig' in k.lower()) and (not 'summon_' in k.lower()) and (not (k.lower().startswith('boss_') and k.lower() in v.lower())) and (not k.lower() in ['blackfurdragon', 'eleclion', 'darkmutant', 'boss_blackfurdragon', 'boss_eleclion', 'boss_darkmutant'])}
+        cls._NAMEMAP = {k: v.replace(' (Boss)', '') for k, v in cls._NAMEMAP.items()}
         cls._maps_loaded = True
     def __init__(self, pal_item, parent=None):
         super().__init__(parent)
@@ -3707,7 +3706,7 @@ class PalFrame(QFrame):
             nick = extract_value(raw, 'NickName', '')
             pal_name = resolve_name(cid, self._NAMEMAP) or cid
             if nick:
-                pal_name = f'{pal_name}({nick})'
+                pal_name = nick
             self.name_label.setText(pal_name)
             self.name_label.repaint()
             self.repaint()
