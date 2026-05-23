@@ -809,7 +809,7 @@ class PalboxSlotWidget(QFrame):
         self.slot_index = slot_index
         self.selected = False
         self.setObjectName('palboxSlot')
-        self.setFixedSize(80, 80)
+        self.setFixedSize(56, 56)
         self.setCursor(Qt.PointingHandCursor)
         self.setMouseTracking(True)
         self._build()
@@ -851,7 +851,7 @@ class PalboxSlotWidget(QFrame):
             child.deleteLater()
         raw = self._get_raw()
         if not raw or not isinstance(raw, dict):
-            self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; }')
+            self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; }')
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
@@ -859,62 +859,62 @@ class PalboxSlotWidget(QFrame):
         is_lucky = extract_value(raw, 'IsRarePal', False)
         is_awake = extract_value(raw, 'bIsAwakening', False)
         icon_path = _get_pal_icon_path(cid)
-        pix = _get_cached_pixmap(icon_path, 56)
+        pix = _get_cached_pixmap(icon_path, 38)
         icon_lbl = QLabel(self)
-        icon_lbl.setFixedSize(56, 56)
+        icon_lbl.setFixedSize(38, 38)
         icon_lbl.setAlignment(Qt.AlignCenter)
         if pix:
             icon_lbl.setPixmap(pix)
         icon_lbl.setStyleSheet('background: transparent; border: none;')
-        icon_lbl.move(12, 6)
+        icon_lbl.move(9, 4)
         icon_lbl.setAttribute(Qt.WA_TransparentForMouseEvents)
         icon_lbl.show()
         self._elem_badge = QLabel(self)
-        self._elem_badge.setFixedSize(14, 14)
-        self._elem_badge.move(62, 4)
+        self._elem_badge.setFixedSize(10, 10)
+        self._elem_badge.move(44, 2)
         self._elem_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
         base_el_data = get_pal_base_data(cid)
         if base_el_data:
             els = base_el_data.get('elements', {})
             if els:
                 en = next(iter(els))
-                ep = _get_element_pixmap(en, 'small', 14)
+                ep = _get_element_pixmap(en, 'small', 10)
                 if ep:
                     self._elem_badge.setPixmap(ep)
         self._elem_badge.show()
         level_lbl = StrokedLabel(f'{level}')
-        level_lbl.setStyleSheet('color: #FFFFFF; font-size: 10px; font-weight: bold; background: transparent;')
-        level_lbl.setFixedSize(24, 14)
-        level_lbl.move(4, 64)
+        level_lbl.setStyleSheet('color: #FFFFFF; font-size: 8px; font-weight: bold; background: transparent;')
+        level_lbl.setFixedSize(16, 10)
+        level_lbl.move(3, 44)
         level_lbl.setAttribute(Qt.WA_TransparentForMouseEvents)
         level_lbl.show()
         if is_boss:
             badge = QLabel('α', self)
-            badge.setStyleSheet('color: #F59E0B; font-size: 13px; font-weight: bold; background: rgba(0,0,0,0.6); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px;')
-            badge.setFixedSize(18, 18)
+            badge.setStyleSheet('color: #F59E0B; font-size: 10px; font-weight: bold; background: rgba(0,0,0,0.6); border: 1px solid rgba(245,158,11,0.3); border-radius: 7px;')
+            badge.setFixedSize(14, 14)
             badge.setAlignment(Qt.AlignCenter)
-            badge.move(4, 4)
+            badge.move(3, 3)
             badge.setAttribute(Qt.WA_TransparentForMouseEvents)
             badge.show()
         elif is_lucky:
             badge = QLabel('☆', self)
-            badge.setStyleSheet('color: #A78BFA; font-size: 14px; font-weight: bold; background: rgba(0,0,0,0.6); border: 1px solid rgba(167,139,250,0.3); border-radius: 8px;')
-            badge.setFixedSize(18, 18)
+            badge.setStyleSheet('color: #A78BFA; font-size: 10px; font-weight: bold; background: rgba(0,0,0,0.6); border: 1px solid rgba(167,139,250,0.3); border-radius: 7px;')
+            badge.setFixedSize(14, 14)
             badge.setAlignment(Qt.AlignCenter)
-            badge.move(4, 4)
+            badge.move(3, 3)
             badge.setAttribute(Qt.WA_TransparentForMouseEvents)
             badge.show()
         if is_awake:
             awake_badge = QLabel('🔥', self)
-            awake_badge.setStyleSheet('font-size: 12px; background: transparent;')
-            awake_badge.setFixedSize(16, 16)
+            awake_badge.setStyleSheet('font-size: 9px; background: transparent;')
+            awake_badge.setFixedSize(12, 12)
             awake_badge.setAlignment(Qt.AlignCenter)
-            awake_badge.move(60, 60)
+            awake_badge.move(42, 40)
             awake_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
             awake_badge.show()
         pal_name = resolve_name(cid, PalFrame._NAMEMAP) or cid
         self.setToolTip(f'{pal_name} [Lv.{level}]')
-        self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; } QFrame#palboxSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+        self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; } QFrame#palboxSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
     def set_selected(self, selected):
         self.selected = selected
         if selected:
@@ -2233,8 +2233,8 @@ class PalEditorWidget(QWidget):
         party_panel.setObjectName('partyPanel')
         party_panel.setFixedWidth(240)
         party_layout = QVBoxLayout(party_panel)
-        party_layout.setContentsMargins(6, 6, 6, 6)
-        party_layout.setSpacing(4)
+        party_layout.setContentsMargins(6, 6, 6, 110)
+        party_layout.setSpacing(28)
         party_header = QLabel('PARTY')
         party_header.setStyleSheet('font-size: 12px; font-weight: 700; color: #7DD3FC; letter-spacing: 2px; border-bottom: 1px solid rgba(125,211,252,0.12); padding-bottom: 4px;')
         party_layout.addWidget(party_header)
@@ -2280,19 +2280,24 @@ class PalEditorWidget(QWidget):
         header_row.addWidget(self.sort_btn)
         palbox_layout.addLayout(header_row)
         self.grid_scroll = QScrollArea()
-        self.grid_scroll.setWidgetResizable(True)
+        self.grid_scroll.setWidgetResizable(False)
         self.grid_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.grid_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.grid_scroll.setStyleSheet('QScrollArea { background: transparent; border: none; } QScrollBar:vertical { width: 6px; background: rgba(255,255,255,0.03); border-radius: 3px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.2); border-radius: 3px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.4); } QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }')
         self.grid_scroll.viewport().installEventFilter(self)
         grid_container = QWidget()
+        grid_container.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.grid_layout = QGridLayout(grid_container)
-        self.grid_layout.setSpacing(4)
-        self.grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.grid_layout.setHorizontalSpacing(2)
+        self.grid_layout.setVerticalSpacing(30)
+        self.grid_layout.setContentsMargins(0, 0, 0, 30)
         self.palbox_slots = []
-        for row in range(6):
-            for col in range(5):
-                idx = row * 5 + col
+        for row in range(5):
+            self.grid_layout.setRowStretch(row, 0)
+            for col in range(6):
+                if row == 0:
+                    self.grid_layout.setColumnStretch(col, 0)
+                idx = row * 6 + col
                 slot = PalboxSlotWidget(None, idx)
                 slot.clicked.connect(partial(self._on_palbox_slot_clicked, idx))
                 slot.rightClicked.connect(self._on_slot_right_clicked)
@@ -2309,13 +2314,17 @@ class PalEditorWidget(QWidget):
     def _prev_box(self):
         if self.current_box_index > 1:
             self.current_box_index -= 1
-            self.box_label.setText(f'Box {self.current_box_index}')
-            self._update_palbox_page()
+        else:
+            self.current_box_index = 32
+        self.box_label.setText(f'Box {self.current_box_index}')
+        self._update_palbox_page()
     def _next_box(self):
         if self.current_box_index < 32:
             self.current_box_index += 1
-            self.box_label.setText(f'Box {self.current_box_index}')
-            self._update_palbox_page()
+        else:
+            self.current_box_index = 1
+        self.box_label.setText(f'Box {self.current_box_index}')
+        self._update_palbox_page()
     def _open_search(self):
         dlg = SearchSortDialog(mode='search', parent=self)
         if dlg.exec() == QDialog.Accepted:
