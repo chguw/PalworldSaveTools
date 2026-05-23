@@ -59,10 +59,13 @@ class DetachedStatusWindow(QWidget):
         self.fade_animation.start()
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self._drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
+            if sys.platform == 'linux':
+                self.windowHandle().startSystemMove()
+            else:
+                self._drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
             event.accept()
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
+        if sys.platform != 'linux' and event.buttons() == Qt.LeftButton:
             self.move(event.globalPosition().toPoint() - self._drag_pos)
             event.accept()
     def save_geometry(self):
@@ -793,14 +796,17 @@ class MainWindow(QMainWindow):
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             if hasattr(self, 'header_widget') and self.header_widget.underMouse():
-                self.drag_position = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
+                if sys.platform == 'linux':
+                    self.windowHandle().startSystemMove()
+                else:
+                    self.drag_position = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
                 event.accept()
             else:
                 super().mousePressEvent(event)
         else:
             super().mousePressEvent(event)
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton and hasattr(self, 'drag_position'):
+        if sys.platform != 'linux' and event.buttons() == Qt.LeftButton and hasattr(self, 'drag_position'):
             self.move(event.globalPosition().toPoint() - self.drag_position)
             event.accept()
         else:

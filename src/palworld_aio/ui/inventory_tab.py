@@ -668,14 +668,7 @@ class PlayerInventoryTab(QWidget):
         header.addStretch()
         self.player_select_btn = QPushButton(t('inventory.select_player', default='Select Player...'))
         self.player_select_btn.setFixedWidth(220)
-        self.player_select_btn.setStyleSheet('''
-            QPushButton {
-                background: rgba(255,255,255,0.06); color: #e2e8f0;
-                border: 1px solid rgba(125,211,252,0.2); border-radius: 4px;
-                padding: 4px 8px; font-size: 12px; text-align: left;
-            }
-            QPushButton:hover { background: rgba(59,142,208,0.2); }
-        ''')
+        self.player_select_btn.setStyleSheet('\n            QPushButton {\n                background: rgba(255,255,255,0.06); color: #e2e8f0;\n                border: 1px solid rgba(125,211,252,0.2); border-radius: 4px;\n                padding: 4px 8px; font-size: 12px; text-align: left;\n            }\n            QPushButton:hover { background: rgba(59,142,208,0.2); }\n        ')
         self.player_select_btn.clicked.connect(self._open_player_popup)
         header.addWidget(self.player_select_btn)
         main_layout.addLayout(header)

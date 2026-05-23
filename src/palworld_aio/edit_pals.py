@@ -532,10 +532,18 @@ class PartySlotWidget(QFrame):
         self.slot_index = slot_index
         self.selected = False
         self.setObjectName('partySlot')
-        self.setFixedHeight(72)
+        self.setMinimumHeight(72)
+        self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         self.setCursor(Qt.PointingHandCursor)
         self.setMouseTracking(True)
+        self._lvl_overlay = None
         self._build()
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if self._lvl_overlay and not self._lvl_overlay.isHidden():
+            w = self.width()
+            lvl_w = self._lvl_overlay.width()
+            self._lvl_overlay.move(8, self.height() - 14)
     def enterEvent(self, event):
         self.entered.emit()
         super().enterEvent(event)
@@ -609,9 +617,10 @@ class PartySlotWidget(QFrame):
         lvl_overlay.setFixedSize(20, 12)
         lvl_overlay.setAlignment(Qt.AlignCenter)
         lvl_overlay.setStyleSheet('color: #7DD3FC; font-size: 9px; font-weight: bold; background: rgba(0,0,0,0.7); border: 1px solid rgba(125,211,252,0.25); border-radius: 3px;')
-        lvl_overlay.move(8, 38)
+        lvl_overlay.move(8, self.height() - 14)
         lvl_overlay.setAttribute(Qt.WA_TransparentForMouseEvents)
         lvl_overlay.show()
+        self._lvl_overlay = lvl_overlay
         info = QVBoxLayout()
         info.setSpacing(1)
         name_row = QHBoxLayout()
@@ -2935,8 +2944,8 @@ class PalEditorWidget(QWidget):
         party_panel.setObjectName('partyPanel')
         party_panel.setFixedWidth(240)
         party_layout = QVBoxLayout(party_panel)
-        party_layout.setContentsMargins(6, 6, 6, 110)
-        party_layout.setSpacing(28)
+        party_layout.setContentsMargins(6, 6, 6, 6)
+        party_layout.setSpacing(4)
         party_header = QLabel('PARTY')
         party_header.setStyleSheet('font-size: 12px; font-weight: 700; color: #7DD3FC; letter-spacing: 2px; border-bottom: 1px solid rgba(125,211,252,0.12); padding-bottom: 4px;')
         party_layout.addWidget(party_header)
@@ -2949,7 +2958,6 @@ class PalEditorWidget(QWidget):
             slot.left.connect(self._on_party_slot_left)
             party_layout.addWidget(slot)
             self.party_slots.append(slot)
-        party_layout.addStretch()
         root.addWidget(party_panel)
         palbox_panel = QWidget()
         palbox_panel.setObjectName('palboxPanel')

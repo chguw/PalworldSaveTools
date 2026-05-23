@@ -105,10 +105,13 @@ if '--spawn-loader' in sys.argv:
                 self.raise_()
         def mousePressEvent(self, event):
             if event.button() == Qt.LeftButton:
-                self._drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
+                if sys.platform == 'linux':
+                    self.windowHandle().startSystemMove()
+                else:
+                    self._drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
                 event.accept()
         def mouseMoveEvent(self, event):
-            if event.buttons() == Qt.LeftButton:
+            if sys.platform != 'linux' and event.buttons() == Qt.LeftButton:
                 self.move(event.globalPosition().toPoint() - self._drag_pos)
                 event.accept()
         def _load_theme_pref(self):
