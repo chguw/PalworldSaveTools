@@ -702,6 +702,9 @@ class PartySlotWidget(QFrame):
         except Exception:
             return None
     def _build(self):
+        old_layout = self.layout()
+        if old_layout:
+            QWidget().setLayout(old_layout)
         for child in self.findChildren(QWidget):
             child.deleteLater()
         raw = self._get_raw()
@@ -847,6 +850,9 @@ class PalboxSlotWidget(QFrame):
         except Exception:
             return None
     def _build(self):
+        old_layout = self.layout()
+        if old_layout:
+            QWidget().setLayout(old_layout)
         for child in self.findChildren(QWidget):
             child.deleteLater()
         raw = self._get_raw()
@@ -2364,18 +2370,15 @@ class PalEditorWidget(QWidget):
     def _on_palbox_slot_left(self):
         self.pal_info.clear_hover()
     def _on_slot_right_clicked(self, slot_index, action):
-        if self.selected_pal_slot:
-            tab_name = self.selected_pal_slot[0]
-        elif hasattr(self, '_last_right_click_tab'):
-            tab_name = self._last_right_click_tab
-        else:
-            tab_name = 'palbox'
+        sender = self.sender()
+        is_party = sender in self.party_slots
         if action == 'delete':
-            self._delete_pal_at_slot(slot_index)
+            self._delete_pal_at_slot(slot_index, is_party)
         elif action == 'add_new':
             self._add_new_pal_at_slot(slot_index)
-    def _delete_pal_at_slot(self, slot_index):
-        is_party = self.selected_pal_slot and self.selected_pal_slot[0] == 'party'
+    def _delete_pal_at_slot(self, slot_index, is_party=None):
+        if is_party is None:
+            is_party = self.selected_pal_slot and self.selected_pal_slot[0] == 'party'
         if is_party:
             if slot_index < len(self.party_pals):
                 pal = self.party_pals[slot_index]
