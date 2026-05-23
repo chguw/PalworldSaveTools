@@ -12,7 +12,7 @@ from loading_manager import show_information, show_warning, show_question
 import nerdfont as nf
 from palworld_aio import constants
 from palworld_aio.utils import sav_to_json, sav_to_gvasfile, gvasfile_to_sav, extract_value, format_character_key, json_to_sav, calculate_max_hp, get_pal_data, safe_dict_get, safe_nested_get, resolve_name
-_PAL_STYLESHEET = '\nQWidget#palRoot {\n    background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,\n        stop:0 rgba(8,10,16,0.98),stop:0.5 rgba(6,12,20,0.98),stop:1 rgba(4,8,16,0.98));\n}\nQWidget#partyPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#partyPanel QLabel {\n    color: #C8D8E8;\n}\nQWidget#palboxPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#palInfoPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#palInfoPanel QLabel {\n    color: #C8D8E8;\n}\nQLabel#boxHeader {\n    font-size: 18px;\n    font-weight: 700;\n    color: #7DD3FC;\n    padding: 4px 8px;\n    background: rgba(125,211,252,0.06);\n    border-radius: 4px;\n}\nQPushButton#navBtn {\n    background: rgba(125,211,252,0.08);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 14px;\n    font-size: 14px;\n    font-weight: 600;\n    min-width: 32px;\n}\nQPushButton#navBtn:hover {\n    background: rgba(125,211,252,0.18);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}\nQPushButton#navBtn:pressed {\n    background: rgba(125,211,252,0.1);\n}\nQPushButton#searchBtn {\n    background: rgba(167,139,250,0.12);\n    color: #A78BFA;\n    border: 1px solid rgba(167,139,250,0.2);\n    border-radius: 6px;\n    padding: 6px 16px;\n    font-size: 12px;\n    font-weight: 600;\n}\nQPushButton#searchBtn:hover {\n    background: rgba(167,139,250,0.22);\n    border-color: rgba(167,139,250,0.4);\n    color: #FFFFFF;\n}\nQPushButton#sortBtn {\n    background: rgba(245,158,11,0.12);\n    color: #F59E0B;\n    border: 1px solid rgba(245,158,11,0.2);\n    border-radius: 6px;\n    padding: 6px 16px;\n    font-size: 12px;\n    font-weight: 600;\n}\nQPushButton#sortBtn:hover {\n    background: rgba(245,158,11,0.22);\n    border-color: rgba(245,158,11,0.4);\n    color: #FFFFFF;\n}\nQLabel#palNameBig {\n    font-size: 20px;\n    font-weight: 700;\n    color: #FFFFFF;\n}\nQLabel#levelBanner {\n    font-size: 14px;\n    font-weight: 700;\n    color: #7DD3FC;\n    background: rgba(125,211,252,0.1);\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 4px;\n    padding: 4px 12px;\n}\nQLabel#statLabel {\n    font-size: 11px;\n    color: #9CA3AF;\n    font-weight: 500;\n}\nQLabel#statValue {\n    font-size: 13px;\n    color: #E2E8F0;\n    font-weight: 600;\n}\nQLabel#sectionTitle {\n    font-size: 12px;\n    font-weight: 600;\n    color: #7DD3FC;\n    padding-bottom: 2px;\n    border-bottom: 1px solid rgba(125,211,252,0.15);\n}\nQFrame#passiveGold {\n    background: rgba(255,215,0,0.12);\n    border: 1px solid rgba(255,215,0,0.35);\n    border-radius: 4px;\n    padding: 4px 8px;\n}\nQFrame#passiveBlue {\n    background: rgba(59,130,246,0.12);\n    border: 1px solid rgba(59,130,246,0.35);\n    border-radius: 4px;\n    padding: 4px 8px;\n}\nQFrame#passiveGreen {\n    background: rgba(34,197,94,0.12);\n    border: 1px solid rgba(34,197,94,0.35);\n    border-radius: 4px;\n    padding: 4px 8px;\n}\nQFrame#passiveWhite {\n    background: rgba(255,255,255,0.06);\n    border: 1px solid rgba(255,255,255,0.15);\n    border-radius: 4px;\n    padding: 4px 8px;\n}\nQFrame#passiveRed {\n    background: rgba(255,60,60,0.12);\n    border: 1px solid rgba(255,60,60,0.35);\n    border-radius: 4px;\n    padding: 4px 8px;\n}\n'
+_PAL_STYLESHEET = '\nQWidget#palRoot {\n    background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,\n        stop:0 rgba(8,10,16,0.98),stop:0.5 rgba(6,12,20,0.98),stop:1 rgba(4,8,16,0.98));\n}\nQWidget#partyPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#partyPanel QLabel {\n    color: #C8D8E8;\n}\nQWidget#palboxPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#palInfoPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#palInfoPanel QLabel {\n    color: #C8D8E8;\n}\nQLabel#boxHeader {\n    font-size: 18px;\n    font-weight: 700;\n    color: #7DD3FC;\n    padding: 4px 8px;\n    background: rgba(125,211,252,0.06);\n    border-radius: 4px;\n    min-width: 80px;\n    qproperty-alignment: AlignCenter;\n}\nQPushButton#navBtn {\n    background: rgba(125,211,252,0.08);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 14px;\n    font-size: 14px;\n    font-weight: 600;\n    min-width: 32px;\n}\nQPushButton#navBtn:hover {\n    background: rgba(125,211,252,0.18);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}\nQPushButton#navBtn:pressed {\n    background: rgba(125,211,252,0.1);\n}\n'
 def _load_pal_exp_table():
     try:
         base_dir = constants.get_base_path()
@@ -2861,136 +2861,6 @@ class PalInfoWidget(QFrame):
                         break
                 break
             parent = parent.parent()
-class SearchSortDialog(QDialog):
-    def __init__(self, mode='search', parent=None):
-        super().__init__(parent)
-        self.mode = mode
-        self.result_data = {}
-        self.setWindowTitle('Search' if mode == 'search' else 'Sort')
-        self.setModal(True)
-        self.setMinimumSize(480, 520)
-        self._setup()
-        self._apply_style()
-        self._setup_shortcuts()
-    def _apply_style(self):
-        self.setStyleSheet('\n            QDialog {\n                background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,\n                            stop:0 rgba(12,14,18,0.98),stop:0.5 rgba(10,16,22,0.98),stop:1 rgba(8,12,18,0.98));\n                border: 1px solid rgba(125,211,252,0.2);\n                border-radius: 8px;\n            }\n            QLabel { color: #C8D8E8; font-size: 12px; }\n            QComboBox {\n                background: rgba(255,255,255,0.06);\n                color: #E2E8F0;\n                border: 1px solid rgba(125,211,252,0.15);\n                border-radius: 4px;\n                padding: 4px 8px;\n                font-size: 12px;\n                min-height: 20px;\n            }\n            QComboBox::drop-down {\n                border: none;\n                padding-right: 4px;\n            }\n            QComboBox QAbstractItemView {\n                background: rgba(18,20,24,0.98);\n                color: #E2E8F0;\n                border: 1px solid rgba(125,211,252,0.15);\n                selection-background-color: rgba(59,142,208,0.3);\n                outline: none;\n            }\n            QLineEdit {\n                background: rgba(255,255,255,0.06);\n                color: #E2E8F0;\n                border: 1px solid rgba(125,211,252,0.15);\n                border-radius: 4px;\n                padding: 4px 8px;\n                font-size: 12px;\n            }\n            QLineEdit:focus { border-color: rgba(125,211,252,0.4); }\n            QCheckBox {\n                color: #C8D8E8;\n                font-size: 12px;\n                spacing: 6px;\n            }\n            QCheckBox::indicator {\n                width: 16px;\n                height: 16px;\n                border-radius: 3px;\n                border: 1px solid rgba(125,211,252,0.2);\n                background: rgba(255,255,255,0.05);\n            }\n            QCheckBox::indicator:checked {\n                background: rgba(125,211,252,0.3);\n                border-color: #7DD3FC;\n            }\n            QPushButton {\n                border-radius: 4px;\n                padding: 6px 16px;\n                font-size: 12px;\n                font-weight: 600;\n            }\n            QPushButton#applyBtn {\n                background: rgba(125,211,252,0.12);\n                color: #7DD3FC;\n                border: 1px solid rgba(125,211,252,0.2);\n            }\n            QPushButton#applyBtn:hover {\n                background: rgba(125,211,252,0.22);\n                border-color: rgba(125,211,252,0.4);\n                color: #FFFFFF;\n            }\n            QPushButton#resetBtn {\n                background: rgba(245,158,11,0.1);\n                color: #F59E0B;\n                border: 1px solid rgba(245,158,11,0.15);\n            }\n            QPushButton#resetBtn:hover {\n                background: rgba(245,158,11,0.2);\n                border-color: rgba(245,158,11,0.3);\n                color: #FFFFFF;\n            }\n            QPushButton#clearBtn {\n                background: rgba(251,113,133,0.1);\n                color: #FB7185;\n                border: 1px solid rgba(251,113,133,0.15);\n                font-size: 11px;\n                padding: 4px 10px;\n            }\n            QPushButton#clearBtn:hover {\n                background: rgba(251,113,133,0.2);\n                color: #FFFFFF;\n            }\n            QGroupBox {\n                border: 1px solid rgba(255,255,255,0.08);\n                border-radius: 6px;\n                margin-top: 8px;\n                padding-top: 16px;\n                font-size: 12px;\n                font-weight: 600;\n                color: #7DD3FC;\n            }\n            QGroupBox::title {\n                subcontrol-origin: margin;\n                subcontrol-position: top left;\n                padding: 2px 8px;\n                color: #7DD3FC;\n            }\n        ')
-    def _setup_shortcuts(self):
-        self.shortcut_apply = QShortcut(QKeySequence(Qt.Key_Return), self)
-        self.shortcut_apply.activated.connect(self._on_apply)
-        self.shortcut_reset = QShortcut(QKeySequence(Qt.Key_R), self)
-        self.shortcut_reset.activated.connect(self._on_reset)
-    def _setup(self):
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(16, 16, 16, 16)
-        layout.setSpacing(10)
-        header = QLabel('Sort & Filter' if self.mode == 'sort' else 'Search & Filter')
-        header.setStyleSheet('font-size: 16px; font-weight: 700; color: #7DD3FC; border-bottom: 1px solid rgba(125,211,252,0.15); padding-bottom: 6px;')
-        layout.addWidget(header)
-        sort_group = QGroupBox('Sort Type')
-        sort_layout = QVBoxLayout(sort_group)
-        self.sort_combo = QComboBox()
-        sort_options = ['Palpedia No.', 'Level', 'Element', 'Alpha Pal', 'Work Suitability Level', 'Trust', 'Expedition Firepower']
-        self.sort_combo.addItems(sort_options)
-        sort_layout.addWidget(self.sort_combo)
-        layout.addWidget(sort_group)
-        filter_group = QGroupBox('Filters')
-        filter_layout = QVBoxLayout(filter_group)
-        filter_layout.setSpacing(6)
-        elem_layout = QHBoxLayout()
-        elem_layout.addWidget(QLabel('Element:'))
-        self.elem_combo = QComboBox()
-        elements = ['Any', 'Neutral', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Ground', 'Dark', 'Dragon']
-        self.elem_combo.addItems(elements)
-        _elem_disp_to_name = {'Neutral': 'Normal', 'Fire': 'Fire', 'Water': 'Water', 'Grass': 'Leaf', 'Electric': 'Electricity', 'Ice': 'Ice', 'Ground': 'Earth', 'Dark': 'Dark', 'Dragon': 'Dragon'}
-        for i, etext in enumerate(elements):
-            ekey = _elem_disp_to_name.get(etext)
-            if ekey:
-                ep = _get_element_pixmap(ekey, 'small', 16)
-                if ep:
-                    self.elem_combo.setItemIcon(i, QIcon(ep))
-        elem_layout.addWidget(self.elem_combo)
-        filter_layout.addLayout(elem_layout)
-        gender_layout = QHBoxLayout()
-        gender_layout.setSpacing(12)
-        gender_layout.addWidget(QLabel('Gender:'))
-        self.gender_male = QCheckBox('Male')
-        self.gender_female = QCheckBox('Female')
-        self.gender_male.setChecked(True)
-        self.gender_female.setChecked(True)
-        gender_layout.addWidget(self.gender_male)
-        gender_layout.addWidget(self.gender_female)
-        gender_layout.addStretch()
-        filter_layout.addLayout(gender_layout)
-        work_layout = QHBoxLayout()
-        work_layout.addWidget(QLabel('Work Suitability:'))
-        self.work_combo = QComboBox()
-        work_types = ['Any', 'Planting', 'Watering', 'Handiwork', 'Gathering', 'Lumbering', 'Mining', 'Cooling', 'Transporting', 'Farming', 'Medicine', 'Electricity']
-        self.work_combo.addItems(work_types)
-        work_layout.addWidget(self.work_combo)
-        filter_layout.addLayout(work_layout)
-        layout.addWidget(filter_group)
-        passive_group = QGroupBox('Passive Skill Filter')
-        passive_layout = QHBoxLayout(passive_group)
-        self.passive_combo = QComboBox()
-        self.passive_combo.setEditable(True)
-        self.passive_combo.setMinimumWidth(200)
-        self.passive_combo.setInsertPolicy(QComboBox.NoInsert)
-        self._populate_passive_skills()
-        completer = QCompleter([self.passive_combo.itemText(i) for i in range(self.passive_combo.count())])
-        completer.setCaseSensitivity(Qt.CaseInsensitive)
-        completer.setFilterMode(Qt.MatchContains)
-        self.passive_combo.setCompleter(completer)
-        passive_layout.addWidget(self.passive_combo, 1)
-        clear_btn = QPushButton('Clear')
-        clear_btn.setObjectName('clearBtn')
-        clear_btn.clicked.connect(lambda: self.passive_combo.setCurrentText(''))
-        passive_layout.addWidget(clear_btn)
-        layout.addWidget(passive_group)
-        flags_group = QGroupBox('Priority Flags')
-        flags_layout = QHBoxLayout(flags_group)
-        flags_layout.setSpacing(8)
-        self.flag_fav1 = QCheckBox('Favorite I')
-        self.flag_fav2 = QCheckBox('Favorite II')
-        self.flag_fav3 = QCheckBox('Favorite III')
-        self.flag_dna = QCheckBox('DNA Symbol')
-        flags_layout.addWidget(self.flag_fav1)
-        flags_layout.addWidget(self.flag_fav2)
-        flags_layout.addWidget(self.flag_fav3)
-        flags_layout.addWidget(self.flag_dna)
-        flags_layout.addStretch()
-        layout.addWidget(flags_group)
-        btn_layout = QHBoxLayout()
-        btn_layout.setSpacing(8)
-        reset_btn = QPushButton('Restore Default [R]')
-        reset_btn.setObjectName('resetBtn')
-        reset_btn.clicked.connect(self._on_reset)
-        btn_layout.addWidget(reset_btn)
-        btn_layout.addStretch()
-        apply_btn = QPushButton('Search/Apply')
-        apply_btn.setObjectName('applyBtn')
-        apply_btn.clicked.connect(self._on_apply)
-        btn_layout.addWidget(apply_btn)
-        layout.addLayout(btn_layout)
-    def _populate_passive_skills(self):
-        self.passive_combo.addItem('')
-        for name in sorted(PalFrame._PASSMAP.values()):
-            self.passive_combo.addItem(name)
-    def _on_reset(self):
-        self.sort_combo.setCurrentIndex(0)
-        self.elem_combo.setCurrentIndex(0)
-        self.gender_male.setChecked(True)
-        self.gender_female.setChecked(True)
-        self.work_combo.setCurrentIndex(0)
-        self.passive_combo.setCurrentText('')
-        self.flag_fav1.setChecked(False)
-        self.flag_fav2.setChecked(False)
-        self.flag_fav3.setChecked(False)
-        self.flag_dna.setChecked(False)
-    def _on_apply(self):
-        self.result_data = {'sort_type': self.sort_combo.currentText(), 'element': self.elem_combo.currentText(), 'gender_male': self.gender_male.isChecked(), 'gender_female': self.gender_female.isChecked(), 'work_suitability': self.work_combo.currentText(), 'passive_skill': self.passive_combo.currentText(), 'flag_fav1': self.flag_fav1.isChecked(), 'flag_fav2': self.flag_fav2.isChecked(), 'flag_fav3': self.flag_fav3.isChecked(), 'flag_dna': self.flag_dna.isChecked()}
-        self.accept()
-    def get_results(self):
-        return self.result_data if self.result() == QDialog.Accepted else None
 class PalEditorWidget(QWidget):
     _process_lock = threading.Lock()
     def __init__(self, parent=None):
@@ -3054,7 +2924,10 @@ class PalEditorWidget(QWidget):
         header_row.setSpacing(6)
         self.box_label = QLabel('Box 1')
         self.box_label.setObjectName('boxHeader')
+        self.box_label.setFixedWidth(90)
+        self.box_label.setAlignment(Qt.AlignCenter)
         header_row.addWidget(self.box_label)
+        header_row.addStretch()
         self.prev_box_btn = QPushButton('◀')
         self.prev_box_btn.setObjectName('navBtn')
         self.prev_box_btn.setFixedSize(32, 28)
@@ -3065,15 +2938,6 @@ class PalEditorWidget(QWidget):
         self.next_box_btn.setFixedSize(32, 28)
         self.next_box_btn.clicked.connect(self._next_box)
         header_row.addWidget(self.next_box_btn)
-        header_row.addStretch()
-        self.search_btn = QPushButton('Search')
-        self.search_btn.setObjectName('searchBtn')
-        self.search_btn.clicked.connect(self._open_search)
-        header_row.addWidget(self.search_btn)
-        self.sort_btn = QPushButton('Sort')
-        self.sort_btn.setObjectName('sortBtn')
-        self.sort_btn.clicked.connect(self._open_sort)
-        header_row.addWidget(self.sort_btn)
         palbox_layout.addLayout(header_row)
         self.grid_scroll = QScrollArea()
         self.grid_scroll.setWidgetResizable(False)
@@ -3121,14 +2985,6 @@ class PalEditorWidget(QWidget):
             self.current_box_index = 1
         self.box_label.setText(f'Box {self.current_box_index}')
         self._update_palbox_page()
-    def _open_search(self):
-        dlg = SearchSortDialog(mode='search', parent=self)
-        if dlg.exec() == QDialog.Accepted:
-            results = dlg.get_results()
-    def _open_sort(self):
-        dlg = SearchSortDialog(mode='sort', parent=self)
-        if dlg.exec() == QDialog.Accepted:
-            results = dlg.get_results()
     def _on_party_slot_clicked(self, idx):
         if 0 <= idx < len(self.party_pals):
             pal = self.party_pals[idx]
