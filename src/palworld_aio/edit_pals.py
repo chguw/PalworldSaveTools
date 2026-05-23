@@ -1192,7 +1192,9 @@ class PalInfoWidget(QFrame):
         'Ground': '#A78BFA', 'Dark': '#6B21A8', 'Dragon': '#818CF8',
     }
     _TRUST_RANK_THRESHOLDS = [0, 1, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500]
-    _WORK_SUITABILITY_ICON_KEYS = ['palwork_02', 'palwork_01', 'palwork_00', 'palwork_03', 'palwork_04', 'palwork_05', 'palwork_06', 'palwork_07', 'palwork_08', 'palwork_09', 'palwork_10', 'palwork_11', 'palwork_12']
+    NATIVE_WORK_ORDER = ('EmitFlame', 'Watering', 'Seeding', 'GenerateElectricity', 'Handcraft', 'Collection', 'Deforest', 'Mining', 'ProductMedicine', 'Cool', 'Transport', 'MonsterFarm')
+    _WORK_SUITABILITY_DISPLAY = {'EmitFlame': 'Kindling', 'Watering': 'Watering', 'Seeding': 'Seeding', 'GenerateElectricity': 'Electricity', 'Handcraft': 'Handiwork', 'Collection': 'Harvesting', 'Deforest': 'Lumbering', 'Mining': 'Mining', 'ProductMedicine': 'Medicine', 'Cool': 'Cooling', 'Transport': 'Transport', 'MonsterFarm': 'Farming'}
+    _WORK_SUITABILITY_ICON_KEYS = ['palwork_00', 'palwork_01', 'palwork_02', 'palwork_03', 'palwork_04', 'palwork_05', 'palwork_06', 'palwork_07', 'palwork_08', 'palwork_10', 'palwork_11', 'palwork_12']
     def __init__(self, parent=None):
         super().__init__(parent)
         self.current_pal = None
@@ -1598,30 +1600,21 @@ class PalInfoWidget(QFrame):
         self.work_icons_layout.setSpacing(2)
         self.work_icon_labels = []
         self.work_icon_values = []
-        ws_data = [
-            ('Seeding', 'Plant'), ('Watering', 'Water'),
-            ('EmitFlame', 'Fire'), ('GenerateElectricity', 'Electric'),
-            ('Handcraft', 'Handiwork'), ('Collection', 'Gather'),
-            ('Deforest', 'Lumber'), ('Mining', 'Mine'),
-            ('OilExtraction', 'Oil'), ('ProductMedicine', 'Medicine'),
-            ('Cool', 'Cool'), ('Transport', 'Transport'),
-            ('MonsterFarm', 'Farm'),
-        ]
-        for idx, (ws_key, ws_display) in enumerate(ws_data):
+        for idx, ws_key in enumerate(self.NATIVE_WORK_ORDER):
             wc = QWidget()
             wc.setObjectName('wsWidget')
             wc.setStyleSheet('background: transparent; border: none;')
-            wc.setFixedWidth(22)
+            wc.setFixedWidth(24)
             vl = QVBoxLayout(wc)
             vl.setContentsMargins(0, 0, 0, 0)
             vl.setSpacing(0)
             ic = QLabel()
             ic.setAlignment(Qt.AlignCenter)
-            ic.setFixedSize(20, 20)
+            ic.setFixedSize(22, 22)
             ic.setAttribute(Qt.WA_TranslucentBackground)
             ic.setStyleSheet('background: transparent; border: none;')
             palwork_key = self._WORK_SUITABILITY_ICON_KEYS[idx]
-            ws_pix = _get_ui_icon_pixmap(palwork_key, 16)
+            ws_pix = _get_ui_icon_pixmap(palwork_key, 18)
             if ws_pix:
                 ic.setPixmap(ws_pix)
                 opacity_effect = QGraphicsOpacityEffect()
