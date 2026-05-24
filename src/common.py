@@ -7,6 +7,8 @@ BETA_SUBVERSION = '1'
 GAME_VERSION = '1.0'
 BRANCH_VERSION = 'main'
 def get_base_directory():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def get_src_directory():
     base_dir = get_base_directory()
