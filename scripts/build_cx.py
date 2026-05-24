@@ -45,12 +45,8 @@ def build_with_cx_freeze():
     subprocess.check_call(['uv', 'run', 'setup_freeze.py', 'build'])
     if os.path.exists('uv.lock'):
         os.remove('uv.lock')
-    lib_folder = os.path.join('PST_standalone', 'src', 'palworld_save_tools', 'lib')
-    if os.path.exists(lib_folder):
-        print(f'Removing {lib_folder}...')
-        shutil.rmtree(lib_folder)
 def clean_build_artifacts():
-    items = ['build', 'PalworldSaveTools.egg-info', 'Backups', 'PST_standalone', 'Logs', 'psp_windows', 'ppe_windows', 'updated_worldmap.png', 'PalDefender', 'XGP_converted_saves', 'saves']
+    items = ['build', 'PalworldSaveTools.egg-info', 'src/PalworldSaveTools.egg-info', 'Backups', 'PST_standalone', 'Logs', 'psp_windows', 'ppe_windows', 'updated_worldmap.png', 'PalDefender', 'XGP_converted_saves', 'saves']
     if not USE_EXISTING_VENV:
         items.extend(['.venv'])
     for item in items:

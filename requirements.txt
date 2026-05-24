@@ -8,4 +8,4 @@ loguru
 orjson
 Pillow
 
-git+https://github.com/oMaN-Rod/pyooz.git#egg=pyooz
+./src/palworld_save_tools/pyooz
