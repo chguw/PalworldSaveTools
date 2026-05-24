@@ -430,7 +430,7 @@ def transfer_all_characters():
         total_players = source_player_list.topLevelItemCount()
         print(f'Starting bulk transfer for {total_players} players...')
         total_start = time.perf_counter()
-        if source_is_post_v1 is not None and target_is_post_v1 is not None and source_is_post_v1 != target_is_post_v1:
+        if source_is_post_v1 is not None and target_is_post_v1 is not None and (source_is_post_v1 != target_is_post_v1):
             _normalize_level_data(targ_lvl, target_is_post_v1)
         for i in range(total_players):
             player_start = time.perf_counter()
@@ -564,7 +564,7 @@ def main(skip_msgbox=False, skip_gui=False):
     src_players_folder = os.path.join(os.path.dirname(level_sav_path), 'Players')
     tgt_players_folder = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
     os.makedirs(tgt_players_folder, exist_ok=True)
-    if source_is_post_v1 is not None and target_is_post_v1 is not None and source_is_post_v1 != target_is_post_v1:
+    if source_is_post_v1 is not None and target_is_post_v1 is not None and (source_is_post_v1 != target_is_post_v1):
         _normalize_level_data(targ_lvl, target_is_post_v1)
     if not transfer_character_only(host_guid, targ_uid):
         print('[FAIL]Character + containers')
@@ -719,7 +719,7 @@ def transfer_tech_and_data():
             targ_save['RecordData'] = fast_deepcopy(host_save['RecordData'])
         elif 'RecordData' in targ_save:
             del targ_save['RecordData']
-        if source_is_post_v1 is not None and target_is_post_v1 is not None and source_is_post_v1 != target_is_post_v1:
+        if source_is_post_v1 is not None and target_is_post_v1 is not None and (source_is_post_v1 != target_is_post_v1):
             _normalize_player_save_data(targ_save, target_is_post_v1)
     except:
         return False
@@ -746,7 +746,7 @@ def transfer_character_only(host_guid, targ_uid):
         key = c.get('key', {})
         if key.get('PlayerUId', {}).get('value') == targ_uid and key.get('InstanceId', {}).get('value') == targ_instance_id:
             c['value'] = fast_deepcopy(exported_map['value'])
-            if source_is_post_v1 is not None and target_is_post_v1 is not None and source_is_post_v1 != target_is_post_v1:
+            if source_is_post_v1 is not None and target_is_post_v1 is not None and (source_is_post_v1 != target_is_post_v1):
                 _normalize_save_parameter(c['value']['RawData']['value']['object']['SaveParameter']['value'], target_is_post_v1)
             updated = True
             break
@@ -1018,7 +1018,7 @@ def source_level_file():
         load_players(wsd, True)
         current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
         print('Done loading the data from Source Save!')
-        if source_is_post_v1 and target_is_post_v1 is not None and not target_is_post_v1:
+        if source_is_post_v1 and target_is_post_v1 is not None and (not target_is_post_v1):
             show_warning(None, t('Warning'), t('character_transfer.post_to_pre_blocked'))
     run_with_loading(on_finished, task)
 def target_level_file():
@@ -1062,7 +1062,7 @@ def target_level_file():
         load_players(wsd, False)
         current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
         print('Done loading the data from Target Save!')
-        if source_is_post_v1 is not None and source_is_post_v1 and not target_is_post_v1:
+        if source_is_post_v1 is not None and source_is_post_v1 and (not target_is_post_v1):
             show_warning(None, t('Warning'), t('character_transfer.post_to_pre_blocked'))
     run_with_loading(on_finished, task)
 def on_selection_of_source_player():

@@ -486,8 +486,8 @@ class MapTab(QWidget):
             tx = wy * s - rx
         else:
             n = float(len(pts))
-            sum_wx, sum_wy, sum_rx, sum_ry = 0.0, 0.0, 0.0, 0.0
-            sum_wx2, sum_wy2, sum_wx_ry, sum_wy_rx = 0.0, 0.0, 0.0, 0.0
+            sum_wx, sum_wy, sum_rx, sum_ry = (0.0, 0.0, 0.0, 0.0)
+            sum_wx2, sum_wy2, sum_wx_ry, sum_wy_rx = (0.0, 0.0, 0.0, 0.0)
             for rx, ry, px, py in pts:
                 wx = px * 2000.0 / W - 1000.0
                 wy = 1000.0 - py * 2000.0 / H
@@ -510,7 +510,7 @@ class MapTab(QWidget):
             else:
                 s2 = sum_rx / n if n > 0 else 0.0
             s = (s1 + s2) / 2.0
-            ty_sum, tx_sum = 0.0, 0.0
+            ty_sum, tx_sum = (0.0, 0.0)
             for rx, ry, px, py in pts:
                 wx = px * 2000.0 / W - 1000.0
                 wy = 1000.0 - py * 2000.0 / H
