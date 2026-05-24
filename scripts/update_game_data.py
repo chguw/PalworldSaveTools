@@ -892,7 +892,11 @@ def update_passive_data():
         ev2 = row_data.get('EffectValue2', 0) if isinstance(row_data, dict) else 0
         ev3 = row_data.get('EffectValue3', 0) if isinstance(row_data, dict) else 0
         ev4 = row_data.get('EffectValue4', 0) if isinstance(row_data, dict) else 0
-        passive_entry = {'name': display_name, 'asset': passive_id, 'rank': rank, 'icon': copied_icon or existing_entry.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.png'), 'description': desc_text, 'effect1': ev1, 'effect2': ev2, 'effect3': ev3, 'effect4': ev4}
+        add_pal = bool(row_data.get('AddPal', False)) if isinstance(row_data, dict) else False
+        add_armor = bool(row_data.get('AddArmor', False)) if isinstance(row_data, dict) else False
+        add_accessory = bool(row_data.get('AddAccessory', False)) if isinstance(row_data, dict) else False
+        add_weapon = bool(row_data.get('AddShotWeapon', False) or row_data.get('AddMeleeWeapon', False)) if isinstance(row_data, dict) else False
+        passive_entry = {'name': display_name, 'asset': passive_id, 'rank': rank, 'icon': copied_icon or existing_entry.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.png'), 'description': desc_text, 'effect1': ev1, 'effect2': ev2, 'effect3': ev3, 'effect4': ev4, 'add_pal': add_pal, 'add_armor': add_armor, 'add_accessory': add_accessory, 'add_weapon': add_weapon}
         updated_passives.append(passive_entry)
     result = {'passives': updated_passives}
     save_resource_json('passivedata.json', result)

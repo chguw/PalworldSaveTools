@@ -3667,6 +3667,7 @@ class PalFrame(QFrame):
     _NAMEMAP = {}
     _PASSMAP = {}
     _PASSRANK = {}
+    _PASSFLAGS = {}
     _SKILLMAP = {}
     _RANK_COLORS = {-99: ('qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #5C1515,stop:0.5 #8A2020,stop:1 #5C1515)', '#7FFF5050', '#FF5555'), 1: ('rgba(255,255,255,0.12)', '#7FFFFFFF', '#FFFFFF'), 2: ('qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #5C4033,stop:0.5 #8B6914,stop:1 #5C4033)', '#7FFFD700', '#FFD700'), 4: ('qlineargradient(x1:0,y1:0,x2:1,y2:1,stop:0 #0D3B66,stop:0.5 #1A6B8A,stop:1 #0D3B66)', '#7F7DD3FC', '#7DD3FC')}
     @classmethod
@@ -3679,6 +3680,10 @@ class PalFrame(QFrame):
         if rank >= 2:
             return cls._RANK_COLORS[2]
         return cls._RANK_COLORS[1]
+    @classmethod
+    def _is_pal_passive(cls, asset_lower):
+        flags = cls._PASSFLAGS.get(asset_lower, {})
+        return flags.get('add_pal', False)
     _maps_loaded_lock = threading.Lock()
     @classmethod
     def _load_maps(cls):
@@ -3709,22 +3714,30 @@ class PalFrame(QFrame):
         PALMAP = load_map('paldata.json', 'pals')
         NPCMAP = load_map('npcdata.json', 'npcs')
         cls._NAMEMAP = {**PALMAP, **NPCMAP}
+        cls._PASSFLAGS = {}
         try:
             fp = os.path.join(base_dir, 'resources', 'game_data', 'passivedata.json')
             js = json_tools.load(fp)
             if isinstance(js, dict):
                 data = js.get('passives', [])
                 for x in data:
-                    if isinstance(x, dict) and 'asset' in x and ('rank' in x):
-                        cls._PASSRANK[x['asset'].lower()] = x['rank']
+                    if isinstance(x, dict) and 'asset' in x:
+                        asset_lower = x['asset'].lower()
+                        if 'rank' in x:
+                            cls._PASSRANK[asset_lower] = x['rank']
+                        cls._PASSFLAGS[asset_lower] = {
+                            'add_pal': x.get('add_pal', False),
+                            'add_armor': x.get('add_armor', False),
+                            'add_accessory': x.get('add_accessory', False),
+                            'add_weapon': x.get('add_weapon', False),
+                        }
         except Exception:
             pass
         skill_exclusions = ['unknown skills', 'unknown skill', 'en_text', 'en text']
-        cls._SKILLMAP = {k: v for k, v in cls._SKILLMAP.items() if not any((exc in v.lower() for exc in skill_exclusions))}
+        npc_skill_patterns = ['Predator', 'RaidCutter', '_GYM_Act', 'Unique_YakushimaBoss', 'Unique_WorldTreeDragon_', 'Unique_LegendDeer_Barrier']
+        cls._SKILLMAP = {k: v for k, v in cls._SKILLMAP.items() if not any((exc in v.lower() for exc in skill_exclusions)) and not any((pat.lower() in k.lower() for pat in npc_skill_patterns))}
         cls._PASSMAP = {k: v for k, v in cls._PASSMAP.items() if not any((exc in v.lower() for exc in skill_exclusions))}
-        pal_exclusions = ['en_text', 'en text', 'blackfurdragon', 'eleclion', 'darkmutant', 'gym']
-        cls._NAMEMAP = {k: v for k, v in cls._NAMEMAP.items() if not any((exc in v.lower() for exc in pal_exclusions)) and (not k.lower().startswith('raid_')) and (not '_oilrig' in k.lower()) and (not 'summon_' in k.lower()) and (not (k.lower().startswith('boss_') and k.lower() in v.lower())) and (not k.lower() in ['blackfurdragon', 'eleclion', 'darkmutant', 'boss_blackfurdragon', 'boss_eleclion', 'boss_darkmutant'])}
-        cls._NAMEMAP = {k: v.replace(' (Boss)', '') for k, v in cls._NAMEMAP.items()}
+        cls._PASSMAP = {passive_id: name for passive_id, name in cls._PASSMAP.items() if cls._is_pal_passive(passive_id)}
         cls._maps_loaded = True
     def __init__(self, pal_item, parent=None):
         super().__init__(parent)
