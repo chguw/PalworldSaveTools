@@ -668,6 +668,12 @@ class BaseInventoryTab(QWidget):
         self.manager = BaseInventoryManager()
         self.selected_item_id = None
         self.selected_item_name = None
+        self._current_guild_id = None
+        self._current_guild_name = ''
+        self._current_base_id = None
+        self._current_base_name = ''
+        self._guilds_data = []
+        self._bases_data = []
         self._setup_ui()
         self._setup_connections()
         self._update_theme()
@@ -688,82 +694,73 @@ class BaseInventoryTab(QWidget):
         if self.container_list.topLevelItemCount() > 0:
             self.container_list.setCurrentItem(self.container_list.topLevelItem(0))
     def refresh_labels(self):
-        if hasattr(self, 'guild_label'):
-            self.guild_label.setText(t('base_inventory.select_guild') if t else 'Select Guild:')
-        if hasattr(self, 'base_label'):
-            self.base_label.setText(t('base_inventory.select_base') if t else 'Select Base:')
         if hasattr(self, 'container_label'):
             self.container_label.setText(t('base_inventory.select_container') if t else 'Containers:')
-        if hasattr(self, 'item_label'):
-            self.item_label.setText(t('base_inventory.select_item') if t else 'Select Item:')
+        if hasattr(self, 'guild_button'):
+            if self._current_guild_name:
+                self.guild_button.setText(self._current_guild_name)
+            else:
+                self.guild_button.setText(t('base_inventory.select_guild') if t else 'Select Guild')
+        if hasattr(self, 'base_button'):
+            if self._current_base_name:
+                self.base_button.setText(self._current_base_name)
+            else:
+                self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
         if hasattr(self, 'item_button'):
             if self.selected_item_id and self.selected_item_name:
                 self.item_button.setText(self.selected_item_name)
             else:
                 self.item_button.setText(t('base_inventory.all_items') if t else 'All Items')
         if hasattr(self, 'clear_item_button'):
+            self.clear_item_button.setVisible(bool(self.selected_item_id))
             self.clear_item_button.setToolTip(t('base_inventory.clear_item') if t else 'Clear Item Filter')
         if hasattr(self, 'container_info'):
             pass
         if hasattr(self, 'inventory_grid'):
             self.inventory_grid.refresh_labels()
-        current_base_index = self.base_combo.currentIndex()
         current_container_id = None
         if self.manager.current_container:
             current_container_id = self.manager.current_container.get('id')
-        if current_base_index >= 0:
-            base_id = self.base_combo.itemData(current_base_index)
-            if base_id:
-                self._load_containers_for_base(base_id)
-                self._restore_container_selection(current_container_id)
+        if self._current_base_id:
+            self._load_containers_for_base(self._current_base_id)
+            self._restore_container_selection(current_container_id)
         self._update_container_stats()
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(10)
         header_layout = QHBoxLayout()
-        header_layout.setSpacing(15)
-        guild_layout = QVBoxLayout()
-        guild_layout.setSpacing(2)
-        self.guild_label = QLabel(t('base_inventory.select_guild') if t else 'Select Guild:')
-        self.guild_label.setStyleSheet('font-weight: bold; font-size: 12px;')
-        self.guild_label.setFixedHeight(20)
-        guild_layout.addWidget(self.guild_label)
-        self.guild_combo = self._create_styled_combo()
-        self.guild_combo.currentIndexChanged.connect(self._on_guild_changed)
-        guild_layout.addWidget(self.guild_combo)
-        header_layout.addLayout(guild_layout)
-        base_layout = QVBoxLayout()
-        base_layout.setSpacing(2)
-        self.base_label = QLabel(t('base_inventory.select_base') if t else 'Select Base:')
-        self.base_label.setStyleSheet('font-weight: bold; font-size: 12px;')
-        self.base_label.setFixedHeight(20)
-        base_layout.addWidget(self.base_label)
-        self.base_combo = self._create_styled_combo()
-        self.base_combo.currentIndexChanged.connect(self._on_base_changed)
-        base_layout.addWidget(self.base_combo)
-        header_layout.addLayout(base_layout)
-        item_layout = QVBoxLayout()
-        item_layout.setSpacing(2)
-        self.item_label = QLabel(t('base_inventory.select_item') if t else 'Select Item:')
-        self.item_label.setStyleSheet('font-weight: bold; font-size: 12px;')
-        self.item_label.setFixedHeight(20)
-        item_layout.addWidget(self.item_label)
-        button_layout = QHBoxLayout()
-        button_layout.setSpacing(5)
+        header_layout.setSpacing(8)
+        self.guild_button = QPushButton(t('base_inventory.select_guild') if t else 'Select Guild')
+        self.guild_button.setMinimumWidth(160)
+        self.guild_button.setMaximumHeight(28)
+        self.guild_button.setStyleSheet('QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; padding: 4px 12px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.2); border-color: rgba(125,211,252,0.4); color: #FFFFFF; }')
+        self.guild_button.setCursor(Qt.PointingHandCursor)
+        self.guild_button.clicked.connect(self._show_guild_popup)
+        header_layout.addWidget(self.guild_button)
+        self.base_button = QPushButton(t('base_inventory.select_base') if t else 'Select Base')
+        self.base_button.setMinimumWidth(140)
+        self.base_button.setMaximumHeight(28)
+        self.base_button.setStyleSheet('QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; padding: 4px 12px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.2); border-color: rgba(125,211,252,0.4); color: #FFFFFF; } QPushButton:disabled { background: rgba(100,100,100,0.1); color: #666; border-color: rgba(255,255,255,0.05); }')
+        self.base_button.setCursor(Qt.PointingHandCursor)
+        self.base_button.clicked.connect(self._show_base_popup)
+        header_layout.addWidget(self.base_button)
         self.item_button = QPushButton(t('base_inventory.all_items') if t else 'All Items')
-        self.item_button.setMinimumWidth(160)
-        self.item_button.setMaximumHeight(24)
+        self.item_button.setMinimumWidth(100)
+        self.item_button.setMaximumHeight(28)
+        self.item_button.setStyleSheet('QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; padding: 4px 12px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.2); border-color: rgba(125,211,252,0.4); color: #FFFFFF; }')
+        self.item_button.setCursor(Qt.PointingHandCursor)
         self.item_button.clicked.connect(self._show_item_picker)
-        button_layout.addWidget(self.item_button)
+        header_layout.addWidget(self.item_button)
         self.clear_item_button = QPushButton('×')
         self.clear_item_button.setFixedWidth(24)
-        self.clear_item_button.setFixedHeight(24)
+        self.clear_item_button.setFixedHeight(28)
+        self.clear_item_button.setStyleSheet('QPushButton { background: rgba(255,80,80,0.4); color: #fff; border: none; border-radius: 4px; font-weight: bold; font-size: 14px; } QPushButton:hover { background: rgba(255,80,80,0.7); }')
+        self.clear_item_button.setCursor(Qt.PointingHandCursor)
         self.clear_item_button.setToolTip(t('base_inventory.clear_item') if t else 'Clear Item Filter')
         self.clear_item_button.clicked.connect(self._clear_item_filter)
-        button_layout.addWidget(self.clear_item_button)
-        item_layout.addLayout(button_layout)
-        header_layout.addLayout(item_layout)
+        self.clear_item_button.setVisible(False)
+        header_layout.addWidget(self.clear_item_button)
         header_layout.addStretch()
         layout.addLayout(header_layout)
         self.splitter = QSplitter(Qt.Horizontal)
@@ -810,15 +807,91 @@ class BaseInventoryTab(QWidget):
         self.refresh_labels()
         if hasattr(self.parent, 'parent') and hasattr(self.parent.parent, 'results_widget'):
             pass
+    def _show_guild_popup(self):
+        popup = QWidget()
+        popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        popup.setMinimumWidth(260)
+        popup.setStyleSheet('QWidget { background: rgba(18,20,24,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
+        layout = QVBoxLayout(popup)
+        layout.setContentsMargins(4, 4, 4, 4)
+        layout.setSpacing(2)
+        search = QLineEdit()
+        search.setPlaceholderText(t('common.search') if t else 'Search...')
+        search.setStyleSheet('QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 4px 8px; font-size: 12px; }')
+        layout.addWidget(search)
+        list_widget = QListWidget()
+        list_widget.setStyleSheet('QListWidget { background: transparent; color: #e2e8f0; border: none; font-size: 12px; } QListWidget::item { padding: 3px 8px; border-radius: 3px; } QListWidget::item:hover { background: rgba(59,142,208,0.2); } QListWidget::item:selected { background: rgba(59,142,208,0.35); }')
+        list_widget.setMaximumHeight(300)
+        layout.addWidget(list_widget)
+        for guild in self._guilds_data:
+            item = QListWidgetItem(f"{guild['name']} (Level {guild['level']})")
+            item.setData(Qt.UserRole, guild['id'])
+            list_widget.addItem(item)
+        def apply_filter(text):
+            q = text.lower()
+            for i in range(list_widget.count()):
+                item = list_widget.item(i)
+                item.setHidden(bool(q and q not in item.text().lower()))
+        search.textChanged.connect(apply_filter)
+        def select_guild(item):
+            if item:
+                guild_id = item.data(Qt.UserRole)
+                if guild_id:
+                    self._on_guild_changed(guild_id)
+            popup.close()
+        list_widget.itemClicked.connect(select_guild)
+        popup.move(self.guild_button.mapToGlobal(self.guild_button.rect().bottomLeft()))
+        popup.show()
+    def _show_base_popup(self):
+        if not self._current_guild_id:
+            return
+        popup = QWidget()
+        popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        popup.setMinimumWidth(260)
+        popup.setStyleSheet('QWidget { background: rgba(18,20,24,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
+        layout = QVBoxLayout(popup)
+        layout.setContentsMargins(4, 4, 4, 4)
+        layout.setSpacing(2)
+        search = QLineEdit()
+        search.setPlaceholderText(t('common.search') if t else 'Search...')
+        search.setStyleSheet('QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 4px 8px; font-size: 12px; }')
+        layout.addWidget(search)
+        list_widget = QListWidget()
+        list_widget.setStyleSheet('QListWidget { background: transparent; color: #e2e8f0; border: none; font-size: 12px; } QListWidget::item { padding: 3px 8px; border-radius: 3px; } QListWidget::item:hover { background: rgba(59,142,208,0.2); } QListWidget::item:selected { background: rgba(59,142,208,0.35); }')
+        list_widget.setMaximumHeight(300)
+        layout.addWidget(list_widget)
+        for base in self._bases_data:
+            item = QListWidgetItem(f"{base['guild_name']} - Base {base['id'][:8]}")
+            item.setData(Qt.UserRole, base['id'])
+            list_widget.addItem(item)
+        def apply_filter(text):
+            q = text.lower()
+            for i in range(list_widget.count()):
+                item = list_widget.item(i)
+                item.setHidden(bool(q and q not in item.text().lower()))
+        search.textChanged.connect(apply_filter)
+        def select_base(item):
+            if item:
+                base_id = item.data(Qt.UserRole)
+                if base_id:
+                    self._on_base_changed(base_id)
+            popup.close()
+        list_widget.itemClicked.connect(select_base)
+        popup.move(self.base_button.mapToGlobal(self.base_button.rect().bottomLeft()))
+        popup.show()
     def _load_guilds(self):
-        self.guild_combo.clear()
+        self._guilds_data = []
+        self._bases_data = []
+        self._current_guild_id = None
+        self._current_guild_name = ''
+        self._current_base_id = None
+        self._current_base_name = ''
         guilds = self.manager.load_guilds()
         if not guilds:
-            self.guild_combo.addItem(t('base_inventory.no_save_loaded') if t else 'No save file loaded', None)
-            self.guild_combo.setEnabled(False)
-            self.base_combo.clear()
-            self.base_combo.addItem(t('base_inventory.load_save_first') if t else 'Load a save file first', None)
-            self.base_combo.setEnabled(False)
+            self.guild_button.setText(t('base_inventory.no_save_loaded') if t else 'No save file loaded')
+            self.guild_button.setEnabled(False)
+            self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
+            self.base_button.setEnabled(False)
             self.container_list.clear()
             self.container_info.set_container_info(None)
             self.inventory_grid.clear()
@@ -829,95 +902,103 @@ class BaseInventoryTab(QWidget):
             if bases:
                 guilds_with_bases.append(guild)
         if not guilds_with_bases:
-            self.guild_combo.addItem(t('base_inventory.no_guilds_with_bases') if t else 'No guilds with bases found', None)
-            self.guild_combo.setEnabled(False)
-            self.base_combo.clear()
-            self.base_combo.addItem(t('base_inventory.no_bases_available') if t else 'No bases available', None)
-            self.base_combo.setEnabled(False)
+            self._guilds_data = guilds
+            self.guild_button.setText(t('base_inventory.no_guilds_with_bases') if t else 'No guilds with bases found')
+            self.guild_button.setEnabled(True)
+            self.base_button.setText(t('base_inventory.no_bases_available') if t else 'No bases available')
+            self.base_button.setEnabled(False)
             self.container_list.clear()
             self.container_info.set_container_info(None)
             self.inventory_grid.clear()
             return
-        self.guild_combo.setEnabled(True)
-        for guild in guilds_with_bases:
-            self.guild_combo.addItem(f"{guild['name']} (Level {guild['level']})", guild['id'])
-        if guilds_with_bases:
-            self._on_guild_changed(0)
-    def _on_guild_changed(self, index):
-        if index >= 0:
-            guild_id = self.guild_combo.itemData(index)
-            if guild_id is None:
-                return
-            guild_id_key = str(guild_id).replace('-', '').lower()
-            if hasattr(self, '_item_locations') and self._item_locations and guild_id_key and (guild_id_key in self._item_locations):
-                self._load_bases_for_guild_filtered(guild_id)
-            else:
-                self._load_bases_for_guild(guild_id)
-        else:
-            self.base_combo.clear()
+        self._guilds_data = guilds_with_bases
+        self.guild_button.setEnabled(True)
+        self.base_button.setEnabled(True)
+        first = guilds_with_bases[0]
+        self._on_guild_changed(first['id'])
+    def _on_guild_changed(self, guild_id):
+        if guild_id is None:
+            self._bases_data = []
+            self._current_base_id = None
+            self._current_base_name = ''
+            self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
             self.container_list.clear()
             self.container_info.set_container_info(None)
             self.inventory_grid.clear()
+            return
+        self._current_guild_id = guild_id
+        guild = next((g for g in self._guilds_data if str(g['id']) == str(guild_id)), None)
+        self._current_guild_name = f"{guild['name']} (Level {guild['level']})" if guild else str(guild_id)
+        self.guild_button.setText(self._current_guild_name)
+        guild_id_key = str(guild_id).replace('-', '').lower()
+        if hasattr(self, '_item_locations') and self._item_locations and guild_id_key and (guild_id_key in self._item_locations):
+            self._load_bases_for_guild_filtered(guild_id)
+        else:
+            self._load_bases_for_guild(guild_id)
     def _load_bases_for_guild(self, guild_id):
-        self.base_combo.clear()
+        self._bases_data = []
+        self._current_base_id = None
+        self._current_base_name = ''
         bases = self.manager.load_bases_for_guild(guild_id)
         if not bases:
-            self.base_combo.addItem(t('base_inventory.no_bases_found') if t else 'No bases found for this guild', None)
-            self.base_combo.setEnabled(False)
+            self.base_button.setText(t('base_inventory.no_bases_found') if t else 'No bases found for this guild')
+            self.base_button.setEnabled(False)
             self.container_list.clear()
             self.container_info.set_container_info(None)
             self.inventory_grid.clear()
             return
-        self.base_combo.setEnabled(True)
-        max_display_bases = 20
-        display_bases = bases[:max_display_bases]
-        for base in display_bases:
-            self.base_combo.addItem(f"{base['guild_name']} - Base {base['id'][:8]}", base['id'])
-        if len(bases) > max_display_bases:
-            remaining_count = len(bases) - max_display_bases
-            self.base_combo.addItem(f'... and {remaining_count} more bases', None)
-            self.base_combo.setItemEnabled(self.base_combo.count() - 1, False)
-        if display_bases:
-            self._on_base_changed(0)
+        self._bases_data = bases
+        self.base_button.setEnabled(True)
+        self._on_base_changed(bases[0]['id'])
     def _load_bases_for_guild_filtered(self, guild_id):
-        self.base_combo.clear()
+        self._bases_data = []
+        self._current_base_id = None
+        self._current_base_name = ''
         guild_id_key = str(guild_id).replace('-', '').lower() if guild_id else None
         if hasattr(self, '_item_locations') and guild_id_key and (guild_id_key in self._item_locations):
             filtered_bases = self._item_locations[guild_id_key]
             if filtered_bases:
-                self.base_combo.setEnabled(True)
                 all_bases = self.manager.load_bases_for_guild(guild_id)
-                for base in all_bases:
-                    base_id_key = str(base['id']).replace('-', '').lower()
-                    if base_id_key in filtered_bases:
-                        self.base_combo.addItem(f"{base['guild_name']} - Base {base['id'][:8]}", base['id'])
-                if self.base_combo.count() > 0:
-                    self._on_base_changed(0)
+                self._bases_data = [base for base in all_bases if str(base['id']).replace('-', '').lower() in filtered_bases]
+                if self._bases_data:
+                    self.base_button.setEnabled(True)
+                    self._on_base_changed(self._bases_data[0]['id'])
+                else:
+                    self.base_button.setText(t('base_inventory.no_bases_with_item') if t else 'No bases found with this item')
+                    self.base_button.setEnabled(False)
+                    self.container_list.clear()
+                    self.container_info.set_container_info(None)
+                    self.inventory_grid.clear()
             else:
-                self.base_combo.addItem(t('base_inventory.no_bases_with_item') if t else 'No bases found with this item', None)
-                self.base_combo.setEnabled(False)
+                self.base_button.setText(t('base_inventory.no_bases_with_item') if t else 'No bases found with this item')
+                self.base_button.setEnabled(False)
                 self.container_list.clear()
                 self.container_info.set_container_info(None)
                 self.inventory_grid.clear()
         else:
             self._load_bases_for_guild(guild_id)
-    def _on_base_changed(self, index):
-        if index >= 0:
-            base_id = self.base_combo.itemData(index)
-            guild_id = self.guild_combo.currentData()
-            guild_id_key = str(guild_id).replace('-', '').lower() if guild_id else None
-            base_id_key = str(base_id).replace('-', '').lower() if base_id else None
-            if hasattr(self, '_item_locations') and self._item_locations and guild_id_key and (guild_id_key in self._item_locations) and base_id_key and (base_id_key in self._item_locations.get(guild_id_key, {})):
-                self._load_containers_for_base_filtered(base_id)
-            else:
-                self._load_containers_for_base(base_id)
-        else:
+    def _on_base_changed(self, base_id):
+        if base_id is None:
+            self._current_base_id = None
+            self._current_base_name = ''
+            self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
             self.container_list.clear()
             self.container_info.set_container_info(None)
             self.inventory_grid.clear()
+            return
+        self._current_base_id = base_id
+        base = next((b for b in self._bases_data if str(b['id']) == str(base_id)), None)
+        self._current_base_name = f"{base.get('guild_name', '')} - Base {str(base_id)[:8]}" if base else str(base_id)[:8]
+        self.base_button.setText(self._current_base_name)
+        guild_id_key = str(self._current_guild_id).replace('-', '').lower() if self._current_guild_id else None
+        base_id_key = str(base_id).replace('-', '').lower()
+        if hasattr(self, '_item_locations') and self._item_locations and guild_id_key and (guild_id_key in self._item_locations) and base_id_key and (base_id_key in self._item_locations.get(guild_id_key, {})):
+            self._load_containers_for_base_filtered(base_id)
+        else:
+            self._load_containers_for_base(base_id)
     def _load_containers_for_base(self, base_id):
         self.container_list.clear()
-        guild_id = self.guild_combo.currentData()
+        guild_id = self._current_guild_id
         if guild_id:
             bases = self.manager.load_bases_for_guild(guild_id)
             base_info = next((b for b in bases if str(b['id']) == str(base_id)), None)
@@ -934,7 +1015,7 @@ class BaseInventoryTab(QWidget):
             self.inventory_grid.clear()
     def _load_containers_for_base_filtered(self, base_id):
         self.container_list.clear()
-        guild_id = self.guild_combo.currentData()
+        guild_id = self._current_guild_id
         guild_id_key = str(guild_id).replace('-', '').lower() if guild_id else None
         base_id_key = str(base_id).replace('-', '').lower() if base_id else None
         if hasattr(self, '_item_locations') and self._item_locations and guild_id_key and (guild_id_key in self._item_locations):
@@ -1055,13 +1136,13 @@ class BaseInventoryTab(QWidget):
                 self.inventory_grid.load_items(items, max_slots=max_slots)
                 self._update_container_stats()
     def _refresh_all(self):
-        current_guild_index = self.guild_combo.currentIndex()
-        current_base_index = self.base_combo.currentIndex()
+        previous_guild_id = self._current_guild_id
+        previous_base_id = self._current_base_id
         self._load_guilds()
-        if current_guild_index >= 0:
-            self.guild_combo.setCurrentIndex(current_guild_index)
-        if current_base_index >= 0:
-            self.base_combo.setCurrentIndex(current_base_index)
+        if previous_guild_id:
+            self._on_guild_changed(previous_guild_id)
+            if previous_base_id:
+                self._on_base_changed(previous_base_id)
     def _filter_guilds_and_bases_by_item(self):
         if not self.selected_item_id:
             self._reset_filters()
@@ -1070,15 +1151,16 @@ class BaseInventoryTab(QWidget):
         start_time = time.time()
         try:
             item_locations = find_item_locations_efficient(self.selected_item_id)
-            self.guild_combo.clear()
+            self._guilds_data = []
             if item_locations:
                 all_guilds = self.manager.load_guilds()
                 for guild in all_guilds:
                     guild_id_key = str(guild['id']).replace('-', '').lower()
                     if guild_id_key in item_locations:
-                        self.guild_combo.addItem(f"{guild['name']} (Level {guild['level']})", guild['id'])
+                        self._guilds_data.append(guild)
                 self._item_locations = item_locations
-                self._on_guild_changed(0)
+                if self._guilds_data:
+                    self._on_guild_changed(self._guilds_data[0]['id'])
             else:
                 display_name = self.selected_item_name or self._get_item_name(self.selected_item_id)
                 message = t('base_inventory.no_guilds_with_item').format(item_name=display_name) if t else f'No guilds found with {display_name}'
@@ -1309,7 +1391,7 @@ class BaseInventoryTab(QWidget):
             if new_slot_count != current_slots:
                 if self.manager.expand_container_capacity(container_info['id'], new_slot_count):
                     current_container_id = container_info['id']
-                    base_id = self.base_combo.currentData()
+                    base_id = self._current_base_id
                     if base_id:
                         self._load_containers_for_base(base_id)
                         self._restore_container_selection(current_container_id)
