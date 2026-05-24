@@ -1,7 +1,7 @@
 import os, ssl
 import sys, argparse, collections, copy, ctypes, datetime, gc, json, shutil, glob
 import logging, multiprocessing, platform, re, subprocess, threading, pickle, zipfile, string, palworld_coord
-import time, traceback, uuid, io, pathlib, urllib.request, tempfile, random, pandas as pd
+import time, traceback, uuid, io, pathlib, urllib.request, tempfile, random
 from multiprocessing import shared_memory
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QDialog, QMessageBox, QFileDialog, QInputDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QComboBox, QTextEdit, QTreeWidget, QTreeWidgetItem, QProgressBar, QCheckBox, QRadioButton, QGroupBox, QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView, QSplitter, QScrollArea, QFrame, QMenuBar, QMenu, QStatusBar, QSystemTrayIcon, QStyle, QCommonStyle
 from PySide6.QtGui import QPixmap, QIcon, QFont, QPainter, QPen, QBrush, QColor, QAction
