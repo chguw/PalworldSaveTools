@@ -18,9 +18,11 @@ def _spawn_process(args):
         exe = sys.executable
         if getattr(sys, 'frozen', False):
             cmd = [exe] + args
+            cwd = os.path.dirname(exe)
         else:
             script_path = os.path.abspath(__file__)
             cmd = [exe, script_path] + args
+            cwd = os.path.dirname(script_path)
         env = os.environ.copy()
         env['PYTHONUNBUFFERED'] = '1'
         if 'VIRTUAL_ENV' in os.environ:
@@ -34,7 +36,7 @@ def _spawn_process(args):
                 env['PYTHONPATH'] = resources_dir + os.pathsep + env['PYTHONPATH']
             else:
                 env['PYTHONPATH'] = resources_dir
-        proc = subprocess.Popen(cmd, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, text=False, env=env, cwd=os.path.dirname(os.path.abspath(__file__)))
+        proc = subprocess.Popen(cmd, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, text=False, env=env, cwd=cwd)
         return proc
     except Exception as e:
         print(f'Failed to spawn loader process: {e}')
