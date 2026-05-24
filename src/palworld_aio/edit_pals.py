@@ -3725,17 +3725,12 @@ class PalFrame(QFrame):
                         asset_lower = x['asset'].lower()
                         if 'rank' in x:
                             cls._PASSRANK[asset_lower] = x['rank']
-                        cls._PASSFLAGS[asset_lower] = {
-                            'add_pal': x.get('add_pal', False),
-                            'add_armor': x.get('add_armor', False),
-                            'add_accessory': x.get('add_accessory', False),
-                            'add_weapon': x.get('add_weapon', False),
-                        }
+                        cls._PASSFLAGS[asset_lower] = {'add_pal': x.get('add_pal', False), 'add_armor': x.get('add_armor', False), 'add_accessory': x.get('add_accessory', False), 'add_weapon': x.get('add_weapon', False)}
         except Exception:
             pass
         skill_exclusions = ['unknown skills', 'unknown skill', 'en_text', 'en text']
         npc_skill_patterns = ['Predator', 'RaidCutter', '_GYM_Act', 'Unique_YakushimaBoss', 'Unique_WorldTreeDragon_', 'Unique_LegendDeer_Barrier']
-        cls._SKILLMAP = {k: v for k, v in cls._SKILLMAP.items() if not any((exc in v.lower() for exc in skill_exclusions)) and not any((pat.lower() in k.lower() for pat in npc_skill_patterns))}
+        cls._SKILLMAP = {k: v for k, v in cls._SKILLMAP.items() if not any((exc in v.lower() for exc in skill_exclusions)) and (not any((pat.lower() in k.lower() for pat in npc_skill_patterns)))}
         cls._PASSMAP = {k: v for k, v in cls._PASSMAP.items() if not any((exc in v.lower() for exc in skill_exclusions))}
         cls._PASSMAP = {passive_id: name for passive_id, name in cls._PASSMAP.items() if cls._is_pal_passive(passive_id)}
         cls._maps_loaded = True
