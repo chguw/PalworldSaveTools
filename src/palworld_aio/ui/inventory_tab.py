@@ -9,6 +9,7 @@ DARK_THEME_STYLE = '\nQDialog {\n    background: qlineargradient(spread:pad, x1:
 STATS_PANEL_STYLE = '\nStatsPanelWidget {\n    background: rgba(18,20,24,0.95);\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 8px;\n}\nStatsPanelWidget QLabel {\n    color: #e2e8f0;\n}\nStatsPanelWidget QLineEdit {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 4px;\n    padding: 2px 4px;\n}\nStatsPanelWidget QLineEdit:focus {\n    border-color: rgba(125,211,252,0.4);\n}\nStatsPanelWidget QPushButton {\n    background: rgba(125,211,252,0.1);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 3px;\n    font-weight: bold;\n}\nStatsPanelWidget QPushButton:hover {\n    background: rgba(125,211,252,0.2);\n}\nStatsPanelWidget QProgressBar {\n    background: rgba(255,255,255,0.05);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 3px;\n}\nStatsPanelWidget QProgressBar::chunk {\n    background: rgba(34,197,94,0.6);\n    border-radius: 2px;\n}\n'
 from palworld_aio.inventory_manager import PlayerInventory, ItemData, get_player_inventory, UI_SLOT_BINDINGS, FOOD_POUCH_ITEMS, ACCESSORY_UNLOCK_ITEMS, WEAPON_UNLOCK_ITEMS
 from palworld_aio import constants
+EQUIP_SLOT_FILTERS = {'weapon': {'type_a': ['EPalItemTypeA::Weapon', 'EPalItemTypeA::MonsterEquipWeapon']}, 'head': {'type_a': 'EPalItemTypeA::Armor', 'type_b': 'EPalItemTypeB::ArmorHead'}, 'body': {'type_a': 'EPalItemTypeA::Armor', 'type_b': 'EPalItemTypeB::ArmorBody'}, 'shield': {'type_a': 'EPalItemTypeA::Armor', 'type_b': 'EPalItemTypeB::Shield'}, 'accessory': {'type_a': 'EPalItemTypeA::Accessory'}, 'glider': {'type_a': 'EPalItemTypeA::Glider'}, 'sphere_mod': {'type_a': 'EPalItemTypeA::CaptureItemModifier'}, 'food': {'type_a': 'EPalItemTypeA::Food'}}
 GRID_COLS = 6
 GRID_ROWS = 9
 SLOT_SIZE = 56
@@ -558,11 +559,15 @@ class RarityBorderDelegate(QStyledItemDelegate):
         painter.restore()
 class ItemPickerDialog(QDialog):
     item_selected = Signal(str, int)
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, filter_type_a=None, filter_type_b=None, filter_exclude_type_a=None, hide_quantity=False):
         super().__init__(parent)
         self.setWindowTitle(t('inventory.select_item', default='Select Item'))
         self.setMinimumSize(900, 600)
         self.selected_item = None
+        self._filter_type_a = filter_type_a
+        self._filter_type_b = filter_type_b
+        self._filter_exclude_type_a = filter_exclude_type_a
+        self._hide_quantity = hide_quantity
         self.setStyleSheet('''
             QDialog { background: qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 rgba(12,14,18,0.98),stop:0.5 rgba(10,16,22,0.98),stop:1 rgba(8,12,18,0.98)); color: #e2e8f0; }
             QLabel { color: #e2e8f0; }
@@ -610,6 +615,9 @@ class ItemPickerDialog(QDialog):
         self.qty_spin.setValue(1)
         qty_layout.addWidget(qty_label)
         qty_layout.addWidget(self.qty_spin)
+        if self._hide_quantity:
+            qty_label.setVisible(False)
+            self.qty_spin.setVisible(False)
         qty_layout.addStretch()
         add_btn = QPushButton(t('button.add', default='Add'))
         add_btn.clicked.connect(self._add_item)
@@ -620,6 +628,26 @@ class ItemPickerDialog(QDialog):
         layout.addLayout(qty_layout)
         items = ItemData.get_all_items()
         for item in items:
+            type_a = item.get('type_a', '')
+            type_b = item.get('type_b', '')
+            if self._filter_type_a is not None:
+                if isinstance(self._filter_type_a, list):
+                    if type_a not in self._filter_type_a:
+                        continue
+                elif type_a != self._filter_type_a:
+                    continue
+            if self._filter_type_b is not None:
+                if isinstance(self._filter_type_b, list):
+                    if type_b not in self._filter_type_b:
+                        continue
+                elif type_b != self._filter_type_b:
+                    continue
+            if self._filter_exclude_type_a is not None:
+                if isinstance(self._filter_exclude_type_a, list):
+                    if type_a in self._filter_exclude_type_a:
+                        continue
+                elif type_a == self._filter_exclude_type_a:
+                    continue
             list_item = QListWidgetItem(item.get('name', 'Unknown'))
             list_item.setData(Qt.UserRole, item.get('asset', ''))
             list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
@@ -1117,7 +1145,9 @@ class PlayerInventoryTab(QWidget):
         menu = QMenu(self)
         menu.setStyleSheet(DARK_THEME_STYLE)
         if current_item:
-            menu.addAction(t('inventory.edit_qty', default='Edit Quantity')).triggered.connect(lambda: self._edit_equip_item(slot_name, current_item))
+            slot_type = self._get_equip_slot_type(slot_name)
+            if slot_type == 'food':
+                menu.addAction(t('inventory.edit_qty', default='Edit Quantity')).triggered.connect(lambda: self._edit_equip_item(slot_name, current_item))
             menu.addAction(t('inventory.clear_slot', default='Clear Slot')).triggered.connect(lambda: self._clear_equip_slot(slot_name, slot_widget))
         else:
             menu.addAction(t('inventory.add_item', default='Add Item')).triggered.connect(lambda: self._add_to_equip_slot(slot_name))
@@ -1129,7 +1159,9 @@ class PlayerInventoryTab(QWidget):
         container_type = self._get_equip_container_type(slot_name)
         if not container_type:
             return
-        dialog = ItemPickerDialog(self)
+        slot_type = self._get_equip_slot_type(slot_name)
+        slot_filter = EQUIP_SLOT_FILTERS.get(slot_type, {})
+        dialog = ItemPickerDialog(self, filter_type_a=slot_filter.get('type_a'), filter_type_b=slot_filter.get('type_b'), hide_quantity=(slot_type != 'food'))
         dialog.item_selected.connect(lambda item_id, qty: self._do_add_to_equip_slot(slot_name, container_type, item_id, qty))
         dialog.exec()
     def _do_add_to_equip_slot(self, slot_name: str, container_type: str, item_id: str, quantity: int):
@@ -1175,6 +1207,11 @@ class PlayerInventoryTab(QWidget):
                 self._update_raw_save_data_with_recursive_clean(container_type, container, slot_index)
                 self.inventory.save()
                 self._refresh_display()
+    def _get_equip_slot_type(self, slot_name: str) -> str:
+        for prefix in ['weapon', 'accessory', 'food']:
+            if slot_name.startswith(prefix):
+                return prefix
+        return slot_name
     def _get_equip_container_type(self, slot_name: str) -> str:
         for binding in UI_SLOT_BINDINGS:
             if binding.get('slot_name') == slot_name:
@@ -1189,15 +1226,17 @@ class PlayerInventoryTab(QWidget):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('error.title', default='Error'), t('inventory.no_player', default='Please select a player first'))
             return
-        dialog = ItemPickerDialog(self)
+        container_type = getattr(self, '_context_container_type', 'main')
+        if container_type == 'key_items':
+            dialog = ItemPickerDialog(self, filter_type_a='EPalItemTypeA::Essential')
+        else:
+            dialog = ItemPickerDialog(self, filter_exclude_type_a='EPalItemTypeA::Essential')
         dialog.item_selected.connect(self._add_item_to_inventory)
         dialog.exec()
     def _add_item_to_inventory(self, item_id: str, quantity: int):
         if not self.inventory:
             return
-        container_type = self._context_container_type
-        container_type_map = {'main': 'main', 'key_items': 'key'}
-        actual_container_type = container_type_map.get(container_type, container_type)
+        actual_container_type = ItemData.get_target_container(item_id)
         container = self.inventory.get_container(actual_container_type)
         if not container:
             return
@@ -1218,9 +1257,9 @@ class PlayerInventoryTab(QWidget):
                 max_index = max(existing_indices) if existing_indices else -1
                 new_slot_index = max_index + 1
         item_info = ItemData.get_item_by_asset(item_id)
-        new_slot = {'slot_index': new_slot_index, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': quantity, 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None}
+        new_slot = {'slot_index': new_slot_index, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': quantity, 'category': ItemData.get_item_category(item_id), 'container_type': actual_container_type, 'raw_data': None}
         container.update_slots(container.slots + [new_slot])
-        self._update_raw_save_data(container_type, container)
+        self._update_raw_save_data(actual_container_type, container)
         self.inventory.save()
         self._refresh_display()
     def _update_raw_save_data(self, container_type: str, container):

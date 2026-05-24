@@ -1123,6 +1123,11 @@ def remove_item_from_players(item_id, percentage=None, player_uids=None):
 def add_item_to_players(item_id, quantity=1, container_type='key', player_uids=None):
     if not constants.loaded_level_json:
         return {'added': 0, 'players_affected': 0, 'containers_modified': 0}
+    from palworld_aio.inventory_manager import ItemData
+    if container_type == 'main' and ItemData.is_essential_item(item_id):
+        container_type = 'key'
+    elif container_type is None or container_type == '':
+        container_type = ItemData.get_target_container(item_id)
     added_count = 0
     players_affected = 0
     containers_modified = 0

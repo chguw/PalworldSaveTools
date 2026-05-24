@@ -588,6 +588,7 @@ def update_item_data():
     existing = load_resource_json('itemdata.json')
     existing_items = {i.get('asset', '').lower(): i for i in existing.get('items', [])}
     item_name_l10n = load_l10n_table('DT_ItemNameText_Common.json')
+    item_desc_l10n = load_l10n_table('DT_ItemDescriptionText_Common.json')
     all_item_rows = {}
     for data in [item_table, item_table_common]:
         if data:
@@ -641,6 +642,20 @@ def update_item_data():
             if _is_valid_l10n_name(val):
                 return val
         return item_id
+    def resolve_item_desc(item_id: str, item_row: dict) -> str:
+        override = ''
+        if isinstance(item_row, dict):
+            override = item_row.get('OverrideDescription', '')
+        if override and override != 'None' and (override in item_desc_l10n):
+            val = item_desc_l10n[override]
+            if val and val.strip().lower() not in ('', 'en_text', 'en text', 'none'):
+                return val
+        standard_key = f'ITEM_DESC_{item_id}'
+        if standard_key in item_desc_l10n:
+            val = item_desc_l10n[standard_key]
+            if val and val.strip().lower() not in ('', 'en_text', 'en text', 'none'):
+                return val
+        return ''
     updated_items = []
     for item_id in sorted(all_item_ids):
         item_id_lower = item_id.lower()
@@ -648,6 +663,8 @@ def update_item_data():
         item_row = all_item_rows.get(item_id, {})
         item_name = resolve_item_name(item_id, item_row)
         item_name = resolve_rich_text(item_name)
+        item_desc = resolve_item_desc(item_id, item_row)
+        item_desc = resolve_rich_text(item_desc) if item_desc else ''
         icon_name_field = ''
         if isinstance(item_row, dict):
             icon_name_field = item_row.get('IconName', '')
@@ -702,12 +719,16 @@ def update_item_data():
         if not final_icon.startswith('/icons/'):
             final_icon = f'/icons/items/{item_id}.webp'
         rarity = 0
+        type_a = ''
+        type_b = ''
         if isinstance(item_row, dict):
             rarity_val = item_row.get('Rarity', 0)
             if isinstance(rarity_val, dict):
                 rarity_val = rarity_val.get('value', 0)
             rarity = int(rarity_val) if rarity_val else 0
-        item_entry = {'name': item_name, 'asset': item_id, 'icon': final_icon, 'rarity': rarity}
+            type_a = item_row.get('TypeA', '')
+            type_b = item_row.get('TypeB', '')
+        item_entry = {'name': item_name, 'asset': item_id, 'icon': final_icon, 'rarity': rarity, 'type_a': type_a, 'type_b': type_b, 'description': item_desc}
         updated_items.append(item_entry)
     try:
         pal_data = load_resource_json('paldata.json')

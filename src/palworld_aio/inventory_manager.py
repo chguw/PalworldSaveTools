@@ -10,13 +10,15 @@ from palworld_aio import constants
 from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav, as_uuid, are_equal_uuids, fast_deepcopy
 from palworld_aio.dynamic_item_manager import get_dynamic_item_manager, generate_dynamic_item_uuid
 from palworld_aio.standardized_container import StandardizedContainer, ContainerSlot
-ITEM_CATEGORIES = {'weapon': ['Bat', 'Torch', 'Spear', 'Axe', 'Pickaxe', 'Sword', 'Katana', 'Bow', 'BowGun', 'HandGun', 'Revolver', 'Rifle', 'Shotgun', 'SMG', 'Launcher', 'Gatling', 'FlameThrower', 'LaserRifle', 'GrenadeLauncher', 'Musket', 'CompoundBow', 'SFBow'], 'armor': ['Armor', 'Helm', 'Helmet', 'Outfit', 'Shield', 'HeadEquip'], 'accessory': ['Accessory', 'Pendant', 'Ring', 'Whistle', 'Boots', 'Belt'], 'food': ['Food', 'Meat', 'Berry', 'Berries', 'Egg', 'Milk', 'Honey', 'Potion', 'Elixir'], 'material': ['Wood', 'Stone', 'Ore', 'Fiber', 'Cloth', 'Ingot', 'Leather', 'Bone', 'Horn', 'Organ', 'Fluid', 'Oil', 'Parts', 'Crystal', 'Seed', 'Fiber'], 'sphere': ['PalSphere', 'Sphere'], 'ammo': ['Arrow', 'Bullet', 'Ammo', 'Cartridge'], 'key_item': ['Key', 'Summon', 'Relic', 'Unlock', 'SkillUnlock', 'Blueprint'], 'tool': ['FishingRod', 'GrapplingGun', 'Glider', 'Lantern', 'MetalDetector', 'Pouch']}
+TYPE_A_TO_CATEGORY = {'EPalItemTypeA::Weapon': 'weapon', 'EPalItemTypeA::MonsterEquipWeapon': 'weapon', 'EPalItemTypeA::SpecialWeapon': 'weapon', 'EPalItemTypeA::Armor': 'armor', 'EPalItemTypeA::Accessory': 'accessory', 'EPalItemTypeA::Food': 'food', 'EPalItemTypeA::Material': 'material', 'EPalItemTypeA::Ammo': 'ammo', 'EPalItemTypeA::Consume': 'consume', 'EPalItemTypeA::Glider': 'tool', 'EPalItemTypeA::CaptureItemModifier': 'sphere', 'EPalItemTypeA::Essential': 'key_item', 'EPalItemTypeA::Blueprint': 'blueprint'}
 class ItemData:
     _instance = None
     _item_data = None
     _icon_cache = {}
     _asset_to_item = {}
     _asset_to_item_lower = {}
+    _asset_to_typea = {}
+    _asset_to_typeb = {}
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -31,6 +33,8 @@ class ItemData:
             cls._item_data = json_tools.load(item_file).get('items', [])
             cls._asset_to_item = {item['asset']: item for item in cls._item_data}
             cls._asset_to_item_lower = {item['asset'].lower(): item for item in cls._item_data}
+            cls._asset_to_typea = {item['asset']: item.get('type_a', '') for item in cls._item_data if item.get('type_a')}
+            cls._asset_to_typeb = {item['asset']: item.get('type_b', '') for item in cls._item_data if item.get('type_b')}
             return cls._item_data
         except Exception as e:
             cls._item_data = []
@@ -53,8 +57,8 @@ class ItemData:
             name = item.get('name', '')
             if not name or name == item.get('asset', ''):
                 name = cls._friendly_name(asset_name)
-            return {'name': name, 'asset': item.get('asset', asset_name), 'icon': item.get('icon', '/icons/items/T_icon_unknown.webp'), 'rarity': item.get('rarity', 0)}
-        return {'name': cls._friendly_name(asset_name), 'asset': asset_name, 'icon': '/icons/items/T_icon_unknown.webp', 'rarity': 0}
+            return {'name': name, 'asset': item.get('asset', asset_name), 'icon': item.get('icon', '/icons/items/T_icon_unknown.webp'), 'rarity': item.get('rarity', 0), 'type_a': item.get('type_a', ''), 'type_b': item.get('type_b', '')}
+        return {'name': cls._friendly_name(asset_name), 'asset': asset_name, 'icon': '/icons/items/T_icon_unknown.webp', 'rarity': 0, 'type_a': '', 'type_b': ''}
     @classmethod
     def _resolve_icon_path(cls, icon_path: str) -> str:
         base_path = constants.get_base_path()
@@ -153,12 +157,28 @@ class ItemData:
         return 0
     @classmethod
     def get_item_category(cls, asset_name: str) -> str:
-        asset_lower = asset_name.lower()
-        for category, keywords in ITEM_CATEGORIES.items():
-            for keyword in keywords:
-                if keyword.lower() in asset_lower:
-                    return category
+        type_a = cls.get_item_type_a(asset_name)
+        if type_a:
+            return TYPE_A_TO_CATEGORY.get(type_a, 'misc')
         return 'misc'
+    @classmethod
+    def get_item_type_a(cls, asset_name: str) -> str:
+        cls.load_item_data()
+        return cls._asset_to_typea.get(asset_name, '') or cls._asset_to_typea.get(asset_name.lower(), '')
+    @classmethod
+    def get_item_type_b(cls, asset_name: str) -> str:
+        cls.load_item_data()
+        return cls._asset_to_typeb.get(asset_name, '') or cls._asset_to_typeb.get(asset_name.lower(), '')
+    @classmethod
+    def is_essential_item(cls, asset_name: str) -> bool:
+        cls.load_item_data()
+        type_a = cls._asset_to_typea.get(asset_name, '') or cls._asset_to_typea.get(asset_name.lower(), '')
+        return type_a == 'EPalItemTypeA::Essential'
+    @classmethod
+    def get_target_container(cls, asset_name: str) -> str:
+        if cls.is_essential_item(asset_name):
+            return 'key'
+        return 'main'
     @classmethod
     def search_items(cls, query: str, limit: int=50) -> list:
         cls.load_item_data()
@@ -361,7 +381,11 @@ class PlayerInventory:
                         equipment[slot_name] = slot
                         break
         return equipment
-    def add_item(self, container_type: str, item_id: str, quantity: int=1, slot_index: int=None) -> bool:
+    def add_item(self, container_type: str=None, item_id: str=None, quantity: int=1, slot_index: int=None) -> bool:
+        if container_type is None or container_type == '':
+            container_type = ItemData.get_target_container(item_id)
+        elif container_type == 'main' and ItemData.is_essential_item(item_id):
+            container_type = 'key'
         container = self.get_container(container_type)
         if not container:
             return False
