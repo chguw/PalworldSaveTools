@@ -604,7 +604,6 @@ def main(skip_msgbox=False, skip_gui=False):
     if not skip_msgbox:
         show_information(None, t('Transfer Successful'), t("Transfer successful in memory! Hit 'Save Changes' to save."))
 def _normalize_lid(lid):
-    """Normalize a local_id (PalUUID, bytes, or str) to lowercase string."""
     if hasattr(lid, 'raw_bytes'):
         s = str(lid).lower()
         return '' if s.replace('-', '') == '00000000000000000000000000000000' else s
@@ -628,16 +627,9 @@ def _bump_guid_str(s, used):
     used.add(bumped)
     return bumped
 def _collect_container_ids(player_json):
-    """Extract the 5 inventory container IDs from a player save JSON."""
     try:
         ii = player_json['SaveData']['value']['InventoryInfo']['value']
-        return {
-            ii['CommonContainerId']['value']['ID']['value'],
-            ii['EssentialContainerId']['value']['ID']['value'],
-            ii['WeaponLoadOutContainerId']['value']['ID']['value'],
-            ii['PlayerEquipArmorContainerId']['value']['ID']['value'],
-            ii['FoodEquipContainerId']['value']['ID']['value'],
-        }
+        return {ii['CommonContainerId']['value']['ID']['value'], ii['EssentialContainerId']['value']['ID']['value'], ii['WeaponLoadOutContainerId']['value']['ID']['value'], ii['PlayerEquipArmorContainerId']['value']['ID']['value'], ii['FoodEquipContainerId']['value']['ID']['value']}
     except:
         return set()
 def gather_and_update_dynamic_containers():
@@ -866,22 +858,10 @@ def transfer_character_only(host_guid, targ_uid):
     targ_lvl.setdefault('CharacterContainerSaveData', {'value': []})
     targ_lvl.setdefault('ItemContainerSaveData', {'value': []})
     host_save = host_json['SaveData']['value']
-    src_char_ids = {
-        host_save['PalStorageContainerId']['value']['ID']['value'],
-        host_save['OtomoCharacterContainerId']['value']['ID']['value'],
-    }
+    src_char_ids = {host_save['PalStorageContainerId']['value']['ID']['value'], host_save['OtomoCharacterContainerId']['value']['ID']['value']}
     inv_info = host_save['InventoryInfo']['value']
-    src_item_ids = {
-        inv_info['CommonContainerId']['value']['ID']['value'],
-        inv_info['EssentialContainerId']['value']['ID']['value'],
-        inv_info['WeaponLoadOutContainerId']['value']['ID']['value'],
-        inv_info['PlayerEquipArmorContainerId']['value']['ID']['value'],
-        inv_info['FoodEquipContainerId']['value']['ID']['value'],
-    }
-    for container_list, src_ids in (
-        ('CharacterContainerSaveData', src_char_ids),
-        ('ItemContainerSaveData', src_item_ids),
-    ):
+    src_item_ids = {inv_info['CommonContainerId']['value']['ID']['value'], inv_info['EssentialContainerId']['value']['ID']['value'], inv_info['WeaponLoadOutContainerId']['value']['ID']['value'], inv_info['PlayerEquipArmorContainerId']['value']['ID']['value'], inv_info['FoodEquipContainerId']['value']['ID']['value']}
+    for container_list, src_ids in (('CharacterContainerSaveData', src_char_ids), ('ItemContainerSaveData', src_item_ids)):
         existing_ids = {c.get('key', {}).get('ID', {}).get('value') for c in targ_lvl[container_list]['value']}
         for c in level_json.get(container_list, {}).get('value', []):
             cid = c['key']['ID']['value']
