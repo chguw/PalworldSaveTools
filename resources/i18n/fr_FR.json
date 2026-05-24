@@ -545,7 +545,7 @@
   "inventory.stats.weight": "Poids",
   "inventory.stats.work_speed": "Vitesse de travail",
   "inventory.tab": "Inventaire du joueur",
-  "inventory.title": "Inventaire du joueur",
+  "inventory.title": "Éditeur d'inventaire des joueurs",
   "inventory.unlock_confirm": "Déverrouiller {slot} ?\n\nCela ajoutera \"{item}\" à vos objets clés.",
   "inventory.unlock_failed": "Échec du déverrouillage",
   "inventory.unlock_hint_accessory": "Cliquez pour déverrouiller avec un objet d'emplacement d'accessoire",
@@ -1319,5 +1319,7 @@
   "calibrate.no_bases": "Aucune base trouvée pour l'étalonnage",
   "calibrate.need_points": "Besoin d'au moins 1 point",
   "calibrate.complete_title": "Étalonnage terminé",
-  "calibrate.complete_msg": "Constantes mises à jour ! scale={s} transl_x={tx} transl_y={ty} Redémarrez pour appliquer."
+  "calibrate.complete_msg": "Constantes mises à jour ! scale={s} transl_x={tx} transl_y={ty} Redémarrez pour appliquer.",
+  "base_inventory.select_guild_base_hint": "Sélectionnez une guilde/base pour modifier son inventaire",
+  "base_inventory.title": "Éditeur d'inventaire de base"
 }

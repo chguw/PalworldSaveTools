@@ -539,7 +539,7 @@
   "inventory.stats.weight": "Вес",
   "inventory.stats.work_speed": "Скорость работы",
   "inventory.tab": "Инвентарь игрока",
-  "inventory.title": "Инвентарь игрока",
+  "inventory.title": "Редактор инвентаря игрока",
   "inventory.unlock_confirm": "Разблокировать {slot}?\n\nЭто добавит \"{item}\" в ключевые предметы.",
   "inventory.unlock_failed": "Не удалось разблокировать",
   "inventory.unlock_hint_accessory": "Нажмите для разблокировки с предметом слота аксессуара",
@@ -1335,5 +1335,7 @@
   "calibrate.no_bases": "Базы для калибровки не найдены",
   "calibrate.need_points": "Нужен хотя бы 1 балл",
   "calibrate.complete_title": "Калибровка завершена",
-  "calibrate.complete_msg": "Константы обновлены! масштаб={s} transl_x={tx} transl_y={ty} Перезапустите, чтобы применить."
+  "calibrate.complete_msg": "Константы обновлены! масштаб={s} transl_x={tx} transl_y={ty} Перезапустите, чтобы применить.",
+  "base_inventory.select_guild_base_hint": "Выберите гильдию/базу, чтобы редактировать их инвентарь.",
+  "base_inventory.title": "Редактор базового инвентаря"
 }

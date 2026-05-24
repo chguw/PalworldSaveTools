@@ -386,7 +386,7 @@
   "base_inventory.success": "Success",
   "base_inventory.support": "Support",
   "base_inventory.tab": "Base Inventory",
-  "base_inventory.title": "Base Inventory",
+  "base_inventory.title": "Base Inventory Editor",
   "base_inventory.type": "Type: {type}",
   "base_inventory.type_unknown": "Type: Unknown",
   "base_inventory.unknown": "Unknown",
@@ -820,7 +820,7 @@
   "inventory.stats.weight": "Weight",
   "inventory.stats.work_speed": "Work Speed",
   "inventory.tab": "Player Inventory",
-  "inventory.title": "Inventory Editor",
+  "inventory.title": "Player Inventory Editor",
   "inventory.unlock_confirm": "Unlock {slot}?\n\nThis will add \"{item}\" to your key items.",
   "inventory.unlock_failed": "Unlock Failed",
   "inventory.unlock_hint_accessory": "Click to unlock with Accessory Slot Item",
@@ -1626,5 +1626,6 @@
   "calibrate.no_bases": "No bases found for calibration",
   "calibrate.need_points": "Need at least 1 point",
   "calibrate.complete_title": "Calibration Complete",
-  "calibrate.complete_msg": "Constants updated! scale={s}  transl_x={tx}  transl_y={ty}  Restart to apply."
+  "calibrate.complete_msg": "Constants updated! scale={s}  transl_x={tx}  transl_y={ty}  Restart to apply.",
+  "base_inventory.select_guild_base_hint": "Select a Guild/Base to edit their inventory"
 }

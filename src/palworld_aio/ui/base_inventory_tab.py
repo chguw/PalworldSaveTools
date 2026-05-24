@@ -3,7 +3,7 @@ import sys
 from palworld_save_tools import json_tools
 import time
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox, QTreeWidget, QTreeWidgetItem, QSplitter, QFrame, QScrollArea, QGridLayout, QGroupBox, QMenu, QHeaderView, QMessageBox, QFileDialog, QInputDialog, QDialog, QCheckBox, QSpinBox, QDoubleSpinBox, QSizePolicy, QAbstractItemView, QSpacerItem, QTabWidget, QTabBar, QStyleOptionTab, QStyle, QApplication, QStyledItemDelegate, QListWidget, QListWidgetItem, QLineEdit, QListView
-from PySide6.QtCore import Qt, Signal, QTimer, QPropertyAnimation, QEasingCurve, QSize, QPoint, QRect, QEvent, QMargins
+from PySide6.QtCore import Qt, Signal, QTimer, QPropertyAnimation, QEasingCurve, QSize, QPoint, QRect, QEvent, QMargins, QThread
 from PySide6.QtGui import QPixmap, QIcon, QFont, QAction, QCursor, QPainter, QColor, QBrush, QPen, QLinearGradient, QPalette, QMouseEvent, QWheelEvent, QResizeEvent, QPaintEvent, QContextMenuEvent, QDragEnterEvent, QDragMoveEvent, QDropEvent, QDrag
 from PySide6.QtWidgets import QStyledItemDelegate
 from PySide6.QtCore import QMimeData
@@ -398,7 +398,7 @@ class ContainerListWidget(QTreeWidget):
         super().__init__(parent)
         self.setHeaderHidden(True)
         self.setIndentation(0)
-        self.setAlternatingRowColors(True)
+        self.setAlternatingRowColors(False)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
         self.setDragEnabled(False)
         self.setAcceptDrops(False)
@@ -407,8 +407,7 @@ class ContainerListWidget(QTreeWidget):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self._show_context_menu)
         self.itemSelectionChanged.connect(self._on_selection_changed)
-    def _update_styles(self):
-        self.setStyleSheet('\n                QTreeWidget {\n                    background-color: rgba(20, 25, 35, 0.8);\n                    border: 1px solid rgba(255, 255, 255, 0.1);\n                    border-radius: 6px;\n                    color: #e0e0e0;\n                }\n                QTreeWidget::item {\n                    padding: 8px;\n                    margin: 2px 0;\n                    border-radius: 4px;\n                    background-color: rgba(30, 35, 45, 0.8);\n                }\n                QTreeWidget::item:selected {\n                    background-color: rgba(74, 144, 226, 0.3);\n                    border: 1px solid rgba(74, 144, 226, 0.5);\n                }\n                QTreeWidget::item:hover {\n                    background-color: rgba(50, 55, 65, 0.8);\n                }\n                QTreeWidget::branch {\n                    background-color: transparent;\n                }\n            ')
+        self.setStyleSheet('\n            QTreeWidget {\n                background: transparent;\n                border: 1px solid rgba(255, 255, 255, 0.08);\n                border-radius: 6px;\n                color: #e0e0e0;\n                outline: none;\n            }\n            QTreeWidget::item {\n                padding: 6px;\n                margin: 1px 2px;\n                border: 1px solid rgba(255, 255, 255, 0.06);\n                border-radius: 3px;\n                background-color: rgba(30, 35, 45, 0.8);\n            }\n            QTreeWidget::item:selected {\n                background-color: rgba(74, 144, 226, 0.5);\n                border: 2px solid rgba(74, 144, 226, 0.7);\n            }\n            QTreeWidget::item:hover {\n                background-color: rgba(50, 55, 65, 0.8);\n                border-color: rgba(255, 255, 255, 0.12);\n            }\n            QTreeWidget::item:selected:hover {\n                background-color: rgba(74, 144, 226, 0.55);\n            }\n            QTreeWidget::branch {\n                background-color: transparent;\n            }\n        ')
     def clear(self):
         super().clear()
         self.setHeaderHidden(True)
@@ -421,13 +420,14 @@ class ContainerListWidget(QTreeWidget):
         self.setItemWidget(item, 0, self._create_container_widget(container_info))
     def _create_container_widget(self, container_info):
         widget = QWidget()
+        widget.setStyleSheet('background: transparent;')
         layout = QHBoxLayout(widget)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(10)
         image_label = QLabel()
         image_label.setFixedSize(60, 60)
         image_label.setAlignment(Qt.AlignCenter)
-        image_label.setStyleSheet(f'\n            QLabel {{\n                background-color: rgba(30, 35, 45, 0.8);\n                border: 1px solid rgba(255, 255, 255, 0.2);\n                border-radius: 4px;\n            }}\n        ')
+        image_label.setStyleSheet(f'QLabel {{ background-color: rgba(30, 35, 45, 0.9); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; }}')
         image_path = get_container_image_path(container_info['type'])
         if image_path and os.path.exists(image_path):
             pixmap = QPixmap(image_path)
@@ -442,16 +442,16 @@ class ContainerListWidget(QTreeWidget):
         info_layout = QVBoxLayout()
         info_layout.setSpacing(2)
         name_label = QLabel(container_info['name'])
-        name_label.setStyleSheet(f'\n            QLabel {{\n                font-weight: bold;\n                font-size: 12px;\n                color: #ffffff;\n            }}\n        ')
+        name_label.setStyleSheet('QLabel { font-weight: bold; font-size: 12px; color: #ffffff; background: transparent; }')
         info_layout.addWidget(name_label)
         details_layout = QHBoxLayout()
         details_layout.setSpacing(10)
         slots_label = QLabel(t('base_inventory.slots_count').format(count=container_info['slot_count']) if t else f"Slots: {container_info['slot_count']}")
-        slots_label.setStyleSheet(f'\n            QLabel {{\n                font-size: 11px;\n                color: #cccccc;\n            }}\n        ')
+        slots_label.setStyleSheet('QLabel { font-size: 11px; color: #cccccc; background: transparent; }')
         details_layout.addWidget(slots_label)
         info_layout.addLayout(details_layout)
         id_label = QLabel(container_info['id'])
-        id_label.setStyleSheet(f'\n            QLabel {{\n                font-size: 11px;\n                color: #999999;\n            }}\n        ')
+        id_label.setStyleSheet('QLabel { font-size: 11px; color: #999999; background: transparent; }')
         info_layout.addWidget(id_label)
         layout.addLayout(info_layout)
         layout.addStretch()
@@ -676,7 +676,6 @@ class BaseInventoryTab(QWidget):
         self._bases_data = []
         self._setup_ui()
         self._setup_connections()
-        self._update_theme()
         self._auto_save_timer = QTimer(self)
         self._auto_save_timer.setSingleShot(True)
         self._auto_save_timer.setInterval(2000)
@@ -694,6 +693,8 @@ class BaseInventoryTab(QWidget):
         if self.container_list.topLevelItemCount() > 0:
             self.container_list.setCurrentItem(self.container_list.topLevelItem(0))
     def refresh_labels(self):
+        if hasattr(self, 'title_label'):
+            self.title_label.setText(t('base_inventory.title', default='Base Inventory'))
         if hasattr(self, 'container_label'):
             self.container_label.setText(t('base_inventory.select_container') if t else 'Containers:')
         if hasattr(self, 'guild_button'):
@@ -714,10 +715,10 @@ class BaseInventoryTab(QWidget):
         if hasattr(self, 'clear_item_button'):
             self.clear_item_button.setVisible(bool(self.selected_item_id))
             self.clear_item_button.setToolTip(t('base_inventory.clear_item') if t else 'Clear Item Filter')
-        if hasattr(self, 'container_info'):
-            pass
         if hasattr(self, 'inventory_grid'):
             self.inventory_grid.refresh_labels()
+        if hasattr(self, 'placeholder_label'):
+            self.placeholder_label.setText(t('base_inventory.select_guild_base_hint', default='Select a Guild/Base to edit their inventory'))
         current_container_id = None
         if self.manager.current_container:
             current_container_id = self.manager.current_container.get('id')
@@ -731,6 +732,10 @@ class BaseInventoryTab(QWidget):
         layout.setSpacing(10)
         header_layout = QHBoxLayout()
         header_layout.setSpacing(8)
+        self.title_label = QLabel(t('base_inventory.title', default='Base Inventory'))
+        self.title_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
+        self.title_label.setObjectName('sectionHeader')
+        header_layout.addWidget(self.title_label)
         self.guild_button = QPushButton(t('base_inventory.select_guild') if t else 'Select Guild')
         self.guild_button.setMinimumWidth(160)
         self.guild_button.setMaximumHeight(28)
@@ -745,6 +750,7 @@ class BaseInventoryTab(QWidget):
         self.base_button.setCursor(Qt.PointingHandCursor)
         self.base_button.clicked.connect(self._show_base_popup)
         header_layout.addWidget(self.base_button)
+        header_layout.addStretch()
         self.item_button = QPushButton(t('base_inventory.all_items') if t else 'All Items')
         self.item_button.setMinimumWidth(100)
         self.item_button.setMaximumHeight(28)
@@ -761,8 +767,20 @@ class BaseInventoryTab(QWidget):
         self.clear_item_button.clicked.connect(self._clear_item_filter)
         self.clear_item_button.setVisible(False)
         header_layout.addWidget(self.clear_item_button)
-        header_layout.addStretch()
         layout.addLayout(header_layout)
+        self.content_area = QFrame()
+        self.content_area.setObjectName('baseInventoryContent')
+        self.content_area.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.content_area.setStyleSheet('\n            QFrame#baseInventoryContent {\n                background-color: rgba(20, 20, 30, 200);\n                border: 1px solid rgba(125, 211, 252, 0.2);\n                border-radius: 8px;\n            }\n        ')
+        content_layout = QVBoxLayout(self.content_area)
+        content_layout.setContentsMargins(8, 8, 8, 8)
+        content_layout.setSpacing(0)
+        self.placeholder_label = QLabel(t('base_inventory.select_guild_base_hint', default='Select a Guild/Base to edit their inventory'))
+        self.placeholder_label.setAlignment(Qt.AlignCenter)
+        self.placeholder_label.setMinimumHeight(400)
+        self.placeholder_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.placeholder_label.setStyleSheet('\n            QLabel {\n                color: #888;\n                font-size: 14px;\n                background: transparent;\n            }\n        ')
+        content_layout.addWidget(self.placeholder_label)
         self.splitter = QSplitter(Qt.Horizontal)
         self.splitter.setChildrenCollapsible(False)
         left_panel = QWidget()
@@ -785,7 +803,9 @@ class BaseInventoryTab(QWidget):
         self.inventory_grid = InventoryGridWidget()
         right_layout.addWidget(self.inventory_grid)
         self.splitter.addWidget(right_panel)
-        layout.addWidget(self.splitter)
+        content_layout.addWidget(self.splitter)
+        layout.addWidget(self.content_area)
+        self.splitter.hide()
         self.splitter.setSizes([300, 700])
     def _create_styled_combo(self):
         combo = StyledCombo()
@@ -798,12 +818,20 @@ class BaseInventoryTab(QWidget):
         self.inventory_grid.item_added.connect(self._trigger_auto_save)
         self.inventory_grid.item_removed.connect(self._trigger_auto_save)
         self.inventory_grid.item_count_changed.connect(self._trigger_auto_save)
+    def _show_content(self):
+        self.placeholder_label.hide()
+        self.splitter.show()
+    def _clear_display(self):
+        self.splitter.hide()
+        self.placeholder_label.show()
+        self.container_list.clear()
+        self.container_info.set_container_info(None)
+        self.inventory_grid.clear()
     def _update_theme(self):
-        self.setStyleSheet('\n                QWidget {\n                    background-color: rgba(15, 20, 30, 0.9);\n                    color: #e0e0e0;\n                }\n                QLabel {\n                    color: #e0e0e0;\n                }\n                QComboBox {\n                    background-color: rgba(30, 35, 45, 0.8);\n                    border: 1px solid rgba(255, 255, 255, 0.2);\n                    border-radius: 4px;\n                    padding: 4px 8px;\n                    color: #e0e0e0;\n                }\n                QComboBox::drop-down {\n                    border-left: 1px solid rgba(255, 255, 255, 0.2);\n                }\n                QPushButton {\n                    background-color: rgba(74, 144, 226, 0.8);\n                    border: 1px solid rgba(74, 144, 226, 1.0);\n                    border-radius: 4px;\n                    padding: 6px 12px;\n                    color: white;\n                    font-weight: bold;\n                }\n                QPushButton:hover {\n                    background-color: rgba(74, 144, 226, 1.0);\n                }\n                QPushButton:pressed {\n                    background-color: rgba(50, 120, 200, 1.0);\n                }\n                QSplitter::handle {\n                    background-color: rgba(255, 255, 255, 0.1);\n                }\n                QSplitter::handle:hover {\n                    background-color: rgba(255, 255, 255, 0.2);\n                }\n            ')
+        self.setStyleSheet('\n                QWidget {\n                    background-color: #121418;\n                    color: #e0e0e0;\n                }\n                QComboBox {\n                    background-color: rgba(30, 35, 45, 0.8);\n                    border: 1px solid rgba(255, 255, 255, 0.2);\n                    border-radius: 4px;\n                    padding: 4px 8px;\n                    color: #e0e0e0;\n                }\n                QComboBox::drop-down {\n                    border-left: 1px solid rgba(255, 255, 255, 0.2);\n                }\n                QPushButton {\n                    background-color: rgba(74, 144, 226, 0.8);\n                    border: 1px solid rgba(74, 144, 226, 1.0);\n                    border-radius: 4px;\n                    padding: 6px 12px;\n                    color: white;\n                    font-weight: bold;\n                }\n                QPushButton:hover {\n                    background-color: rgba(74, 144, 226, 1.0);\n                }\n                QPushButton:pressed {\n                    background-color: rgba(50, 120, 200, 1.0);\n                }\n                QSplitter::handle {\n                    background-color: rgba(255, 255, 255, 0.1);\n                }\n                QSplitter::handle:hover {\n                    background-color: rgba(255, 255, 255, 0.2);\n                }\n            ')
     def refresh(self):
         self._load_guilds()
         self._load_items()
-        self._update_theme()
         self.refresh_labels()
         if hasattr(self.parent, 'parent') and hasattr(self.parent.parent, 'results_widget'):
             pass
@@ -823,6 +851,9 @@ class BaseInventoryTab(QWidget):
         list_widget.setStyleSheet('QListWidget { background: transparent; color: #e2e8f0; border: none; font-size: 12px; } QListWidget::item { padding: 3px 8px; border-radius: 3px; } QListWidget::item:hover { background: rgba(59,142,208,0.2); } QListWidget::item:selected { background: rgba(59,142,208,0.35); }')
         list_widget.setMaximumHeight(300)
         layout.addWidget(list_widget)
+        clear_item = QListWidgetItem('-- clear --')
+        clear_item.setData(Qt.UserRole, '__clear__')
+        list_widget.addItem(clear_item)
         for guild in self._guilds_data:
             item = QListWidgetItem(f"{guild['name']} (Level {guild['level']})")
             item.setData(Qt.UserRole, guild['id'])
@@ -836,12 +867,23 @@ class BaseInventoryTab(QWidget):
         def select_guild(item):
             if item:
                 guild_id = item.data(Qt.UserRole)
-                if guild_id:
+                if guild_id == '__clear__':
+                    self._clear_guild_selection()
+                elif guild_id:
                     self._on_guild_changed(guild_id)
             popup.close()
         list_widget.itemClicked.connect(select_guild)
         popup.move(self.guild_button.mapToGlobal(self.guild_button.rect().bottomLeft()))
         popup.show()
+    def _clear_guild_selection(self):
+        self._current_guild_id = None
+        self._current_guild_name = ''
+        self.guild_button.setText(t('base_inventory.select_guild') if t else 'Select Guild')
+        self._bases_data = []
+        self._current_base_id = None
+        self._current_base_name = ''
+        self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
+        self._clear_display()
     def _show_base_popup(self):
         if not self._current_guild_id:
             return
@@ -860,6 +902,9 @@ class BaseInventoryTab(QWidget):
         list_widget.setStyleSheet('QListWidget { background: transparent; color: #e2e8f0; border: none; font-size: 12px; } QListWidget::item { padding: 3px 8px; border-radius: 3px; } QListWidget::item:hover { background: rgba(59,142,208,0.2); } QListWidget::item:selected { background: rgba(59,142,208,0.35); }')
         list_widget.setMaximumHeight(300)
         layout.addWidget(list_widget)
+        clear_item = QListWidgetItem('-- clear --')
+        clear_item.setData(Qt.UserRole, '__clear__')
+        list_widget.addItem(clear_item)
         for base in self._bases_data:
             item = QListWidgetItem(f"{base['guild_name']} - Base {base['id'][:8]}")
             item.setData(Qt.UserRole, base['id'])
@@ -873,12 +918,19 @@ class BaseInventoryTab(QWidget):
         def select_base(item):
             if item:
                 base_id = item.data(Qt.UserRole)
-                if base_id:
+                if base_id == '__clear__':
+                    self._clear_base_selection()
+                elif base_id:
                     self._on_base_changed(base_id)
             popup.close()
         list_widget.itemClicked.connect(select_base)
         popup.move(self.base_button.mapToGlobal(self.base_button.rect().bottomLeft()))
         popup.show()
+    def _clear_base_selection(self):
+        self._current_base_id = None
+        self._current_base_name = ''
+        self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
+        self._clear_display()
     def _load_guilds(self):
         self._guilds_data = []
         self._bases_data = []
@@ -886,15 +938,15 @@ class BaseInventoryTab(QWidget):
         self._current_guild_name = ''
         self._current_base_id = None
         self._current_base_name = ''
+        self.guild_button.setText(t('base_inventory.select_guild') if t else 'Select Guild')
+        self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
         guilds = self.manager.load_guilds()
         if not guilds:
             self.guild_button.setText(t('base_inventory.no_save_loaded') if t else 'No save file loaded')
             self.guild_button.setEnabled(False)
             self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
             self.base_button.setEnabled(False)
-            self.container_list.clear()
-            self.container_info.set_container_info(None)
-            self.inventory_grid.clear()
+            self._clear_display()
             return
         guilds_with_bases = []
         for guild in guilds:
@@ -907,24 +959,19 @@ class BaseInventoryTab(QWidget):
             self.guild_button.setEnabled(True)
             self.base_button.setText(t('base_inventory.no_bases_available') if t else 'No bases available')
             self.base_button.setEnabled(False)
-            self.container_list.clear()
-            self.container_info.set_container_info(None)
-            self.inventory_grid.clear()
+            self._clear_display()
             return
         self._guilds_data = guilds_with_bases
         self.guild_button.setEnabled(True)
         self.base_button.setEnabled(True)
-        first = guilds_with_bases[0]
-        self._on_guild_changed(first['id'])
+        self._clear_display()
     def _on_guild_changed(self, guild_id):
         if guild_id is None:
             self._bases_data = []
             self._current_base_id = None
             self._current_base_name = ''
             self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
-            self.container_list.clear()
-            self.container_info.set_container_info(None)
-            self.inventory_grid.clear()
+            self._clear_display()
             return
         self._current_guild_id = guild_id
         guild = next((g for g in self._guilds_data if str(g['id']) == str(guild_id)), None)
@@ -943,9 +990,7 @@ class BaseInventoryTab(QWidget):
         if not bases:
             self.base_button.setText(t('base_inventory.no_bases_found') if t else 'No bases found for this guild')
             self.base_button.setEnabled(False)
-            self.container_list.clear()
-            self.container_info.set_container_info(None)
-            self.inventory_grid.clear()
+            self._clear_display()
             return
         self._bases_data = bases
         self.base_button.setEnabled(True)
@@ -966,15 +1011,11 @@ class BaseInventoryTab(QWidget):
                 else:
                     self.base_button.setText(t('base_inventory.no_bases_with_item') if t else 'No bases found with this item')
                     self.base_button.setEnabled(False)
-                    self.container_list.clear()
-                    self.container_info.set_container_info(None)
-                    self.inventory_grid.clear()
+                    self._clear_display()
             else:
                 self.base_button.setText(t('base_inventory.no_bases_with_item') if t else 'No bases found with this item')
                 self.base_button.setEnabled(False)
-                self.container_list.clear()
-                self.container_info.set_container_info(None)
-                self.inventory_grid.clear()
+                self._clear_display()
         else:
             self._load_bases_for_guild(guild_id)
     def _on_base_changed(self, base_id):
@@ -982,9 +1023,7 @@ class BaseInventoryTab(QWidget):
             self._current_base_id = None
             self._current_base_name = ''
             self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
-            self.container_list.clear()
-            self.container_info.set_container_info(None)
-            self.inventory_grid.clear()
+            self._clear_display()
             return
         self._current_base_id = base_id
         base = next((b for b in self._bases_data if str(b['id']) == str(base_id)), None)
@@ -1013,6 +1052,7 @@ class BaseInventoryTab(QWidget):
         else:
             self.container_info.set_container_info(None)
             self.inventory_grid.clear()
+        self._show_content()
     def _load_containers_for_base_filtered(self, base_id):
         self.container_list.clear()
         guild_id = self._current_guild_id
@@ -1034,6 +1074,7 @@ class BaseInventoryTab(QWidget):
                     else:
                         self.container_info.set_container_info(None)
                         self.inventory_grid.clear()
+                    self._show_content()
                 else:
                     self._load_containers_for_base(base_id)
             else:

@@ -543,7 +543,7 @@
   "inventory.stats.weight": "重量",
   "inventory.stats.work_speed": "作業速度",
   "inventory.tab": "プレイヤーインベントリ",
-  "inventory.title": "プレイヤーインベントリ",
+  "inventory.title": "プレイヤーインベントリエディター",
   "inventory.unlock_confirm": "{slot}を解放しますか？\n\nこれにより「{item}」がキーアイテムに追加されます。",
   "inventory.unlock_failed": "解放に失敗しました",
   "inventory.unlock_hint_accessory": "クリックしてアクセサリスロットアイテムで解放",
@@ -1337,5 +1337,7 @@
   "calibrate.no_bases": "キャリブレーション用の塩基が見つかりません",
   "calibrate.need_points": "最低1点必要",
   "calibrate.complete_title": "校正完了",
-  "calibrate.complete_msg": "定数が更新されました! scale={s} transl_x={tx} transl_y={ty} 再起動して適用します。"
+  "calibrate.complete_msg": "定数が更新されました! scale={s} transl_x={tx} transl_y={ty} 再起動して適用します。",
+  "base_inventory.select_guild_base_hint": "ギルド/拠点を選択してインベントリを編集します",
+  "base_inventory.title": "基本在庫エディター"
 }

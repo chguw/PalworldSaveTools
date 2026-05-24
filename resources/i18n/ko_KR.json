@@ -544,7 +544,7 @@
   "inventory.stats.weight": "무게",
   "inventory.stats.work_speed": "작업 속도",
   "inventory.tab": "플레이어 인벤토리",
-  "inventory.title": "플레이어 인벤토리",
+  "inventory.title": "플레이어 인벤토리 편집자",
   "inventory.unlock_confirm": "{slot}을(를) 잠금 해제하시겠습니까?\n\n이 작업은 \"{item}\"을(를) 주요 아이템에 추가합니다.",
   "inventory.unlock_failed": "잠금 해제 실패",
   "inventory.unlock_hint_accessory": "클릭하여 액세서리 슬롯 아이템으로 잠금 해제",
@@ -1336,5 +1336,7 @@
   "calibrate.no_bases": "교정을 위한 베이스를 찾을 수 없습니다.",
   "calibrate.need_points": "최소 1포인트 필요",
   "calibrate.complete_title": "교정 완료",
-  "calibrate.complete_msg": "상수가 업데이트되었습니다! scale={s} transl_x={tx} transl_y={ty} 적용하려면 다시 시작하세요."
+  "calibrate.complete_msg": "상수가 업데이트되었습니다! scale={s} transl_x={tx} transl_y={ty} 적용하려면 다시 시작하세요.",
+  "base_inventory.select_guild_base_hint": "인벤토리를 편집하려면 길드/기지를 선택하세요.",
+  "base_inventory.title": "기본 인벤토리 편집기"
 }

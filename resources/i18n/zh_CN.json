@@ -545,7 +545,7 @@
   "inventory.stats.weight": "负重",
   "inventory.stats.work_speed": "工作速度",
   "inventory.tab": "玩家背包",
-  "inventory.title": "玩家背包",
+  "inventory.title": "玩家物品栏编辑器",
   "inventory.unlock_confirm": "解锁{slot}？\n\n这将添加\"{item}\"到关键物品中。",
   "inventory.unlock_failed": "解锁失败",
   "inventory.unlock_hint_accessory": "点击使用饰品槽位道具解锁",
@@ -1339,5 +1339,7 @@
   "calibrate.no_bases": "未找到用于校准的碱基",
   "calibrate.need_points": "至少需要1分",
   "calibrate.complete_title": "校准完成",
-  "calibrate.complete_msg": "常数更新了！ scale={s} transl_x={tx} transl_y={ty} 重启即可应用。"
+  "calibrate.complete_msg": "常数更新了！ scale={s} transl_x={tx} transl_y={ty} 重启即可应用。",
+  "base_inventory.select_guild_base_hint": "选择一个公会/基地来编辑他们的库存",
+  "base_inventory.title": "基础库存编辑器"
 }

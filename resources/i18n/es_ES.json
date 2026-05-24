@@ -536,7 +536,7 @@
   "inventory.stats.weight": "Peso",
   "inventory.stats.work_speed": "Velocidad de trabajo",
   "inventory.tab": "Inventario del jugador",
-  "inventory.title": "Inventario del jugador",
+  "inventory.title": "Editor de inventario de jugadores",
   "inventory.unlock_confirm": "¿Desbloquear {slot}?\n\nEsto añadirá \"{item}\" a tus objetos clave.",
   "inventory.unlock_failed": "Error al desbloquear",
   "inventory.unlock_hint_accessory": "Clic para desbloquear con Item de Ranura de Accesorio",
@@ -1330,5 +1330,7 @@
   "calibrate.no_bases": "No se encontraron bases para la calibración.",
   "calibrate.need_points": "Necesito al menos 1 punto",
   "calibrate.complete_title": "Calibración completa",
-  "calibrate.complete_msg": "¡Constantes actualizadas! scale={s} transl_x={tx} transl_y={ty} Reiniciar para aplicar."
+  "calibrate.complete_msg": "¡Constantes actualizadas! scale={s} transl_x={tx} transl_y={ty} Reiniciar para aplicar.",
+  "base_inventory.select_guild_base_hint": "Selecciona un gremio/base para editar su inventario.",
+  "base_inventory.title": "Editor de inventario base"
 }

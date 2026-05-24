@@ -546,7 +546,7 @@
   "inventory.stats.weight": "Gewicht",
   "inventory.stats.work_speed": "Arbeitsgeschwindigkeit",
   "inventory.tab": "Spielerinventar",
-  "inventory.title": "Spielerinventar",
+  "inventory.title": "Spielerinventar-Editor",
   "inventory.unlock_confirm": "{slot} freischalten?\n\nDies wird \"{item}\" zu deinen Schlüsselitems hinzufügen.",
   "inventory.unlock_failed": "Freischalten fehlgeschlagen",
   "inventory.unlock_hint_accessory": "Klicken zum Freischalten mit Accessoire-Slot-Item",
@@ -1361,5 +1361,7 @@
   "calibrate.no_bases": "Keine Basen für die Kalibrierung gefunden",
   "calibrate.need_points": "Benötige mindestens 1 Punkt",
   "calibrate.complete_title": "Kalibrierung abgeschlossen",
-  "calibrate.complete_msg": "Konstanten aktualisiert! scale={s} transl_x={tx} transl_y={ty} Zur Anwendung neu starten."
+  "calibrate.complete_msg": "Konstanten aktualisiert! scale={s} transl_x={tx} transl_y={ty} Zur Anwendung neu starten.",
+  "base_inventory.select_guild_base_hint": "Wählen Sie eine Gilde/Basis aus, um deren Inventar zu bearbeiten",
+  "base_inventory.title": "Basisinventar-Editor"
 }

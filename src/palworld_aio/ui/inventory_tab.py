@@ -8,6 +8,7 @@ from i18n import t
 DARK_THEME_STYLE = '\nQDialog {\n    background: qlineargradient(spread:pad, x1:0.0, y1:0.0, x2:1.0, y2:1.0,\n                stop:0 rgba(12,14,18,0.98), stop:0.5 rgba(10,16,22,0.98), stop:1 rgba(8,12,18,0.98));\n    color: #e2e8f0;\n}\nQLabel {\n    color: #e2e8f0;\n}\nQLineEdit {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 10px;\n}\nQLineEdit:focus {\n    border-color: rgba(125,211,252,0.4);\n}\nQSpinBox {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 4px 8px;\n}\nQSpinBox:focus {\n    border-color: rgba(125,211,252,0.4);\n}\nQComboBox {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 10px;\n}\nQComboBox:hover {\n    border-color: rgba(125,211,252,0.3);\n}\nQComboBox QAbstractItemView {\n    background-color: rgba(18,20,24,0.98);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    selection-background-color: rgba(59,142,208,0.3);\n    border-radius: 4px;\n}\nQPushButton {\n    background: rgba(125,211,252,0.12);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 8px 16px;\n    font-weight: 600;\n}\nQPushButton:hover {\n    background: rgba(125,211,252,0.2);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}\nQListWidget {\n    background: rgba(255,255,255,0.03);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 6px;\n}\nQListWidget::item {\n    padding: 4px;\n    border: 1px solid rgba(125,211,252,0.12);\n    border-radius: 4px;\n    margin: 2px;\n}\nQListWidget::item:hover {\n    border: 1px solid rgba(125,211,252,0.3);\n    background: rgba(125,211,252,0.05);\n}\nQListWidget::item:selected {\n    background: rgba(59,142,208,0.3);\n    border: 1px solid rgba(59,142,208,0.5);\n}\nQMenu {\n    background-color: rgba(18,20,24,0.95);\n    border: 1px solid rgba(125,211,252,0.3);\n    border-radius: 4px;\n    color: #e2e8f0;\n    padding: 4px;\n}\nQMenu::item {\n    padding: 6px 12px;\n    border-radius: 3px;\n}\nQMenu::item:selected {\n    background-color: rgba(59,142,208,0.3);\n}\nQMenu::separator {\n    height: 1px;\n    background: rgba(125,211,252,0.2);\n    margin: 4px 8px;\n}\nQMessageBox {\n    background: qlineargradient(spread:pad, x1:0.0, y1:0.0, x2:1.0, y2:1.0,\n                stop:0 rgba(12,14,18,0.98), stop:0.5 rgba(10,16,22,0.98), stop:1 rgba(8,12,18,0.98));\n    color: #e2e8f0;\n}\nQMessageBox QLabel {\n    color: #e2e8f0;\n}\nQMessageBox QPushButton {\n    background: rgba(125,211,252,0.12);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 8px 16px;\n    min-width: 70px;\n    font-weight: 600;\n}\nQMessageBox QPushButton:hover {\n    background: rgba(125,211,252,0.2);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}\n'
 STATS_PANEL_STYLE = '\nStatsPanelWidget {\n    background: rgba(18,20,24,0.95);\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 8px;\n}\nStatsPanelWidget QLabel {\n    color: #e2e8f0;\n}\nStatsPanelWidget QLineEdit {\n    background: rgba(255,255,255,0.06);\n    color: #e2e8f0;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 4px;\n    padding: 2px 4px;\n}\nStatsPanelWidget QLineEdit:focus {\n    border-color: rgba(125,211,252,0.4);\n}\nStatsPanelWidget QPushButton {\n    background: rgba(125,211,252,0.1);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 3px;\n    font-weight: bold;\n}\nStatsPanelWidget QPushButton:hover {\n    background: rgba(125,211,252,0.2);\n}\nStatsPanelWidget QProgressBar {\n    background: rgba(255,255,255,0.05);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 3px;\n}\nStatsPanelWidget QProgressBar::chunk {\n    background: rgba(34,197,94,0.6);\n    border-radius: 2px;\n}\n'
 from palworld_aio.inventory_manager import PlayerInventory, ItemData, get_player_inventory, UI_SLOT_BINDINGS, FOOD_POUCH_ITEMS, ACCESSORY_UNLOCK_ITEMS, WEAPON_UNLOCK_ITEMS
+SINGLETON_TYPE_A = {'EPalItemTypeA::Weapon', 'EPalItemTypeA::MonsterEquipWeapon', 'EPalItemTypeA::Armor', 'EPalItemTypeA::Accessory', 'EPalItemTypeA::Glider', 'EPalItemTypeA::CaptureItemModifier'}
 from palworld_aio import constants
 EQUIP_SLOT_FILTERS = {'weapon': {'type_a': ['EPalItemTypeA::Weapon', 'EPalItemTypeA::MonsterEquipWeapon']}, 'head': {'type_a': 'EPalItemTypeA::Armor', 'type_b': 'EPalItemTypeB::ArmorHead'}, 'body': {'type_a': 'EPalItemTypeA::Armor', 'type_b': 'EPalItemTypeB::ArmorBody'}, 'shield': {'type_a': 'EPalItemTypeA::Armor', 'type_b': 'EPalItemTypeB::Shield'}, 'accessory': {'type_a': 'EPalItemTypeA::Accessory'}, 'glider': {'type_a': 'EPalItemTypeA::Glider'}, 'sphere_mod': {'type_a': 'EPalItemTypeA::CaptureItemModifier'}, 'food': {'type_a': 'EPalItemTypeA::Food'}}
 GRID_COLS = 6
@@ -596,14 +597,14 @@ class ItemPickerDialog(QDialog):
         self.results_list.itemDoubleClicked.connect(self._on_item_double_clicked)
         layout.addWidget(self.results_list)
         qty_layout = QHBoxLayout()
-        qty_label = QLabel(t('inventory.quantity', default='Quantity:'))
+        self.qty_label = QLabel(t('inventory.quantity', default='Quantity:'))
         self.qty_spin = QSpinBox()
         self.qty_spin.setRange(1, 9999)
         self.qty_spin.setValue(1)
-        qty_layout.addWidget(qty_label)
+        qty_layout.addWidget(self.qty_label)
         qty_layout.addWidget(self.qty_spin)
         if self._hide_quantity:
-            qty_label.setVisible(False)
+            self.qty_label.setVisible(False)
             self.qty_spin.setVisible(False)
         qty_layout.addStretch()
         add_btn = QPushButton(t('button.add', default='Add'))
@@ -638,6 +639,7 @@ class ItemPickerDialog(QDialog):
             list_item = QListWidgetItem(item.get('name', 'Unknown'))
             list_item.setData(Qt.UserRole, item.get('asset', ''))
             list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
+            list_item.setData(Qt.UserRole + 3, type_a)
             icon_path = item.get('icon', '')
             if icon_path:
                 pixmap = ItemData.get_item_icon(icon_path, QSize(48, 48))
@@ -658,6 +660,13 @@ class ItemPickerDialog(QDialog):
             item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
     def _on_item_clicked(self, item: QListWidgetItem):
         self.selected_item = item.data(Qt.UserRole)
+        type_a = item.data(Qt.UserRole + 3) or ''
+        is_singleton = type_a in SINGLETON_TYPE_A
+        if not self._hide_quantity:
+            self.qty_label.setVisible(not is_singleton)
+            self.qty_spin.setVisible(not is_singleton)
+            if is_singleton:
+                self.qty_spin.setValue(1)
     def _on_item_double_clicked(self, item: QListWidgetItem):
         self.selected_item = item.data(Qt.UserRole)
         self._add_item()
@@ -691,8 +700,10 @@ class PlayerInventoryTab(QWidget):
         header.addWidget(self.title_label)
         header.addStretch()
         self.player_select_btn = QPushButton(t('inventory.select_player', default='Select Player...'))
-        self.player_select_btn.setFixedWidth(220)
-        self.player_select_btn.setStyleSheet('\n            QPushButton {\n                background: rgba(255,255,255,0.06); color: #e2e8f0;\n                border: 1px solid rgba(125,211,252,0.2); border-radius: 4px;\n                padding: 4px 8px; font-size: 12px; text-align: left;\n            }\n            QPushButton:hover { background: rgba(59,142,208,0.2); }\n        ')
+        self.player_select_btn.setMinimumWidth(220)
+        self.player_select_btn.setMaximumHeight(28)
+        self.player_select_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; padding: 4px 12px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.2); border-color: rgba(125,211,252,0.4); color: #FFFFFF; }')
+        self.player_select_btn.setCursor(Qt.PointingHandCursor)
         self.player_select_btn.clicked.connect(self._open_player_popup)
         header.addWidget(self.player_select_btn)
         main_layout.addLayout(header)
