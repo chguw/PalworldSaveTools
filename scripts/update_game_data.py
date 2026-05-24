@@ -4,6 +4,26 @@ import json
 import re
 import shutil
 from pathlib import Path
+import io
+import itertools
+import threading
+import time
+def _spinner(label):
+    spinner_chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
+    stop_event = threading.Event()
+    out = sys.__stdout__
+    def _spin():
+        for c in itertools.cycle(spinner_chars):
+            if stop_event.is_set():
+                break
+            out.write(f'\r  {c} {label}')
+            out.flush()
+            time.sleep(0.08)
+        out.write('\r')
+        out.flush()
+    t = threading.Thread(target=_spin, daemon=True)
+    t.start()
+    return stop_event
 BASE_DIR = Path(__file__).resolve().parent.parent
 RESOURCES_DIR = BASE_DIR / 'resources' / 'game_data'
 ICONS_DIR = RESOURCES_DIR / 'icons'
@@ -13,14 +33,16 @@ EXPORT_L10N_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'L10N' / 'en' / 'Pa
 EXPORT_TEXTURES_DIR_FAST = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Pal' / 'Texture'
 OTHER_ICON_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Others'
 _ELEMENT_DEFS = [{'name': 'Normal', 'display': 'Neutral', 'index': 0, 'color': '#9CA3AF'}, {'name': 'Fire', 'display': 'Fire', 'index': 1, 'color': '#EF4444'}, {'name': 'Water', 'display': 'Water', 'index': 2, 'color': '#3B82F6'}, {'name': 'Electricity', 'display': 'Electric', 'index': 3, 'color': '#FBBF24'}, {'name': 'Leaf', 'display': 'Grass', 'index': 4, 'color': '#4ADE80'}, {'name': 'Dark', 'display': 'Dark', 'index': 5, 'color': '#6B21A8'}, {'name': 'Dragon', 'display': 'Dragon', 'index': 6, 'color': '#818CF8'}, {'name': 'Earth', 'display': 'Earth', 'index': 7, 'color': '#A78BFA'}, {'name': 'Ice', 'display': 'Ice', 'index': 8, 'color': '#67E8F9'}]
+def _build_icon_lookup():
+    icon_name_to_path = {}
+    for search_dir in [str(EXPORT_TEXTURES_DIR_FAST), str(OTHER_ICON_DIR)]:
+        if os.path.exists(search_dir):
+            for root, dirs, files in os.walk(search_dir):
+                for f in files:
+                    stem = os.path.splitext(f)[0].lower()
+                    icon_name_to_path[stem] = os.path.join(root, f)
+    return icon_name_to_path
 icon_name_to_path = {}
-for search_dir in [str(EXPORT_TEXTURES_DIR_FAST), str(OTHER_ICON_DIR)]:
-    if os.path.exists(search_dir):
-        for root, dirs, files in os.walk(search_dir):
-            for f in files:
-                stem = os.path.splitext(f)[0].lower()
-                icon_name_to_path[stem] = os.path.join(root, f)
-print(f'  Built icon name lookup: {len(icon_name_to_path)} files')
 def ensure_dir(directory: Path):
     directory.mkdir(parents=True, exist_ok=True)
 def load_export_json(rel_path: str) -> dict | list | None:
@@ -1313,42 +1335,29 @@ def update_lab_research_data():
     save_resource_json('labresearchdata.json', all_rows)
 MAP_EXPORT_DIR = EXPORT_TEXTURES_DIR / 'UI' / 'Map'
 def update_map_data():
-    print('\n=== Updating Map Textures ===')
     map_files = ['T_TreeMap.png', 'T_WorldMap.png']
-    try:
-        from PIL import Image
-        has_pil = True
-    except ImportError:
-        has_pil = False
-        print('  Pillow not available, will copy PNG as-is')
     for fname in map_files:
         src = MAP_EXPORT_DIR / fname
         if not src.exists():
-            print(f'  WARNING: Map file not found: {fname}')
             continue
-        stem = src.stem
-        target_webp = BASE_DIR / 'resources' / f'{stem}.webp'
-        target_png = BASE_DIR / 'resources' / f'{stem}.png'
-        if target_webp.exists():
-            target_webp.unlink(missing_ok=True)
-        if has_pil:
-            try:
-                img = Image.open(str(src))
-                img.save(str(target_webp), 'WEBP', quality=90)
-                print(f'  Converted {fname} -> {stem}.webp')
-            except Exception as e:
-                print(f'  ERROR converting {fname}: {e}')
-        else:
-            try:
-                shutil.copy2(str(src), str(target_png))
-                print(f'  Copied {fname} -> {stem}.png')
-            except Exception as e:
-                print(f'  ERROR copying {fname}: {e}')
-        if has_pil and target_png.exists():
-            try:
-                os.remove(target_png)
-            except Exception:
-                pass
+        target = BASE_DIR / 'resources' / fname
+        if not target.exists() or src.stat().st_mtime > target.stat().st_mtime:
+            shutil.copy2(str(src), str(target))
+
+def _convert_map_pngs(Image):
+    for fname in ['T_TreeMap.png', 'T_WorldMap.png']:
+        png = BASE_DIR / 'resources' / fname
+        if not png.exists():
+            continue
+        stem = png.stem
+        webp = BASE_DIR / 'resources' / f'{stem}.webp'
+        try:
+            img = Image.open(str(png))
+            img.save(str(webp), 'WEBP', quality=60)
+            png.unlink()
+            print(f'  Converted map: {fname} -> {stem}.webp')
+        except Exception as e:
+            print(f'  ERROR converting map {fname}: {e}')
 def _build_element_icons(monster_row: dict) -> dict:
     if not monster_row or not isinstance(monster_row, dict):
         return {}
@@ -1403,41 +1412,84 @@ def update_element_data():
                 print(f'    WARNING: Element icon not found: {stem}.png')
     save_resource_json('elementdata.json', {'elements': _ELEMENT_DEFS})
     print(f'  Total elements: {len(_ELEMENT_DEFS)}')
-def main():
-    print('=' * 60)
-    print('  Palworld Save Tools - Game Data Resource Updater')
-    print('=' * 60)
-    print(f'  Base directory: {BASE_DIR}')
-    print(f'  Resources directory: {RESOURCES_DIR}')
-    print(f'  Exports directory: {EXPORTS_DIR}')
-    print('=' * 60)
-    ensure_dir(RESOURCES_DIR)
+def _convert_icons(Image):
+    optimized = 0
+    saved_bytes = 0
     for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements', 'ui']:
-        ensure_dir(ICONS_DIR / subdir)
-    if not EXPORTS_DIR.exists():
-        print(f'\nWARNING: Exports directory not found at {EXPORTS_DIR}')
-        print('Please run the Palworld exporter first to generate the required export files.')
-        print('The script will attempt to use existing resources as-is and only update ')
-        print("what's available from exports.\n")
-    update_element_data()
-    update_pal_data()
-    update_npc_data()
-    update_item_data()
-    update_structure_data()
-    update_passive_data()
-    update_technology_data()
-    update_skill_data()
-    update_pal_exp_table()
-    update_friendship_data()
-    update_items_psp()
-    update_pal_passive_data()
-    update_lab_research_data()
-    update_ui_icons()
-    update_map_data()
-    print('\n=== Cleaning up unused icons ===')
+        subdir_path = ICONS_DIR / subdir
+        if not subdir_path.exists():
+            continue
+        for f in subdir_path.iterdir():
+            if f.is_file() and f.suffix.lower() == '.png':
+                webp_path = f.with_suffix('.webp')
+                if webp_path.exists():
+                    png_size = f.stat().st_size
+                    webp_size = webp_path.stat().st_size
+                    if webp_size < png_size:
+                        f.unlink()
+                        optimized += 1
+                        saved_bytes += png_size - webp_size
+                    continue
+                try:
+                    img = Image.open(str(f))
+                    img.save(str(webp_path), 'WEBP', quality=60)
+                    png_size = f.stat().st_size
+                    webp_size = webp_path.stat().st_size
+                    f.unlink()
+                    optimized += 1
+                    saved_bytes += png_size - webp_size
+                except Exception:
+                    pass
+    if optimized:
+        print(f'  Optimized {optimized} icons, saved {saved_bytes / 1024:.0f} KB')
+        updated_refs = 0
+        for fname in _JSON_FILES:
+            fpath = RESOURCES_DIR / fname
+            if not fpath.exists():
+                continue
+            try:
+                with open(fpath, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            except:
+                continue
+            modified = False
+            if isinstance(data, dict):
+                for key, entries in data.items():
+                    if isinstance(entries, list):
+                        for entry in entries:
+                            if isinstance(entry, dict):
+                                if 'icon' in entry:
+                                    icon = entry['icon']
+                                    if icon.endswith('.png'):
+                                        webp_icon = icon[:-4] + '.webp'
+                                        webp_path = RESOURCES_DIR / webp_icon.lstrip('/')
+                                        if webp_path.exists():
+                                            entry['icon'] = webp_icon
+                                            modified = True
+                                            updated_refs += 1
+                                icns = entry.get('icons', {})
+                                if isinstance(icns, dict):
+                                    for ikey, ival in list(icns.items()):
+                                        if isinstance(ival, str) and ival.endswith('.png'):
+                                            webp_val = ival[:-4] + '.webp'
+                                            webp_path = RESOURCES_DIR / webp_val.lstrip('/')
+                                            if webp_path.exists():
+                                                icns[ikey] = webp_val
+                                                modified = True
+                                                updated_refs += 1
+            if modified:
+                with open(fpath, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=4, ensure_ascii=False)
+        if updated_refs:
+            print(f'  Updated {updated_refs} icon references in data files')
+    else:
+        print('  No icons to optimize')
+
+_JSON_FILES = {'paldata.json': 'pals', 'itemdata.json': 'items', 'npcdata.json': 'npcs', 'structuredata.json': 'structures', 'passivedata.json': 'passives', 'technologydata.json': 'technology', 'skilldata.json': None, 'palpassivedata.json': 'passives', 'elementdata.json': 'elements', 'uidata.json': 'ui'}
+
+def _cleanup_stale_icons():
     referenced = set()
-    json_files = {'paldata.json': 'pals', 'itemdata.json': 'items', 'npcdata.json': 'npcs', 'structuredata.json': 'structures', 'passivedata.json': 'passives', 'technologydata.json': 'technology', 'skilldata.json': None, 'palpassivedata.json': 'passives', 'elementdata.json': 'elements', 'uidata.json': 'ui'}
-    for fname, _ in json_files.items():
+    for fname, _ in _JSON_FILES.items():
         fpath = RESOURCES_DIR / fname
         if not fpath.exists():
             continue
@@ -1480,97 +1532,81 @@ def main():
                     f.unlink()
                     removed_count += 1
     if removed_count:
-        print(f"  Removed {removed_count} stale icon file{('s' if removed_count != 1 else '')}")
+        print(f'  Removed {removed_count} stale icon files')
     else:
         print('  No stale icons to remove')
-    print('\n=== Optimizing icons (PNG -> WEBP) ===')
+
+def main():
+    if os.name == 'nt':
+        os.system('title PalworldSaveTools - Game Data Extractor and Updater')
+    logo = "\n  ___      _                _    _ ___              _____         _    \n | _ \\__ _| |_ __ _____ _ _| |__| / __| __ ___ ____|_   _|__  ___| |___\n |  _/ _` | \\ V  V / _ \\ '_| / _` \\__ \\/ _` \\ V / -_)| |/ _ \\/ _ \\(_-<\n |_| \\__,_|_|\\_/\\_/\\___/_| |_\\__,_|___/\\__,_|\\_/\\___||_|\\___/\\___/_/__/\n"
+    print(logo)
+    print('=' * 60)
+    print('  PalworldSaveTools Game Data Extractor and Updater')
+    print('=' * 60)
+    print(f'  Base directory: {BASE_DIR}')
+    print(f'  Resources directory: {RESOURCES_DIR}')
+    print(f'  Exports directory: {EXPORTS_DIR}')
+    print('=' * 60)
+    ensure_dir(RESOURCES_DIR)
+    for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements', 'ui']:
+        ensure_dir(ICONS_DIR / subdir)
+    if not EXPORTS_DIR.exists():
+        print(f'\nWARNING: Exports directory not found at {EXPORTS_DIR}')
+        print('Please run the Palworld exporter first to generate the required export files.')
+        print('The script will attempt to use existing resources as-is and only update ')
+        print("what's available from exports.\n")
+    print()
+    def _run_step(label, fn):
+        stop = _spinner(label)
+        try:
+            with io.StringIO() as buf, __import__('contextlib').redirect_stdout(buf):
+                fn()
+        except Exception as e:
+            stop.set()
+            print(f'\r  [FAIL] {label} - {e}')
+            return
+        stop.set()
+        print(f'\r  [OK]  {label}')
+    global icon_name_to_path
+    def _build_lookup():
+        global icon_name_to_path
+        icon_name_to_path = _build_icon_lookup()
+    _run_step('Building icon lookup...', _build_lookup)
+    print()
+    _run_step('Updating element data...', update_element_data)
+    _run_step('Updating pal data...', update_pal_data)
+    _run_step('Updating NPC data...', update_npc_data)
+    _run_step('Updating item data...', update_item_data)
+    _run_step('Updating structure data...', update_structure_data)
+    _run_step('Updating passive data...', update_passive_data)
+    _run_step('Updating technology data...', update_technology_data)
+    _run_step('Updating skill data...', update_skill_data)
+    _run_step('Updating pal EXP table...', update_pal_exp_table)
+    _run_step('Updating friendship data...', update_friendship_data)
+    _run_step('Updating items PSP...', update_items_psp)
+    _run_step('Updating pal passive data...', update_pal_passive_data)
+    _run_step('Updating lab research data...', update_lab_research_data)
+    _run_step('Updating UI icons...', update_ui_icons)
+    _run_step('Updating map data...', update_map_data)
+    _run_step('Cleaning up unused icons...', _cleanup_stale_icons)
+    print('\n=== Optimizing assets (PNG -> WEBP) ===')
     try:
         from PIL import Image
-        optimized = 0
-        saved_bytes = 0
-        for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements', 'ui']:
-            subdir_path = ICONS_DIR / subdir
-            if not subdir_path.exists():
-                continue
-            for f in subdir_path.iterdir():
-                if f.is_file() and f.suffix.lower() == '.png':
-                    webp_path = f.with_suffix('.webp')
-                    if webp_path.exists():
-                        png_size = f.stat().st_size
-                        webp_size = webp_path.stat().st_size
-                        if webp_size < png_size:
-                            f.unlink()
-                            optimized += 1
-                            saved_bytes += png_size - webp_size
-                        continue
-                    try:
-                        img = Image.open(str(f))
-                        if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
-                            img.save(str(webp_path), 'WEBP', quality=85, lossless=False)
-                        else:
-                            img = img.convert('RGB')
-                            img.save(str(webp_path), 'WEBP', quality=90)
-                        png_size = f.stat().st_size
-                        webp_size = webp_path.stat().st_size
-                        f.unlink()
-                        optimized += 1
-                        saved_bytes += png_size - webp_size
-                    except Exception as e:
-                        pass
-        if optimized:
-            print(f'  Optimized {optimized} icons, saved {saved_bytes / 1024:.0f} KB')
-            updated_refs = 0
-            for fname in json_files:
-                fpath = RESOURCES_DIR / fname
-                if not fpath.exists():
-                    continue
-                try:
-                    with open(fpath, 'r', encoding='utf-8') as f:
-                        data = json.load(f)
-                except:
-                    continue
-                modified = False
-                if isinstance(data, dict):
-                    for key, entries in data.items():
-                        if isinstance(entries, list):
-                            for entry in entries:
-                                if isinstance(entry, dict):
-                                    if 'icon' in entry:
-                                        icon = entry['icon']
-                                        if icon.endswith('.png'):
-                                            webp_icon = icon[:-4] + '.webp'
-                                            webp_path = RESOURCES_DIR / webp_icon.lstrip('/')
-                                            if webp_path.exists():
-                                                entry['icon'] = webp_icon
-                                                modified = True
-                                                updated_refs += 1
-                                    icns = entry.get('icons', {})
-                                    if isinstance(icns, dict):
-                                        for ikey, ival in list(icns.items()):
-                                            if isinstance(ival, str) and ival.endswith('.png'):
-                                                webp_val = ival[:-4] + '.webp'
-                                                webp_path = RESOURCES_DIR / webp_val.lstrip('/')
-                                                if webp_path.exists():
-                                                    icns[ikey] = webp_val
-                                                    modified = True
-                                                    updated_refs += 1
-                if modified:
-                    with open(fpath, 'w', encoding='utf-8') as f:
-                        json.dump(data, f, indent=4, ensure_ascii=False)
-            if updated_refs:
-                print(f'  Updated {updated_refs} icon references in data files')
-        else:
-            print('  No icons to optimize')
+        has_pil = True
     except ImportError:
-        print('  Pillow not available, skipping optimization')
-    except Exception as e:
-        print(f'  Optimization error: {e}')
+        has_pil = False
+        Image = None
+        print('  Pillow not available, will copy files as-is')
+    if has_pil:
+        _run_step('Converting map textures...', lambda: _convert_map_pngs(Image))
+    print()
+    if has_pil:
+        _run_step('Converting icons...', lambda: _convert_icons(Image))
+    else:
+        print('  No icons to optimize')
     print('\n' + '=' * 60)
-    print('  Update complete!')
+    print('  Update successfully completed! Enjoy latest update!')
     print('=' * 60)
-    print('\nNote: Existing entries that are not found in new exports are preserved.')
-    print('Icon files from exports are copied to resources/game_data/icons/')
-    print('Map textures from exports are converted to WEBP in resources/')
-    print('Run this script every time you get updated Palworld exports.')
 if __name__ == '__main__':
     main()

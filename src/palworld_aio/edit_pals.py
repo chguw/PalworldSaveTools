@@ -219,7 +219,6 @@ def _ensure_pal_icon_lookup():
                 _PAL_ICON_LOOKUP_NPC[asset] = os.path.join(base_dir, 'resources', 'game_data', icon.lstrip('/'))
     except Exception:
         pass
-
 def _lookup_icon_in_data(asset_name: str, base_dir: str) -> str | None:
     _ensure_pal_icon_lookup()
     path = _PAL_ICON_LOOKUP.get(asset_name.lower())
@@ -557,7 +556,7 @@ class PartySlotWidget(QFrame):
         self._build()
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        if self._lvl_overlay and not self._lvl_overlay.isHidden():
+        if self._lvl_overlay and (not self._lvl_overlay.isHidden()):
             w = self.width()
             lvl_w = self._lvl_overlay.width()
             self._lvl_overlay.move(8, self.height() - 14)
@@ -741,7 +740,7 @@ class PalboxSlotWidget(QFrame):
         super().resizeEvent(event)
         if not hasattr(self, '_children'):
             return
-        w, h = self.width(), self.height()
+        w, h = (self.width(), self.height())
         for c in self._children:
             try:
                 kind = c._slot_child_kind
@@ -2835,7 +2834,7 @@ class PalInfoWidget(QFrame):
                         p_info = _PASSIVE_DATA.get(asset.lower(), {}) if isinstance(_PASSIVE_DATA, dict) else {}
                         p_desc = p_info.get('description', '')
                         rank_labels = {1: 'Common', 2: 'Rare', 4: 'Epic', -99: 'Negative'}
-                        tip_parts = [f'<b style="color:{tc}">{name}</b>', f'<i>{rank_labels.get(rank, f"Rank {rank}")}</i>']
+                        tip_parts = [f'<b style="color:{tc}">{name}</b>', f"<i>{rank_labels.get(rank, f'Rank {rank}')}</i>"]
                         if p_desc:
                             p_desc = p_desc.replace('{CharacterName}', 'Pal')
                             for ei in range(1, 5):

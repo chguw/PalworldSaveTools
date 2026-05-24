@@ -19,6 +19,8 @@ class PlayerPalActionDialog(QDialog):
         self.selected_active_skill_name = None
         self.selected_passive_skill_id = None
         self.selected_passive_skill_name = None
+        self._pal_icon_map = {}
+        self._icon_pixmap_cache = {}
         self._setup_ui()
         self._load_data()
     def _setup_ui(self):
@@ -133,40 +135,51 @@ class PlayerPalActionDialog(QDialog):
         return tab
     def _load_data(self):
         PalFrame._load_maps()
+        self._build_pal_icon_map()
         self._display_pals()
         self._display_active_skills()
         self._display_passive_skills()
+
+    def _build_pal_icon_map(self):
+        base_dir = constants.get_base_path()
+        try:
+            paldata_path = os.path.join(base_dir, 'resources', 'game_data', 'paldata.json')
+            paldata = json_tools.load(paldata_path)
+            for pal in paldata.get('pals', []):
+                asset = pal.get('asset', '').lower()
+                icon_rel = pal.get('icon', '')
+                if icon_rel:
+                    icon_path = os.path.join(base_dir, 'resources', 'game_data', icon_rel.lstrip('/'))
+                    if os.path.exists(icon_path):
+                        self._pal_icon_map[asset] = icon_path
+        except:
+            pass
+
+    def _get_pal_icon(self, pal_id):
+        asset = pal_id.lower()
+        icon_path = self._pal_icon_map.get(asset)
+        if not icon_path:
+            base_dir = constants.get_base_path()
+            icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'T_icon_unknown.webp')
+        if icon_path in self._icon_pixmap_cache:
+            return self._icon_pixmap_cache[icon_path]
+        if os.path.exists(icon_path):
+            pixmap = QPixmap(icon_path).scaled(48, 48, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self._icon_pixmap_cache[icon_path] = pixmap
+            return pixmap
+        return None
+
     def _display_pals(self):
         self.pal_list.clear()
-        base_dir = constants.get_base_path()
         all_pals = sorted(PalFrame._NAMEMAP.items(), key=lambda x: x[1])
         for pal_id, pal_name in all_pals:
             list_item = QListWidgetItem(pal_name)
             list_item.setData(Qt.UserRole, pal_id)
             list_item.setToolTip(f'{pal_name}\n({pal_id})')
-            icon_path = self._get_pal_icon(pal_id, base_dir)
-            if icon_path and os.path.exists(icon_path):
-                pixmap = QPixmap(icon_path)
-                if not pixmap.isNull():
-                    list_item.setIcon(QIcon(pixmap))
+            pixmap = self._get_pal_icon(pal_id)
+            if pixmap and not pixmap.isNull():
+                list_item.setIcon(QIcon(pixmap))
             self.pal_list.addItem(list_item)
-    def _get_pal_icon(self, pal_id, base_dir):
-        icon_path = None
-        try:
-            paldata_path = os.path.join(base_dir, 'resources', 'game_data', 'paldata.json')
-            paldata = json_tools.load(paldata_path)
-            for pal in paldata.get('pals', []):
-                if pal.get('asset', '').lower() == pal_id.lower():
-                    icon_rel_path = pal.get('icon', '')
-                    if icon_rel_path:
-                        icon_rel_path = icon_rel_path.lstrip('/')
-                        icon_path = os.path.join(base_dir, 'resources', 'game_data', icon_rel_path)
-                        break
-        except:
-            pass
-        if not icon_path:
-            icon_path = os.path.join(base_dir, 'resources', 'game_data', 'icons', 'T_icon_unknown.webp')
-        return icon_path
     def _search_pals(self, query):
         if not query:
             self._display_pals()
@@ -174,16 +187,13 @@ class PlayerPalActionDialog(QDialog):
         query_lower = query.lower()
         filtered = [(pid, name) for pid, name in sorted(PalFrame._NAMEMAP.items(), key=lambda x: x[1]) if query_lower in name.lower() or query_lower in pid.lower()]
         self.pal_list.clear()
-        base_dir = constants.get_base_path()
         for pal_id, pal_name in filtered:
             list_item = QListWidgetItem(pal_name)
             list_item.setData(Qt.UserRole, pal_id)
             list_item.setToolTip(f'{pal_name}\n({pal_id})')
-            icon_path = self._get_pal_icon(pal_id, base_dir)
-            if icon_path and os.path.exists(icon_path):
-                pixmap = QPixmap(icon_path)
-                if not pixmap.isNull():
-                    list_item.setIcon(QIcon(pixmap))
+            pixmap = self._get_pal_icon(pal_id)
+            if pixmap and not pixmap.isNull():
+                list_item.setIcon(QIcon(pixmap))
             self.pal_list.addItem(list_item)
     def _on_pal_clicked(self, item):
         self.selected_pal_id = item.data(Qt.UserRole)
