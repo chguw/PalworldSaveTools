@@ -5,6 +5,8 @@ from PySide6.QtGui import QPixmap, QFont, QCursor
 from import_libs import *
 _result_data = {'status': 'idle', 'data': None}
 def get_base_directory():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def get_src_directory():
     base_dir = get_base_directory()
