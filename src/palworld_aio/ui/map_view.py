@@ -344,11 +344,12 @@ class MapGraphicsView(QGraphicsView):
             rect = self.scene().sceneRect()
             if rect.width() > 0 and rect.height() > 0:
                 viewport = self.viewport()
-                scale_x = viewport.width() / rect.width()
-                scale_y = viewport.height() / rect.height()
+                scale_x = max(1, viewport.width() - 2) / rect.width()
+                scale_y = max(1, viewport.height() - 2) / rect.height()
                 scale = max(scale_x, scale_y)
                 self.base_scale = scale
                 self.scale(scale, scale)
+                self.centerOn(self.scene().itemsBoundingRect().center())
         self.zoom_changed.emit(self.current_zoom)
     def _validate_and_recover_view(self):
         if not self.scene():

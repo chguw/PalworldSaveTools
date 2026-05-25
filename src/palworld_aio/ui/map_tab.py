@@ -55,13 +55,15 @@ class MapTab(QWidget):
         if self.scene and self.map_width > 0 and (self.map_height > 0):
             viewport = self.view.viewport()
             if viewport.width() > 0 and viewport.height() > 0:
-                scale_x = viewport.width() / self.map_width
-                scale_y = viewport.height() / self.map_height
+                scale_x = max(1, viewport.width() - 2) / self.map_width
+                scale_y = max(1, viewport.height() - 2) / self.map_height
                 scale = max(scale_x, scale_y)
                 self.view.base_scale = scale
                 self.view.resetTransform()
                 self.view.scale(scale, scale)
                 self.view.centerOn(self.map_item)
+                clamped = self.view._clamp_center_to_bounds(self.view.mapToScene(self.view.viewport().rect().center()))
+                self.view.centerOn(clamped)
                 self.view.current_zoom = 1.0
                 self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
                 self.view.zoom_changed.emit(1.0)
@@ -281,8 +283,9 @@ class MapTab(QWidget):
         self.base_tree.header().setMouseTracking(True)
         self.base_tree.header().setAttribute(Qt.WA_Hover, True)
         self.base_tree.header().setSectionsClickable(True)
-        self.base_tree.header().setStretchLastSection(True)
+        self.base_tree.header().setStretchLastSection(False)
         self.base_tree.header().setSectionResizeMode(QHeaderView.Stretch)
+        self.base_tree.header().setDefaultAlignment(Qt.AlignCenter)
         self.base_tree.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.player_tree = QTreeWidget()
         self.player_tree.setObjectName('playerTree')
@@ -295,8 +298,9 @@ class MapTab(QWidget):
         self.player_tree.header().setMouseTracking(True)
         self.player_tree.header().setAttribute(Qt.WA_Hover, True)
         self.player_tree.header().setSectionsClickable(True)
-        self.player_tree.header().setStretchLastSection(True)
+        self.player_tree.header().setStretchLastSection(False)
         self.player_tree.header().setSectionResizeMode(QHeaderView.Stretch)
+        self.player_tree.header().setDefaultAlignment(Qt.AlignCenter)
         self.player_tree.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.sidebar_tabs.addTab(self.base_tree, t('map.toggle.bases') if t else 'Bases')
         self.sidebar_tabs.addTab(self.player_tree, t('map.toggle.players') if t else 'Players')
@@ -319,12 +323,15 @@ class MapTab(QWidget):
         self.updateGeometry()
         if self.scene and self.map_width > 0 and (self.map_height > 0):
             viewport = self.view.viewport()
-            scale_x = viewport.width() / self.map_width
-            scale_y = viewport.height() / self.map_height
+            scale_x = max(1, viewport.width() - 2) / self.map_width
+            scale_y = max(1, viewport.height() - 2) / self.map_height
             scale = max(scale_x, scale_y)
             self.view.base_scale = scale
             self.view.resetTransform()
             self.view.scale(scale, scale)
+            self.view.centerOn(self.map_item)
+            clamped = self.view._clamp_center_to_bounds(self.view.mapToScene(self.view.viewport().rect().center()))
+            self.view.centerOn(clamped)
         self.view.current_zoom = 1.0
         self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
         self.view.zoom_changed.emit(1.0)
@@ -361,12 +368,15 @@ class MapTab(QWidget):
         self.view.set_map_type(map_type, coord_range)
         if self.map_width > 0 and self.map_height > 0:
             viewport = self.view.viewport()
-            scale_x = viewport.width() / self.map_width
-            scale_y = viewport.height() / self.map_height
+            scale_x = max(1, viewport.width() - 2) / self.map_width
+            scale_y = max(1, viewport.height() - 2) / self.map_height
             scale = max(scale_x, scale_y)
             self.view.base_scale = scale
             self.view.resetTransform()
             self.view.scale(scale, scale)
+            self.view.centerOn(self.map_item)
+            clamped = self.view._clamp_center_to_bounds(self.view.mapToScene(self.view.viewport().rect().center()))
+            self.view.centerOn(clamped)
             self.view.current_zoom = 1.0
             self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
             self.view.zoom_changed.emit(1.0)
