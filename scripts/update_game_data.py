@@ -3,11 +3,40 @@ import sys
 import json
 import re
 import shutil
+import subprocess
 from pathlib import Path
 import io
 import itertools
 import threading
 import time
+VENV_DIR = Path(__file__).resolve().parent.parent / '.venv'
+def _venv_python():
+    if os.name == 'nt':
+        return VENV_DIR / 'Scripts' / 'python.exe'
+    return VENV_DIR / 'bin' / 'python'
+def _ensure_venv():
+    vpy = _venv_python()
+    if vpy.exists():
+        return True
+    print('Creating virtual environment...')
+    if VENV_DIR.exists():
+        shutil.rmtree(VENV_DIR, ignore_errors=True)
+    result = subprocess.run(['uv', 'venv', str(VENV_DIR)])
+    if result.returncode != 0:
+        print('Failed to create venv')
+        return False
+    print('Installing dependencies...')
+    result = subprocess.run(['uv', 'pip', 'install', '-r', str(Path(__file__).resolve().parent.parent / 'requirements.txt')])
+    uv_lock = Path(__file__).resolve().parent.parent / 'uv.lock'
+    if uv_lock.exists():
+        uv_lock.unlink()
+    if result.returncode == 0:
+        print('Environment ready')
+        return True
+    print('Failed to install dependencies')
+    if VENV_DIR.exists():
+        shutil.rmtree(VENV_DIR, ignore_errors=True)
+    return False
 def _spinner(label):
     spinner_chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
     stop_event = threading.Event()
@@ -1578,10 +1607,17 @@ def main():
     for subdir in ['pals', 'items', 'structures', 'technologies', 'passives', 'npcs', 'elements', 'ui']:
         ensure_dir(ICONS_DIR / subdir)
     if not EXPORTS_DIR.exists():
-        print(f'\nWARNING: Exports directory not found at {EXPORTS_DIR}')
+        print(f'\nERROR: Exports directory not found at {EXPORTS_DIR}')
         print('Please run the Palworld exporter first to generate the required export files.')
-        print('The script will attempt to use existing resources as-is and only update ')
-        print("what's available from exports.\n")
+        print('Nothing to update.\n')
+        input('Press Enter to exit...')
+        sys.exit(1)
+    vpy = _venv_python()
+    if not vpy.exists() or os.path.abspath(sys.executable) != os.path.abspath(str(vpy)):
+        if not _ensure_venv():
+            input('Press Enter to exit...')
+            sys.exit(1)
+        os.execv(str(vpy), [str(vpy), __file__] + sys.argv[1:])
     print()
     def _run_step(label, fn):
         stop = _spinner(label)
