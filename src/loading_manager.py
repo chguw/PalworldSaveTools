@@ -29,7 +29,7 @@ def _spawn_process(args):
         env['PYTHONUNBUFFERED'] = '1'
         if 'VIRTUAL_ENV' in os.environ:
             env['VIRTUAL_ENV'] = os.environ['VIRTUAL_ENV']
-            venv_scripts = os.path.join(os.environ['VIRTUAL_ENV'], 'Scripts')
+            venv_scripts = os.path.join(os.environ['VIRTUAL_ENV'], 'Scripts' if os.name == 'nt' else 'bin')
             if venv_scripts not in env['PATH']:
                 env['PATH'] = venv_scripts + os.pathsep + env['PATH']
         resources_dir = os.path.join(os.getcwd(), 'resources')

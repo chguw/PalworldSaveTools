@@ -1,5 +1,5 @@
 from import_libs import *
-from PySide6.QtWidgets import QSizePolicy, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QMainWindow, QWidget, QComboBox, QLineEdit, QFileDialog, QApplication, QFrame, QProgressBar
+from PySide6.QtWidgets import QSizePolicy, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QMainWindow, QWidget, QComboBox, QLineEdit, QFileDialog, QApplication, QFrame, QProgressBar, QMessageBox
 from PySide6.QtGui import QIcon, QPixmap, QFont
 from PySide6.QtCore import Qt, QTimer
 import ssl
@@ -135,6 +135,9 @@ def find_any_exe(folder):
 def open_exe_with_cwd(exe_path):
     subprocess.Popen([exe_path], cwd=os.path.dirname(exe_path))
 def _launch_save_pal():
+    if os.name != 'nt':
+        print('Palworld Save Pal is only available on Windows.')
+        return
     repo_owner = 'oMaN-Rod'
     repo_name = 'palworld-save-pal'
     version = get_latest_version(repo_owner, repo_name)
@@ -195,6 +198,9 @@ def _download_to(path_dir, file_url, progress_callback=None):
         print(f'Error downloading file: {e}')
         return None
 def _launch_pal_editor():
+    if os.name != 'nt':
+        print('Palworld Pal Editor is only available on Windows.')
+        return
     repo_owner = 'KrisCris'
     repo_name = 'Palworld-Pal-Editor'
     version = get_latest_version(repo_owner, repo_name)
@@ -289,6 +295,9 @@ def _build_selector_window():
     savepal_btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
     paleditor_btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
     def on_savepal():
+        if os.name != 'nt':
+            QMessageBox.information(win, 'Platform Error', 'Palworld Save Pal is only available on Windows.')
+            return
         exe_path = find_exe('psp_windows')
         if exe_path:
             print('Opening Palworld Save Pal...')
@@ -325,6 +334,9 @@ def _build_selector_window():
         win.setFixedSize(520, 250)
         win.accept()
     def on_paleditor():
+        if os.name != 'nt':
+            QMessageBox.information(win, 'Platform Error', 'Palworld Pal Editor is only available on Windows.')
+            return
         exe_path = find_any_exe('ppe_windows')
         if exe_path:
             print('Opening Palworld Pal Editor...')

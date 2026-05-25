@@ -1,5 +1,5 @@
 import datetime, os, re, sys, uuid
-from container_types import ContainerIndex, ContainerFileList, FILETIME, Container
+from palworld_xgp_import.container_types import ContainerIndex, ContainerFileList, FILETIME, Container
 def create_container_entry(root, save_id, data, suffix):
     c_uuid = uuid.uuid4()
     f_uuid = uuid.uuid4()

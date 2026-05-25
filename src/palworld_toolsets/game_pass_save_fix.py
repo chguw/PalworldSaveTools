@@ -467,9 +467,6 @@ class GamePassSaveFixWidget(QWidget):
         try:
             self.stop_gaming_services()
             time.sleep(1)
-            import_path = os.path.join(base_dir, 'palworld_xgp_import')
-            if import_path not in sys.path:
-                sys.path.insert(0, import_path)
             from palworld_xgp_import import main as xgp_main
             old_argv = sys.argv
             try:
@@ -544,6 +541,11 @@ def center_window(win):
         size = win.size()
     win.move((screen.width() - size.width()) // 2, (screen.height() - size.height()) // 2)
 def game_pass_save_fix():
+    if os.name != 'nt':
+        msg = QLabel('Xbox Game Pass save management is only available on Windows.')
+        msg.setAlignment(Qt.AlignCenter)
+        msg.setStyleSheet('font-size: 14px; padding: 40px; color: #888;')
+        return msg
     saves_folder = os.path.join(root_dir, 'saves')
     xgp_folder = os.path.join(root_dir, 'XGP_converted_saves')
     if os.path.exists(saves_folder):

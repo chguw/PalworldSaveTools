@@ -147,7 +147,7 @@ def extract_value(data, key, default_value=''):
 def safe_str(s):
     return s.encode('utf-8', 'replace').decode('utf-8')
 def sanitize_filename(name):
-    invalid_chars = '<>:"/\\|?*'
+    invalid_chars = '<>:"/\\|?*' if os.name == 'nt' else '/'
     control_chars = {chr(i) for i in range(32)}
     return ''.join((c if c not in invalid_chars and c not in control_chars else '_' for c in name))
 def format_duration(s):

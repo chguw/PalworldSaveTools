@@ -119,7 +119,7 @@ def convert_sav_to_json(filename, output_path, force=False, minify=False, allow_
     if raw:
         output_dir = os.path.dirname(output_path)
         output_file = f'{os.path.basename(output_path)}.bin'
-        output_file_path = f'{output_dir}\\{output_file}'
+        output_file_path = os.path.join(output_dir, output_file)
         logger.info(f'Writing raw GVAS file to {output_file_path}')
         with open(output_file_path, 'wb') as f:
             f.write(raw_gvas)

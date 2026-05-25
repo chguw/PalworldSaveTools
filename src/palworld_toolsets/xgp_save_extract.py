@@ -7,9 +7,10 @@ filetime_epoch = datetime(1601, 1, 1, tzinfo=timezone.utc)
 packages_root = Path(os.path.expandvars(f'%LOCALAPPDATA%\\Packages'))
 def read_game_list() -> Dict[str, Any] | None:
     try:
-        games_json_path = Path('games.json')
+        base_dir = get_base_directory()
+        games_json_path = Path(base_dir) / 'games.json'
         if not games_json_path.exists():
-            games_json_path = Path(__file__).resolve().parent.parent / 'games.json'
+            games_json_path = Path(base_dir) / 'src' / 'games.json'
         if not games_json_path.exists():
             return None
         with games_json_path.open('r') as f:
@@ -187,7 +188,7 @@ def main(wgs_path=None):
         wgs_dir = Path(wgs_path)
         if not wgs_dir.is_dir():
             print(f'Provided WGS path {wgs_path} is not a directory.')
-            sys.exit(1)
+            return None
         try:
             user_containers = find_user_containers_from_path(wgs_dir)
             if len(user_containers) == 0:
@@ -197,7 +198,7 @@ def main(wgs_path=None):
             games = read_game_list()
             if games is None:
                 print('Failed to read game list.Check that games.json exists and is valid.')
-                sys.exit(1)
+                return None
             store_pkg_name = 'PocketpairInc.Palworld_ad4psfrxyesvt'
             name: str = games.get(store_pkg_name, {}).get('name', 'Palworld')
             for xbox_username_or_id, container_dir in user_containers:
@@ -230,11 +231,11 @@ def main(wgs_path=None):
     games = read_game_list()
     if games is None:
         print('Failed to read game list.Check that games.json exists and is valid.')
-        sys.exit(1)
+        return None
     found_games = discover_games(games)
     if len(found_games) == 0:
         print('No supported games installed')
-        sys.exit(1)
+        return None
     print('Installed supported games:')
     for package_name in found_games:
         name: str = games[package_name]['name']
