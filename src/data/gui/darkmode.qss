@@ -430,37 +430,21 @@ QTabBar::tab {
     font-size: 11px;
 }
 
-QWidget#modernNavBar {
-    background: transparent;
-    border-bottom: 1px solid rgba(125, 211, 252, 0.10);
-}
-
-QPushButton[navButton="true"] {
-    background: transparent;
-    color: #A6B8C8;
-    border: none;
-    border-radius: 6px;
-    font-size: 18px;
-}
-
-QPushButton[navButton="true"]:hover {
-    background: rgba(125, 211, 252, 0.08);
-    color: #E6EEF6;
-}
-
-QPushButton[navButton="true"][active="true"] {
-    color: #7DD3FC;
+QWidget#sideBar {
     background: transparent;
 }
 
-QPushButton[navButton="true"][active="true"]:hover {
-    background: rgba(125, 211, 252, 0.10);
-    color: #AEE9FF;
+QFrame#sidebarBg {
+    background-color: rgba(10, 12, 16, 0.95);
+    border-right: 1px solid rgba(125, 211, 252, 0.08);
 }
 
-QWidget#navUnderline {
-    background: #7DD3FC;
-    border-radius: 2px;
+QWidget#sidebarContent {
+    background: transparent;
+}
+
+QWidget#innerContent {
+    background: transparent;
 }
 
 /* Tab Content Widgets - Ensure proper theming for all tab content */

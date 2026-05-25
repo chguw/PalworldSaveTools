@@ -253,7 +253,7 @@ class MainWindow(QMainWindow):
         self._load_user_settings()
         self._setup_ui()
         self._load_theme()
-        self.nav_bar.set_active('tools')
+        self.sidebar.set_active('tools')
         self._setup_menus()
         self._setup_connections()
         QTimer.singleShot(0, self._check_update)
@@ -275,17 +275,20 @@ class MainWindow(QMainWindow):
             self.status_stream.detach()
     def _setup_ui(self):
         self.setWindowTitle(t('deletion.title') if t else 'All-in-One Tools')
-        self.setMinimumSize(1400, 800)
-        self.resize(1400, 800)
+        self.setMinimumSize(1600, 800)
+        self.resize(1600, 800)
         self.setWindowFlags(Qt.FramelessWindowHint)
         if os.path.exists(constants.ICON_PATH):
             self.setWindowIcon(QIcon(constants.ICON_PATH))
         central_widget = QWidget()
         central_widget.setObjectName('central')
         self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
+        self.sidebar_width = 200
+        self._inner_widget = QWidget(central_widget)
+        self._inner_widget.setObjectName('innerContent')
+        inner_layout = QVBoxLayout(self._inner_widget)
+        inner_layout.setContentsMargins(0, 0, 0, 0)
+        inner_layout.setSpacing(0)
         from .header_widget import HeaderWidget
         self.header_widget = HeaderWidget()
         self.header_widget.minimize_clicked.connect(self.showMinimized)
@@ -294,11 +297,7 @@ class MainWindow(QMainWindow):
         self.header_widget.about_clicked.connect(self._show_about)
         self.header_widget.warn_btn.clicked.connect(self._show_warnings)
         self.header_widget.show_warning(True)
-        main_layout.addWidget(self.header_widget)
-        from .modern_nav_bar import ModernNavBar
-        self.nav_bar = ModernNavBar()
-        self.nav_bar.nav_changed.connect(self._on_nav_changed)
-        main_layout.addWidget(self.nav_bar)
+        inner_layout.addWidget(self.header_widget)
         self._dashboard_collapsed = False
         self._dashboard_sizes = [1000, 400]
         self.splitter = QSplitter(Qt.Horizontal)
@@ -317,23 +316,16 @@ class MainWindow(QMainWindow):
         from .results_widget import ResultsWidget
         self.results_widget = ResultsWidget()
         self.splitter.addWidget(self.results_widget)
-        total_width = self.width()
-        tab_width = int(total_width * 0.75)
-        results_width = int(total_width * 0.25)
-        self.splitter.setSizes([tab_width, results_width])
-        self.splitter.setStretchFactor(0, 1)
-        self.splitter.setStretchFactor(1, 1)
-        main_layout.addWidget(self.splitter, stretch=1)
+        inner_layout.addWidget(self.splitter, stretch=1)
+        from .sidebar_widget import SidebarWidget
+        self.sidebar = SidebarWidget(central_widget)
+        self.sidebar.nav_changed.connect(self._on_nav_changed)
+        self.sidebar.console_toggled.connect(self._detach_status)
+        self.sidebar.right_panel_toggled.connect(self._toggle_dashboard)
         self.status_bar = QStatusBar()
-        self.status_bar.setMinimumHeight(35)
+        self.status_bar.setFixedHeight(0)
+        self.status_bar.hide()
         self.setStatusBar(self.status_bar)
-        self.status_bar.showMessage(t('status.ready') if t else 'Ready')
-        detach_btn = QPushButton(t('console.detach'))
-        detach_btn.setObjectName('detachButton')
-        detach_btn.setFixedSize(120, 20)
-        detach_btn.setStyleSheet('font-size: 10px;')
-        detach_btn.clicked.connect(self._detach_status)
-        self.status_bar.addPermanentWidget(detach_btn)
     def _setup_players_tab(self):
         players_tab = QWidget()
         layout = QVBoxLayout(players_tab)
@@ -660,11 +652,21 @@ class MainWindow(QMainWindow):
             self._dashboard_sizes = self.splitter.sizes()
             self.results_widget.hide()
             self._dashboard_collapsed = True
+        if hasattr(self, 'sidebar') and self.sidebar:
+            self.sidebar.set_right_panel_visible(not self._dashboard_collapsed)
     def _toggle_maximize(self):
         if self.isMaximized():
             self.showNormal()
         else:
             self.showMaximized()
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        if hasattr(self, 'sidebar') and hasattr(self, '_inner_widget'):
+            cw = self.centralWidget()
+            sw = self.sidebar_width
+            sh = cw.height()
+            self.sidebar.setGeometry(0, 0, sw, sh)
+            self._inner_widget.setGeometry(sw, 0, cw.width() - sw, sh)
     def _detach_status(self):
         if self.status_stream:
             if self.status_stream.detached:
@@ -674,9 +676,7 @@ class MainWindow(QMainWindow):
         self.user_settings['console_detached'] = self.status_stream.detached if self.status_stream else False
         self._save_user_settings()
     def _on_detach_state_changed(self, detached):
-        detach_btn = self.status_bar.findChild(QPushButton)
-        if detach_btn:
-            detach_btn.setText(t('console.reattach') if detached else t('console.detach'))
+        pass
     def _check_update(self):
         settings = get_update_settings()
         if not settings.get('check_updates', True):
@@ -1336,7 +1336,7 @@ class MainWindow(QMainWindow):
             return
         for i in range(self.stacked_widget.count()):
             if self.stacked_widget.widget(i) == self.map_tab:
-                self.nav_bar.set_active('map')
+                self.sidebar.set_active('map')
                 self.stacked_widget.setCurrentIndex(i)
                 return
     def _generate_map(self):
@@ -1376,13 +1376,13 @@ class MainWindow(QMainWindow):
             if self.status_stream.detach_window:
                 self.status_stream.detach_window.refresh_title()
             self.setWindowTitle(t('deletion.title') if t else 'All-in-One Tools')
-            self.nav_bar.refresh_labels()
+            self.sidebar.refresh_labels()
             self._setup_menus()
             self._refresh_texts()
             self.tools_tab.refresh_labels()
             self.results_widget.refresh_labels()
             self.header_widget.refresh_labels()
-            self.nav_bar.refresh_labels()
+            self.sidebar.refresh_labels()
             if hasattr(self.header_widget, '_menu_popup') and self.header_widget._menu_popup:
                 self.header_widget._menu_popup.refresh_labels()
             if hasattr(self, 'map_tab') and self.map_tab:
@@ -1425,9 +1425,6 @@ class MainWindow(QMainWindow):
             self.excl_guilds_panel.refresh_labels()
         if hasattr(self, 'excl_bases_panel'):
             self.excl_bases_panel.refresh_labels()
-        detach_btn = self.status_bar.findChild(QPushButton)
-        if detach_btn:
-            detach_btn.setText(t('console.reattach') if self.status_stream and self.status_stream.detached else t('console.detach'))
         if hasattr(self, 'menu_bar'):
             self._setup_menus()
     def _add_exclusion(self, excl_type, value):
@@ -1723,7 +1720,7 @@ class MainWindow(QMainWindow):
         if dialog.exec() == QDialog.Accepted:
             self.refresh_all()
     def _edit_player_inventory(self, uid, name):
-        self.nav_bar.set_active('player_inventory')
+        self.sidebar.set_active('player_inventory')
         self.stacked_widget.setCurrentIndex(2)
         if hasattr(self, 'inventory_tab'):
             self.inventory_tab.load_player(uid, name)
