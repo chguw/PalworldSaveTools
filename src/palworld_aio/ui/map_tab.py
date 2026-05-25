@@ -50,14 +50,14 @@ class MapTab(QWidget):
         self._update_zone_items()
     def showEvent(self, event):
         super().showEvent(event)
-        QTimer.singleShot(50, self._fit_map_to_viewport)
+        QTimer.singleShot(200, self._fit_map_to_viewport)
     def _fit_map_to_viewport(self):
         if self.scene and self.map_width > 0 and self.map_height > 0:
             viewport = self.view.viewport()
             if viewport.width() > 0 and viewport.height() > 0:
                 scale_x = viewport.width() / self.map_width
                 scale_y = viewport.height() / self.map_height
-                scale = min(scale_x, scale_y)
+                scale = max(scale_x, scale_y)
                 self.view.base_scale = scale
                 self.view.resetTransform()
                 self.view.scale(scale, scale)
@@ -380,6 +380,7 @@ class MapTab(QWidget):
             self._map_widget.setFixedWidth(min(avail_h, max_map_w))
         self._reposition_map_overlay()
         self._update_tab_widths()
+        QTimer.singleShot(100, self._fit_map_to_viewport)
     def _update_tab_widths(self):
         pass
     def _setup_animation(self):

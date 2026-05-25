@@ -26,11 +26,10 @@ class ResultsWidget(QWidget):
     def _setup_ui(self):
         self.setMinimumWidth(350)
         self.setMaximumWidth(350)
-        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(16, 16, 16, 16)
         layout.setSpacing(16)
-        layout.setAlignment(Qt.AlignTop)
         self.results_title = QLabel(t('deletion.results_panel') if t else 'Selection & Stats')
         self.results_title.setObjectName('sectionHeader')
         self.results_title.setFont(QFont(constants.FONT_FAMILY, 14, QFont.Bold))
@@ -41,6 +40,7 @@ class ResultsWidget(QWidget):
         selection_frame.setObjectName('glassPanel')
         selection_layout = QVBoxLayout(selection_frame)
         selection_layout.setSpacing(8)
+        selection_layout.addStretch()
         player_card = self._create_value_card(t('deletion.selected_player_label') if t else 'Selected Player:', 'player')
         self.player_value = player_card['value_label']
         self.player_label = player_card['label']
@@ -53,7 +53,8 @@ class ResultsWidget(QWidget):
         self.base_value = base_card['value_label']
         self.base_label = base_card['label']
         selection_layout.addWidget(base_card['container'])
-        layout.addWidget(selection_frame)
+        selection_layout.addStretch()
+        layout.addWidget(selection_frame, stretch=1)
         separator2 = self._create_gradient_separator()
         layout.addWidget(separator2)
         self.stats_title = QLabel(t('deletion.stats_panel') if t else 'Statistics')
@@ -63,10 +64,12 @@ class ResultsWidget(QWidget):
         stats_frame = QFrame()
         stats_frame.setObjectName('glassPanel')
         stats_layout = QVBoxLayout(stats_frame)
+        stats_layout.addStretch()
         self.stats_panel = StatsPanel()
         self.stats_panel.setObjectName('statsGrid')
         stats_layout.addWidget(self.stats_panel)
-        layout.addWidget(stats_frame)
+        stats_layout.addStretch()
+        layout.addWidget(stats_frame, stretch=1)
     def _create_gradient_separator(self):
         separator = QFrame()
         separator.setObjectName('gradientSeparator')
