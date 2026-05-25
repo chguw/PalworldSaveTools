@@ -3685,7 +3685,13 @@ class PalFrame(QFrame):
     @classmethod
     def _is_pal_passive(cls, asset_lower):
         flags = cls._PASSFLAGS.get(asset_lower, {})
-        return flags.get('add_pal', False)
+        if not flags.get('invoke_always', False):
+            return False
+        if flags.get('category', '') != 'EPalPassiveCategory::SortDisplayable':
+            return False
+        if flags.get('add_weapon', False) or flags.get('add_armor', False) or flags.get('add_accessory', False):
+            return False
+        return True
     _maps_loaded_lock = threading.Lock()
     @classmethod
     def _load_maps(cls):
@@ -3727,7 +3733,7 @@ class PalFrame(QFrame):
                         asset_lower = x['asset'].lower()
                         if 'rank' in x:
                             cls._PASSRANK[asset_lower] = x['rank']
-                        cls._PASSFLAGS[asset_lower] = {'add_pal': x.get('add_pal', False), 'add_armor': x.get('add_armor', False), 'add_accessory': x.get('add_accessory', False), 'add_weapon': x.get('add_weapon', False)}
+                        cls._PASSFLAGS[asset_lower] = {'add_pal': x.get('add_pal', False), 'add_rare_pal': x.get('add_rare_pal', False), 'add_world_tree_pal': x.get('add_world_tree_pal', False), 'add_mutation_pal': x.get('add_mutation_pal', False), 'add_armor': x.get('add_armor', False), 'add_accessory': x.get('add_accessory', False), 'add_weapon': x.get('add_weapon', False), 'invoke_always': x.get('invoke_always', False), 'category': x.get('category', '')}
         except Exception:
             pass
         skill_exclusions = ['unknown skills', 'unknown skill', 'en_text', 'en text']
