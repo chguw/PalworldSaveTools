@@ -1,6 +1,6 @@
 import os
 from palworld_save_tools import json_tools
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QTabWidget, QDialog, QPushButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QTabWidget, QDialog, QPushButton, QSizePolicy
 from PySide6.QtCore import Qt, QRectF, QPointF, QPoint, QSize, QTimer, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QPixmap, QPen, QBrush, QColor, QPainter, QFont, QIcon
 from i18n import t
@@ -31,8 +31,6 @@ class MapTab(QWidget):
         self.filtered_players_data = []
         self.active_effects = []
         self.search_text = ''
-        self._map_widget = None
-        self._splitter = None
         self._sidebar_widget = None
         self.selected_base_marker = None
         self.current_radius_ring = None
@@ -59,10 +57,11 @@ class MapTab(QWidget):
             if viewport.width() > 0 and viewport.height() > 0:
                 scale_x = viewport.width() / self.map_width
                 scale_y = viewport.height() / self.map_height
-                scale = max(scale_x, scale_y)
+                scale = min(scale_x, scale_y)
                 self.view.base_scale = scale
                 self.view.resetTransform()
                 self.view.scale(scale, scale)
+                self.view.centerOn(self.map_item)
                 self.view.current_zoom = 1.0
                 self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
                 self.view.zoom_changed.emit(1.0)
@@ -149,12 +148,15 @@ class MapTab(QWidget):
     def _setup_ui(self):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        splitter = QSplitter(Qt.Horizontal)
         self._map_widget = QWidget()
+        self._map_widget.setMinimumSize(0, 0)
         map_layout = QVBoxLayout(self._map_widget)
         map_layout.setContentsMargins(0, 0, 0, 0)
         map_layout.setSpacing(0)
         self.view = MapGraphicsView(self.config)
+        self.view.setBackgroundBrush(QColor(14, 16, 20))
+        self.view.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        self.view.setMinimumSize(0, 0)
         self.scene = QGraphicsScene()
         self.view.setScene(self.scene)
         self.view.marker_clicked.connect(self._on_marker_clicked)
@@ -187,7 +189,7 @@ class MapTab(QWidget):
         self.btn_calibrate.setCheckable(True)
         self.btn_calibrate.setChecked(False)
         self.btn_calibrate.clicked.connect(self._on_calibrate_toggle)
-        self.btn_calibrate.setStyleSheet('QPushButton { color: white; background: rgba(200, 80, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { color: white; background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
+        self.btn_calibrate.setStyleSheet('QPushButton { color: white; background: rgba(125, 211, 252, 0.12); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { color: white; background: rgba(125, 211, 252, 0.30); border: 1px solid #7dd3fc; }')
         overlay_layout.addWidget(self.btn_calibrate)
         base_dir = constants.get_base_path()
         self.toggle_map_bases = QPushButton()
@@ -197,7 +199,7 @@ class MapTab(QWidget):
         self.toggle_map_bases.setCheckable(True)
         self.toggle_map_bases.setChecked(True)
         self.toggle_map_bases.clicked.connect(self._on_toggle_changed)
-        self.toggle_map_bases.setStyleSheet('QPushButton { color: white; background: rgba(200, 80, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
+        self.toggle_map_bases.setStyleSheet('QPushButton { color: white; background: rgba(125, 211, 252, 0.08); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(125, 211, 252, 0.25); border: 1px solid #7dd3fc; }')
         overlay_layout.addWidget(self.toggle_map_bases)
         self.toggle_map_players = QPushButton()
         self.toggle_map_players.setIcon(QIcon(os.path.join(base_dir, 'resources', 'playericon.webp')))
@@ -206,7 +208,7 @@ class MapTab(QWidget):
         self.toggle_map_players.setCheckable(True)
         self.toggle_map_players.setChecked(False)
         self.toggle_map_players.clicked.connect(self._on_toggle_changed)
-        self.toggle_map_players.setStyleSheet('QPushButton { color: white; background: rgba(200, 80, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
+        self.toggle_map_players.setStyleSheet('QPushButton { color: white; background: rgba(125, 211, 252, 0.08); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(125, 211, 252, 0.25); border: 1px solid #7dd3fc; }')
         overlay_layout.addWidget(self.toggle_map_players)
         self.toggle_base_radius_rings = QPushButton()
         self.toggle_base_radius_rings.setIcon(QIcon(os.path.join(base_dir, 'resources', 'ring.webp')))
@@ -215,7 +217,7 @@ class MapTab(QWidget):
         self.toggle_base_radius_rings.setCheckable(True)
         self.toggle_base_radius_rings.setChecked(True)
         self.toggle_base_radius_rings.clicked.connect(self._on_radius_rings_toggle)
-        self.toggle_base_radius_rings.setStyleSheet('QPushButton { color: white; background: rgba(200, 80, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
+        self.toggle_base_radius_rings.setStyleSheet('QPushButton { color: white; background: rgba(125, 211, 252, 0.08); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(125, 211, 252, 0.25); border: 1px solid #7dd3fc; }')
         overlay_layout.addWidget(self.toggle_base_radius_rings)
         self.toggle_map_zones = QPushButton()
         self.toggle_map_zones.setIcon(QIcon(os.path.join(base_dir, 'resources', 'zones.webp')))
@@ -224,7 +226,7 @@ class MapTab(QWidget):
         self.toggle_map_zones.setCheckable(True)
         self.toggle_map_zones.setChecked(False)
         self.toggle_map_zones.clicked.connect(self._on_zones_toggle)
-        self.toggle_map_zones.setStyleSheet('QPushButton { color: white; background: rgba(200, 80, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
+        self.toggle_map_zones.setStyleSheet('QPushButton { color: white; background: rgba(125, 211, 252, 0.08); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(125, 211, 252, 0.25); border: 1px solid #7dd3fc; }')
         overlay_layout.addWidget(self.toggle_map_zones)
         self.toggle_map_type = QPushButton()
         self.toggle_map_type.setIcon(QIcon(os.path.join(base_dir, 'resources', 'T_TreeMap.webp')))
@@ -233,7 +235,7 @@ class MapTab(QWidget):
         self.toggle_map_type.setCheckable(True)
         self.toggle_map_type.setChecked(False)
         self.toggle_map_type.clicked.connect(self._on_map_type_toggle)
-        self.toggle_map_type.setStyleSheet('QPushButton { color: white; background: rgba(0, 0, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 40px; min-height: 28px; } QPushButton:checked { background: rgba(125, 211, 252, 0.15); border: 1px solid #7dd3fc; }')
+        self.toggle_map_type.setStyleSheet('QPushButton { color: white; background: rgba(125, 211, 252, 0.08); padding: 6px 10px; border-radius: 4px; border: none; min-width: 40px; min-height: 28px; } QPushButton:checked { background: rgba(125, 211, 252, 0.25); border: 1px solid #7dd3fc; }')
         overlay_layout.addWidget(self.toggle_map_type)
         overlay_layout.addStretch()
         self.view.overlay_position_callback = self._reposition_map_overlay
@@ -241,12 +243,13 @@ class MapTab(QWidget):
         self._calibration_bases = []
         self._calibration_markers = []
         self._calibration_label = QLabel('', self.view)
-        self._calibration_label.setStyleSheet('background: rgba(0,0,0,180); color: #ff8800; padding: 6px 12px; border-radius: 4px; font-size: 12px;')
+        self._calibration_label.setStyleSheet('background: rgba(0,0,0,180); color: #7dd3fc; padding: 6px 12px; border-radius: 4px; font-size: 12px;')
         self._calibration_effect = None
         self._calibration_label.move(10, 50)
         self._calibration_label.setVisible(False)
         self._sidebar_widget = QWidget()
         self._sidebar_widget.setAttribute(Qt.WA_StyledBackground, True)
+        self._sidebar_widget.setStyleSheet('background-color: rgba(14, 16, 20, 0.95);')
         sidebar_layout = QVBoxLayout(self._sidebar_widget)
         sidebar_layout.setContentsMargins(0, 0, 0, 0)
         sidebar_layout.setSpacing(0)
@@ -256,14 +259,11 @@ class MapTab(QWidget):
         self.search_input.textChanged.connect(self._on_search_changed)
         sidebar_layout.addWidget(self.search_input)
         self.sidebar_tabs = QTabWidget()
-        self.sidebar_tabs.setObjectName('sidebarTabs')
-        sidebar_layout.addSpacing(4)
-        self.sidebar_tabs.setStyleSheet('\n            QTabWidget::pane {\n                border: none;\n                background: transparent;\n                padding: 0px;\n                margin: 0px;\n            }\n            QTabBar {\n                background: transparent;\n                spacing: 0px;\n                padding: 0px 4px;\n            }\n            QTabBar::tab {\n                background: #2a2a2a;\n                color: #cccccc;\n                padding: 6px 0px;\n                margin: 0px 2px;\n                border: none;\n                border-bottom: 2px solid transparent;\n                border-radius: 4px;\n            }\n            QTabBar::tab:selected {\n                background: #3a3a3a;\n                color: #ffffff;\n                border-bottom: 2px solid #7dd3fc;\n            }\n            QTabBar::tab:hover {\n                background: #333333;\n            }\n        ')
+        self.sidebar_tabs.setObjectName('mapSidebarTabs')
         self.sidebar_tabs.tabBar().setDocumentMode(True)
         self.sidebar_tabs.tabBar().setExpanding(True)
         self.base_tree = QTreeWidget()
         self.base_tree.setObjectName('baseTree')
-        self.base_tree.setStyleSheet('\n            QTreeWidget {\n                border: none;\n                background: transparent;\n                padding: 0px;\n                margin: 0px;\n            }\n            QTreeWidget::item {\n                padding: 1px 2px;\n                margin: 0px;\n            }\n            QTreeWidget::branch {\n                background: transparent;\n            }\n            QHeaderView::section {\n                background: #2a2a2a;\n                color: #cccccc;\n                padding: 2px 4px;\n                border: none;\n                margin: 0px;\n                border-radius: 4px;\n            }\n        ')
         self.base_tree.setHeaderLabels([t('map.header.guild') if t else 'Guild', t('map.header.leader') if t else 'Leader', t('map.header.lastseen') if t else 'Last Seen', t('map.header.bases') if t else 'Bases'])
         self.base_tree.setColumnWidth(0, 120)
         self.base_tree.setColumnWidth(1, 85)
@@ -280,7 +280,6 @@ class MapTab(QWidget):
         self.base_tree.header().setSectionsClickable(True)
         self.player_tree = QTreeWidget()
         self.player_tree.setObjectName('playerTree')
-        self.player_tree.setStyleSheet('\n            QTreeWidget {\n                border: none;\n                background: transparent;\n                padding: 0px;\n                margin: 0px;\n            }\n            QTreeWidget::item {\n                padding: 1px 2px;\n                margin: 0px;\n            }\n            QTreeWidget::branch {\n                background: transparent;\n            }\n            QHeaderView::section {\n                background: #2a2a2a;\n                color: #cccccc;\n                padding: 2px 4px;\n                border: none;\n                margin: 0px;\n                border-radius: 4px;\n            }\n        ')
         self.player_tree.setHeaderLabels([t('map.header.player') if t else 'Player', t('map.info.level') if t else 'Level', t('map.header.lastseen') if t else 'Last Seen', t('player.pals') if t else 'Pals'])
         self.player_tree.setColumnWidth(0, 120)
         self.player_tree.setColumnWidth(1, 60)
@@ -304,29 +303,26 @@ class MapTab(QWidget):
         self.info_label.setObjectName('sectionHeader')
         self.info_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
         sidebar_layout.addWidget(self.info_label)
-        self._splitter = splitter
-        splitter.addWidget(self._map_widget)
-        splitter.addWidget(self._sidebar_widget)
-        splitter.setStretchFactor(0, 3)
-        splitter.setStretchFactor(1, 1)
-        splitter.setSizes([1000, 400])
-        layout.addWidget(splitter)
+        body_layout = QHBoxLayout()
+        body_layout.setContentsMargins(0, 0, 0, 0)
+        body_layout.setSpacing(0)
+        body_layout.addWidget(self._map_widget)
+        body_layout.addWidget(self._sidebar_widget, stretch=1)
+        layout.addLayout(body_layout)
         QTimer.singleShot(100, self._fix_initial_layout)
     def _fix_initial_layout(self):
-        if self._splitter:
-            self._splitter.updateGeometry()
-            self.updateGeometry()
-            if self.scene and self.map_width > 0 and (self.map_height > 0):
-                viewport = self.view.viewport()
-                scale_x = viewport.width() / self.map_width
-                scale_y = viewport.height() / self.map_height
-                scale = max(scale_x, scale_y)
-                self.view.base_scale = scale
-                self.view.resetTransform()
-                self.view.scale(scale, scale)
-            self.view.current_zoom = 1.0
-            self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
-            self.view.zoom_changed.emit(1.0)
+        self.updateGeometry()
+        if self.scene and self.map_width > 0 and (self.map_height > 0):
+            viewport = self.view.viewport()
+            scale_x = viewport.width() / self.map_width
+            scale_y = viewport.height() / self.map_height
+            scale = max(scale_x, scale_y)
+            self.view.base_scale = scale
+            self.view.resetTransform()
+            self.view.scale(scale, scale)
+        self.view.current_zoom = 1.0
+        self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
+        self.view.zoom_changed.emit(1.0)
         if hasattr(self, 'map_overlay'):
             self.map_overlay.adjustSize()
             sh = self.map_overlay.sizeHint()
@@ -377,6 +373,9 @@ class MapTab(QWidget):
             self.map_overlay.raise_()
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        if hasattr(self, '_map_widget') and hasattr(self, '_sidebar_widget'):
+            avail_h = self._map_widget.height()
+            self._map_widget.setFixedWidth(avail_h)
         self._reposition_map_overlay()
         self._update_tab_widths()
     def _update_tab_widths(self):

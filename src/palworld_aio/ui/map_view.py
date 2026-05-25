@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QGraphicsView, QLabel
-from PySide6.QtCore import Qt, QPointF, QPoint, Signal, QTimer
+from PySide6.QtCore import Qt, QPointF, QPoint, QSize, Signal, QTimer
 from PySide6.QtGui import QPainter
 from i18n import t
 import palworld_coord
@@ -333,6 +333,10 @@ class MapGraphicsView(QGraphicsView):
         self.zoom_label.raise_()
         if self.overlay_position_callback:
             self.overlay_position_callback()
+    def sizeHint(self):
+        return QSize(100, 100)
+    def minimumSizeHint(self):
+        return QSize(100, 100)
     def reset_view(self):
         self.resetTransform()
         self.current_zoom = 1.0

@@ -520,6 +520,53 @@ QTabWidget#inventoryTabs QTabBar::tab:hover:!selected {
     color: #E6EEF6;
 }
 
+QTabWidget#mapSidebarTabs::pane {
+    border: none;
+    background: transparent;
+}
+
+QTabWidget#mapSidebarTabs QTabBar::tab {
+    background: rgba(255, 255, 255, 0.04);
+    color: #A6B8C8;
+    padding: 6px 0px;
+    margin: 0px 2px;
+    border-bottom: 2px solid transparent;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+QTabWidget#mapSidebarTabs QTabBar::tab:selected {
+    background: rgba(125, 211, 252, 0.10);
+    color: #7DD3FC;
+    border-bottom: 2px solid #7DD3FC;
+}
+
+QTabWidget#mapSidebarTabs QTabBar::tab:hover:!selected {
+    background: rgba(125, 211, 252, 0.05);
+    color: #E6EEF6;
+}
+
+QTreeWidget#baseTree,
+QTreeWidget#playerTree {
+    border: none;
+    background: transparent;
+}
+
+QTreeWidget#baseTree::item,
+QTreeWidget#playerTree::item {
+    padding: 2px 4px;
+}
+
+QTreeWidget#baseTree QHeaderView::section,
+QTreeWidget#playerTree QHeaderView::section {
+    background: rgba(255, 255, 255, 0.05);
+    color: #A6B8C8;
+    padding: 4px 6px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
 QWidget#sideBar {
     background-color: rgba(10, 12, 16, 0.95);
     border-right: 1px solid rgba(125, 211, 252, 0.08);
