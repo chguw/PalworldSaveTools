@@ -9,7 +9,6 @@ from typing import Optional, Dict, List, Any
 from palworld_aio import constants
 from palworld_aio.utils import are_equal_uuids, as_uuid, fast_deepcopy
 from palworld_aio.inventory_manager import InventoryContainer
-from palworld_aio.base_dto import get_base_containers_simple, ContainerDTO
 from palworld_aio.dynamic_item_manager import get_dynamic_item_manager, generate_dynamic_item_uuid
 from palworld_aio.standardized_container import StandardizedContainer
 import threading
