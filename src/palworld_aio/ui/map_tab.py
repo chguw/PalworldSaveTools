@@ -1,8 +1,8 @@
 import os
 from palworld_save_tools import json_tools
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QTabWidget, QDialog, QPushButton
-from PySide6.QtCore import Qt, QRectF, QPointF, QPoint, QTimer, QPropertyAnimation, QEasingCurve
-from PySide6.QtGui import QPixmap, QPen, QBrush, QColor, QPainter, QFont
+from PySide6.QtCore import Qt, QRectF, QPointF, QPoint, QSize, QTimer, QPropertyAnimation, QEasingCurve
+from PySide6.QtGui import QPixmap, QPen, QBrush, QColor, QPainter, QFont, QIcon
 from i18n import t
 from loading_manager import show_information, show_warning, show_critical, show_question
 import palworld_coord
@@ -50,22 +50,35 @@ class MapTab(QWidget):
         self._setup_ui()
         self._setup_animation()
         self._update_zone_items()
+    def showEvent(self, event):
+        super().showEvent(event)
+        QTimer.singleShot(50, self._fit_map_to_viewport)
+    def _fit_map_to_viewport(self):
+        if self.scene and self.map_width > 0 and self.map_height > 0:
+            viewport = self.view.viewport()
+            if viewport.width() > 0 and viewport.height() > 0:
+                scale_x = viewport.width() / self.map_width
+                scale_y = viewport.height() / self.map_height
+                scale = max(scale_x, scale_y)
+                self.view.base_scale = scale
+                self.view.resetTransform()
+                self.view.scale(scale, scale)
+                self.view.current_zoom = 1.0
+                self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
+                self.view.zoom_changed.emit(1.0)
     def refresh_labels(self):
         if hasattr(self, 'search_input'):
             self.search_input.setPlaceholderText(t('map.search.placeholder') if t else 'Search guilds,leaders,bases...')
         if hasattr(self, 'toggle_map_bases'):
-            self.toggle_map_bases.setText(t('map.toggle.bases') if t else 'Bases')
+            self.toggle_map_bases.setToolTip(t('map.toggle.bases') if t else 'Bases')
         if hasattr(self, 'toggle_map_players'):
-            self.toggle_map_players.setText(t('map.toggle.players') if t else 'Players')
+            self.toggle_map_players.setToolTip(t('map.toggle.players') if t else 'Players')
         if hasattr(self, 'toggle_base_radius_rings'):
-            self.toggle_base_radius_rings.setText(t('map.toggle.base_radius_rings') if t else 'Base Radius Rings')
+            self.toggle_base_radius_rings.setToolTip(t('map.toggle.base_radius_rings') if t else 'Base Radius Rings')
         if hasattr(self, 'toggle_map_zones'):
-            self.toggle_map_zones.setText(t('map.toggle.zones') if t else 'Zones')
+            self.toggle_map_zones.setToolTip(t('map.toggle.zones') if t else 'Zones')
         if hasattr(self, 'toggle_map_type'):
-            if t:
-                self.toggle_map_type.setText(t('map.toggle.tree_map') if self.current_map == 'tree' else t('map.toggle.world_map'))
-            else:
-                self.toggle_map_type.setText('Tree Map' if self.current_map == 'tree' else 'World Map')
+            self.toggle_map_type.setToolTip(t('map.toggle.world_map') if self.current_map == 'tree' else t('map.toggle.tree_map'))
         if hasattr(self, 'btn_calibrate'):
             self.btn_calibrate.setText(t('calibrate.button'))
         if hasattr(self, '_calibration_label') and self._calibration_label.isVisible():
@@ -93,7 +106,7 @@ class MapTab(QWidget):
             if hasattr(self.view, 'zoom_label'):
                 self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + ': 100%')
     def _load_config(self):
-        self.config = {'marker': {'type': 'icon', 'dot': {'size': 24, 'color': [255, 0, 0], 'border_width': 3, 'border_color': [180, 0, 0], 'size_min': 24, 'size_max': 24, 'dynamic_sizing': False, 'dynamic_sizing_formula': 'sqrt'}, 'icon': {'path': 'resources/baseicon.png', 'size_min': 32, 'size_max': 64, 'base_size': 48, 'dynamic_sizing': True, 'dynamic_sizing_formula': 'sqrt'}}, 'glow': {'enabled': True, 'color': [59, 142, 208], 'selected_alpha_min': 80, 'selected_alpha_max': 180, 'animation_speed': 8, 'hover_alpha': 80, 'radius_multiplier': 1.5}, 'zoom': {'factor': 1.15, 'min': 1.0, 'max': 30.0, 'double_click_target': 26.0, 'animation_speed': 0.2, 'animation_fps': 60}, 'effects': {'delete': {'enabled': True, 'duration': 1000, 'max_radius': 150, 'colors': {'outer': [255, 80, 80], 'inner': [255, 150, 0], 'flash': [255, 200, 0]}}, 'import': {'enabled': True, 'duration': 1000, 'pulse_count': 3, 'color': [0, 255, 150], 'sparkle_color': [100, 255, 200]}, 'export': {'enabled': True, 'duration': 1000, 'color': [100, 200, 255]}}}
+        self.config = {'marker': {'type': 'icon', 'dot': {'size': 24, 'color': [255, 0, 0], 'border_width': 3, 'border_color': [180, 0, 0], 'size_min': 24, 'size_max': 24, 'dynamic_sizing': False, 'dynamic_sizing_formula': 'sqrt'}, 'icon': {'path': 'resources/baseicon.webp', 'size_min': 32, 'size_max': 64, 'base_size': 48, 'dynamic_sizing': True, 'dynamic_sizing_formula': 'sqrt'}}, 'glow': {'enabled': True, 'color': [59, 142, 208], 'selected_alpha_min': 80, 'selected_alpha_max': 180, 'animation_speed': 8, 'hover_alpha': 80, 'radius_multiplier': 1.5}, 'zoom': {'factor': 1.15, 'min': 1.0, 'max': 30.0, 'double_click_target': 26.0, 'animation_speed': 0.2, 'animation_fps': 60}, 'effects': {'delete': {'enabled': True, 'duration': 1000, 'max_radius': 150, 'colors': {'outer': [255, 80, 80], 'inner': [255, 150, 0], 'flash': [255, 200, 0]}}, 'import': {'enabled': True, 'duration': 1000, 'pulse_count': 3, 'color': [0, 255, 150], 'sparkle_color': [100, 255, 200]}, 'export': {'enabled': True, 'duration': 1000, 'color': [100, 200, 255]}}}
         return self.config
     def _create_dot_pixmap(self, size):
         from PySide6.QtGui import QPainter, QPen, QBrush
@@ -119,14 +132,14 @@ class MapTab(QWidget):
         if os.path.exists(icon_path):
             self.base_icon_pixmap = QPixmap(icon_path)
         else:
-            alt_icon_path = os.path.join(base_dir, 'resources', 'baseicon.png')
+            alt_icon_path = os.path.join(base_dir, 'resources', 'baseicon.webp')
             if os.path.exists(alt_icon_path):
                 self.base_icon_pixmap = QPixmap(alt_icon_path)
             else:
                 self.base_icon_pixmap = self._create_dot_pixmap(32)
     def _load_player_icon(self):
         base_dir = constants.get_base_path()
-        icon_path = os.path.join(base_dir, 'resources', 'playericon.png')
+        icon_path = os.path.join(base_dir, 'resources', 'playericon.webp')
         if os.path.exists(icon_path):
             pixmap = QPixmap(icon_path)
             if not pixmap.isNull():
@@ -168,38 +181,59 @@ class MapTab(QWidget):
         self.map_overlay.raise_()
         overlay_layout = QHBoxLayout(self.map_overlay)
         overlay_layout.setContentsMargins(0, 0, 0, 0)
+        overlay_layout.setSpacing(3)
         overlay_layout.addStretch()
         self.btn_calibrate = QPushButton(t('calibrate.button'))
         self.btn_calibrate.setCheckable(True)
         self.btn_calibrate.setChecked(False)
         self.btn_calibrate.clicked.connect(self._on_calibrate_toggle)
-        self.btn_calibrate.setStyleSheet('\n            QPushButton {\n                color: white;\n                background: rgba(200, 80, 0, 150);\n                padding: 4px 8px;\n                border-radius: 4px;\n                border: none;\n            }\n            QPushButton:checked {\n                color: white;\n                background: rgba(255, 120, 0, 200);\n                border: 1px solid #ff8800;\n            }\n        ')
+        self.btn_calibrate.setStyleSheet('QPushButton { color: white; background: rgba(200, 80, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { color: white; background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
         overlay_layout.addWidget(self.btn_calibrate)
-        self.toggle_map_bases = QCheckBox(t('map.toggle.bases') if t else 'Bases')
+        base_dir = constants.get_base_path()
+        self.toggle_map_bases = QPushButton()
+        self.toggle_map_bases.setIcon(QIcon(os.path.join(base_dir, 'resources', 'baseicon.webp')))
+        self.toggle_map_bases.setIconSize(QSize(22, 22))
+        self.toggle_map_bases.setToolTip(t('map.toggle.bases') if t else 'Bases')
+        self.toggle_map_bases.setCheckable(True)
         self.toggle_map_bases.setChecked(True)
-        self.toggle_map_bases.stateChanged.connect(self._on_toggle_changed)
-        self.toggle_map_bases.setStyleSheet('\n            QCheckBox {\n                color: white;\n                background: rgba(0, 0, 0, 150);\n                padding: 4px 8px;\n                border-radius: 4px;\n            }\n        ')
+        self.toggle_map_bases.clicked.connect(self._on_toggle_changed)
+        self.toggle_map_bases.setStyleSheet('QPushButton { color: white; background: rgba(0, 0, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
         overlay_layout.addWidget(self.toggle_map_bases)
-        self.toggle_map_players = QCheckBox(t('map.toggle.players') if t else 'Players')
+        self.toggle_map_players = QPushButton()
+        self.toggle_map_players.setIcon(QIcon(os.path.join(base_dir, 'resources', 'marker.webp')))
+        self.toggle_map_players.setIconSize(QSize(22, 22))
+        self.toggle_map_players.setToolTip(t('map.toggle.players') if t else 'Players')
+        self.toggle_map_players.setCheckable(True)
         self.toggle_map_players.setChecked(False)
-        self.toggle_map_players.stateChanged.connect(self._on_toggle_changed)
-        self.toggle_map_players.setStyleSheet('\n            QCheckBox {\n                color: white;\n                background: rgba(0, 0, 0, 150);\n                padding: 4px 8px;\n                border-radius: 4px;\n            }\n        ')
+        self.toggle_map_players.clicked.connect(self._on_toggle_changed)
+        self.toggle_map_players.setStyleSheet('QPushButton { color: white; background: rgba(0, 0, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
         overlay_layout.addWidget(self.toggle_map_players)
-        self.toggle_base_radius_rings = QCheckBox(t('map.toggle.base_radius_rings') if t else 'Base Radius Rings')
+        self.toggle_base_radius_rings = QPushButton()
+        self.toggle_base_radius_rings.setIcon(QIcon(os.path.join(base_dir, 'resources', 'ring.webp')))
+        self.toggle_base_radius_rings.setIconSize(QSize(22, 22))
+        self.toggle_base_radius_rings.setToolTip(t('map.toggle.base_radius_rings') if t else 'Base Radius Rings')
+        self.toggle_base_radius_rings.setCheckable(True)
         self.toggle_base_radius_rings.setChecked(True)
-        self.toggle_base_radius_rings.stateChanged.connect(self._on_radius_rings_toggle)
-        self.toggle_base_radius_rings.setStyleSheet('\n            QCheckBox {\n                color: white;\n                background: rgba(0, 0, 0, 150);\n                padding: 4px 8px;\n                border-radius: 4px;\n            }\n        ')
+        self.toggle_base_radius_rings.clicked.connect(self._on_radius_rings_toggle)
+        self.toggle_base_radius_rings.setStyleSheet('QPushButton { color: white; background: rgba(0, 0, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
         overlay_layout.addWidget(self.toggle_base_radius_rings)
-        self.toggle_map_zones = QCheckBox(t('map.toggle.zones') if t else 'Zones')
+        self.toggle_map_zones = QPushButton()
+        self.toggle_map_zones.setIcon(QIcon(os.path.join(base_dir, 'resources', 'zones.webp')))
+        self.toggle_map_zones.setIconSize(QSize(22, 22))
+        self.toggle_map_zones.setToolTip(t('map.toggle.zones') if t else 'Zones')
+        self.toggle_map_zones.setCheckable(True)
         self.toggle_map_zones.setChecked(False)
-        self.toggle_map_zones.stateChanged.connect(self._on_zones_toggle)
-        self.toggle_map_zones.setStyleSheet('\n            QCheckBox {\n                color: white;\n                background: rgba(0, 0, 0, 150);\n                padding: 4px 8px;\n                border-radius: 4px;\n            }\n        ')
+        self.toggle_map_zones.clicked.connect(self._on_zones_toggle)
+        self.toggle_map_zones.setStyleSheet('QPushButton { color: white; background: rgba(0, 0, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 36px; min-height: 28px; } QPushButton:checked { background: rgba(255, 120, 0, 200); border: 1px solid #ff8800; }')
         overlay_layout.addWidget(self.toggle_map_zones)
-        self.toggle_map_type = QPushButton(t('map.toggle.world_map') if t else 'World Map')
+        self.toggle_map_type = QPushButton()
+        self.toggle_map_type.setIcon(QIcon(os.path.join(base_dir, 'resources', 'T_TreeMap.webp')))
+        self.toggle_map_type.setIconSize(QSize(26, 26))
+        self.toggle_map_type.setToolTip(t('map.toggle.tree_map') if t else 'Tree Map')
         self.toggle_map_type.setCheckable(True)
         self.toggle_map_type.setChecked(False)
         self.toggle_map_type.clicked.connect(self._on_map_type_toggle)
-        self.toggle_map_type.setStyleSheet('\n            QPushButton {\n                color: white;\n                background: rgba(0, 0, 0, 150);\n                padding: 4px 8px;\n                border-radius: 4px;\n                border: none;\n            }\n            QPushButton:checked {\n                color: #7dd3fc;\n                background: rgba(0, 0, 0, 180);\n                border: 1px solid #7dd3fc;\n            }\n        ')
+        self.toggle_map_type.setStyleSheet('QPushButton { color: white; background: rgba(0, 0, 0, 150); padding: 6px 10px; border-radius: 4px; border: none; min-width: 40px; min-height: 28px; } QPushButton:checked { background: rgba(125, 211, 252, 0.15); border: 1px solid #7dd3fc; }')
         overlay_layout.addWidget(self.toggle_map_type)
         overlay_layout.addStretch()
         self.view.overlay_position_callback = self._reposition_map_overlay
@@ -273,14 +307,13 @@ class MapTab(QWidget):
         self._splitter = splitter
         splitter.addWidget(self._map_widget)
         splitter.addWidget(self._sidebar_widget)
-        splitter.setStretchFactor(0, 3)
+        splitter.setStretchFactor(0, 4)
         splitter.setStretchFactor(1, 1)
-        splitter.setSizes([1000, 400])
+        splitter.setSizes([1120, 280])
         layout.addWidget(splitter)
         QTimer.singleShot(100, self._fix_initial_layout)
     def _fix_initial_layout(self):
         if self._splitter:
-            self._splitter.setSizes([850, 550])
             self._splitter.updateGeometry()
             self.updateGeometry()
             if self.scene and self.map_width > 0 and (self.map_height > 0):
@@ -295,14 +328,9 @@ class MapTab(QWidget):
             self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
             self.view.zoom_changed.emit(1.0)
         if hasattr(self, 'map_overlay'):
-            cal_width = self.btn_calibrate.sizeHint().width() if hasattr(self, 'btn_calibrate') else 0
-            bases_width = self.toggle_map_bases.sizeHint().width()
-            players_width = self.toggle_map_players.sizeHint().width()
-            rings_width = self.toggle_base_radius_rings.sizeHint().width()
-            zones_width = self.toggle_map_zones.sizeHint().width()
-            map_type_width = self.toggle_map_type.sizeHint().width()
-            overlay_width = cal_width + bases_width + players_width + rings_width + zones_width + map_type_width + 30
-            self.map_overlay.setGeometry(self.view.width() - overlay_width - 10, 10, overlay_width, 34)
+            self.map_overlay.adjustSize()
+            sh = self.map_overlay.sizeHint()
+            self.map_overlay.setGeometry(self.view.width() - sh.width() - 10, 6, sh.width(), sh.height())
     def _on_marker_hover_enter(self, data, global_pos):
         if 'base_id' in data:
             self.hover_overlay.show_for_base(data, QPoint(int(global_pos.x()), int(global_pos.y())))
@@ -343,13 +371,9 @@ class MapTab(QWidget):
             self.view.zoom_changed.emit(1.0)
     def _reposition_map_overlay(self):
         if hasattr(self, 'map_overlay'):
-            bases_width = self.toggle_map_bases.sizeHint().width()
-            players_width = self.toggle_map_players.sizeHint().width()
-            rings_width = self.toggle_base_radius_rings.sizeHint().width()
-            zones_width = self.toggle_map_zones.sizeHint().width()
-            map_type_width = self.toggle_map_type.sizeHint().width()
-            overlay_width = bases_width + players_width + rings_width + zones_width + map_type_width + 20
-            self.map_overlay.setGeometry(self.view.width() - overlay_width - 10, 10, overlay_width, 30)
+            self.map_overlay.adjustSize()
+            sh = self.map_overlay.sizeHint()
+            self.map_overlay.setGeometry(self.view.width() - sh.width() - 10, 6, sh.width(), sh.height())
             self.map_overlay.raise_()
     def resizeEvent(self, event):
         super().resizeEvent(event)
@@ -373,10 +397,10 @@ class MapTab(QWidget):
             self._hide_all_radius_rings()
     def _on_map_type_toggle(self, checked):
         self.current_map = 'tree' if checked else 'world'
-        if t:
-            self.toggle_map_type.setText(t('map.toggle.tree_map') if checked else t('map.toggle.world_map'))
-        else:
-            self.toggle_map_type.setText('Tree Map' if checked else 'World Map')
+        base_dir = constants.get_base_path()
+        icon = 'T_WorldMap.webp' if checked else 'T_TreeMap.webp'
+        self.toggle_map_type.setIcon(QIcon(os.path.join(base_dir, 'resources', icon)))
+        self.toggle_map_type.setToolTip(t('map.toggle.world_map') if checked else t('map.toggle.tree_map'))
         self.view.set_map_type(self.current_map, palworld_coord.get_treemap_coord_range() if checked else 1000)
         self._recalc_img_coords()
         self._load_map(self.current_map)

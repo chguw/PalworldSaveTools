@@ -82,7 +82,7 @@ def generate_world_map(output_path=None, map_type='world'):
     font_family = get_cjk_font()
     map_filename = 'T_WorldMap.webp' if map_type == 'world' else 'T_TreeMap.webp'
     worldmap_path = os.path.join(base_dir, 'resources', map_filename)
-    marker_path = os.path.join(base_dir, 'resources', 'baseicon.png')
+    marker_path = os.path.join(base_dir, 'resources', 'baseicon.webp')
     if not os.path.exists(worldmap_path):
         print(f'Map not found: {worldmap_path}')
         return None
