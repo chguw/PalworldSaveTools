@@ -297,10 +297,10 @@ class ToolsTab(QWidget):
         section_layout.setContentsMargins(14, 10, 14, 10)
         section_layout.setSpacing(8)
         title = QLabel(t(section_key) if t else section_key)
-        title.setObjectName('categoryTitle')
-        title.setFont(QFont(constants.FONT_FAMILY, 13, QFont.Bold))
+        title.setObjectName('sectionHeader')
+        title.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
         self._section_titles.append((title, section_key))
-        section_layout.addWidget(title)
+        section_layout.addWidget(title, alignment=Qt.AlignLeft)
         grid = QGridLayout()
         grid.setSpacing(8)
         for idx, key in enumerate(tool_keys):

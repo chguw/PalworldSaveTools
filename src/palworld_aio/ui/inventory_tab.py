@@ -561,7 +561,8 @@ class ItemPickerDialog(QDialog):
     def __init__(self, parent=None, filter_type_a=None, filter_type_b=None, filter_exclude_type_a=None, hide_quantity=False):
         super().__init__(parent)
         self.setWindowTitle(t('inventory.select_item', default='Select Item'))
-        self.setMinimumSize(900, 600)
+        self.setMinimumSize(840, 600)
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         self.selected_item = None
         self._filter_type_a = filter_type_a
         self._filter_type_b = filter_type_b
@@ -569,6 +570,7 @@ class ItemPickerDialog(QDialog):
         self._hide_quantity = hide_quantity
         self.setStyleSheet(DARK_THEME_STYLE)
         self._setup_ui()
+        self._adjust_width()
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setSpacing(8)
@@ -657,6 +659,13 @@ class ItemPickerDialog(QDialog):
             name = item.text()
             asset = item.data(Qt.UserRole) or ''
             item.setHidden(bool(q and q not in name.lower() and (q not in asset.lower())))
+    def _adjust_width(self):
+        m = self.layout().contentsMargins()
+        frame_w = self.frameGeometry().width() - self.geometry().width()
+        scrollbar = 16
+        padding = 24
+        target_w = m.left() + m.right() + frame_w + scrollbar + padding + 10 * 80
+        self.setFixedWidth(target_w)
     def _on_item_clicked(self, item: QListWidgetItem):
         self.selected_item = item.data(Qt.UserRole)
         type_a = item.data(Qt.UserRole + 3) or ''
