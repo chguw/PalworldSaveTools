@@ -55,15 +55,9 @@ class MapTab(QWidget):
         if self.scene and self.map_width > 0 and (self.map_height > 0):
             viewport = self.view.viewport()
             if viewport.width() > 0 and viewport.height() > 0:
-                scale_x = max(1, viewport.width() - 2) / self.map_width
-                scale_y = max(1, viewport.height() - 2) / self.map_height
-                scale = max(scale_x, scale_y)
-                self.view.base_scale = scale
                 self.view.resetTransform()
-                self.view.scale(scale, scale)
-                self.view.centerOn(self.map_item)
-                clamped = self.view._clamp_center_to_bounds(self.view.mapToScene(self.view.viewport().rect().center()))
-                self.view.centerOn(clamped)
+                self.view.fitInView(self.map_item, Qt.IgnoreAspectRatio)
+                self.view.base_scale = self.view.transform().m11()
                 self.view.current_zoom = 1.0
                 self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
                 self.view.zoom_changed.emit(1.0)
@@ -322,16 +316,9 @@ class MapTab(QWidget):
     def _fix_initial_layout(self):
         self.updateGeometry()
         if self.scene and self.map_width > 0 and (self.map_height > 0):
-            viewport = self.view.viewport()
-            scale_x = max(1, viewport.width() - 2) / self.map_width
-            scale_y = max(1, viewport.height() - 2) / self.map_height
-            scale = max(scale_x, scale_y)
-            self.view.base_scale = scale
             self.view.resetTransform()
-            self.view.scale(scale, scale)
-            self.view.centerOn(self.map_item)
-            clamped = self.view._clamp_center_to_bounds(self.view.mapToScene(self.view.viewport().rect().center()))
-            self.view.centerOn(clamped)
+            self.view.fitInView(self.map_item, Qt.IgnoreAspectRatio)
+            self.view.base_scale = self.view.transform().m11()
         self.view.current_zoom = 1.0
         self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
         self.view.zoom_changed.emit(1.0)
@@ -367,16 +354,9 @@ class MapTab(QWidget):
         coord_range = palworld_coord.get_treemap_coord_range() if map_type == 'tree' else 1000
         self.view.set_map_type(map_type, coord_range)
         if self.map_width > 0 and self.map_height > 0:
-            viewport = self.view.viewport()
-            scale_x = max(1, viewport.width() - 2) / self.map_width
-            scale_y = max(1, viewport.height() - 2) / self.map_height
-            scale = max(scale_x, scale_y)
-            self.view.base_scale = scale
             self.view.resetTransform()
-            self.view.scale(scale, scale)
-            self.view.centerOn(self.map_item)
-            clamped = self.view._clamp_center_to_bounds(self.view.mapToScene(self.view.viewport().rect().center()))
-            self.view.centerOn(clamped)
+            self.view.fitInView(self.map_item, Qt.IgnoreAspectRatio)
+            self.view.base_scale = self.view.transform().m11()
             self.view.current_zoom = 1.0
             self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
             self.view.zoom_changed.emit(1.0)
