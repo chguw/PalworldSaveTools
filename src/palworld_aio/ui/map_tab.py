@@ -52,7 +52,7 @@ class MapTab(QWidget):
         super().showEvent(event)
         QTimer.singleShot(200, self._fit_map_to_viewport)
     def _fit_map_to_viewport(self):
-        if self.scene and self.map_width > 0 and self.map_height > 0:
+        if self.scene and self.map_width > 0 and (self.map_height > 0):
             viewport = self.view.viewport()
             if viewport.width() > 0 and viewport.height() > 0:
                 scale_x = viewport.width() / self.map_width

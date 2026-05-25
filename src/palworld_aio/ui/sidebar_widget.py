@@ -5,9 +5,9 @@ try:
     import nerdfont as nf
 except:
     class nf:
-        icons = {'nf-cod-tools': '\uea83', 'nf-cod-globe': '\ueaf0', 'nf-cod-package': '\ueb3f', 'nf-cod-archive': '\ueb07', 'nf-cod-star-full': '\ueb7c', 'nf-cod-organization': '\ueb87', 'nf-cod-shield': '\ueb4b', 'nf-cod-home': '\ueaa2', 'nf-cod-circle-slash': '\uea54', 'nf-cod-triangle_right': '\ueb9c', 'nf-cod-triangle_left': '\ueb9b', 'nf-cod-terminal': '\ueac5'}
+        icons = {'nf-fa-wrench': '\uf0ad', 'nf-fa-map': '\uf279', 'nf-fa-warehouse': '\ued92', 'nf-fa-suitcase': '\uf0f2', 'nf-fa-dragon': '\ueef8', 'nf-fa-users': '\uf0c0', 'nf-fa-shield': '\uf132', 'nf-fa-home': '\uf015', 'nf-fa-ban': '\uf05e', 'nf-fa-chevron_right': '\uf054', 'nf-fa-chevron_left': '\uf053', 'nf-fa-terminal': '\uf120'}
 from i18n import t
-ICONS = {'tools': nf.icons.get('nf-cod-tools', '\uea83'), 'map': nf.icons.get('nf-cod-globe', '\ueaf0'), 'base_inventory': nf.icons.get('nf-cod-package', '\ueb3f'), 'player_inventory': nf.icons.get('nf-cod-archive', '\ueb07'), 'pal_editor': nf.icons.get('nf-cod-star-full', '\ueb7c'), 'players': nf.icons.get('nf-cod-organization', '\ueb87'), 'guilds': nf.icons.get('nf-cod-shield', '\ueb4b'), 'bases': nf.icons.get('nf-cod-home', '\ueaa2'), 'exclusions': nf.icons.get('nf-cod-circle-slash', '\uea54'), 'collapse_open': nf.icons.get('nf-cod-triangle_right', '\ueb9c'), 'collapse_close': nf.icons.get('nf-cod-triangle_left', '\ueb9b'), 'console': nf.icons.get('nf-cod-terminal', '\ueac5')}
+ICONS = {'tools': nf.icons.get('nf-fa-wrench', '\uf0ad'), 'map': nf.icons.get('nf-fa-map', '\uf279'), 'base_inventory': nf.icons.get('nf-fa-warehouse', '\ued92'), 'player_inventory': nf.icons.get('nf-fa-suitcase', '\uf0f2'), 'pal_editor': nf.icons.get('nf-fa-dragon', '\ueef8'), 'players': nf.icons.get('nf-fa-users', '\uf0c0'), 'guilds': nf.icons.get('nf-fa-shield', '\uf132'), 'bases': nf.icons.get('nf-fa-home', '\uf015'), 'exclusions': nf.icons.get('nf-fa-ban', '\uf05e'), 'collapse_open': nf.icons.get('nf-fa-chevron_right', '\uf054'), 'collapse_close': nf.icons.get('nf-fa-chevron_left', '\uf053'), 'console': nf.icons.get('nf-fa-terminal', '\uf120')}
 SIDEBAR_W = 48
 ITEM_H = 44
 class NavItem(QPushButton):
