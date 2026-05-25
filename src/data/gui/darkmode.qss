@@ -435,45 +435,32 @@ QWidget#modernNavBar {
     border-bottom: 1px solid rgba(125, 211, 252, 0.10);
 }
 
-QPushButton[pillButton="true"] {
+QPushButton[navButton="true"] {
     background: transparent;
     color: #A6B8C8;
-    border: 1px solid rgba(125, 211, 252, 0.12);
-    border-left: none;
+    border: none;
+    border-radius: 6px;
     font-size: 18px;
-    outline: none;
 }
 
-QPushButton[pillButton="true"][pillPosition="first"] {
-    border-left: 1px solid rgba(125, 211, 252, 0.12);
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-}
-
-QPushButton[pillButton="true"][pillPosition="single"] {
-    border-left: 1px solid rgba(125, 211, 252, 0.12);
-    border-radius: 8px;
-}
-
-QPushButton[pillButton="true"][pillPosition="last"] {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
-
-QPushButton[pillButton="true"]:hover {
+QPushButton[navButton="true"]:hover {
     background: rgba(125, 211, 252, 0.08);
     color: #E6EEF6;
 }
 
-QPushButton[pillButton="true"][active="true"] {
-    background: rgba(125, 211, 252, 0.18);
+QPushButton[navButton="true"][active="true"] {
     color: #7DD3FC;
-    border-color: rgba(125, 211, 252, 0.35);
+    background: transparent;
 }
 
-QPushButton[pillButton="true"][active="true"]:hover {
-    background: rgba(125, 211, 252, 0.25);
+QPushButton[navButton="true"][active="true"]:hover {
+    background: rgba(125, 211, 252, 0.10);
     color: #AEE9FF;
+}
+
+QWidget#navUnderline {
+    background: #7DD3FC;
+    border-radius: 2px;
 }
 
 /* Tab Content Widgets - Ensure proper theming for all tab content */
