@@ -307,8 +307,7 @@ class MainWindow(QMainWindow):
         body_layout.addWidget(self.sidebar)
         self._dashboard_collapsed = False
         self._dashboard_sizes = [1000, 400]
-        if not self.user_settings.get('right_panel_visible', True):
-            self._toggle_dashboard()
+        self._init_collapse = not self.user_settings.get('right_panel_visible', True)
         self.splitter = QSplitter(Qt.Horizontal)
         self.splitter.setChildrenCollapsible(False)
         self.stacked_widget = QStackedWidget()
@@ -326,6 +325,11 @@ class MainWindow(QMainWindow):
         self.results_widget = ResultsWidget()
         self.splitter.addWidget(self.results_widget)
         body_layout.addWidget(self.splitter, stretch=1)
+        if self._init_collapse:
+            self.results_widget.hide()
+            self._dashboard_collapsed = True
+            if hasattr(self, 'sidebar') and self.sidebar:
+                self.sidebar.set_right_panel_visible(False)
         main_layout.addLayout(body_layout, stretch=1)
         self.status_bar = QStatusBar()
         self.status_bar.setFixedHeight(0)
