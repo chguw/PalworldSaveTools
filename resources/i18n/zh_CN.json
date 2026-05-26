@@ -1390,5 +1390,7 @@
   "dashboard.stat_players": "玩家",
   "dashboard.stat_guilds": "行会",
   "dashboard.stat_bases": "基地",
-  "dashboard.stat_pals": "好朋友"
+  "dashboard.stat_pals": "好朋友",
+  "tools.drop_title": "将 Level.sav 拖放到“加载保存”",
+  "tools.drop_hint_overlay": "或者点击上面的“加载保存”按钮"
 }

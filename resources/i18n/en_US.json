@@ -1676,5 +1676,7 @@
   "dashboard.stat_players": "Players",
   "dashboard.stat_guilds": "Guilds",
   "dashboard.stat_bases": "Bases",
-  "dashboard.stat_pals": "Pals"
+  "dashboard.stat_pals": "Pals",
+  "tools.drop_title": "Drop Level.sav to Load Save",
+  "tools.drop_hint_overlay": "Or click the 'Load Save' button above"
 }

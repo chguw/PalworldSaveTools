@@ -1388,5 +1388,7 @@
   "dashboard.stat_players": "選手",
   "dashboard.stat_guilds": "ギルド",
   "dashboard.stat_bases": "拠点",
-  "dashboard.stat_pals": "仲間"
+  "dashboard.stat_pals": "仲間",
+  "tools.drop_title": "Level.sav をロード保存にドロップします",
+  "tools.drop_hint_overlay": "または、上の「ロード保存」ボタンをクリックしてください"
 }

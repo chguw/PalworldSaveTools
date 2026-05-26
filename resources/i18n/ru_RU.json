@@ -1386,5 +1386,7 @@
   "dashboard.stat_players": "Игроки",
   "dashboard.stat_guilds": "Гильдии",
   "dashboard.stat_bases": "Базы",
-  "dashboard.stat_pals": "приятели"
+  "dashboard.stat_pals": "приятели",
+  "tools.drop_title": "Перетащите Level.sav для загрузки сохранения",
+  "tools.drop_hint_overlay": "Или нажмите кнопку «Загрузить сохранение» выше."
 }
