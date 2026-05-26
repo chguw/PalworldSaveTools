@@ -309,8 +309,8 @@ class MapTab(QWidget):
         body_layout = QHBoxLayout()
         body_layout.setContentsMargins(0, 0, 0, 0)
         body_layout.setSpacing(0)
-        body_layout.addWidget(self._map_widget)
-        body_layout.addWidget(self._sidebar_widget, stretch=1)
+        body_layout.addWidget(self._map_widget, stretch=3)
+        body_layout.addWidget(self._sidebar_widget, stretch=2)
         layout.addLayout(body_layout)
         QTimer.singleShot(100, self._fix_initial_layout)
     def _fix_initial_layout(self):
@@ -368,12 +368,6 @@ class MapTab(QWidget):
             self.map_overlay.raise_()
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        if hasattr(self, '_map_widget') and hasattr(self, '_sidebar_widget'):
-            avail_h = self._map_widget.height()
-            total_w = self.width()
-            sidebar_min = self._sidebar_widget.minimumWidth()
-            max_map_w = max(200, total_w - sidebar_min)
-            self._map_widget.setFixedWidth(min(avail_h, max_map_w))
         self._reposition_map_overlay()
         self._update_tab_widths()
         QTimer.singleShot(100, self._fit_map_to_viewport)

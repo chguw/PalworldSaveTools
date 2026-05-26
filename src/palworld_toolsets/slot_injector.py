@@ -1,6 +1,6 @@
 from import_libs import *
 from loading_manager import show_information, show_critical
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QFileDialog, QApplication, QFrame, QGridLayout, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QAbstractItemView, QMessageBox, QSpinBox, QGroupBox, QWidget, QScrollArea, QProgressBar, QStatusBar
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QFileDialog, QApplication, QFrame, QGridLayout, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QAbstractItemView, QMessageBox, QSpinBox, QGroupBox, QWidget, QScrollArea, QProgressBar
 from PySide6.QtGui import QIcon, QFont, QPixmap, QColor, QPalette
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from concurrent.futures import ThreadPoolExecutor
@@ -271,14 +271,11 @@ class SlotNumUpdaterApp(QDialog):
         self.table.setSortingEnabled(True)
         table_layout.addLayout(selection_layout)
         table_layout.addWidget(self.table)
-        self.status_bar = QStatusBar()
-        self.status_bar.showMessage('Ready')
         main_layout.addWidget(header_frame)
         main_layout.addWidget(file_group)
         main_layout.addWidget(controls_group)
         main_layout.addWidget(search_frame)
         main_layout.addWidget(table_frame)
-        main_layout.addWidget(self.status_bar)
         self.has_changes = False
         self.pending_new_value = None
         try:
@@ -322,7 +319,6 @@ class SlotNumUpdaterApp(QDialog):
         self.loading_thread.start()
     def set_loading_state(self, loading, message='Processing...'):
         if loading:
-            self.status_bar.showMessage(message)
             self.browse_button.setEnabled(False)
             self.apply_selected_btn.setEnabled(False)
             self.apply_all_btn.setEnabled(False)
@@ -334,7 +330,6 @@ class SlotNumUpdaterApp(QDialog):
             self.select_none_btn.setEnabled(False)
             QApplication.setOverrideCursor(Qt.WaitCursor)
         else:
-            self.status_bar.showMessage('Ready')
             self.browse_button.setEnabled(True)
             self.apply_selected_btn.setEnabled(True)
             self.apply_all_btn.setEnabled(True)
