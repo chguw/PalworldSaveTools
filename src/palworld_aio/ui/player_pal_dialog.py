@@ -7,7 +7,7 @@ from i18n import t
 from palworld_aio import constants
 import palworld_aio.edit_pals as _ep
 from palworld_aio.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data, _PassiveSkillDelegate
-from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
+from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text
 class PalSlotDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         super().paint(painter, option, index)
@@ -200,7 +200,7 @@ class PlayerPalActionDialog(QDialog):
             tip = f'{pal_name}\n({pal_id})'
             pdesc = self._pal_desc_map.get(pal_id.lower(), '')
             if pdesc:
-                tip += f'\n\n{pdesc}'
+                tip += f'\n\n{wrap_tooltip_text(pdesc)}'
             list_item.setToolTip(tip)
             pixmap = self._get_pal_icon(pal_id)
             if pixmap and (not pixmap.isNull()):
@@ -222,7 +222,7 @@ class PlayerPalActionDialog(QDialog):
             tip = f'{pal_name}\n({pal_id})'
             pdesc = self._pal_desc_map.get(pal_id.lower(), '')
             if pdesc:
-                tip += f'\n\n{pdesc}'
+                tip += f'\n\n{wrap_tooltip_text(pdesc)}'
             list_item.setToolTip(tip)
             pixmap = self._get_pal_icon(pal_id)
             if pixmap and (not pixmap.isNull()):

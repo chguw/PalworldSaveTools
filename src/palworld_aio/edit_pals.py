@@ -3838,7 +3838,7 @@ class PalCreateDialog(QDialog):
             pdesc = pal_descs.get(asset.lower(), '')
             tip = f'<b>{name}</b><br>ID: {asset}'
             if pdesc:
-                tip += f'<br><br><span style="color:#94a3b8;font-size:11px">{pdesc}</span>'
+                tip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(pdesc)}</span>'
             li.setToolTip(tip)
             li.setSizeHint(QSize(80, 80))
             is_variant = any((asset.upper().startswith(p) for p in _BOSS_PREFIXES))

@@ -19,7 +19,7 @@ from palworld_aio.ui.styled_combo import StyledCombo
 from palworld_aio.utils import format_duration_short
 from i18n import t
 from palworld_aio.inventory_manager import ItemData
-from palworld_aio.ui.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE
+from palworld_aio.ui.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE, wrap_tooltip_text
 class RarityBorderDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         super().paint(painter, option, index)
@@ -160,7 +160,7 @@ class GuildItemPickerDialog(QDialog):
             item_desc = item.get('description', '')
             tip = f'{name}\n({asset})'
             if item_desc:
-                tip += f'\n\n{item_desc}'
+                tip += f'\n\n{wrap_tooltip_text(item_desc)}'
             list_item.setToolTip(tip)
             icon_path = item.get('icon', '')
             if icon_path:
