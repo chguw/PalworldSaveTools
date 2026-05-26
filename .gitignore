@@ -54,3 +54,9 @@ tmp/
 uv.lock
 
 Logs/
+
+# External assets
+Exports/
+Backups/
+*.sav
+*.savc
