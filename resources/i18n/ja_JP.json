@@ -1363,5 +1363,9 @@
   "common.clear": "-  クリア  -",
   "pal_editor.no_pal_data": "仲間データなし",
   "map.zone_shape.rect": "長方形ゾーン",
-  "map.zone_shape.polygon": "ポリゴンゾーン"
+  "map.zone_shape.polygon": "ポリゴンゾーン",
+  "player_pal.select_active": "アクティブスキルを選択",
+  "player_pal.select_passive": "パッシブスキルを選択",
+  "player_pal.no_active_selected": "アクティブなスキルが選択されていません",
+  "player_pal.no_passive_selected": "パッシブスキルが選択されていません"
 }

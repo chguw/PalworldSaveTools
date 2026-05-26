@@ -1345,5 +1345,9 @@
   "common.clear": "-- clair --",
   "pal_editor.no_pal_data": "Aucune donnée Pal",
   "map.zone_shape.rect": "Zone rectangulaire",
-  "map.zone_shape.polygon": "Zone Polygone"
+  "map.zone_shape.polygon": "Zone Polygone",
+  "player_pal.select_active": "Sélectionnez une compétence active",
+  "player_pal.select_passive": "Sélectionnez la compétence passive",
+  "player_pal.no_active_selected": "Aucune compétence active sélectionnée",
+  "player_pal.no_passive_selected": "Aucune compétence passive sélectionnée"
 }

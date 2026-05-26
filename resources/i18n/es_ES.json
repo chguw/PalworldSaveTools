@@ -1356,5 +1356,9 @@
   "common.clear": "-- claro --",
   "pal_editor.no_pal_data": "Sin datos de amigos",
   "map.zone_shape.rect": "Zona rectangular",
-  "map.zone_shape.polygon": "Zona de polígono"
+  "map.zone_shape.polygon": "Zona de polígono",
+  "player_pal.select_active": "Seleccionar habilidad activa",
+  "player_pal.select_passive": "Seleccionar habilidad pasiva",
+  "player_pal.no_active_selected": "No se ha seleccionado ninguna habilidad activa",
+  "player_pal.no_passive_selected": "No se seleccionó ninguna habilidad pasiva"
 }

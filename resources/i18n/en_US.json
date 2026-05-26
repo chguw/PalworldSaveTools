@@ -1651,5 +1651,9 @@
   "common.clear": "-- clear --",
   "pal_editor.no_pal_data": "No Pal Data",
   "map.zone_shape.rect": "Rectangle Zone",
-  "map.zone_shape.polygon": "Polygon Zone"
+  "map.zone_shape.polygon": "Polygon Zone",
+  "player_pal.select_active": "Select Active Skill",
+  "player_pal.select_passive": "Select Passive Skill",
+  "player_pal.no_active_selected": "No active skill selected",
+  "player_pal.no_passive_selected": "No passive skill selected"
 }

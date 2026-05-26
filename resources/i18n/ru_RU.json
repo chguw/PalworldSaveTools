@@ -1361,5 +1361,9 @@
   "common.clear": "-- прозрачный --",
   "pal_editor.no_pal_data": "Нет данных приятеля",
   "map.zone_shape.rect": "Прямоугольная зона",
-  "map.zone_shape.polygon": "Полигональная зона"
+  "map.zone_shape.polygon": "Полигональная зона",
+  "player_pal.select_active": "Выберите активный навык",
+  "player_pal.select_passive": "Выберите пассивный навык",
+  "player_pal.no_active_selected": "Активный навык не выбран",
+  "player_pal.no_passive_selected": "Пассивный навык не выбран"
 }

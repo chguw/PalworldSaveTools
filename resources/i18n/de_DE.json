@@ -1387,5 +1387,9 @@
   "common.clear": "-- klar --",
   "pal_editor.no_pal_data": "Keine Pal-Daten",
   "map.zone_shape.rect": "Rechteckzone",
-  "map.zone_shape.polygon": "Polygonzone"
+  "map.zone_shape.polygon": "Polygonzone",
+  "player_pal.select_active": "Wählen Sie „Aktive Fertigkeit“.",
+  "player_pal.select_passive": "Wählen Sie Passive Fertigkeit",
+  "player_pal.no_active_selected": "Kein aktiver Skill ausgewählt",
+  "player_pal.no_passive_selected": "Keine passive Fertigkeit ausgewählt"
 }

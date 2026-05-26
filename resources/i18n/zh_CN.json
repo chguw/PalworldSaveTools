@@ -1365,5 +1365,9 @@
   "common.clear": "-  清除  -",
   "pal_editor.no_pal_data": "没有好友数据",
   "map.zone_shape.rect": "矩形区",
-  "map.zone_shape.polygon": "多边形区"
+  "map.zone_shape.polygon": "多边形区",
+  "player_pal.select_active": "选择主动技能",
+  "player_pal.select_passive": "选择被动技能",
+  "player_pal.no_active_selected": "未选择主动技能",
+  "player_pal.no_passive_selected": "未选择被动技能"
 }

@@ -1362,5 +1362,9 @@
   "common.clear": "-- 분명한 --",
   "pal_editor.no_pal_data": "친구 데이터 없음",
   "map.zone_shape.rect": "직사각형 영역",
-  "map.zone_shape.polygon": "다각형 영역"
+  "map.zone_shape.polygon": "다각형 영역",
+  "player_pal.select_active": "액티브 스킬 선택",
+  "player_pal.select_passive": "패시브 스킬 선택",
+  "player_pal.no_active_selected": "활성 스킬을 선택하지 않았습니다.",
+  "player_pal.no_passive_selected": "패시브 스킬을 선택하지 않았습니다."
 }

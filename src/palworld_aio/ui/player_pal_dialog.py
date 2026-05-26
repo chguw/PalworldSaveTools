@@ -276,6 +276,7 @@ class PlayerPalActionDialog(QDialog):
         lst.addItem(clear_item)
         skill_map = PalFrame._SKILLMAP if is_active else PalFrame._PASSMAP
         names = sorted(skill_map.values())
+        anim_timer = None
         if is_active:
             _ep._ensure_skill_data()
             for name in names:
@@ -344,6 +345,12 @@ class PlayerPalActionDialog(QDialog):
                 lst.addItem(item)
         if not is_active:
             lst.setItemDelegate(_PassiveSkillDelegate(lst))
+            anim_timer = QTimer(popup)
+            def _tick_anim():
+                _ep._anim_phase = (_ep._anim_phase + 0.03) % 10000.0
+                lst.viewport().update()
+            anim_timer.timeout.connect(_tick_anim)
+            anim_timer.start(33)
         self._skill_search = search
         self._skill_list = lst
         self._skill_is_active = is_active
@@ -377,12 +384,15 @@ class PlayerPalActionDialog(QDialog):
                             if n == chosen_name:
                                 self.selected_passive_skill_id = a
                                 break
-                        rank = PalFrame._PASSRANK.get(chosen_name.lower(), 1)
-                        tc = PalFrame._passive_rank_color(chosen_name.lower())[2]
+                        asset_lower = (self.selected_passive_skill_id or '').lower()
+                        rank = PalFrame._PASSRANK.get(asset_lower, 1)
+                        tc = PalFrame._passive_rank_color(asset_lower)[2]
                         self.passive_skill_label.setText(f'Passive: {chosen_name}')
                         self.passive_skill_label.setStyleSheet(f'color: {tc}; font-weight: bold; padding: 5px;')
                         self.passive_clear_btn.setVisible(True)
                 self._update_remove_button()
+                if anim_timer:
+                    anim_timer.stop()
                 popup.close()
         lst.itemClicked.connect(on_select)
         pos = QCursor.pos()
