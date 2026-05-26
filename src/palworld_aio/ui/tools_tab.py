@@ -522,5 +522,35 @@ class ToolsTab(QWidget):
         if hasattr(self, '_drop_overlay'):
             self._drop_overlay.setGeometry(self.rect())
 
+    def refresh_labels(self):
+        if hasattr(self, '_load_btn') and self._load_btn:
+            self._load_btn.setText(t('menu.file.load_save') if t else 'Load Save')
+        if hasattr(self, '_save_path_label') and self._save_path_label:
+            if not (hasattr(constants, 'current_save_path') and constants.current_save_path):
+                self._save_path_label.setText(t('tools.no_save_loaded') if t else 'No save loaded')
+                self._save_status_label.setText(t('dashboard.no_save') if t else 'No Save Loaded')
+                self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #e2e8f0; border: none; background: transparent;')
+            else:
+                self._save_status_label.setText(t('tools.save_loaded') if t else 'Save Loaded')
+                self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #22c55e; border: none; background: transparent;')
+        if hasattr(self, '_drag_hint_label') and self._drag_hint_label:
+            self._drag_hint_label.setText(t('tools.drag_hint') if t else 'or drag & drop a Level.sav file here')
+        for title_label, section_key in self._section_titles:
+            title_label.setText(t(section_key) if t else section_key)
+        for card, key in self.tool_buttons:
+            label = t(key) if t else key
+            card.title_label.setText(label)
+            card.title_label.setToolTip(label)
+            desc_key = TOOL_DESCRIPTIONS.get(key)
+            if desc_key and hasattr(card, 'desc_label') and card.desc_label:
+                card.desc_label.setText(t(desc_key) if t else '')
+        if hasattr(self, '_drop_overlay'):
+            self._drop_overlay._drop_text = t('tools.drop_title') if t else 'Drop Level.sav to Load Save'
+            self._drop_overlay._drop_hint = t('tools.drop_hint_overlay') if t else "Or click the 'Load Save' button above"
+            self._drop_overlay.update()
+        if hasattr(self, '_stat_label_refs'):
+            for key, lbl in self._stat_label_refs.items():
+                lbl.setText(t('dashboard.stat_' + key) if t else key)
+
     def refresh(self):
         pass
