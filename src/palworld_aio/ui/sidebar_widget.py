@@ -96,6 +96,8 @@ class SidebarWidget(QWidget):
         layout.addWidget(self._console_btn)
         self._right_panel_btn = BottomBtn(ICONS['collapse_open'], t('sidebar.close') if t else 'Close Panel')
         self._right_panel_btn.clicked.connect(self._on_right_panel_toggle)
+        self._right_panel_btn.set_active(True)
+        self._update_right_panel_icon()
         layout.addWidget(self._right_panel_btn)
     def _on_item_clicked(self, button_id):
         self.set_active(button_id)
