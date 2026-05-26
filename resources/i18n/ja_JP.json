@@ -1390,5 +1390,6 @@
   "dashboard.stat_bases": "拠点",
   "dashboard.stat_pals": "仲間",
   "tools.drop_title": "Level.sav をロード保存にドロップします",
-  "tools.drop_hint_overlay": "または、上の「ロード保存」ボタンをクリックしてください"
+  "tools.drop_hint_overlay": "または、上の「ロード保存」ボタンをクリックしてください",
+  "tools.save_loaded": "ロード済みを保存"
 }

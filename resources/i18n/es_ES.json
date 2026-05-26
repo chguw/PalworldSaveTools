@@ -1383,5 +1383,6 @@
   "dashboard.stat_bases": "Bases",
   "dashboard.stat_pals": "amigos",
   "tools.drop_title": "Suelte Level.sav para cargar Guardar",
-  "tools.drop_hint_overlay": "O haga clic en el botón 'Cargar Guardar' de arriba"
+  "tools.drop_hint_overlay": "O haga clic en el botón 'Cargar Guardar' de arriba",
+  "tools.save_loaded": "Guardar cargado"
 }

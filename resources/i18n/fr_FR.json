@@ -1372,5 +1372,6 @@
   "dashboard.stat_bases": "Socles",
   "dashboard.stat_pals": "Copains",
   "tools.drop_title": "Déposez Level.sav pour charger la sauvegarde",
-  "tools.drop_hint_overlay": "Ou cliquez sur le bouton « Charger la sauvegarde » ci-dessus"
+  "tools.drop_hint_overlay": "Ou cliquez sur le bouton « Charger la sauvegarde » ci-dessus",
+  "tools.save_loaded": "Enregistrer chargé"
 }

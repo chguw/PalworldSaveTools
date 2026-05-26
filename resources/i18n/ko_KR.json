@@ -1389,5 +1389,6 @@
   "dashboard.stat_bases": "기지",
   "dashboard.stat_pals": "친구들",
   "tools.drop_title": "Level.sav를 저장 로드에 삭제",
-  "tools.drop_hint_overlay": "또는 위의 '저장 불러오기' 버튼을 클릭하세요."
+  "tools.drop_hint_overlay": "또는 위의 '저장 불러오기' 버튼을 클릭하세요.",
+  "tools.save_loaded": "저장 로드됨"
 }

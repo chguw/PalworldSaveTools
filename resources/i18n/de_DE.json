@@ -1414,5 +1414,6 @@
   "dashboard.stat_bases": "Basen",
   "dashboard.stat_pals": "Freunde",
   "tools.drop_title": "Legen Sie „Level.sav“ ab, um „Laden und Speichern“ zu laden",
-  "tools.drop_hint_overlay": "Oder klicken Sie oben auf die Schaltfläche „Laden und speichern“."
+  "tools.drop_hint_overlay": "Oder klicken Sie oben auf die Schaltfläche „Laden und speichern“.",
+  "tools.save_loaded": "Speichern geladen"
 }
