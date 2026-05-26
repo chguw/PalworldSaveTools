@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene,
 from PySide6.QtCore import Qt, QRectF, QPointF, QPoint, QSize, QTimer, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QPixmap, QPen, QBrush, QColor, QPainter, QFont, QIcon
 from i18n import t
-from loading_manager import show_information, show_warning, show_critical, show_question
+from loading_manager import show_information, show_warning, show_critical, show_question, run_with_loading
 import palworld_coord
 from palworld_aio import constants
 from palworld_aio.data_manager import delete_base_camp, get_tick
@@ -1299,47 +1299,52 @@ class MapTab(QWidget):
         file_paths, _ = QFileDialog.getOpenFileNames(self, t('base.import_multi') if t else 'Import Bases(Multi-File)', '', 'JSON Files(*.json)')
         if not file_paths:
             return
-        successful_imports = 0
-        failed_imports = 0
-        failed_files = []
-        imported_coords_list = []
-        for file_path in file_paths:
-            try:
-                exported_data = json_tools.load(file_path)
-                if import_base_json(constants.loaded_level_json, exported_data, guild_id):
-                    constants.invalidate_container_lookup()
-                    if self.parent_window and hasattr(self.parent_window, 'base_inventory_tab'):
-                        self.parent_window.base_inventory_tab.manager.invalidate_cache()
-                    successful_imports += 1
-                    try:
-                        raw_t = exported_data['base_camp']['value']['RawData']['value']['transform']['translation']
-                        bx, by = palworld_coord.sav_to_map(raw_t['x'], raw_t['y'], new=True)
-                        img_x, img_y = self._to_image_coordinates(bx, by, self.map_width, self.map_height)
-                        imported_coords_list.append((bx, by, img_x, img_y))
-                        self._play_effect(ImportEffect, img_x, img_y)
-                    except:
-                        pass
-                else:
+        def task():
+            successful_imports = 0
+            failed_imports = 0
+            failed_files = []
+            imported_coords_list = []
+            for file_path in file_paths:
+                try:
+                    exported_data = json_tools.load(file_path)
+                    if import_base_json(constants.loaded_level_json, exported_data, guild_id):
+                        constants.invalidate_container_lookup()
+                        if self.parent_window and hasattr(self.parent_window, 'base_inventory_tab'):
+                            self.parent_window.base_inventory_tab.manager.invalidate_cache()
+                        successful_imports += 1
+                        try:
+                            raw_t = exported_data['base_camp']['value']['RawData']['value']['transform']['translation']
+                            bx, by = palworld_coord.sav_to_map(raw_t['x'], raw_t['y'], new=True)
+                            img_x, img_y = self._to_image_coordinates(bx, by, self.map_width, self.map_height)
+                            imported_coords_list.append((bx, by, img_x, img_y))
+                            self._play_effect(ImportEffect, img_x, img_y)
+                        except:
+                            pass
+                    else:
+                        failed_imports += 1
+                        failed_files.append(os.path.basename(file_path) + '(import failed)')
+                except Exception as e:
                     failed_imports += 1
-                    failed_files.append(os.path.basename(file_path) + '(import failed)')
-            except Exception as e:
-                failed_imports += 1
-                failed_files.append(os.path.basename(file_path) + f'(error: {str(e)})')
-        self.refresh()
-        if self.parent_window:
-            self.parent_window.refresh_all()
-        if imported_coords_list:
-            _, _, img_x, img_y = imported_coords_list[0]
-            self.view.animate_to_coords(img_x, img_y, zoom_level=self.config['zoom']['double_click_target'])
-        if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
-            self._show_all_radius_rings()
-        if successful_imports > 0:
-            msg = f'Successfully imported {successful_imports} base(s).'
-            if failed_imports > 0:
-                msg += f'\nFailed to import {failed_imports} file(s):\n' + '\n'.join(failed_files)
-            show_information(self, t('success.title') if t else 'Success', msg)
-        else:
-            show_warning(self, t('error.title') if t else 'Error', f'Failed to import any bases.\n' + '\n'.join(failed_files))
+                    failed_files.append(os.path.basename(file_path) + f'(error: {str(e)})')
+            return (successful_imports, failed_imports, failed_files, imported_coords_list)
+        def on_finished(result):
+            successful_imports, failed_imports, failed_files, imported_coords_list = result
+            self.refresh()
+            if self.parent_window:
+                self.parent_window.refresh_all()
+            if imported_coords_list:
+                _, _, img_x, img_y = imported_coords_list[0]
+                self.view.animate_to_coords(img_x, img_y, zoom_level=self.config['zoom']['double_click_target'])
+            if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
+                self._show_all_radius_rings()
+            if successful_imports > 0:
+                msg = f'Successfully imported {successful_imports} base(s).'
+                if failed_imports > 0:
+                    msg += f'\nFailed to import {failed_imports} file(s):\n' + '\n'.join(failed_files)
+                show_information(self, t('success.title') if t else 'Success', msg)
+            else:
+                show_warning(self, t('error.title') if t else 'Error', f'Failed to import any bases.\n' + '\n'.join(failed_files))
+        run_with_loading(on_finished, task)
     def _export_bases_for_guild(self, guild_id):
         guild_name = self.guilds_data.get(guild_id, {}).get('guild_name', '')
         if not guild_name:
@@ -1352,34 +1357,41 @@ class MapTab(QWidget):
         export_dir = QFileDialog.getExistingDirectory(self, f'Select Export Directory for "{guild_name}"')
         if not export_dir:
             return
-        successful_exports = 0
-        failed_exports = 0
-        failed_bases = []
-        for base_data in guild_bases:
-            bid = str(base_data['base_id'])
-            try:
-                data = export_base_json(constants.loaded_level_json, bid)
-                if not data:
+        def task():
+            successful_exports = 0
+            failed_exports = 0
+            failed_bases = []
+            effects = []
+            for base_data in guild_bases:
+                bid = str(base_data['base_id'])
+                try:
+                    data = export_base_json(constants.loaded_level_json, bid)
+                    if not data:
+                        failed_exports += 1
+                        failed_bases.append(f'Base {bid}(no data)')
+                        continue
+                    safe_gname = ''.join((c for c in guild_name if c.isalnum() or c in (' ', '-', '_'))).rstrip()
+                    filename = f'base_{bid}_{safe_gname}.json'
+                    file_path = os.path.join(export_dir, filename)
+                    json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
+                    successful_exports += 1
+                    effects.append(base_data['img_coords'])
+                except Exception as e:
                     failed_exports += 1
-                    failed_bases.append(f'Base {bid}(no data)')
-                    continue
-                safe_gname = ''.join((c for c in guild_name if c.isalnum() or c in (' ', '-', '_'))).rstrip()
-                filename = f'base_{bid}_{safe_gname}.json'
-                file_path = os.path.join(export_dir, filename)
-                json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
-                successful_exports += 1
-                img_x, img_y = base_data['img_coords']
+                    failed_bases.append(f'Base {bid}(error: {str(e)})')
+            return (successful_exports, failed_exports, failed_bases, guild_name, export_dir, effects)
+        def on_finished(result):
+            successful_exports, failed_exports, failed_bases, guild_name, export_dir, effects = result
+            for img_x, img_y in effects:
                 self._play_effect(ExportEffect, img_x, img_y)
-            except Exception as e:
-                failed_exports += 1
-                failed_bases.append(f'Base {bid}(error: {str(e)})')
-        if successful_exports > 0:
-            msg = f'Successfully exported {successful_exports} base(s)for guild "{guild_name}" to {export_dir}.'
-            if failed_exports > 0:
-                msg += f'\nFailed to export {failed_exports} base(s):\n' + '\n'.join(failed_bases)
-            show_information(self, t('success.title'), msg)
-        else:
-            show_warning(self, t('error.title'), f'Failed to export any bases for guild "{guild_name}".\n' + '\n'.join(failed_bases))
+            if successful_exports > 0:
+                msg = f'Successfully exported {successful_exports} base(s)for guild "{guild_name}" to {export_dir}.'
+                if failed_exports > 0:
+                    msg += f'\nFailed to export {failed_exports} base(s):\n' + '\n'.join(failed_bases)
+                show_information(self, t('success.title'), msg)
+            else:
+                show_warning(self, t('error.title'), f'Failed to export any bases for guild "{guild_name}".\n' + '\n'.join(failed_bases))
+        run_with_loading(on_finished, task)
     def _delete_player(self, player_data):
         from ..data_manager import load_exclusions, delete_player
         player_uid = player_data.get('player_uid', '')

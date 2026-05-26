@@ -1507,31 +1507,36 @@ class MainWindow(QMainWindow):
         file_paths, _ = QFileDialog.getOpenFileNames(self, 'Select Base JSON Files', '', 'JSON Files(*.json)')
         if not file_paths:
             return
-        successful_imports = 0
-        failed_imports = 0
-        failed_files = []
-        for file_path in file_paths:
-            try:
-                exported_data = json_tools.load(file_path)
-                if import_base_json(constants.loaded_level_json, exported_data, gid):
-                    successful_imports += 1
-                else:
+        def task():
+            successful_imports = 0
+            failed_imports = 0
+            failed_files = []
+            for file_path in file_paths:
+                try:
+                    exported_data = json_tools.load(file_path)
+                    if import_base_json(constants.loaded_level_json, exported_data, gid):
+                        successful_imports += 1
+                    else:
+                        failed_imports += 1
+                        failed_files.append(os.path.basename(file_path) + '(import failed)')
+                except Exception as e:
                     failed_imports += 1
-                    failed_files.append(os.path.basename(file_path) + '(import failed)')
-            except Exception as e:
-                failed_imports += 1
-                failed_files.append(os.path.basename(file_path) + f'(error: {str(e)})')
-        if successful_imports > 0:
-            constants.invalidate_container_lookup()
-            self.base_inventory_tab.manager.invalidate_cache()
-        self.refresh_all()
-        if successful_imports > 0:
-            msg = f'Successfully imported {successful_imports} base(s).'
-            if failed_imports > 0:
-                msg += f'\nFailed to import {failed_imports} file(s):\n' + '\n'.join(failed_files)
-            self._show_info(t('success.title'), msg)
-        else:
-            self._show_warning(t('error.title'), f'Failed to import any bases.\n' + '\n'.join(failed_files))
+                    failed_files.append(os.path.basename(file_path) + f'(error: {str(e)})')
+            return (successful_imports, failed_imports, failed_files)
+        def on_finished(result):
+            successful_imports, failed_imports, failed_files = result
+            if successful_imports > 0:
+                constants.invalidate_container_lookup()
+                self.base_inventory_tab.manager.invalidate_cache()
+            self.refresh_all()
+            if successful_imports > 0:
+                msg = f'Successfully imported {successful_imports} base(s).'
+                if failed_imports > 0:
+                    msg += f'\nFailed to import {failed_imports} file(s):\n' + '\n'.join(failed_files)
+                self._show_info(t('success.title'), msg)
+            else:
+                self._show_warning(t('error.title'), f'Failed to import any bases.\n' + '\n'.join(failed_files))
+        run_with_loading(on_finished, task)
     def _export_all_bases(self):
         if not constants.loaded_level_json:
             self._show_warning(t('Error') if t else 'Error', t('error.no_save_loaded') if t else 'No save file loaded.')
@@ -1592,33 +1597,38 @@ class MainWindow(QMainWindow):
         export_dir = QFileDialog.getExistingDirectory(self, f'Select Export Directory for "{guild_name}"')
         if not export_dir:
             return
-        successful_exports = 0
-        failed_exports = 0
-        failed_bases = []
-        for base in guild_bases:
-            bid = base['id']
-            gname = base['guild_name']
-            try:
-                data = export_base_json(constants.loaded_level_json, bid)
-                if not data:
+        def task():
+            successful_exports = 0
+            failed_exports = 0
+            failed_bases = []
+            for base in guild_bases:
+                bid = base['id']
+                gname = base['guild_name']
+                try:
+                    data = export_base_json(constants.loaded_level_json, bid)
+                    if not data:
+                        failed_exports += 1
+                        failed_bases.append(f'Base {bid}(no data)')
+                        continue
+                    safe_gname = ''.join((c for c in gname if c.isalnum() or c in (' ', '-', '_'))).rstrip()
+                    filename = f'base_{bid}_{safe_gname}.json'
+                    file_path = os.path.join(export_dir, filename)
+                    json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
+                    successful_exports += 1
+                except Exception as e:
                     failed_exports += 1
-                    failed_bases.append(f'Base {bid}(no data)')
-                    continue
-                safe_gname = ''.join((c for c in gname if c.isalnum() or c in (' ', '-', '_'))).rstrip()
-                filename = f'base_{bid}_{safe_gname}.json'
-                file_path = os.path.join(export_dir, filename)
-                json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
-                successful_exports += 1
-            except Exception as e:
-                failed_exports += 1
-                failed_bases.append(f'Base {bid}(error: {str(e)})')
-        if successful_exports > 0:
-            msg = f'Successfully exported {successful_exports} base(s)for guild "{guild_name}" to {export_dir}.'
-            if failed_exports > 0:
-                msg += f'\nFailed to export {failed_exports} base(s):\n' + '\n'.join(failed_bases)
-            self._show_info(t('success.title'), msg)
-        else:
-            self._show_warning(t('error.title'), f'Failed to export any bases for guild "{guild_name}".\n' + '\n'.join(failed_bases))
+                    failed_bases.append(f'Base {bid}(error: {str(e)})')
+            return (successful_exports, failed_exports, failed_bases, guild_name, export_dir)
+        def on_finished(result):
+            successful_exports, failed_exports, failed_bases, guild_name, export_dir = result
+            if successful_exports > 0:
+                msg = f'Successfully exported {successful_exports} base(s)for guild "{guild_name}" to {export_dir}.'
+                if failed_exports > 0:
+                    msg += f'\nFailed to export {failed_exports} base(s):\n' + '\n'.join(failed_bases)
+                self._show_info(t('success.title'), msg)
+            else:
+                self._show_warning(t('error.title'), f'Failed to export any bases for guild "{guild_name}".\n' + '\n'.join(failed_bases))
+        run_with_loading(on_finished, task)
     def _export_base(self, bid):
         if not constants.loaded_level_json:
             self._show_warning(t('Error') if t else 'Error', t('error.no_save_loaded') if t else 'No save file loaded.')
