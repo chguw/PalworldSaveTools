@@ -263,13 +263,13 @@ class ToolsTab(QWidget):
         self._save_path_label.clicked.connect(lambda: self._on_save_path_label_clicked())
         card_layout.addWidget(self._save_path_label)
 
-        load_btn = QPushButton(t('menu.file.load_save') if t else 'Load Save')
-        load_btn.setObjectName('loadSaveBtn')
-        load_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        load_btn.setMinimumHeight(42)
-        load_btn.clicked.connect(self._on_load_save_clicked)
-        load_btn.setStyleSheet('QPushButton { font-size: 14px; font-weight: 700; }')
-        card_layout.addWidget(load_btn)
+        self._load_btn = QPushButton(t('menu.file.load_save') if t else 'Load Save')
+        self._load_btn.setObjectName('loadSaveBtn')
+        self._load_btn.setCursor(QCursor(Qt.PointingHandCursor))
+        self._load_btn.setMinimumHeight(42)
+        self._load_btn.clicked.connect(self._on_load_save_clicked)
+        self._load_btn.setStyleSheet('QPushButton { font-size: 14px; font-weight: 700; }')
+        card_layout.addWidget(self._load_btn)
 
         self._drag_hint_label = QLabel(t('tools.drag_hint') if t else 'or drag & drop a Level.sav file here')
         self._drag_hint_label.setAlignment(Qt.AlignCenter)
@@ -602,11 +602,16 @@ class ToolsTab(QWidget):
         if hasattr(self, '_drop_overlay'):
             self._drop_overlay.setGeometry(self.rect())
     def refresh_labels(self):
+        if hasattr(self, '_load_btn') and self._load_btn:
+            self._load_btn.setText(t('menu.file.load_save') if t else 'Load Save')
         if hasattr(self, '_save_path_label') and self._save_path_label:
             if not (hasattr(constants, 'current_save_path') and constants.current_save_path):
                 self._save_path_label.setText(t('tools.no_save_loaded') if t else 'No save loaded')
                 self._save_status_label.setText(t('dashboard.no_save') if t else 'No Save Loaded')
                 self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #e2e8f0; border: none; background: transparent;')
+            else:
+                self._save_status_label.setText(t('tools.save_loaded') if t else 'Save Loaded')
+                self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #22c55e; border: none; background: transparent;')
         if hasattr(self, '_drag_hint_label') and self._drag_hint_label:
             self._drag_hint_label.setText(t('tools.drag_hint') if t else 'or drag & drop a Level.sav file here')
         for title_label, section_key in self._section_titles:
