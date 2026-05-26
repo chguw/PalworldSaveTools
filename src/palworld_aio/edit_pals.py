@@ -3240,17 +3240,6 @@ class PalInfoWidget(QFrame):
                 break
             parent = parent.parent()
 
-    def _update_dashboard_stats(self):
-        parent = self.parent()
-        while parent:
-            if hasattr(parent, 'tools_tab'):
-                parent.tools_tab._update_stats()
-                break
-            if hasattr(parent, 'settings'):
-                parent = parent.parent()
-            else:
-                parent = None
-
     def refresh_labels(self):
         self._no_data_overlay.setText(t('pal_editor.no_pal_data') if t else 'No Pal Data')
         if hasattr(self, '_lv_label'):
@@ -3574,6 +3563,15 @@ class PalEditorWidget(QWidget):
             self._load_pals()
     def _process_pending_changes(self):
         pass
+
+    def _update_dashboard_stats(self):
+        parent = self.parent()
+        while parent:
+            if hasattr(parent, 'tools_tab'):
+                parent.tools_tab._update_stats()
+                break
+            parent = parent.parent() if parent.parent() else None
+
     def refresh_labels(self):
         if hasattr(self, '_party_header'):
             self._party_header.setText(t('pal_editor.party') if t else 'PARTY')
