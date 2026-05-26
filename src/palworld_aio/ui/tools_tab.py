@@ -226,7 +226,6 @@ class ToolsTab(QWidget):
 
         self._drop_overlay = DropOverlay(self)
         self._drop_overlay.setVisible(False)
-        self._drop_overlay.lower()
         self._setup_save_manager_connection()
 
     def _create_header_bar(self):
@@ -340,6 +339,33 @@ class ToolsTab(QWidget):
             self._update_stats()
             if hasattr(self, '_stats_frame'):
                 self._stats_frame.setVisible(True)
+
+    def _update_stats(self):
+        if not hasattr(constants, 'loaded_level_json') or not constants.loaded_level_json:
+            return
+        wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+        group_data = wsd.get('GroupSaveDataMap', {}).get('value', [])
+        base_data = wsd.get('BaseCampSaveData', {}).get('value', [])
+        char_data = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
+
+        total_players = sum(len(g['value']['RawData']['value'].get('players', [])) for g in group_data
+                            if g['value']['GroupType']['value']['value'] == 'EPalGroupType::Guild')
+        total_guilds = sum(1 for g in group_data
+                           if g['value']['GroupType']['value']['value'] == 'EPalGroupType::Guild')
+        total_bases = len(base_data)
+        total_pals = sum(1 for c in char_data
+                         if c.get('value', {}).get('RawData', {}).get('value', {}).get('object', {})
+                         .get('SaveParameter', {}).get('struct_type') == 'PalIndividualCharacterSaveParameter'
+                         and not c.get('value', {}).get('RawData', {}).get('value', {}).get('object', {})
+                         .get('SaveParameter', {}).get('value', {}).get('IsPlayer', {}).get('value'))
+        try:
+            self._stat_cards['players'].setText(str(total_players))
+            self._stat_cards['guilds'].setText(str(total_guilds))
+            self._stat_cards['bases'].setText(str(total_bases))
+            self._stat_cards['pals'].setText(str(total_pals))
+        except:
+            pass
+
     def _create_section(self, section_key, tool_keys, run_handler):
         section_frame = QFrame()
         section_frame.setObjectName('glass')
@@ -494,15 +520,7 @@ class ToolsTab(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         if hasattr(self, '_drop_overlay'):
-            self._drop_overlay._drop_text = t('tools.drop_title') if t else 'Drop Level.sav to Load Save'
-            self._drop_overlay._drop_hint = t('tools.drop_hint_overlay') if t else "Or click the 'Load Save' button above"
-            self._drop_overlay.update()
-        if hasattr(self, '_stat_label_refs'):
-            for key, lbl in self._stat_label_refs.items():
-                lbl.setText(t('dashboard.stat_' + key) if t else key)
-        if hasattr(self, '_drop_overlay'):
-            self._drop_overlay._drop_text = t('tools.drop_title') if t else 'Drop Level.sav to Load Save'
-            self._drop_overlay._drop_hint = t('tools.drop_hint_overlay') if t else "Or click the 'Load Save' button above"
-            self._drop_overlay.update()
+            self._drop_overlay.setGeometry(self.rect())
+
     def refresh(self):
         pass
