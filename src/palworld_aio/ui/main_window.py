@@ -304,11 +304,11 @@ class MainWindow(QMainWindow):
         self.sidebar.nav_changed.connect(self._on_nav_changed)
         self.sidebar.console_toggled.connect(self._detach_status)
         self.sidebar.right_panel_toggled.connect(self._toggle_dashboard)
-        if not self.user_settings.get('right_panel_visible', True):
-            self._toggle_dashboard()
         body_layout.addWidget(self.sidebar)
         self._dashboard_collapsed = False
         self._dashboard_sizes = [1000, 400]
+        if not self.user_settings.get('right_panel_visible', True):
+            self._toggle_dashboard()
         self.splitter = QSplitter(Qt.Horizontal)
         self.splitter.setChildrenCollapsible(False)
         self.stacked_widget = QStackedWidget()
