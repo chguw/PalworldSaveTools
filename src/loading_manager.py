@@ -70,7 +70,7 @@ if '--spawn-loader' in sys.argv:
             self._target_pos = None
             self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.Tool | Qt.WindowStaysOnTopHint)
             self.setAttribute(Qt.WA_TranslucentBackground)
-            self.setMinimumSize(850, 500)
+            self.setMinimumSize(420, 340)
             self._drag_pos = QPoint()
             self.main_layout = QVBoxLayout(self)
             self.container = QFrame()
@@ -86,7 +86,7 @@ if '--spawn-loader' in sys.argv:
             self.listener.start()
             self.center_on_cursor_screen()
         def center_on_cursor_screen(self):
-            win_width, win_height = (850, 500)
+            win_width, win_height = (420, 340)
             if self.parent_geom:
                 px, py, pw, ph = self.parent_geom
                 center_x = px + pw // 2 - win_width // 2
@@ -129,9 +129,8 @@ if '--spawn-loader' in sys.argv:
                 ThemeManager.apply_to_widget(self)
             except Exception:
                 self.setStyleSheet("""
-QWidget { background: qlineargradient(spread:pad, x1:0,y1:0,x2:1,y2:1,
-stop:0 rgba(12,14,18,0.98), stop:0.5 rgba(10,16,22,0.98), stop:1 rgba(8,12,18,0.98)); color: #e2e8f0; }
-QLabel { color: #7DD3FC; }
+QDialog { background: rgba(12,14,18,0.97); color: #e2e8f0; }
+#mainContainer { background: rgba(18,20,24,0.95); border-radius: 16px; border: 1px solid rgba(125,211,252,0.12); }
 """)
         def clear_layout(self):
             while self.inner.count():
@@ -149,51 +148,76 @@ QLabel { color: #7DD3FC; }
                     self._clear_sub_layout(child.layout())
         def setup_loader_ui(self, start_time):
             self.start_ts = start_time
-            top_bar = QHBoxLayout()
-            top_bar.addStretch()
-            self.close_btn = QPushButton('✕')
-            self.close_btn.setFixedSize(40, 40)
-            self.close_btn.clicked.connect(self.safe_exit)
-            self.close_btn.setObjectName('closeBtn')
-            top_bar.addWidget(self.close_btn)
-            self.inner.addLayout(top_bar)
-            self.inner.addStretch()
+            self.setMinimumSize(420, 340)
+            self.resize(420, 340)
+
+            self.inner.addStretch(1)
+            icon = QLabel()
+            icon.setAlignment(Qt.AlignCenter)
+            p = get_path('Xenolord.webp')
+            if os.path.exists(p):
+                pix = QPixmap(p)
+                icon.setPixmap(pix.scaled(80, 80, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            icon.setStyleSheet('border: none; background: transparent;')
+            self.inner.addWidget(icon)
+            self.inner.addSpacing(16)
+
+            self.progress_bar = QProgressBar()
+            self.progress_bar.setRange(0, 0)
+            self.progress_bar.setFixedHeight(4)
+            self.progress_bar.setObjectName('loadingProgress')
+            self.progress_bar.setStyleSheet(
+                'QProgressBar { background: rgba(255,255,255,0.06); border: none; border-radius: 2px; }'
+                'QProgressBar::chunk { background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #38bdf8,stop:1 #7c3aed); border-radius: 2px; }'
+            )
+            pb_layout = QHBoxLayout()
+            pb_layout.addStretch()
+            pb_layout.addWidget(self.progress_bar)
+            pb_layout.addStretch()
+            self.inner.addLayout(pb_layout)
+            self.inner.addSpacing(20)
+
             self.label = QLabel(random.choice(self.phrases))
             self.label.setAlignment(Qt.AlignCenter)
             self.label.setWordWrap(True)
             self.label.setObjectName('loadingLabel')
+            self.label.setStyleSheet('color: #e2e8f0; font-size: 15px; font-weight: 600; border: none; background: transparent;')
             self.opacity_effect = QGraphicsOpacityEffect(self.label)
             self.label.setGraphicsEffect(self.opacity_effect)
             self.inner.addWidget(self.label)
-            self.icon_label = QLabel()
-            self.icon_label.setAlignment(Qt.AlignCenter)
-            self.icon_label.setObjectName('iconLabel')
-            p = get_path('Xenolord.webp')
-            if os.path.exists(p):
-                pix = QPixmap(p)
-                self.icon_label.setPixmap(pix.scaled(120, 120, Qt.KeepAspectRatio, Qt.SmoothTransformation))
-            self.inner.addWidget(self.icon_label)
-            self.progress_bar = QProgressBar()
-            self.progress_bar.setRange(0, 0)
-            self.progress_bar.setFixedWidth(200)
-            self.progress_bar.setFixedHeight(8)
-            self.progress_bar.setObjectName('loadingProgress')
-            progress_layout = QHBoxLayout()
-            progress_layout.addStretch()
-            progress_layout.addWidget(self.progress_bar)
-            progress_layout.addStretch()
-            self.inner.addLayout(progress_layout)
-            self.timer_label = QLabel('00:00.00')
+            self.inner.addSpacing(8)
+
+            self.subtitle = QLabel('Please wait...')
+            self.subtitle.setAlignment(Qt.AlignCenter)
+            self.subtitle.setStyleSheet('color: rgba(148,163,184,0.7); font-size: 12px; border: none; background: transparent;')
+            self.inner.addWidget(self.subtitle)
+            self.inner.addStretch(1)
+
+            self.timer_label = QLabel('00:00')
             self.timer_label.setAlignment(Qt.AlignCenter)
-            self.timer_label.setObjectName('timerLabel')
+            self.timer_label.setStyleSheet('color: rgba(148,163,184,0.4); font-size: 11px; border: none; background: transparent;')
             self.inner.addWidget(self.timer_label)
-            self.inner.addStretch()
+
+            self.close_btn = QPushButton('ESC to cancel')
+            self.close_btn.setFixedHeight(28)
+            self.close_btn.clicked.connect(self.safe_exit)
+            self.close_btn.setStyleSheet(
+                'QPushButton { background: rgba(255,255,255,0.04); color: rgba(148,163,184,0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; font-size: 11px; }'
+                'QPushButton:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }'
+            )
+            close_layout = QHBoxLayout()
+            close_layout.addStretch()
+            close_layout.addWidget(self.close_btn)
+            close_layout.addStretch()
+            self.inner.addLayout(close_layout)
+            self.inner.addSpacing(4)
+
             self.tick_timer = QTimer(self)
             self.tick_timer.timeout.connect(self.update_loader)
-            self.tick_timer.start(100)
+            self.tick_timer.start(250)
             self.phrase_timer = QTimer(self)
             self.phrase_timer.timeout.connect(self.cycle_phrase)
-            self.phrase_timer.start(3000)
+            self.phrase_timer.start(3500)
         def cycle_phrase(self):
             self.anim = QPropertyAnimation(self.opacity_effect, b'opacity')
             self.anim.setDuration(400)
@@ -210,7 +234,7 @@ QLabel { color: #7DD3FC; }
             self.anim.start()
         def update_loader(self):
             elapsed = time.time() - self.start_ts
-            self.timer_label.setText(f'{int(elapsed // 60):02d}:{int(elapsed % 60):02d}.{int(elapsed * 100 % 100):02d}')
+            self.timer_label.setText(f'{int(elapsed // 60):02d}:{int(elapsed % 60):02d}')
         def handle_message(self, data):
             cmd = data.get('cmd')
             if cmd == 'error':
