@@ -1362,5 +1362,12 @@
   "player_pal.no_active_selected": "No se ha seleccionado ninguna habilidad activa",
   "player_pal.no_passive_selected": "No se seleccionó ninguna habilidad pasiva",
   "player_item.inventory_items": "Artículos de inventario",
-  "player_item.key_items": "Artículos clave"
+  "player_item.key_items": "Artículos clave",
+  "character_transfer.source_tooltip": "Seleccione el archivo Level.sav para usarlo como fuente (host).",
+  "character_transfer.target_tooltip": "Seleccione el archivo Level.sav para usarlo como destino.",
+  "character_transfer.transfer_all_tooltip": "Transfiere todos los caracteres del origen al destino (en la memoria).",
+  "character_transfer.transfer_tooltip": "Transfiere los personajes seleccionados.",
+  "character_transfer.save_tooltip": "Escriba cambios en los archivos Level.sav y Player de destino.",
+  "character_transfer.selection_none": "Fuente: N/A, Objetivo: N/A",
+  "character_transfer.selection_status": "Fuente: {fuente}, Destino: {objetivo}"
 }

@@ -1369,5 +1369,12 @@
   "player_pal.no_active_selected": "アクティブなスキルが選択されていません",
   "player_pal.no_passive_selected": "パッシブスキルが選択されていません",
   "player_item.inventory_items": "在庫品目",
-  "player_item.key_items": "主要アイテム"
+  "player_item.key_items": "主要アイテム",
+  "character_transfer.source_tooltip": "ソース (ホスト) として使用する Level.sav ファイルを選択します。",
+  "character_transfer.target_tooltip": "ターゲットとして使用する Level.sav ファイルを選択します。",
+  "character_transfer.transfer_all_tooltip": "すべての文字をソースからターゲット (メモリ内) に転送します。",
+  "character_transfer.transfer_tooltip": "選択したキャラクターを転送します。",
+  "character_transfer.save_tooltip": "ターゲットの Level.sav およびプレーヤー ファイルに変更を書き込みます。",
+  "character_transfer.selection_none": "ソース: N/A、ターゲット: N/A",
+  "character_transfer.selection_status": "ソース: {source}、ターゲット: {target}"
 }

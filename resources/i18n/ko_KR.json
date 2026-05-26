@@ -1368,5 +1368,12 @@
   "player_pal.no_active_selected": "활성 스킬을 선택하지 않았습니다.",
   "player_pal.no_passive_selected": "패시브 스킬을 선택하지 않았습니다.",
   "player_item.inventory_items": "인벤토리 아이템",
-  "player_item.key_items": "주요 품목"
+  "player_item.key_items": "주요 품목",
+  "character_transfer.source_tooltip": "소스(호스트)로 사용할 Level.sav 파일을 선택합니다.",
+  "character_transfer.target_tooltip": "대상으로 사용할 Level.sav 파일을 선택합니다.",
+  "character_transfer.transfer_all_tooltip": "모든 문자를 소스에서 대상(메모리 내)으로 전송합니다.",
+  "character_transfer.transfer_tooltip": "선택한 캐릭터를 전송합니다.",
+  "character_transfer.save_tooltip": "대상 Level.sav 및 플레이어 파일에 변경 사항을 기록합니다.",
+  "character_transfer.selection_none": "출처: 해당 없음, 대상: 해당 없음",
+  "character_transfer.selection_status": "소스: {source}, 대상: {target}"
 }

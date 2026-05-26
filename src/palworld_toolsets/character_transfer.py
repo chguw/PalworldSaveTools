@@ -226,11 +226,11 @@ class CharacterTransferWindow(QWidget):
         file_row = QHBoxLayout()
         file_row.setSpacing(10)
         src_btn = QPushButton(f"{t('Select Source Level File')}")
-        src_btn.setToolTip(t('Select the Level.sav file to use as the source(host)'))
+        src_btn.setToolTip(t('character_transfer.source_tooltip'))
         src_btn.clicked.connect(self.source_level_file)
         file_row.addWidget(src_btn)
         tgt_btn = QPushButton(f"{t('Select Target Level File')}")
-        tgt_btn.setToolTip(t('Select the Level.sav file to use as the target'))
+        tgt_btn.setToolTip(t('character_transfer.target_tooltip'))
         tgt_btn.clicked.connect(self.target_level_file)
         file_row.addWidget(tgt_btn)
         glass_layout.addLayout(file_row)
@@ -299,22 +299,22 @@ class CharacterTransferWindow(QWidget):
         target_panel_layout.addWidget(self.target_player_list, 1)
         trees_layout.addWidget(target_panel, 1)
         glass_layout.addLayout(trees_layout)
-        self.current_selection_label = QLabel(t('Source: N/A,Target: N/A'))
+        self.current_selection_label = QLabel(t('character_transfer.selection_none'))
         self.current_selection_label.setWordWrap(True)
         self.current_selection_label.setAlignment(Qt.AlignCenter)
         glass_layout.addWidget(self.current_selection_label)
         actions_row = QHBoxLayout()
         actions_row.setSpacing(12)
         transfer_all_btn = QPushButton(t('Transfer All'))
-        transfer_all_btn.setToolTip(t('Transfer all characters from source to target(in memory).'))
+        transfer_all_btn.setToolTip(t('character_transfer.transfer_all_tooltip'))
         transfer_all_btn.clicked.connect(self.transfer_all_characters)
         actions_row.addWidget(transfer_all_btn)
         transfer_btn = QPushButton(t('Transfer'))
-        transfer_btn.setToolTip(t('Transfer selected character(s).'))
+        transfer_btn.setToolTip(t('character_transfer.transfer_tooltip'))
         transfer_btn.clicked.connect(lambda: self.main(skip_msgbox=False))
         actions_row.addWidget(transfer_btn)
         save_btn = QPushButton(t('Save Changes'))
-        save_btn.setToolTip(t('Write changes to target Level.sav and player files.'))
+        save_btn.setToolTip(t('character_transfer.save_tooltip'))
         save_btn.clicked.connect(self.finalize_save)
         actions_row.addWidget(save_btn)
         glass_layout.addLayout(actions_row)
@@ -373,7 +373,7 @@ class CharacterTransferWindow(QWidget):
                 selected_source_player = selected_items[0].text(1)
             else:
                 selected_source_player = None
-            self.current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
+            self.current_selection_label.setText(t('character_transfer.selection_status', source=selected_source_player or 'N/A', target=selected_target_player or 'N/A'))
     def on_selection_of_target_player(self):
         try:
             on_selection_of_target_player()
@@ -384,7 +384,7 @@ class CharacterTransferWindow(QWidget):
                 selected_target_player = selected_items[0].text(1)
             else:
                 selected_target_player = None
-            self.current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
+            self.current_selection_label.setText(t('character_transfer.selection_status', source=selected_source_player or 'N/A', target=selected_target_player or 'N/A'))
     def transfer_all_characters(self):
         try:
             transfer_all_characters()

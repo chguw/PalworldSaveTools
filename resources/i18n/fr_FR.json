@@ -1351,5 +1351,12 @@
   "player_pal.no_active_selected": "Aucune compétence active sélectionnée",
   "player_pal.no_passive_selected": "Aucune compétence passive sélectionnée",
   "player_item.inventory_items": "Articles en stock",
-  "player_item.key_items": "Éléments clés"
+  "player_item.key_items": "Éléments clés",
+  "character_transfer.source_tooltip": "Sélectionnez le fichier Level.sav à utiliser comme source (hôte).",
+  "character_transfer.target_tooltip": "Sélectionnez le fichier Level.sav à utiliser comme cible.",
+  "character_transfer.transfer_all_tooltip": "Transférez tous les personnages de la source à la cible (en mémoire).",
+  "character_transfer.transfer_tooltip": "Transférez le(s) personnage(s) sélectionné(s).",
+  "character_transfer.save_tooltip": "Écrivez les modifications dans les fichiers Level.sav et le lecteur cibles.",
+  "character_transfer.selection_none": "Source : N/A, Cible : N/A",
+  "character_transfer.selection_status": "Source : {source}, Cible : {target}"
 }

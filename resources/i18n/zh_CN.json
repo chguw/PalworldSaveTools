@@ -1371,5 +1371,12 @@
   "player_pal.no_active_selected": "未选择主动技能",
   "player_pal.no_passive_selected": "未选择被动技能",
   "player_item.inventory_items": "库存物品",
-  "player_item.key_items": "关键项目"
+  "player_item.key_items": "关键项目",
+  "character_transfer.source_tooltip": "选择要用作源（主机）的 Level.sav 文件。",
+  "character_transfer.target_tooltip": "选择要用作目标的 Level.sav 文件。",
+  "character_transfer.transfer_all_tooltip": "将所有字符从源传输到目标（在内存中）。",
+  "character_transfer.transfer_tooltip": "传输选定的字符。",
+  "character_transfer.save_tooltip": "将更改写入目标 Level.sav 和播放器文件。",
+  "character_transfer.selection_none": "来源：不适用，目标：不适用",
+  "character_transfer.selection_status": "源：{source}，目标：{target}"
 }

@@ -1657,5 +1657,12 @@
   "player_pal.no_active_selected": "No active skill selected",
   "player_pal.no_passive_selected": "No passive skill selected",
   "player_item.inventory_items": "Inventory Items",
-  "player_item.key_items": "Key Items"
+  "player_item.key_items": "Key Items",
+  "character_transfer.source_tooltip": "Select the Level.sav file to use as the source (host).",
+  "character_transfer.target_tooltip": "Select the Level.sav file to use as the target.",
+  "character_transfer.transfer_all_tooltip": "Transfer all characters from source to target (in memory).",
+  "character_transfer.transfer_tooltip": "Transfer the selected character(s).",
+  "character_transfer.save_tooltip": "Write changes to target Level.sav and player files.",
+  "character_transfer.selection_none": "Source: N/A, Target: N/A",
+  "character_transfer.selection_status": "Source: {source}, Target: {target}"
 }

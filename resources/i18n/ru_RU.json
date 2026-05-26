@@ -1367,5 +1367,12 @@
   "player_pal.no_active_selected": "Активный навык не выбран",
   "player_pal.no_passive_selected": "Пассивный навык не выбран",
   "player_item.inventory_items": "Предметы инвентаря",
-  "player_item.key_items": "Ключевые предметы"
+  "player_item.key_items": "Ключевые предметы",
+  "character_transfer.source_tooltip": "Выберите файл Level.sav, который будет использоваться в качестве источника (хоста).",
+  "character_transfer.target_tooltip": "Выберите файл Level.sav, который будет использоваться в качестве цели.",
+  "character_transfer.transfer_all_tooltip": "Перенесите все символы из источника в целевой (в памяти).",
+  "character_transfer.transfer_tooltip": "Перенесите выбранных персонажей.",
+  "character_transfer.save_tooltip": "Запишите изменения в целевые файлы Level.sav и проигрывателя.",
+  "character_transfer.selection_none": "Источник: н/д, Цель: н/д",
+  "character_transfer.selection_status": "Источник: {source}, Цель: {target}"
 }

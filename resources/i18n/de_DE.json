@@ -1393,5 +1393,12 @@
   "player_pal.no_active_selected": "Kein aktiver Skill ausgewählt",
   "player_pal.no_passive_selected": "Keine passive Fertigkeit ausgewählt",
   "player_item.inventory_items": "Inventargegenstände",
-  "player_item.key_items": "Schlüsselelemente"
+  "player_item.key_items": "Schlüsselelemente",
+  "character_transfer.source_tooltip": "Wählen Sie die Datei Level.sav aus, die als Quelle (Host) verwendet werden soll.",
+  "character_transfer.target_tooltip": "Wählen Sie die Datei Level.sav aus, die als Ziel verwendet werden soll.",
+  "character_transfer.transfer_all_tooltip": "Übertragen Sie alle Zeichen von der Quelle zum Ziel (im Speicher).",
+  "character_transfer.transfer_tooltip": "Übertragen Sie die ausgewählten Zeichen.",
+  "character_transfer.save_tooltip": "Schreiben Sie Änderungen in die Ziel-Level.sav- und Player-Dateien.",
+  "character_transfer.selection_none": "Quelle: N/A, Ziel: N/A",
+  "character_transfer.selection_status": "Quelle: {source}, Ziel: {target}"
 }
