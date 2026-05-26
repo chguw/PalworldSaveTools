@@ -244,7 +244,7 @@ QDialog { background: rgba(12,14,18,0.97); color: #e2e8f0; }
                 self.phrase_timer.stop()
             if hasattr(self, 'close_btn'):
                 self.close_btn.hide()
-            self.label.setText(data.get('message', 'Save Loaded Successfully'))
+            self.label.setText(data.get('message', t('loading.success')))
             self.label.setStyleSheet('color: #22c55e; font-size: 18px; font-weight: 700; border: none; background: transparent;')
             if hasattr(self, 'opacity_effect'):
                 self.label.setGraphicsEffect(None)
@@ -427,7 +427,7 @@ def run_with_loading(callback, func, *args, parent=None, **kwargs):
         else:
             if loader_proc and loader_proc.poll() is None:
                 try:
-                    loader_proc.stdin.write((json.dumps({'cmd': 'success', 'message': t('loading.success') if 't' in dir() else 'Save Loaded Successfully'}) + '\n').encode())
+                    loader_proc.stdin.write((json.dumps({'cmd': 'success', 'message': t('loading.success')}) + '\n').encode())
                     loader_proc.stdin.flush()
                 except:
                     cleanup()
