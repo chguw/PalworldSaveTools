@@ -768,6 +768,7 @@ class PlayerInventoryTab(QWidget):
         self.stats_tab = QWidget()
         stats_tab_layout = QVBoxLayout(self.stats_tab)
         stats_tab_layout.setContentsMargins(0, 0, 0, 0)
+        stats_tab_layout.addStretch()
         self.stats_panel = StatsPanelWidget()
         self.stats_panel.stats_changed.connect(self._on_stats_changed)
         stats_tab_layout.addWidget(self.stats_panel, alignment=Qt.AlignCenter)
