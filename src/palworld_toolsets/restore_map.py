@@ -3,6 +3,7 @@ from loading_manager import show_critical
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
+from palworld_aio.ui.styles import ThemeManager
 import os, time, shutil
 savegames_path = os.path.join(os.environ['LOCALAPPDATA'], 'Pal', 'Saved', 'SaveGames')
 restore_map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'Backups', 'Restore Map')
@@ -131,18 +132,7 @@ def restore_map():
         def on_no(self):
             self.reject()
         def load_styles(self):
-            user_cfg_path = os.path.join(get_src_directory(), 'data', 'configs', 'user.cfg')
-            theme = 'dark'
-            if os.path.exists(user_cfg_path):
-                try:
-                    data = json_tools.load(user_cfg_path)
-                    theme = data.get('theme', 'dark')
-                except:
-                    pass
-            qss_path = os.path.join(get_src_directory(), 'data', 'gui', f'{theme}mode.qss')
-            if os.path.exists(qss_path):
-                with open(qss_path, 'r') as f:
-                    self.setStyleSheet(f.read())
+            ThemeManager.load_styles(self)
     dialog = RestoreMapDialog()
     return dialog
 def main():

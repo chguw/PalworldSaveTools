@@ -8,24 +8,9 @@ from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QDragEnterEvent, QDrop
 from i18n import t
 from loading_manager import show_critical
 from palworld_aio import constants
-def get_src_path():
-    env = os.environ.get('src_PATH')
-    if env:
-        return os.path.abspath(env)
-    if getattr(sys, 'frozen', False):
-        exe_dir = os.path.dirname(sys.executable)
-        src = os.path.join(exe_dir, 'src')
-        if os.path.isdir(src):
-            return src
-    try:
-        base = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    except NameError:
-        base = os.path.dirname(os.path.abspath(sys.argv[0]))
-    if os.path.isdir(base):
-        return base
-    return os.path.abspath(base)
+from palworld_aio.ui.styles import ThemeManager
 def load_tool_icons():
-    icon_file = os.path.join(get_src_path(), 'data', 'configs', 'toolicon.json')
+    icon_file = os.path.join(constants.get_src_path(), 'data', 'configs', 'toolicon.json')
     if not os.path.exists(icon_file):
         return {}
     try:
@@ -127,28 +112,7 @@ class ConversionOptionsDialog(QDialog):
         else:
             super().keyPressEvent(event)
     def _load_theme(self):
-        is_dark = True
-        base_path = constants.get_src_path() if hasattr(constants, 'get_src_path') else get_src_path()
-        theme_file = 'darkmode.qss'
-        theme_path = os.path.join(base_path, 'data', 'gui', theme_file)
-        if os.path.exists(theme_path):
-            try:
-                with open(theme_path, 'r', encoding='utf-8') as f:
-                    qss_content = f.read()
-                    self.setStyleSheet(qss_content)
-            except Exception as e:
-                print(f'Failed to load theme {theme_file}: {e}')
-        self._apply_fallback_styles(is_dark)
-    def _apply_fallback_styles(self, is_dark):
-        if is_dark:
-            bg_gradient = 'qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 #07080a,stop:0.5 #08101a,stop:1 #05060a)'
-            txt_color = '#dfeefc'
-            accent_color = '#7DD3FC'
-        else:
-            bg_gradient = 'qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 #e6ecef,stop:0.5 #bdd5df,stop:1 #a7c9da)'
-            txt_color = '#000000'
-            accent_color = '#1e3a8a'
-        self.setStyleSheet(f"QDialog {{ background: {bg_gradient}; color: {txt_color}; font-family: 'Segoe UI',Roboto,Arial; }}")
+        ThemeManager.apply_to_widget(self)
 class ToolCard(QFrame):
     clicked = Signal()
     def __init__(self, label_text, tooltip_text, description_text=None, icon_path=None, parent=None):
@@ -320,7 +284,7 @@ class ToolsTab(QWidget):
     def _get_tool_icon_path(self, tool_key):
         if tool_key in self.tool_icons:
             icon_name = self.tool_icons[tool_key]
-            icon_dir = os.path.join(get_src_path(), 'data', 'icon')
+            icon_dir = os.path.join(constants.get_src_path(), 'data', 'icon')
             for ext in ['.ico', '.png']:
                 icon_path = os.path.join(icon_dir, f'{icon_name}{ext}')
                 if os.path.exists(icon_path):
@@ -328,7 +292,7 @@ class ToolsTab(QWidget):
         return None
     def _import_and_call(self, module_name, function_name, *args):
         try:
-            src_path = get_src_path()
+            src_path = constants.get_src_path()
             if src_path not in sys.path:
                 sys.path.insert(0, src_path)
             import importlib

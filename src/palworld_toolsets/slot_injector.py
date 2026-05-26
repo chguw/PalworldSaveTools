@@ -5,6 +5,7 @@ from PySide6.QtGui import QIcon, QFont, QPixmap, QColor, QPalette
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from concurrent.futures import ThreadPoolExecutor
 import os
+from palworld_aio.ui.styles import ThemeManager
 def sav_to_gvasfile(filepath):
     with open(filepath, 'rb') as f:
         data = f.read()
@@ -694,18 +695,7 @@ class SlotNumUpdaterApp(QDialog):
                 return
         event.accept()
     def load_styles(self):
-        user_cfg_path = os.path.join(get_src_directory(), 'data', 'configs', 'user.cfg')
-        theme = 'dark'
-        if os.path.exists(user_cfg_path):
-            try:
-                data = json_tools.load(user_cfg_path)
-                theme = data.get('theme', 'dark')
-            except:
-                pass
-        qss_path = os.path.join(get_src_directory(), 'data', 'gui', f'{theme}mode.qss')
-        if os.path.exists(qss_path):
-            with open(qss_path, 'r') as f:
-                self.setStyleSheet(f.read())
+        ThemeManager.load_styles(self)
 def slot_injector():
     return SlotNumUpdaterApp()
 if __name__ == '__main__':

@@ -2,6 +2,7 @@ from import_libs import *
 from PySide6.QtWidgets import QSizePolicy, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QMainWindow, QWidget, QComboBox, QLineEdit, QFileDialog, QApplication, QFrame, QProgressBar, QMessageBox
 from PySide6.QtGui import QIcon, QPixmap, QFont
 from PySide6.QtCore import Qt, QTimer
+from palworld_aio.ui.styles import ThemeManager
 import ssl
 def _get_ssl_context():
     ca_file = os.path.join(get_src_directory(), 'cert', 'cacert.pem')
@@ -10,20 +11,6 @@ def _get_ssl_context():
         return context
     else:
         return ssl.create_default_context()
-def load_styles(widget):
-    user_cfg_path = os.path.join(get_src_directory(), 'data', 'configs', 'user.cfg')
-    theme = 'dark'
-    if os.path.exists(user_cfg_path):
-        try:
-            with open(user_cfg_path, 'r') as f:
-                data = json.load(f)
-            theme = data.get('theme', 'dark')
-        except:
-            pass
-    qss_path = os.path.join(get_src_directory(), 'data', 'gui', f'{theme}mode.qss')
-    if os.path.exists(qss_path):
-        with open(qss_path, 'r') as f:
-            widget.setStyleSheet(f.read())
 def _format_bytes(num: int) -> str:
     for unit in ('B', 'KB', 'MB', 'GB'):
         if num < 1024 or unit == 'GB':
@@ -272,7 +259,7 @@ def _build_selector_window():
             win.setWindowIcon(QIcon(ico_path))
     except Exception as e:
         print(f'Error setting icon: {e}')
-    load_styles(win)
+    ThemeManager.load_styles(win)
     main = QVBoxLayout(win)
     main.setContentsMargins(12, 12, 12, 12)
     glass = QFrame()
@@ -428,7 +415,7 @@ class MenuGUI(QMainWindow):
         self.lang_combo = None
         self.setup_ui()
         self._add_pal_tools_button()
-        load_styles(self)
+        ThemeManager.load_styles(self)
     def setup_ui(self):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)

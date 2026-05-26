@@ -1,5 +1,6 @@
 from import_libs import *
 from loading_manager import show_warning, show_critical
+from palworld_aio.ui.styles import ThemeManager
 import nerdfont as nf
 def get_steam_id_from_local():
     local_app_data_path = os.path.expandvars('%localappdata%\\Pal\\Saved\\SaveGames')
@@ -31,20 +32,7 @@ def convert_steam_id():
         dialog.setWindowIcon(QIcon(ICON_PATH))
     except:
         pass
-    def load_styles(widget):
-        user_cfg_path = os.path.join(get_src_directory(), 'data', 'configs', 'user.cfg')
-        theme = 'dark'
-        if os.path.exists(user_cfg_path):
-            try:
-                data = json_tools.load(user_cfg_path)
-                theme = data.get('theme', 'dark')
-            except:
-                pass
-        qss_path = os.path.join(get_src_directory(), 'data', 'gui', f'{theme}mode.qss')
-        if os.path.exists(qss_path):
-            with open(qss_path, 'r') as f:
-                widget.setStyleSheet(f.read())
-    load_styles(dialog)
+    ThemeManager.load_styles(dialog)
     main_layout = QVBoxLayout(dialog)
     main_layout.setContentsMargins(14, 14, 14, 14)
     main_layout.setSpacing(12)

@@ -6,6 +6,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QCursor
 from i18n import t
 from loading_manager import show_warning, show_critical
+from palworld_aio.ui.styles import ThemeManager
 def get_src_path():
     env = os.environ.get('src_PATH')
     if env:
@@ -252,27 +253,7 @@ class WorldOptionEditorDialog(QDialog):
             error_details = f"{(t('worldoption.editor.save_failed') if t else 'Failed to save:')}\n{str(e)}\n\n{traceback.format_exc()}"
             show_critical(self, t('error.title') if t else 'Error', error_details)
     def _load_theme(self):
-        is_dark = self.parent_window.is_dark_mode if self.parent_window and hasattr(self.parent_window, 'is_dark_mode') else True
-        base_path = get_src_path()
-        theme_file = 'darkmode.qss'
-        theme_path = os.path.join(base_path, 'data', 'gui', theme_file)
-        if os.path.exists(theme_path):
-            try:
-                with open(theme_path, 'r', encoding='utf-8') as f:
-                    qss_content = f.read()
-                    self.setStyleSheet(qss_content)
-                return
-            except Exception as e:
-                print(f'Failed to load theme {theme_file}: {e}')
-        self._apply_fallback_styles(is_dark)
-    def _apply_fallback_styles(self, is_dark):
-        if is_dark:
-            bg_gradient = 'qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 #07080a,stop:0.5 #08101a,stop:1 #05060a)'
-            txt_color = '#dfeefc'
-        else:
-            bg_gradient = 'qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 #e6ecef,stop:0.5 #bdd5df,stop:1 #a7c9da)'
-            txt_color = '#000000'
-        self.setStyleSheet(f"\n            QDialog {{\n                background: {bg_gradient};\n                color: {txt_color};\n                font-family: 'Segoe UI', Roboto, Arial;\n            }}\n            QLabel {{\n                color: {txt_color};\n                font-family: 'Segoe UI', Roboto, Arial;\n            }}\n            QListWidget {{\n                background: #0a0f14;\n                color: {txt_color};\n                border: 1px solid #256aa0;\n                border-radius: 5px;\n                padding: 5px;\n            }}\n            QListWidget::item {{\n                padding: 8px;\n                border-radius: 3px;\n            }}\n            QListWidget::item:selected {{\n                background: #256aa0;\n                color: white;\n            }}\n            QListWidget::item:hover {{\n                background: #2a3a4a;\n            }}\n            QPushButton {{\n                background: #256aa0;\n                color: white;\n                border: none;\n                padding: 8px 16px;\n                border-radius: 4px;\n                font-family: 'Segoe UI', Roboto, Arial;\n                font-size: 11px;\n            }}\n            QPushButton:hover {{\n                background: #2a7fc0;\n            }}\n            QPushButton:pressed {{\n                background: #1e5a8a;\n            }}\n            QLineEdit {{\n                background: #1a1f2a;\n                color: {txt_color};\n                border: 1px solid #256aa0;\n                border-radius: 3px;\n                padding: 6px;\n            }}\n            QLineEdit:focus {{\n                border: 1px solid #7DD3FC;\n            }}\n            QSpinBox, QDoubleSpinBox, QComboBox {{\n                background: #1a1f2a;\n                color: {txt_color};\n                border: 1px solid #256aa0;\n                border-radius: 3px;\n                padding: 4px;\n            }}\n            QTextEdit {{\n                background: #1a1f2a;\n                color: {txt_color};\n                border: 1px solid #256aa0;\n                border-radius: 3px;\n                padding: 4px;\n            }}\n            QCheckBox {{\n                color: {txt_color};\n            }}\n            QSplitter::handle {{\n                background: #256aa0;\n                width: 3px;\n            }}\n        ")
+        ThemeManager.apply_to_widget(self)
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.reject()

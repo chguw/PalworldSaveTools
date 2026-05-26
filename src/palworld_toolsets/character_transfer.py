@@ -9,6 +9,7 @@ try:
     from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
 except ImportError:
     from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
+from palworld_aio.ui.styles import ThemeManager
 player_list_cache = []
 def extract_value(data, key, default_value=''):
     value = data.get(key, default_value)
@@ -335,18 +336,7 @@ class CharacterTransferWindow(QWidget):
             self.activateWindow()
             self.raise_()
     def load_styles(self):
-        user_cfg_path = os.path.join(get_src_directory(), 'data', 'configs', 'user.cfg')
-        theme = 'dark'
-        if os.path.exists(user_cfg_path):
-            try:
-                data = json_tools.load(user_cfg_path)
-                theme = data.get('theme', 'dark')
-            except:
-                pass
-        qss_path = os.path.join(get_src_directory(), 'data', 'gui', f'{theme}mode.qss')
-        if os.path.exists(qss_path):
-            with open(qss_path, 'r') as f:
-                self.setStyleSheet(f.read())
+        ThemeManager.load_styles(self)
     def filter_treeview(self, tree, query, is_source):
         query = query.lower()
         for i in range(tree.topLevelItemCount()):

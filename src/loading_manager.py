@@ -2,6 +2,7 @@ import sys, os, time, random, subprocess, threading, json, traceback
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, QPushButton, QTextEdit, QGraphicsOpacityEffect, QMessageBox, QProgressBar, QDialog
 from PySide6.QtCore import Qt, QTimer, QThread, Signal, QPropertyAnimation, QPoint, QSize
 from PySide6.QtGui import QPixmap, QFont, QCursor
+from palworld_aio.ui.styles import ThemeManager
 from import_libs import *
 _result_data = {'status': 'idle', 'data': None}
 def get_base_directory():
@@ -121,27 +122,7 @@ if '--spawn-loader' in sys.argv:
         def _load_theme_pref(self):
             return True
         def _load_theme(self):
-            base_path = get_src_directory()
-            theme_file = 'darkmode.qss'
-            theme_path = os.path.join(base_path, 'data', 'gui', theme_file)
-            if os.path.exists(theme_path):
-                try:
-                    with open(theme_path, 'r', encoding='utf-8') as f:
-                        qss_content = f.read()
-                        self.setStyleSheet(qss_content)
-                except Exception as e:
-                    print(f'Failed to load theme {theme_file}: {e}')
-                    self._apply_fallback_styles()
-            else:
-                self._apply_fallback_styles()
-        def _apply_fallback_styles(self):
-            bg_gradient = 'qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 #07080a,stop:0.5 #08101a,stop:1 #05060a)'
-            glass_bg = 'rgba(18,20,24,0.95)'
-            glass_border = 'rgba(255,255,255,0.08)'
-            txt_color = '#dfeefc'
-            accent_color = '#7DD3FC'
-            self.setStyleSheet(f"QWidget {{ background: {bg_gradient}; color: {txt_color}; font-family: 'Segoe UI',Roboto,Arial; }}")
-            self.container.setStyleSheet(f'#mainContainer {{ background: {glass_bg}; border-radius: 10px; border: 1px solid {glass_border}; }}')
+            ThemeManager.apply_to_widget(self)
         def clear_layout(self):
             while self.inner.count():
                 child = self.inner.takeAt(0)
@@ -442,29 +423,7 @@ class ErrorDialog(QDialog):
     def _load_theme_pref(self):
         return True
     def _load_theme(self):
-        base_path = get_src_directory()
-        theme_file = 'darkmode.qss'
-        theme_path = os.path.join(base_path, 'data', 'gui', theme_file)
-        if os.path.exists(theme_path):
-            try:
-                with open(theme_path, 'r', encoding='utf-8') as f:
-                    qss_content = f.read()
-                    self.setStyleSheet(qss_content)
-            except Exception as e:
-                print(f'Failed to load theme {theme_file}: {e}')
-                self._apply_fallback_styles()
-        else:
-            self._apply_fallback_styles()
-    def _apply_fallback_styles(self):
-        bg_gradient = 'qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 #07080a,stop:0.5 #08101a,stop:1 #05060a)'
-        glass_bg = 'rgba(18,20,24,0.95)'
-        glass_border = 'rgba(255,59,48,0.3)'
-        txt_color = '#dfeefc'
-        accent_color = '#FF3B30'
-        btn_bg = 'rgba(125,211,252,0.08)'
-        btn_border = 'rgba(125,211,252,0.15)'
-        btn_hover_bg = 'rgba(125,211,252,0.15)'
-        self.setStyleSheet(f"QWidget {{ background: {bg_gradient}; color: {txt_color}; font-family: 'Segoe UI',Roboto,Arial; }}")
+        ThemeManager.apply_to_widget(self)
     def setup_error_ui(self):
         self.container = QFrame()
         self.container.setObjectName('mainContainer')

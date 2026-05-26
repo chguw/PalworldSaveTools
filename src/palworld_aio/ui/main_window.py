@@ -18,6 +18,7 @@ from .tools_tab import center_on_parent
 GITHUB_RAW_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
 GITHUB_LATEST_ZIP = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 from palworld_aio import constants
+from palworld_aio.ui.styles import ThemeManager
 from palworld_aio.utils import check_for_update, as_uuid
 from palworld_aio.save_manager import save_manager
 from palworld_aio.data_manager import get_guilds, get_guild_members, get_bases, delete_guild, delete_player, load_exclusions, save_exclusions, delete_base_camp
@@ -76,35 +77,7 @@ class DetachedStatusWindow(QWidget):
             geo = QByteArray.fromBase64(bytes(geo_str, 'utf-8'))
             self.restoreGeometry(geo)
     def _load_theme(self):
-        base_path = constants.get_src_path()
-        theme_file = 'darkmode.qss'
-        theme_path = os.path.join(base_path, 'data', 'gui', theme_file)
-        if os.path.exists(theme_path):
-            try:
-                with open(theme_path, 'r', encoding='utf-8') as f:
-                    qss_content = f.read()
-                    from PySide6.QtWidgets import QApplication
-                    QApplication.instance().setStyleSheet(qss_content)
-            except Exception as e:
-                print(f'Failed to load theme {theme_file}: {e}')
-                self._apply_fallback_styles()
-        else:
-            self._apply_fallback_styles()
-    def _apply_fallback_styles(self):
-        if self.is_dark:
-            bg_gradient = 'qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 #07080a,stop:0.5 #08101a,stop:1 #05060a)'
-            glass_bg = 'rgba(18,20,24,0.95)'
-            glass_border = 'rgba(255,255,255,0.08)'
-            txt_color = '#dfeefc'
-            accent_color = '#7DD3FC'
-        else:
-            bg_gradient = 'qlineargradient(spread:pad,x1:0.0,y1:0.0,x2:1.0,y2:1.0,stop:0 #e6ecef,stop:0.5 #bdd5df,stop:1 #a7c9da)'
-            glass_bg = 'rgba(240,245,255,1.0)'
-            glass_border = 'rgba(180,200,220,0.5)'
-            txt_color = '#000000'
-            accent_color = '#1e3a8a'
-        self.setStyleSheet(f"QWidget {{ background: {bg_gradient}; color: {txt_color}; font-family: 'Segoe UI',Roboto,Arial; }}")
-        self.container.setStyleSheet(f'#mainContainer {{ background: {glass_bg}; border-radius: 10px; border: 1px solid {glass_border}; }}')
+        ThemeManager.apply_to_widget(self)
     def setup_status_ui(self):
         head = QHBoxLayout()
         txt_color = '#dfeefc' if self.is_dark else '#000000'
@@ -631,27 +604,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(f'Failed to save user settings: {e}')
     def _load_theme(self):
-        base_path = constants.get_src_path()
-        theme_file = 'darkmode.qss'
-        theme_path = os.path.join(base_path, 'data', 'gui', theme_file)
-        if os.path.exists(theme_path):
-            try:
-                with open(theme_path, 'r', encoding='utf-8') as f:
-                    qss_content = f.read()
-                    from PySide6.QtWidgets import QApplication
-                    QApplication.instance().setStyleSheet(qss_content)
-            except Exception as e:
-                print(f'Failed to load theme {theme_file}: {e}')
-                self._apply_fallback_styles()
-        else:
-            print(f'Theme file not found: {theme_path}')
-            self._apply_fallback_styles()
-        if hasattr(self, 'results_widget') and self.results_widget:
-            pass
-    def _apply_fallback_styles(self):
-        border_color = 'rgba(70,70,70,1.0)'
-        from PySide6.QtWidgets import QApplication
-        QApplication.instance().setStyleSheet(f'\n            QMainWindow {{\n                background-color: {constants.BG};\n            }}\n            QWidget {{\n                color: {constants.TEXT};\n            }}\n            QTabWidget::pane {{\n                background-color: {constants.GLASS};\n                border: 1px solid {border_color};\n                border-radius: 4px;\n            }}\n            QTabBar::tab {{\n                background-color: {constants.GLASS};\n                color: {constants.TEXT};\n                padding: 8px 16px;\n                border: 1px solid {border_color};\n                border-bottom: none;\n                border-top-left-radius: 4px;\n                border-top-right-radius: 4px;\n            }}\n            QTabBar::tab:selected {{\n                background-color: {constants.ACCENT};\n            }}\n            QTabBar::tab:hover {{\n                background-color: {constants.BUTTON_HOVER};\n            }}\n            QPushButton {{\n                background-color: {constants.GLASS};\n                color: {constants.TEXT};\n                border: 1px solid {border_color};\n                border-radius: 4px;\n                padding: 6px 12px;\n            }}\n            QPushButton:hover {{\n                background-color: {constants.BUTTON_HOVER};\n            }}\n            QMenuBar {{\n                background-color: {constants.GLASS};\n                color: {constants.TEXT};\n            }}\n            QMenuBar::item:selected {{\n                background-color: {constants.ACCENT};\n            }}\n            QMenu {{\n                background-color: {constants.GLASS};\n                color: {constants.TEXT};\n                border: 1px solid {border_color};\n            }}\n            QMenu::item:selected {{\n                background-color: {constants.ACCENT};\n            }}\n        ')
+        ThemeManager.apply_global()
     def _toggle_dashboard(self):
         if self._dashboard_collapsed:
             self.results_widget.show()

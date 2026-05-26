@@ -3,6 +3,7 @@ from loading_manager import show_information, show_warning
 from PySide6.QtWidgets import QHeaderView, QMainWindow, QWidget, QLineEdit, QTreeWidget, QTreeWidgetItem, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
+from palworld_aio.ui.styles import ThemeManager
 import struct
 import io
 player_list_cache = []
@@ -592,18 +593,7 @@ class FixHostSaveWindow(QWidget):
         else:
             self.target_result_label.setText(t('Target Player: N/A'))
     def load_styles(self):
-        user_cfg_path = os.path.join(get_src_directory(), 'data', 'configs', 'user.cfg')
-        theme = 'dark'
-        if os.path.exists(user_cfg_path):
-            try:
-                data = json_tools.load(user_cfg_path)
-                theme = data.get('theme', 'dark')
-            except:
-                pass
-        qss_path = os.path.join(get_src_directory(), 'data', 'gui', f'{theme}mode.qss')
-        if os.path.exists(qss_path):
-            with open(qss_path, 'r') as f:
-                self.setStyleSheet(f.read())
+        ThemeManager.load_styles(self)
 def fix_host_save():
     window = FixHostSaveWindow()
     return window

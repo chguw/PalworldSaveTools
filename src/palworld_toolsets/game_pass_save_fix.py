@@ -1,7 +1,8 @@
 from import_libs import *
 from palworld_aio.utils import sav_to_json, json_to_sav, extract_value
 from palworld_toolsets.fix_host_save import ask_string_with_icon
-from common import get_src_directory, get_base_directory
+from common import get_base_directory
+from palworld_aio.ui.styles import ThemeManager
 from loading_manager import run_with_loading, show_information, show_critical
 import nerdfont as nf
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QFrame, QMessageBox, QFileDialog, QStyleFactory, QApplication, QLabel
@@ -521,18 +522,7 @@ class GamePassSaveFixWidget(QWidget):
         self.adjustSize()
         center_window(self)
     def load_styles(self):
-        user_cfg_path = os.path.join(get_src_directory(), 'data', 'configs', 'user.cfg')
-        theme = 'dark'
-        if os.path.exists(user_cfg_path):
-            try:
-                data = json_tools.load(user_cfg_path)
-                theme = data.get('theme', 'dark')
-            except:
-                pass
-        qss_path = os.path.join(get_src_directory(), 'data', 'gui', f'{theme}mode.qss')
-        if os.path.exists(qss_path):
-            with open(qss_path, 'r') as f:
-                self.setStyleSheet(f.read())
+        ThemeManager.load_styles(self)
 def center_window(win):
     screen = QApplication.primaryScreen().availableGeometry()
     size = win.sizeHint()
