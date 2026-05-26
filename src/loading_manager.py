@@ -307,6 +307,7 @@ QDialog { background: rgba(12,14,18,0.97); color: #e2e8f0; }
             btns.addStretch()
             self.inner.addLayout(btns)
     app = QApplication(sys.argv)
+    init_language()
     idx = sys.argv.index('--spawn-loader')
     start_ts = float(sys.argv[idx + 1])
     phrases = json.loads(sys.argv[idx + 2])
