@@ -32,12 +32,21 @@ def _spawn_process(args):
             venv_scripts = os.path.join(os.environ['VIRTUAL_ENV'], 'Scripts' if os.name == 'nt' else 'bin')
             if venv_scripts not in env['PATH']:
                 env['PATH'] = venv_scripts + os.pathsep + env['PATH']
-        resources_dir = os.path.join(os.getcwd(), 'resources')
+        resources_dir = os.path.join(cwd, 'resources')
+        if getattr(sys, 'frozen', False):
+            src_dir = os.path.join(cwd, 'src')
+        else:
+            src_dir = os.path.join(os.getcwd(), 'src')
         if resources_dir not in env.get('PYTHONPATH', ''):
             if 'PYTHONPATH' in env:
                 env['PYTHONPATH'] = resources_dir + os.pathsep + env['PYTHONPATH']
             else:
                 env['PYTHONPATH'] = resources_dir
+        if src_dir not in env.get('PYTHONPATH', ''):
+            if 'PYTHONPATH' in env:
+                env['PYTHONPATH'] = src_dir + os.pathsep + env['PYTHONPATH']
+            else:
+                env['PYTHONPATH'] = src_dir
         proc = subprocess.Popen(cmd, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.PIPE, text=False, env=env, cwd=cwd)
         return proc
     except Exception as e:
