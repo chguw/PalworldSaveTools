@@ -753,7 +753,7 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict):
     target_guild = None
     for g in guilds:
         raw = g.get('value', {}).get('RawData', {}).get('value', {})
-        if any((p.get('player_uid') == targ_uid for p in raw.get('players', []))):
+        if any((str(p.get('player_uid')) == str(targ_uid) for p in raw.get('players', []))):
             target_guild = g
             break
     source_player = None
@@ -761,7 +761,7 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict):
     for g in source_guild_dict.values():
         raw = g.get('value', {}).get('RawData', {}).get('value', {})
         for p in raw.get('players', []):
-            if p['player_uid'] == host_guid:
+            if str(p['player_uid']) == str(host_guid):
                 source_player = fast_deepcopy(p)
                 source_guild = g
                 break
@@ -771,9 +771,9 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict):
         source_player['player_uid'] = str(targ_uid)
     if target_guild:
         raw = target_guild['value']['RawData']['value']
-        raw['players'] = [p for p in raw['players'] if p.get('player_uid') != targ_uid]
+        raw['players'] = [p for p in raw['players'] if str(p.get('player_uid')) != str(targ_uid)]
         raw['players'].append(source_player)
-        if raw.get('admin_player_uid') == host_guid:
+        if str(raw.get('admin_player_uid')) == str(host_guid):
             raw['admin_player_uid'] = str(targ_uid)
             return True
     zero_uuid = PalUUID(b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
