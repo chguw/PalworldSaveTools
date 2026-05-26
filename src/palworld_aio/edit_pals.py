@@ -568,6 +568,13 @@ class PartySlotWidget(QFrame):
                     bw = badge.width()
                     badge.move(badge_x - bw, badge_y if bw >= 14 else badge_y + 1)
                     badge_x -= bw + 2
+        if hasattr(self, '_el_badges') and self._el_badges:
+            el_x = 6
+            el_y = 5
+            for badge in self._el_badges:
+                if shiboken6.isValid(badge) and (not badge.isHidden()):
+                    badge.move(el_x, el_y)
+                    el_x += 14
     def enterEvent(self, event):
         self.entered.emit()
         super().enterEvent(event)
@@ -677,7 +684,7 @@ class PartySlotWidget(QFrame):
         self.hp_bar.setRange(0, 100)
         self.hp_bar.setValue(hp_pct)
         self.hp_bar.setTextVisible(True)
-        self.hp_bar.setFormat(f'{int(hp_val)} / {int(max_hp)}')
+        self.hp_bar.setFormat(f'{int(hp_val) // 1000} / {int(max_hp) // 1000}')
         self.hp_bar.setStyleSheet('QProgressBar { background: rgba(55,65,81,0.5); border: 1px solid rgba(16,185,129,0.15); border-radius: 3px; text-align: center; font-size: 6px; font-weight: 700; color: #FFFFFF; } QProgressBar::chunk { background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #10B981,stop:1 #34D399); border-radius: 2px; }')
         info.addWidget(self.hp_bar)
         exp_bar = QFrame()
@@ -692,9 +699,11 @@ class PartySlotWidget(QFrame):
         info.addWidget(exp_bar)
         layout.addLayout(info)
         self._badges = []
+        self._el_badges = []
         badge_x = self.width() - 6
         badge_y = 4
-        badge_gap = 2
+        el_x = 6
+        el_y = 5
         if fav_idx and int(fav_idx) > 0:
             lock_key = f'lock_{int(fav_idx)}'
             lock_pix = _get_ui_icon_pixmap(lock_key, 14) or _get_ui_icon_pixmap('lock_1', 14) or _get_ui_icon_pixmap('lock', 14)
@@ -749,21 +758,6 @@ class PartySlotWidget(QFrame):
             awake_badge.show()
             self._badges.append(awake_badge)
             badge_x -= 14
-        base_el_data = get_pal_base_data(cid)
-        if base_el_data:
-            els = base_el_data.get('elements', {})
-            for en in els:
-                ep = _get_element_pixmap(en, 'small', 12)
-                if ep:
-                    el_icon = QLabel(self)
-                    el_icon.setFixedSize(12, 12)
-                    el_icon.setPixmap(ep)
-                    el_icon.setStyleSheet('background: transparent; border: none;')
-                    el_icon.setAttribute(Qt.WA_TransparentForMouseEvents)
-                    el_icon.move(badge_x - 12, badge_y + 1)
-                    el_icon.show()
-                    self._badges.append(el_icon)
-                    badge_x -= 14
         if is_boss:
             boss_pix = _get_boss_alpha_pixmap(14)
             if boss_pix:
@@ -790,6 +784,21 @@ class PartySlotWidget(QFrame):
                 lucky_badge.show()
                 self._badges.append(lucky_badge)
                 badge_x -= 16
+        base_el_data = get_pal_base_data(cid)
+        if base_el_data:
+            els = base_el_data.get('elements', {})
+            for en in els:
+                ep = _get_element_pixmap(en, 'small', 12)
+                if ep:
+                    el_icon = QLabel(self)
+                    el_icon.setFixedSize(12, 12)
+                    el_icon.setPixmap(ep)
+                    el_icon.setStyleSheet('background: transparent; border: none;')
+                    el_icon.setAttribute(Qt.WA_TransparentForMouseEvents)
+                    el_icon.move(el_x, el_y)
+                    el_icon.show()
+                    self._el_badges.append(el_icon)
+                    el_x += 14
         self.setStyleSheet('QFrame#partySlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; } QFrame#partySlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
     def set_selected(self, selected):
         self.selected = selected
@@ -1734,16 +1743,6 @@ class PalInfoWidget(QFrame):
         self.name_lbl.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.name_lbl.installEventFilter(self)
         name_row.addWidget(self.name_lbl, 1)
-        self.gender_icon = QPushButton()
-        self.gender_icon.setFixedSize(18, 18)
-        self.gender_icon.setIconSize(QSize(14, 14))
-        gender_def = _get_ui_icon_pixmap('gender_female', 14)
-        if gender_def:
-            self.gender_icon.setIcon(QIcon(gender_def))
-        self.gender_icon.setStyleSheet('QPushButton { background: transparent; border: none; } QPushButton:hover { background: rgba(255,255,255,0.08); border-radius: 3px; }')
-        self.gender_icon.setCursor(Qt.PointingHandCursor)
-        self.gender_icon.clicked.connect(self._on_gender_click)
-        name_row.addWidget(self.gender_icon)
         self.type_icons_container = QWidget()
         self.type_icons_container.setStyleSheet('background: transparent; border: none;')
         self.type_icons_layout = QHBoxLayout(self.type_icons_container)
@@ -1763,6 +1762,16 @@ class PalInfoWidget(QFrame):
         self.next_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #E2E8F0; background: transparent; border: none;')
         next_row.addWidget(self.next_lbl)
         next_row.addStretch()
+        self.gender_icon = QPushButton()
+        self.gender_icon.setFixedSize(18, 18)
+        self.gender_icon.setIconSize(QSize(14, 14))
+        gender_def = _get_ui_icon_pixmap('gender_female', 14)
+        if gender_def:
+            self.gender_icon.setIcon(QIcon(gender_def))
+        self.gender_icon.setStyleSheet('QPushButton { background: transparent; border: none; } QPushButton:hover { background: rgba(255,255,255,0.08); border-radius: 3px; }')
+        self.gender_icon.setCursor(Qt.PointingHandCursor)
+        self.gender_icon.clicked.connect(self._on_gender_click)
+        next_row.addWidget(self.gender_icon)
         base_dir = constants.get_base_path()
         self.info_boss_btn = QPushButton()
         self.info_boss_btn.setIcon(QIcon(os.path.join(base_dir, 'resources', 'boss_alpha.webp')))
@@ -1795,6 +1804,12 @@ class PalInfoWidget(QFrame):
         self.info_awake_btn.setCursor(Qt.PointingHandCursor)
         self.info_awake_btn.clicked.connect(self._on_awake_toggle)
         next_row.addWidget(self.info_awake_btn)
+        self.info_max_btn = QPushButton(nf.icons['nf-md-database_arrow_up'])
+        self.info_max_btn.setFixedSize(18, 18)
+        self.info_max_btn.setStyleSheet('QPushButton { font-size: 12px; padding: 0px; margin: 0px; background: transparent; color: #4ADE80; border: none; } QPushButton:hover { background: rgba(74,222,128,0.15); color: #FFFFFF; border-radius: 3px; }')
+        self.info_max_btn.setCursor(Qt.PointingHandCursor)
+        self.info_max_btn.clicked.connect(self._on_max_click)
+        next_row.addWidget(self.info_max_btn)
         self.info_dna_btn = QPushButton()
         self.info_dna_btn.setCheckable(True)
         self.info_dna_btn.setFixedSize(18, 18)
@@ -1813,12 +1828,6 @@ class PalInfoWidget(QFrame):
         self.info_fav_btn.setCursor(Qt.PointingHandCursor)
         self.info_fav_btn.clicked.connect(self._on_fav_toggle)
         next_row.addWidget(self.info_fav_btn)
-        self.info_max_btn = QPushButton(nf.icons['nf-md-database_arrow_up'])
-        self.info_max_btn.setFixedSize(18, 18)
-        self.info_max_btn.setStyleSheet('QPushButton { font-size: 12px; padding: 0px; margin: 0px; background: transparent; color: #4ADE80; border: none; } QPushButton:hover { background: rgba(74,222,128,0.15); color: #FFFFFF; border-radius: 3px; }')
-        self.info_max_btn.setCursor(Qt.PointingHandCursor)
-        self.info_max_btn.clicked.connect(self._on_max_click)
-        next_row.addWidget(self.info_max_btn)
         nc_layout.addLayout(next_row)
         hrow.addWidget(name_col, 0, Qt.AlignTop)
         header_layout = QVBoxLayout(header)
@@ -2002,7 +2011,7 @@ class PalInfoWidget(QFrame):
         self.stat_plus_lbl.setCursor(Qt.PointingHandCursor)
         self.stat_plus_lbl.installEventFilter(self)
         soul_row.addWidget(self.stat_plus_lbl)
-        left_layout.addLayout(soul_row)
+        left_layout.addLayout(soul_row, 1)
 
         ivs_row = QHBoxLayout()
         ivs_row.setSpacing(4)
@@ -2016,26 +2025,26 @@ class PalInfoWidget(QFrame):
         self.ivs_hp_lbl = QLabel('100')
         self.ivs_hp_lbl.setFixedWidth(24)
         self.ivs_hp_lbl.setAlignment(Qt.AlignCenter)
-        self.ivs_hp_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #EF4444; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 3px; padding: 1px 0px;')
+        self.ivs_hp_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #FFFFFF; background: transparent; border: none; padding: 1px 0px;')
         self.ivs_hp_lbl.setCursor(Qt.PointingHandCursor)
         self.ivs_hp_lbl.installEventFilter(self)
         ivs_row.addWidget(self.ivs_hp_lbl)
         self.ivs_atk_lbl = QLabel('100')
         self.ivs_atk_lbl.setFixedWidth(24)
         self.ivs_atk_lbl.setAlignment(Qt.AlignCenter)
-        self.ivs_atk_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #F59E0B; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 3px; padding: 1px 0px;')
+        self.ivs_atk_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #FFFFFF; background: transparent; border: none; padding: 1px 0px;')
         self.ivs_atk_lbl.setCursor(Qt.PointingHandCursor)
         self.ivs_atk_lbl.installEventFilter(self)
         ivs_row.addWidget(self.ivs_atk_lbl)
         self.ivs_def_lbl = QLabel('100')
         self.ivs_def_lbl.setFixedWidth(24)
         self.ivs_def_lbl.setAlignment(Qt.AlignCenter)
-        self.ivs_def_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #3B82F6; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 3px; padding: 1px 0px;')
+        self.ivs_def_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #FFFFFF; background: transparent; border: none; padding: 1px 0px;')
         self.ivs_def_lbl.setCursor(Qt.PointingHandCursor)
         self.ivs_def_lbl.installEventFilter(self)
         ivs_row.addWidget(self.ivs_def_lbl)
         ivs_row.addStretch()
-        left_layout.addLayout(ivs_row)
+        left_layout.addLayout(ivs_row, 1)
 
         souls_row = QHBoxLayout()
         souls_row.setSpacing(4)
@@ -2049,34 +2058,33 @@ class PalInfoWidget(QFrame):
         self.soul_hp_lbl = QLabel('0')
         self.soul_hp_lbl.setFixedWidth(22)
         self.soul_hp_lbl.setAlignment(Qt.AlignCenter)
-        self.soul_hp_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #A78BFA; background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2); border-radius: 3px; padding: 1px 0px;')
+        self.soul_hp_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #FFFFFF; background: transparent; border: none; padding: 1px 0px;')
         self.soul_hp_lbl.setCursor(Qt.PointingHandCursor)
         self.soul_hp_lbl.installEventFilter(self)
         souls_row.addWidget(self.soul_hp_lbl)
         self.soul_atk_lbl = QLabel('0')
         self.soul_atk_lbl.setFixedWidth(22)
         self.soul_atk_lbl.setAlignment(Qt.AlignCenter)
-        self.soul_atk_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #F59E0B; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 3px; padding: 1px 0px;')
+        self.soul_atk_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #FFFFFF; background: transparent; border: none; padding: 1px 0px;')
         self.soul_atk_lbl.setCursor(Qt.PointingHandCursor)
         self.soul_atk_lbl.installEventFilter(self)
         souls_row.addWidget(self.soul_atk_lbl)
         self.soul_def_lbl = QLabel('0')
         self.soul_def_lbl.setFixedWidth(22)
         self.soul_def_lbl.setAlignment(Qt.AlignCenter)
-        self.soul_def_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #3B82F6; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 3px; padding: 1px 0px;')
+        self.soul_def_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #FFFFFF; background: transparent; border: none; padding: 1px 0px;')
         self.soul_def_lbl.setCursor(Qt.PointingHandCursor)
         self.soul_def_lbl.installEventFilter(self)
         souls_row.addWidget(self.soul_def_lbl)
         self.soul_craft_lbl = QLabel('0')
         self.soul_craft_lbl.setFixedWidth(22)
         self.soul_craft_lbl.setAlignment(Qt.AlignCenter)
-        self.soul_craft_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #4ADE80; background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); border-radius: 3px; padding: 1px 0px;')
+        self.soul_craft_lbl.setStyleSheet('font-size: 8px; font-weight: 600; color: #FFFFFF; background: transparent; border: none; padding: 1px 0px;')
         self.soul_craft_lbl.setCursor(Qt.PointingHandCursor)
         self.soul_craft_lbl.installEventFilter(self)
         souls_row.addWidget(self.soul_craft_lbl)
         souls_row.addStretch()
-        left_layout.addLayout(souls_row)
-        left_layout.addStretch()
+        left_layout.addLayout(souls_row, 1)
 
         columns.addWidget(left_col)
 
@@ -2171,7 +2179,7 @@ class PalInfoWidget(QFrame):
         right_layout.addLayout(san_row, 1)
 
         stats_q = QFrame()
-        stats_q.setStyleSheet('background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 3px;')
+        stats_q.setStyleSheet('background: transparent; border: none;')
         stats_grid = QGridLayout(stats_q)
         stats_grid.setContentsMargins(4, 1, 4, 1)
         stats_grid.setSpacing(2)
@@ -2274,7 +2282,7 @@ class PalInfoWidget(QFrame):
         card_layout.addWidget(self.work_icons_container)
         food_row = QHBoxLayout()
         food_row.setSpacing(2)
-        food_row.addSpacing(2)
+        food_row.addStretch()
         self.food_icon_labels = []
         for i in range(10):
             fc = QLabel()
@@ -2290,7 +2298,6 @@ class PalInfoWidget(QFrame):
                 fc.setGraphicsEffect(opacity)
             food_row.addWidget(fc)
             self.food_icon_labels.append(fc)
-        food_row.addStretch()
         card_layout.addLayout(food_row)
         body_layout.addWidget(suit_card)
 
@@ -2354,10 +2361,10 @@ class PalInfoWidget(QFrame):
         self.active_skills_list.setContentsMargins(0, 0, 0, 0)
         self.active_skills_list.setSpacing(2)
         as_layout.addLayout(self.active_skills_list)
-        self.active_skills_frame.setFixedHeight(120)
+        self.active_skills_frame.setFixedHeight(100)
 
         sb_layout.addWidget(self.active_skills_frame)
-        self.partner_frame.setFixedHeight(120)
+        self.partner_frame.setFixedHeight(100)
         sb_layout.addWidget(self.partner_frame)
 
         passive_title = QLabel(t('pal_editor.passive_skills') if t else 'Passive Skills')
@@ -2383,7 +2390,7 @@ class PalInfoWidget(QFrame):
             card.setFixedHeight(26)
             card.setStyleSheet(f'QFrame#passiveCard {{ background: {default_bg}; border: none; border-radius: 4px; }}')
             card_layout = QHBoxLayout(card)
-            card_layout.setContentsMargins(4, 0, 4, 0)
+            card_layout.setContentsMargins(6, 0, 6, 0)
             card_layout.setSpacing(2)
             card_layout.setAlignment(Qt.AlignVCenter)
             plbl = QLabel(pname)
@@ -2545,7 +2552,7 @@ class PalInfoWidget(QFrame):
             hunger_pct = int(min(hunger_full / hunger_max * 100, 100))
             exp_pct = int(min(exp_val / 1000.0 * 100, 100))
             self.hp_bar.setValue(hp_pct)
-            self.hp_bar.setFormat(f'{int(hp_val)} / {int(max_hp)}')
+            self.hp_bar.setFormat(f'{int(hp_val) // 1000} / {int(max_hp) // 1000}')
             self.hunger_bar.setValue(hunger_pct)
             self.hunger_bar.setFormat(f'{int(hunger_full)} / {int(hunger_max)}')
             self.exp_header_bar.setValue(exp_pct)
@@ -2700,7 +2707,7 @@ class PalInfoWidget(QFrame):
                     elem_color = '#4A4A50'
                 slot = SkillSlotFrame()
                 slot.setStyleSheet('QFrame { background: rgba(0,0,0,0); border: 1px solid rgba(125,211,252,0.08); border-radius: 3px; }')
-                slot.setFixedHeight(36)
+                slot.setFixedHeight(26)
                 slot.setCursor(Qt.PointingHandCursor)
                 slot.installEventFilter(self)
                 slot._skill_slot_idx = i
@@ -3184,7 +3191,14 @@ class PalInfoWidget(QFrame):
                 for slot in parent.palbox_slots + parent.party_slots:
                     if hasattr(slot, 'pal_data') and slot.pal_data is self.last_clicked_data:
                         slot.update_display()
+                        slot.set_selected(True)
                         break
+                if parent.selected_pal_slot:
+                    ptype, idx = parent.selected_pal_slot
+                    if ptype == 'party':
+                        parent._highlight_party_slot(idx)
+                    elif ptype == 'palbox':
+                        parent._highlight_palbox_slot(idx)
                 break
             parent = parent.parent()
     def refresh_labels(self):
