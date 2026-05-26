@@ -121,8 +121,15 @@ if '--spawn-loader' in sys.argv:
         def _load_theme_pref(self):
             return True
         def _load_theme(self):
-            from palworld_aio.ui.styles import ThemeManager
-            ThemeManager.apply_to_widget(self)
+            try:
+                from palworld_aio.ui.styles import ThemeManager
+                ThemeManager.apply_to_widget(self)
+            except Exception:
+                self.setStyleSheet("""
+QWidget { background: qlineargradient(spread:pad, x1:0,y1:0,x2:1,y2:1,
+stop:0 rgba(12,14,18,0.98), stop:0.5 rgba(10,16,22,0.98), stop:1 rgba(8,12,18,0.98)); color: #e2e8f0; }
+QLabel { color: #7DD3FC; }
+""")
         def clear_layout(self):
             while self.inner.count():
                 child = self.inner.takeAt(0)
@@ -423,7 +430,11 @@ class ErrorDialog(QDialog):
     def _load_theme_pref(self):
         return True
     def _load_theme(self):
-        ThemeManager.apply_to_widget(self)
+        try:
+            from palworld_aio.ui.styles import ThemeManager
+            ThemeManager.apply_to_widget(self)
+        except Exception:
+            self.setStyleSheet("QWidget{background:rgba(12,14,18,0.98);color:#e2e8f0}QLabel{color:#7DD3FC}")
     def setup_error_ui(self):
         self.container = QFrame()
         self.container.setObjectName('mainContainer')
