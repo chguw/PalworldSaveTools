@@ -58,36 +58,47 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
                                 break
                         except Exception:
                             break
+            if not nplayers and len(raw) >= 12:
+                _fallback_players = _parse_raw_players_without_count(raw)
+                if _fallback_players:
+                    nplayers = _fallback_players
             if nplayers:
                 guild['players'] = nplayers
                 guild['_format_version'] = 'new'
         except Exception:
             pass
         if '_format_version' not in guild or guild.get('players', []) == []:
-            try:
-                old_r = FArchiveReader(remaining, debug=False)
-                guild['_opaque_players_bytes'] = remaining
-                if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
-                    guild['unknown_guild_field'] = old_r.byte_list(4)
-                guild['admin_player_uid'] = old_r.guid()
-                nplayers = []
-                count = old_r.u32()
-                if 0 <= count <= 1000:
-                    for _ in range(count):
-                        try:
-                            uid = old_r.guid()
-                            lo = old_r.i64()
-                            nm = old_r.fstring()
-                            nplayers.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
-                        except Exception:
-                            break
-                if nplayers:
-                    guild['players'] = nplayers
-                    guild['trailing_bytes'] = [int(b) for b in old_r.read_to_end()]
-                    guild['_format_version'] = 'old'
-            except Exception:
-                pass
-        if '_format_version' not in guild and len(remaining) >= 100:
+            for old_offset in (0, 10):
+                if old_offset > 0 and len(remaining) <= old_offset + 16:
+                    continue
+                try:
+                    shifted = remaining[old_offset:]
+                    old_r = FArchiveReader(shifted, debug=False)
+                    guild['_opaque_players_bytes'] = remaining
+                    if len(shifted) >= 4 and shifted[:4] == b'\x00\x00\x00\x00':
+                        old_r.byte_list(4)
+                    guild['admin_player_uid'] = old_r.guid()
+                    nplayers = []
+                    count = old_r.u32()
+                    if 0 <= count <= 1000:
+                        for _ in range(count):
+                            try:
+                                uid = old_r.guid()
+                                lo = old_r.i64()
+                                nm = old_r.fstring()
+                                if not nm:
+                                    break
+                                nplayers.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                            except Exception:
+                                break
+                    if nplayers:
+                        guild['players'] = nplayers
+                        guild['trailing_bytes'] = [int(b) for b in old_r.read_to_end()]
+                        guild['_format_version'] = 'old'
+                        break
+                except Exception:
+                    continue
+        if '_format_version' not in guild and len(remaining) >= 50:
             try:
                 scan_r = FArchiveReader(remaining, debug=False)
                 if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
@@ -102,6 +113,11 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
                     guild['_format_version'] = 'new'
             except Exception:
                 pass
+        if '_format_version' not in guild and '_opaque_raw' in guild and len(guild.get('_opaque_raw', b'')) >= 12:
+            _fallback_players = _parse_raw_players_without_count(guild['_opaque_raw'])
+            if _fallback_players:
+                guild['players'] = _fallback_players
+                guild['_format_version'] = 'new'
         if '_format_version' not in guild:
             guild['players'] = []
             guild['trailing_bytes'] = []
@@ -115,6 +131,24 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
     if not reader.eof():
         group_data['unknown_bytes'] = reader.read_to_end()
     return group_data
+def _parse_raw_players_without_count(raw: bytes) -> list[dict[str, Any]]:
+    players = []
+    pos = 0
+    while pos + 12 <= len(raw) and len(players) < 100:
+        try:
+            pr = FArchiveReader(raw[pos:], debug=False)
+            lo = pr.i64()
+            nm = pr.fstring()
+            if nm and _is_valid_player_name(nm):
+                players.append({'player_uid': '', 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                pr.byte_list(31)
+                consumed = len(raw[pos:]) - len(pr.read_to_end())
+                pos += consumed
+            else:
+                break
+        except Exception:
+            break
+    return players
 def _scan_players_from_raw(data: bytes) -> list[dict[str, Any]]:
     players = []
     idx = 0
