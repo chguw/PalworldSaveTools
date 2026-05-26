@@ -1,5 +1,5 @@
 from import_libs import *
-from loading_manager import show_information, show_critical
+from loading_manager import show_information, show_critical, run_with_loading
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QFileDialog, QApplication, QFrame, QGridLayout, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QAbstractItemView, QMessageBox, QSpinBox, QGroupBox, QWidget, QScrollArea, QProgressBar
 from PySide6.QtGui import QIcon, QFont, QPixmap, QColor, QPalette
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
@@ -313,10 +313,7 @@ class SlotNumUpdaterApp(QDialog):
         def on_error(error_msg):
             self.set_loading_state(False)
             show_critical(self, t('error.title'), f'Failed to load save file: {error_msg}')
-        self.loading_thread = LoadingThread(task, self)
-        self.loading_thread.finished.connect(on_finished)
-        self.loading_thread.error.connect(on_error)
-        self.loading_thread.start()
+        run_with_loading(on_finished, task, parent=self)
     def set_loading_state(self, loading, message='Processing...'):
         if loading:
             self.browse_button.setEnabled(False)
@@ -536,10 +533,7 @@ class SlotNumUpdaterApp(QDialog):
         def on_error(error_msg):
             self.set_loading_state(False)
             show_critical(self, t('error.title'), f'Failed to update containers: {error_msg}')
-        self.loading_thread = LoadingThread(task, self)
-        self.loading_thread.finished.connect(on_finished)
-        self.loading_thread.error.connect(on_error)
-        self.loading_thread.start()
+        run_with_loading(on_finished, task, parent=self)
     def _cleanup_excess_slots(self, container, new_slot_count):
         try:
             import copy
@@ -691,10 +685,7 @@ class SlotNumUpdaterApp(QDialog):
         def on_error(error_msg):
             self.set_loading_state(False)
             show_critical(self, t('error.title'), f'Failed to save changes: {error_msg}')
-        self.loading_thread = LoadingThread(task, self)
-        self.loading_thread.finished.connect(on_finished)
-        self.loading_thread.error.connect(on_error)
-        self.loading_thread.start()
+        run_with_loading(on_finished, task, parent=self)
     def closeEvent(self, event):
         if self.has_changes:
             reply = QMessageBox.question(self, t('warning.title'), t('slotinjector.unsaved_changes'), QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
