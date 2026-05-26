@@ -28,96 +28,15 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
         guild: dict[str, Any] = {'leading_bytes': reader.byte_list(4), 'base_ids': reader.tarray(uuid_reader), 'unknown_1': reader.i32(), 'base_camp_level': reader.i32(), 'map_object_instance_ids_base_camp_points': reader.tarray(uuid_reader), 'guild_name': reader.fstring(), 'last_guild_name_modifier_player_uid': reader.guid(), 'unknown_2': reader.byte_list(4)}
         remaining = reader.read_to_end()
         guild['_opaque_all_remaining_bytes'] = remaining
-        try:
-            new_r = FArchiveReader(remaining, debug=False)
-            if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
-                guild['unknown_guild_field'] = new_r.byte_list(4)
-            guild['admin_player_uid'] = new_r.guid()
-            guild['unknown_3'] = new_r.i32()
-            guild['unknown_4'] = new_r.byte_list(4)
-            guild['unknown_5'] = new_r.u16()
-            guild['unknown_6'] = new_r.i32()
-            guild['unknown_7'] = new_r.i32()
-            guild['unknown_8'] = new_r.i32()
-            guild['unknown_9'] = new_r.i32()
-            raw = new_r.read_to_end()
-            guild['_opaque_raw'] = raw
-            nplayers = []
-            if len(raw) >= 4:
-                pr = FArchiveReader(raw, debug=False)
-                count = pr.i32()
-                if 0 <= count <= 1000:
-                    for _ in range(count):
-                        try:
-                            lo = pr.i64()
-                            nm = pr.fstring()
-                            pr.byte_list(31)
-                            if _is_valid_player_name(nm):
-                                nplayers.append({'player_uid': '', 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
-                            else:
-                                break
-                        except Exception:
-                            break
-            if not nplayers and len(raw) >= 12:
-                _fallback_players = _parse_raw_players_without_count(raw)
-                if _fallback_players:
-                    nplayers = _fallback_players
-            if nplayers:
-                guild['players'] = nplayers
-                guild['_format_version'] = 'new'
-        except Exception:
-            pass
-        if '_format_version' not in guild or guild.get('players', []) == []:
-            for old_offset in (0, 10):
-                if old_offset > 0 and len(remaining) <= old_offset + 16:
-                    continue
-                try:
-                    shifted = remaining[old_offset:]
-                    old_r = FArchiveReader(shifted, debug=False)
-                    guild['_opaque_players_bytes'] = remaining
-                    if len(shifted) >= 4 and shifted[:4] == b'\x00\x00\x00\x00':
-                        old_r.byte_list(4)
-                    guild['admin_player_uid'] = old_r.guid()
-                    nplayers = []
-                    count = old_r.u32()
-                    if 0 <= count <= 1000:
-                        for _ in range(count):
-                            try:
-                                uid = old_r.guid()
-                                lo = old_r.i64()
-                                nm = old_r.fstring()
-                                if not nm:
-                                    break
-                                nplayers.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
-                            except Exception:
-                                break
-                    if nplayers:
-                        guild['players'] = nplayers
-                        guild['trailing_bytes'] = [int(b) for b in old_r.read_to_end()]
-                        guild['_format_version'] = 'old'
-                        break
-                except Exception:
-                    continue
-        if '_format_version' not in guild and len(remaining) >= 50:
-            try:
-                scan_r = FArchiveReader(remaining, debug=False)
-                if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
-                    scan_r.byte_list(4)
-                scan_admin = scan_r.guid()
-                guild['admin_player_uid'] = str(scan_admin)
-                scan_r = FArchiveReader(remaining, debug=False)
-                nplayers = _scan_players_from_raw(remaining)
-                if nplayers:
-                    guild['players'] = nplayers
-                    guild['_opaque_all_remaining_for_encode'] = remaining
-                    guild['_format_version'] = 'new'
-            except Exception:
-                pass
-        if '_format_version' not in guild and '_opaque_raw' in guild and len(guild.get('_opaque_raw', b'')) >= 12:
-            _fallback_players = _parse_raw_players_without_count(guild['_opaque_raw'])
-            if _fallback_players:
-                guild['players'] = _fallback_players
-                guild['_format_version'] = 'new'
+        V1_HEADER = b'\x02\x00\x00\x00\x02\x03\x00\x00\x00\x00'
+        has_v1_header = len(remaining) >= 10 and remaining[:10] == V1_HEADER
+        if has_v1_header:
+            guild['_v1_header'] = remaining[:10]
+            remaining = remaining[10:]
+            guild['_opaque_players_bytes'] = remaining
+        old_ok = _try_old_format(guild, remaining)
+        if not old_ok:
+            _try_new_format(guild, remaining)
         if '_format_version' not in guild:
             guild['players'] = []
             guild['trailing_bytes'] = []
@@ -131,6 +50,46 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
     if not reader.eof():
         group_data['unknown_bytes'] = reader.read_to_end()
     return group_data
+def _try_old_format(guild: dict, remaining: bytes) -> bool:
+    try:
+        old_r = FArchiveReader(remaining, debug=False)
+        if len(remaining) >= 4 and remaining[:4] == b'\x00\x00\x00\x00':
+            guild['unknown_guild_field'] = old_r.byte_list(4)
+        admin = old_r.guid()
+        guild['admin_player_uid'] = admin
+        nplayers = []
+        count = old_r.u32()
+        if 1 <= count <= 1000:
+            for _ in range(count):
+                try:
+                    uid = old_r.guid()
+                    lo = old_r.i64()
+                    nm = old_r.fstring()
+                    if nm and _is_valid_player_name(nm):
+                        nplayers.append({'player_uid': str(uid), 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
+                    else:
+                        break
+                except Exception:
+                    break
+        if nplayers:
+            guild['players'] = nplayers
+            guild['trailing_bytes'] = [int(b) for b in old_r.read_to_end()]
+            guild['_format_version'] = 'old'
+            return True
+    except Exception:
+        pass
+    return False
+def _try_new_format(guild: dict, remaining: bytes) -> bool:
+    nplayers = _scan_players_from_raw(remaining)
+    if nplayers:
+        guild['players'] = nplayers
+        guild['_opaque_all_remaining_for_encode'] = remaining
+        guild['_format_version'] = 'new'
+        if 'admin_player_uid' not in guild or str(guild['admin_player_uid']).startswith('00000002-'):
+            guild['admin_player_uid'] = guild.get('last_guild_name_modifier_player_uid',
+                guild.get('admin_player_uid', '00000000-0000-0000-0000-000000000000'))
+        return True
+    return False
 def _parse_raw_players_without_count(raw: bytes) -> list[dict[str, Any]]:
     players = []
     pos = 0
@@ -141,7 +100,10 @@ def _parse_raw_players_without_count(raw: bytes) -> list[dict[str, Any]]:
             nm = pr.fstring()
             if nm and _is_valid_player_name(nm):
                 players.append({'player_uid': '', 'player_info': {'last_online_real_time': lo, 'player_name': nm}})
-                pr.byte_list(31)
+                try:
+                    pr.byte_list(31)
+                except Exception:
+                    pass
                 consumed = len(raw[pos:]) - len(pr.read_to_end())
                 pos += consumed
             else:
@@ -267,6 +229,8 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
         writer.fstring(p['guild_name'])
         writer.guid(p['last_guild_name_modifier_player_uid'])
         writer.write(bytes(p['unknown_2']))
+        if '_v1_header' in p:
+            writer.write(bytes(p['_v1_header']))
         format_version = p.get('_format_version', 'new')
         if format_version == 'opaque_full' and '_opaque_all_remaining_bytes' in p:
             writer.write(bytes(p['_opaque_all_remaining_bytes']))
