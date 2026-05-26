@@ -1669,5 +1669,12 @@
   "loading.success": "Save Loaded Successfully",
   "tools.drag_hint": "or drag & drop a Level.sav file here",
   "dashboard.overview": "World Overview",
-  "sidebar.locked": "Load a save file first"
+  "sidebar.locked": "Load a save file first",
+  "dashboard.no_save": "No Save Loaded",
+  "dashboard.welcome_title": "Palworld Save Tools",
+  "dashboard.welcome_tips": "📁 Click <b>Load Save</b> to open your Level.sav\n🖱️ Or drag & drop a save file onto this window\n🔧 Then use the tools below to manage your world",
+  "dashboard.stat_players": "Players",
+  "dashboard.stat_guilds": "Guilds",
+  "dashboard.stat_bases": "Bases",
+  "dashboard.stat_pals": "Pals"
 }

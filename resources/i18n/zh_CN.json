@@ -1383,5 +1383,12 @@
   "loading.success": "保存加载成功",
   "tools.drag_hint": "或将 Level.sav 文件拖放到此处",
   "dashboard.overview": "世界概况",
-  "sidebar.locked": "首先加载保存文件"
+  "sidebar.locked": "首先加载保存文件",
+  "dashboard.no_save": "未加载保存",
+  "dashboard.welcome_title": "Palworld 保存工具",
+  "dashboard.welcome_tips": "📁 单击<b>加载保存</b>打开您的Level.sav\n🖱️ 或者将保存文件拖放到此窗口上\n🔧 然后使用下面的工具来管理你的世界",
+  "dashboard.stat_players": "玩家",
+  "dashboard.stat_guilds": "行会",
+  "dashboard.stat_bases": "基地",
+  "dashboard.stat_pals": "好朋友"
 }

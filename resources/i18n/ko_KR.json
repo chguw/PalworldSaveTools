@@ -1380,5 +1380,12 @@
   "loading.success": "저장이 성공적으로 로드되었습니다.",
   "tools.drag_hint": "또는 여기에 Level.sav 파일을 끌어서 놓으세요.",
   "dashboard.overview": "세계 개요",
-  "sidebar.locked": "먼저 세이브 파일을 불러오세요"
+  "sidebar.locked": "먼저 세이브 파일을 불러오세요",
+  "dashboard.no_save": "저장 파일이 로드되지 않았습니다.",
+  "dashboard.welcome_title": "Palworld 저장 도구",
+  "dashboard.welcome_tips": "📁 Level.sav를 열려면 <b>저장 로드</b>를 클릭하세요.\n🖱️ 또는 저장 파일을 이 창으로 드래그 앤 드롭하세요.\n🔧 그런 다음 아래 도구를 사용하여 세상을 관리하세요.",
+  "dashboard.stat_players": "플레이어",
+  "dashboard.stat_guilds": "길드",
+  "dashboard.stat_bases": "기지",
+  "dashboard.stat_pals": "친구들"
 }

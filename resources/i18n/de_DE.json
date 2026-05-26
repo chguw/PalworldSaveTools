@@ -1405,5 +1405,12 @@
   "loading.success": "Speichern erfolgreich geladen",
   "tools.drag_hint": "oder ziehen Sie eine Level.sav-Datei per Drag & Drop hierher",
   "dashboard.overview": "Weltüberblick",
-  "sidebar.locked": "Laden Sie zuerst eine Sicherungsdatei"
+  "sidebar.locked": "Laden Sie zuerst eine Sicherungsdatei",
+  "dashboard.no_save": "Kein Speicher geladen",
+  "dashboard.welcome_title": "Palworld-Speichertools",
+  "dashboard.welcome_tips": "📁 Klicken Sie auf <b>Speichern laden</b>, um Ihre Level.sav zu öffnen\n🖱️ Oder ziehen Sie eine Speicherdatei per Drag & Drop in dieses Fenster\n🔧 Dann nutzen Sie die folgenden Tools, um Ihre Welt zu verwalten",
+  "dashboard.stat_players": "Spieler",
+  "dashboard.stat_guilds": "Gilden",
+  "dashboard.stat_bases": "Basen",
+  "dashboard.stat_pals": "Freunde"
 }

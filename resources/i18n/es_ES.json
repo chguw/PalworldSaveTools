@@ -1374,5 +1374,12 @@
   "loading.success": "Guardar cargado exitosamente",
   "tools.drag_hint": "o arrastre y suelte un archivo Level.sav aquí",
   "dashboard.overview": "Panorama mundial",
-  "sidebar.locked": "Cargue un archivo guardado primero"
+  "sidebar.locked": "Cargue un archivo guardado primero",
+  "dashboard.no_save": "No hay guardado cargado",
+  "dashboard.welcome_title": "Herramientas de guardado de Palworld",
+  "dashboard.welcome_tips": "📁 Haga clic en <b>Cargar Guardar</b> para abrir su Level.sav\n🖱️ O arrastre y suelte un archivo guardado en esta ventana\n🔧 Luego usa las siguientes herramientas para administrar tu mundo",
+  "dashboard.stat_players": "Jugadores",
+  "dashboard.stat_guilds": "Gremios",
+  "dashboard.stat_bases": "Bases",
+  "dashboard.stat_pals": "amigos"
 }

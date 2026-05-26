@@ -1381,5 +1381,12 @@
   "loading.success": "保存が正常にロードされました",
   "tools.drag_hint": "または、Level.sav ファイルをここにドラッグ アンド ドロップします。",
   "dashboard.overview": "世界概要",
-  "sidebar.locked": "最初に保存ファイルをロードします"
+  "sidebar.locked": "最初に保存ファイルをロードします",
+  "dashboard.no_save": "セーブがロードされていません",
+  "dashboard.welcome_title": "パルワールドセーブツール",
+  "dashboard.welcome_tips": "📁 [<b>読み込み保存</b>] をクリックして Level.sav を開きます。\n🖱️ または、保存ファイルをこのウィンドウにドラッグアンドドロップします\n🔧 次に、以下のツールを使用して世界を管理します",
+  "dashboard.stat_players": "選手",
+  "dashboard.stat_guilds": "ギルド",
+  "dashboard.stat_bases": "拠点",
+  "dashboard.stat_pals": "仲間"
 }

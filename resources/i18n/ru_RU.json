@@ -1379,5 +1379,12 @@
   "loading.success": "Сохранить, загружено успешно",
   "tools.drag_hint": "или перетащите сюда файл Level.sav.",
   "dashboard.overview": "Обзор мира",
-  "sidebar.locked": "Сначала загрузите файл сохранения"
+  "sidebar.locked": "Сначала загрузите файл сохранения",
+  "dashboard.no_save": "Сохранения не загружены",
+  "dashboard.welcome_title": "Инструменты сохранения Palworld",
+  "dashboard.welcome_tips": "📁 Нажмите <b>Загрузить сохранение</b>, чтобы открыть файл Level.sav.\n🖱️ Или перетащите файл сохранения в это окно.\n🔧 Тогда используйте инструменты ниже, чтобы управлять своим миром.",
+  "dashboard.stat_players": "Игроки",
+  "dashboard.stat_guilds": "Гильдии",
+  "dashboard.stat_bases": "Базы",
+  "dashboard.stat_pals": "приятели"
 }

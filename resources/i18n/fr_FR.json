@@ -1363,5 +1363,12 @@
   "loading.success": "Sauvegarde chargée avec succès",
   "tools.drag_hint": "ou faites glisser et déposez un fichier Level.sav ici",
   "dashboard.overview": "Aperçu du monde",
-  "sidebar.locked": "Chargez d'abord un fichier de sauvegarde"
+  "sidebar.locked": "Chargez d'abord un fichier de sauvegarde",
+  "dashboard.no_save": "Aucune sauvegarde chargée",
+  "dashboard.welcome_title": "Outils de sauvegarde de Palworld",
+  "dashboard.welcome_tips": "📁 Cliquez sur <b>Load Save</b> pour ouvrir votre Level.sav\n🖱️ Ou faites glisser et déposez un fichier de sauvegarde sur cette fenêtre\n🔧 Utilisez ensuite les outils ci-dessous pour gérer votre monde",
+  "dashboard.stat_players": "Joueurs",
+  "dashboard.stat_guilds": "Guildes",
+  "dashboard.stat_bases": "Socles",
+  "dashboard.stat_pals": "Copains"
 }
