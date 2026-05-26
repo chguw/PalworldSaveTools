@@ -108,7 +108,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wolf of the Sun",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Ice damage and are immune to Freeze status. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to status. (Does not stack)"
         },
         {
             "name": "Kitsun Noct",
@@ -163,7 +163,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Gloomhowl",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Dark damage and are immune to Darkness. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to . (Does not stack)"
         },
         {
             "name": "Ambassador01",
@@ -226,7 +226,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the Desert",
-            "description": "When activated, Anubis lends its power to the player to change the player's attack type to Earth with ?% increased Attack. Sometimes dodges attacks with a high speed sidestep while in battle."
+            "description": "When activated, Anubis lends its power to the player to change the player's attack type to with ?% increased Attack. Sometimes dodges attacks with a high speed sidestep while in battle."
         },
         {
             "name": "Arena Shop",
@@ -1170,7 +1170,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Modified DNA",
-            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. Enhances Dark attacks by ?% while mounted."
+            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. Enhances attacks by ?% while mounted."
         },
         {
             "name": "Astegon",
@@ -1347,7 +1347,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dig, Smokie Cryst, Dig!",
-            "description": "While at a base, +? Cool Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Blacksmith01",
@@ -1416,7 +1416,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Waterwing Dance",
-            "description": "Can be ridden to travel on water. Changes the player's attack type to Water with ?% increased Attack while mounted."
+            "description": "Can be ridden to travel on water. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Azurobe Cryst",
@@ -1477,7 +1477,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Icewing Dance",
-            "description": "Can be ridden to travel on water. Changes the player's attack type to Ice with ?% increased Attack while mounted."
+            "description": "Can be ridden to travel on water. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Fuack Ignis",
@@ -1599,7 +1599,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Azure Sovereign",
-            "description": "Can be ridden as a flying mount. This Pal's Attack increases by ?% for each other Dragon Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Attack increases by ?% for each other Pal in party."
         },
         {
             "name": "Azurmane",
@@ -1833,7 +1833,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the Desert",
-            "description": "When activated, Anubis lends its power to the player to change the player's attack type to Earth with ?% increased Attack. Sometimes dodges attacks with a high speed sidestep while in battle."
+            "description": "When activated, Anubis lends its power to the player to change the player's attack type to with ?% increased Attack. Sometimes dodges attacks with a high speed sidestep while in battle."
         },
         {
             "name": "Bounty Trader",
@@ -1951,7 +1951,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Please Hug Me",
-            "description": "While in party, increases player and Pal damage to enemies afflicted with Ivycling by ?%. (Does not stack)"
+            "description": "While in party, increases player and Pal damage to enemies afflicted with by ?%. (Does not stack)"
         },
         {
             "name": "Needoll Noct",
@@ -2012,7 +2012,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Hug You So Much",
-            "description": "While in party, infuses the player's attacks with Ivycling ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Sootseer",
@@ -2073,7 +2073,7 @@
                 "MonsterFarm": 2
             },
             "partner_skill": "Grave Robber",
-            "description": "While in party, player and Pal take ?% less Normal damage. (Does not stack) Sometimes digs up when assigned to Ranch."
+            "description": "While in party, player and Pal take ?% less damage. (Does not stack) Sometimes digs up when assigned to Ranch."
         },
         {
             "name": "Penking",
@@ -2134,7 +2134,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Brave Sailor",
-            "description": "While in party, Fire Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Penking Lux",
@@ -2195,7 +2195,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Unyielding Storm Commander",
-            "description": "While in party, improves player and Pal Water damage to weak points by ?%. (Does not stack)"
+            "description": "While in party, improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Caravan Leader01",
@@ -2392,7 +2392,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Mystical Black Magic",
-            "description": "While in party, Normal Pals drop ?% more items when defeated. Also has a ?% chance to prevent Pal Sphere consumption when thrown. (Does not stack)"
+            "description": "While in party, Pals drop ?% more items when defeated. Also has a ?% chance to prevent Pal Sphere consumption when thrown. (Does not stack)"
         },
         {
             "name": "Katress Ignis",
@@ -2453,7 +2453,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Blazing Black Magic",
-            "description": "While at a base, +? Emitflame Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Felbat",
@@ -2508,7 +2508,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Life Steal",
-            "description": "While fighting together, grants the player and Felbat the life steal effect which absorbs ?% of damage dealt to restore Hp."
+            "description": "While fighting together, grants the player and Felbat the life steal effect which absorbs ?% of damage dealt to restore ."
         },
         {
             "name": "Chikipi",
@@ -2618,7 +2618,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Magical Twin Powers",
-            "description": "While at a base, +? Watering Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Clovee",
@@ -2679,7 +2679,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Happy Clover",
-            "description": "While at a base, raises Collection Work Suitability Level by+? for all other Base Pals. (Does not stack)"
+            "description": "While at a base, raises Work Suitability Level by+? for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Dupin",
@@ -2734,7 +2734,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Trick Show Fluffle",
-            "description": "While in party, Dupin produces a shockwave when the player's Health falls below 50% (Fire / Power: ?). Also boosts the player's Attack by ?% at the same time. (Does not stack)"
+            "description": "While in party, Dupin produces a shockwave when the player's Health falls below 50% ( / Power: ?). Also boosts the player's Attack by ?% at the same time. (Does not stack)"
         },
         {
             "name": "Tocotoco",
@@ -2852,7 +2852,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Mysterious Scales",
-            "description": "When activated, attacks targeted enemy with . While at a base, +? Monsterfarm Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "When activated, attacks targeted enemy with . While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Vixy",
@@ -3017,7 +3017,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Fuzzy Fairy",
-            "description": "While in party, increases the capture rate of Pals afflicted with Ivycling. (Does not stack)"
+            "description": "While in party, increases the capture rate of Pals afflicted with . (Does not stack)"
         },
         {
             "name": "Xenovader",
@@ -3188,7 +3188,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Phantasmal Arcana",
-            "description": "While in party, enemies with Burn set their surroundings on fire when attacked by the player. Other enemies that touch these flames take continuous damage equal to ?% of player attack damage. (Does not stack)"
+            "description": "While in party, enemies with set their surroundings on fire when attacked by the player. Other enemies that touch these flames take continuous damage equal to ?% of player attack damage. (Does not stack)"
         },
         {
             "name": "Xenolord",
@@ -3365,7 +3365,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Steel Scorpion",
-            "description": "While in party, player's Defense increases by ?%, and Electricity Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, player's Defense increases by ?%, and Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Menasting Terra",
@@ -3420,7 +3420,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Golden Scorpion",
-            "description": "While in party, player's Defense increases by ?%, and Electricity Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, player's Defense increases by ?%, and Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Death Penalty guide",
@@ -3538,7 +3538,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the Golden Forest",
-            "description": "Can be ridden. Can perform a double jump while mounted. While at a base, +? Deforest Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "Can be ridden. Can perform a double jump while mounted. While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Doctor",
@@ -3607,7 +3607,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Indestructible Fortress",
-            "description": "Can be ridden. While in party, player and Pal take ?% less damage from explosive attacks, and are immune to Stun. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage from explosive attacks, and are immune to . (Does not stack)"
         },
         {
             "name": "Daedream",
@@ -3827,7 +3827,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Static Electricity",
-            "description": "While in party, increases Attack of Electricity Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Boltmane",
@@ -3937,7 +3937,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Chillswitch",
-            "description": "While in party, enemies with Electrical shoot out static when attacked by the player, dealing damage equal to ?%of player attack damage to any enemies in range. (Does not stack)"
+            "description": "While in party, enemies with shoot out static when attacked by the player, dealing damage equal to ?%of player attack damage to any enemies in range. (Does not stack)"
         },
         {
             "name": "Grizzbolt",
@@ -4047,7 +4047,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Crackle Booster",
-            "description": "While at a base, +? Generateelectricity Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Snock",
@@ -4102,7 +4102,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Charging Shell",
-            "description": "While in party, infuses the player's attacks with Electrical ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Snock Lux",
@@ -4163,7 +4163,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Grounding Shell",
-            "description": "While in party, player and Pal take ?% less Water damage, and are immune to Wetness. (Does not stack)"
+            "description": "While in party, player and Pal take ?% less damage, and are immune to . (Does not stack)"
         },
         {
             "name": "Emote Tester",
@@ -4394,7 +4394,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Amicable Holy Dragon",
-            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, Dark Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Elphidran Aqua",
@@ -4455,7 +4455,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Amicable Water Dragon",
-            "description": "Can be ridden. While flying, Movement Speed is increased. While in party, player and Pal take ?% less Fire damage and are immune to Burn status. (Does not stack)"
+            "description": "Can be ridden. While flying, Movement Speed is increased. While in party, player and Pal take ?% less damage and are immune to status. (Does not stack)"
         },
         {
             "name": "Dazemu",
@@ -4924,7 +4924,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stormcloud",
-            "description": "Can be ridden. Can double jump while mounted. While in party, Water Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden. Can double jump while mounted. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Fire Cult Flame Thrower",
@@ -5059,7 +5059,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Red Hare",
-            "description": "Can be ridden. Changes the player's attack type to Fire with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Pyrin Noct",
@@ -5120,7 +5120,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Black Hare",
-            "description": "Can be ridden. Changes the player's attack type to Dark with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Rooby",
@@ -5175,7 +5175,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Tiny Spark",
-            "description": "While in party, increases Defense of Fire Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Arsox",
@@ -5291,7 +5291,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Fragrant Dragon",
-            "description": "Can be ridden. While in party, Dragon Pals' Defense increases by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals' Defense increases by ?%. (Does not stack)"
         },
         {
             "name": "Dinossom Lux",
@@ -5352,7 +5352,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Thunder Dragon",
-            "description": "Can be ridden. While in party, Electricity Pals' Defense increases by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals' Defense increases by ?%. (Does not stack)"
         },
         {
             "name": "Petallia",
@@ -5407,7 +5407,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Blessing of the Flower Spirit",
-            "description": "When activated, uses medicinal flowers to restore ?% of the player's Health. While at a base, +? Seeding Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "When activated, uses medicinal flowers to restore ?% of the player's Health. While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Petallia Ignis",
@@ -5468,7 +5468,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Passion of the Flower Spirit",
-            "description": "When activated, soothing blossoms restore the player's Health by ?%. While in party, player and Pal take ?% less Leaf damage, and are immune to Ivycling. (Does not stack)"
+            "description": "When activated, soothing blossoms restore the player's Health by ?%. While in party, player and Pal take ?% less damage, and are immune to . (Does not stack)"
         },
         {
             "name": "Dandilord",
@@ -5529,7 +5529,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Mist Stalwart",
-            "description": "When activated, infuses the player's attacks with Poison ?. While in party, grants the player and Pals immunity to Poison, and nullifies the effects of toxic gas in the World Tree area. (Does not stack)"
+            "description": "When activated, infuses the player's attacks with ?. While in party, grants the player and Pals immunity to , and nullifies the effects of toxic gas in the World Tree area. (Does not stack)"
         },
         {
             "name": "Flopie",
@@ -5639,7 +5639,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Fluffy Flutterer",
-            "description": "While in party, increases the capture rate of Pals afflicted with Freeze. (Does not stack)"
+            "description": "While in party, increases the capture rate of Pals afflicted with . (Does not stack)"
         },
         {
             "name": "Celaray",
@@ -5810,7 +5810,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Burning Future",
-            "description": "While in party, enemies with Burn explode when attacked by the player and take additional damage equal to ?% of player attack damage. (Does not stack)"
+            "description": "While in party, enemies with explode when attacked by the player and take additional damage equal to ?% of player attack damage. (Does not stack)"
         },
         {
             "name": "Wixen",
@@ -5865,7 +5865,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lord Fox",
-            "description": "When activated, Wixen lends its power to the player to change the player's attack type to Fire with ?% increased Attack."
+            "description": "When activated, Wixen lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Wixen Noct",
@@ -5926,7 +5926,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Black Fox Lord",
-            "description": "When activated, Wixen Noct lends its power to the player, changing their attack type to Dark with ?% increased Attack."
+            "description": "When activated, Wixen Noct lends its power to the player, changing their attack type to with ?% increased Attack."
         },
         {
             "name": "Zoe & Grizzbolt (Gym)",
@@ -6152,7 +6152,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Master of Darkness",
-            "description": "Can be ridden to travel on water. This Pal's Movement Speed increases by ?%Ghangler for each other Dark or Water Pal in party."
+            "description": "Can be ridden to travel on water. This Pal's Movement Speed increases by ?%Ghangler for each other or Pal in party."
         },
         {
             "name": "Ghangler Ignis",
@@ -6213,7 +6213,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Deep Sea Top Chef",
-            "description": "Can be ridden to travel on water. This Pal's Movement Speed increases by ?% for each other Fire or Water Pal in party."
+            "description": "Can be ridden to travel on water. This Pal's Movement Speed increases by ?% for each other or Pal in party."
         },
         {
             "name": "Maraith",
@@ -6384,7 +6384,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Liberated Pterosaur",
-            "description": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by ?% for each other Dragonor Dark Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by ?% for each other or Pal in party."
         },
         {
             "name": "Eidrolon Ignis",
@@ -6445,7 +6445,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Resentful Pterosaur",
-            "description": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by ?% for each other Dragonor Fire Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by ?% for each other or Pal in party."
         },
         {
             "name": "Nitemary",
@@ -6555,7 +6555,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Soul Binder",
-            "description": "While in party, increases Defense of Leaf Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Gildane",
@@ -6610,7 +6610,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sandstorm's Blessing",
-            "description": "Can be ridden. While mounted, changes the player's attack type to Earth with ?% increased Attack."
+            "description": "Can be ridden. While mounted, changes the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Goodwill Ambassador",
@@ -6797,7 +6797,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Forest Laser",
-            "description": "Can be ridden. When activated, Dualith fires a powerful Leaf laser from its right hand."
+            "description": "Can be ridden. When activated, Dualith fires a powerful laser from its right hand."
         },
         {
             "name": "Dualith Noct",
@@ -6858,7 +6858,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Corruption Laser",
-            "description": "Can be ridden. When activated, Dualith Noct fires a powerful Dark laser from its right hand."
+            "description": "Can be ridden. When activated, Dualith Noct fires a powerful laser from its right hand."
         },
         {
             "name": "Mammorest",
@@ -7035,7 +7035,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Mother Nature's Menace",
-            "description": "When activated, Elgrove lends its power to the player to change the player's attack type to Leaf with ?% increased Attack."
+            "description": "When activated, Elgrove lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Elgrove Cryst",
@@ -7090,7 +7090,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Father Winter's Threat",
-            "description": "While in party, grants the player the ability to Freeze enemies afflicted with Wetnessin one strike."
+            "description": "While in party, grants the player the ability to enemies afflicted with in one strike."
         },
         {
             "name": "Mossanda",
@@ -7436,7 +7436,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Death",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Dark with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Helzephyr Lux",
@@ -7497,7 +7497,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Thunder",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Electricity with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Nitewing",
@@ -7607,7 +7607,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Jolt Bomb",
-            "description": "When activated, equips Jolthog to the player to be thrown at an enemy, causing an Electricity explosion upon impact."
+            "description": "When activated, equips Jolthog to the player to be thrown at an enemy, causing an explosion upon impact."
         },
         {
             "name": "Jolthog Cryst",
@@ -7662,7 +7662,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Cold Bomb",
-            "description": "When activated, equips Jolthog Cryst to the player to be thrown at an enemy, causing an Ice explosion upon impact."
+            "description": "When activated, equips Jolthog Cryst to the player to be thrown at an enemy, causing an explosion upon impact."
         },
         {
             "name": "Help01",
@@ -7920,7 +7920,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Scorching Predator",
-            "description": "Can be ridden as a flying mount. While in party, Ice Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Faleris Aqua",
@@ -7975,7 +7975,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Tidal Predator",
-            "description": "Can be ridden as a flying mount. While in party, Fire Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Human",
@@ -8476,7 +8476,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Icy Maw",
-            "description": "While in party, reduces ingredient and meal weights by ?%. When paired with another Ice Pal, their Rot Speed also reduces by ?%. (Does not stack)"
+            "description": "While in party, reduces ingredient and meal weights by ?%. When paired with another Pal, their Rot Speed also reduces by ?%. (Does not stack)"
         },
         {
             "name": "Reindrix",
@@ -8586,7 +8586,7 @@
                 "MonsterFarm": 3
             },
             "partner_skill": "Aurora Guide",
-            "description": "While in party, increases Attack of Ice Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Frostallion",
@@ -8641,7 +8641,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Ice Steed",
-            "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Ice, infuses it with Freeze ?, and grants ?% increased Attack."
+            "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to , infuses it with ?, and grants ?% increased Attack."
         },
         {
             "name": "Frostallion Noct",
@@ -8696,7 +8696,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Black Steed",
-            "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Dark, infuses it with Darkness ?, and grants ?% increased Attack."
+            "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to , infuses it with ?, and grants ?% increased Attack."
         },
         {
             "name": "Whalaska",
@@ -8995,7 +8995,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Witch's Icy Veil",
-            "description": "When activated, Icelyn lends its power to the player to change the player's attack type to Ice with ?% increased Attack."
+            "description": "When activated, Icelyn lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Inspector",
@@ -9229,7 +9229,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stage Combat",
-            "description": "While in party, infuses the player's attacks with Burn ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Kelpsea",
@@ -9284,7 +9284,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Aqua Spout",
-            "description": "While in party, increases Attack of Water Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Kelpsea Ignis",
@@ -9339,7 +9339,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Lava Spout",
-            "description": "While in party, increases Attack of Fire Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Croajiro",
@@ -9455,7 +9455,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Shadow Stance",
-            "description": "When activated, Croajiro Noct channels its loyalty and puffs up its abdomen to store energy. Players can leap off its head for increased jump elevation. While in team, increases player and Pal damage to Dark weak points by ?%. (Does not stack)"
+            "description": "When activated, Croajiro Noct channels its loyalty and puffs up its abdomen to store energy. Players can leap off its head for increased jump elevation. While in team, increases player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Kingpaca",
@@ -9634,7 +9634,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dragon Kaiser",
-            "description": "Can be ridden. While in party, improves player and Pal Dragon damage to weak points by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Solmora",
@@ -9750,7 +9750,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Shocking Fish",
-            "description": "Can be ridden to travel on water. Changes the player's attack type to Electricity with ?% increased Attack while mounted. While in party, also makes it easier to fish up talented Pals. (Does not stack)"
+            "description": "Can be ridden to travel on water. Changes the player's attack type to with ?% increased Attack while mounted. While in party, also makes it easier to fish up talented Pals. (Does not stack)"
         },
         {
             "name": "Panthalus",
@@ -9860,7 +9860,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Swift Deity",
-            "description": "Can be ridden. While in party, improves player's and Pals' Electricity damage to weak points by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, improves player's and Pals' damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Univolt Cryst",
@@ -9868,7 +9868,7 @@
             "icon": "/icons/pals/T_Kirin_Ice_icon_normal.webp",
             "elements": {},
             "partner_skill": "Frigid Deity",
-            "description": "Can be ridden. Changes the player's attack type to Ice with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Foxparks",
@@ -10155,7 +10155,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Soil Improver",
-            "description": "While in party, increases Attack of Earth Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Dumud Gild",
@@ -10399,7 +10399,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Herbil Pulse",
-            "description": "While in party, Herbil uses its healing powers to restore ?%of the player's Hp2 when incapacitated."
+            "description": "While in party, Herbil uses its healing powers to restore ?%of the player's when incapacitated."
         },
         {
             "name": "Lullu",
@@ -10674,7 +10674,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Princess Gaze",
-            "description": "While in party, increases Attack of Leaf Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Leezpunk",
@@ -10900,7 +10900,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Glorious Mist",
-            "description": "Can be ridden. While in party, infuses the player's attacks with Wetness ?. (Does not stack)"
+            "description": "Can be ridden. While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Male Angler01 v01",
@@ -11507,7 +11507,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Hellflame Lion",
-            "description": "Can be ridden. While in party, Leaf Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Blazehowl Noct",
@@ -11568,7 +11568,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Darkflame Lion",
-            "description": "Can be ridden. While in party, Normal Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Mimog",
@@ -11757,7 +11757,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Chipper Chimp Gunfire",
-            "description": "When activated, Tanzee Ignis will mercilessly shoot a Fire assault rifle at nearby enemies for a limited time."
+            "description": "When activated, Tanzee Ignis will mercilessly shoot a assault rifle at nearby enemies for a limited time."
         },
         {
             "name": "Solenne",
@@ -11873,7 +11873,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Hidden Dark Energy",
-            "description": "While in party, increases Defense of Dark Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Selyne",
@@ -11934,7 +11934,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Celestial Darkness",
-            "description": "Can be ridden as a flying mount. Enhances Normal and Dark attacks by ?% while mounted."
+            "description": "Can be ridden as a flying mount. Enhances and attacks by ?% while mounted."
         },
         {
             "name": "Swee",
@@ -12099,7 +12099,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Spore Stalwart",
-            "description": "While in party, enemies with Ivycling explode when attacked by the player and take additional damage equal to ?% of player attack damage. (Does not stack) Grants immunity to the World Tree's explosive spores for both the player and their Pals."
+            "description": "While in party, enemies with explode when attacked by the player and take additional damage equal to ?% of player attack damage. (Does not stack) Grants immunity to the World Tree's explosive spores for both the player and their Pals."
         },
         {
             "name": "Gildra",
@@ -12331,7 +12331,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Charming Spore",
-            "description": "While at a base, +? Productmedicine Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Lunaris",
@@ -12807,7 +12807,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Light Dancer",
-            "description": "Can be ridden. Boosts Jump Power while mounted. This Pal's Movement Speed increases by ?% for each other Normal Pal in party."
+            "description": "Can be ridden. Boosts Jump Power while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Nox",
@@ -13121,7 +13121,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Cephalo-Princess",
-            "description": "While in party, increases Defense of Water Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Bakemi",
@@ -13176,7 +13176,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Grinning Death",
-            "description": "While in party, reduces the Attack of enemies with Poison by ?%. (Does not stack)"
+            "description": "While in party, reduces the Attack of enemies with by ?%. (Does not stack)"
         },
         {
             "name": "Pal Dealer",
@@ -13271,7 +13271,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Selfless Discipline",
-            "description": "This Pal's Attack and Defense increases by ?% for each other Leaf Pal in party."
+            "description": "This Pal's Attack and Defense increases by ?% for each other Pal in party."
         },
         {
             "name": "Pengullet",
@@ -13558,7 +13558,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Heart Drain",
-            "description": "While fighting together, grants the player and Lovander the life steal effect, which absorbs ?% of damage dealt to restore Hp."
+            "description": "While fighting together, grants the player and Lovander the life steal effect, which absorbs ?% of damage dealt to restore ."
         },
         {
             "name": "Ribbuny",
@@ -13613,7 +13613,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Happy-Go-Lucky Bunny",
-            "description": "While in party, increases Attack of Normal Pals by ?%. (Does not stack) While at a base, +? Handcraft Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Ribbuny Botan",
@@ -13668,7 +13668,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Ground 'n' Pound",
-            "description": "While in party, improves player and Pal damage to Leaf weak points by ?%. (Does not stack) Increases efficiency by ?% when working at a Weapon Workbench, Weapon Assembly Line, or other related facilities."
+            "description": "While in party, improves player and Pal damage to weak points by ?%. (Does not stack) Increases efficiency by ?% when working at a Weapon Workbench, Weapon Assembly Line, or other related facilities."
         },
         {
             "name": "Gumoss",
@@ -14123,7 +14123,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Masonry Archelon",
-            "description": "Can be ridden. While at a base, +? Mining Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "Can be ridden. While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Pharapace Primo",
@@ -14360,7 +14360,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lady of Lightning",
-            "description": "While in party, appears near the player. Follows up player attacks with Electricity bolts. These bolts will not reduce the target's Health below 1."
+            "description": "While in party, appears near the player. Follows up player attacks with bolts. These bolts will not reduce the target's Health below 1."
         },
         {
             "name": "Dazzi Noct",
@@ -14421,7 +14421,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lady of Dark Lightning",
-            "description": "While in party, appears near the player. Follows up player attacks with Dark bolts. These bolts will not reduce the target's Health below 1."
+            "description": "While in party, appears near the player. Follows up player attacks with bolts. These bolts will not reduce the target's Health below 1."
         },
         {
             "name": "Random Event Shop",
@@ -14484,7 +14484,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Flame Wing",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Fire with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Tropicaw",
@@ -14926,7 +14926,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Power Stone",
-            "description": "While in party, increases player and Pal damage to enemies afflicted with Muddy by ?%. (Does not stack)"
+            "description": "While in party, increases player and Pal damage to enemies afflicted with by ?%. (Does not stack)"
         },
         {
             "name": "Pierdon Cryst",
@@ -14981,7 +14981,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Power Crystal",
-            "description": "While in party, player and Pal take ?% less Dragon damage. (Does not stack)"
+            "description": "While in party, player and Pal take ?% less damage. (Does not stack)"
         },
         {
             "name": "Bushi",
@@ -15472,7 +15472,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Scorpion Sonar",
-            "description": "While in party, increases damage from Poison applied by the player and Pal by ?%. (Does not stack)"
+            "description": "While in party, increases damage from applied by the player and Pal by ?%. (Does not stack)"
         },
         {
             "name": "Prixter Lux",
@@ -15533,7 +15533,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Scorpion Longwave",
-            "description": "When activated, Prixter Lux lends its power to the player to change the player's attack type to Electricity with ?% increased Attack."
+            "description": "When activated, Prixter Lux lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Sekhmet",
@@ -15698,7 +15698,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sand Swimmer",
-            "description": "Can be ridden. While in party, infuses the player's attack with Muddy ?. (Does not stack)"
+            "description": "Can be ridden. While in party, infuses the player's attack with ?. (Does not stack)"
         },
         {
             "name": "Gobfin",
@@ -15973,7 +15973,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sky Dragon Affection",
-            "description": "Can be ridden as a flying mount. While in party, Dragon Pals' Attack increases by ?%. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, Pals' Attack increases by ?%. (Does not stack)"
         },
         {
             "name": "Quivern Botan",
@@ -16034,7 +16034,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Grass Dragon Affection",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Leaf with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Lapure",
@@ -16144,7 +16144,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sandy Beach Ball",
-            "description": "While in party, increases Defense of Earth Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Snugloo",
@@ -16254,7 +16254,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Snake's Sagacity",
-            "description": "While in party, infuses the player's attacks with Darkness ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Frostplume",
@@ -16317,7 +16317,7 @@
             "icon": "/icons/pals/T_SnowTigerBeastman_icon_normal.webp",
             "elements": {},
             "partner_skill": "Blizzard Crash",
-            "description": "Can be ridden. While mounted, delivers crushing blows with a hammer forged from Ice."
+            "description": "Can be ridden. While mounted, delivers crushing blows with a hammer forged from ."
         },
         {
             "name": "Beegarde",
@@ -16427,7 +16427,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Water Gun",
-            "description": "When activated, Finsider lends its power to the player to change the player's attack type to Water with ?% increased Attack."
+            "description": "When activated, Finsider lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Finsider Ignis",
@@ -16488,7 +16488,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Ember Chamber",
-            "description": "While in party, Finsider Ignis helps carry supplies, reducing the weight of weapons in your inventory by ?%. Also improves player and Pal Fire damage to weak points by ?%. (Does not stack)"
+            "description": "While in party, Finsider Ignis helps carry supplies, reducing the weight of weapons in your inventory by ?%. Also improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Bulldosu",
@@ -16543,7 +16543,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Yokozuna's Presence",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Electricity damage and are immune to Electrical. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to . (Does not stack)"
         },
         {
             "name": "Suzaku",
@@ -16598,7 +16598,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Flame",
-            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Fire Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Suzaku Aqua",
@@ -16653,7 +16653,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Water",
-            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Water Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Woolipop",
@@ -16708,7 +16708,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Candy Pop",
-            "description": "Sometimes drops when assigned to Ranch. While at a base, reduces Hunger depletion rate of Base Pals by ?%. (Does not stack)"
+            "description": "Sometimes drops when assigned to Ranch. While at a base, reduces depletion rate of Base Pals by ?%. (Does not stack)"
         },
         {
             "name": "Woolipop Terra",
@@ -16763,7 +16763,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Bitter Pop",
-            "description": "Sometimes drops when assigned to Ranch. While at a base, reduces Hunger depletion rate of Base Pals by ?%. (Does not stack)"
+            "description": "Sometimes drops when assigned to Ranch. While at a base, reduces depletion rate of Base Pals by ?%. (Does not stack)"
         },
         {
             "name": "Skutlass",
@@ -16771,7 +16771,7 @@
             "icon": "/icons/pals/T_SwordCutlassfish_icon_normal.webp",
             "elements": {},
             "partner_skill": "Severed Flesh for Bone",
-            "description": "When activated, Skutlass becomes the player's katana (Attack: ?). Skutlass will be incapacitated if it doesn't return to normal form soon enough. Will also be incapacitated if Iaigiri is activated."
+            "description": "When activated, Skutlass becomes the player's katana (: ?). Skutlass will be incapacitated if it doesn't return to normal form soon enough. Will also be incapacitated if Iaigiri is activated."
         },
         {
             "name": "Skutlass Ignis",
@@ -16779,7 +16779,7 @@
             "icon": "/icons/pals/T_SwordCutlassfish_Fire_icon_normal.webp",
             "elements": {},
             "partner_skill": "Seered Flesh for Bone",
-            "description": "When activated, Skutlass Ignis becomes the player's katana (Attack: ?). Skutlass Ignis will be incapacitated if it doesn't return to normal form soon enough. Will also be incapacitated if Iaigiri is activated."
+            "description": "When activated, Skutlass Ignis becomes the player's katana (: ?). Skutlass Ignis will be incapacitated if it doesn't return to normal form soon enough. Will also be incapacitated if Iaigiri is activated."
         },
         {
             "name": "Turtacle",
@@ -16895,7 +16895,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Shiny Hauler",
-            "description": "While in party, reduces weight of and by ?%. Also improves player and Pal Earth damage to weak points by ?%. (Does not stack)"
+            "description": "While in party, reduces weight of and by ?%. Also improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Test Assassin",
@@ -16958,7 +16958,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dark-Nester",
-            "description": "Can be ridden as a flying mount. While in party, increases player and Pal damage to enemies afflicted with Darkness by ?%. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, increases player and Pal damage to enemies afflicted with by ?%. (Does not stack)"
         },
         {
             "name": "Beakon",
@@ -17013,7 +17013,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Thunderous",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Electricity with ?% increased Attack while mounted. This Pal's Movement Speed increases by ?% for each other Electricity Pal in party."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Beakon Cryst",
@@ -17068,7 +17068,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Coldsnap",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Ice with ?% increased Attack while mounted. This Pal's Movement Speed increases by ?% for each other Ice Pal in party."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Rayhound",
@@ -17123,7 +17123,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lightning Shepherd",
-            "description": "Can be ridden. Can perform a double jump while mounted. This Pal's Movement Speed increases by ?% for each other Electricity Pal in party."
+            "description": "Can be ridden. Can perform a double jump while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Rayhound Cryst",
@@ -17178,7 +17178,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Snow Shepherd",
-            "description": "Can be ridden. Can perform a double jump while mounted. While in party, increases Ice Pals' Defense by ?%. (Does not stack)"
+            "description": "Can be ridden. Can perform a double jump while mounted. While in party, increases Pals' Defense by ?%. (Does not stack)"
         },
         {
             "name": "Orserk",
@@ -17410,7 +17410,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stormbringer Sea Dragon",
-            "description": "Can be ridden to travel on water. While in party, increases damage from Wetness applied by the player and Pal by ?%. (Does not stack)"
+            "description": "Can be ridden to travel on water. While in party, increases damage from applied by the player and Pal by ?%. (Does not stack)"
         },
         {
             "name": "Jormuntide Ignis",
@@ -17471,7 +17471,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stormbringer Lava Dragon",
-            "description": "Can be ridden. While in party, nullifies lava damage and increases damage from Burn applied by the player and Pal by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, nullifies lava damage and increases damage from applied by the player and Pal by ?%. (Does not stack)"
         },
         {
             "name": "Carnibora",
@@ -17526,7 +17526,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Entangling Tongue",
-            "description": "While in party, whenever the player dodges, Carniboracreates a whirlwind that deals damage to any enemy it touches (Leaf/ Power: ?). (Does not stack)"
+            "description": "While in party, whenever the player dodges, Carniboracreates a whirlwind that deals damage to any enemy it touches (/ Power: ?). (Does not stack)"
         },
         {
             "name": "Viking",
@@ -17653,7 +17653,7 @@
                 "MonsterFarm": 2
             },
             "partner_skill": "Purification of Gaia",
-            "description": "While in party, Earth Pals drop ?% more items when defeated. (Does not stack) Sometimes drops various seeds when assigned to Ranch."
+            "description": "While in party, Pals drop ?% more items when defeated. (Does not stack) Sometimes drops various seeds when assigned to Ranch."
         },
         {
             "name": "Visiting Merchant",
@@ -17815,7 +17815,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Magma Overload",
-            "description": "Can be ridden as a mount. This Pal's Attack increases by ?% for each other Fire or Earth Pal in party."
+            "description": "Can be ridden as a mount. This Pal's Attack increases by ?% for each other or Pal in party."
         },
         {
             "name": "Moldron Cryst",
@@ -17876,7 +17876,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Ice Overload",
-            "description": "Can be ridden. While in party, improves player and Pal Ice damage to weak points by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Weapons Dealer",
@@ -17945,7 +17945,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wriggling Weasel",
-            "description": "Can be ridden. Changes the player's attack type to Dragon with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Chillet Ignis",
@@ -18006,7 +18006,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sparkling Weasel",
-            "description": "Can be ridden. Changes the player's attack type to Fire with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Loupmoon",
@@ -18226,7 +18226,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Blessing of Purification",
-            "description": "Can be ridden. This Pal's Attack and Movement Speed increases by ?% for each other Normal Pal in party. When in party, recovers Health of the player and Party Pals by ?% per second. (Does not stack)"
+            "description": "Can be ridden. This Pal's Attack and Movement Speed increases by ?% for each other Pal in party. When in party, recovers Health of the player and Party Pals by ?% per second. (Does not stack)"
         },
         {
             "name": "Celesdir Noct",
@@ -18391,7 +18391,7 @@
                 "MonsterFarm": 4
             },
             "partner_skill": "Gilded Shroud",
-            "description": "While in party, increases Defense of Normal Pals by ?%. (Does not stack) Sometimes makes when assigned to Ranch."
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack) Sometimes makes when assigned to Ranch."
         },
         {
             "name": "Silvegis",
@@ -18501,7 +18501,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dragon Hunter",
-            "description": "While in party, Dragon Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Cryolinx Terra",
@@ -18831,7 +18831,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dark Knowledge",
-            "description": "While in party, increases Attack of Dark Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Cremis",
@@ -18886,7 +18886,7 @@
                 "MonsterFarm": 2
             },
             "partner_skill": "Fluffy Wool",
-            "description": "While in party, increases Attack of Normal Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Astralym",
@@ -19044,7 +19044,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Demonic Sight",
-            "description": "While in party, increases Attack of Dark Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Green Slime",
@@ -19429,7 +19429,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Enchant",
-            "description": "While in party, Dark Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Cave Bat",
@@ -19634,7 +19634,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the Snowy Mountain",
-            "description": "Can be ridden. While at a base, +? Transport Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "Can be ridden. While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Wumpo Botan",
@@ -19689,7 +19689,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the South",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Earth damage and are immune to Muddy status. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to status. (Does not stack)"
         },
         {
             "name": "Kitsun Noct",
@@ -19964,7 +19964,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wolf of the Sun",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Ice damage and are immune to Freeze status. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to status. (Does not stack)"
         },
         {
             "name": "Kitsun Noct (Boss)",
@@ -20019,7 +20019,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Gloomhowl",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Dark damage and are immune to Darkness. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to . (Does not stack)"
         },
         {
             "name": "Armor Woodlouse (Boss)",
@@ -20813,7 +20813,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Modified DNA",
-            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. Enhances Dark attacks by ?% while mounted."
+            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. Enhances attacks by ?% while mounted."
         },
         {
             "name": "Shadowbeak (Boss)",
@@ -21045,7 +21045,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dig, Smokie Cryst, Dig!",
-            "description": "While at a base, +? Cool Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Azurobe (Boss)",
@@ -21106,7 +21106,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Waterwing Dance",
-            "description": "Can be ridden to travel on water. Changes the player's attack type to Water with ?% increased Attack while mounted."
+            "description": "Can be ridden to travel on water. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Azurobe Cryst (Boss)",
@@ -21167,7 +21167,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Icewing Dance",
-            "description": "Can be ridden to travel on water. Changes the player's attack type to Ice with ?% increased Attack while mounted."
+            "description": "Can be ridden to travel on water. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Fuack (Boss)",
@@ -21344,7 +21344,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Azure Sovereign",
-            "description": "Can be ridden as a flying mount. This Pal's Attack increases by ?% for each other Dragon Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Attack increases by ?% for each other Pal in party."
         },
         {
             "name": "Shaolong (Boss)",
@@ -21741,7 +21741,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Please Hug Me",
-            "description": "While in party, increases player and Pal damage to enemies afflicted with Ivycling by ?%. (Does not stack)"
+            "description": "While in party, increases player and Pal damage to enemies afflicted with by ?%. (Does not stack)"
         },
         {
             "name": "Needoll Noct (Boss)",
@@ -21802,7 +21802,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Hug You So Much",
-            "description": "While in party, infuses the player's attacks with Ivycling ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Sootseer (Boss)",
@@ -21863,7 +21863,7 @@
                 "MonsterFarm": 2
             },
             "partner_skill": "Grave Robber",
-            "description": "While in party, player and Pal take ?% less Normal damage. (Does not stack) Sometimes digs up when assigned to Ranch."
+            "description": "While in party, player and Pal take ?% less damage. (Does not stack) Sometimes digs up when assigned to Ranch."
         },
         {
             "name": "Candle Witch (Boss)",
@@ -21985,7 +21985,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Brave Sailor",
-            "description": "While in party, Fire Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Penking Lux (Boss)",
@@ -22046,7 +22046,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Unyielding Storm Commander",
-            "description": "While in party, improves player and Pal Water damage to weak points by ?%. (Does not stack)"
+            "description": "While in party, improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Lifmunk (Boss)",
@@ -22211,7 +22211,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Mystical Black Magic",
-            "description": "While in party, Normal Pals drop ?% more items when defeated. Also has a ?% chance to prevent Pal Sphere consumption when thrown. (Does not stack)"
+            "description": "While in party, Pals drop ?% more items when defeated. Also has a ?% chance to prevent Pal Sphere consumption when thrown. (Does not stack)"
         },
         {
             "name": "Katress Ignis (Boss)",
@@ -22272,7 +22272,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Blazing Black Magic",
-            "description": "While at a base, +? Emitflame Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Felbat (Boss)",
@@ -22327,7 +22327,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Life Steal",
-            "description": "While fighting together, grants the player and Felbat the life steal effect which absorbs ?% of damage dealt to restore Hp."
+            "description": "While fighting together, grants the player and Felbat the life steal effect which absorbs ?% of damage dealt to restore ."
         },
         {
             "name": "Chikipi (Boss)",
@@ -22437,7 +22437,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Magical Twin Powers",
-            "description": "While at a base, +? Watering Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Clovee (Boss)",
@@ -22498,7 +22498,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Happy Clover",
-            "description": "While at a base, raises Collection Work Suitability Level by+? for all other Base Pals. (Does not stack)"
+            "description": "While at a base, raises Work Suitability Level by+? for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Dupin (Boss)",
@@ -22553,7 +22553,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Trick Show Fluffle",
-            "description": "While in party, Dupin produces a shockwave when the player's Health falls below 50% (Fire / Power: ?). Also boosts the player's Attack by ?% at the same time. (Does not stack)"
+            "description": "While in party, Dupin produces a shockwave when the player's Health falls below 50% ( / Power: ?). Also boosts the player's Attack by ?% at the same time. (Does not stack)"
         },
         {
             "name": "Tocotoco (Boss)",
@@ -22718,7 +22718,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Mysterious Scales",
-            "description": "When activated, attacks targeted enemy with . While at a base, +? Monsterfarm Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "When activated, attacks targeted enemy with . While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Vixy (Boss)",
@@ -22938,7 +22938,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Fuzzy Fairy",
-            "description": "While in party, increases the capture rate of Pals afflicted with Ivycling. (Does not stack)"
+            "description": "While in party, increases the capture rate of Pals afflicted with . (Does not stack)"
         },
         {
             "name": "Xenovader (Boss)",
@@ -23109,7 +23109,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Phantasmal Arcana",
-            "description": "While in party, enemies with Burn set their surroundings on fire when attacked by the player. Other enemies that touch these flames take continuous damage equal to ?% of player attack damage. (Does not stack)"
+            "description": "While in party, enemies with set their surroundings on fire when attacked by the player. Other enemies that touch these flames take continuous damage equal to ?% of player attack damage. (Does not stack)"
         },
         {
             "name": "Xenolord (Boss)",
@@ -23286,7 +23286,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Steel Scorpion",
-            "description": "While in party, player's Defense increases by ?%, and Electricity Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, player's Defense increases by ?%, and Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Menasting Terra (Boss)",
@@ -23341,7 +23341,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Golden Scorpion",
-            "description": "While in party, player's Defense increases by ?%, and Electricity Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, player's Defense increases by ?%, and Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Eikthyrdeer (Boss)",
@@ -23451,7 +23451,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the Golden Forest",
-            "description": "Can be ridden. Can perform a double jump while mounted. While at a base, +? Deforest Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "Can be ridden. Can perform a double jump while mounted. While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Aegidron (Boss)",
@@ -23512,7 +23512,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Indestructible Fortress",
-            "description": "Can be ridden. While in party, player and Pal take ?% less damage from explosive attacks, and are immune to Stun. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage from explosive attacks, and are immune to . (Does not stack)"
         },
         {
             "name": "Daedream (Boss)",
@@ -23732,7 +23732,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Static Electricity",
-            "description": "While in party, increases Attack of Electricity Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Boltmane (Boss)",
@@ -23842,7 +23842,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Chillswitch",
-            "description": "While in party, enemies with Electrical shoot out static when attacked by the player, dealing damage equal to ?%of player attack damage to any enemies in range. (Does not stack)"
+            "description": "While in party, enemies with shoot out static when attacked by the player, dealing damage equal to ?%of player attack damage to any enemies in range. (Does not stack)"
         },
         {
             "name": "Grizzbolt (Boss)",
@@ -24007,7 +24007,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Crackle Booster",
-            "description": "While at a base, +? Generateelectricity Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Snock (Boss)",
@@ -24062,7 +24062,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Charging Shell",
-            "description": "While in party, infuses the player's attacks with Electrical ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Elec Snail Fire (Boss)",
@@ -24178,7 +24178,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Grounding Shell",
-            "description": "While in party, player and Pal take ?% less Water damage, and are immune to Wetness. (Does not stack)"
+            "description": "While in party, player and Pal take ?% less damage, and are immune to . (Does not stack)"
         },
         {
             "name": "Elphidran (Boss)",
@@ -24233,7 +24233,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Amicable Holy Dragon",
-            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, Dark Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Elphidran Aqua (Boss)",
@@ -24294,7 +24294,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Amicable Water Dragon",
-            "description": "Can be ridden. While flying, Movement Speed is increased. While in party, player and Pal take ?% less Fire damage and are immune to Burn status. (Does not stack)"
+            "description": "Can be ridden. While flying, Movement Speed is increased. While in party, player and Pal take ?% less damage and are immune to status. (Does not stack)"
         },
         {
             "name": "Dazemu (Boss)",
@@ -24459,7 +24459,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stormcloud",
-            "description": "Can be ridden. Can double jump while mounted. While in party, Water Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden. Can double jump while mounted. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Pyrin (Boss)",
@@ -24514,7 +24514,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Red Hare",
-            "description": "Can be ridden. Changes the player's attack type to Fire with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Pyrin Noct (Boss)",
@@ -24575,7 +24575,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Black Hare",
-            "description": "Can be ridden. Changes the player's attack type to Dark with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Rooby (Boss)",
@@ -24630,7 +24630,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Tiny Spark",
-            "description": "While in party, increases Defense of Fire Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Arsox (Boss)",
@@ -24746,7 +24746,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Fragrant Dragon",
-            "description": "Can be ridden. While in party, Dragon Pals' Defense increases by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals' Defense increases by ?%. (Does not stack)"
         },
         {
             "name": "Dinossom Lux (Boss)",
@@ -24807,7 +24807,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Thunder Dragon",
-            "description": "Can be ridden. While in party, Electricity Pals' Defense increases by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals' Defense increases by ?%. (Does not stack)"
         },
         {
             "name": "Petallia (Boss)",
@@ -24862,7 +24862,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Blessing of the Flower Spirit",
-            "description": "When activated, uses medicinal flowers to restore ?% of the player's Health. While at a base, +? Seeding Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "When activated, uses medicinal flowers to restore ?% of the player's Health. While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Petallia Ignis (Boss)",
@@ -24923,7 +24923,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Passion of the Flower Spirit",
-            "description": "When activated, soothing blossoms restore the player's Health by ?%. While in party, player and Pal take ?% less Leaf damage, and are immune to Ivycling. (Does not stack)"
+            "description": "When activated, soothing blossoms restore the player's Health by ?%. While in party, player and Pal take ?% less damage, and are immune to . (Does not stack)"
         },
         {
             "name": "Dandilord (Boss)",
@@ -24984,7 +24984,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Mist Stalwart",
-            "description": "When activated, infuses the player's attacks with Poison ?. While in party, grants the player and Pals immunity to Poison, and nullifies the effects of toxic gas in the World Tree area. (Does not stack)"
+            "description": "When activated, infuses the player's attacks with ?. While in party, grants the player and Pals immunity to , and nullifies the effects of toxic gas in the World Tree area. (Does not stack)"
         },
         {
             "name": "Flopie (Boss)",
@@ -25094,7 +25094,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Fluffy Flutterer",
-            "description": "While in party, increases the capture rate of Pals afflicted with Freeze. (Does not stack)"
+            "description": "While in party, increases the capture rate of Pals afflicted with . (Does not stack)"
         },
         {
             "name": "Celaray (Boss)",
@@ -25265,7 +25265,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Burning Future",
-            "description": "While in party, enemies with Burn explode when attacked by the player and take additional damage equal to ?% of player attack damage. (Does not stack)"
+            "description": "While in party, enemies with explode when attacked by the player and take additional damage equal to ?% of player attack damage. (Does not stack)"
         },
         {
             "name": "Wixen (Boss)",
@@ -25320,7 +25320,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lord Fox",
-            "description": "When activated, Wixen lends its power to the player to change the player's attack type to Fire with ?% increased Attack."
+            "description": "When activated, Wixen lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Wixen Noct (Boss)",
@@ -25381,7 +25381,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Black Fox Lord",
-            "description": "When activated, Wixen Noct lends its power to the player, changing their attack type to Dark with ?% increased Attack."
+            "description": "When activated, Wixen Noct lends its power to the player, changing their attack type to with ?% increased Attack."
         },
         {
             "name": "Frozen Bear (Boss)",
@@ -25607,7 +25607,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Master of Darkness",
-            "description": "Can be ridden to travel on water. This Pal's Movement Speed increases by ?%Ghangler for each other Dark or Water Pal in party."
+            "description": "Can be ridden to travel on water. This Pal's Movement Speed increases by ?%Ghangler for each other or Pal in party."
         },
         {
             "name": "Ghangler Ignis (Boss)",
@@ -25668,7 +25668,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Deep Sea Top Chef",
-            "description": "Can be ridden to travel on water. This Pal's Movement Speed increases by ?% for each other Fire or Water Pal in party."
+            "description": "Can be ridden to travel on water. This Pal's Movement Speed increases by ?% for each other or Pal in party."
         },
         {
             "name": "Maraith (Boss)",
@@ -25839,7 +25839,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Liberated Pterosaur",
-            "description": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by ?% for each other Dragonor Dark Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by ?% for each other or Pal in party."
         },
         {
             "name": "Eidrolon Ignis (Boss)",
@@ -25900,7 +25900,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Resentful Pterosaur",
-            "description": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by ?% for each other Dragonor Fire Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by ?% for each other or Pal in party."
         },
         {
             "name": "Nitemary (Boss)",
@@ -26010,7 +26010,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Soul Binder",
-            "description": "While in party, increases Defense of Leaf Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Gildane (Boss)",
@@ -26065,7 +26065,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sandstorm's Blessing",
-            "description": "Can be ridden. While mounted, changes the player's attack type to Earth with ?% increased Attack."
+            "description": "Can be ridden. While mounted, changes the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Gorirat (Boss)",
@@ -26291,7 +26291,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Forest Laser",
-            "description": "Can be ridden. When activated, Dualith fires a powerful Leaf laser from its right hand."
+            "description": "Can be ridden. When activated, Dualith fires a powerful laser from its right hand."
         },
         {
             "name": "Dualith Noct (Boss)",
@@ -26352,7 +26352,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Corruption Laser",
-            "description": "Can be ridden. When activated, Dualith Noct fires a powerful Dark laser from its right hand."
+            "description": "Can be ridden. When activated, Dualith Noct fires a powerful laser from its right hand."
         },
         {
             "name": "Mammorest (Boss)",
@@ -26529,7 +26529,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Mother Nature's Menace",
-            "description": "When activated, Elgrove lends its power to the player to change the player's attack type to Leaf with ?% increased Attack."
+            "description": "When activated, Elgrove lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Elgrove Cryst (Boss)",
@@ -26584,7 +26584,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Father Winter's Threat",
-            "description": "While in party, grants the player the ability to Freeze enemies afflicted with Wetnessin one strike."
+            "description": "While in party, grants the player the ability to enemies afflicted with in one strike."
         },
         {
             "name": "Mossanda (Boss)",
@@ -26914,7 +26914,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Death",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Dark with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Helzephyr Lux (Boss)",
@@ -26975,7 +26975,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Thunder",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Electricity with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Nitewing (Boss)",
@@ -27085,7 +27085,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Jolt Bomb",
-            "description": "When activated, equips Jolthog to the player to be thrown at an enemy, causing an Electricity explosion upon impact."
+            "description": "When activated, equips Jolthog to the player to be thrown at an enemy, causing an explosion upon impact."
         },
         {
             "name": "Jolthog Cryst (Boss)",
@@ -27140,7 +27140,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Cold Bomb",
-            "description": "When activated, equips Jolthog Cryst to the player to be thrown at an enemy, causing an Ice explosion upon impact."
+            "description": "When activated, equips Jolthog Cryst to the player to be thrown at an enemy, causing an explosion upon impact."
         },
         {
             "name": "Warsect (Boss)",
@@ -27366,7 +27366,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Scorching Predator",
-            "description": "Can be ridden as a flying mount. While in party, Ice Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Faleris (Boss)",
@@ -27476,7 +27476,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Tidal Predator",
-            "description": "Can be ridden as a flying mount. While in party, Fire Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Munchill (Boss)",
@@ -27537,7 +27537,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Icy Maw",
-            "description": "While in party, reduces ingredient and meal weights by ?%. When paired with another Ice Pal, their Rot Speed also reduces by ?%. (Does not stack)"
+            "description": "While in party, reduces ingredient and meal weights by ?%. When paired with another Pal, their Rot Speed also reduces by ?%. (Does not stack)"
         },
         {
             "name": "Reindrix (Boss)",
@@ -27647,7 +27647,7 @@
                 "MonsterFarm": 3
             },
             "partner_skill": "Aurora Guide",
-            "description": "While in party, increases Attack of Ice Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Frostallion (Boss)",
@@ -27702,7 +27702,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Ice Steed",
-            "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Ice, infuses it with Freeze ?, and grants ?% increased Attack."
+            "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to , infuses it with ?, and grants ?% increased Attack."
         },
         {
             "name": "Frostallion Noct (Boss)",
@@ -27757,7 +27757,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Black Steed",
-            "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Dark, infuses it with Darkness ?, and grants ?% increased Attack."
+            "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to , infuses it with ?, and grants ?% increased Attack."
         },
         {
             "name": "Whalaska (Boss)",
@@ -28117,7 +28117,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Witch's Icy Veil",
-            "description": "When activated, Icelyn lends its power to the player to change the player's attack type to Ice with ?% increased Attack."
+            "description": "When activated, Icelyn lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Jelliette (Boss)",
@@ -28343,7 +28343,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stage Combat",
-            "description": "While in party, infuses the player's attacks with Burn ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Kelpsea (Boss)",
@@ -28398,7 +28398,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Aqua Spout",
-            "description": "While in party, increases Attack of Water Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Kelpsea Ignis (Boss)",
@@ -28453,7 +28453,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Lava Spout",
-            "description": "While in party, increases Attack of Fire Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Croajiro (Boss)",
@@ -28569,7 +28569,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Shadow Stance",
-            "description": "When activated, Croajiro Noct channels its loyalty and puffs up its abdomen to store energy. Players can leap off its head for increased jump elevation. While in team, increases player and Pal damage to Dark weak points by ?%. (Does not stack)"
+            "description": "When activated, Croajiro Noct channels its loyalty and puffs up its abdomen to store energy. Players can leap off its head for increased jump elevation. While in team, increases player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Kingpaca (Boss)",
@@ -28795,7 +28795,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dragon Kaiser",
-            "description": "Can be ridden. While in party, improves player and Pal Dragon damage to weak points by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "King Crab (Boss)",
@@ -28966,7 +28966,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Shocking Fish",
-            "description": "Can be ridden to travel on water. Changes the player's attack type to Electricity with ?% increased Attack while mounted. While in party, also makes it easier to fish up talented Pals. (Does not stack)"
+            "description": "Can be ridden to travel on water. Changes the player's attack type to with ?% increased Attack while mounted. While in party, also makes it easier to fish up talented Pals. (Does not stack)"
         },
         {
             "name": "Panthalus (Boss)",
@@ -29131,7 +29131,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Swift Deity",
-            "description": "Can be ridden. While in party, improves player's and Pals' Electricity damage to weak points by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, improves player's and Pals' damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Univolt Cryst (Boss)",
@@ -29186,7 +29186,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Frigid Deity",
-            "description": "Can be ridden. Changes the player's attack type to Ice with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Foxparks (Boss)",
@@ -29473,7 +29473,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Soil Improver",
-            "description": "While in party, increases Attack of Earth Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Dumud Gild (Boss)",
@@ -29772,7 +29772,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Herbil Pulse",
-            "description": "While in party, Herbil uses its healing powers to restore ?%of the player's Hp2 when incapacitated."
+            "description": "While in party, Herbil uses its healing powers to restore ?%of the player's when incapacitated."
         },
         {
             "name": "Lullu (Boss)",
@@ -30102,7 +30102,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Princess Gaze",
-            "description": "While in party, increases Attack of Leaf Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Leezpunk (Boss)",
@@ -30328,7 +30328,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Glorious Mist",
-            "description": "Can be ridden. While in party, infuses the player's attacks with Wetness ?. (Does not stack)"
+            "description": "Can be ridden. While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Blazehowl (Boss)",
@@ -30383,7 +30383,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Hellflame Lion",
-            "description": "Can be ridden. While in party, Leaf Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Blazehowl Noct (Boss)",
@@ -30444,7 +30444,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Darkflame Lion",
-            "description": "Can be ridden. While in party, Normal Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Medjed Bird (Boss)",
@@ -30725,7 +30725,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Chipper Chimp Gunfire",
-            "description": "When activated, Tanzee Ignis will mercilessly shoot a Fire assault rifle at nearby enemies for a limited time."
+            "description": "When activated, Tanzee Ignis will mercilessly shoot a assault rifle at nearby enemies for a limited time."
         },
         {
             "name": "Monkey Ice (Boss)",
@@ -30957,7 +30957,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Hidden Dark Energy",
-            "description": "While in party, increases Defense of Dark Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Selyne (Boss)",
@@ -31018,7 +31018,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Celestial Darkness",
-            "description": "Can be ridden as a flying mount. Enhances Normal and Dark attacks by ?% while mounted."
+            "description": "Can be ridden as a flying mount. Enhances and attacks by ?% while mounted."
         },
         {
             "name": "Selyne (Boss)",
@@ -31244,7 +31244,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Spore Stalwart",
-            "description": "While in party, enemies with Ivycling explode when attacked by the player and take additional damage equal to ?% of player attack damage. (Does not stack) Grants immunity to the World Tree's explosive spores for both the player and their Pals."
+            "description": "While in party, enemies with explode when attacked by the player and take additional damage equal to ?% of player attack damage. (Does not stack) Grants immunity to the World Tree's explosive spores for both the player and their Pals."
         },
         {
             "name": "Gildra (Boss)",
@@ -31476,7 +31476,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Charming Spore",
-            "description": "While at a base, +? Productmedicine Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Lunaris (Boss)",
@@ -31928,7 +31928,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Light Dancer",
-            "description": "Can be ridden. Boosts Jump Power while mounted. This Pal's Movement Speed increases by ?% for each other Normal Pal in party."
+            "description": "Can be ridden. Boosts Jump Power while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Nox (Boss)",
@@ -32215,7 +32215,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Cephalo-Princess",
-            "description": "While in party, increases Defense of Water Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Bakemi (Boss)",
@@ -32270,7 +32270,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Grinning Death",
-            "description": "While in party, reduces the Attack of enemies with Poison by ?%. (Does not stack)"
+            "description": "While in party, reduces the Attack of enemies with by ?%. (Does not stack)"
         },
         {
             "name": "Leafan (Boss)",
@@ -32325,7 +32325,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Selfless Discipline",
-            "description": "This Pal's Attack and Defense increases by ?% for each other Leaf Pal in party."
+            "description": "This Pal's Attack and Defense increases by ?% for each other Pal in party."
         },
         {
             "name": "Pengullet (Boss)",
@@ -32612,7 +32612,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Heart Drain",
-            "description": "While fighting together, grants the player and Lovander the life steal effect, which absorbs ?% of damage dealt to restore Hp."
+            "description": "While fighting together, grants the player and Lovander the life steal effect, which absorbs ?% of damage dealt to restore ."
         },
         {
             "name": "Ribbuny (Boss)",
@@ -32667,7 +32667,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Happy-Go-Lucky Bunny",
-            "description": "While in party, increases Attack of Normal Pals by ?%. (Does not stack) While at a base, +? Handcraft Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Ribbuny Botan (Boss)",
@@ -32722,7 +32722,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Ground 'n' Pound",
-            "description": "While in party, improves player and Pal damage to Leaf weak points by ?%. (Does not stack) Increases efficiency by ?% when working at a Weapon Workbench, Weapon Assembly Line, or other related facilities."
+            "description": "While in party, improves player and Pal damage to weak points by ?%. (Does not stack) Increases efficiency by ?% when working at a Weapon Workbench, Weapon Assembly Line, or other related facilities."
         },
         {
             "name": "Gumoss (Boss)",
@@ -33070,7 +33070,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Masonry Archelon",
-            "description": "Can be ridden. While at a base, +? Mining Work Suitability Level by for all other Base Pals. (Does not stack)"
+            "description": "Can be ridden. While at a base, +? Work Suitability Level by for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Pharapace Primo (Boss)",
@@ -33235,7 +33235,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lady of Lightning",
-            "description": "While in party, appears near the player. Follows up player attacks with Electricity bolts. These bolts will not reduce the target's Health below 1."
+            "description": "While in party, appears near the player. Follows up player attacks with bolts. These bolts will not reduce the target's Health below 1."
         },
         {
             "name": "Dazzi Noct (Boss)",
@@ -33296,7 +33296,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lady of Dark Lightning",
-            "description": "While in party, appears near the player. Follows up player attacks with Dark bolts. These bolts will not reduce the target's Health below 1."
+            "description": "While in party, appears near the player. Follows up player attacks with bolts. These bolts will not reduce the target's Health below 1."
         },
         {
             "name": "Ragnahawk (Boss)",
@@ -33351,7 +33351,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Flame Wing",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Fire with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Tropicaw (Boss)",
@@ -33577,7 +33577,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Power Stone",
-            "description": "While in party, increases player and Pal damage to enemies afflicted with Muddy by ?%. (Does not stack)"
+            "description": "While in party, increases player and Pal damage to enemies afflicted with by ?%. (Does not stack)"
         },
         {
             "name": "Pierdon Cryst (Boss)",
@@ -33632,7 +33632,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Power Crystal",
-            "description": "While in party, player and Pal take ?% less Dragon damage. (Does not stack)"
+            "description": "While in party, player and Pal take ?% less damage. (Does not stack)"
         },
         {
             "name": "Rock Cheetah (Boss)",
@@ -34090,7 +34090,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Scorpion Sonar",
-            "description": "While in party, increases damage from Poison applied by the player and Pal by ?%. (Does not stack)"
+            "description": "While in party, increases damage from applied by the player and Pal by ?%. (Does not stack)"
         },
         {
             "name": "Prixter Lux (Boss)",
@@ -34151,7 +34151,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Scorpion Longwave",
-            "description": "When activated, Prixter Lux lends its power to the player to change the player's attack type to Electricity with ?% increased Attack."
+            "description": "When activated, Prixter Lux lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Sekhmet (Boss)",
@@ -34316,7 +34316,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sand Swimmer",
-            "description": "Can be ridden. While in party, infuses the player's attack with Muddy ?. (Does not stack)"
+            "description": "Can be ridden. While in party, infuses the player's attack with ?. (Does not stack)"
         },
         {
             "name": "Gobfin (Boss)",
@@ -34591,7 +34591,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sky Dragon Affection",
-            "description": "Can be ridden as a flying mount. While in party, Dragon Pals' Attack increases by ?%. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, Pals' Attack increases by ?%. (Does not stack)"
         },
         {
             "name": "Quivern Botan (Boss)",
@@ -34652,7 +34652,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Grass Dragon Affection",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Leaf with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Lapure (Boss)",
@@ -34762,7 +34762,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sandy Beach Ball",
-            "description": "While in party, increases Defense of Earth Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Snugloo (Boss)",
@@ -34872,7 +34872,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Snake's Sagacity",
-            "description": "While in party, infuses the player's attacks with Darkness ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Snake Queen (Boss)",
@@ -35037,7 +35037,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Blizzard Crash",
-            "description": "Can be ridden. While mounted, delivers crushing blows with a hammer forged from Ice."
+            "description": "Can be ridden. While mounted, delivers crushing blows with a hammer forged from ."
         },
         {
             "name": "Bastigor (Boss)",
@@ -35257,7 +35257,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Water Gun",
-            "description": "When activated, Finsider lends its power to the player to change the player's attack type to Water with ?% increased Attack."
+            "description": "When activated, Finsider lends its power to the player to change the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Finsider Ignis (Boss)",
@@ -35318,7 +35318,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Ember Chamber",
-            "description": "While in party, Finsider Ignis helps carry supplies, reducing the weight of weapons in your inventory by ?%. Also improves player and Pal Fire damage to weak points by ?%. (Does not stack)"
+            "description": "While in party, Finsider Ignis helps carry supplies, reducing the weight of weapons in your inventory by ?%. Also improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Bulldosu (Boss)",
@@ -35373,7 +35373,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Yokozuna's Presence",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Electricity damage and are immune to Electrical. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to . (Does not stack)"
         },
         {
             "name": "Suzaku (Boss)",
@@ -35428,7 +35428,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Flame",
-            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Fire Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Suzaku Aqua (Boss)",
@@ -35483,7 +35483,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Water",
-            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Water Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Woolipop (Boss)",
@@ -35538,7 +35538,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Candy Pop",
-            "description": "Sometimes drops when assigned to Ranch. While at a base, reduces Hunger depletion rate of Base Pals by ?%. (Does not stack)"
+            "description": "Sometimes drops when assigned to Ranch. While at a base, reduces depletion rate of Base Pals by ?%. (Does not stack)"
         },
         {
             "name": "Woolipop Terra (Boss)",
@@ -35593,7 +35593,7 @@
                 "MonsterFarm": 1
             },
             "partner_skill": "Bitter Pop",
-            "description": "Sometimes drops when assigned to Ranch. While at a base, reduces Hunger depletion rate of Base Pals by ?%. (Does not stack)"
+            "description": "Sometimes drops when assigned to Ranch. While at a base, reduces depletion rate of Base Pals by ?%. (Does not stack)"
         },
         {
             "name": "Skutlass (Boss)",
@@ -35648,7 +35648,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Severed Flesh for Bone",
-            "description": "When activated, Skutlass becomes the player's katana (Attack: ?). Skutlass will be incapacitated if it doesn't return to normal form soon enough. Will also be incapacitated if Iaigiri is activated."
+            "description": "When activated, Skutlass becomes the player's katana (: ?). Skutlass will be incapacitated if it doesn't return to normal form soon enough. Will also be incapacitated if Iaigiri is activated."
         },
         {
             "name": "Skutlass Ignis (Boss)",
@@ -35709,7 +35709,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Seered Flesh for Bone",
-            "description": "When activated, Skutlass Ignis becomes the player's katana (Attack: ?). Skutlass Ignis will be incapacitated if it doesn't return to normal form soon enough. Will also be incapacitated if Iaigiri is activated."
+            "description": "When activated, Skutlass Ignis becomes the player's katana (: ?). Skutlass Ignis will be incapacitated if it doesn't return to normal form soon enough. Will also be incapacitated if Iaigiri is activated."
         },
         {
             "name": "Turtacle (Boss)",
@@ -35825,7 +35825,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Shiny Hauler",
-            "description": "While in party, reduces weight of and by ?%. Also improves player and Pal Earth damage to weak points by ?%. (Does not stack)"
+            "description": "While in party, reduces weight of and by ?%. Also improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Roujay (Boss)",
@@ -35880,7 +35880,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dark-Nester",
-            "description": "Can be ridden as a flying mount. While in party, increases player and Pal damage to enemies afflicted with Darkness by ?%. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, increases player and Pal damage to enemies afflicted with by ?%. (Does not stack)"
         },
         {
             "name": "Beakon (Boss)",
@@ -35935,7 +35935,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Thunderous",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Electricity with ?% increased Attack while mounted. This Pal's Movement Speed increases by ?% for each other Electricity Pal in party."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Beakon Cryst (Boss)",
@@ -35990,7 +35990,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Coldsnap",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Ice with ?% increased Attack while mounted. This Pal's Movement Speed increases by ?% for each other Ice Pal in party."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Rayhound (Boss)",
@@ -36045,7 +36045,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lightning Shepherd",
-            "description": "Can be ridden. Can perform a double jump while mounted. This Pal's Movement Speed increases by ?% for each other Electricity Pal in party."
+            "description": "Can be ridden. Can perform a double jump while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Rayhound Cryst (Boss)",
@@ -36100,7 +36100,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Snow Shepherd",
-            "description": "Can be ridden. Can perform a double jump while mounted. While in party, increases Ice Pals' Defense by ?%. (Does not stack)"
+            "description": "Can be ridden. Can perform a double jump while mounted. While in party, increases Pals' Defense by ?%. (Does not stack)"
         },
         {
             "name": "Orserk (Boss)",
@@ -36393,7 +36393,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stormbringer Sea Dragon",
-            "description": "Can be ridden to travel on water. While in party, increases damage from Wetness applied by the player and Pal by ?%. (Does not stack)"
+            "description": "Can be ridden to travel on water. While in party, increases damage from applied by the player and Pal by ?%. (Does not stack)"
         },
         {
             "name": "Jormuntide Ignis (Boss)",
@@ -36454,7 +36454,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stormbringer Lava Dragon",
-            "description": "Can be ridden. While in party, nullifies lava damage and increases damage from Burn applied by the player and Pal by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, nullifies lava damage and increases damage from applied by the player and Pal by ?%. (Does not stack)"
         },
         {
             "name": "Carnibora (Boss)",
@@ -36509,7 +36509,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Entangling Tongue",
-            "description": "While in party, whenever the player dodges, Carniboracreates a whirlwind that deals damage to any enemy it touches (Leaf/ Power: ?). (Does not stack)"
+            "description": "While in party, whenever the player dodges, Carniboracreates a whirlwind that deals damage to any enemy it touches (/ Power: ?). (Does not stack)"
         },
         {
             "name": "Vaelet (Boss)",
@@ -36564,7 +36564,7 @@
                 "MonsterFarm": 2
             },
             "partner_skill": "Purification of Gaia",
-            "description": "While in party, Earth Pals drop ?% more items when defeated. (Does not stack) Sometimes drops various seeds when assigned to Ranch."
+            "description": "While in party, Pals drop ?% more items when defeated. (Does not stack) Sometimes drops various seeds when assigned to Ranch."
         },
         {
             "name": "Reptyro (Boss)",
@@ -36808,7 +36808,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Magma Overload",
-            "description": "Can be ridden as a mount. This Pal's Attack increases by ?% for each other Fire or Earth Pal in party."
+            "description": "Can be ridden as a mount. This Pal's Attack increases by ?% for each other or Pal in party."
         },
         {
             "name": "Moldron Cryst (Boss)",
@@ -36869,7 +36869,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Ice Overload",
-            "description": "Can be ridden. While in party, improves player and Pal Ice damage to weak points by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Water Lizard (Boss)",
@@ -36985,7 +36985,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wriggling Weasel",
-            "description": "Can be ridden. Changes the player's attack type to Dragon with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Chillet Ignis (Boss)",
@@ -37046,7 +37046,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sparkling Weasel",
-            "description": "Can be ridden. Changes the player's attack type to Fire with ?% increased Attack while mounted."
+            "description": "Can be ridden. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Loupmoon (Boss)",
@@ -37266,7 +37266,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Blessing of Purification",
-            "description": "Can be ridden. This Pal's Attack and Movement Speed increases by ?% for each other Normal Pal in party. When in party, recovers Health of the player and Party Pals by ?% per second. (Does not stack)"
+            "description": "Can be ridden. This Pal's Attack and Movement Speed increases by ?% for each other Pal in party. When in party, recovers Health of the player and Party Pals by ?% per second. (Does not stack)"
         },
         {
             "name": "Celesdir Noct (Boss)",
@@ -37431,7 +37431,7 @@
                 "MonsterFarm": 4
             },
             "partner_skill": "Gilded Shroud",
-            "description": "While in party, increases Defense of Normal Pals by ?%. (Does not stack) Sometimes makes when assigned to Ranch."
+            "description": "While in party, increases Defense of Pals by ?%. (Does not stack) Sometimes makes when assigned to Ranch."
         },
         {
             "name": "Silvegis (Boss)",
@@ -37541,7 +37541,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dragon Hunter",
-            "description": "While in party, Dragon Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Cryolinx Terra (Boss)",
@@ -37871,7 +37871,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dark Knowledge",
-            "description": "While in party, increases Attack of Dark Pals by ?%. (Does not stack)"
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack)"
         },
         {
             "name": "Cremis (Boss)",
@@ -37926,7 +37926,7 @@
                 "MonsterFarm": 2
             },
             "partner_skill": "Fluffy Wool",
-            "description": "While in party, increases Attack of Normal Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
+            "description": "While in party, increases Attack of Pals by ?%. (Does not stack) Sometimes drops when assigned to Ranch."
         },
         {
             "name": "Astralym (Boss)",
@@ -38084,7 +38084,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the Snowy Mountain",
-            "description": "Can be ridden. While at a base, +? Transport Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "Can be ridden. While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Wumpo Botan (Boss)",
@@ -38139,7 +38139,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the South",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Earth damage and are immune to Muddy status. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to status. (Does not stack)"
         },
         {
             "name": "Incineram Noct",
@@ -38701,7 +38701,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Modified DNA",
-            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. Enhances Dark attacks by ?% while mounted."
+            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. Enhances attacks by ?% while mounted."
         },
         {
             "name": "Victor & Shadowbeak (Gym)",
@@ -38872,7 +38872,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Azure Sovereign",
-            "description": "Can be ridden as a flying mount. This Pal's Attack increases by ?% for each other Dragon Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Attack increases by ?% for each other Pal in party."
         },
         {
             "name": "Blue Sky Dragon 2 (Gym)",
@@ -39098,7 +39098,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Scorching Predator",
-            "description": "Can be ridden as a flying mount. While in party, Ice Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Marcus & Faleris (Gym)",
@@ -39324,7 +39324,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Celestial Darkness",
-            "description": "Can be ridden as a flying mount. Enhances Normal and Dark attacks by ?% while mounted."
+            "description": "Can be ridden as a flying mount. Enhances and attacks by ?% while mounted."
         },
         {
             "name": "Saya & Selyne (Gym)",
@@ -39501,7 +39501,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Blizzard Crash",
-            "description": "Can be ridden. While mounted, delivers crushing blows with a hammer forged from Ice."
+            "description": "Can be ridden. While mounted, delivers crushing blows with a hammer forged from ."
         },
         {
             "name": "Bjorn & Bastigor (Gym)",
@@ -40623,7 +40623,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lightning Shepherd",
-            "description": "Can be ridden. Can perform a double jump while mounted. This Pal's Movement Speed increases by ?% for each other Electricity Pal in party."
+            "description": "Can be ridden. Can perform a double jump while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Kitsun (Predator)",
@@ -40678,7 +40678,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wolf of the Sun",
-            "description": "Can be ridden. While in party, player and Pal take ?% less Ice damage and are immune to Freeze status. (Does not stack)"
+            "description": "Can be ridden. While in party, player and Pal take ?% less damage and are immune to status. (Does not stack)"
         },
         {
             "name": "Incineram Noct (Predator)",
@@ -40855,7 +40855,7 @@
                 "MonsterFarm": 2
             },
             "partner_skill": "Grave Robber",
-            "description": "While in party, player and Pal take ?% less Normal damage. (Does not stack) Sometimes digs up when assigned to Ranch."
+            "description": "While in party, player and Pal take ?% less damage. (Does not stack) Sometimes digs up when assigned to Ranch."
         },
         {
             "name": "Menasting (Predator)",
@@ -40916,7 +40916,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Steel Scorpion",
-            "description": "While in party, player's Defense increases by ?%, and Electricity Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "While in party, player's Defense increases by ?%, and Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Digtoise (Predator)",
@@ -41026,7 +41026,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Amicable Holy Dragon",
-            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, Dark Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Dazemu (Predator)",
@@ -41142,7 +41142,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Fragrant Dragon",
-            "description": "Can be ridden. While in party, Dragon Pals' Defense increases by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals' Defense increases by ?%. (Does not stack)"
         },
         {
             "name": "Flopie (Predator)",
@@ -41417,7 +41417,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Sandstorm's Blessing",
-            "description": "Can be ridden. While mounted, changes the player's attack type to Earth with ?% increased Attack."
+            "description": "Can be ridden. While mounted, changes the player's attack type to with ?% increased Attack."
         },
         {
             "name": "Gorirat (Predator)",
@@ -41588,7 +41588,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Father Winter's Threat",
-            "description": "While in party, grants the player the ability to Freeze enemies afflicted with Wetnessin one strike."
+            "description": "While in party, grants the player the ability to enemies afflicted with in one strike."
         },
         {
             "name": "Mossanda (Predator)",
@@ -41759,7 +41759,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Thunder",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Electricity with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Faleris Aqua (Predator)",
@@ -41814,7 +41814,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Tidal Predator",
-            "description": "Can be ridden as a flying mount. While in party, Fire Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden as a flying mount. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Relaxaurus (Predator)",
@@ -41936,7 +41936,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Darkflame Lion",
-            "description": "Can be ridden. While in party, Normal Pals drop ?% more items when defeated. (Does not stack)"
+            "description": "Can be ridden. While in party, Pals drop ?% more items when defeated. (Does not stack)"
         },
         {
             "name": "Solenne (Predator)",
@@ -42278,7 +42278,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Selfless Discipline",
-            "description": "This Pal's Attack and Defense increases by ?% for each other Leaf Pal in party."
+            "description": "This Pal's Attack and Defense increases by ?% for each other Pal in party."
         },
         {
             "name": "Lovander (Predator)",
@@ -42333,7 +42333,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Heart Drain",
-            "description": "While fighting together, grants the player and Lovander the life steal effect, which absorbs ?% of damage dealt to restore Hp."
+            "description": "While fighting together, grants the player and Lovander the life steal effect, which absorbs ?% of damage dealt to restore ."
         },
         {
             "name": "Lovander (Predator)",
@@ -42498,7 +42498,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Flame Wing",
-            "description": "Can be ridden as a flying mount. Changes the player's attack type to Fire with ?% increased Attack while mounted."
+            "description": "Can be ridden as a flying mount. Changes the player's attack type to with ?% increased Attack while mounted."
         },
         {
             "name": "Tropicaw (Predator)",
@@ -42675,7 +42675,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Scorpion Sonar",
-            "description": "While in party, increases damage from Poison applied by the player and Pal by ?%. (Does not stack)"
+            "description": "While in party, increases damage from applied by the player and Pal by ?%. (Does not stack)"
         },
         {
             "name": "Dogen (Predator)",
@@ -42785,7 +42785,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Snake's Sagacity",
-            "description": "While in party, infuses the player's attacks with Darkness ?. (Does not stack)"
+            "description": "While in party, infuses the player's attacks with ?. (Does not stack)"
         },
         {
             "name": "Suzaku (Predator)",
@@ -42840,7 +42840,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Wings of Flame",
-            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Fire Pal in party."
+            "description": "Can be ridden as a flying mount. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Rayhound (Predator)",
@@ -42895,7 +42895,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Lightning Shepherd",
-            "description": "Can be ridden. Can perform a double jump while mounted. This Pal's Movement Speed increases by ?% for each other Electricity Pal in party."
+            "description": "Can be ridden. Can perform a double jump while mounted. This Pal's Movement Speed increases by ?% for each other Pal in party."
         },
         {
             "name": "Jormuntide Ignis (Predator)",
@@ -42956,7 +42956,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Stormbringer Lava Dragon",
-            "description": "Can be ridden. While in party, nullifies lava damage and increases damage from Burn applied by the player and Pal by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, nullifies lava damage and increases damage from applied by the player and Pal by ?%. (Does not stack)"
         },
         {
             "name": "Jormuntide Ignis (Predator)",
@@ -43139,7 +43139,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Magma Overload",
-            "description": "Can be ridden as a mount. This Pal's Attack increases by ?% for each other Fire or Earth Pal in party."
+            "description": "Can be ridden as a mount. This Pal's Attack increases by ?% for each other or Pal in party."
         },
         {
             "name": "Loupmoon Cryst (Predator)",
@@ -43359,7 +43359,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Guardian of the Snowy Mountain",
-            "description": "Can be ridden. While at a base, +? Transport Work Suitability Level for all other Base Pals. (Does not stack)"
+            "description": "Can be ridden. While at a base, +? Work Suitability Level for all other Base Pals. (Does not stack)"
         },
         {
             "name": "Gumoss",
@@ -43713,7 +43713,7 @@
                 "MonsterFarm": 0
             },
             "partner_skill": "Dragon Kaiser",
-            "description": "Can be ridden. While in party, improves player and Pal Dragon damage to weak points by ?%. (Does not stack)"
+            "description": "Can be ridden. While in party, improves player and Pal damage to weak points by ?%. (Does not stack)"
         },
         {
             "name": "Blazamut Ryu (Raid)",

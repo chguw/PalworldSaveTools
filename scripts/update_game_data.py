@@ -272,6 +272,7 @@ def resolve_rich_text(text: str) -> str:
             return name
         return asset_id
     text = re.sub('<(itemName|mapObjectName|characterName|activeSkillName)\\s+id=\\|([^|]+)\\|/>', _replace, text, flags=re.I)
+    text = re.sub('<[^>]+>', '', text).strip()
     return text
 def find_and_copy_icon(search_name: str, target_subdir: str, export_subdirs: list[Path]=None) -> str | None:
     if not search_name:
