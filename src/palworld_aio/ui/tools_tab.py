@@ -235,6 +235,7 @@ class ToolsTab(QWidget):
     def _create_save_card(self):
         card = QFrame()
         card.setObjectName('saveCard')
+        card.setFixedWidth(340)
         card_layout = QVBoxLayout(card)
         card_layout.setContentsMargins(24, 24, 24, 24)
         card_layout.setSpacing(12)
@@ -272,6 +273,43 @@ class ToolsTab(QWidget):
         self._drag_hint_label.setStyleSheet('font-size: 11px; color: rgba(148,163,184,0.4); border: none; background: transparent;')
         card_layout.addWidget(self._drag_hint_label)
 
+        self._stats_frame = QFrame()
+        self._stats_frame.setObjectName('saveStats')
+        stats_layout = QHBoxLayout(self._stats_frame)
+        stats_layout.setContentsMargins(0, 8, 0, 0)
+        stats_layout.setSpacing(16)
+
+        self._stat_cards = {}
+        self._stat_label_refs = {}
+        stats = [
+            ('players', '👥', 'dashboard.stat_players'),
+            ('guilds', '🛡️', 'dashboard.stat_guilds'),
+            ('bases', '🏠', 'dashboard.stat_bases'),
+            ('pals', '🐉', 'dashboard.stat_pals'),
+        ]
+        for key, icon, label_key in stats:
+            box = QVBoxLayout()
+            box.setSpacing(2)
+            icon_lbl = QLabel(icon)
+            icon_lbl.setAlignment(Qt.AlignCenter)
+            icon_lbl.setStyleSheet('font-size: 18px; border: none; background: transparent;')
+            box.addWidget(icon_lbl)
+            val = QLabel('0')
+            val.setAlignment(Qt.AlignCenter)
+            val.setStyleSheet('font-size: 16px; font-weight: 700; color: #e2e8f0; border: none; background: transparent;')
+            box.addWidget(val)
+            lbl = QLabel(t(label_key) if t else label_key)
+            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setStyleSheet('font-size: 10px; color: rgba(148,163,184,0.5); border: none; background: transparent;')
+            box.addWidget(lbl)
+            stats_layout.addStretch()
+            stats_layout.addLayout(box)
+            self._stat_cards[key] = val
+            self._stat_label_refs[key] = lbl
+        stats_layout.addStretch()
+        self._stats_frame.setVisible(False)
+        card_layout.addWidget(self._stats_frame)
+
         card_layout.addStretch()
         return card
 
@@ -299,6 +337,9 @@ class ToolsTab(QWidget):
                 self._save_path_label.setText(constants.current_save_path)
                 self._save_status_label.setText(t('tools.save_loaded') if t else 'Save Loaded')
                 self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #22c55e; border: none; background: transparent;')
+            self._update_stats()
+            if hasattr(self, '_stats_frame'):
+                self._stats_frame.setVisible(True)
     def _create_section(self, section_key, tool_keys, run_handler):
         section_frame = QFrame()
         section_frame.setObjectName('glass')
@@ -453,29 +494,12 @@ class ToolsTab(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         if hasattr(self, '_drop_overlay'):
-            self._drop_overlay.setGeometry(self.rect())
-    def refresh_labels(self):
-        if hasattr(self, '_load_btn') and self._load_btn:
-            self._load_btn.setText(t('menu.file.load_save') if t else 'Load Save')
-        if hasattr(self, '_save_path_label') and self._save_path_label:
-            if not (hasattr(constants, 'current_save_path') and constants.current_save_path):
-                self._save_path_label.setText(t('tools.no_save_loaded') if t else 'No save loaded')
-                self._save_status_label.setText(t('dashboard.no_save') if t else 'No Save Loaded')
-                self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #e2e8f0; border: none; background: transparent;')
-            else:
-                self._save_status_label.setText(t('tools.save_loaded') if t else 'Save Loaded')
-                self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #22c55e; border: none; background: transparent;')
-        if hasattr(self, '_drag_hint_label') and self._drag_hint_label:
-            self._drag_hint_label.setText(t('tools.drag_hint') if t else 'or drag & drop a Level.sav file here')
-        for title_label, section_key in self._section_titles:
-            title_label.setText(t(section_key) if t else section_key)
-        for card, key in self.tool_buttons:
-            label = t(key) if t else key
-            card.title_label.setText(label)
-            card.title_label.setToolTip(label)
-            desc_key = TOOL_DESCRIPTIONS.get(key)
-            if desc_key and hasattr(card, 'desc_label') and card.desc_label:
-                card.desc_label.setText(t(desc_key) if t else '')
+            self._drop_overlay._drop_text = t('tools.drop_title') if t else 'Drop Level.sav to Load Save'
+            self._drop_overlay._drop_hint = t('tools.drop_hint_overlay') if t else "Or click the 'Load Save' button above"
+            self._drop_overlay.update()
+        if hasattr(self, '_stat_label_refs'):
+            for key, lbl in self._stat_label_refs.items():
+                lbl.setText(t('dashboard.stat_' + key) if t else key)
         if hasattr(self, '_drop_overlay'):
             self._drop_overlay._drop_text = t('tools.drop_title') if t else 'Drop Level.sav to Load Save'
             self._drop_overlay._drop_hint = t('tools.drop_hint_overlay') if t else "Or click the 'Load Save' button above"
