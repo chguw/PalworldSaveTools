@@ -54,7 +54,6 @@ class SaveManager(QObject):
             constants.backup_save_path = None
             constants.srcGuildMapping = None
             constants.base_guild_lookup = {}
-            constants.is_ui_locked = True
             constants.files_to_delete = set()
             constants.PLAYER_PAL_COUNTS = {}
             constants.player_levels = {}

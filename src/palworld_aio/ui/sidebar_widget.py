@@ -133,9 +133,4 @@ class SidebarWidget(QWidget):
         self._update_right_panel_icon()
 
     def set_lock_state(self, locked):
-        lockable = ('map', 'base_inventory', 'player_inventory', 'pal_editor', 'players', 'guilds', 'bases', 'exclusions')
-        for btn_id in lockable:
-            if btn_id in self._buttons:
-                self._buttons[btn_id].setEnabled(not locked)
-                self._buttons[btn_id].setToolTip(t('sidebar.locked') if locked and t else (t(btn_id) if t else btn_id))
         return True

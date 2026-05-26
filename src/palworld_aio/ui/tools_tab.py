@@ -619,13 +619,5 @@ class ToolsTab(QWidget):
             desc_key = TOOL_DESCRIPTIONS.get(key)
             if desc_key and hasattr(card, 'desc_label') and card.desc_label:
                 card.desc_label.setText(t(desc_key) if t else '')
-    def set_tool_cards_enabled(self, enabled):
-        for card, key in self.tool_buttons:
-            card.setEnabled(enabled)
-            if enabled:
-                card.setStyleSheet('')
-            else:
-                card.setStyleSheet('QFrame.toolCard { opacity: 0.4; } QFrame.toolCard:hover { background: transparent; }')
-
     def refresh(self):
         pass

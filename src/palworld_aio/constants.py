@@ -52,7 +52,6 @@ loaded_level_json = None
 original_loaded_level_json = None
 backup_save_path = None
 srcGuildMapping = None
-is_ui_locked = True
 player_levels = {}
 base_guild_lookup = {}
 container_lookup = {}
