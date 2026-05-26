@@ -336,7 +336,7 @@ class ToolsTab(QWidget):
                 self._save_path_label.setText(constants.current_save_path)
                 self._save_status_label.setText(t('tools.save_loaded') if t else 'Save Loaded')
                 self._save_status_label.setStyleSheet('font-size: 15px; font-weight: 700; color: #22c55e; border: none; background: transparent;')
-            self._update_stats()
+            self.refresh()
             if hasattr(self, '_stats_frame'):
                 self._stats_frame.setVisible(True)
 
@@ -555,4 +555,4 @@ class ToolsTab(QWidget):
                 lbl.setText(t('dashboard.stat_' + key) if t else key)
 
     def refresh(self):
-        pass
+        self._update_stats()

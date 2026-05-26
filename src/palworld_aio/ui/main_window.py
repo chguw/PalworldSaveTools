@@ -694,7 +694,7 @@ class MainWindow(QMainWindow):
             if hasattr(self, 'pal_editor_tab'):
                 self.pal_editor_tab.refresh()
             if hasattr(self, 'tools_tab'):
-                self.tools_tab._update_stats()
+                self.tools_tab.refresh()
         finally:
             self._is_refreshing = False
     def _refresh_inventory(self):

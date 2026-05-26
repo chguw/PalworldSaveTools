@@ -3221,7 +3221,7 @@ class PalInfoWidget(QFrame):
         parent = self.parent()
         while parent:
             if hasattr(parent, 'tools_tab'):
-                parent.tools_tab._update_stats()
+                parent.tools_tab.refresh()
                 break
             if hasattr(parent, '_update_party_slots'):
                 parent._update_party_slots()
@@ -3568,7 +3568,7 @@ class PalEditorWidget(QWidget):
         parent = self.parent()
         while parent:
             if hasattr(parent, 'tools_tab'):
-                parent.tools_tab._update_stats()
+                parent.tools_tab.refresh()
                 break
             parent = parent.parent() if parent.parent() else None
 
