@@ -2,7 +2,6 @@ import sys, os, time, random, subprocess, threading, json, traceback
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, QPushButton, QTextEdit, QGraphicsOpacityEffect, QMessageBox, QProgressBar, QDialog
 from PySide6.QtCore import Qt, QTimer, QThread, Signal, QPropertyAnimation, QPoint, QSize
 from PySide6.QtGui import QPixmap, QFont, QCursor
-from palworld_aio.ui.styles import ThemeManager
 from import_libs import *
 _result_data = {'status': 'idle', 'data': None}
 def get_base_directory():
@@ -122,6 +121,7 @@ if '--spawn-loader' in sys.argv:
         def _load_theme_pref(self):
             return True
         def _load_theme(self):
+            from palworld_aio.ui.styles import ThemeManager
             ThemeManager.apply_to_widget(self)
         def clear_layout(self):
             while self.inner.count():
