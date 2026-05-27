@@ -2840,8 +2840,8 @@ class PalInfoWidget(QFrame):
             tip = f'{pal_name} [Lv.{level}]'
             if base and base.get('description'):
                 tip += f'<br><br>{wrap_tooltip_text(base["description"])}'
-            self.portrait_icon.setToolTip(tip)
-            self.bracket_wrapper.setToolTip(tip)
+            # Set tooltip on portrait_frame to ensure unified tooltip style
+            self.portrait_frame.setToolTip(tip)
             equip_waza_data = raw.get('EquipWaza', {})
             if isinstance(equip_waza_data, dict):
                 e_list = equip_waza_data.get('value', {}).get('values', [])
