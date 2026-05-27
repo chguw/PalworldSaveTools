@@ -2,9 +2,9 @@ import os
 import sys
 from palworld_save_tools import json_tools
 import traceback
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QScrollArea, QSizePolicy, QSpacerItem, QGridLayout, QApplication, QDialog
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QScrollArea, QSizePolicy, QSpacerItem, QGridLayout, QApplication, QDialog, QStylePainter, QStyleOptionButton, QStyle
 from PySide6.QtCore import Qt, QSize, Signal, QPropertyAnimation, QEasingCurve, QRectF
-from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QDragEnterEvent, QDropEvent, QDragLeaveEvent, QPainter, QColor, QPen, QPainterPath
+from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QDragEnterEvent, QDropEvent, QDragLeaveEvent, QPainter, QColor, QPen, QPainterPath, QFontMetrics
 from i18n import t
 from loading_manager import show_critical
 from palworld_aio import constants
@@ -202,6 +202,35 @@ class DropOverlay(QWidget):
         painter.setPen(QColor(166, 184, 200, 255))
         hint_rect = QRectF(inner.x(), center_y + 40, inner.width(), 30)
         painter.drawText(hint_rect, Qt.AlignHCenter | Qt.AlignTop, self._drop_hint)
+class StatIconBtn(QPushButton):
+    def __init__(self, icon, parent=None):
+        super().__init__(icon, parent)
+        self.setFont(QFont('Hack Nerd Font', 11))
+        self.setFixedSize(44, 28)
+        self.setCursor(QCursor(Qt.PointingHandCursor))
+        self.setFocusPolicy(Qt.NoFocus)
+        self.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.15); border-radius: 6px; } QPushButton:hover { background: rgba(125,211,252,0.15); border-color: rgba(125,211,252,0.3); color: #FFFFFF; } QPushButton:pressed { background: rgba(125,211,252,0.25); }')
+
+    def paintEvent(self, event):
+        sp = QStylePainter(self)
+        opt = QStyleOptionButton()
+        self.initStyleOption(opt)
+        opt.text = ''
+        sp.drawControl(QStyle.CE_PushButton, opt)
+        sp.end()
+
+        p = QPainter(self)
+        p.setRenderHint(QPainter.TextAntialiasing | QPainter.Antialiasing)
+        p.setFont(self.font())
+        p.setPen(self.palette().color(self.foregroundRole()))
+        fm = QFontMetrics(self.font())
+        br = fm.boundingRect(self.text())
+        x = (self.width() - br.width()) / 2 - br.x()
+        y = (self.height() - br.height()) / 2 - br.y()
+        p.drawText(int(x), int(y), self.text())
+        p.end()
+
+
 class ToolsTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -290,14 +319,10 @@ class ToolsTab(QWidget):
         for key, icon, label_key in stats:
             box = QVBoxLayout()
             box.setSpacing(2)
-            icon_btn = QPushButton(icon)
-            icon_btn.setFont(QFont('Hack Nerd Font', 12))
-            icon_btn.setFixedSize(44, 28)
-            icon_btn.setFlat(True)
-            icon_btn.setFocusPolicy(Qt.NoFocus)
-            pr = {'players': 8, 'guilds': 4, 'bases': 8, 'pals': 8}.get(key, 8)
-            icon_btn.setStyleSheet(f'QPushButton {{ color: #4a5568; border: 1px solid #2d3748; border-radius: 6px; background-color: #1a202c; padding-left: 2px; padding-right: {pr}px; }} QPushButton:disabled {{ color: #4a5568; }}')
-            icon_btn.setEnabled(False)
+            icon_btn = StatIconBtn(icon)
+            nav_key = {'players': 'players', 'guilds': 'guilds', 'bases': 'bases', 'pals': 'pal_editor'}.get(key)
+            if nav_key and hasattr(self, 'parent_window') and self.parent_window:
+                icon_btn.clicked.connect(lambda checked, k=nav_key: (self.parent_window.sidebar.set_active(k), self.parent_window._on_nav_changed(k)))
             box.addWidget(icon_btn)
             val = QLabel('0')
             val.setAlignment(Qt.AlignCenter)

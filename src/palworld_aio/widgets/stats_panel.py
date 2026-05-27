@@ -1,9 +1,10 @@
-from PySide6.QtWidgets import QWidget, QGridLayout, QLabel, QFrame, QPushButton, QApplication
+from PySide6.QtWidgets import QWidget, QGridLayout, QLabel, QFrame, QPushButton, QApplication, QStylePainter, QStyleOptionButton, QStyle
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QPainter, QFontMetrics
 from i18n import t
 from loading_manager import show_information, show_warning
 from palworld_aio import constants
+from palworld_aio.ui.sidebar_widget import NerdBtn
 class StatsPanel(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -18,7 +19,12 @@ class StatsPanel(QWidget):
         self.stat_key_labels = {}
         sections = [('before', 'deletion.stats.before'), ('after', 'deletion.stats.after'), ('result', 'deletion.stats.result')]
         fields = [('guilds', 'deletion.stats.guilds'), ('bases', 'deletion.stats.bases'), ('players', 'deletion.stats.players'), ('pals', 'deletion.stats.pals')]
-        copy_btn = QPushButton('📋')
+        try:
+            import nerdfont as nf
+            copy_icon = nf.icons.get('nf-cod-copy', '📋')
+        except:
+            copy_icon = '📋'
+        copy_btn = NerdBtn(copy_icon)
         copy_btn.setFixedSize(30, 24)
         copy_btn.setStyleSheet(f'\n            QPushButton {{\n                background-color: transparent;\n                border: none;\n                font-size: 14px;\n            }}\n            QPushButton:hover {{\n                background-color: {constants.BUTTON_HOVER};\n                border-radius: 4px;\n            }}\n        ')
         copy_btn.clicked.connect(self._copy_stats_to_clipboard)

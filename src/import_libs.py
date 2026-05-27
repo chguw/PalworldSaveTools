@@ -3,9 +3,28 @@ import sys, argparse, collections, copy, ctypes, datetime, gc, json, shutil, glo
 import logging, multiprocessing, platform, re, subprocess, threading, pickle, zipfile, string, palworld_coord
 import time, traceback, uuid, io, pathlib, urllib.request, tempfile, random
 from multiprocessing import shared_memory
-from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QDialog, QMessageBox, QFileDialog, QInputDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QComboBox, QTextEdit, QTreeWidget, QTreeWidgetItem, QProgressBar, QCheckBox, QRadioButton, QGroupBox, QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView, QSplitter, QScrollArea, QFrame, QMenuBar, QMenu, QStatusBar, QSystemTrayIcon, QStyle, QCommonStyle
-from PySide6.QtGui import QPixmap, QIcon, QFont, QPainter, QPen, QBrush, QColor, QAction
+from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QDialog, QMessageBox, QFileDialog, QInputDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QComboBox, QTextEdit, QTreeWidget, QTreeWidgetItem, QProgressBar, QCheckBox, QRadioButton, QGroupBox, QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView, QSplitter, QScrollArea, QFrame, QMenuBar, QMenu, QStatusBar, QSystemTrayIcon, QStyle, QCommonStyle, QStylePainter, QStyleOptionButton
+from PySide6.QtGui import QPixmap, QIcon, QFont, QPainter, QPen, QBrush, QColor, QAction, QFontMetrics
 from PySide6.QtCore import Qt, QTimer, QThread, Signal, QObject, QEvent, QSize, QPoint, QRect
+
+class NerdBtn(QPushButton):
+    def paintEvent(self, event):
+        sp = QStylePainter(self)
+        opt = QStyleOptionButton()
+        self.initStyleOption(opt)
+        opt.text = ''
+        sp.drawControl(QStyle.CE_PushButton, opt)
+        sp.end()
+        p = QPainter(self)
+        p.setRenderHint(QPainter.TextAntialiasing | QPainter.Antialiasing)
+        p.setFont(self.font())
+        p.setPen(self.palette().color(self.foregroundRole()))
+        fm = QFontMetrics(self.font())
+        br = fm.boundingRect(self.text())
+        x = (self.width() - br.width()) / 2 - br.x()
+        y = (self.height() - br.height()) / 2 - br.y()
+        p.drawText(int(x), int(y), self.text())
+        p.end()
 from i18n import init_language, t, set_language, get_language, load_resources
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'palworld_save_tools', 'commands')))
 from palworld_save_tools.archive import *

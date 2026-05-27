@@ -1,6 +1,6 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QStyleOptionButton, QStylePainter, QStyle
 from PySide6.QtCore import Signal, Qt
-from PySide6.QtGui import QFont, QCursor, QPainter, QColor, QBrush
+from PySide6.QtGui import QFont, QCursor, QPainter, QColor, QBrush, QFontMetrics
 try:
     import nerdfont as nf
 except:
@@ -10,6 +10,45 @@ from i18n import t
 ICONS = {'tools': nf.icons.get('nf-fa-wrench', '\uf0ad'), 'map': nf.icons.get('nf-fa-map', '\uf279'), 'base_inventory': nf.icons.get('nf-fa-warehouse', '\ued92'), 'player_inventory': nf.icons.get('nf-fa-suitcase', '\uf0f2'), 'pal_editor': nf.icons.get('nf-fa-dragon', '\ueef8'), 'players': nf.icons.get('nf-fa-users', '\uf0c0'), 'guilds': nf.icons.get('nf-fa-shield', '\uf132'), 'bases': nf.icons.get('nf-fa-home', '\uf015'), 'exclusions': nf.icons.get('nf-fa-ban', '\uf05e'), 'collapse_open': nf.icons.get('nf-fa-chevron_right', '\uf054'), 'collapse_close': nf.icons.get('nf-fa-chevron_left', '\uf053'), 'console': nf.icons.get('nf-fa-terminal', '\uf120')}
 SIDEBAR_W = 48
 ITEM_H = 44
+
+class NerdBtn(QPushButton):
+    def paintEvent(self, event):
+        sp = QStylePainter(self)
+        opt = QStyleOptionButton()
+        self.initStyleOption(opt)
+        opt.text = ''
+        sp.drawControl(QStyle.CE_PushButton, opt)
+        sp.end()
+
+        p = QPainter(self)
+        p.setRenderHint(QPainter.TextAntialiasing | QPainter.Antialiasing)
+        p.setFont(self.font())
+        p.setPen(self.palette().color(self.foregroundRole()))
+        fm = QFontMetrics(self.font())
+        br = fm.boundingRect(self.text())
+        x = (self.width() - br.width()) / 2 - br.x()
+        y = (self.height() - br.height()) / 2 - br.y()
+        p.drawText(int(x), int(y), self.text())
+        p.end()
+
+
+class NerdLabel(QLabel):
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        if not self.text():
+            return
+        p = QPainter(self)
+        p.setRenderHint(QPainter.TextAntialiasing | QPainter.Antialiasing)
+        p.setFont(self.font())
+        p.setPen(self.palette().color(self.foregroundRole()))
+        fm = QFontMetrics(self.font())
+        br = fm.boundingRect(self.text())
+        x = (self.width() - br.width()) / 2 - br.x()
+        y = (self.height() - br.height()) / 2 - br.y()
+        p.drawText(int(x), int(y), self.text())
+        p.end()
+
+
 class NavItem(QPushButton):
     clicked_with_id = Signal(str)
     def __init__(self, button_id, icon_code, label, parent=None):
@@ -28,16 +67,33 @@ class NavItem(QPushButton):
         self.style().polish(self)
         self.update()
     def paintEvent(self, event):
-        super().paintEvent(event)
+        sp = QStylePainter(self)
+        opt = QStyleOptionButton()
+        self.initStyleOption(opt)
+        opt.text = ''
+        sp.drawControl(QStyle.CE_PushButton, opt)
+        sp.end()
+
+        p = QPainter(self)
+        p.setRenderHint(QPainter.TextAntialiasing | QPainter.Antialiasing)
+        p.setFont(self.font())
+        p.setPen(self.palette().color(self.foregroundRole()))
+        fm = QFontMetrics(self.font())
+        br = fm.boundingRect(self.text())
+        x = (self.width() - br.width()) / 2 - br.x()
+        y = (self.height() - br.height()) / 2 - br.y()
+        p.drawText(int(x), int(y), self.text())
+        p.end()
+
         if self.property('active'):
-            painter = QPainter(self)
-            painter.setRenderHint(QPainter.Antialiasing)
+            p = QPainter(self)
+            p.setRenderHint(QPainter.Antialiasing)
             pw, ph = 4, 20
             px, py = 3, (self.height() - ph) // 2
-            painter.setPen(Qt.NoPen)
-            painter.setBrush(QBrush(QColor('#7DD3FC')))
-            painter.drawRoundedRect(px, py, pw, ph, pw / 2, pw / 2)
-            painter.end()
+            p.setPen(Qt.NoPen)
+            p.setBrush(QBrush(QColor('#7DD3FC')))
+            p.drawRoundedRect(px, py, pw, ph, pw / 2, pw / 2)
+            p.end()
 class BottomBtn(QPushButton):
     def __init__(self, icon_code, tooltip, parent=None):
         super().__init__(parent)
@@ -56,16 +112,33 @@ class BottomBtn(QPushButton):
         self.style().polish(self)
         self.update()
     def paintEvent(self, event):
-        super().paintEvent(event)
+        sp = QStylePainter(self)
+        opt = QStyleOptionButton()
+        self.initStyleOption(opt)
+        opt.text = ''
+        sp.drawControl(QStyle.CE_PushButton, opt)
+        sp.end()
+
+        p = QPainter(self)
+        p.setRenderHint(QPainter.TextAntialiasing | QPainter.Antialiasing)
+        p.setFont(self.font())
+        p.setPen(self.palette().color(self.foregroundRole()))
+        fm = QFontMetrics(self.font())
+        br = fm.boundingRect(self.text())
+        x = (self.width() - br.width()) / 2 - br.x()
+        y = (self.height() - br.height()) / 2 - br.y()
+        p.drawText(int(x), int(y), self.text())
+        p.end()
+
         if self.property('active'):
-            painter = QPainter(self)
-            painter.setRenderHint(QPainter.Antialiasing)
+            p = QPainter(self)
+            p.setRenderHint(QPainter.Antialiasing)
             pw, ph = 4, 20
             px, py = 3, (self.height() - ph) // 2
-            painter.setPen(Qt.NoPen)
-            painter.setBrush(QBrush(QColor('#7DD3FC')))
-            painter.drawRoundedRect(px, py, pw, ph, pw / 2, pw / 2)
-            painter.end()
+            p.setPen(Qt.NoPen)
+            p.setBrush(QBrush(QColor('#7DD3FC')))
+            p.drawRoundedRect(px, py, pw, ph, pw / 2, pw / 2)
+            p.end()
 class SidebarWidget(QWidget):
     nav_changed = Signal(str)
     console_toggled = Signal()
