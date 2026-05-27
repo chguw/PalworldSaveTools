@@ -1391,5 +1391,16 @@
   "dashboard.stat_pals": "仲間",
   "tools.drop_title": "Level.sav をロード保存にドロップします",
   "tools.drop_hint_overlay": "または、上の「ロード保存」ボタンをクリックしてください",
-  "tools.save_loaded": "ロード済みを保存"
+  "tools.save_loaded": "ロード済みを保存",
+  "edit_pals.learn_all_moves": "すべての動きを学ぶ",
+  "edit_pals.ctx.boss_alpha": "ボス(アルファ)",
+  "edit_pals.ctx.lucky_shiny": "ラッキー（シャイニー）",
+  "edit_pals.ctx.awakened": "目覚めた",
+  "edit_pals.ctx.imported": "輸入品",
+  "edit_pals.ctx.favorited": "お気に入りに登録しました",
+  "edit_pals.ctx.lock_level": "ロックレベル",
+  "edit_pals.ctx.max_all_stats": "すべてのステータスを最大化する",
+  "edit_pals.ctx.learn_all_moves": "すべての動きを学ぶ",
+  "edit_pals.learn_all_success": "すべての技が無事に習得されました！",
+  "edit_pals.learn_all_fail": "動きの学習に失敗しました。"
 }

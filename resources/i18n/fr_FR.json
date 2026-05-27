@@ -1373,5 +1373,16 @@
   "dashboard.stat_pals": "Copains",
   "tools.drop_title": "Déposez Level.sav pour charger la sauvegarde",
   "tools.drop_hint_overlay": "Ou cliquez sur le bouton « Charger la sauvegarde » ci-dessus",
-  "tools.save_loaded": "Enregistrer chargé"
+  "tools.save_loaded": "Enregistrer chargé",
+  "edit_pals.learn_all_moves": "Apprenez tous les mouvements",
+  "edit_pals.ctx.boss_alpha": "Patron (Alpha)",
+  "edit_pals.ctx.lucky_shiny": "Chanceux (brillant)",
+  "edit_pals.ctx.awakened": "Éveillé",
+  "edit_pals.ctx.imported": "Importé",
+  "edit_pals.ctx.favorited": "Favoris",
+  "edit_pals.ctx.lock_level": "Niveau de verrouillage",
+  "edit_pals.ctx.max_all_stats": "Toutes les statistiques maximales",
+  "edit_pals.ctx.learn_all_moves": "Apprenez tous les mouvements",
+  "edit_pals.learn_all_success": "Tous les mouvements appris avec succès !",
+  "edit_pals.learn_all_fail": "Impossible d'apprendre les mouvements."
 }

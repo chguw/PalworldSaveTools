@@ -1679,5 +1679,16 @@
   "dashboard.stat_pals": "Pals",
   "tools.drop_title": "Drop Level.sav to Load Save",
   "tools.drop_hint_overlay": "Or click the 'Load Save' button above",
-  "tools.save_loaded": "Save Loaded"
+  "tools.save_loaded": "Save Loaded",
+  "edit_pals.learn_all_moves": "Learn All Moves",
+  "edit_pals.ctx.boss_alpha": "Boss (Alpha)",
+  "edit_pals.ctx.lucky_shiny": "Lucky (Shiny)",
+  "edit_pals.ctx.awakened": "Awakened",
+  "edit_pals.ctx.imported": "Imported",
+  "edit_pals.ctx.favorited": "Favorited",
+  "edit_pals.ctx.lock_level": "Lock Level",
+  "edit_pals.ctx.max_all_stats": "Max All Stats",
+  "edit_pals.ctx.learn_all_moves": "Learn All Moves",
+  "edit_pals.learn_all_success": "All moves learned successfully!",
+  "edit_pals.learn_all_fail": "Failed to learn moves."
 }

@@ -1384,5 +1384,16 @@
   "dashboard.stat_pals": "amigos",
   "tools.drop_title": "Suelte Level.sav para cargar Guardar",
   "tools.drop_hint_overlay": "O haga clic en el botón 'Cargar Guardar' de arriba",
-  "tools.save_loaded": "Guardar cargado"
+  "tools.save_loaded": "Guardar cargado",
+  "edit_pals.learn_all_moves": "Aprende todos los movimientos",
+  "edit_pals.ctx.boss_alpha": "Jefe (Alfa)",
+  "edit_pals.ctx.lucky_shiny": "Suerte (brillante)",
+  "edit_pals.ctx.awakened": "despertado",
+  "edit_pals.ctx.imported": "Importado",
+  "edit_pals.ctx.favorited": "Favorito",
+  "edit_pals.ctx.lock_level": "Nivel de bloqueo",
+  "edit_pals.ctx.max_all_stats": "Máximo de todas las estadísticas",
+  "edit_pals.ctx.learn_all_moves": "Aprende todos los movimientos",
+  "edit_pals.learn_all_success": "¡Todos los movimientos aprendidos con éxito!",
+  "edit_pals.learn_all_fail": "No pude aprender movimientos."
 }

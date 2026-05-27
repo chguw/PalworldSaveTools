@@ -1415,5 +1415,16 @@
   "dashboard.stat_pals": "Freunde",
   "tools.drop_title": "Legen Sie „Level.sav“ ab, um „Laden und Speichern“ zu laden",
   "tools.drop_hint_overlay": "Oder klicken Sie oben auf die Schaltfläche „Laden und speichern“.",
-  "tools.save_loaded": "Speichern geladen"
+  "tools.save_loaded": "Speichern geladen",
+  "edit_pals.learn_all_moves": "Lerne alle Bewegungen",
+  "edit_pals.ctx.boss_alpha": "Boss (Alpha)",
+  "edit_pals.ctx.lucky_shiny": "Glücklich (glänzend)",
+  "edit_pals.ctx.awakened": "Erwacht",
+  "edit_pals.ctx.imported": "Importiert",
+  "edit_pals.ctx.favorited": "Favorit",
+  "edit_pals.ctx.lock_level": "Sperrebene",
+  "edit_pals.ctx.max_all_stats": "Alle Statistiken maximieren",
+  "edit_pals.ctx.learn_all_moves": "Lerne alle Bewegungen",
+  "edit_pals.learn_all_success": "Alle Züge erfolgreich gelernt!",
+  "edit_pals.learn_all_fail": "Bewegungen konnten nicht gelernt werden."
 }

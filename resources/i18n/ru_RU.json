@@ -1389,5 +1389,16 @@
   "dashboard.stat_pals": "приятели",
   "tools.drop_title": "Перетащите Level.sav для загрузки сохранения",
   "tools.drop_hint_overlay": "Или нажмите кнопку «Загрузить сохранение» выше.",
-  "tools.save_loaded": "Сохранить загружено"
+  "tools.save_loaded": "Сохранить загружено",
+  "edit_pals.learn_all_moves": "Изучите все движения",
+  "edit_pals.ctx.boss_alpha": "Босс (Альфа)",
+  "edit_pals.ctx.lucky_shiny": "Лаки (Блестящий)",
+  "edit_pals.ctx.awakened": "Пробужденный",
+  "edit_pals.ctx.imported": "Импортировано",
+  "edit_pals.ctx.favorited": "Избранное",
+  "edit_pals.ctx.lock_level": "Уровень блокировки",
+  "edit_pals.ctx.max_all_stats": "Макс. все характеристики",
+  "edit_pals.ctx.learn_all_moves": "Изучите все движения",
+  "edit_pals.learn_all_success": "Все движения успешно разучены!",
+  "edit_pals.learn_all_fail": "Не удалось выучить движения."
 }

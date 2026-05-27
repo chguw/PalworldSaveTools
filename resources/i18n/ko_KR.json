@@ -1390,5 +1390,16 @@
   "dashboard.stat_pals": "친구들",
   "tools.drop_title": "Level.sav를 저장 로드에 삭제",
   "tools.drop_hint_overlay": "또는 위의 '저장 불러오기' 버튼을 클릭하세요.",
-  "tools.save_loaded": "저장 로드됨"
+  "tools.save_loaded": "저장 로드됨",
+  "edit_pals.learn_all_moves": "모든 동작 배우기",
+  "edit_pals.ctx.boss_alpha": "보스(알파)",
+  "edit_pals.ctx.lucky_shiny": "럭키(반짝)",
+  "edit_pals.ctx.awakened": "깨어남",
+  "edit_pals.ctx.imported": "수입됨",
+  "edit_pals.ctx.favorited": "즐겨찾기",
+  "edit_pals.ctx.lock_level": "잠금 수준",
+  "edit_pals.ctx.max_all_stats": "최대 모든 통계",
+  "edit_pals.ctx.learn_all_moves": "모든 동작 배우기",
+  "edit_pals.learn_all_success": "모든 동작을 성공적으로 배웠습니다!",
+  "edit_pals.learn_all_fail": "동작을 배우지 못했습니다."
 }

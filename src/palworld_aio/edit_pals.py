@@ -415,15 +415,34 @@ class PalIcon(QFrame):
             self.clicked.emit()
         super().mousePressEvent(event)
     def contextMenuEvent(self, event):
-        from PySide6.QtWidgets import QMenu
-        menu = QMenu(self)
-        menu.setObjectName('editPalsContextMenu')
         if self.pal_data:
-            delete_action = menu.addAction(t('edit_pals.delete'))
+            self.clicked.emit()
+            raw = self._get_raw()
+            if not raw:
+                return
+            menu, actions = build_pal_context_menu(self, raw)
             action = menu.exec(event.globalPos())
-            if action == delete_action:
+            if action == actions['boss']:
+                self.rightClicked.emit(self.slot_index, 'boss_toggle')
+            elif action == actions['lucky']:
+                self.rightClicked.emit(self.slot_index, 'lucky_toggle')
+            elif action == actions['awake']:
+                self.rightClicked.emit(self.slot_index, 'awake_toggle')
+            elif action == actions['dna']:
+                self.rightClicked.emit(self.slot_index, 'dna_toggle')
+            elif action in actions['fav'][1]:
+                idx = actions['fav'][1].index(action)
+                self.rightClicked.emit(self.slot_index, f'fav_set_{idx}')
+            elif action == actions['max']:
+                self.rightClicked.emit(self.slot_index, 'max_all_stats')
+            elif action == actions['learn']:
+                self.rightClicked.emit(self.slot_index, 'learn_all')
+            elif action == actions['delete']:
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
+            from PySide6.QtWidgets import QMenu
+            menu = QMenu(self)
+            menu.setObjectName('editPalsContextMenu')
             add_action = menu.addAction(t('edit_pals.add_new_pal'))
             action = menu.exec(event.globalPos())
             if action == add_action:
@@ -612,15 +631,33 @@ class PartySlotWidget(QFrame):
             self.clicked.emit()
         super().mousePressEvent(event)
     def contextMenuEvent(self, event):
-        from PySide6.QtWidgets import QMenu
-        menu = QMenu(self)
-        menu.setObjectName('editPalsContextMenu')
         if self.pal_data:
-            delete_action = menu.addAction(t('edit_pals.delete'))
+            raw = self._get_raw()
+            if not raw:
+                return
+            menu, actions = build_pal_context_menu(self, raw)
             action = menu.exec(event.globalPos())
-            if action == delete_action:
+            if action == actions['boss']:
+                self.rightClicked.emit(self.slot_index, 'boss_toggle')
+            elif action == actions['lucky']:
+                self.rightClicked.emit(self.slot_index, 'lucky_toggle')
+            elif action == actions['awake']:
+                self.rightClicked.emit(self.slot_index, 'awake_toggle')
+            elif action == actions['dna']:
+                self.rightClicked.emit(self.slot_index, 'dna_toggle')
+            elif action in actions['fav'][1]:
+                idx = actions['fav'][1].index(action)
+                self.rightClicked.emit(self.slot_index, f'fav_set_{idx}')
+            elif action == actions['max']:
+                self.rightClicked.emit(self.slot_index, 'max_all_stats')
+            elif action == actions['learn']:
+                self.rightClicked.emit(self.slot_index, 'learn_all')
+            elif action == actions['delete']:
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
+            from PySide6.QtWidgets import QMenu
+            menu = QMenu(self)
+            menu.setObjectName('editPalsContextMenu')
             add_action = menu.addAction(t('edit_pals.add_new_pal'))
             action = menu.exec(event.globalPos())
             if action == add_action:
@@ -652,6 +689,11 @@ class PartySlotWidget(QFrame):
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
         if nick:
             pal_name = f'{nick}'
+        tip = f'{pal_name} [Lv.{level}]'
+        base = get_pal_base_data(cid)
+        if base and base.get('description'):
+            tip += f'<br><br>{wrap_tooltip_text(base["description"])}'
+        self.setToolTip(tip)
         is_boss = cid.upper().startswith('BOSS_')
         is_lucky = extract_value(raw, 'IsRarePal', False)
         is_imported = extract_value(raw, 'bImportedCharacter', False)
@@ -890,15 +932,33 @@ class PalboxSlotWidget(QFrame):
             self.clicked.emit()
         super().mousePressEvent(event)
     def contextMenuEvent(self, event):
-        from PySide6.QtWidgets import QMenu
-        menu = QMenu(self)
-        menu.setObjectName('editPalsContextMenu')
         if self.pal_data:
-            delete_action = menu.addAction(t('edit_pals.delete'))
+            raw = self._get_raw()
+            if not raw:
+                return
+            menu, actions = build_pal_context_menu(self, raw)
             action = menu.exec(event.globalPos())
-            if action == delete_action:
+            if action == actions['boss']:
+                self.rightClicked.emit(self.slot_index, 'boss_toggle')
+            elif action == actions['lucky']:
+                self.rightClicked.emit(self.slot_index, 'lucky_toggle')
+            elif action == actions['awake']:
+                self.rightClicked.emit(self.slot_index, 'awake_toggle')
+            elif action == actions['dna']:
+                self.rightClicked.emit(self.slot_index, 'dna_toggle')
+            elif action in actions['fav'][1]:
+                idx = actions['fav'][1].index(action)
+                self.rightClicked.emit(self.slot_index, f'fav_set_{idx}')
+            elif action == actions['max']:
+                self.rightClicked.emit(self.slot_index, 'max_all_stats')
+            elif action == actions['learn']:
+                self.rightClicked.emit(self.slot_index, 'learn_all')
+            elif action == actions['delete']:
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
+            from PySide6.QtWidgets import QMenu
+            menu = QMenu(self)
+            menu.setObjectName('editPalsContextMenu')
             add_action = menu.addAction(t('edit_pals.add_new_pal'))
             action = menu.exec(event.globalPos())
             if action == add_action:
@@ -1031,7 +1091,11 @@ class PalboxSlotWidget(QFrame):
             lock_badge.show()
             self._children.append(lock_badge)
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
-        self.setToolTip(f'{pal_name} [Lv.{level}]')
+        tip = f'{pal_name} [Lv.{level}]'
+        base = get_pal_base_data(cid)
+        if base and base.get('description'):
+            tip += f'<br><br>{wrap_tooltip_text(base["description"])}'
+        self.setToolTip(tip)
         self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; } QFrame#palboxSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
         self.resizeEvent(None)
     def set_selected(self, selected):
@@ -1241,6 +1305,103 @@ def _ensure_passive_data():
                 _PASSIVE_DATA[p['asset'].lower()] = p
     except Exception:
         pass
+def _learn_all_skills_raw(raw):
+    _ensure_skill_data()
+    skill_exclusions = ['unknown skills', 'unknown skill', 'en_text', 'en text']
+    npc_skill_patterns = ['Predator', 'RaidCutter', '_GYM_Act', '_GYM_', 'PartnerSkill', 'Unique_YakushimaBoss', 'Unique_WorldTreeDragon_', 'Unique_LegendDeer_Barrier', 'Unique_']
+    mastered = []
+    for asset_lower, skill_info in _SKILL_DATA.items():
+        name = skill_info.get('name', '')
+        if any((exc in name.lower() for exc in skill_exclusions)):
+            continue
+        original_asset = skill_info.get('asset', asset_lower)
+        if any((pat.lower() in original_asset.lower() for pat in npc_skill_patterns)):
+            continue
+        mastered.append(f'EPalWazaID::{original_asset}')
+    ew_data = raw.get('EquipWaza', {})
+    e_list = ew_data.get('value', {}).get('values', []) if isinstance(ew_data, dict) else ew_data if isinstance(ew_data, list) else []
+    if isinstance(e_list, list):
+        for s in e_list:
+            if s and s not in mastered:
+                mastered.append(s)
+    seen = set()
+    mastered_unique = []
+    for skill in mastered:
+        if skill not in seen:
+            seen.add(skill)
+            mastered_unique.append(skill)
+    raw['MasteredWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': mastered_unique}, 'type': 'ArrayProperty'}
+def _toggle_boss_raw(raw, enable):
+    cid = extract_value(raw, 'CharacterID', '')
+    if enable:
+        if not cid.upper().startswith('BOSS_'):
+            raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'BOSS_' + cid}
+        raw['IsRarePal'] = {'id': None, 'type': 'BoolProperty', 'value': False}
+    elif cid.upper().startswith('BOSS_'):
+        raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': cid[5:]}
+def _toggle_lucky_raw(raw, enable):
+    raw['IsRarePal'] = {'id': None, 'type': 'BoolProperty', 'value': enable}
+    if enable:
+        cid = extract_value(raw, 'CharacterID', '')
+        if cid.upper().startswith('BOSS_'):
+            raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': cid[5:]}
+def _toggle_awake_raw(raw, enable):
+    raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': enable}
+def _toggle_dna_raw(raw, enable):
+    raw['bImportedCharacter'] = {'id': None, 'type': 'BoolProperty', 'value': enable}
+def _set_fav_raw(raw, idx):
+    raw['FavoriteIndex'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': idx}}
+def _max_stats_raw(raw):
+    raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+    raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+    raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+    raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+    raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+    raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+    raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+    raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+    raw['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
+    raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
+def build_pal_context_menu(parent, raw):
+    from PySide6.QtWidgets import QMenu
+    menu = QMenu(parent)
+    menu.setObjectName('editPalsContextMenu')
+    cid = extract_value(raw, 'CharacterID', '') if raw else ''
+    is_boss = cid.upper().startswith('BOSS_')
+    is_lucky = extract_value(raw, 'IsRarePal', False) if raw else False
+    is_awake = extract_value(raw, 'bIsAwakening', False) if raw else False
+    is_dna = extract_value(raw, 'bImportedCharacter', False) if raw else False
+    fav_idx = extract_value(raw, 'FavoriteIndex', 0) if raw else 0
+    boss_action = menu.addAction(t('edit_pals.ctx.boss_alpha'))
+    boss_action.setCheckable(True)
+    boss_action.setChecked(is_boss)
+    lucky_action = menu.addAction(t('edit_pals.ctx.lucky_shiny'))
+    lucky_action.setCheckable(True)
+    lucky_action.setChecked(is_lucky)
+    awake_action = menu.addAction(t('edit_pals.ctx.awakened'))
+    awake_action.setCheckable(True)
+    awake_action.setChecked(is_awake)
+    dna_action = menu.addAction(t('edit_pals.ctx.imported'))
+    dna_action.setCheckable(True)
+    dna_action.setChecked(is_dna)
+    menu.addSeparator()
+    fav_sub = QMenu(t('edit_pals.ctx.lock_level'), menu)
+    fav_sub.setObjectName('editPalsContextMenu')
+    lock_actions = []
+    for i in range(4):
+        sub_a = fav_sub.addAction(f'{t("edit_pals.ctx.lock_level")} {i}')
+        sub_a.setCheckable(True)
+        sub_a.setChecked(fav_idx == i)
+        lock_actions.append(sub_a)
+    fav_action = menu.addAction(t('edit_pals.ctx.favorited'))
+    fav_action.setMenu(fav_sub)
+    menu.addSeparator()
+    max_action = menu.addAction(t('edit_pals.ctx.max_all_stats'))
+    learn_action = menu.addAction(t('edit_pals.ctx.learn_all_moves'))
+    menu.addSeparator()
+    delete_action = menu.addAction(t('edit_pals.delete'))
+    actions = {'boss': boss_action, 'lucky': lucky_action, 'awake': awake_action, 'dna': dna_action, 'fav': (fav_action, lock_actions), 'max': max_action, 'learn': learn_action, 'delete': delete_action}
+    return (menu, actions)
 def _fp64(value):
     return {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(value), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
 def _byte(value):
@@ -1868,41 +2029,31 @@ class PalInfoWidget(QFrame):
         parent.addWidget(header)
 
     def _on_portrait_context_menu(self, pos):
-        menu = QMenu(self)
-        menu.setObjectName('editPalsContextMenu')
-        boss_action = menu.addAction('☠ Boss (Alpha)')
-        boss_action.setCheckable(True)
-        boss_action.setChecked(self.info_boss_btn.isChecked())
-        lucky_action = menu.addAction('☆ Lucky (Shiny)')
-        lucky_action.setCheckable(True)
-        lucky_action.setChecked(self.info_lucky_btn.isChecked())
-        awake_action = menu.addAction('🔥 Awakened')
-        awake_action.setCheckable(True)
-        awake_action.setChecked(self.info_awake_btn.isChecked())
-        dna_action = menu.addAction('🧬 Imported')
-        dna_action.setCheckable(True)
-        dna_action.setChecked(self.info_dna_btn.isChecked())
-        menu.addSeparator()
-        fav_action = menu.addAction('★ Favorited')
-        fav_sub = QMenu('Lock Level', menu)
-        for i in range(4):
-            sub_a = fav_sub.addAction(f'Lock {i}')
-            sub_a.setCheckable(True)
-            sub_a.setChecked(extract_value(self._raw, 'FavoriteIndex', 0) == i if self._raw else False)
+        if not self._raw:
+            return
+        menu, actions = build_pal_context_menu(self, self._raw)
+        fav_action, lock_actions = actions['fav']
+        for i, sub_a in enumerate(lock_actions):
             sub_a.triggered.connect(partial(self._on_fav_set, i))
-        fav_action.setMenu(fav_sub)
-        menu.addSeparator()
-        max_action = menu.addAction('⬆ Max All Stats')
-        max_action.triggered.connect(self._on_max_click)
         action = menu.exec(self.bracket_wrapper.mapToGlobal(pos))
-        if action == boss_action:
+        if action == actions['boss']:
             self._on_boss_toggle()
-        elif action == lucky_action:
+        elif action == actions['lucky']:
             self._on_lucky_toggle()
-        elif action == awake_action:
+        elif action == actions['awake']:
             self._on_awake_toggle()
-        elif action == dna_action:
+        elif action == actions['dna']:
             self._on_dna_toggle()
+        elif action == actions['max']:
+            self._on_max_click()
+        elif action == actions['learn']:
+            try:
+                self._learn_all_skills()
+                show_information(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_success'))
+            except Exception:
+                show_warning(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_fail'))
+        elif action == actions['delete']:
+            pass
 
     def _on_fav_set(self, idx):
         if not self._raw:
@@ -2686,6 +2837,11 @@ class PalInfoWidget(QFrame):
             pix = _get_cached_pixmap(icon_path, 80)
             if pix:
                 self.portrait_icon.setPixmap(pix)
+            tip = f'{pal_name} [Lv.{level}]'
+            if base and base.get('description'):
+                tip += f'<br><br>{wrap_tooltip_text(base["description"])}'
+            self.portrait_icon.setToolTip(tip)
+            self.bracket_wrapper.setToolTip(tip)
             equip_waza_data = raw.get('EquipWaza', {})
             if isinstance(equip_waza_data, dict):
                 e_list = equip_waza_data.get('value', {}).get('values', [])
@@ -3156,6 +3312,11 @@ class PalInfoWidget(QFrame):
         cur[slot_idx] = asset
         self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': cur[:4]}, 'type': 'ArrayProperty'}
         self._refresh()
+    def _learn_all_skills(self):
+        if not self._raw:
+            return
+        _learn_all_skills_raw(self._raw)
+        self._refresh()
     def _on_boss_toggle(self):
         if not self._raw:
             return
@@ -3427,10 +3588,56 @@ class PalEditorWidget(QWidget):
     def _on_slot_right_clicked(self, slot_index, action):
         sender = self.sender()
         is_party = sender in self.party_slots
+        raw = sender._get_raw() if hasattr(sender, '_get_raw') else None
         if action == 'delete':
             self._delete_pal_at_slot(slot_index, is_party)
         elif action == 'add_new':
             self._add_new_pal_at_slot(slot_index)
+        elif action == 'boss_toggle':
+            if raw:
+                cid = extract_value(raw, 'CharacterID', '')
+                is_boss = cid.upper().startswith('BOSS_')
+                _toggle_boss_raw(raw, not is_boss)
+                self.pal_info._refresh()
+                sender.update_display()
+        elif action == 'lucky_toggle':
+            if raw:
+                is_lucky = extract_value(raw, 'IsRarePal', False)
+                _toggle_lucky_raw(raw, not is_lucky)
+                self.pal_info._refresh()
+                sender.update_display()
+        elif action == 'awake_toggle':
+            if raw:
+                is_awake = extract_value(raw, 'bIsAwakening', False)
+                _toggle_awake_raw(raw, not is_awake)
+                self.pal_info._refresh()
+                sender.update_display()
+        elif action == 'dna_toggle':
+            if raw:
+                is_dna = extract_value(raw, 'bImportedCharacter', False)
+                _toggle_dna_raw(raw, not is_dna)
+                self.pal_info._refresh()
+                sender.update_display()
+        elif action.startswith('fav_set_'):
+            if raw:
+                idx = int(action.split('_')[-1])
+                _set_fav_raw(raw, idx)
+                self.pal_info._refresh()
+                sender.update_display()
+        elif action == 'max_all_stats':
+            if raw:
+                _max_stats_raw(raw)
+                self.pal_info._refresh()
+                sender.update_display()
+        elif action == 'learn_all':
+            if raw:
+                try:
+                    _learn_all_skills_raw(raw)
+                    self.pal_info._refresh()
+                    sender.update_display()
+                    show_information(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_success'))
+                except Exception:
+                    show_warning(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_fail'))
     def _delete_pal_at_slot(self, slot_index, is_party=None):
         if is_party is None:
             is_party = self.selected_pal_slot and self.selected_pal_slot[0] == 'party'
