@@ -1380,7 +1380,7 @@
   "character_transfer.selection_none": "来源：不适用，目标：不适用",
   "character_transfer.selection_status": "源：{source}，目标：{target}",
   "loading.cancel": "ESC取消",
-  "loading.success": "保存加载成功",
+  "loading.success": "操作成功完成",
   "tools.drag_hint": "或将 Level.sav 文件拖放到此处",
   "dashboard.overview": "世界概况",
   "sidebar.locked": "首先加载保存文件",

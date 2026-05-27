@@ -8,7 +8,7 @@ try:
 except ImportError:
     print('Installing deep-translator...')
     import subprocess
-    subprocess.check_call(['pip', 'install', 'deep-translator'])
+    subprocess.check_call(['uv', 'pip', 'install', 'deep-translator'])
     from deep_translator import GoogleTranslator
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
@@ -16,7 +16,7 @@ NEW_TRANSLATIONS = {
     'tools.save_loaded': 'Save Loaded',
     'tools.drop_title': 'Drop Level.sav to Load Save',
     'tools.drop_hint_overlay': "Or click the 'Load Save' button above",
-    'loading.success': 'Save Loaded Successfully',
+    'loading.success': 'Operation Completed Successfully',
     'loading.cancel': 'ESC to cancel',
     'tools.drag_hint': 'or drag & drop a Level.sav file here',
     'dashboard.overview': 'World Overview',

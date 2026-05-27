@@ -1377,7 +1377,7 @@
   "character_transfer.selection_none": "출처: 해당 없음, 대상: 해당 없음",
   "character_transfer.selection_status": "소스: {source}, 대상: {target}",
   "loading.cancel": "취소하려면 ESC",
-  "loading.success": "저장이 성공적으로 로드되었습니다.",
+  "loading.success": "작업이 성공적으로 완료되었습니다.",
   "tools.drag_hint": "또는 여기에 Level.sav 파일을 끌어서 놓으세요.",
   "dashboard.overview": "세계 개요",
   "sidebar.locked": "먼저 세이브 파일을 불러오세요",

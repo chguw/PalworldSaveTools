@@ -1402,7 +1402,7 @@
   "character_transfer.selection_none": "Quelle: N/A, Ziel: N/A",
   "character_transfer.selection_status": "Quelle: {source}, Ziel: {target}",
   "loading.cancel": "ESC zum Abbrechen",
-  "loading.success": "Speichern erfolgreich geladen",
+  "loading.success": "Vorgang erfolgreich abgeschlossen",
   "tools.drag_hint": "oder ziehen Sie eine Level.sav-Datei per Drag & Drop hierher",
   "dashboard.overview": "Weltüberblick",
   "sidebar.locked": "Laden Sie zuerst eine Sicherungsdatei",

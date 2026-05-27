@@ -1378,7 +1378,7 @@
   "character_transfer.selection_none": "ソース: N/A、ターゲット: N/A",
   "character_transfer.selection_status": "ソース: {source}、ターゲット: {target}",
   "loading.cancel": "ESCでキャンセル",
-  "loading.success": "保存が正常にロードされました",
+  "loading.success": "操作は正常に完了しました",
   "tools.drag_hint": "または、Level.sav ファイルをここにドラッグ アンド ドロップします。",
   "dashboard.overview": "世界概要",
   "sidebar.locked": "最初に保存ファイルをロードします",

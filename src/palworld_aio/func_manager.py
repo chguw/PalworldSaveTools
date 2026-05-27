@@ -1378,8 +1378,8 @@ def unlock_all_lab_research_for_guild(guild_id, parent=None):
             return False
         lab_data = extra_value['Lab']['value']['RawData']['value']
         complete_research_list = []
-        for research_id, research_info in research_data.items():
-            complete_research_list.append({'research_id': research_id, 'work_amount': research_info['work_amount']})
+        for research_id, research_info in research_data.get('lab_research', {}).items():
+            complete_research_list.append({'research_id': research_id, 'work_amount': research_info['RequiredWorkAmount']})
         lab_data['research_info'] = complete_research_list
         return True
     except Exception as e:

@@ -1376,7 +1376,7 @@
   "character_transfer.selection_none": "Источник: н/д, Цель: н/д",
   "character_transfer.selection_status": "Источник: {source}, Цель: {target}",
   "loading.cancel": "ESC для отмены",
-  "loading.success": "Сохранить, загружено успешно",
+  "loading.success": "Операция успешно завершена",
   "tools.drag_hint": "или перетащите сюда файл Level.sav.",
   "dashboard.overview": "Обзор мира",
   "sidebar.locked": "Сначала загрузите файл сохранения",

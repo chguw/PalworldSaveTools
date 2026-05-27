@@ -1360,7 +1360,7 @@
   "character_transfer.selection_none": "Source : N/A, Cible : N/A",
   "character_transfer.selection_status": "Source : {source}, Cible : {target}",
   "loading.cancel": "ESC pour annuler",
-  "loading.success": "Sauvegarde chargée avec succès",
+  "loading.success": "Opération terminée avec succès",
   "tools.drag_hint": "ou faites glisser et déposez un fichier Level.sav ici",
   "dashboard.overview": "Aperçu du monde",
   "sidebar.locked": "Chargez d'abord un fichier de sauvegarde",

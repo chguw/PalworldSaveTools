@@ -1371,7 +1371,7 @@
   "character_transfer.selection_none": "Fuente: N/A, Objetivo: N/A",
   "character_transfer.selection_status": "Fuente: {fuente}, Destino: {objetivo}",
   "loading.cancel": "ESC para cancelar",
-  "loading.success": "Guardar cargado exitosamente",
+  "loading.success": "Operación completada con éxito",
   "tools.drag_hint": "o arrastre y suelte un archivo Level.sav aquí",
   "dashboard.overview": "Panorama mundial",
   "sidebar.locked": "Cargue un archivo guardado primero",
