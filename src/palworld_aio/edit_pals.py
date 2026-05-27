@@ -632,6 +632,8 @@ class PartySlotWidget(QFrame):
         super().mousePressEvent(event)
     def contextMenuEvent(self, event):
         if self.pal_data:
+            self._context_click = True
+            self.clicked.emit()
             raw = self._get_raw()
             if not raw:
                 return
@@ -933,6 +935,8 @@ class PalboxSlotWidget(QFrame):
         super().mousePressEvent(event)
     def contextMenuEvent(self, event):
         if self.pal_data:
+            self._context_click = True
+            self.clicked.emit()
             raw = self._get_raw()
             if not raw:
                 return
@@ -1190,6 +1194,8 @@ class _CircularIcon(QWidget):
             painter.setPen(QPen(QColor(100, 110, 130), 1))
             painter.setFont(QFont('Segoe UI', 16))
             painter.drawText(r, Qt.AlignCenter, '?')
+_SKILL_EXCLUSION_NAMES = ['unknown skills', 'unknown skill', 'en_text', 'en text']
+_SKILL_EXCLUSION_PATTERNS = ['Predator', 'RaidCutter', '_GYM_', 'PartnerSkill', 'Unique_', 'Funnel_', 'Human_', 'Scratch', 'Throw', 'WorkAttack', 'SelfDestruct_Bee', 'Weapon_Use', 'CreepingBubble']
 _SKILL_DATA = None
 _ELEMENT_DATA = None
 def _ensure_element_data():
@@ -1307,15 +1313,13 @@ def _ensure_passive_data():
         pass
 def _learn_all_skills_raw(raw):
     _ensure_skill_data()
-    skill_exclusions = ['unknown skills', 'unknown skill', 'en_text', 'en text']
-    npc_skill_patterns = ['Predator', 'RaidCutter', '_GYM_Act', '_GYM_', 'PartnerSkill', 'Unique_YakushimaBoss', 'Unique_WorldTreeDragon_', 'Unique_LegendDeer_Barrier', 'Unique_']
     mastered = []
     for asset_lower, skill_info in _SKILL_DATA.items():
         name = skill_info.get('name', '')
-        if any((exc in name.lower() for exc in skill_exclusions)):
+        if any((exc in name.lower() for exc in _SKILL_EXCLUSION_NAMES)):
             continue
         original_asset = skill_info.get('asset', asset_lower)
-        if any((pat.lower() in original_asset.lower() for pat in npc_skill_patterns)):
+        if any((pat.lower() in original_asset.lower() for pat in _SKILL_EXCLUSION_PATTERNS)):
             continue
         mastered.append(f'EPalWazaID::{original_asset}')
     ew_data = raw.get('EquipWaza', {})
@@ -1749,21 +1753,27 @@ class PalInfoWidget(QFrame):
         self.installEventFilter(self)
     def set_hover_pal(self, pal_data):
         self._hovered_data = pal_data
+        if pal_data is None:
+            self._update_stack_state()
+            self._clear_display()
+            return
         self._update_stack_state()
-        if pal_data is not None:
-            self._update_display(pal_data)
+        self._update_display(pal_data)
     def set_clicked_pal(self, pal_data):
         self.last_clicked_data = pal_data
+        if pal_data is None:
+            self._update_stack_state()
+            self._clear_display()
+            return
         self._update_stack_state()
-        if pal_data is not None:
-            self._update_display(pal_data)
+        self._update_display(pal_data)
     def clear_hover(self):
         self._hovered_data = None
-        self._update_stack_state()
         if self.last_clicked_data is not None:
             self._update_display(self.last_clicked_data)
-        else:
-            self._clear_display()
+            return
+        self._update_stack_state()
+        self._clear_display()
     def _update_stack_state(self):
         if self._hovered_data is None and self.last_clicked_data is None:
             self._no_data_overlay.show()
@@ -1814,10 +1824,10 @@ class PalInfoWidget(QFrame):
         self.partner_name_lbl.setText('--')
         self.partner_lvl_lbl.setText('Lv --')
         self.partner_desc_lbl.setText('Select a pal to view details')
-        for i in reversed(range(self.active_skills_list.count())):
-            w = self.active_skills_list.itemAt(i)
-            if w and w.widget():
-                w.widget().deleteLater()
+        while self.active_skills_list.count():
+            item = self.active_skills_list.takeAt(0)
+            if item and item.widget():
+                item.widget().deleteLater()
         for s in self.passive_slots:
             s.setText('--')
             s.setStyleSheet('font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.3); background: transparent; border: none;')
@@ -1841,8 +1851,6 @@ class PalInfoWidget(QFrame):
         self.lucky_overlay.hide()
         self.awake_overlay.hide()
         self.portrait_ring.set_awakened(False)
-        self.last_clicked_data = None
-        self._hovered_data = None
         self._update_stack_state()
     def _set_passive_overlay(self, index, mode):
         if index >= len(self.passive_cards) or index >= len(self.passive_overlays):
@@ -2097,6 +2105,7 @@ class PalInfoWidget(QFrame):
         left_layout.addWidget(self.star_container)
 
         portrait_frame = QFrame()
+        self.portrait_frame = portrait_frame
         portrait_frame.setFixedSize(88, 88)
         portrait_frame.setObjectName('portraitGlow')
         portrait_frame.setStyleSheet('QFrame#portraitGlow { background: qradialgradient(cx:0.5,cy:0.5,radius:0.6,fx:0.5,fy:0.5,stop:0 rgba(125,211,252,0.12),stop:0.4 rgba(125,211,252,0.04),stop:1 transparent); border: none; border-radius: 44px; }')
@@ -2584,7 +2593,6 @@ class PalInfoWidget(QFrame):
             else:
                 raw = pal_data
             if not isinstance(raw, dict):
-                self._clear_display()
                 return
             self._raw = raw
             _ensure_skill_data()
@@ -2849,12 +2857,14 @@ class PalInfoWidget(QFrame):
                 e_list = equip_waza_data
             else:
                 e_list = []
-            for i in reversed(range(self.active_skills_list.count())):
-                w = self.active_skills_list.itemAt(i)
-                if w and w.widget():
-                    w.widget().deleteLater()
+            while self.active_skills_list.count():
+                item = self.active_skills_list.takeAt(0)
+                if item and item.widget():
+                    item.widget().deleteLater()
             for i in range(3):
                 e = e_list[i] if i < len(e_list) else ''
+                if isinstance(e, dict):
+                    e = e.get('value', '')
                 if e:
                     w_clean = e.split('::')[-1].lower()
                     move_name = PalFrame._SKILLMAP.get(w_clean, e.split('::')[-1])
@@ -2973,8 +2983,9 @@ class PalInfoWidget(QFrame):
             self.partner_name_lbl.setText(pskill_name or pal_name)
             self.partner_lvl_lbl.setText(f'Lv {max(1, condenser_rank)}')
             self.partner_desc_lbl.setText(pal_desc or f'Partner skill for {pal_name}. Effects scale with level.')
-        except Exception as e:
-            self._clear_display()
+        except Exception:
+            import traceback
+            traceback.print_exc()
     def eventFilter(self, obj, event):
         if event.type() == QEvent.Type.MouseButtonPress and event.button() == Qt.LeftButton:
             if obj is self.name_lbl:
@@ -3175,6 +3186,8 @@ class PalInfoWidget(QFrame):
                             break
                     if asset:
                         key = asset.split('::')[-1].lower()
+                        if any((pat.lower() in key for pat in _SKILL_EXCLUSION_PATTERNS)):
+                            continue
                         info = _SKILL_DATA.get(key, {}) if isinstance(_SKILL_DATA, dict) else {}
                         elem = info.get('element', 'Normal')
                         pwr = info.get('power', 0)
@@ -3544,12 +3557,18 @@ class PalEditorWidget(QWidget):
         self.box_label.setText(t('pal_editor.box', n=self.current_box_index) if t else f'Box {self.current_box_index}')
         self._update_palbox_page()
     def _on_party_slot_clicked(self, idx):
+        slot = self.party_slots[idx]
+        is_context = getattr(slot, '_context_click', False)
+        if is_context:
+            slot._context_click = False
         if idx in self.party_pals:
             pal = self.party_pals[idx]
-            if self._clicked_pal is pal and self.selected_pal_slot == ('party', idx):
+            if not is_context and self._clicked_pal is pal and self.selected_pal_slot == ('party', idx):
                 self._clicked_pal = None
                 self.selected_pal_slot = None
                 self._clear_party_highlight()
+                self.pal_info.last_clicked_data = None
+                self.pal_info._hovered_data = None
                 self.pal_info._clear_display()
                 return
             self._clicked_pal = pal
@@ -3565,12 +3584,18 @@ class PalEditorWidget(QWidget):
     def _on_party_slot_left(self):
         self.pal_info.clear_hover()
     def _on_palbox_slot_clicked(self, idx):
+        slot = self.palbox_slots[idx]
+        is_context = getattr(slot, '_context_click', False)
+        if is_context:
+            slot._context_click = False
         pals_on_page = self._get_palbox_page_pals()
         if idx < len(pals_on_page) and pals_on_page[idx] is not None:
-            if self._clicked_pal is pals_on_page[idx] and self.selected_pal_slot == ('palbox', idx):
+            if not is_context and self._clicked_pal is pals_on_page[idx] and self.selected_pal_slot == ('palbox', idx):
                 self._clicked_pal = None
                 self.selected_pal_slot = None
                 self._clear_palbox_highlight()
+                self.pal_info.last_clicked_data = None
+                self.pal_info._hovered_data = None
                 self.pal_info._clear_display()
                 return
             self._clicked_pal = pals_on_page[idx]
@@ -3626,9 +3651,7 @@ class PalEditorWidget(QWidget):
                 sender.update_display()
         elif action == 'max_all_stats':
             if raw:
-                _max_stats_raw(raw)
-                self.pal_info._refresh()
-                sender.update_display()
+                self.pal_info._on_max_click()
         elif action == 'learn_all':
             if raw:
                 try:
@@ -3655,6 +3678,8 @@ class PalEditorWidget(QWidget):
                     pass
                 del self.party_pals[slot_index]
                 self._update_party_slots()
+                self.pal_info.last_clicked_data = None
+                self.pal_info._hovered_data = None
                 self.pal_info._clear_display()
                 self._update_dashboard_stats()
         else:
@@ -3672,6 +3697,8 @@ class PalEditorWidget(QWidget):
                     pass
                 del self.palbox_pal_dict[abs_idx]
                 self._update_palbox_page()
+                self.pal_info.last_clicked_data = None
+                self.pal_info._hovered_data = None
                 self.pal_info._clear_display()
                 self._update_dashboard_stats()
     def _add_new_pal_at_slot(self, slot_index):
@@ -3764,6 +3791,8 @@ class PalEditorWidget(QWidget):
             slot.update_display()
             slot.set_selected(False)
         self.box_label.setText(t('pal_editor.box', n=1) if t else 'Box 1')
+        self.pal_info.last_clicked_data = None
+        self.pal_info._hovered_data = None
         self.pal_info._clear_display()
     def refresh(self):
         self._process_pending_changes()
@@ -4214,10 +4243,7 @@ class PalFrame(QFrame):
                         cls._PASSFLAGS[asset_lower] = {'add_pal': x.get('add_pal', False), 'add_rare_pal': x.get('add_rare_pal', False), 'add_world_tree_pal': x.get('add_world_tree_pal', False), 'add_mutation_pal': x.get('add_mutation_pal', False), 'add_armor': x.get('add_armor', False), 'add_accessory': x.get('add_accessory', False), 'add_weapon': x.get('add_weapon', False), 'invoke_always': x.get('invoke_always', False), 'category': x.get('category', '')}
         except Exception:
             pass
-        skill_exclusions = ['unknown skills', 'unknown skill', 'en_text', 'en text']
-        npc_skill_patterns = ['Predator', 'RaidCutter', '_GYM_Act', 'Unique_YakushimaBoss', 'Unique_WorldTreeDragon_', 'Unique_LegendDeer_Barrier']
-        cls._SKILLMAP = {k: v for k, v in cls._SKILLMAP.items() if not any((exc in v.lower() for exc in skill_exclusions)) and (not any((pat.lower() in k.lower() for pat in npc_skill_patterns)))}
-        cls._PASSMAP = {k: v for k, v in cls._PASSMAP.items() if not any((exc in v.lower() for exc in skill_exclusions))}
+        cls._PASSMAP = {k: v for k, v in cls._PASSMAP.items() if not any((exc in v.lower() for exc in _SKILL_EXCLUSION_NAMES))}
         cls._PASSMAP = {passive_id: name for passive_id, name in cls._PASSMAP.items() if cls._is_pal_passive(passive_id)}
         cls._maps_loaded = True
     def __init__(self, pal_item, parent=None):
