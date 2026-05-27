@@ -9,6 +9,7 @@ from i18n import t
 from loading_manager import show_critical
 from palworld_aio import constants
 from palworld_aio.ui.styles import ThemeManager
+from .sidebar_widget import ICONS
 def load_tool_icons():
     icon_file = os.path.join(constants.get_src_path(), 'data', 'configs', 'toolicon.json')
     if not os.path.exists(icon_file):
@@ -281,18 +282,23 @@ class ToolsTab(QWidget):
         self._stat_cards = {}
         self._stat_label_refs = {}
         stats = [
-            ('players', '👥', 'dashboard.stat_players'),
-            ('guilds', '🛡️', 'dashboard.stat_guilds'),
-            ('bases', '🏠', 'dashboard.stat_bases'),
-            ('pals', '🐉', 'dashboard.stat_pals'),
+            ('players', ICONS['players'], 'dashboard.stat_players'),
+            ('guilds', ICONS['guilds'], 'dashboard.stat_guilds'),
+            ('bases', ICONS['bases'], 'dashboard.stat_bases'),
+            ('pals', ICONS['pal_editor'], 'dashboard.stat_pals'),
         ]
         for key, icon, label_key in stats:
             box = QVBoxLayout()
             box.setSpacing(2)
-            icon_lbl = QLabel(icon)
-            icon_lbl.setAlignment(Qt.AlignCenter)
-            icon_lbl.setStyleSheet('font-size: 18px; border: none; background: transparent;')
-            box.addWidget(icon_lbl)
+            icon_btn = QPushButton(icon)
+            icon_btn.setFont(QFont('Hack Nerd Font', 12))
+            icon_btn.setFixedSize(44, 28)
+            icon_btn.setFlat(True)
+            icon_btn.setFocusPolicy(Qt.NoFocus)
+            pr = {'players': 8, 'guilds': 4, 'bases': 8, 'pals': 8}.get(key, 8)
+            icon_btn.setStyleSheet(f'QPushButton {{ color: #4a5568; border: 1px solid #2d3748; border-radius: 6px; background-color: #1a202c; padding-left: 2px; padding-right: {pr}px; }} QPushButton:disabled {{ color: #4a5568; }}')
+            icon_btn.setEnabled(False)
+            box.addWidget(icon_btn)
             val = QLabel('0')
             val.setAlignment(Qt.AlignCenter)
             val.setStyleSheet('font-size: 16px; font-weight: 700; color: #e2e8f0; border: none; background: transparent;')
