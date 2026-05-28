@@ -108,7 +108,7 @@ class GuildItemPickerDialog(QDialog):
         self.desc_label.setWordWrap(True)
         self.desc_label.setVisible(False)
         info_layout.addWidget(self.desc_label)
-        right_layout.addWidget(info_frame, 1)
+        right_layout.addWidget(info_frame, 2)
 
         guilds_group = QGroupBox(t('base_inventory.select_guilds') if t else 'Select Guilds')
         guilds_inner_layout = QVBoxLayout()
@@ -155,7 +155,7 @@ class GuildItemPickerDialog(QDialog):
         guilds_inner_layout.addWidget(stats_container)
 
         guilds_group.setLayout(guilds_inner_layout)
-        right_layout.addWidget(guilds_group, 1)
+        right_layout.addWidget(guilds_group, 3)
 
         btn_layout = QHBoxLayout()
         self.find_btn = QPushButton(t('base_inventory.find_containers') if t else 'Find Containers')
