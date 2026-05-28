@@ -7541,7 +7541,7 @@
             "description": ""
         },
         {
-            "name": "oilpump02",
+            "name": "OilPump02",
             "asset": "OilPump02",
             "icon": "/icons/technologies/T_icon_buildObject_OilPump02.webp",
             "type": "boss",
