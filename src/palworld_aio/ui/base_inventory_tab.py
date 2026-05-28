@@ -59,8 +59,8 @@ class GuildItemPickerDialog(QDialog):
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(10)
 
-        splitter = QSplitter(Qt.Horizontal)
-        splitter.setChildrenCollapsible(False)
+        content_layout = QHBoxLayout()
+        content_layout.setSpacing(10)
 
         left_widget = QWidget()
         left_layout = QVBoxLayout(left_widget)
@@ -165,11 +165,10 @@ class GuildItemPickerDialog(QDialog):
         btn_layout.addWidget(close_btn)
         right_layout.addLayout(btn_layout)
 
-        splitter.addWidget(left_widget)
-        splitter.addWidget(right_widget)
-        splitter.setSizes([220, 580])
+        content_layout.addWidget(left_widget, 3)
+        content_layout.addWidget(right_widget, 2)
 
-        layout.addWidget(splitter)
+        layout.addLayout(content_layout)
         items = ItemData.get_all_items()
         for item in items:
             if item.get('sort_id', 0) == 9999:
