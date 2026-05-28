@@ -1,0 +1,790 @@
+{
+    "boss_defeat_flag_map": {
+        "BossDefeatReward_GrassMammoth": [
+            "81_1_grass_FBOSS_1",
+            "worldtree_9_55_WorldTreeAura",
+            "green_A",
+            "green_A_PlantSlime",
+            "green_B",
+            "green_C",
+            "green_D",
+            "green_E",
+            "blue_G",
+            "blue_H",
+            "yellow_G",
+            "orange_G",
+            "snow_orange_B",
+            "snow_orange_D",
+            "snow_orange_E",
+            "snow_orange_E"
+        ],
+        "BossDefeatReward_KingAlpaca": [
+            "81_1_grass_FBOSS_2",
+            "worldtree_9_55_WorldTreeAura"
+        ],
+        "BossDefeatReward_ThunderBird": [
+            "81_1_grass_FBOSS_4",
+            "50_10_dungeon_dessert_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "orange_A_thunderbirds",
+            "orange_D",
+            "desert_orange_A",
+            "desert_orange_C",
+            "desert_orange_D"
+        ],
+        "BossDefeatReward_SakuraSaurus_Water": [
+            "81_1_grass_FBOSS_5",
+            "worldtree_9_55_WorldTreeAura",
+            "purple_A_SakuraSaurus_Water"
+        ],
+        "BossDefeatReward_Ronin": [
+            "81_1_grass_FBOSS_6",
+            "50_8_dungeon_volcano_boss",
+            "volcano_yellow_A",
+            "volcano_yellow_B",
+            "volcano_yellow_C",
+            "volcano_yellow_D",
+            "volcano_orange_A",
+            "volcano_orange_B",
+            "volcano_orange_C",
+            "volcano_orange_D",
+            "volcano_orange_E",
+            "volcano_orange_F",
+            "volcano_orange_G",
+            "volcano_orange_H",
+            "volcano_orange_I",
+            "volcano_orange_J",
+            "desert_yellow_A",
+            "desert_orange_A",
+            "desert_orange_B",
+            "desert_orange_C",
+            "desert_orange_D",
+            "desert_orange_E",
+            "desert_orange_F",
+            "desert_orange_G",
+            "snow_orange_A",
+            "snow_orange_B",
+            "snow_orange_C",
+            "snow_orange_D",
+            "snow_orange_E",
+            "snow_orange_F",
+            "snow_orange_G",
+            "snow_orange_H",
+            "snow_orange_I",
+            "snow_red_B",
+            "snow_red_C",
+            "snow_red_E",
+            "sakura_red_A",
+            "sakura_red_B",
+            "sakura_red_C",
+            "sakura_purple_A",
+            "sakura_Waterfront_purple_A",
+            "sakura_purple_B",
+            "sakura_purple_C",
+            "sakura_purple_D",
+            "sanctuary_3_dessert"
+        ],
+        "BossDefeatReward_FireKirin": [
+            "81_1_grass_FBOSS_8",
+            "50_8_dungeon_volcano_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "volcano_orange_C",
+            "volcano_orange_D",
+            "volcano_orange_H"
+        ],
+        "BossDefeatReward_CaptainPenguin": [
+            "81_1_grass_FBOSS_9",
+            "snow_orange_B",
+            "snow_orange_D",
+            "sanctuary_1_forest",
+            "5_1_island_iceblock"
+        ],
+        "BossDefeatReward_Manticore": [
+            "81_1_grass_FBOSS_10",
+            "50_8_dungeon_volcano_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "volcano_orange_C",
+            "yamijima_lava_pink_A"
+        ],
+        "BossDefeatReward_FlameBuffalo": [
+            "81_1_grass_FBOSS_FlameBuffalo",
+            "50_4_dungeon_grass2_boss",
+            "yellow_C",
+            "red_B",
+            "volcano_yellow_A",
+            "volcano_yellow_B",
+            "volcano_orange_A",
+            "volcano_orange_E"
+        ],
+        "BossDefeatReward_Umihebi": [
+            "81_1_grass_FBOSS_13",
+            "worldtree_9_55_WorldTreeAura"
+        ],
+        "BossDefeatReward_Anubis": [
+            "81_1_grass_FBOSS_14",
+            "81_1_grass_FBOSS_17",
+            "worldtree_9_55_WorldTreeAura",
+            "desertisland_1"
+        ],
+        "BossDefeatReward_Kitsunebi_Ice": [
+            "81_1_grass_FBOSS_15",
+            "81_5_Yamijima_FBOSS_19",
+            "50_15_dungeon_Yamijima_boss",
+            "snow_orange_G"
+        ],
+        "BossDefeatReward_FengyunDeeper": [
+            "81_1_grass_FBOSS_16",
+            "50_8_dungeon_volcano_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "sanctuary_3_dessert"
+        ],
+        "BossDefeatReward_NaughtyCat": [
+            "81_1_grass_FBOSS_18",
+            "50_5_dungeon_forest",
+            "50_6_dungeon_forest_boss",
+            "50_5_dungeon_forest_monsteronly",
+            "yellow_A",
+            "yellow_C",
+            "yellow_D",
+            "orange_A",
+            "orange_C",
+            "orange_D",
+            "orange_E",
+            "purple_A",
+            "sakura_red_A"
+        ],
+        "BossDefeatReward_CatVampire": [
+            "81_1_grass_FBOSS_19",
+            "50_5_dungeon_forest",
+            "50_6_dungeon_forest_boss",
+            "50_5_dungeon_forest_monsteronly",
+            "yamijima_IceLand_pink_A",
+            "yamijima_IceLand_pink_B"
+        ],
+        "BossDefeatReward_IceFox": [
+            "81_1_grass_FBOSS_20",
+            "orange_H",
+            "red_A",
+            "snow_orange_F",
+            "snow_orange_G",
+            "snow_orange_H",
+            "snow_orange_I"
+        ],
+        "BossDefeatReward_MopKing": [
+            "81_1_grass_FBOSS_21",
+            "50_4_dungeon_grass2_boss",
+            "yellow_E",
+            "red_A",
+            "snow_orange_G"
+        ],
+        "BossDefeatReward_HawkBird": [
+            "81_1_grass_FBOSS_22",
+            "50_10_dungeon_dessert_boss",
+            "blue_B",
+            "blue_E",
+            "blue_G",
+            "blue_H",
+            "blue_J_hawkbirds"
+        ],
+        "BossDefeatReward_Kirin": [
+            "81_1_grass_FBOSS_23",
+            "50_4_dungeon_grass2_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "yellow_G"
+        ],
+        "BossDefeatReward_SakuraSaurus": [
+            "81_1_grass_FBOSS_24",
+            "worldtree_9_55_WorldTreeAura",
+            "green_K",
+            "green_M",
+            "yellow_A",
+            "yellow_F",
+            "yellow_H",
+            "purple_A"
+        ],
+        "BossDefeatReward_PlantSlime": [
+            "81_1_grass_FBOSS_25",
+            "50_2_dungeon_grass_boss",
+            "green_A_PlantSlime",
+            "green_B",
+            "green_L",
+            "green_M"
+        ],
+        "BossDefeatReward_GrassPanda_Electric": [
+            "81_1_grass_FBOSS_26",
+            "50_9_dungeon_dessert",
+            "50_9_dungeon_dessert_monsteronly",
+            "worldtree_9_55_WorldTreeAura"
+        ],
+        "BossDefeatReward_LazyCatfish": [
+            "81_1_grass_FBOSS_27",
+            "50_4_dungeon_grass2_boss",
+            "50_8_dungeon_volcano_boss",
+            "yellow_C",
+            "yellow_F",
+            "orange_I",
+            "volcano_yellow_A_coast",
+            "volcano_yellow_B_coast",
+            "volcano_yellow_C_coast",
+            "volcano_yellow_D_coast",
+            "volcano_orange_G_coast",
+            "volcano_orange_I_coast",
+            "volcano_orange_J_coast"
+        ],
+        "BossDefeatReward_BerryGoat_Dark": [
+            "81_1_grass_FBOSS_28",
+            "81_5_Yamijima_FBOSS_22",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_forest_purple_B",
+            "yamijima_forest_purple_B_BOSS",
+            "yamijima_forest_purple_C"
+        ],
+        "BossDefeatReward_Yeti_Grass": [
+            "81_1_grass_FBOSS_29",
+            "worldtree_9_55_WorldTreeAura",
+            "sakura_purple_A",
+            "sakura_Waterfront_purple_A"
+        ],
+        "BossDefeatReward_PurpleSpider": [
+            "81_1_grass_FBOSS_30",
+            "81_5_Yamijima_FBOSS_15",
+            "50_5_dungeon_forest",
+            "50_14_dungeon_Yamijima",
+            "50_15_dungeon_Yamijima_boss",
+            "orange_A"
+        ],
+        "BossDefeatReward_BlueDragon": [
+            "81_1_grass_FBOSS_31",
+            "worldtree_9_55_WorldTreeAura",
+            "yellow_F_BlueDragons"
+        ],
+        "BossDefeatReward_WeaselDragon": [
+            "1_10_plain_F_Boss_FairyDragon",
+            "50_12_dungeon_snow_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "snow_orange_B",
+            "snow_orange_D"
+        ],
+        "BossDefeatReward_Suzaku": [
+            "81_2_dessert_FBOSS_1",
+            "worldtree_9_55_WorldTreeAura",
+            "desert_orange_ALL_Suzakus"
+        ],
+        "BossDefeatReward_SaintCentaur": "81_2_dessert_FBOSS_2",
+        "BossDefeatReward_DarkScorpion": [
+            "81_2_dessert_FBOSS_3",
+            "desert_orange_A",
+            "desert_orange_B",
+            "desert_orange_C",
+            "desert_orange_D",
+            "desert_orange_E",
+            "desert_orange_F",
+            "desert_orange_G"
+        ],
+        "BossDefeatReward_FlowerDinosaur_Electric": [
+            "81_2_dessert_FBOSS_FlowerDinosaur_Electric",
+            "50_10_dungeon_dessert_boss",
+            "desert_orange_A",
+            "desert_orange_B",
+            "desert_orange_C",
+            "desert_orange_D",
+            "desert_orange_E",
+            "desert_orange_F",
+            "desert_orange_G",
+            "desert_orange_Oasis"
+        ],
+        "BossDefeatReward_PyramidTurtle": [
+            "81_2_dessert_FBOSS_5",
+            "worldtree_9_55_WorldTreeAura",
+            "desert_orange_C"
+        ],
+        "BossDefeatReward_JetDragon": [
+            "81_3_volcano_FBOSS_1",
+            "skyisland_8_04_B_highland_FBOSS_1"
+        ],
+        "BossDefeatReward_VolcanicMonster": [
+            "81_3_volcano_FBOSS_2",
+            "50_8_dungeon_volcano_boss",
+            "red_B_VolcanicMonster",
+            "volcano_orange_D_VolcanicMonsters"
+        ],
+        "BossDefeatReward_KingBahamut": [
+            "81_3_volcano_FBOSS_3",
+            "worldtree_9_55_WorldTreeAura",
+            "volcanoiskand_2"
+        ],
+        "BossDefeatReward_VioletFairy": [
+            "81_1_forest_FBOSS_1",
+            "sakura_purple_D",
+            "sanctuary_1_forest"
+        ],
+        "BossDefeatReward_FoxMage": [
+            "81_1_forest_FBOSS_2",
+            "50_8_dungeon_volcano_boss",
+            "orange_J",
+            "volcano_yellow_C",
+            "volcano_orange_B"
+        ],
+        "BossDefeatReward_GrassRabbitMan": [
+            "81_1_forest_FBOSS_3",
+            "sakura_purple_A",
+            "sakura_Waterfront_purple_A"
+        ],
+        "BossDefeatReward_Mutant": [
+            "81_1_forest_FBOSS_4",
+            "50_11_dungeon_snow",
+            "50_12_dungeon_snow_boss",
+            "50_11_dungeon_snow_monsteronly",
+            "volcano_yellow_C",
+            "snow_orange_C",
+            "snow_red_B",
+            "sanctuary_1_forest"
+        ],
+        "BossDefeatReward_WhiteMoth": [
+            "81_1_forest_FBOSS_5",
+            "50_11_dungeon_snow",
+            "50_12_dungeon_snow_boss",
+            "50_11_dungeon_snow_monsteronly",
+            "snow_orange_I"
+        ],
+        "BossDefeatReward_QueenBee": [
+            "81_1_forest_FBOSS_6",
+            "orange_A"
+        ],
+        "BossDefeatReward_FairyDragon": [
+            "81_1_forest_FBOSS_7",
+            "50_12_dungeon_snow_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "yellow_A",
+            "sanctuary_1_forest"
+        ],
+        "BossDefeatReward_IceHorse": "81_3_snow_FBOSS_1",
+        "BossDefeatReward_KingAlpaca_Ice": [
+            "81_3_snow_FBOSS_2",
+            "snow_orange_I_BOSS"
+        ],
+        "BossDefeatReward_LilyQueen_Dark": [
+            "81_3_snow_FBOSS_3",
+            "worldtree_9_55_WorldTreeAura",
+            "sakura_purple_D_LilyQueen_Dark"
+        ],
+        "BossDefeatReward_DarkScorpion_Ground": [
+            "81_4_Sakurajima_FBOSS_1",
+            "sakura_red_B_BOSS",
+            "sanctuary_3_dessert"
+        ],
+        "BossDefeatReward_WingGolem": [
+            "81_4_Sakurajima_FBOSS_2",
+            "worldtree_9_55_WorldTreeAura",
+            "sanctuary_3_dessert"
+        ],
+        "BossDefeatReward_WhiteShieldDragon": [
+            "81_5_Yamijima_FBOSS_1",
+            "worldtree_9_55_WorldTreeAura",
+            "yamijima_plateau_purple_BOSS_2"
+        ],
+        "BossDefeatReward_GrimGirl": [
+            "81_5_Yamijima_FBOSS_2",
+            "50_14_dungeon_Yamijima",
+            "50_15_dungeon_Yamijima_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "yamijima_plateau_purple_A",
+            "yamijima_plateau_purple_B",
+            "yamijima_plateau_purple_C",
+            "yamijima_plateau_pink_D",
+            "yamijima_plateau_pink_E",
+            "yamijima_plateau_pink_F",
+            "yamijima_plateau_pink_G",
+            "yamijima_plateau_pink_G_BOSS_2"
+        ],
+        "BossDefeatReward_BlueThunderHorse": [
+            "81_5_Yamijima_FBOSS_3",
+            "worldtree_9_55_WorldTreeAura",
+            "yamijima_IceLand_pink_D",
+            "yamijima_IceLand_pink_F",
+            "yamijima_IceLand_pink_F_BOSS"
+        ],
+        "BossDefeatReward_Horus_Water": [
+            "81_5_Yamijima_FBOSS_4",
+            "50_15_dungeon_Yamijima_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "skyisland_8_13_F_meadow",
+            "yamijima_IceLand_pink_B",
+            "yamijima_IceLand_pink_D",
+            "yamijima_IceLand_pink_D_BOSS"
+        ],
+        "BossDefeatReward_FengyunDeeper_Electric": [
+            "81_5_Yamijima_FBOSS_5",
+            "worldtree_9_55_WorldTreeAura",
+            "yamijima_plateau_purple_A",
+            "yamijima_plateau_purple_B",
+            "yamijima_plateau_purple_C",
+            "yamijima_plateau_purple_C_BOSS"
+        ],
+        "BossDefeatReward_AmaterasuWolf_Dark": [
+            "81_5_Yamijima_FBOSS_6",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_plateau_pink_D",
+            "yamijima_plateau_pink_F",
+            "yamijima_plateau_pink_F_BOSS",
+            "yamijima_plateau_pink_G"
+        ],
+        "BossDefeatReward_WhiteDeer": [
+            "81_5_Yamijima_FBOSS_7",
+            "worldtree_9_55_WorldTreeAura",
+            "yamijima_beach_purple_A",
+            "yamijima_beach_purple_B",
+            "yamijima_beach_purple_C",
+            "yamijima_rock_purple_A",
+            "yamijima_rock_purple_B",
+            "yamijima_rock_purple_C",
+            "yamijima_rock_pink_D",
+            "yamijima_rock_pink_E",
+            "yamijima_forest_purple_A",
+            "yamijima_forest_purple_B",
+            "yamijima_forest_purple_C",
+            "yamijima_forest_pink_D_WhiteDeer",
+            "yamijima_lava_pink_A",
+            "yamijima_plateau_purple_A",
+            "yamijima_plateau_purple_B",
+            "yamijima_plateau_purple_C",
+            "yamijima_plateau_pink_D",
+            "yamijima_plateau_pink_E",
+            "yamijima_plateau_pink_F",
+            "yamijima_plateau_pink_G",
+            "yamijima_IceLand_pink_A",
+            "yamijima_IceLand_pink_B",
+            "yamijima_IceLand_pink_C",
+            "yamijima_IceLand_pink_D",
+            "yamijima_IceLand_pink_F"
+        ],
+        "BossDefeatReward_BlackPuppy": [
+            "81_5_Yamijima_FBOSS_8",
+            "50_14_dungeon_Yamijima",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_beach_purple_A",
+            "yamijima_beach_purple_B",
+            "yamijima_beach_purple_C",
+            "yamijima_rock_purple_A",
+            "yamijima_rock_purple_B",
+            "yamijima_rock_BOSS_B",
+            "yamijima_rock_purple_C",
+            "yamijima_rock_pink_D",
+            "yamijima_rock_pink_E",
+            "yamijima_forest_purple_A",
+            "yamijima_forest_purple_B",
+            "yamijima_forest_purple_C",
+            "yamijima_forest_pink_D",
+            "yamijima_lava_pink_A",
+            "yamijima_plateau_purple_A",
+            "yamijima_plateau_purple_B",
+            "yamijima_plateau_purple_C",
+            "yamijima_plateau_pink_D",
+            "yamijima_plateau_pink_E",
+            "yamijima_plateau_pink_F",
+            "yamijima_plateau_pink_G",
+            "yamijima_IceLand_pink_A",
+            "yamijima_IceLand_pink_B",
+            "yamijima_IceLand_pink_C",
+            "yamijima_IceLand_pink_D",
+            "yamijima_IceLand_pink_F"
+        ],
+        "BossDefeatReward_GhostRabbit": [
+            "81_5_Yamijima_FBOSS_9",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_IceLand_pink_A",
+            "yamijima_IceLand_pink_C",
+            "yamijima_IceLand_pink_C_BOSS"
+        ],
+        "BossDefeatReward_NightBlueHorse": [
+            "81_5_Yamijima_FBOSS_10",
+            "50_14_dungeon_Yamijima",
+            "50_15_dungeon_Yamijima_boss",
+            "50_21_dungeon_yakushima_hallow",
+            "worldtree_9_55_WorldTreeAura",
+            "yamijima_forest_purple_A",
+            "yamijima_forest_purple_A_BOSS_2",
+            "yamijima_forest_purple_B",
+            "yamijima_forest_purple_C",
+            "yamijima_forest_pink_D",
+            "yamijima_lava_pink_A"
+        ],
+        "BossDefeatReward_BlueberryFairy": [
+            "81_5_Yamijima_FBOSS_11",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_forest_purple_A",
+            "yamijima_forest_purple_B",
+            "yamijima_plateau_pink_D",
+            "yamijima_plateau_pink_E",
+            "yamijima_plateau_pink_F",
+            "yamijima_plateau_pink_G",
+            "yamijima_plateau_pink_G_BOSS"
+        ],
+        "BossDefeatReward_BadCatgirl": [
+            "81_5_Yamijima_FBOSS_12",
+            "50_14_dungeon_Yamijima",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_plateau_purple_A",
+            "yamijima_plateau_purple_BOSS",
+            "yamijima_plateau_purple_B",
+            "yamijima_plateau_purple_C"
+        ],
+        "BossDefeatReward_GoldenHorse": [
+            "81_5_Yamijima_FBOSS_13",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_forest_purple_A",
+            "yamijima_forest_purple_A_BOSS",
+            "yamijima_forest_pink_D",
+            "yamijima_plateau_pink_E",
+            "yamijima_plateau_pink_G"
+        ],
+        "BossDefeatReward_MysteryMask": [
+            "81_5_Yamijima_FBOSS_14",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_beach_purple_A",
+            "yamijima_beach_purple_B",
+            "yamijima_beach_purple_C",
+            "yamijima_rock_purple_A",
+            "yamijima_rock_purple_BOSS",
+            "yamijima_rock_purple_B",
+            "yamijima_rock_purple_C",
+            "yamijima_rock_pink_D",
+            "yamijima_rock_pink_E",
+            "yamijima_forest_purple_A",
+            "yamijima_forest_purple_B",
+            "yamijima_forest_purple_C",
+            "yamijima_forest_pink_D",
+            "yamijima_lava_pink_A",
+            "yamijima_plateau_purple_A",
+            "yamijima_plateau_purple_B",
+            "yamijima_plateau_purple_C",
+            "yamijima_plateau_pink_D",
+            "yamijima_plateau_pink_E",
+            "yamijima_plateau_pink_F",
+            "yamijima_plateau_pink_G",
+            "yamijima_IceLand_pink_A",
+            "yamijima_IceLand_pink_B",
+            "yamijima_IceLand_pink_C",
+            "yamijima_IceLand_pink_D",
+            "yamijima_IceLand_pink_F"
+        ],
+        "BossDefeatReward_PyramidTurtle_Neutral": [
+            "81_5_Yamijima_FBOSS_16",
+            "worldtree_9_11_N"
+        ],
+        "BossDefeatReward_PinkRabbit_Grass": [
+            "81_5_Yamijima_FBOSS_17",
+            "50_15_dungeon_Yamijima_boss",
+            "yellow_D",
+            "yellow_D",
+            "yellow_F",
+            "yellow_H",
+            "yellow_H"
+        ],
+        "BossDefeatReward_HerculesBeetle_Ground": [
+            "81_5_Yamijima_FBOSS_18",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_forest_purple_B",
+            "yamijima_forest_purple_C",
+            "yamijima_forest_purple_C_BOSS",
+            "yamijima_forest_pink_D"
+        ],
+        "BossDefeatReward_RaijinDaughter_Water": [
+            "81_5_Yamijima_FBOSS_20",
+            "50_15_dungeon_Yamijima_boss",
+            "skyisland_8_04_B_higland",
+            "yamijima_beach_purple_C",
+            "yamijima_beach_purple_BOSS",
+            "yamijima_plateau_purple_A"
+        ],
+        "BossDefeatReward_WhiteTiger_Ground": [
+            "81_5_Yamijima_FBOSS_21",
+            "50_15_dungeon_Yamijima_boss",
+            "yamijima_rock_pink_D",
+            "yamijima_rock_pink_E",
+            "yamijima_rock_pink_E_BOSS"
+        ],
+        "BossDefeatReward_Werewolf_Ice": [
+            "81_5_Yamijima_FBOSS_23",
+            "50_15_dungeon_Yamijima_boss",
+            "snow_orange_B",
+            "snow_orange_C",
+            "snow_orange_D",
+            "snow_orange_E",
+            "snow_orange_F",
+            "snow_orange_H",
+            "snow_orange_I",
+            "snow_red_B",
+            "snow_red_C",
+            "snow_red_E",
+            "yamijima_IceLand_pink_A",
+            "yamijima_IceLand_pink_A_BOSS",
+            "yamijima_IceLand_pink_B"
+        ],
+        "BossDefeatReward_IceNarwhal": [
+            "81_6_Ocean_FBOSS_1",
+            "50_26_dungeon_snow",
+            "worldtree_9_55_WorldTreeAura",
+            "5_2_island_iceblock"
+        ],
+        "BossDefeatReward_IceNarwhal_Fire": [
+            "81_6_Ocean_FBOSS_2",
+            "worldtree_9_02_B",
+            "worldtree_9_55_WorldTreeAura"
+        ],
+        "BossDefeatReward_CatMage": [
+            "50_5_dungeon_forest",
+            "50_6_dungeon_forest_boss",
+            "50_5_dungeon_forest_monsteronly",
+            "yellow_A",
+            "yellow_C",
+            "yellow_D",
+            "orange_A",
+            "orange_C",
+            "orange_D",
+            "orange_E",
+            "purple_A",
+            "snow_orange_C",
+            "snow_red_B"
+        ],
+        "BossDefeatReward_SkyDragon": [
+            "50_12_dungeon_snow_boss",
+            "worldtree_9_55_WorldTreeAura",
+            "skyisland_8_01_A_meadow",
+            "skyisland_8_04_B_higland",
+            "skyisland_8_07_G_mountain",
+            "skyisland_8_11_E_meadow",
+            "skyisland_8_13_F_meadow",
+            "snow_orange_C",
+            "snow_orange_D",
+            "snow_orange_D",
+            "snow_orange_E",
+            "snow_orange_F",
+            "snow_orange_H",
+            "snow_orange_I",
+            "snow_red_B",
+            "snow_red_C",
+            "snow_red_E"
+        ],
+        "BossDefeatReward_GrassGolem": [
+            "worldtree_9_01_A",
+            "worldtree_9_09_E_FBOSS_1",
+            "worldtree_9_55_WorldTreeAura",
+            "snow_orange_C",
+            "remainsIsland_1_GrassGolem_FBOSS"
+        ],
+        "BossDefeatReward_ElecPanda": [
+            "worldtree_9_01_A",
+            "worldtree_9_55_WorldTreeAura",
+            "sanctuary_1_forest_FBOSS"
+        ],
+        "BossDefeatReward_FoxExorcist": [
+            "worldtree_9_05_D",
+            "worldtree_9_55_WorldTreeAura",
+            "skyisland_8_07_G_mountain_FBOSS_1"
+        ],
+        "BossDefeatReward_KabukiMan": [
+            "worldtree_9_05_D_FBOSS_1",
+            "worldtree_9_55_WorldTreeAura"
+        ],
+        "BossDefeatReward_VolcanoDragon_Ice": "worldtree_9_07_I_FBOSS_1",
+        "BossDefeatReward_GrassGolem_Dark": [
+            "worldtree_9_08_I_labo",
+            "remainsIsland_2_GrassGolem_Dark_FBOSS"
+        ],
+        "BossDefeatReward_MushroomLady": [
+            "worldtree_9_10_L",
+            "worldtree_9_10_L_FBOSS_1"
+        ],
+        "BossDefeatReward_LilyQueen": [
+            "worldtree_9_10_L",
+            "worldtree_9_55_WorldTreeAura",
+            "sakura_purple_D_LilyQueen"
+        ],
+        "BossDefeatReward_MoonChild": [
+            "worldtree_9_11_N",
+            "skyisland_8_09_D_forest_FBOSS_2"
+        ],
+        "BossDefeatReward_WhiteDeer_Dark": "worldtree_9_11_N_FBOSS_1",
+        "BossDefeatReward_BlackMetalDragon": [
+            "worldtree_9_55_WorldTreeAura",
+            "sanctuary_2_volcano_FBOSS"
+        ],
+        "BossDefeatReward_HerculesBeetle": [
+            "worldtree_9_55_WorldTreeAura",
+            "orange_A_HerculesBeetles"
+        ],
+        "BossDefeatReward_VolcanoDragon": [
+            "worldtree_9_55_WorldTreeAura",
+            "volcano_orange_C",
+            "volcano_orange_D",
+            "volcanoiskand_1",
+            "volcanoiskand_1_FBOSS"
+        ],
+        "BossDefeatReward_LotusDragon": [
+            "worldtree_9_55_WorldTreeAura",
+            "skyisland_8_06_C_lotsulake_FBOSS_1"
+        ],
+        "BossDefeatReward_GhostDragon": [
+            "worldtree_9_55_WorldTreeAura",
+            "skyisland_8_15_1_lake_FBOSS_1",
+            "50_27_dungeon_Skyisland"
+        ],
+        "BossDefeatReward_LazyDragon_Electric": [
+            "worldtree_9_55_WorldTreeAura",
+            "yellow_B_Paripi_Lazydragons",
+            "orange_ALL_Paripi_Lazydragons",
+            "desert_orange_ALL_Paripi_Lazydragons",
+            "snow_orange_ALL_Paripi_Lazydragons",
+            "yamijima_rock_pink_B_LazyDragon",
+            "yamijima_plateau_pink_A_LazyDragon",
+            "yamijima_plateau_pink_B_LazyDragon",
+            "yamijima_plateau_pink_D_LazyDragon",
+            "yamijima_plateau_pink_E_LazyDragon",
+            "yamijima_IceLand_pink_A_LazyDragon",
+            "yamijima_IceLand_pink_B_LazyDragon",
+            "sakura_red_A_kazyDragon",
+            "sakura_Waterfront_purple_A_LazyDragon"
+        ],
+        "BossDefeatReward_RockBeast_Ice": [
+            "skyisland_8_01_A_meadow",
+            "skyisland_8_01_A_meadow_FBOSS_1"
+        ],
+        "BossDefeatReward_ThunderFluffyBird": [
+            "skyisland_8_04_B_higland",
+            "skyisland_8_07_G_mountain_FBOSS_2",
+            "50_29_dungeon_Skyisland_boss"
+        ],
+        "BossDefeatReward_ElecLizard": [
+            "skyisland_8_09w_D_forest",
+            "skyisland_8_09w_D_forest",
+            "skyisland_8_10_D_swamp",
+            "skyisland_8_10_D_swamp_FBOSS_1"
+        ],
+        "BossDefeatReward_ElecSnail": [
+            "skyisland_8_11_E_meadow",
+            "skyisland_8_11_E_meadow_FBOSS_1",
+            "50_29_dungeon_Skyisland_boss"
+        ],
+        "BossDefeatReward_FlowerDoll": [
+            "yellow_D",
+            "sakura_purple_D"
+        ],
+        "BossDefeatReward_CactusDoll": [
+            "desert_orange_C",
+            "desert_orange_Oasis",
+            "desertisland_2",
+            "desertisland_2_FBOSS"
+        ],
+        "BossDefeatReward_IceHorse_Dark": "sanctuary_3_dessert_FBOSS",
+        "BossDefeatReward_PoseidonOrca": "5_2_island_iceblock_FBOSS_1",
+        "BossDefeatReward_ScorpionMan_Electric": [
+            "desertisland_1",
+            "desertisland_1_FBOSS"
+        ],
+        "BossDefeatReward_RockBeast": [
+            "volcanoiskand_2",
+            "volcanoiskand_2_FBOSS"
+        ]
+    }
+}

@@ -1732,6 +1732,49 @@ def update_pal_passive_data():
         print(f'    Warning: Could not merge passives: {e}')
     result = {'passives': updated_passives}
     save_resource_json('palpassivedata.json', result)
+def update_boss_mapping():
+    print('\n=== Updating Boss Mapping ===')
+    wild_spawner = load_export_json('Spawner/DT_PalWildSpawner.json')
+    if not wild_spawner:
+        print('  No spawner data found. Skipping.')
+        return
+    rows = get_rows(wild_spawner)
+    items_data = load_resource_json('items.json')
+    boss_item_suffixes = set()
+    for it in items_data.get('items', []):
+        if it.get('type_b') == 'EPalItemTypeB::Essential_BossReward':
+            asset = it.get('asset', '')
+            if asset.startswith('BossDefeatReward_') and asset != 'TEST_BossDefeatReward':
+                boss_item_suffixes.add(asset.replace('BossDefeatReward_', ''))
+    mapping = {}
+    for row_key, row in rows.items():
+        pal_1 = row.get('Pal_1', 'None')
+        if not pal_1 or pal_1 == 'None':
+            continue
+        suffix = pal_1
+        if suffix.startswith('BOSS_'):
+            suffix = suffix[5:]
+        elif suffix.startswith('Boss_'):
+            suffix = suffix[5:]
+        if suffix not in boss_item_suffixes:
+            continue
+        spawner_name = row.get('SpawnerName', '')
+        if not spawner_name:
+            continue
+        item_asset = f'BossDefeatReward_{suffix}'
+        if item_asset in mapping:
+            if isinstance(mapping[item_asset], list):
+                mapping[item_asset].append(spawner_name)
+            else:
+                mapping[item_asset] = [mapping[item_asset], spawner_name]
+        else:
+            mapping[item_asset] = spawner_name
+    output = {'boss_defeat_flag_map': mapping}
+    save_resource_json('boss_mapping.json', output)
+    total_keys = sum(1 for v in mapping.values() if isinstance(v, str)) + sum(len(v) if isinstance(v, list) else 0 for v in mapping.values())
+    print(f'  Total mapped boss entries: {total_keys}')
+    print(f'  Unique item assets mapped: {len(mapping)}')
+
 def update_ui_icons():
     print('\n=== Updating UI Icons ===')
     target_subdir = 'ui'
@@ -2204,6 +2247,7 @@ def main():
     _run_step('Updating pal passive data...', update_pal_passive_data)
     _run_step('Updating lab research data...', update_lab_research_data)
     _run_step('Updating UI icons...', update_ui_icons)
+    _run_step('Updating boss mapping...', update_boss_mapping)
     _run_step('Updating map data...', update_map_data)
     _run_step('Writing merged game data files...', _write_merged_files)
     _run_step('Deleting individual source files...', _delete_individual_files)
