@@ -135,6 +135,7 @@ class PlayerItemActionDialog(QDialog):
         return grid
     def _load_items(self):
         self._all_items = ItemData.get_all_items()
+        unlock_assets = {'AutoMealPouch_Tier1', 'AutoMealPouch_Tier2', 'AutoMealPouch_Tier3', 'AutoMealPouch_Tier4', 'AutoMealPouch_Tier5', 'UnlockEquipmentSlot_Accessory_01', 'Accessory_02', 'UnlockEquipmentSlot_Weapon_01', 'Weapon_02'}
         for tab_idx, type_a_filter in enumerate([False, True]):
             grid = self._inv_grid if tab_idx == 0 else self._key_grid
             for item in self._all_items:
@@ -146,6 +147,20 @@ class PlayerItemActionDialog(QDialog):
                     continue
                 if (not type_a_filter) and is_essential:
                     continue
+                if is_essential:
+                    if 'Effigy' in name:
+                        continue
+                    if asset in unlock_assets:
+                        continue
+                    if item.get('sort_id', 0) == 9999:
+                        continue
+                    desc = item.get('description', '').strip()
+                    if desc in ('', '-'):
+                        continue
+                    if name == asset:
+                        continue
+                    if 'en_text' in name.lower():
+                        continue
                 list_item = QListWidgetItem(name)
                 list_item.setData(Qt.UserRole, asset)
                 list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
