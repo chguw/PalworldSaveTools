@@ -588,6 +588,8 @@ QTabWidget#inventoryTabs QTabBar::tab:hover:!selected {
 QTabWidget#mapSidebarTabs::pane {
     border: none;
     background: transparent;
+    padding: 0px;
+    margin: 0px;
 }
 
 QTabWidget#mapSidebarTabs QTabBar::tab {
@@ -745,10 +747,11 @@ QFrame#glassPanel {
 /* Section Headers (Chip Style) */
 QLabel#sectionHeader {
     background: rgba(125,211,252,0.08);
-    border: 1px solid rgba(125,211,252,0.12);
+    border: 2px solid rgba(125,211,252,0.12);
     padding: 8px 12px;
     border-radius: 8px;
     color: #7DD3FC;
+    margin: 0px 10px;
 }
 
 /* Value Cards */
