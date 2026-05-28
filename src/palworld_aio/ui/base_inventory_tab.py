@@ -47,7 +47,7 @@ class GuildItemPickerDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle(t('base_inventory.select_item_action') if t else 'Item Actions')
-        self.setMinimumSize(1050, 650)
+        self.setMinimumSize(1200, 650)
         self.selected_item_id = None
         self.selected_item_name = None
         self.guild_locations = {}
