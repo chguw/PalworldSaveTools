@@ -147,12 +147,15 @@ class PlayerItemActionDialog(QDialog):
                     continue
                 if (not type_a_filter) and is_essential:
                     continue
+                if item.get('sort_id', 0) == 9999:
+                    continue
+                if not is_essential:
+                    if asset.startswith('PalEgg_') or asset.startswith('YakushimaParts'):
+                        continue
                 if is_essential:
                     if 'Effigy' in name:
                         continue
                     if asset in unlock_assets:
-                        continue
-                    if item.get('sort_id', 0) == 9999:
                         continue
                     desc = item.get('description', '').strip()
                     if desc in ('', '-'):

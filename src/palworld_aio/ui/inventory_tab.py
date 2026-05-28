@@ -671,12 +671,15 @@ class ItemPickerDialog(QDialog):
                         continue
                 elif type_a == self._filter_exclude_type_a:
                     continue
+            if item.get('sort_id', 0) == 9999:
+                continue
+            if type_a != 'EPalItemTypeA::Essential':
+                if item['asset'].startswith('PalEgg_') or item['asset'].startswith('YakushimaParts'):
+                    continue
             if type_a == 'EPalItemTypeA::Essential':
                 if 'Effigy' in item.get('name', ''):
                     continue
                 if item.get('asset', '') in self._exclude_assets:
-                    continue
-                if item.get('sort_id', 0) == 9999:
                     continue
                 desc = item.get('description', '').strip()
                 if desc in ('', '-'):
