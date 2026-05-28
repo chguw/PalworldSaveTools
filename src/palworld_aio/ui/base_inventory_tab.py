@@ -47,7 +47,7 @@ class GuildItemPickerDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle(t('base_inventory.select_item_action') if t else 'Item Actions')
-        self.setMinimumSize(800, 650)
+        self.setMinimumSize(900, 650)
         self.selected_item_id = None
         self.selected_item_name = None
         self.guild_locations = {}
@@ -95,15 +95,22 @@ class GuildItemPickerDialog(QDialog):
         right_layout.setContentsMargins(0, 0, 0, 0)
         right_layout.setSpacing(8)
 
+        info_frame = QFrame()
+        info_frame.setMaximumHeight(70)
+        info_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        info_frame.setStyleSheet('background: rgba(0,0,0,0.15); border-radius: 4px;')
+        info_layout = QVBoxLayout(info_frame)
+        info_layout.setContentsMargins(5, 2, 5, 2)
+        info_layout.setSpacing(1)
         self.info_label = QLabel(t('base_inventory.select_item') if t else 'Select an item to perform actions')
-        self.info_label.setStyleSheet('color: #888; font-style: italic; padding: 5px;')
-        right_layout.addWidget(self.info_label)
-
+        self.info_label.setStyleSheet('color: #888; font-style: italic; padding: 2px;')
+        info_layout.addWidget(self.info_label)
         self.desc_label = QLabel('')
-        self.desc_label.setStyleSheet('color: #94a3b8; font-size: 11px; padding: 2px 5px;')
+        self.desc_label.setStyleSheet('color: #94a3b8; font-size: 11px; padding: 0 2px;')
         self.desc_label.setWordWrap(True)
         self.desc_label.setVisible(False)
-        right_layout.addWidget(self.desc_label)
+        info_layout.addWidget(self.desc_label)
+        right_layout.addWidget(info_frame)
 
         guilds_group = QGroupBox(t('base_inventory.select_guilds') if t else 'Select Guilds')
         guilds_inner_layout = QVBoxLayout()
