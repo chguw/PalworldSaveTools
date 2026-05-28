@@ -1037,7 +1037,7 @@ class PlayerInventoryTab(QWidget):
             return
         all_items = ItemData.get_all_items()
         unlock_assets = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
-        key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and i['asset'] not in unlock_assets and i.get('description', '').strip() not in ('', '-') and i.get('name', '') != i.get('asset', '') and 'en_text' not in i.get('name', '').lower()]
+        key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and i['asset'] not in unlock_assets and i.get('sort_id', 0) != 9999 and i.get('description', '').strip() not in ('', '-') and i.get('name', '') != i.get('asset', '') and 'en_text' not in i.get('name', '').lower()]
         existing_ids = {s.get('item_id') for s in self.inventory.get_container('key').slots}
         to_add = [i for i in key_candidates if i['asset'] not in existing_ids]
 

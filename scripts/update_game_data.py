@@ -778,6 +778,7 @@ def update_item_data():
         rarity = 0
         type_a = ''
         type_b = ''
+        sort_id = 0
         if isinstance(item_row, dict):
             rarity_val = item_row.get('Rarity', 0)
             if isinstance(rarity_val, dict):
@@ -785,7 +786,11 @@ def update_item_data():
             rarity = int(rarity_val) if rarity_val else 0
             type_a = item_row.get('TypeA', '')
             type_b = item_row.get('TypeB', '')
-        item_entry = {'name': item_name, 'asset': item_id, 'icon': final_icon, 'rarity': rarity, 'type_a': type_a, 'type_b': type_b, 'description': item_desc}
+            sort_id_val = item_row.get('SortId', 0)
+            if isinstance(sort_id_val, dict):
+                sort_id_val = sort_id_val.get('value', 0)
+            sort_id = int(sort_id_val) if sort_id_val else 0
+        item_entry = {'name': item_name, 'asset': item_id, 'icon': final_icon, 'rarity': rarity, 'type_a': type_a, 'type_b': type_b, 'description': item_desc, 'sort_id': sort_id}
         updated_items.append(item_entry)
     try:
         pal_data = load_resource_json('paldata.json')
