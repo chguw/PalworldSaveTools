@@ -52,6 +52,8 @@ tmp/
 
 .build/
 uv.lock
+PST.Bootstrapper/
+dist/
 
 Logs/
 

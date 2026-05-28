@@ -4,7 +4,6 @@ import sys
 import subprocess
 import threading
 import queue
-import time
 import traceback
 import tempfile
 import signal
@@ -450,17 +449,15 @@ def backend_worker(venv_py: Path, signals: 'WorkerSignals'):
                 traceback.print_exc()
     rc_final = 0
     try:
-        cmd_upg = [str(venv_py), '-m', 'pip', 'install', '--upgrade', 'pip', 'setuptools', 'wheel']
+        cmd_upg = ['uv', 'pip', 'install', '--upgrade', 'pip', 'setuptools', 'wheel']
         rc = run_and_watch(cmd_upg, update_callback=emit_raw)
-        if rc != 0:
-            rc_final = rc
         all_req_satisfied = True
         try:
             if REQ_FILE.exists():
                 with open(REQ_FILE, 'r') as f:
                     for line in f:
                         line = line.strip()
-                        if line and (not line.startswith('#')):
+                        if line and (not line.startswith('#')) and (not line.startswith('./')) and (not line.startswith('..')):
                             try:
                                 req = Requirement(line)
                                 try:
@@ -486,7 +483,7 @@ def backend_worker(venv_py: Path, signals: 'WorkerSignals'):
                         if line and (not line.startswith('#')):
                             if line.startswith('git+'):
                                 git_packages.append(line)
-                            elif 'pyside6-essentials' not in line:
+                            elif 'pyside6-essentials' not in line and not line.startswith('./') and not line.startswith('..'):
                                 with open(temp_req_path, 'a') as f_out:
                                     f_out.write(line + '\n')
             for git_req in git_packages:
@@ -500,19 +497,19 @@ def backend_worker(venv_py: Path, signals: 'WorkerSignals'):
                         try:
                             with tempfile.TemporaryDirectory() as temp_dir:
                                 subprocess.run(['git', 'clone', '--recursive', url, temp_dir], check=True, capture_output=True)
-                                rc = run_and_watch([str(venv_py), '-m', 'pip', 'install', temp_dir], update_callback=emit_raw)
+                                rc = run_and_watch(['uv', 'pip', 'install', temp_dir], update_callback=emit_raw)
                                 if rc != 0:
                                     rc_final = rc
                         except Exception:
-                            cmd_install = [str(venv_py), '-m', 'pip', 'install', git_req]
+                            cmd_install = ['uv', 'pip', 'install', git_req]
                             rc = run_and_watch(cmd_install, update_callback=emit_raw)
                             if rc != 0:
                                 rc_final = rc
             cmd_install = None
             if temp_req_path.exists() and temp_req_path.stat().st_size > 0:
-                cmd_install = [str(venv_py), '-m', 'pip', 'install', '-r', str(temp_req_path)]
+                cmd_install = ['uv', 'pip', 'install', '-r', str(temp_req_path)]
             elif PYPROJECT.exists() and (not REQ_FILE.exists()):
-                cmd_install = [str(venv_py), '-m', 'pip', 'install', '.']
+                cmd_install = ['uv', 'pip', 'install', '.']
             if cmd_install:
                 rc2 = run_and_watch(cmd_install, update_callback=emit_raw)
                 if rc2 != 0:
@@ -522,10 +519,9 @@ def backend_worker(venv_py: Path, signals: 'WorkerSignals'):
                     temp_req_path.unlink()
             except Exception:
                 pass
-    except Exception as e:
+    except Exception:
         rc_final = 2
         if DEBUG:
-            print('Worker exception:', e)
             traceback.print_exc()
     finally:
         try:
@@ -643,17 +639,15 @@ def main():
                     print_small(f'> {raw_line}')
             rc_final = 0
             try:
-                cmd_upg = [str(venv_py), '-m', 'pip', 'install', '--upgrade', 'pip', 'setuptools', 'wheel']
+                cmd_upg = ['uv', 'pip', 'install', '--upgrade', 'pip', 'setuptools', 'wheel']
                 rc = run_and_watch(cmd_upg, update_callback=lambda r, p: emit_raw_console(r, p))
-                if rc != 0:
-                    rc_final = rc
                 all_req_satisfied = True
                 try:
                     if REQ_FILE.exists():
                         with open(REQ_FILE, 'r') as f:
                             for line in f:
                                 line = line.strip()
-                                if line and (not line.startswith('#')):
+                                if line and (not line.startswith('#')) and (not line.startswith('./')) and (not line.startswith('..')):
                                     try:
                                         req = Requirement(line)
                                         try:
@@ -679,7 +673,7 @@ def main():
                                 if line and (not line.startswith('#')):
                                     if line.startswith('git+'):
                                         git_packages.append(line)
-                                    elif 'pyside6-essentials' not in line:
+                                    elif 'pyside6-essentials' not in line and not line.startswith('./') and not line.startswith('..'):
                                         with open(temp_req_path, 'a') as f_out:
                                             f_out.write(line + '\n')
                     for git_req in git_packages:
@@ -693,19 +687,19 @@ def main():
                                 try:
                                     with tempfile.TemporaryDirectory() as temp_dir:
                                         subprocess.run(['git', 'clone', '--recursive', url, temp_dir], check=True, capture_output=True)
-                                        rc = run_and_watch([str(venv_py), '-m', 'pip', 'install', temp_dir], update_callback=lambda r, p: emit_raw_console(r, p))
+                                        rc = run_and_watch(['uv', 'pip', 'install', temp_dir], update_callback=lambda r, p: emit_raw_console(r, p))
                                         if rc != 0:
                                             rc_final = rc
                                 except Exception:
-                                    cmd_install = [str(venv_py), '-m', 'pip', 'install', git_req]
+                                    cmd_install = ['uv', 'pip', 'install', git_req]
                                     rc = run_and_watch(cmd_install, update_callback=lambda r, p: emit_raw_console(r, p))
                                     if rc != 0:
                                         rc_final = rc
                     cmd_install = None
                     if temp_req_path.exists() and temp_req_path.stat().st_size > 0:
-                        cmd_install = [str(venv_py), '-m', 'pip', 'install', '-r', str(temp_req_path)]
+                        cmd_install = ['uv', 'pip', 'install', '-r', str(temp_req_path)]
                     elif PYPROJECT.exists() and (not REQ_FILE.exists()):
-                        cmd_install = [str(venv_py), '-m', 'pip', 'install', '.']
+                        cmd_install = ['uv', 'pip', 'install', '.']
                     if cmd_install:
                         rc2 = run_and_watch(cmd_install, update_callback=lambda r, p: emit_raw_console(r, p))
                         if rc2 != 0:
