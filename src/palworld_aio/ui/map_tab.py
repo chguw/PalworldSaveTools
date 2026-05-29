@@ -387,6 +387,7 @@ class MapTab(QWidget):
         if not show_base_markers:
             self._hide_all_radius_rings()
     def _on_map_type_toggle(self, checked):
+        self._hide_all_radius_rings()
         self.current_map = 'tree' if checked else 'world'
         base_dir = constants.get_base_path()
         icon = 'T_WorldMap.webp' if checked else 'T_TreeMap.webp'
@@ -397,6 +398,8 @@ class MapTab(QWidget):
         self._load_map(self.current_map)
         self._update_markers()
         self._update_tree()
+        if self.current_map == 'world' and self.toggle_base_radius_rings.isChecked():
+            self._show_all_radius_rings()
     def _on_calibrate_toggle(self, checked):
         if checked:
             self._calibration_points = []
@@ -927,6 +930,8 @@ class MapTab(QWidget):
             marker.scale_to_zoom(zoom_level)
         self._update_radius_rings_visibility()
     def _update_radius_rings_visibility(self):
+        if self.current_map != 'world':
+            return
         show_base_markers = hasattr(self, 'toggle_map_bases') and self.toggle_map_bases.isChecked()
         if not show_base_markers:
             self._hide_all_radius_rings()
@@ -941,6 +946,8 @@ class MapTab(QWidget):
             if self.current_radius_ring:
                 self.current_radius_ring.setVisible(True)
     def _update_radius_rings_for_filter(self):
+        if self.current_map != 'world':
+            return
         if not hasattr(self, 'toggle_base_radius_rings') or not self.toggle_base_radius_rings.isChecked():
             return
         self._hide_all_radius_rings()
@@ -1028,6 +1035,8 @@ class MapTab(QWidget):
     def _on_zones_toggle(self, state):
         self._update_zone_items()
     def _show_radius_ring_for_marker(self, marker):
+        if self.current_map != 'world':
+            return
         if not hasattr(self, 'toggle_base_radius_rings') or not self.toggle_base_radius_rings.isChecked():
             return
         if not isinstance(marker, BaseMarker):
@@ -1056,6 +1065,8 @@ class MapTab(QWidget):
                 self.scene.removeItem(ring)
             self.all_radius_rings = []
     def _show_all_radius_rings(self):
+        if self.current_map != 'world':
+            return
         self._hide_all_radius_rings()
         for guild in self.guilds_data.values():
             for base in guild['bases']:
