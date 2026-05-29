@@ -2044,7 +2044,7 @@ class PalInfoWidget(QFrame):
         self.portrait_frame = portrait_frame
         portrait_frame.setFixedSize(88, 88)
         portrait_frame.setObjectName('portraitGlow')
-        portrait_frame.setStyleSheet('QFrame#portraitGlow { background: qradialgradient(cx:0.5,cy:0.5,radius:0.6,fx:0.5,fy:0.5,stop:0 rgba(125,211,252,0.12),stop:0.4 rgba(125,211,252,0.04),stop:1 transparent); border: none; border-radius: 44px; }')
+        portrait_frame.setStyleSheet('QFrame#portraitGlow { background: qradialgradient(cx:0.5,cy:0.5,radius:0.6,fx:0.5,fy:0.5,stop:0 rgba(125,211,252,0.12),stop:0.4 rgba(125,211,252,0.04),stop:1 transparent); border: none; border-radius: 44px; }\nQToolTip { background: rgba(18,20,24,0.98); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.25); border-radius: 6px; padding: 6px 10px; font-size: 11px; }')
         portrait_frame.setContextMenuPolicy(Qt.CustomContextMenu)
         portrait_frame.customContextMenuRequested.connect(self._on_portrait_context_menu)
         pf_layout = QVBoxLayout(portrait_frame)
@@ -2769,9 +2769,9 @@ class PalInfoWidget(QFrame):
             pix = _get_cached_pixmap(icon_path, 80)
             if pix:
                 self.portrait_icon.setPixmap(pix)
-            tip = f'{pal_name} [Lv.{level}]'
+            tip = f'<b>{pal_name}</b> [Lv.{level}]'
             if base and base.get('description'):
-                tip += f"<br><br>{wrap_tooltip_text(base['description'])}"
+                tip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(base["description"])}</span>'
             self.portrait_frame.setToolTip(tip)
             equip_waza_data = raw.get('EquipWaza', {})
             if isinstance(equip_waza_data, dict):
