@@ -1468,5 +1468,14 @@
   "func_manager.fix_unassigned_pals.title": "Korrigieren Sie nicht zugewiesene Freunde",
   "func_manager.fix_unassigned_pals.msg": "{count} Kumpel(s) ohne Besitzer-UID behoben.",
   "func_manager.fix_unassigned_pals.confirm.title": "Korrigieren Sie nicht zugewiesene Freunde",
-  "func_manager.fix_unassigned_pals.confirm.msg": "Nicht zugewiesene(n) Kumpel reparieren? (Sie werden dem Containereigentümer zugewiesen.)"
+  "func_manager.fix_unassigned_pals.confirm.msg": "Nicht zugewiesene(n) Kumpel reparieren? (Sie werden dem Containereigentümer zugewiesen.)",
+  "edit_pals.ctx.learnt_skills": "Erlernte Fähigkeiten",
+  "edit_pals.ctx.bulk_sync_passives": "Passive Massensynchronisierung",
+  "edit_pals.bulk_sync_title": "Passive Bulk-Synchronisierung – {name}",
+  "edit_pals.bulk_sync_found": "{count} {name} gefunden",
+  "edit_pals.bulk_sync_success": "{count} {name} Passive aktualisiert!",
+  "edit_pals.learnt_skills_title": "Erlernte Fähigkeiten",
+  "edit_pals.learnt_skills_count": "{count} Fertigkeiten erlernt",
+  "edit_pals.confirm_remove_skill": "{name} aus erlernten Zügen entfernen?",
+  "edit_pals.learnt_skills_removed": "{name} wurde aus den erlernten Bewegungen entfernt."
 }

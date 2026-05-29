@@ -1446,5 +1446,14 @@
   "func_manager.fix_unassigned_pals.title": "修复未分配的好友",
   "func_manager.fix_unassigned_pals.msg": "修复了 {count} 个没有所有者 UID 的好友。",
   "func_manager.fix_unassigned_pals.confirm.title": "修复未分配的好友",
-  "func_manager.fix_unassigned_pals.confirm.msg": "修复未分配的好友？ （它们将被分配给集装箱所有者。）"
+  "func_manager.fix_unassigned_pals.confirm.msg": "修复未分配的好友？ （它们将被分配给集装箱所有者。）",
+  "edit_pals.ctx.learnt_skills": "学到的技能",
+  "edit_pals.ctx.bulk_sync_passives": "批量同步被动",
+  "edit_pals.bulk_sync_title": "批量同步被动 - {name}",
+  "edit_pals.bulk_sync_found": "已找到 {count} {name}",
+  "edit_pals.bulk_sync_success": "更新了 {count} {name} 个被动技能！",
+  "edit_pals.learnt_skills_title": "学到的技能",
+  "edit_pals.learnt_skills_count": "学到了 {count} 项技能",
+  "edit_pals.confirm_remove_skill": "从学习的动作中删除{name}？",
+  "edit_pals.learnt_skills_removed": "{name} 从学习的动作中删除。"
 }

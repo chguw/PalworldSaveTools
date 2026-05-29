@@ -1442,5 +1442,14 @@
   "func_manager.fix_unassigned_pals.title": "Исправить неназначенных друзей",
   "func_manager.fix_unassigned_pals.msg": "Исправлено количество друзей ({count}) без UID владельца.",
   "func_manager.fix_unassigned_pals.confirm.title": "Исправить неназначенных друзей",
-  "func_manager.fix_unassigned_pals.confirm.msg": "Исправить неназначенных приятелей? (Они будут назначены владельцу контейнера.)"
+  "func_manager.fix_unassigned_pals.confirm.msg": "Исправить неназначенных приятелей? (Они будут назначены владельцу контейнера.)",
+  "edit_pals.ctx.learnt_skills": "Приобретенные навыки",
+  "edit_pals.ctx.bulk_sync_passives": "Массовая синхронизация пассивов",
+  "edit_pals.bulk_sync_title": "Массовая синхронизация пассивов – {name}",
+  "edit_pals.bulk_sync_found": "Найдено {count} {name}",
+  "edit_pals.bulk_sync_success": "Обновлены пассивные умения {count} {name}!",
+  "edit_pals.learnt_skills_title": "Приобретенные навыки",
+  "edit_pals.learnt_skills_count": "Получено навыков: {count}",
+  "edit_pals.confirm_remove_skill": "Удалить {name} из изученных приемов?",
+  "edit_pals.learnt_skills_removed": "{name} удален из изученных приемов."
 }

@@ -440,6 +440,10 @@ class PalIcon(QFrame):
                 self.rightClicked.emit(self.slot_index, 'max_all_stats')
             elif action == actions['learn']:
                 self.rightClicked.emit(self.slot_index, 'learn_all')
+            elif action == actions['learned']:
+                self.rightClicked.emit(self.slot_index, 'learnt_skills')
+            elif action == actions['bulk_sync_passives']:
+                self.rightClicked.emit(self.slot_index, 'bulk_sync_passives')
             elif action == actions['delete']:
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
@@ -657,6 +661,10 @@ class PartySlotWidget(QFrame):
                 self.rightClicked.emit(self.slot_index, 'max_all_stats')
             elif action == actions['learn']:
                 self.rightClicked.emit(self.slot_index, 'learn_all')
+            elif action == actions['learned']:
+                self.rightClicked.emit(self.slot_index, 'learnt_skills')
+            elif action == actions['bulk_sync_passives']:
+                self.rightClicked.emit(self.slot_index, 'bulk_sync_passives')
             elif action == actions['delete']:
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
@@ -960,6 +968,10 @@ class PalboxSlotWidget(QFrame):
                 self.rightClicked.emit(self.slot_index, 'max_all_stats')
             elif action == actions['learn']:
                 self.rightClicked.emit(self.slot_index, 'learn_all')
+            elif action == actions['learned']:
+                self.rightClicked.emit(self.slot_index, 'learnt_skills')
+            elif action == actions['bulk_sync_passives']:
+                self.rightClicked.emit(self.slot_index, 'bulk_sync_passives')
             elif action == actions['delete']:
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
@@ -1432,10 +1444,22 @@ def build_pal_context_menu(parent, raw):
     menu.addSeparator()
     max_action = menu.addAction(t('edit_pals.ctx.max_all_stats'))
     learn_action = menu.addAction(t('edit_pals.ctx.learn_all_moves'))
+    learned_action = menu.addAction(t('edit_pals.ctx.learnt_skills'))
+    menu.addSeparator()
+    bulk_sync_action = menu.addAction(t('edit_pals.ctx.bulk_sync_passives'))
     menu.addSeparator()
     delete_action = menu.addAction(t('edit_pals.delete'))
-    actions = {'boss': boss_action, 'lucky': lucky_action, 'awake': awake_action, 'dna': dna_action, 'fav': (fav_action, lock_actions), 'max': max_action, 'learn': learn_action, 'delete': delete_action}
+    actions = {'boss': boss_action, 'lucky': lucky_action, 'awake': awake_action, 'dna': dna_action, 'fav': (fav_action, lock_actions), 'max': max_action, 'learn': learn_action, 'learned': learned_action, 'bulk_sync_passives': bulk_sync_action, 'delete': delete_action}
     return (menu, actions)
+def _get_raw_from_item(pal_item):
+    if not pal_item:
+        return None
+    try:
+        if 'data' in pal_item:
+            return pal_item['data']
+        return safe_nested_get(pal_item, ['value', 'RawData', 'value', 'object', 'SaveParameter', 'value'])
+    except Exception:
+        return None
 def _fp64(value):
     return {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(value), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
 def _byte(value):
@@ -2004,8 +2028,28 @@ class PalInfoWidget(QFrame):
                 show_information(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_success'))
             except Exception:
                 show_warning(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_fail'))
+        elif action == actions['learned']:
+            if self._raw:
+                _show_learned_moves_dialog(self._raw, self)
+        elif action == actions['bulk_sync_passives']:
+            if self._raw:
+                self._on_bulk_sync_passives()
         elif action == actions['delete']:
             pass
+    def _on_bulk_sync_passives(self):
+        if not self._raw:
+            return
+        cid = extract_value(self._raw, 'CharacterID', '')
+        base_id = cid.lower()
+        if base_id.startswith('boss_'):
+            base_id = base_id[5:]
+        pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        owner = self.parent()
+        while owner and not hasattr(owner, 'party_pals'):
+            owner = owner.parent()
+        if not owner or not hasattr(owner, '_bulk_sync_passives'):
+            return
+        owner._bulk_sync_passives(self._raw)
     def _on_fav_set(self, idx):
         if not self._raw:
             return
@@ -3277,6 +3321,291 @@ class PalInfoWidget(QFrame):
             self._as_title.setText(t('pal_editor.active_skills') if t else 'Active Skills')
         if hasattr(self, '_passive_title'):
             self._passive_title.setText(t('pal_editor.passive_skills') if t else 'Passive Skills')
+def _show_learned_moves_dialog(raw, parent):
+    if not isinstance(raw, dict):
+        return
+    mw_data = raw.get('MasteredWaza', {})
+    if isinstance(mw_data, dict):
+        mw_list = mw_data.get('value', {}).get('values', [])
+    elif isinstance(mw_data, list):
+        mw_list = mw_data
+    else:
+        mw_list = []
+    dlg = FramelessDialog('edit_pals.learnt_skills_title', parent)
+    dlg.set_title_text(t('edit_pals.learnt_skills_title'))
+    dlg.setModal(True)
+    dlg.setMinimumSize(420, 400)
+    dlg.setMaximumSize(500, 600)
+    inner = QWidget()
+    inner.setStyleSheet('QWidget { background: transparent; }')
+    il = QVBoxLayout(inner)
+    il.setContentsMargins(8, 4, 8, 8)
+    il.setSpacing(4)
+    _ensure_skill_data()
+    count_lbl = QLabel(t('edit_pals.learnt_skills_count', count=len(mw_list)))
+    count_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #9CA3AF; background: transparent; border: none; padding: 2px 4px;')
+    il.addWidget(count_lbl)
+    scroll = QScrollArea()
+    scroll.setWidgetResizable(True)
+    scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+    scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); } QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }')
+    scroll_ct = QWidget()
+    scroll_ct.setStyleSheet('background: transparent; border: none;')
+    scl = QVBoxLayout(scroll_ct)
+    scl.setContentsMargins(2, 2, 2, 2)
+    scl.setSpacing(2)
+    scl.addStretch()
+    if not mw_list:
+        nl = QLabel('--')
+        nl.setAlignment(Qt.AlignCenter)
+        nl.setStyleSheet('font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.25); background: transparent; border: none; padding: 20px;')
+        scl.insertWidget(0, nl)
+    else:
+        elem_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
+        for idx, skill_val in enumerate(mw_list):
+            if isinstance(skill_val, dict):
+                skill_val = skill_val.get('value', '')
+            if not skill_val:
+                continue
+            w_clean = skill_val.split('::')[-1].lower()
+            move_name = PalFrame._SKILLMAP.get(w_clean, skill_val.split('::')[-1])
+            skill_info = _SKILL_DATA.get(w_clean, {}) if isinstance(_SKILL_DATA, dict) else {}
+            skill_elem = skill_info.get('element', 'Normal')
+            skill_power = skill_info.get('power', 0)
+            elem_color = elem_colors.get(skill_elem, '#9CA3AF')
+            slot = SkillSlotFrame()
+            slot.setStyleSheet('QFrame { background: rgba(0,0,0,0); border: 1px solid rgba(125,211,252,0.08); border-radius: 3px; } QFrame:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+            slot.setFixedHeight(28)
+            slot.setCursor(Qt.PointingHandCursor)
+            slot._skill_raw_value = skill_val
+            slot._skill_idx = idx
+            slot_layout = QHBoxLayout(slot)
+            slot_layout.setContentsMargins(6, 0, 6, 0)
+            slot_layout.setSpacing(4)
+            slot_layout.setAlignment(Qt.AlignVCenter)
+            name_lbl = QLabel(move_name)
+            name_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #E2E8F0; background: transparent; border: none;')
+            slot_layout.addWidget(name_lbl, 1)
+            elem_badge = QLabel()
+            elem_badge.setFixedSize(18, 18)
+            elem_badge.setAlignment(Qt.AlignCenter)
+            if skill_elem:
+                ep = _get_element_pixmap(skill_elem, 'small', 16)
+                if ep:
+                    elem_badge.setScaledContents(True)
+                    elem_badge.setPixmap(ep)
+                    elem_badge.setStyleSheet('background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 2px; padding: 1px; margin: 0px;')
+                else:
+                    elem_badge.setText(skill_elem[:4])
+                    elem_badge.setStyleSheet(f'font-size: 6px; font-weight: 700; color: {elem_color}; background: rgba(255,255,255,0.04); border: 1px solid {elem_color}40; border-radius: 2px;')
+            else:
+                elem_badge.setStyleSheet('background: transparent; border: none;')
+            slot_layout.addWidget(elem_badge)
+            power_lbl = QLabel(str(skill_power) if skill_power else '--')
+            power_lbl.setFixedWidth(24)
+            power_lbl.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            power_lbl.setStyleSheet('font-size: 9px; font-weight: 700; color: #F59E0B; background: transparent; border: none;')
+            slot_layout.addWidget(power_lbl)
+            if skill_info:
+                tip_parts = [f'<b>{move_name}</b>', f'Element: {skill_elem}', f'Power: {skill_power}']
+                cd = skill_info.get('cooldown', 0)
+                if cd:
+                    tip_parts.append(f'Cooldown: {cd}s')
+                desc = skill_info.get('description', '')
+                if desc:
+                    tip_parts.append('')
+                    tip_parts.append(desc)
+                slot.setToolTip('<br>'.join(tip_parts))
+            def _make_handler(sv, parent_dlg):
+                def handler(event):
+                    event.accept()
+                    sname = sv.split('::')[-1]
+                    confirm = show_question(slot, t('edit_pals.learnt_skills_title'), t('edit_pals.confirm_remove_skill', name=sname))
+                    if not confirm:
+                        return
+                    mw_data = raw.get('MasteredWaza', {})
+                    if isinstance(mw_data, dict):
+                        mlist = mw_data.get('value', {}).get('values', [])
+                    elif isinstance(mw_data, list):
+                        mlist = mw_data
+                    else:
+                        mlist = []
+                    if sv in mlist:
+                        mlist.remove(sv)
+                        new_mw = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': mlist}, 'type': 'ArrayProperty'}
+                        raw['MasteredWaza'] = new_mw
+                    parent_dlg.accept()
+                    show_information(parent_dlg, t('edit_pals.learnt_skills_title'), t('edit_pals.learnt_skills_removed', name=sname))
+                return handler
+            slot.mousePressEvent = _make_handler(skill_val, dlg)
+            scl.insertWidget(scl.count() - 1, slot)
+    scroll.setWidget(scroll_ct)
+    il.addWidget(scroll, 1)
+    btn_row = QHBoxLayout()
+    btn_row.addStretch()
+    close_btn = QPushButton('Close')
+    close_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.1); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.25); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.2); color: #FFFFFF; }')
+    close_btn.clicked.connect(dlg.accept)
+    btn_row.addWidget(close_btn)
+    il.addLayout(btn_row)
+    dlg.content_layout.addWidget(inner)
+    dlg.exec()
+class BulkSyncPassiveDialog(FramelessDialog):
+    def __init__(self, pal_name, cid, affected_count, parent=None):
+        super().__init__('edit_pals.bulk_sync_title', parent)
+        self.set_title_text(t('edit_pals.bulk_sync_title', name=pal_name))
+        self.setModal(True)
+        self.setMinimumSize(400, 380)
+        self.setMaximumSize(500, 450)
+        self._selected = [None, None, None, None]
+        self._result = None
+        self._build_ui(pal_name, cid, affected_count)
+    def _build_ui(self, pal_name, cid, affected_count):
+        inner = QWidget()
+        inner.setStyleSheet('QWidget { background: transparent; }')
+        il = QVBoxLayout(inner)
+        il.setContentsMargins(8, 4, 8, 8)
+        il.setSpacing(6)
+        info_lbl = QLabel(t('edit_pals.bulk_sync_found', count=affected_count, name=pal_name))
+        info_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #9CA3AF; background: transparent; border: none; padding: 2px 4px;')
+        il.addWidget(info_lbl)
+        pg = QWidget()
+        pg.setStyleSheet('background: transparent; border: none;')
+        pg_layout = QGridLayout(pg)
+        pg_layout.setContentsMargins(0, 0, 0, 0)
+        pg_layout.setSpacing(4)
+        _, _, default_tc = PalFrame._RANK_COLORS[1]
+        default_bg = PalFrame._RANK_COLORS[1][0]
+        self._cards = []
+        self._card_labels = []
+        self._card_overlays = []
+        self._card_rank_icons = []
+        for i in range(4):
+            card = QFrame()
+            card.setObjectName('passiveCard')
+            card.setFixedHeight(28)
+            card.setStyleSheet(f'QFrame#passiveCard {{ background: {default_bg}; border: 1.5px solid rgba(255,255,255,0.06); border-radius: 4px; }} QFrame#passiveCard:hover {{ border: 1.5px solid rgba(125,211,252,0.25); }}')
+            cl = QHBoxLayout(card)
+            cl.setContentsMargins(6, 0, 6, 0)
+            cl.setSpacing(2)
+            cl.setAlignment(Qt.AlignVCenter)
+            plbl = QLabel('--')
+            plbl.setStyleSheet(f'font-size: 9px; font-weight: 700; color: {default_tc}; background: transparent; border: none;')
+            cl.addWidget(plbl, 1)
+            rank_icon = QLabel()
+            rank_icon.setFixedSize(14, 14)
+            rank_icon.setAlignment(Qt.AlignCenter)
+            rank_icon.setStyleSheet('background: transparent; border: none;')
+            rank_icon.hide()
+            cl.addWidget(rank_icon)
+            chev = QLabel('❯❯❯')
+            chev.setStyleSheet(f'font-size: 6px; color: rgba(255,255,255,0.15); background: transparent; border: none; letter-spacing: -1px;')
+            cl.addWidget(chev)
+            card.setCursor(Qt.PointingHandCursor)
+            self._cards.append(card)
+            self._card_labels.append(plbl)
+            self._card_rank_icons.append(rank_icon)
+            overlay = PassiveEffectOverlay(card)
+            self._card_overlays.append(overlay)
+            def _make_click_handler(idx):
+                def handler():
+                    self._on_card_click(idx)
+                return handler
+            card.mousePressEvent = lambda ev, idx=i: self._on_card_click(idx)
+            card.setContextMenuPolicy(Qt.CustomContextMenu)
+            card.customContextMenuRequested.connect(lambda pos, idx=i: self._on_card_context(pos, idx))
+            row, col = (i // 2, i % 2)
+            pg_layout.addWidget(card, row, col)
+        il.addWidget(pg)
+        self._passive_pg = pg
+        self._passive_pg_layout = pg_layout
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        cancel_btn = QPushButton('Cancel')
+        cancel_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 16px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
+        cancel_btn.clicked.connect(self.reject)
+        btn_row.addWidget(cancel_btn)
+        apply_btn = QPushButton('Apply')
+        apply_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.15); color: #4ADE80; border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.25); color: #FFFFFF; }')
+        apply_btn.clicked.connect(lambda: self._on_apply(pal_name, cid, affected_count))
+        btn_row.addWidget(apply_btn)
+        il.addLayout(btn_row)
+        self.content_layout.addWidget(inner)
+    def _on_card_click(self, idx):
+        from palworld_aio.ui.skill_picker import SkillPicker
+        picker = SkillPicker(self)
+        result = picker.pick(PalFrame._PASSMAP, is_active=False, current_value=self._selected[idx] or '')
+        if result is None:
+            return
+        if result == '':
+            self._selected[idx] = None
+            self._update_card_display(idx)
+            return
+        self._selected[idx] = result
+        self._update_card_display(idx)
+    def _on_card_context(self, pos, idx):
+        if not self._selected[idx]:
+            return
+        menu = QMenu(self)
+        menu.setObjectName('editPalsContextMenu')
+        clear_action = menu.addAction('Clear')
+        action = menu.exec(self._cards[idx].mapToGlobal(pos))
+        if action == clear_action:
+            self._selected[idx] = None
+            self._update_card_display(idx)
+    def _update_card_display(self, idx):
+        card = self._cards[idx]
+        lbl = self._card_labels[idx]
+        p_val = self._selected[idx]
+        if p_val:
+            display_name = PalFrame._PASSMAP.get(p_val.lower(), p_val)
+            bg, bd, tc = PalFrame._passive_rank_color(p_val.lower())
+            rank = PalFrame._PASSRANK.get(p_val.lower(), 1)
+            anim_mode = None
+            if rank >= 5:
+                anim_mode = 'world_tree'
+            elif rank >= 4:
+                anim_mode = 'legend'
+            lbl.setText(display_name)
+            lbl.setStyleSheet(f'font-size: 9px; font-weight: 700; color: {tc}; background: transparent; border: none;')
+            card.setStyleSheet(f'QFrame#passiveCard {{ background: {bg}; border: 1.5px solid {bd}; border-radius: 4px; }}')
+            if idx < len(self._card_overlays):
+                self._card_overlays[idx].setGeometry(0, 0, card.width(), card.height())
+                self._card_overlays[idx].set_mode(anim_mode)
+            _ensure_passive_data()
+            p_info = _PASSIVE_DATA.get(p_val.lower(), {})
+            if p_info and isinstance(p_info, dict):
+                icon_path = p_info.get('icon', '')
+                if icon_path and idx < len(self._card_rank_icons):
+                    base_dir = constants.get_base_path()
+                    full_path = os.path.join(base_dir, 'resources', 'game_data', icon_path.lstrip('/'))
+                    pix = _get_cached_pixmap(full_path, 14)
+                    if pix:
+                        self._card_rank_icons[idx].setPixmap(pix)
+                        self._card_rank_icons[idx].show()
+                    else:
+                        self._card_rank_icons[idx].hide()
+        else:
+            _, _, default_tc = PalFrame._RANK_COLORS[1]
+            default_bg = PalFrame._RANK_COLORS[1][0]
+            lbl.setText('--')
+            lbl.setStyleSheet(f'font-size: 9px; font-weight: 700; color: {default_tc}; background: transparent; border: none;')
+            card.setStyleSheet(f'QFrame#passiveCard {{ background: {default_bg}; border: 1.5px solid rgba(255,255,255,0.06); border-radius: 4px; }}')
+            if idx < len(self._card_overlays):
+                self._card_overlays[idx].set_mode(None)
+            if idx < len(self._card_rank_icons):
+                self._card_rank_icons[idx].hide()
+    def _on_apply(self, pal_name, cid, affected_count):
+        selected = [s for s in self._selected if s is not None]
+        if len(selected) == 0:
+            show_warning(self, 'Bulk Sync', 'Select at least one passive skill.')
+            return
+        while len(selected) < 4:
+            selected.append('')
+        self._result = selected[:4]
+        self.accept()
+    def get_selected(self):
+        return self._result
 class PalEditorWidget(QWidget):
     _process_lock = threading.Lock()
     def __init__(self, parent=None):
@@ -3509,6 +3838,48 @@ class PalEditorWidget(QWidget):
                     show_information(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_success'))
                 except Exception:
                     show_warning(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_fail'))
+        elif action == 'learnt_skills':
+            if raw:
+                _show_learned_moves_dialog(raw, self)
+        elif action == 'bulk_sync_passives':
+            if raw:
+                self._bulk_sync_passives(raw)
+    def _bulk_sync_passives(self, raw):
+        cid = extract_value(raw, 'CharacterID', '')
+        base_id = cid.lower()
+        if base_id.startswith('boss_'):
+            base_id = base_id[5:]
+        pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        affected = []
+        for idx, pal_item in self.party_pals.items():
+            p_raw = _get_raw_from_item(pal_item)
+            if p_raw:
+                p_cid = extract_value(p_raw, 'CharacterID', '').lower().replace('boss_', '')
+                if p_cid == base_id:
+                    affected.append(pal_item)
+        for abs_idx, pal_item in self.palbox_pal_dict.items():
+            p_raw = _get_raw_from_item(pal_item)
+            if p_raw:
+                p_cid = extract_value(p_raw, 'CharacterID', '').lower().replace('boss_', '')
+                if p_cid == base_id:
+                    affected.append(pal_item)
+        if not affected:
+            show_information(self, 'Bulk Sync', 'No matching pals found.')
+            return
+        dlg = BulkSyncPassiveDialog(pal_name, base_id, len(affected), self)
+        if dlg.exec() != QDialog.Accepted:
+            return
+        selected = dlg.get_selected()
+        if not selected:
+            return
+        for pal_item in affected:
+            p_raw = _get_raw_from_item(pal_item)
+            if p_raw:
+                p_raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': [s for s in selected if s]}, 'type': 'ArrayProperty'}
+        self.pal_info._refresh()
+        self._update_party_slots()
+        self._update_palbox_page()
+        show_information(self, 'Bulk Sync', t('edit_pals.bulk_sync_success', count=len(affected), name=pal_name))
     def _delete_pal_at_slot(self, slot_index, is_party=None):
         if is_party is None:
             is_party = self.selected_pal_slot and self.selected_pal_slot[0] == 'party'

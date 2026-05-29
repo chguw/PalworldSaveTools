@@ -1443,5 +1443,14 @@
   "func_manager.fix_unassigned_pals.title": "할당되지 않은 친구 수정",
   "func_manager.fix_unassigned_pals.msg": "소유자 UID가 없는 {count}명의 친구를 수정했습니다.",
   "func_manager.fix_unassigned_pals.confirm.title": "할당되지 않은 친구 수정",
-  "func_manager.fix_unassigned_pals.confirm.msg": "할당되지 않은 친구를 수정하시겠습니까? (컨테이너 소유자에게 할당됩니다.)"
+  "func_manager.fix_unassigned_pals.confirm.msg": "할당되지 않은 친구를 수정하시겠습니까? (컨테이너 소유자에게 할당됩니다.)",
+  "edit_pals.ctx.learnt_skills": "배운 기술",
+  "edit_pals.ctx.bulk_sync_passives": "대량 동기화 패시브",
+  "edit_pals.bulk_sync_title": "대량 동기화 패시브 - {name}",
+  "edit_pals.bulk_sync_found": "{count} {name}을(를) 찾았습니다.",
+  "edit_pals.bulk_sync_success": "{count} {name} 패시브를 업데이트했습니다!",
+  "edit_pals.learnt_skills_title": "배운 기술",
+  "edit_pals.learnt_skills_count": "{count}개의 기술을 배웠습니다.",
+  "edit_pals.confirm_remove_skill": "학습된 동작에서 {name}을(를) 제거하시겠습니까?",
+  "edit_pals.learnt_skills_removed": "{name}이(가) 학습된 동작에서 제거되었습니다."
 }

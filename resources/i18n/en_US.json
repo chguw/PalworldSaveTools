@@ -1732,5 +1732,14 @@
   "func_manager.fix_unassigned_pals.title": "Fix Unassigned Pals",
   "func_manager.fix_unassigned_pals.msg": "Fixed {count} pal(s) without owner UID.",
   "func_manager.fix_unassigned_pals.confirm.title": "Fix Unassigned Pals",
-  "func_manager.fix_unassigned_pals.confirm.msg": "Fix unassigned pal(s)? (They will be assigned to the container owner.)"
+  "func_manager.fix_unassigned_pals.confirm.msg": "Fix unassigned pal(s)? (They will be assigned to the container owner.)",
+  "edit_pals.ctx.learnt_skills": "Learnt Skills",
+  "edit_pals.ctx.bulk_sync_passives": "Bulk Sync Passives",
+  "edit_pals.bulk_sync_title": "Bulk Sync Passives - {name}",
+  "edit_pals.bulk_sync_found": "Found {count} {name}",
+  "edit_pals.bulk_sync_success": "Updated {count} {name} passives!",
+  "edit_pals.learnt_skills_title": "Learnt Skills",
+  "edit_pals.learnt_skills_count": "{count} skills learnt",
+  "edit_pals.confirm_remove_skill": "Remove {name} from learnt moves?",
+  "edit_pals.learnt_skills_removed": "{name} removed from learnt moves."
 }

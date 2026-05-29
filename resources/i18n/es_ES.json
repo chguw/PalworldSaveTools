@@ -1437,5 +1437,14 @@
   "func_manager.fix_unassigned_pals.title": "Reparar amigos no asignados",
   "func_manager.fix_unassigned_pals.msg": "Se corrigió {count} amigos sin UID de propietario.",
   "func_manager.fix_unassigned_pals.confirm.title": "Reparar amigos no asignados",
-  "func_manager.fix_unassigned_pals.confirm.msg": "¿Reparar amigos no asignados? (Serán asignados al propietario del contenedor)."
+  "func_manager.fix_unassigned_pals.confirm.msg": "¿Reparar amigos no asignados? (Serán asignados al propietario del contenedor).",
+  "edit_pals.ctx.learnt_skills": "Habilidades aprendidas",
+  "edit_pals.ctx.bulk_sync_passives": "Pasivos de sincronización masiva",
+  "edit_pals.bulk_sync_title": "Pasivos de sincronización masiva: {nombre}",
+  "edit_pals.bulk_sync_found": "Encontrado {count} {nombre}",
+  "edit_pals.bulk_sync_success": "¡Pasivos {count} {name} actualizados!",
+  "edit_pals.learnt_skills_title": "Habilidades aprendidas",
+  "edit_pals.learnt_skills_count": "{count} habilidades aprendidas",
+  "edit_pals.confirm_remove_skill": "¿Eliminar a {nombre} de los movimientos aprendidos?",
+  "edit_pals.learnt_skills_removed": "{name} eliminado de los movimientos aprendidos."
 }

@@ -1444,5 +1444,14 @@
   "func_manager.fix_unassigned_pals.title": "未割り当ての仲間を修正する",
   "func_manager.fix_unassigned_pals.msg": "オーナー UID のない {count} 人の仲間を修正しました。",
   "func_manager.fix_unassigned_pals.confirm.title": "未割り当ての仲間を修正する",
-  "func_manager.fix_unassigned_pals.confirm.msg": "未割り当ての仲間を修正しますか? (コンテナ所有者に割り当てられます。)"
+  "func_manager.fix_unassigned_pals.confirm.msg": "未割り当ての仲間を修正しますか? (コンテナ所有者に割り当てられます。)",
+  "edit_pals.ctx.learnt_skills": "習得したスキル",
+  "edit_pals.ctx.bulk_sync_passives": "一括同期パッシブ",
+  "edit_pals.bulk_sync_title": "一括同期パッシブ - {name}",
+  "edit_pals.bulk_sync_found": "{count} {name} が見つかりました",
+  "edit_pals.bulk_sync_success": "{count} {name} パッシブを更新しました!",
+  "edit_pals.learnt_skills_title": "習得したスキル",
+  "edit_pals.learnt_skills_count": "{count} 個のスキルを学習しました",
+  "edit_pals.confirm_remove_skill": "学習した動きから {name} を削除しますか?",
+  "edit_pals.learnt_skills_removed": "{name} が学習した動きから削除されました。"
 }
