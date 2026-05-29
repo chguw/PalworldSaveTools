@@ -20,7 +20,7 @@ class GamePassSaveFixWidget(QWidget):
     message_signal = Signal(str, str, str)
     def __init__(self):
         super().__init__()
-        self.save_frame = None
+        self.conversion_direction = None
         self.update_combobox_signal.connect(self.update_combobox_slot)
         self.extraction_complete_signal.connect(self.start_conversion)
         self.message_signal.connect(self.handle_message)
@@ -28,7 +28,7 @@ class GamePassSaveFixWidget(QWidget):
         self.load_styles()
     def setup_ui(self):
         self.setWindowTitle(t('xgp.title.converter'))
-        self.setMinimumSize(600, 200)
+        self.setMinimumSize(960, 440)
         self.setObjectName('central')
         try:
             if ICON_PATH and os.path.exists(ICON_PATH):
@@ -42,44 +42,64 @@ class GamePassSaveFixWidget(QWidget):
         glass_frame.setObjectName('glass')
         glass_layout = QVBoxLayout(glass_frame)
         glass_layout.setContentsMargins(12, 12, 12, 12)
-        glass_layout.addStretch(1)
         title_label = QLabel(t('xgp.title.converter'))
         title_label.setFont(QFont('Segoe UI', 16, QFont.Bold))
         title_label.setAlignment(Qt.AlignCenter)
         glass_layout.addWidget(title_label)
-        desc_label = QLabel(t('xgp.ui.description') if hasattr(t, '__call__') else 'Select an option to convert your Palworld saves:')
+        desc_label = QLabel(t('xgp.ui.description'))
         desc_label.setFont(QFont('Segoe UI', 12))
         desc_label.setAlignment(Qt.AlignCenter)
         desc_label.setWordWrap(True)
         glass_layout.addWidget(desc_label)
-        glass_layout.addStretch(1)
         warning_label = QLabel(t('warning.world_id'))
         warning_label.setFont(QFont('Segoe UI', 9))
         warning_label.setStyleSheet('color: #ffaa00;')
         warning_label.setAlignment(Qt.AlignCenter)
         warning_label.setWordWrap(True)
         glass_layout.addWidget(warning_label)
-        buttons_layout = QHBoxLayout()
-        buttons_layout.addStretch()
-        xgp_button = QPushButton(f"{nf.icons['nf-fa-xbox']}  {t('xgp.ui.btn_xgp_folder')}")
-        xgp_button.setFont(QFont('Segoe UI', 13))
-        xgp_button.setFixedWidth(250)
-        buttons_layout.addWidget(xgp_button)
-        steam_button = QPushButton(f"{nf.icons['nf-fa-steam']}  {t('xgp.ui.btn_steam_folder')}")
-        steam_button.setFont(QFont('Segoe UI', 13))
-        steam_button.setFixedWidth(250)
-        buttons_layout.addWidget(steam_button)
-        buttons_layout.addStretch()
-        glass_layout.addLayout(buttons_layout)
-        xgp_button.clicked.connect(self.get_save_game_pass)
-        steam_button.clicked.connect(self.get_save_steam)
-        self.save_frame = QFrame()
-        self.save_frame.setStyleSheet('QFrame { background-color: transparent; }')
-        save_layout = QVBoxLayout(self.save_frame)
-        save_layout.setContentsMargins(0, 0, 0, 0)
-        save_layout.setSpacing(12)
-        glass_layout.addWidget(self.save_frame)
+        panels_layout = QHBoxLayout()
+        panels_layout.setSpacing(12)
+        left_frame = QFrame()
+        left_frame.setObjectName('glass')
+        left_layout = QVBoxLayout(left_frame)
+        left_layout.setContentsMargins(10, 10, 10, 10)
+        left_header = QLabel(t('xgp.ui.section_xgp_to_steam'))
+        left_header.setFont(QFont('Segoe UI', 14, QFont.Bold))
+        left_header.setAlignment(Qt.AlignCenter)
+        left_layout.addWidget(left_header)
+        self.xgp_browse_btn = QPushButton(f"{nf.icons['nf-fa-xbox']}  {t('xgp.ui.btn_xgp_folder')}")
+        self.xgp_browse_btn.setFont(QFont('Segoe UI', 12))
+        left_layout.addWidget(self.xgp_browse_btn, alignment=Qt.AlignCenter)
+        self.xgp_save_frame = QFrame()
+        self.xgp_save_frame.setStyleSheet('QFrame { background-color: transparent; }')
+        xgp_save_layout = QVBoxLayout(self.xgp_save_frame)
+        xgp_save_layout.setContentsMargins(0, 0, 0, 0)
+        xgp_save_layout.setSpacing(12)
+        left_layout.addWidget(self.xgp_save_frame)
+        left_layout.addStretch()
+        panels_layout.addWidget(left_frame, 1)
+        right_frame = QFrame()
+        right_frame.setObjectName('glass')
+        right_layout = QVBoxLayout(right_frame)
+        right_layout.setContentsMargins(10, 10, 10, 10)
+        right_header = QLabel(t('xgp.ui.section_steam_to_xgp'))
+        right_header.setFont(QFont('Segoe UI', 14, QFont.Bold))
+        right_header.setAlignment(Qt.AlignCenter)
+        right_layout.addWidget(right_header)
+        self.steam_browse_btn = QPushButton(f"{nf.icons['nf-fa-steam']}  {t('xgp.ui.btn_steam_folder')}")
+        self.steam_browse_btn.setFont(QFont('Segoe UI', 12))
+        right_layout.addWidget(self.steam_browse_btn, alignment=Qt.AlignCenter)
+        self.steam_status_label = QLabel('')
+        self.steam_status_label.setFont(QFont('Segoe UI', 10))
+        self.steam_status_label.setAlignment(Qt.AlignCenter)
+        self.steam_status_label.setWordWrap(True)
+        right_layout.addWidget(self.steam_status_label)
+        right_layout.addStretch()
+        panels_layout.addWidget(right_frame, 1)
+        glass_layout.addLayout(panels_layout)
         main_layout.addWidget(glass_frame)
+        self.xgp_browse_btn.clicked.connect(self.get_save_game_pass)
+        self.steam_browse_btn.clicked.connect(self.get_save_steam)
         center_window(self)
     def showEvent(self, event):
         super().showEvent(event)
@@ -124,9 +144,10 @@ class GamePassSaveFixWidget(QWidget):
         default = os.path.expandvars('%LOCALAPPDATA%\\Packages\\PocketpairInc.Palworld_ad4psfrxyesvt\\SystemAppData\\wgs')
         self.raise_()
         self.activateWindow()
-        folder = QFileDialog.getExistingDirectory(self, 'Select XGP Save Folder', default)
+        folder = QFileDialog.getExistingDirectory(self, t('xgp.ui.select_xgp_folder'), default)
         if not folder:
             return
+        self.conversion_direction = 'xgp_to_steam'
         self.xgp_source_folder = folder
         def is_xgp_container(path):
             for root, _, files in os.walk(path):
@@ -154,9 +175,10 @@ class GamePassSaveFixWidget(QWidget):
         import gc
         self.raise_()
         self.activateWindow()
-        folder = QFileDialog.getExistingDirectory(self, 'Select Steam Save Folder to Transfer')
+        folder = QFileDialog.getExistingDirectory(self, t('xgp.ui.select_steam_folder'))
         if not folder:
             return
+        self.conversion_direction = 'steam_to_xgp'
         sav_path = os.path.join(folder, 'Level.sav')
         if not os.path.exists(sav_path):
             self.message_signal.emit('critical', t('Error'), 'Selected folder does not contain Level.sav')
@@ -166,6 +188,8 @@ class GamePassSaveFixWidget(QWidget):
             try:
                 meta_json = sav_to_json(meta_path)
                 old_name = meta_json['properties']['SaveData']['value'].get('WorldName', {}).get('value', 'Unknown World')
+                QMessageBox.information(self, t('world.rename.title'),
+                    t('xgp.msg.world_rename_info', old=old_name))
                 new_name = ask_string_with_icon(t('world.rename.title'), t('world.rename.prompt', old=old_name), ICON_PATH)
                 if new_name:
                     meta_json['properties']['SaveData']['value']['WorldName']['value'] = new_name
@@ -174,6 +198,14 @@ class GamePassSaveFixWidget(QWidget):
             except Exception as e:
                 print(f'Metadata processing failed: {e}')
         gc.collect()
+        if not self.is_admin():
+            self.message_signal.emit('critical', t('xgp.err.admin_required.title'), t('xgp.err.admin_required.msg'))
+            return
+        reply = QMessageBox.warning(self, t('xgp.admin_warning.title'),
+            t('xgp.admin_warning.msg'),
+            QMessageBox.Yes | QMessageBox.No)
+        if reply != QMessageBox.Yes:
+            return
         run_with_loading(None, lambda: self.transfer_steam_to_gamepass(folder))
     @staticmethod
     def list_folders_in_directory(directory):
@@ -228,12 +260,12 @@ class GamePassSaveFixWidget(QWidget):
         total = len(saveFolders)
         if successful > 0:
             if successful == total:
-                message = f'All {total} save files converted successfully.'
+                message = t('xgp.msg.all_converted_success', total=total)
             else:
-                message = f'Successfully converted {successful} out of {total} save files.'
-            self.message_signal.emit('info', 'Conversion Done', message)
+                message = t('xgp.msg.some_converted_success', successful=successful, total=total)
+            self.message_signal.emit('info', t('xgp.msg.conversion_done.title'), message)
         else:
-            self.message_signal.emit('critical', 'Conversion Failed', 'No save files were converted successfully.')
+            self.message_signal.emit('critical', t('xgp.msg.conversion_failed.title'), t('xgp.msg.no_saves_converted'))
     def run_save_extractor(self):
         import gc
         global save_info_map
@@ -362,7 +394,7 @@ class GamePassSaveFixWidget(QWidget):
             initial = steam_default if os.path.isdir(steam_default) else root_dir
             self.raise_()
             self.activateWindow()
-            destination = QFileDialog.getExistingDirectory(self, 'Select where to place converted save', initial)
+            destination = QFileDialog.getExistingDirectory(self, t('xgp.ui.select_destination'), initial)
             if not destination:
                 return
             if hasattr(self, 'direct_saves_map') and saveName in self.direct_saves_map:
@@ -462,9 +494,6 @@ class GamePassSaveFixWidget(QWidget):
         except Exception as e:
             print(f'Service start failed: {e}')
     def transfer_steam_to_gamepass(self, source_folder):
-        if not self.is_admin():
-            self.message_signal.emit('critical', 'Admin Required', 'Please restart as Administrator.')
-            return
         try:
             self.stop_gaming_services()
             time.sleep(1)
@@ -479,11 +508,11 @@ class GamePassSaveFixWidget(QWidget):
                 sys.argv = old_argv
                 self.start_gaming_services()
         except Exception as e:
-            self.message_signal.emit('critical', 'Import Failed', str(e))
+            self.message_signal.emit('critical', t('xgp.err.import_failed.title'), str(e))
     def update_combobox(self, saveList):
         global saves
         saves = saveList
-        layout = self.save_frame.layout()
+        layout = self.xgp_save_frame.layout()
         while layout.count():
             item = layout.takeAt(0)
             widget = item.widget()
@@ -492,7 +521,7 @@ class GamePassSaveFixWidget(QWidget):
         if saves:
             label_layout = QHBoxLayout()
             label_layout.addStretch()
-            label = QLabel('Available Saves ▼')
+            label = QLabel(t('xgp.ui.available_saves'))
             label.setFont(QFont('Segoe UI', 10))
             label_layout.addWidget(label)
             label_layout.addStretch()
@@ -501,9 +530,11 @@ class GamePassSaveFixWidget(QWidget):
             combo_layout.addStretch()
             combobox = QComboBox()
             combobox.setFont(QFont('Segoe UI', 10))
-            combobox.setMinimumWidth(400)
-            combobox.setPlaceholderText('Select a save...')
-            combobox.addItems(saves)
+            combobox.setMinimumWidth(350)
+            combobox.setPlaceholderText(t('xgp.ui.select_save_placeholder'))
+            for s in saves:
+                prefix = '[XGP] ' if self.conversion_direction == 'xgp_to_steam' else '[Steam] '
+                combobox.addItem(f'{prefix}{s}', userData=s)
             combo_layout.addWidget(combobox)
             combo_layout.addStretch()
             layout.addLayout(combo_layout)
@@ -513,14 +544,12 @@ class GamePassSaveFixWidget(QWidget):
             button.setFont(QFont('Segoe UI', 10))
             button.setFixedWidth(250)
             button.setEnabled(combobox.currentIndex() >= 0)
-            button.clicked.connect(lambda: self.convert_JSON_sav(combobox.currentText()))
+            button.clicked.connect(lambda: self.convert_JSON_sav(combobox.currentData()))
             combobox.currentIndexChanged.connect(lambda index: button.setEnabled(index >= 0))
             button_layout.addWidget(button)
             button_layout.addStretch()
             layout.addLayout(button_layout)
         QApplication.processEvents()
-        self.adjustSize()
-        center_window(self)
     def load_styles(self):
         ThemeManager.load_styles(self)
 def center_window(win):
@@ -532,7 +561,7 @@ def center_window(win):
     win.move((screen.width() - size.width()) // 2, (screen.height() - size.height()) // 2)
 def game_pass_save_fix():
     if os.name != 'nt':
-        msg = QLabel('Xbox Game Pass save management is only available on Windows.')
+        msg = QLabel(t('xgp.err.not_windows'))
         msg.setAlignment(Qt.AlignCenter)
         msg.setStyleSheet('font-size: 14px; padding: 40px; color: #888;')
         return msg

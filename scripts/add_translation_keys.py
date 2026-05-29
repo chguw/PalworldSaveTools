@@ -54,6 +54,23 @@ NEW_TRANSLATIONS = {
     'inventory.unlock_all_map_success.title': 'Unlock All Map',
     'inventory.unlock_all_map_success.msg': 'Unlock all map completed successfully!',
     'inventory.unlock_all_map_bulk_success.msg': 'Unlocked map + fast travel for {count} player(s).',
+    'xgp.err.admin_required.title': 'Admin Required',
+    'xgp.err.admin_required.msg': 'Please restart as Administrator.',
+    'xgp.admin_warning.title': 'Administrator privileges required',
+    'xgp.admin_warning.msg': 'This operation will:\n• Stop Xbox Gaming Services (GamingServices.exe)\n• Restart them after conversion\n\nYour game may be affected if running. Continue?',
+    'xgp.msg.world_rename_info': 'Your world name "{old}" will be carried over to the Game Pass save.\nYou can rename it on the next screen if you like.',
+    'xgp.ui.available_saves': 'Available Saves ▼',
+    'xgp.ui.select_save_placeholder': 'Select a save...',
+    'xgp.ui.select_xgp_folder': 'Select XGP Save Folder',
+    'xgp.ui.select_steam_folder': 'Select Steam Save Folder to Transfer',
+    'xgp.ui.select_destination': 'Select where to place converted save',
+    'xgp.err.import_failed.title': 'Import Failed',
+    'xgp.err.not_windows': 'Xbox Game Pass save management is only available on Windows.',
+    'xgp.msg.all_converted_success': 'All {total} save files converted successfully.',
+    'xgp.msg.some_converted_success': 'Successfully converted {successful} out of {total} save files.',
+    'xgp.msg.conversion_done.title': 'Conversion Done',
+    'xgp.msg.conversion_failed.title': 'Conversion Failed',
+    'xgp.msg.no_saves_converted': 'No save files were converted successfully.',
 }
 def add_english_keys():
     lang_file = PROJECT_ROOT / 'resources' / 'i18n' / 'en_US.json'
