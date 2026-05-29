@@ -4019,7 +4019,8 @@ class PalCreateDialog(QDialog):
         if not group_id:
             show_warning(self, 'Error', t('edit_pals.error_no_guild'))
             return
-        pal_item = _generate_pal_save_param(cid, nick, owner_uid, container_id, self.slot_index, group_id)
+        slot_to_use = (self.pal_editor.current_box_index - 1) * 30 + self.slot_index if not self.is_party else self.slot_index
+        pal_item = _generate_pal_save_param(cid, nick, owner_uid, container_id, slot_to_use, group_id)
         instance_id = pal_item['key']['InstanceId']['value']
         cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
         cmap.append(pal_item)
@@ -4027,7 +4028,7 @@ class PalCreateDialog(QDialog):
         for cont in char_containers:
             if safe_nested_get(cont, ['key', 'ID', 'value']) == container_id:
                 slots = safe_nested_get(cont, ['value', 'Slots', 'value', 'values'], [])
-                slots.append({'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': self.slot_index}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': instance_id, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}})
+                slots.append({'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_to_use}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': instance_id, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}})
                 break
         if 'GroupSaveDataMap' in wsd:
             for g in wsd['GroupSaveDataMap']['value']:
@@ -4039,9 +4040,8 @@ class PalCreateDialog(QDialog):
         if self.is_party:
             self.pal_editor.party_pals[self.slot_index] = pal_item
         else:
-            abs_idx = (self.pal_editor.current_box_index - 1) * 30 + self.slot_index
-            self.pal_editor.palbox_pal_dict[abs_idx] = pal_item
-        self.created_item = {'character_id': cid, 'nickname': nick, 'container_id': container_id, 'slot_index': self.slot_index, 'pal_item': pal_item}
+            self.pal_editor.palbox_pal_dict[slot_to_use] = pal_item
+        self.created_item = {'character_id': cid, 'nickname': nick, 'container_id': container_id, 'slot_index': slot_to_use, 'pal_item': pal_item}
         self.accept()
 class PalFrame(QFrame):
     _maps_loaded = False
