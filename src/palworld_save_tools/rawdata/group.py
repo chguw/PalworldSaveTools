@@ -242,17 +242,17 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
                     uid = _stdlib_uuid.UUID(uid)
                 elif isinstance(uid, _stdlib_uuid.UUID):
                     pass
+                elif isinstance(uid, UUID):
+                    pass
                 else:
                     uid = _stdlib_uuid.UUID('00000000-0000-0000-0000-000000000000')
                 writer.guid(uid)
                 writer.i64(player['player_info']['last_online_real_time'])
                 writer.fstring(player['player_info']['player_name'])
-            if 'trailing_bytes' in p:
-                writer.write(bytes(p['trailing_bytes']))
-            if '_trailing_unknown' in p:
-                writer.write(bytes(p['_trailing_unknown']))
         elif '_opaque_all_remaining_for_encode' in p:
             writer.write(bytes(p['_opaque_all_remaining_for_encode']))
+        elif '_opaque_all_remaining_bytes' in p and p.get('_format_version') != 'old':
+            writer.write(bytes(p['_opaque_all_remaining_bytes']))
         else:
             if 'unknown_guild_field' in p:
                 writer.write(bytes(p['unknown_guild_field']))
@@ -280,9 +280,9 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
                     else:
                         uid = _stdlib_uuid.UUID('00000000-0000-0000-0000-000000000000')
                     writer.guid(uid)
-                    writer.i64(player['player_info']['last_online_real_time'])
-                    writer.fstring(player['player_info']['player_name'])
     if 'trailing_bytes' in p and p['group_type'] != 'EPalGroupType::Guild':
         writer.write(bytes(p['trailing_bytes']))
+    if 'unknown_bytes' in p and p['group_type'] not in ('EPalGroupType::Guild', 'EPalGroupType::Organization', 'EPalGroupType::IndependentGuild'):
+        writer.write(bytes(p['unknown_bytes']))
     encoded_bytes = writer.bytes()
     return encoded_bytes

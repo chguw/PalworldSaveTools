@@ -254,7 +254,7 @@ QDialog { background: rgba(12,14,18,0.97); color: #e2e8f0; }
                 'QProgressBar { background: rgba(255,255,255,0.06); border: none; border-radius: 2px; }'
                 'QProgressBar::chunk { background: #22c55e; border-radius: 2px; }'
             )
-            QTimer.singleShot(2000, self.safe_exit)
+            QTimer.singleShot(1000, self.safe_exit)
         def safe_exit(self):
             QApplication.quit()
             os._exit(0)
@@ -433,7 +433,7 @@ def run_with_loading(callback, func, *args, parent=None, **kwargs):
                     cleanup()
             else:
                 cleanup()
-            QTimer.singleShot(2500, lambda: (cleanup(), callback(res) if callback else None))
+            QTimer.singleShot(1000, lambda: (cleanup(), callback(res) if callback else None))
     QTimer.singleShot(100, monitor)
 class ErrorDialog(QDialog):
     def __init__(self, error_text, parent=None):

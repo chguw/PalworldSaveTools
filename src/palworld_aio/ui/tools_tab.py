@@ -4,7 +4,7 @@ from palworld_save_tools import json_tools
 import traceback
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QScrollArea, QSizePolicy, QSpacerItem, QGridLayout, QApplication, QDialog, QStylePainter, QStyleOptionButton, QStyle
 from PySide6.QtCore import Qt, QSize, Signal, QPropertyAnimation, QEasingCurve, QRectF
-from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QDragEnterEvent, QDropEvent, QDragLeaveEvent, QPainter, QColor, QPen, QPainterPath, QFontMetrics
+from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QDragEnterEvent, QDropEvent, QDragLeaveEvent, QPainter, QColor, QPen, QPainterPath, QFontMetrics, QFontDatabase
 from i18n import t
 from loading_manager import show_critical
 from palworld_aio import constants
@@ -205,7 +205,17 @@ class DropOverlay(QWidget):
 class StatIconBtn(QPushButton):
     def __init__(self, icon, parent=None):
         super().__init__(icon, parent)
-        self.setFont(QFont('Hack Nerd Font', 11))
+        font_family = self._resolve_nerdfont()
+        self.setFont(QFont(font_family, 11))
+
+    @staticmethod
+    def _resolve_nerdfont():
+        db = QFontDatabase()
+        candidates = ['Hack Nerd Font', 'NerdFontsSymbolsOnly', 'Segoe Fluent Icons', 'Segoe UI Symbol', 'Segoe UI']
+        for name in candidates:
+            if name in db.families():
+                return name
+        return 'Segoe UI'
         self.setFixedSize(44, 28)
         self.setCursor(QCursor(Qt.PointingHandCursor))
         self.setFocusPolicy(Qt.NoFocus)
@@ -337,7 +347,6 @@ class ToolsTab(QWidget):
             self._stat_cards[key] = val
             self._stat_label_refs[key] = lbl
         stats_layout.addStretch()
-        self._stats_frame.setVisible(False)
         card_layout.addWidget(self._stats_frame)
 
         card_layout.addStretch()

@@ -13397,7 +13397,7 @@
             "rarity": 0,
             "type_a": "EPalItemTypeA::Armor",
             "type_b": "EPalItemTypeB::ArmorHead",
-            "description": "Hat shaped like a Shroomer Noct.",
+            "description": "Hat shaped like a Shroomer.",
             "sort_id": 1525
         },
         {
@@ -23715,7 +23715,7 @@
             "asset": "WingGlider_Fuel",
             "icon": "/icons/items/T_itemicon_Material_WingGlider_Fuel.webp",
             "rarity": 0,
-            "type_a": "EPalItemTypeA::Material",
+            "type_a": "EPalItemTypeA::Consume",
             "type_b": "EPalItemTypeB::ConsumeOther",
             "description": "The fuel required to power the Wing Pack.",
             "sort_id": 49
