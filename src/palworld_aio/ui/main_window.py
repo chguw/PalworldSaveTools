@@ -1401,6 +1401,9 @@ class MainWindow(QMainWindow):
         else:
             self._show_warning(t('Error') if t else 'Error', t('timestamps.reset_failed') if t else 'Failed to reset player timestamp')
     def _open_paldefender(self):
+        if not constants.loaded_level_json:
+            self._show_warning(t('Error'), t('error.no_save_loaded'))
+            return
         dialog = PalDefenderDialog(self)
         dialog.exec()
     def _rebuild_all_guilds(self):
