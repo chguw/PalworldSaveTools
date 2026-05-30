@@ -250,7 +250,7 @@ def add_all_effigies_to_players(player_uids, quantity=999):
     total = 0
     level_changed = False
     for uid in player_uids:
-        uid_clean = str(uid).replace('-', '').lower()
+        uid_clean = str(uid).replace('-', '').upper()
         players_dir = os.path.join(constants.current_save_path, 'Players')
         if not os.path.isdir(players_dir):
             continue

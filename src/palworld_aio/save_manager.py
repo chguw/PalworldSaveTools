@@ -175,8 +175,8 @@ class SaveManager(QObject):
             t1 = time.perf_counter()
             players_folder = os.path.join(constants.current_save_path, 'Players')
             for uid in constants.files_to_delete:
-                f = os.path.join(players_folder, uid + '.sav')
-                f_dps = os.path.join(players_folder, f'{uid}_dps.sav')
+                f = os.path.join(players_folder, uid.upper() + '.sav')
+                f_dps = os.path.join(players_folder, f'{uid.upper()}_dps.sav')
                 try:
                     os.remove(f)
                 except FileNotFoundError:
@@ -770,7 +770,7 @@ class SaveManager(QObject):
         uniques = caught = encounters = 0
         if not uid:
             return (uid, pname, uniques, caught, encounters)
-        clean_uid = str(uid).replace('-', '')
+        clean_uid = str(uid).replace('-', '').upper()
         sav_file = os.path.join(playerdir, f'{clean_uid}.sav')
         dps_file = os.path.join(playerdir, f'{clean_uid}_dps.sav')
         if os.path.isfile(sav_file):

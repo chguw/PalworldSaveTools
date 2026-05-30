@@ -1042,7 +1042,7 @@ def finalize_save_task():
         try:
             tgt_dir = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
             os.makedirs(tgt_dir, exist_ok=True)
-            _write_sav(gvas_obj, os.path.join(tgt_dir, f'{target_uid}.sav'))
+            _write_sav(gvas_obj, os.path.join(tgt_dir, f'{target_uid.upper()}.sav'))
         except Exception as e:
             errors.append(f'Player {target_uid}: {e}')
     if errors:
@@ -1057,9 +1057,9 @@ def load_player_file(level_sav_path, player_uid, use_source_folder=False):
         base_folder = os.path.join(base_folder, 'Players')
     else:
         base_folder = os.path.join(base_folder, 'Players')
-    player_file_path = os.path.join(base_folder, f'{player_uid}.sav')
+    player_file_path = os.path.join(base_folder, f'{player_uid.upper()}.sav')
     if not os.path.exists(player_file_path):
-        player_file_path = os.path.join(os.path.dirname(level_sav_path), '../Players', f'{player_uid}.sav')
+        player_file_path = os.path.join(os.path.dirname(level_sav_path), '../Players', f'{player_uid.upper()}.sav')
         if not os.path.exists(player_file_path):
             print(f'Error!', f'Player file {player_file_path} not present.')
             return None
