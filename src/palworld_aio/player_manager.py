@@ -214,7 +214,7 @@ def set_player_stats(player_uid, stat_changes, unused_stat_points=None):
                         sp_val['UnusedStatusPoint']['value'] = 0
             return True
     return False
-EFFIGY_ITEM_IDS = ['Relic_01', 'Relic_02', 'Relic_03', 'Relic_04', 'Relic_05', 'Relic_06', 'Relic_07', 'Relic_08', 'Relic_09', 'Relic_10', 'Relic_11', 'Relic_12']
+EFFIGY_ITEM_IDS = ['Relic_01', 'Relic_02', 'Relic_03', 'Relic_04', 'Relic_05', 'Relic_06', 'Relic_07', 'Relic_08', 'Relic_09', 'Relic_10', 'Relic_11', 'Relic_12', 'Relic']
 def _load_relic_data():
     relic_path = os.path.join(constants.get_base_path(), 'resources', 'game_data', 'relic_data.json')
     try:
