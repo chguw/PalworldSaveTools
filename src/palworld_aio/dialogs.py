@@ -1,5 +1,5 @@
 import os
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QSpinBox, QComboBox, QTextEdit, QFileDialog, QGroupBox, QFormLayout, QCheckBox, QRadioButton, QFrame, QTabWidget, QScrollArea, QWidget, QGridLayout, QSlider, QProgressBar, QApplication, QButtonGroup
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QSpinBox, QComboBox, QTextEdit, QFileDialog, QGroupBox, QFormLayout, QCheckBox, QRadioButton, QFrame, QTabWidget, QScrollArea, QWidget, QGridLayout, QSlider, QProgressBar, QApplication, QButtonGroup, QTreeWidget, QTreeWidgetItem
 from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtGui import QIcon, QFont, QColor, QPen, QBrush, QPainter, QLinearGradient
 from i18n import t
@@ -583,95 +583,192 @@ class RadiusPreviewDialog(ThemedDialog):
             return dialog.result_value
         return None
 class PalDefenderDialog(ThemedDialog):
+    FILTER_INACTIVITY = 1
+    FILTER_MAXLEVEL = 2
+    FILTER_BOTH = 3
+    COL_GUILD = 0
+    COL_GUILD_UID = 1
+    COL_BASES = 2
+    COL_MEMBERS = 3
+    COL_INACTIVE = 4
+    COL_LEVEL = 5
+    COL_PLAYER_UID = 6
+    COL_PALS = 7
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle(t('paldefender.title') if t else 'PalDefender - Generate Commands')
-        self.setMinimumSize(800, 600)
+        self.setWindowTitle(t('paldefender.title') if t else 'PalDefender \u2014 Base Kill Command Generator')
+        self.setMinimumSize(900, 650)
         if os.path.exists(constants.ICON_PATH):
             self.setWindowIcon(QIcon(constants.ICON_PATH))
+        self._guild_data = []
         self._setup_ui()
+    def showEvent(self, event):
+        super().showEvent(event)
+        if not event.spontaneous():
+            parent = self._get_effective_parent()
+            if parent:
+                pw = parent.geometry()
+                ow = self.frameGeometry()
+                ow.moveCenter(pw.center())
+                self.move(ow.topLeft())
+                self.activateWindow()
+                self.raise_()
     def _setup_ui(self):
-        from PySide6.QtWidgets import QRadioButton, QButtonGroup, QFrame
+        from PySide6.QtWidgets import QRadioButton, QButtonGroup, QFrame, QCheckBox, QHeaderView
         layout = QVBoxLayout(self)
-        layout.setSpacing(15)
+        layout.setSpacing(12)
         layout.setContentsMargins(20, 20, 20, 20)
         filter_frame = QFrame()
         filter_frame.setFrameShape(QFrame.StyledPanel)
         filter_layout = QVBoxLayout(filter_frame)
-        filter_label = QLabel(t('paldefender.filter_type') if t else 'Filter Type:')
-        filter_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
-        filter_layout.addWidget(filter_label)
-        radio_layout = QHBoxLayout()
+        filter_layout.setSpacing(8)
+        mode_row = QHBoxLayout()
+        mode_label = QLabel(t('paldefender.filter_mode') if t else 'Filter Mode:')
+        mode_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
+        mode_row.addWidget(mode_label)
         self.filter_group = QButtonGroup(self)
-        self.radio_inactivity = QRadioButton(t('paldefender.inactivity') if t else 'Inactivity(days)')
-        self.radio_maxlevel = QRadioButton(t('paldefender.max_level') if t else 'Max Level')
+        self.radio_inactivity = QRadioButton(t('paldefender.inactivity_only') if t else 'Inactivity')
+        self.radio_maxlevel = QRadioButton(t('paldefender.max_level_only') if t else 'Max Level')
         self.radio_both = QRadioButton(t('paldefender.both') if t else 'Both')
-        self.filter_group.addButton(self.radio_inactivity, 1)
-        self.filter_group.addButton(self.radio_maxlevel, 2)
-        self.filter_group.addButton(self.radio_both, 3)
+        self.filter_group.addButton(self.radio_inactivity, self.FILTER_INACTIVITY)
+        self.filter_group.addButton(self.radio_maxlevel, self.FILTER_MAXLEVEL)
+        self.filter_group.addButton(self.radio_both, self.FILTER_BOTH)
         self.radio_inactivity.setChecked(True)
-        radio_layout.addWidget(self.radio_inactivity)
-        radio_layout.addWidget(self.radio_maxlevel)
-        radio_layout.addWidget(self.radio_both)
-        radio_layout.addStretch()
-        filter_layout.addLayout(radio_layout)
-        instructions = QLabel(t('paldefender.instructions') if t else 'Choose filter type:\nInactivity: Select guilds with ALL players inactive for given days.\nMax Level: Select guilds with ALL players below given level.\nBoth: Combine both filters(ALL players must match both criteria).')
-        instructions.setStyleSheet(f'color: {constants.MUTED}; padding: 10px;')
-        instructions.setWordWrap(True)
-        filter_layout.addWidget(instructions)
-        layout.addWidget(filter_frame)
-        input_layout = QHBoxLayout()
-        inactivity_label = QLabel(t('paldefender.inactivity_days') if t else 'Inactivity Days:')
-        input_layout.addWidget(inactivity_label)
+        mode_row.addWidget(self.radio_inactivity)
+        mode_row.addWidget(self.radio_maxlevel)
+        mode_row.addWidget(self.radio_both)
+        mode_row.addStretch()
+        filter_layout.addLayout(mode_row)
+        params_row = QHBoxLayout()
+        inactivity_label = QLabel(t('paldefender.inactivity_days') if t else 'Inactive \u2265')
+        params_row.addWidget(inactivity_label)
         self.inactivity_spin = QSpinBox()
-        self.inactivity_spin.setMinimum(1)
+        self.inactivity_spin.setMinimum(0)
         self.inactivity_spin.setMaximum(9999)
         self.inactivity_spin.setValue(30)
-        self.inactivity_spin.setMinimumWidth(100)
-        input_layout.addWidget(self.inactivity_spin)
-        input_layout.addSpacing(20)
-        maxlevel_label = QLabel(t('paldefender.max_level_label') if t else 'Max Level:')
-        input_layout.addWidget(maxlevel_label)
+        self.inactivity_spin.setMinimumWidth(80)
+        params_row.addWidget(self.inactivity_spin)
+        params_row.addSpacing(16)
+        maxlevel_label = QLabel(t('paldefender.max_level') if t else 'Max Level \u2264')
+        params_row.addWidget(maxlevel_label)
         self.maxlevel_spin = QSpinBox()
         self.maxlevel_spin.setMinimum(1)
         self.maxlevel_spin.setMaximum(100)
         self.maxlevel_spin.setValue(10)
-        self.maxlevel_spin.setMinimumWidth(100)
-        input_layout.addWidget(self.maxlevel_spin)
-        input_layout.addStretch()
-        layout.addLayout(input_layout)
-        run_btn = QPushButton(t('button.run') if t else 'Generate Commands')
-        run_btn.setMinimumHeight(40)
-        run_btn.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
-        run_btn.clicked.connect(self._on_generate)
-        layout.addWidget(run_btn)
-        output_label = QLabel(t('paldefender.output') if t else 'Output (killnearestbase commands):')
-        output_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
-        layout.addWidget(output_label)
-        self.output_text = QTextEdit()
-        self.output_text.setReadOnly(True)
-        self.output_text.setFont(QFont('Consolas', 10))
-        self.output_text.setStyleSheet(f'background-color: {constants.GLASS}; color: {constants.TEXT};')
-        layout.addWidget(self.output_text)
-    def _append_output(self, text):
-        self.output_text.append(text)
-    def _clear_output(self):
-        self.output_text.clear()
-    def _on_generate(self):
-        self._clear_output()
+        self.maxlevel_spin.setMinimumWidth(80)
+        params_row.addWidget(self.maxlevel_spin)
+        params_row.addStretch()
+        filter_layout.addLayout(params_row)
+        opts_row = QHBoxLayout()
+        self.skip_excl_cb = QCheckBox(t('paldefender.skip_exclusions') if t else 'Skip excluded guilds/bases')
+        self.skip_excl_cb.setChecked(True)
+        opts_row.addWidget(self.skip_excl_cb)
+        self.hide_no_bases_cb = QCheckBox(t('paldefender.hide_no_bases') if t else 'Hide guilds with no bases')
+        self.hide_no_bases_cb.setChecked(True)
+        opts_row.addWidget(self.hide_no_bases_cb)
+        opts_row.addStretch()
+        filter_layout.addLayout(opts_row)
+        btn_row = QHBoxLayout()
+        self.scan_btn = QPushButton(t('paldefender.scan') if t else 'Scan Guilds')
+        self.scan_btn.setMinimumHeight(36)
+        self.scan_btn.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
+        self.scan_btn.clicked.connect(self._on_scan)
+        btn_row.addWidget(self.scan_btn)
+        self.select_all_btn = QPushButton(t('paldefender.select_all') if t else 'Select All')
+        self.select_all_btn.clicked.connect(self._select_all)
+        btn_row.addWidget(self.select_all_btn)
+        self.deselect_all_btn = QPushButton(t('paldefender.deselect_all') if t else 'Deselect All')
+        self.deselect_all_btn.clicked.connect(self._deselect_all)
+        btn_row.addWidget(self.deselect_all_btn)
+        btn_row.addStretch()
+        filter_layout.addLayout(btn_row)
+        layout.addWidget(filter_frame)
+        headers = [
+            t('paldefender.col_guild') if t else 'Guild',
+            t('paldefender.col_guild_uid') if t else 'Guild UID',
+            t('paldefender.col_bases') if t else 'Bases',
+            t('paldefender.col_members') if t else 'Members',
+            t('paldefender.col_inactive') if t else 'Least Active',
+            t('paldefender.col_level') if t else 'Max Level',
+            t('paldefender.col_player_uid') if t else 'Player UID',
+            t('paldefender.col_pals') if t else 'Pals',
+        ]
+        self.tree = QTreeWidget()
+        self.tree.setHeaderLabels(headers)
+        self.tree.setRootIsDecorated(True)
+        self.tree.setAlternatingRowColors(True)
+        self.tree.setSelectionMode(QTreeWidget.NoSelection)
+        self.tree.setAnimated(True)
+        self.tree.setIndentation(20)
+        self.tree.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        h = self.tree.header()
+        h.setStretchLastSection(True)
+        for i in range(8):
+            h.setSectionResizeMode(i, QHeaderView.Stretch)
+        self.tree.setStyleSheet(f'''
+            QTreeWidget {{
+                background-color: {constants.GLASS};
+                color: {constants.TEXT};
+                border: 1px solid {constants.BORDER};
+                border-radius: 4px;
+            }}
+            QTreeWidget::item {{
+                padding: 3px;
+            }}
+            QTreeWidget::item:selected {{
+                background-color: {constants.ACCENT};
+            }}
+            QHeaderView::section {{
+                background-color: #2a2d3a;
+                color: {constants.EMPHASIS};
+                padding: 6px;
+                border: none;
+                font-weight: bold;
+            }}
+        ''')
+        layout.addWidget(self.tree)
+        action_row = QHBoxLayout()
+        self.gen_btn = QPushButton(t('paldefender.generate') if t else 'Generate Kill Commands')
+        self.gen_btn.setMinimumHeight(40)
+        self.gen_btn.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
+        self.gen_btn.clicked.connect(self._on_generate)
+        self.gen_btn.setEnabled(False)
+        action_row.addWidget(self.gen_btn)
+        close_btn = QPushButton(t('paldefender.close') if t else 'Close')
+        close_btn.setMinimumHeight(40)
+        close_btn.clicked.connect(self.close)
+        action_row.addWidget(close_btn)
+        action_row.addStretch()
+        layout.addLayout(action_row)
+        self.log_text = QTextEdit()
+        self.log_text.setReadOnly(True)
+        self.log_text.setMaximumHeight(100)
+        self.log_text.setFont(QFont('Consolas', 9))
+        self.log_text.setStyleSheet(f'background-color: {constants.GLASS}; color: {constants.TEXT}; border: 1px solid {constants.BORDER}; border-radius: 4px;')
+        layout.addWidget(self.log_text)
+    def _log(self, text):
+        self.log_text.append(text)
+    def _clear_log(self):
+        self.log_text.clear()
+    def _on_scan(self):
+        self._clear_log()
+        self.tree.clear()
+        self._guild_data = []
+        self.gen_btn.setEnabled(False)
+        if not constants.loaded_level_json:
+            self._log('No save file loaded.')
+            return
         try:
-            if not constants.loaded_level_json:
-                self._append_output('No save file loaded.')
-                return
             filter_type = self.filter_group.checkedId()
-            inactivity_days = self.inactivity_spin.value() if filter_type in (1, 3) else None
-            max_level = self.maxlevel_spin.value() if filter_type in (2, 3) else None
-            self._generate_commands(inactivity_days=inactivity_days, max_level=max_level)
+            inactivity_days = self.inactivity_spin.value() if filter_type in (self.FILTER_INACTIVITY, self.FILTER_BOTH) else None
+            max_level = self.maxlevel_spin.value() if filter_type in (self.FILTER_MAXLEVEL, self.FILTER_BOTH) else None
+            skip_excl = self.skip_excl_cb.isChecked()
+            hide_no_bases = self.hide_no_bases_cb.isChecked()
+            self._scan_guilds(inactivity_days, max_level, skip_excl, hide_no_bases)
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', str(e))
-    def _generate_commands(self, inactivity_days=None, max_level=None):
-        from collections import defaultdict
-        from .utils import as_uuid, extract_value
+    def _scan_guilds(self, inactivity_days, max_level, skip_excl, hide_no_bases):
+        from .utils import as_uuid, extract_value, format_duration_short
         wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
         tick = wsd['GameTimeSaveData']['value']['RealDateTimeTicks']['value']
         player_levels = {}
@@ -692,9 +789,28 @@ class PalDefenderDialog(ThemedDialog):
                     player_levels[uid.replace('-', '').lower()] = level
             except:
                 continue
-        excluded_guilds = {ex.replace('-', '').lower() for ex in constants.exclusions.get('guilds', [])}
-        excluded_bases = {ex.replace('-', '').lower() for ex in constants.exclusions.get('bases', [])}
-        matching_guilds = {}
+        # Count non-player characters per owner (player UID)
+        player_pal_counts = {}
+        for entry in char_map:
+            try:
+                sp = entry['value']['RawData']['value']['object']['SaveParameter']
+                if sp['struct_type'] != 'PalIndividualCharacterSaveParameter':
+                    continue
+                sp_val = sp['value']
+                if sp_val.get('IsPlayer', {}).get('value', False):
+                    continue
+                owner_uid = sp_val.get('OwnerPlayerUId', {}).get('value', '')
+                if owner_uid:
+                    owner_str = str(owner_uid).replace('-', '').lower()
+                    player_pal_counts[owner_str] = player_pal_counts.get(owner_str, 0) + 1
+            except:
+                continue
+        excluded_guilds = set()
+        excluded_bases = set()
+        if skip_excl:
+            excluded_guilds = {ex.replace('-', '').lower() for ex in constants.exclusions.get('guilds', [])}
+            excluded_bases = {ex.replace('-', '').lower() for ex in constants.exclusions.get('bases', [])}
+        guild_entries = []
         for g in wsd['GroupSaveDataMap']['value']:
             if g['value']['GroupType']['value']['value'] != 'EPalGroupType::Guild':
                 continue
@@ -706,17 +822,14 @@ class PalDefenderDialog(ThemedDialog):
             players = g['value']['RawData']['value'].get('players', [])
             if not players:
                 continue
+            player_infos = []
             matches_inactivity = True
             if inactivity_days is not None:
                 for p in players:
                     last_online = p.get('player_info', {}).get('last_online_real_time')
-                    if last_online is None:
-                        matches_inactivity = False
-                        break
-                    days_inactive = (tick - last_online) / 10000000.0 / 86400
+                    days_inactive = float('inf') if last_online is None else (tick - last_online) / 10000000.0 / 86400
                     if days_inactive < inactivity_days:
                         matches_inactivity = False
-                        break
             if not matches_inactivity:
                 continue
             matches_max_level = True
@@ -724,63 +837,159 @@ class PalDefenderDialog(ThemedDialog):
                 for p in players:
                     uid = str(p.get('player_uid', '')).replace('-', '').lower()
                     level = player_levels.get(uid, '?')
-                    if level == '?':
-                        matches_max_level = False
-                        break
-                    if isinstance(level, int) and level > max_level:
+                    if level == '?' or (isinstance(level, int) and level > max_level):
                         matches_max_level = False
                         break
             if not matches_max_level:
                 continue
-            matching_guilds[gid_raw] = {'name': guild_name, 'bases': []}
+            for p in players:
+                uid = str(p.get('player_uid', '')).replace('-', '').lower()
+                last_online = p.get('player_info', {}).get('last_online_real_time')
+                days = float('inf') if last_online is None else (tick - last_online) / 10000000.0 / 86400
+                inactive_str = format_duration_short((tick - last_online) / 10000000.0) if last_online is not None else 'Never'
+                name = p.get('player_info', {}).get('player_name', 'Unknown')
+                level = player_levels.get(uid, '?')
+                player_infos.append({'uid': uid, 'name': name, 'days': days, 'inactive_str': inactive_str, 'level': level, 'pals': player_pal_counts.get(uid, 0)})
+            guild_entries.append({'id': gid_raw, 'name': guild_name, 'players': player_infos})
         base_list = wsd.get('BaseCampSaveData', {}).get('value', [])
+        guild_bases = {}
         for b in base_list:
             gid = as_uuid(b['value']['RawData']['value'].get('group_id_belong_to'))
             base_id = str(b['key'])
             if base_id.replace('-', '').lower() in excluded_bases:
                 continue
             gid_str = str(gid)
-            if gid_str in matching_guilds:
-                raw = b['value']['RawData']['value']
-                trans = raw.get('transform', {})
-                translation = trans.get('translation', {})
-                x = translation.get('x', 0)
-                y = translation.get('y', 0)
-                z = translation.get('z', 0)
-                raw_data = f'RawData: {x},{y},{z}'
-                matching_guilds[gid_str]['bases'].append({'id': base_id, 'raw': raw_data})
-        kill_commands = []
-        for gid, ginfo in matching_guilds.items():
-            self._append_output(f"Guild: {ginfo['name']} | ID: {gid}")
-            self._append_output(f"Bases: {len(ginfo['bases'])}")
-            for base in ginfo['bases']:
-                self._append_output(f"  Base {base['id']} | {base['raw']}")
-                raw = base['raw'].replace('RawData: ', '')
-                coords = raw.split(',')
-                if len(coords) >= 3:
-                    x, y, z = (coords[0], coords[1], coords[2])
-                    kill_commands.append(f'killnearestbase {x} {y} {z}')
-            self._append_output('-' * 40)
-        self._append_output(f'\nFound {len(matching_guilds)} guild(s) with bases to delete.')
-        if kill_commands:
-            output_dir = os.path.join(constants.get_base_path(), 'PalDefender')
-            os.makedirs(output_dir, exist_ok=True)
-            commands_file = os.path.join(output_dir, 'paldefender_bases.log')
-            with open(commands_file, 'w', encoding='utf-8') as f:
-                f.write('\n'.join(kill_commands))
-            self._append_output(f'\nWrote {len(kill_commands)} kill commands to:')
-            self._append_output(commands_file)
-            self._append_output('\n--- Commands ---')
-            for cmd in kill_commands:
-                self._append_output(cmd)
+            if gid_str not in guild_bases:
+                guild_bases[gid_str] = []
+            raw = b['value']['RawData']['value']
+            trans = raw.get('transform', {})
+            translation = trans.get('translation', {})
+            x = translation.get('x', 0)
+            y = translation.get('y', 0)
+            z = translation.get('z', 0)
+            guild_bases[gid_str].append({'id': base_id, 'x': x, 'y': y, 'z': z})
+        for ge in guild_entries:
+            bases = guild_bases.get(ge['id'], [])
+            ge['bases'] = bases
+            self._guild_data.append(ge)
+        visible_count = 0
+        with_bases_count = 0
+        for ge in self._guild_data:
+            has_bases = len(ge['bases']) > 0
+            if has_bases:
+                with_bases_count += 1
+            if hide_no_bases and not has_bases:
+                continue
+            visible_count += 1
+            self._add_guild_tree_item(ge)
+        self._log(f'Found {len(self._guild_data)} guild(s) matching filters ({with_bases_count} with bases, {visible_count} visible).')
+        has_checkable = any(len(g['bases']) > 0 for g in self._guild_data)
+        self.gen_btn.setEnabled(has_checkable)
+    def _add_guild_tree_item(self, ge):
+        from .utils import format_duration_short
+        min_days = min((p['days'] for p in ge['players']), default=float('inf'))
+        max_lv = max((p['level'] for p in ge['players'] if isinstance(p['level'], int)), default='?')
+        has_bases = len(ge['bases']) > 0
+        inactive_col = 'Never'
+        if min_days != float('inf'):
+            ticks = min_days * 86400 * 10000000.0
+            inactive_col = format_duration_short(ticks / 10000000.0)
+        player_uids = ', '.join(p['uid'] for p in ge['players'])
+        guild_uid_short = ge['id']
+        total_pals = sum(p['pals'] for p in ge['players'])
+        guild_item = QTreeWidgetItem()
+        guild_item.setText(self.COL_GUILD, ge['name'])
+        guild_item.setText(self.COL_GUILD_UID, guild_uid_short)
+        guild_item.setText(self.COL_BASES, str(len(ge['bases'])))
+        guild_item.setText(self.COL_MEMBERS, str(len(ge['players'])))
+        guild_item.setText(self.COL_INACTIVE, inactive_col)
+        guild_item.setText(self.COL_LEVEL, str(max_lv))
+        guild_item.setText(self.COL_PLAYER_UID, player_uids)
+        guild_item.setText(self.COL_PALS, str(total_pals))
+        guild_item.setData(self.COL_GUILD, Qt.UserRole, ge['id'])
+        guild_item.setToolTip(self.COL_GUILD, f"Guild ID: {ge['id']}")
+        guild_item.setToolTip(self.COL_PLAYER_UID, player_uids)
+        if has_bases:
+            guild_item.setFlags(guild_item.flags() | Qt.ItemIsUserCheckable)
+            guild_item.setCheckState(self.COL_GUILD, Qt.Checked)
         else:
-            self._append_output('\nNo kill commands generated.')
-        if inactivity_days is not None:
-            self._append_output(f'\nFilter: Inactivity >= {inactivity_days} days')
-        if max_level is not None:
-            self._append_output(f'\nFilter: Max Level <= {max_level}')
-        self._append_output(f'\nExcluded guilds: {len(excluded_guilds)}')
-        self._append_output(f'Excluded bases: {len(excluded_bases)}')
+            guild_item.setFlags(guild_item.flags() & ~Qt.ItemIsUserCheckable)
+            for c in range(8):
+                guild_item.setForeground(c, QColor('#666666'))
+        self.tree.addTopLevelItem(guild_item)
+        for pi in ge['players']:
+            child = QTreeWidgetItem()
+            child.setText(self.COL_GUILD, f"  {pi['name']}")
+            child.setText(self.COL_INACTIVE, pi['inactive_str'])
+            child.setText(self.COL_LEVEL, str(pi['level']))
+            child.setText(self.COL_PLAYER_UID, pi['uid'])
+            child.setText(self.COL_PALS, str(pi['pals']))
+            child.setFlags(child.flags() & ~Qt.ItemIsUserCheckable)
+            child.setForeground(self.COL_GUILD, QColor(constants.MUTED))
+            guild_item.addChild(child)
+    def _get_checked_guild_ids(self):
+        ids = []
+        for i in range(self.tree.topLevelItemCount()):
+            item = self.tree.topLevelItem(i)
+            if item.flags() & Qt.ItemIsUserCheckable and item.checkState(self.COL_GUILD) == Qt.Checked:
+                gid = item.data(self.COL_GUILD, Qt.UserRole)
+                if gid:
+                    ids.append(gid)
+        return ids
+    def _select_all(self):
+        for i in range(self.tree.topLevelItemCount()):
+            item = self.tree.topLevelItem(i)
+            if item.flags() & Qt.ItemIsUserCheckable:
+                item.setCheckState(self.COL_GUILD, Qt.Checked)
+    def _deselect_all(self):
+        for i in range(self.tree.topLevelItemCount()):
+            item = self.tree.topLevelItem(i)
+            if item.flags() & Qt.ItemIsUserCheckable:
+                item.setCheckState(self.COL_GUILD, Qt.Unchecked)
+    def _on_generate(self):
+        self._clear_log()
+        checked_ids = self._get_checked_guild_ids()
+        if not checked_ids:
+            self._log('No guilds selected. Check guilds in the list first.')
+            return
+        guild_lookup = {g['id']: g for g in self._guild_data}
+        kill_commands = []
+        log_lines = []
+        for gid in checked_ids:
+            ge = guild_lookup.get(gid)
+            if not ge or not ge['bases']:
+                continue
+            guild_name = ge['name']
+            guild_uid = ge['id']
+            log_lines.append(f'=== Guild: {guild_name} ({guild_uid}) ===')
+            log_lines.append('  [Base Locations]')
+            for i, base in enumerate(ge['bases'], 1):
+                kill_commands.append(f'killnearestbase {base["x"]} {base["y"]} {base["z"]}')
+                log_lines.append(f'    Base {i} - [{base["x"]}, {base["y"]}]')
+            log_lines.append('  [Members]')
+            for pi in ge['players']:
+                log_lines.append(f'    Player: {pi["name"]}')
+                log_lines.append(f'      Player UID: {pi["uid"]}')
+                log_lines.append(f'      Total Pals: {pi["pals"]}')
+                log_lines.append(f'      Last Online: {pi["inactive_str"]}')
+            log_lines.append('')
+        if not kill_commands:
+            self._log('No bases found for selected guilds.')
+            return
+        output_dir = os.path.join(constants.get_base_path(), 'Logs', 'PalDefender')
+        os.makedirs(output_dir, exist_ok=True)
+        commands_file = os.path.join(output_dir, 'paldefender_bases.log')
+        with open(commands_file, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(kill_commands))
+        report_file = os.path.join(output_dir, 'paldefender_report.log')
+        with open(report_file, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(log_lines))
+        self._log(f'Wrote {len(kill_commands)} kill commands and report to:')
+        self._log(f'  Commands: {commands_file}')
+        self._log(f'  Report:   {report_file}')
+        self._log('--- Commands ---')
+        for cmd in kill_commands:
+            self._log(cmd)
 class ScrollableGuildSelectionDialog(ThemedDialog):
     def __init__(self, guilds_data, parent=None):
         super().__init__(parent)
