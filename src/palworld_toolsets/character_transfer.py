@@ -786,24 +786,44 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict):
                         break
                 if tgt_guild_entry:
                     break
-        if tgt_guild_entry is None:
-            new_guild_entry = fast_deepcopy(src_guild_entry)
-            new_guild_entry['value']['RawData']['value']['group_id'] = str(UUID(os.urandom(16)))
-            for pl in new_guild_entry['value']['RawData']['value']['players']:
+        if tgt_guild_entry is not None:
+            tgt_group_map.remove(tgt_guild_entry)
+        new_guild_entry = fast_deepcopy(src_guild_entry)
+        new_guild_entry['value']['RawData']['value']['group_id'] = str(UUID(os.urandom(16)))
+        new_players = []
+        src_player_info = None
+        for pl in new_guild_entry['value']['RawData']['value']['players']:
+            if are_equal_uuids(pl.get('player_uid', ''), host_guid):
                 pl['player_uid'] = str(targ_uid)
-            tgt_group_map.append(new_guild_entry)
-            if 'GroupId' in targ_json['SaveData']['value']:
-                targ_json['SaveData']['value']['GroupId']['value'] = new_guild_entry['value']['RawData']['value']['group_id']
-            return True
-        tgt_group_id = tgt_guild_entry['value']['RawData']['value']['group_id']
-        tgt_guild_data = tgt_guild_entry['value']['RawData']['value']
-        if 'name' in src_guild_data:
-            tgt_guild_data['name'] = src_guild_data['name']
-        if src_guild_data.get('guild_level', 0) > tgt_guild_data.get('guild_level', 0):
-            tgt_guild_data['guild_level'] = src_guild_data['guild_level']
-        tgt_guild_data['admin_player_uid'] = str(targ_uid)
+                src_player_info = pl
+                break
+        if src_player_info is not None:
+            new_players.append(src_player_info)
+        new_guild_entry['value']['RawData']['value']['players'] = new_players
+        new_guild_entry['value']['RawData']['value']['admin_player_uid'] = str(targ_uid)
+        handles = new_guild_entry['value']['RawData']['value'].get('individual_character_handle_ids', [])
+        if isinstance(handles, list):
+            filtered = []
+            inst_key = host_json.get('SaveData', {}).get('value', {}).get('IndividualId', {}).get('value', {}).get('InstanceId', {}).get('value', '')
+            inst_str = str(inst_key).lower().replace('-', '') if inst_key else ''
+            targ_inst = targ_json.get('SaveData', {}).get('value', {}).get('IndividualId', {}).get('value', {}).get('InstanceId', {}).get('value', '')
+            targ_inst_str = str(targ_inst).lower().replace('-', '') if targ_inst else ''
+            for h in handles:
+                h_inst = h.get('instance_id', {})
+                if isinstance(h_inst, dict):
+                    h_inst_str = str(h_inst.get('ID', {}).get('value', '')).lower().replace('-', '')
+                else:
+                    h_inst_str = str(h_inst).lower().replace('-', '')
+                if h_inst_str == inst_str:
+                    if isinstance(h_inst, dict):
+                        h['instance_id'] = {'ID': {'value': targ_inst}}
+                    else:
+                        h['instance_id'] = targ_inst if targ_inst else h_inst
+                    filtered.append(h)
+            new_guild_entry['value']['RawData']['value']['individual_character_handle_ids'] = filtered
+        tgt_group_map.append(new_guild_entry)
         if 'GroupId' in targ_json['SaveData']['value']:
-            targ_json['SaveData']['value']['GroupId']['value'] = tgt_group_id
+            targ_json['SaveData']['value']['GroupId']['value'] = new_guild_entry['value']['RawData']['value']['group_id']
         return True
     except Exception as e:
         print(f'[FAIL] transfer_guild: {e}')
@@ -1060,9 +1080,27 @@ def load_player_file(level_sav_path, player_uid, use_source_folder=False):
     player_file_path = os.path.join(base_folder, f'{player_uid.upper()}.sav')
     if not os.path.exists(player_file_path):
         player_file_path = os.path.join(os.path.dirname(level_sav_path), '../Players', f'{player_uid.upper()}.sav')
-        if not os.path.exists(player_file_path):
-            print(f'Error!', f'Player file {player_file_path} not present.')
-            return None
+    if not os.path.exists(player_file_path):
+        base_folder = os.path.normpath(os.path.join(os.path.dirname(level_sav_path), '..', 'Players'))
+        player_file_path = os.path.join(base_folder, f'{player_uid.upper()}.sav')
+    if not os.path.exists(player_file_path):
+        global host_json_gvas
+        if host_json_gvas is not None:
+            clone = fast_deepcopy(host_json_gvas)
+            sd = clone.properties['SaveData']['value']
+            sd['PlayerUId']['value'] = player_uid
+            sd['IndividualId']['value']['PlayerUId']['value'] = player_uid
+            sd['IndividualId']['value']['InstanceId']['value'] = str(uuid.uuid4()).upper()
+            if 'LastSaveDate' in sd:
+                sd['LastSaveDate']['value'] = int(time.time() * 10000000)
+            target_dir = os.path.join(os.path.dirname(level_sav_path), 'Players')
+            os.makedirs(target_dir, exist_ok=True)
+            player_file_path = os.path.join(target_dir, f'{player_uid.upper()}.sav')
+            _write_sav(clone, player_file_path)
+            print(f'Created new player file: {player_file_path}')
+            return clone
+        print(f'Error!', f'Player file {player_file_path} not present.')
+        return None
     if not os.path.exists(player_file_path):
         print(f'Error!', f'Invalid file {player_file_path}')
         return
