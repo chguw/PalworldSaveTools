@@ -970,6 +970,7 @@ class PalDefenderDialog(ThemedDialog):
             for pi in ge['players']:
                 log_lines.append(f'    Player: {pi["name"]}')
                 log_lines.append(f'      Player UID: {pi["uid"]}')
+                log_lines.append(f'      Level: {pi["level"]}')
                 log_lines.append(f'      Total Pals: {pi["pals"]}')
                 log_lines.append(f'      Last Online: {pi["inactive_str"]}')
             log_lines.append('')
