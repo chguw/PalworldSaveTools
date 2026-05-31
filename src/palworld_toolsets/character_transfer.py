@@ -667,6 +667,7 @@ def _collect_dynamic_ids(container, needed_set):
             continue
 
 _session_transferred_dynamics = set()
+_session_id_map = {}
 
 def gather_and_update_dynamic_containers():
     global targ_lvl, dynamic_guids
@@ -722,7 +723,7 @@ def gather_and_update_dynamic_containers():
                 existing.add(norm)
         except:
             continue
-    id_map = {}
+    id_map = dict(_session_id_map)
     for dc in src_containers:
         try:
             lid = dc['RawData']['value']['id']['local_id_in_created_world']
@@ -742,6 +743,7 @@ def gather_and_update_dynamic_containers():
         tgt_dict[bumped] = copy
         id_map[norm] = bumped
         _session_transferred_dynamics.add(norm)
+        _session_id_map[norm] = bumped
     preserved_map = {}
     for dc in tgt_containers:
         try:
@@ -1213,8 +1215,9 @@ def load_players(save_json, is_source):
             item = QTreeWidgetItem([safe_uuid_str(guild_id), playerUId, player_name, str(player_level), str(player_pals_count), last_seen])
             list_box.addTopLevelItem(item)
 def source_level_file():
-    global level_sav_path, level_json, selected_source_player, _session_transferred_dynamics
+    global level_sav_path, level_json, selected_source_player, _session_transferred_dynamics, _session_id_map
     _session_transferred_dynamics.clear()
+    _session_id_map.clear()
     tmp = select_file()
     if not tmp:
         return
@@ -1253,8 +1256,9 @@ def source_level_file():
     run_with_loading(on_finished, task)
 def target_level_file():
     global t_level_sav_path, targ_lvl, target_gvas_file, selected_target_player
-    global modified_target_players, modified_targets_data, _session_transferred_dynamics
+    global modified_target_players, modified_targets_data, _session_transferred_dynamics, _session_id_map
     _session_transferred_dynamics.clear()
+    _session_id_map.clear()
     tmp = select_file()
     if not tmp:
         return
