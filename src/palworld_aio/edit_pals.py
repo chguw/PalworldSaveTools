@@ -3175,7 +3175,25 @@ class PalInfoWidget(QFrame):
                 cur_val = cur_val.get('value', '')
         except Exception:
             cur_val = ''
-        result = picker.pick(skill_map, is_active, current_value=cur_val if isinstance(cur_val, str) else '')
+        skip_items = set()
+        try:
+            if is_active:
+                ew = self._raw.get('EquipWaza', {})
+                ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
+                for v in ew_list:
+                    if v:
+                        key = v.split('::')[-1].lower() if '::' in v else v.lower()
+                        skip_items.add(key)
+            else:
+                ps = self._raw.get('PassiveSkillList', {})
+                ps_list = ps.get('value', {}).get('values', []) if isinstance(ps, dict) else ps if isinstance(ps, list) else []
+                for v in ps_list:
+                    clean = v['value'] if isinstance(v, dict) else v
+                    if clean:
+                        skip_items.add(clean.lower())
+        except Exception:
+            pass
+        result = picker.pick(skill_map, is_active, current_value=cur_val if isinstance(cur_val, str) else '', skip_items=skip_items)
         if result is None:
             return
         if result == '':
@@ -3531,6 +3549,14 @@ class BulkSyncPalDialog(FramelessDialog):
                     target_raw[key] = current_raw[key]
                 else:
                     target_raw.pop(key, None)
+            ew = target_raw.get('EquipWaza', {})
+            ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
+            mw = target_raw.get('MasteredWaza', {})
+            mw_list = mw.get('value', {}).get('values', []) if isinstance(mw, dict) else mw if isinstance(mw, list) else []
+            if isinstance(ew_list, list) and isinstance(mw_list, list):
+                cleaned = [s for s in ew_list if s not in mw_list]
+                if len(cleaned) != len(ew_list):
+                    target_raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': cleaned}, 'type': 'ArrayProperty'}
         self.pal_editor.pal_info._refresh()
         self.pal_editor._update_party_slots()
         self.pal_editor._update_palbox_page()

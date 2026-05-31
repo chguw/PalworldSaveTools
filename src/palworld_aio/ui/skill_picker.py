@@ -140,7 +140,10 @@ class SkillPicker(QWidget):
         self._list.itemClicked.connect(self._on_select)
     def _on_search(self, text):
         for i in range(self._list.count()):
-            self._list.item(i).setHidden(text.lower() not in self._list.item(i).text().lower())
+            item = self._list.item(i)
+            if not (item.flags() & Qt.ItemIsSelectable):
+                continue
+            item.setHidden(text.lower() not in item.text().lower())
     def _on_select(self):
         sel = self._list.currentItem()
         if not sel:
@@ -151,8 +154,9 @@ class SkillPicker(QWidget):
             chosen_name = sel.data(Qt.UserRole) or sel.text()
             self._result = chosen_name
         self.hide()
-    def pick(self, skill_map, is_active, pos=None, current_value='', use_exclusions=True):
+    def pick(self, skill_map, is_active, pos=None, current_value='', use_exclusions=True, skip_items=None):
         self._result = None
+        self._search.clear()
         self._list.clear()
         clear_item = QListWidgetItem(t('common.clear') if t else '-- clear --')
         self._list.addItem(clear_item)
@@ -192,6 +196,9 @@ class SkillPicker(QWidget):
                     tip_parts.append(desc)
                 item.setToolTip('<br>'.join(tip_parts))
                 self._list.addItem(item)
+                if skip_items and asset in skip_items:
+                    item.setHidden(True)
+                    item.setFlags(item.flags() & ~Qt.ItemIsSelectable)
         else:
             _ensure_passive_data()
             for name in names:
@@ -229,6 +236,9 @@ class SkillPicker(QWidget):
                     tip_parts.append(p_desc)
                 item.setToolTip('<br>'.join(tip_parts))
                 self._list.addItem(item)
+                if skip_items and asset.lower() in skip_items:
+                    item.setHidden(True)
+                    item.setFlags(item.flags() & ~Qt.ItemIsSelectable)
         if not is_active:
             self._list.setItemDelegate(_PassiveSkillDelegate(self._list))
             self._anim_timer = QTimer(self)
