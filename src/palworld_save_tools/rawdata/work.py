@@ -1,5 +1,6 @@
 from typing import Any, Sequence
-from loguru import logger
+import logging
+logger = logging.getLogger(__name__)
 from palworld_save_tools.archive import *
 WORK_BASE_TYPES = set(['EPalWorkableType::Progress', 'EPalWorkableType::TransportItemInBaseCamp', 'EPalWorkableType::ReviveCharacter', 'EPalWorkableType::Booth', 'EPalWorkableType::LevelObject', 'EPalWorkableType::Repair', 'EPalWorkableType::Defense', 'EPalWorkableType::BootUp', 'EPalWorkableType::OnlyJoin', 'EPalWorkableType::OnlyJoinAndWalkAround', 'EPalWorkableType::RemoveMapObjectEffect', 'EPalWorkableType::MonsterFarm'])
 def decode(reader: FArchiveReader, type_name: str, size: int, path: str) -> dict[str, Any]:

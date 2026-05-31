@@ -1,7 +1,8 @@
 import os
 import sys
 import platform
-from loguru import logger
+import logging
+logger = logging.getLogger(__name__)
 from palworld_save_tools.compressor import Compressor, SaveType
 class OodleCompressor:
     Kraken = 8

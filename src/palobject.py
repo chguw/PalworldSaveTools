@@ -215,7 +215,8 @@ class MappingCacheObject:
         self.GroupSaveDataMap = {group['key']: group for group in self._worldSaveData['GroupSaveDataMap']['value']}
         self.GuildSaveDataMap = {group['key']: group for group in filter(lambda x: x['value']['GroupType']['value']['value'] == 'EPalGroupType::Guild', self._worldSaveData['GroupSaveDataMap']['value'])}
     def LoadBaseCampMapping(self):
-        self.BaseCampMapping = {base['key']: base for base in self._worldSaveData['BaseCampSaveData']['value']}
+        bcsd = self._worldSaveData.get('BaseCampSaveData', {})
+        self.BaseCampMapping = {base['key']: base for base in bcsd.get('value', [])}
     def __del__(self):
         for key in self._worldSaveData:
             if isinstance(self._worldSaveData[key]['value'], MPMapProperty):

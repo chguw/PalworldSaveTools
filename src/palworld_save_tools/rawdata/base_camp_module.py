@@ -1,5 +1,6 @@
 from typing import Any, Sequence
-from loguru import logger
+import logging
+logger = logging.getLogger(__name__)
 from palworld_save_tools.archive import FArchiveReader, FArchiveWriter
 from palworld_save_tools.rawdata.common import pal_item_and_num_read, pal_item_and_slot_writer
 NO_OP_TYPES = ['EPalBaseCampModuleType::Energy', 'EPalBaseCampModuleType::Medical', 'EPalBaseCampModuleType::ResourceCollector', 'EPalBaseCampModuleType::ItemStorages', 'EPalBaseCampModuleType::FacilityReservation', 'EPalBaseCampModuleType::ObjectMaintenance', 'EPalBaseCampModuleType::ItemStackInfo']

@@ -1,5 +1,6 @@
 from typing import Any, Sequence
-from loguru import logger
+import logging
+logger = logging.getLogger(__name__)
 from palworld_save_tools.archive import *
 def decode(reader: FArchiveReader, type_name: str, size: int, path: str) -> dict[str, Any]:
     if type_name != 'ArrayProperty':

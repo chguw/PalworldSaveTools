@@ -4,7 +4,8 @@ import gc
 import sys
 import time
 import os
-from loguru import logger
+import logging
+logger = logging.getLogger(__name__)
 from palworld_save_tools.gvas import GvasFile
 from palworld_save_tools import json_tools
 from palworld_save_tools.palsav import compress_gvas_to_sav, decompress_sav_to_gvas
@@ -36,14 +37,13 @@ def main():
     parser.add_argument('--debug', action='store_true', help='Enable debug logging')
     parser.add_argument('--debug-log', action='store_true', help='Enable debug logging to file')
     args = parser.parse_args()
-    if args.debug:
-        logger.remove()
-        logger.add(sys.stdout, colorize=True, level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | <level>{level: <8}</level> | <cyan>{name}</cyan>:<blue>{function}</blue>:{line} 🡆 {message}')
-    else:
-        logger.remove()
-        logger.add(sys.stdout, format='<level>{level}</level> 🡆 {message}', level='INFO')
+    level = logging.DEBUG if args.debug else logging.INFO
+    logging.basicConfig(level=level, format='%(asctime)s | %(levelname)-8s | %(name)s | %(message)s')
     if args.debug_log:
-        logger.add('palworld-save-tools-debug.log', rotation='10 MB', retention='5 days', level='DEBUG', format='{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} 🡆 {message}')
+        fh = logging.FileHandler('palworld-save-tools-debug.log')
+        fh.setLevel(logging.DEBUG)
+        fh.setFormatter(logging.Formatter('%(asctime)s | %(levelname)-8s | %(name)s:%(funcName)s:%(lineno)d | %(message)s'))
+        logging.getLogger().addHandler(fh)
     if args.to_json and args.from_json:
         logger.error('Cannot specify both --to-json and --from-json')
         exit(1)

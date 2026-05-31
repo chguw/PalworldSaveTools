@@ -9,15 +9,18 @@ from palworld_save_tools.paltypes import PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PR
 from palworld_save_tools.gvas import GvasFile
 from palworld_aio.ui.styles import ThemeManager
 from palworld_aio.container_ownership import ContainerOwnership
+from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 _TRANSFER_STEPS = {'character': True, 'tech_data': True, 'inventory': True, 'guild': True, 'pals': True, 'dynamics': True, 'timestamps': True}
 player_list_cache = []
 def _load_sav(path):
     with open(path, 'rb') as f:
-        raw_gvas, _ = decompress_sav_to_gvas(f.read())
-    return GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
+        raw_gvas, save_type = decompress_sav_to_gvas(f.read())
+    gvas_file = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
+    gvas_file.save_type = save_type
+    return gvas_file
 def _write_sav(gvas_file, path):
-    data = gvas_file.write(PALWORLD_CUSTOM_PROPERTIES)
-    t = 50 if 'Pal.PalworldSaveGame' in gvas_file.header.save_game_class_name or 'Pal.PalLocalWorldSaveGame' in gvas_file.header.save_game_class_name else 49
+    data = gvas_file.write(SKP_PALWORLD_CUSTOM_PROPERTIES)
+    t = getattr(gvas_file, 'save_type', 50)
     tmp = path + '.tmp'
     with open(tmp, 'wb') as f:
         f.write(compress_gvas_to_sav(data, t))
@@ -800,8 +803,7 @@ def sync_player_timestamps(targ_uid, target_lvl):
             for gdata in target_lvl['GroupSaveDataMap']['value']:
                 try:
                     raw_g = gdata['value']['RawData']['value']
-                    players = raw_g.get('players', [])
-                    for p_info in players:
+                    for p_info in raw_g.get('players', []):
                         if str(p_info.get('player_uid')).lower() == t_uid_str:
                             if 'player_info' in p_info:
                                 p_info['player_info']['last_online_real_time'] = target_world_tick
@@ -811,61 +813,88 @@ def sync_player_timestamps(targ_uid, target_lvl):
     except:
         return False
 from palworld_save_tools.archive import UUID as PalUUID
-def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict):
-    if 'GroupSaveDataMap' not in targ_lvl or targ_lvl['GroupSaveDataMap'].get('value') is None:
-        targ_lvl['GroupSaveDataMap'] = {'value': []}
-    guilds = targ_lvl['GroupSaveDataMap']['value']
-    target_guild = None
-    for g in guilds:
-        raw = g.get('value', {}).get('RawData', {}).get('value', {})
-        if any((p.get('player_uid') == targ_uid for p in raw.get('players', []))):
-            target_guild = g
-            break
-    source_player = None
-    source_guild = None
-    for g in source_guild_dict.values():
-        raw = g.get('value', {}).get('RawData', {}).get('value', {})
-        for p in raw.get('players', []):
-            if p['player_uid'] == host_guid:
-                source_player = fast_deepcopy(p)
-                source_guild = g
+from palworld_save_tools.archive import FArchiveWriter
+def _new_guid():
+    return PalUUID(os.urandom(16))
+def _rebuild_opaque_bytes(raw):
+    try:
+        from palworld_save_tools.archive import FArchiveReader
+        opaque = bytes(raw['_opaque_all_remaining_bytes'])
+        v1 = raw.get('_v1_header')
+        if v1:
+            opaque = opaque[len(v1):]
+        r = FArchiveReader(opaque, debug=False)
+        nw = FArchiveWriter()
+        if opaque[:4] == b'\x00\x00\x00\x00':
+            nw.write(r.read(4))
+        nw.guid(raw['admin_player_uid'])
+        nw.write(r.read(4 + 4 + 2 + 4 + 4 + 4 + 4))
+        r.i32()
+        players = raw.get('players', [])
+        nw.i32(len(players))
+        for p in players:
+            nw.i64(p['player_info']['last_online_real_time'])
+            nw.fstring(p['player_info']['player_name'])
+            nw.write(b'\x00' * 31)
+        nw.write(r.read_to_end())
+        raw['_opaque_all_remaining_bytes'] = [int(b) for b in nw.bytes()]
+    except Exception as e:
+        print(f'_rebuild_opaque_bytes error: {e}')
+def _set_player_groupid(targ_json, group_id):
+    sd = targ_json['SaveData']['value']
+    sd['GroupId'] = {
+        'id': None,
+        'value': group_id,
+        'type': 'StructProperty',
+        'struct_type': 'Guid',
+        'struct_id': '00000000-0000-0000-0000-000000000000'
+    }
+def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, target_world_tick=None):
+    try:
+        if 'GroupSaveDataMap' not in targ_lvl or targ_lvl['GroupSaveDataMap'].get('value') is None:
+            return False
+        guilds = targ_lvl['GroupSaveDataMap']['value']
+        if not source_guild_dict:
+            return False
+        target_guild = None
+        for g in guilds:
+            raw = g.get('value', {}).get('RawData', {}).get('value', {})
+            if any((str(p.get('player_uid')) == str(targ_uid) for p in raw.get('players', []))):
+                target_guild = g
                 break
-        if source_guild:
-            break
-    if source_player:
-        source_player['player_uid'] = targ_uid
-    if target_guild:
-        raw = target_guild['value']['RawData']['value']
-        raw['players'] = [p for p in raw['players'] if p.get('player_uid') != targ_uid]
-        raw['players'].append(source_player)
-        if raw.get('admin_player_uid') == host_guid:
-            raw['admin_player_uid'] = targ_uid
-        return True
-    zero_uuid = PalUUID(b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
-    if source_guild:
-        cloned = fast_deepcopy(source_guild)
-        cloned['key'] = UUID(os.urandom(16))
-        raw = cloned['value']['RawData']['value']
-        raw['group_id'] = UUID(os.urandom(16))
-        raw['group_name'] = 'Transferred Guild'
-        raw['players'] = [source_player]
-        raw['admin_player_uid'] = targ_uid
-        raw['base_ids'] = []
-        raw['map_object_instance_ids_base_camp_points'] = []
-        raw['individual_character_handle_ids'] = []
-        raw['org_type'] = 0
-        raw['leading_bytes'] = [0, 0, 0, 0]
-        raw['unknown_1'] = 0
-        raw['base_camp_level'] = 1
-        raw['guild_name'] = 'Transferred Guild'
-        raw['last_guild_name_modifier_player_uid'] = zero_uuid
-        raw['unknown_2'] = [0, 0, 0, 0]
-        raw['trailing_bytes'] = [0, 0, 0, 0]
-        guilds.append(cloned)
-        return True
-    new_g = {'key': UUID(os.urandom(16)), 'value': {'GroupType': {'value': {'value': 'EPalGroupType::Guild'}}, 'RawData': {'value': {'group_type': 'EPalGroupType::Guild', 'group_id': UUID(os.urandom(16)), 'group_name': 'Transferred Guild', 'individual_character_handle_ids': [], 'org_type': 0, 'leading_bytes': [0, 0, 0, 0], 'base_ids': [], 'unknown_1': 0, 'base_camp_level': 1, 'map_object_instance_ids_base_camp_points': [], 'guild_name': 'Transferred Guild', 'last_guild_name_modifier_player_uid': zero_uuid, 'unknown_2': [0, 0, 0, 0], 'admin_player_uid': targ_uid, 'players': [{'player_uid': targ_uid, 'player_info': {'last_online_real_time': target_world_tick, 'player_name': targ_json['SaveData']['value']['NickName']['value']}}], 'trailing_bytes': [0, 0, 0, 0]}}}}
-    guilds.append(new_g)
-    return True
+        source_player = None
+        source_entry = None
+        for g in source_guild_dict.values():
+            raw = g.get('value', {}).get('RawData', {}).get('value', {})
+            for p in raw.get('players', []):
+                if p.get('player_uid') == host_guid:
+                    source_player = fast_deepcopy(p)
+                    source_entry = g
+                    break
+            if source_entry:
+                break
+        if source_entry is None:
+            return False
+        if source_player:
+            source_player['player_uid'] = targ_uid
+            if 'player_info' in source_player:
+                source_player['player_info']['last_online_real_time'] = target_world_tick or 0
+        if target_guild:
+            target_raw = target_guild['value']['RawData']['value']
+            target_raw['players'] = [p for p in target_raw.get('players', []) if str(p.get('player_uid')) != str(targ_uid)]
+            if source_player:
+                target_raw['players'].append(source_player)
+            if str(target_raw.get('admin_player_uid')) == str(host_guid):
+                target_raw['admin_player_uid'] = targ_uid
+            if '_opaque_all_remaining_bytes' in target_raw:
+                _rebuild_opaque_bytes(target_raw)
+            _set_player_groupid(targ_json, target_raw.get('group_id'))
+            return True
+        print('[GUILD] CANNOT CREATE NEW GUILD DUE A BUG')
+        return False
+    except Exception as e:
+        print(f'[GUILD ERROR] {e}')
+        return False
 def transfer_tech_and_data():
     try:
         src_sd = host_json['SaveData']['value']
@@ -1136,6 +1165,7 @@ def load_player_file(level_sav_path, player_uid, use_source_folder=False):
         global host_json_gvas
         if host_json_gvas is not None:
             clone = fast_deepcopy(host_json_gvas)
+            clone.save_type = getattr(host_json_gvas, 'save_type', 50)
             sd = clone.properties['SaveData']['value']
             sd['PlayerUId']['value'] = player_uid
             sd['IndividualId']['value']['PlayerUId']['value'] = player_uid
@@ -1157,8 +1187,11 @@ def load_players(save_json, is_source):
     players = {}
     for group_data in save_json['GroupSaveDataMap']['value']:
         if group_data['value']['GroupType']['value']['value'] == 'EPalGroupType::Guild':
-            group_id = group_data['value']['RawData']['value']['group_id']
-            players[group_id] = group_data['value']['RawData']['value']['players']
+            rdv = group_data['value']['RawData']['value']
+            if 'values' in rdv:
+                continue
+            group_id = rdv['group_id']
+            players[group_id] = rdv['players']
             guild_dict[group_id] = group_data
     list_box = source_player_list if is_source else target_player_list
     list_box.clear()
@@ -1167,7 +1200,7 @@ def load_players(save_json, is_source):
     for guild_id, player_items in players.items():
         for player_item in player_items:
             playerUId = ''.join(safe_uuid_str(player_item['player_uid']).split('-')).upper()
-            player_name = player_item['player_info']['player_name']
+            player_name = player_item.get('player_name', (player_item.get('player_info') or {}).get('player_name', ''))
             player_level = get_player_level_from_cspm(cspm_json, playerUId)
             player_pals_count = get_player_pals_count_from_cspm(cspm_json, playerUId)
             last_online_time = player_item.get('player_info', {}).get('last_online_real_time', 0)

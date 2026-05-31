@@ -1,5 +1,6 @@
 import sys
-from loguru import logger
+import logging
+logger = logging.getLogger(__name__)
 from palworld_save_tools.commands.convert import convert_json_to_sav, convert_sav_to_json
 from palworld_save_tools.palsav import decompress_sav_to_gvas
 from palworld_save_tools.paltypes import DISABLED_PROPERTIES, PALWORLD_CUSTOM_PROPERTIES
