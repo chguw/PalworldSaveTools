@@ -1739,7 +1739,7 @@ def update_relic_data():
         json.dump(result, f, indent=2, ensure_ascii=False)
     print(f'  Saved: {RELIC_OUTPUT_FILE} ({len(result)} relic types)')
     for rt, rd in result.items():
-        print(f'    {rt}: {rd["cumulative_max"]} total relics, {rd["max_rank"]} ranks')
+        print(f"    {rt}: {rd['cumulative_max']} total relics, {rd['max_rank']} ranks")
 def update_map_data():
     map_files = ['T_TreeMap.png', 'T_WorldMap.png']
     for fname in map_files:

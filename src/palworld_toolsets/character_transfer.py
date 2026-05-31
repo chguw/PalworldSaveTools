@@ -665,10 +665,8 @@ def _collect_dynamic_ids(container, needed_set):
                 needed_set.add(norm)
         except:
             continue
-
 _session_transferred_dynamics = set()
 _session_id_map = {}
-
 def gather_and_update_dynamic_containers():
     global targ_lvl, dynamic_guids
     from palworld_save_tools.archive import UUID as PalUUID
@@ -849,13 +847,7 @@ def _rebuild_opaque_bytes(raw):
         print(f'_rebuild_opaque_bytes error: {e}')
 def _set_player_groupid(targ_json, group_id):
     sd = targ_json['SaveData']['value']
-    sd['GroupId'] = {
-        'id': None,
-        'value': group_id,
-        'type': 'StructProperty',
-        'struct_type': 'Guid',
-        'struct_id': '00000000-0000-0000-0000-000000000000'
-    }
+    sd['GroupId'] = {'id': None, 'value': group_id, 'type': 'StructProperty', 'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000'}
 def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, target_world_tick=None):
     try:
         if 'GroupSaveDataMap' not in targ_lvl or targ_lvl['GroupSaveDataMap'].get('value') is None:

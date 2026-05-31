@@ -596,7 +596,7 @@ class PalDefenderDialog(ThemedDialog):
     COL_PALS = 7
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle(t('paldefender.title') if t else 'PalDefender \u2014 Base Kill Command Generator')
+        self.setWindowTitle(t('paldefender.title') if t else 'PalDefender — Base Kill Command Generator')
         self.setMinimumSize(900, 650)
         if os.path.exists(constants.ICON_PATH):
             self.setWindowIcon(QIcon(constants.ICON_PATH))
@@ -640,7 +640,7 @@ class PalDefenderDialog(ThemedDialog):
         mode_row.addStretch()
         filter_layout.addLayout(mode_row)
         params_row = QHBoxLayout()
-        inactivity_label = QLabel(t('paldefender.inactivity_days') if t else 'Inactive \u2265')
+        inactivity_label = QLabel(t('paldefender.inactivity_days') if t else 'Inactive ≥')
         params_row.addWidget(inactivity_label)
         self.inactivity_spin = QSpinBox()
         self.inactivity_spin.setMinimum(0)
@@ -649,7 +649,7 @@ class PalDefenderDialog(ThemedDialog):
         self.inactivity_spin.setMinimumWidth(80)
         params_row.addWidget(self.inactivity_spin)
         params_row.addSpacing(16)
-        maxlevel_label = QLabel(t('paldefender.max_level') if t else 'Max Level \u2264')
+        maxlevel_label = QLabel(t('paldefender.max_level') if t else 'Max Level ≤')
         params_row.addWidget(maxlevel_label)
         self.maxlevel_spin = QSpinBox()
         self.maxlevel_spin.setMinimum(1)
@@ -683,16 +683,7 @@ class PalDefenderDialog(ThemedDialog):
         btn_row.addStretch()
         filter_layout.addLayout(btn_row)
         layout.addWidget(filter_frame)
-        headers = [
-            t('paldefender.col_guild') if t else 'Guild',
-            t('paldefender.col_guild_uid') if t else 'Guild UID',
-            t('paldefender.col_bases') if t else 'Bases',
-            t('paldefender.col_members') if t else 'Members',
-            t('paldefender.col_inactive') if t else 'Least Active',
-            t('paldefender.col_level') if t else 'Max Level',
-            t('paldefender.col_player_uid') if t else 'Player UID',
-            t('paldefender.col_pals') if t else 'Pals',
-        ]
+        headers = [t('paldefender.col_guild') if t else 'Guild', t('paldefender.col_guild_uid') if t else 'Guild UID', t('paldefender.col_bases') if t else 'Bases', t('paldefender.col_members') if t else 'Members', t('paldefender.col_inactive') if t else 'Least Active', t('paldefender.col_level') if t else 'Max Level', t('paldefender.col_player_uid') if t else 'Player UID', t('paldefender.col_pals') if t else 'Pals']
         self.tree = QTreeWidget()
         self.tree.setHeaderLabels(headers)
         self.tree.setRootIsDecorated(True)
@@ -705,27 +696,7 @@ class PalDefenderDialog(ThemedDialog):
         h.setStretchLastSection(True)
         for i in range(8):
             h.setSectionResizeMode(i, QHeaderView.Stretch)
-        self.tree.setStyleSheet(f'''
-            QTreeWidget {{
-                background-color: {constants.GLASS};
-                color: {constants.TEXT};
-                border: 1px solid {constants.BORDER};
-                border-radius: 4px;
-            }}
-            QTreeWidget::item {{
-                padding: 3px;
-            }}
-            QTreeWidget::item:selected {{
-                background-color: {constants.ACCENT};
-            }}
-            QHeaderView::section {{
-                background-color: #2a2d3a;
-                color: {constants.EMPHASIS};
-                padding: 6px;
-                border: none;
-                font-weight: bold;
-            }}
-        ''')
+        self.tree.setStyleSheet(f'\n            QTreeWidget {{\n                background-color: {constants.GLASS};\n                color: {constants.TEXT};\n                border: 1px solid {constants.BORDER};\n                border-radius: 4px;\n            }}\n            QTreeWidget::item {{\n                padding: 3px;\n            }}\n            QTreeWidget::item:selected {{\n                background-color: {constants.ACCENT};\n            }}\n            QHeaderView::section {{\n                background-color: #2a2d3a;\n                color: {constants.EMPHASIS};\n                padding: 6px;\n                border: none;\n                font-weight: bold;\n            }}\n        ')
         layout.addWidget(self.tree)
         action_row = QHBoxLayout()
         self.gen_btn = QPushButton(t('paldefender.generate') if t else 'Generate Kill Commands')
@@ -789,7 +760,6 @@ class PalDefenderDialog(ThemedDialog):
                     player_levels[uid.replace('-', '').lower()] = level
             except:
                 continue
-        # Count non-player characters per owner (player UID)
         player_pal_counts = {}
         for entry in char_map:
             try:
@@ -878,12 +848,12 @@ class PalDefenderDialog(ThemedDialog):
             has_bases = len(ge['bases']) > 0
             if has_bases:
                 with_bases_count += 1
-            if hide_no_bases and not has_bases:
+            if hide_no_bases and (not has_bases):
                 continue
             visible_count += 1
             self._add_guild_tree_item(ge)
         self._log(f'Found {len(self._guild_data)} guild(s) matching filters ({with_bases_count} with bases, {visible_count} visible).')
-        has_checkable = any(len(g['bases']) > 0 for g in self._guild_data)
+        has_checkable = any((len(g['bases']) > 0 for g in self._guild_data))
         self.gen_btn.setEnabled(has_checkable)
     def _add_guild_tree_item(self, ge):
         from .utils import format_duration_short
@@ -894,9 +864,9 @@ class PalDefenderDialog(ThemedDialog):
         if min_days != float('inf'):
             ticks = min_days * 86400 * 10000000.0
             inactive_col = format_duration_short(ticks / 10000000.0)
-        player_uids = ', '.join(p['uid'] for p in ge['players'])
+        player_uids = ', '.join((p['uid'] for p in ge['players']))
         guild_uid_short = ge['id']
-        total_pals = sum(p['pals'] for p in ge['players'])
+        total_pals = sum((p['pals'] for p in ge['players']))
         guild_item = QTreeWidgetItem()
         guild_item.setText(self.COL_GUILD, ge['name'])
         guild_item.setText(self.COL_GUILD_UID, guild_uid_short)
@@ -964,15 +934,15 @@ class PalDefenderDialog(ThemedDialog):
             log_lines.append(f'=== Guild: {guild_name} ({guild_uid}) ===')
             log_lines.append('  [Base Locations]')
             for i, base in enumerate(ge['bases'], 1):
-                kill_commands.append(f'killnearestbase {base["x"]} {base["y"]} {base["z"]}')
-                log_lines.append(f'    Base {i} - [{base["x"]}, {base["y"]}]')
+                kill_commands.append(f"killnearestbase {base['x']} {base['y']} {base['z']}")
+                log_lines.append(f"    Base {i} - [{base['x']}, {base['y']}]")
             log_lines.append('  [Members]')
             for pi in ge['players']:
-                log_lines.append(f'    Player: {pi["name"]}')
-                log_lines.append(f'      Player UID: {pi["uid"]}')
-                log_lines.append(f'      Level: {pi["level"]}')
-                log_lines.append(f'      Total Pals: {pi["pals"]}')
-                log_lines.append(f'      Last Online: {pi["inactive_str"]}')
+                log_lines.append(f"    Player: {pi['name']}")
+                log_lines.append(f"      Player UID: {pi['uid']}")
+                log_lines.append(f"      Level: {pi['level']}")
+                log_lines.append(f"      Total Pals: {pi['pals']}")
+                log_lines.append(f"      Last Online: {pi['inactive_str']}")
             log_lines.append('')
         if not kill_commands:
             self._log('No bases found for selected guilds.')

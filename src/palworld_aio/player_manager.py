@@ -221,25 +221,11 @@ def _load_relic_data():
         data = json_tools.load(relic_path)
         cumax = {k: v['cumulative_max'] for k, v in data.items()}
         maxrank = {k: v['max_rank'] for k, v in data.items()}
-        return cumax, maxrank
+        return (cumax, maxrank)
     except Exception:
-        return {}, {}
+        return ({}, {})
 RELIC_CUMULATIVE_MAX, RELIC_MAX_RANK = _load_relic_data()
-RELIC_TO_STATUS_NAME = {
-    'EPalRelicType::CapturePower': '捕獲率',
-    'EPalRelicType::HungerReduction': '空腹率低減',
-    'EPalRelicType::SwimSpeed': '泳ぎ速度',
-    'EPalRelicType::FoodDecayReduction': '食料腐敗低減',
-    'EPalRelicType::JumpPower': 'ジャンプ力',
-    'EPalRelicType::GliderSpeed': '滑空速度',
-    'EPalRelicType::ClimbSpeed': '崖登り速度',
-    'EPalRelicType::StatusAilmentResist': '状態異常耐性',
-    'EPalRelicType::ExpBonus': '経験値ボーナス',
-    'EPalRelicType::RainbowPassiveRate': '虹パッシブ率',
-    'EPalRelicType::MoveSpeed': '移動速度アップ',
-    'EPalRelicType::SphereHoming': 'パルスフィアホーミング',
-    'EPalRelicType::StaminaReduction': 'スタミナ消費軽減',
-}
+RELIC_TO_STATUS_NAME = {'EPalRelicType::CapturePower': '捕獲率', 'EPalRelicType::HungerReduction': '空腹率低減', 'EPalRelicType::SwimSpeed': '泳ぎ速度', 'EPalRelicType::FoodDecayReduction': '食料腐敗低減', 'EPalRelicType::JumpPower': 'ジャンプ力', 'EPalRelicType::GliderSpeed': '滑空速度', 'EPalRelicType::ClimbSpeed': '崖登り速度', 'EPalRelicType::StatusAilmentResist': '状態異常耐性', 'EPalRelicType::ExpBonus': '経験値ボーナス', 'EPalRelicType::RainbowPassiveRate': '虹パッシブ率', 'EPalRelicType::MoveSpeed': '移動速度アップ', 'EPalRelicType::SphereHoming': 'パルスフィアホーミング', 'EPalRelicType::StaminaReduction': 'スタミナ消費軽減'}
 def add_all_effigies_to_players(player_uids, quantity=999):
     if not constants.loaded_level_json:
         return 0
@@ -264,7 +250,7 @@ def add_all_effigies_to_players(player_uids, quantity=999):
         rmap['value'] = [{'key': rk, 'value': max_val} for rk, max_val in RELIC_CUMULATIVE_MAX.items()]
         if 'RelicPossessNum' not in rd:
             rd['RelicPossessNum'] = {'id': None, 'value': 0, 'type': 'IntProperty'}
-        rd['RelicPossessNum']['value'] = sum(e.get('value', 0) for e in rmap['value'])
+        rd['RelicPossessNum']['value'] = sum((e.get('value', 0) for e in rmap['value']))
         if rd.get('RelicBonusExpTableIndex', {}).get('value', 0) < 9999:
             rd['RelicBonusExpTableIndex'] = {'id': None, 'value': 9999, 'type': 'IntProperty'}
         if inv:
@@ -316,10 +302,7 @@ def add_all_effigies_to_players(player_uids, quantity=999):
                             seen_names[stat_name]['StatusPoint']['value'] = max_val
                             level_changed = True
                     else:
-                        sl.append({
-                            'StatusName': {'id': None, 'value': stat_name, 'type': 'NameProperty'},
-                            'StatusPoint': {'id': None, 'value': max_val, 'type': 'IntProperty'},
-                        })
+                        sl.append({'StatusName': {'id': None, 'value': stat_name, 'type': 'NameProperty'}, 'StatusPoint': {'id': None, 'value': max_val, 'type': 'IntProperty'}})
                         level_changed = True
                 break
     if level_changed:

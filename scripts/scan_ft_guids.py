@@ -1,14 +1,11 @@
 import sys, os, json, mmap, shutil, subprocess
 from pathlib import Path
-
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _PROJECT_DIR = _SCRIPT_DIR.parent
 _VENV_DIR = _PROJECT_DIR / '.venv'
 _SRC_DIR = _PROJECT_DIR / 'src'
-
 def _venv_python():
     return _VENV_DIR / 'Scripts' / 'python.exe' if os.name == 'nt' else _VENV_DIR / 'bin' / 'python'
-
 def _ensure_venv():
     vpy = _venv_python()
     if vpy.exists():
@@ -30,7 +27,6 @@ def _ensure_venv():
         uv_lock.unlink()
     print('Environment ready')
     return True
-
 def _load_save_tools():
     sys.path.insert(0, str(_SRC_DIR))
     global decompress_sav_to_gvas, GvasFile, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES
@@ -39,7 +35,6 @@ def _load_save_tools():
     from palworld_save_tools.paltypes import PALWORLD_TYPE_HINTS
     import palobject
     SKP_PALWORLD_CUSTOM_PROPERTIES = palobject.SKP_PALWORLD_CUSTOM_PROPERTIES
-
 def sav_to_gvasfile(path):
     if 'decompress_sav_to_gvas' not in globals():
         _load_save_tools()
@@ -53,7 +48,6 @@ def sav_to_gvasfile(path):
             data = f.read()
         raw_gvas, _ = decompress_sav_to_gvas(data)
     return GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
-
 def get_record_data(gvas):
     props = gvas.properties if hasattr(gvas, 'properties') else gvas.get('properties', {})
     save_data = props.get('SaveData', {}).get('value', {})
