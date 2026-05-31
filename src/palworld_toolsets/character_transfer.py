@@ -666,6 +666,8 @@ def _collect_dynamic_ids(container, needed_set):
         except:
             continue
 
+_session_transferred_dynamics = set()
+
 def gather_and_update_dynamic_containers():
     global targ_lvl, dynamic_guids
     from palworld_save_tools.archive import UUID as PalUUID
@@ -731,12 +733,15 @@ def gather_and_update_dynamic_containers():
                 continue
         except:
             continue
+        if norm in _session_transferred_dynamics:
+            continue
         bumped = _bump_guid_str(norm, existing)
         copy = fast_deepcopy(dc)
         copy['RawData']['value']['id']['local_id_in_created_world'] = PalUUID.from_str(bumped)
         dynamic_guids.add(lid)
         tgt_dict[bumped] = copy
         id_map[norm] = bumped
+        _session_transferred_dynamics.add(norm)
     preserved_map = {}
     for dc in tgt_containers:
         try:
@@ -1208,7 +1213,8 @@ def load_players(save_json, is_source):
             item = QTreeWidgetItem([safe_uuid_str(guild_id), playerUId, player_name, str(player_level), str(player_pals_count), last_seen])
             list_box.addTopLevelItem(item)
 def source_level_file():
-    global level_sav_path, level_json, selected_source_player
+    global level_sav_path, level_json, selected_source_player, _session_transferred_dynamics
+    _session_transferred_dynamics.clear()
     tmp = select_file()
     if not tmp:
         return
@@ -1247,7 +1253,8 @@ def source_level_file():
     run_with_loading(on_finished, task)
 def target_level_file():
     global t_level_sav_path, targ_lvl, target_gvas_file, selected_target_player
-    global modified_target_players, modified_targets_data
+    global modified_target_players, modified_targets_data, _session_transferred_dynamics
+    _session_transferred_dynamics.clear()
     tmp = select_file()
     if not tmp:
         return
