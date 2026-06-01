@@ -889,7 +889,16 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, 
                 _rebuild_opaque_bytes(target_raw)
             _set_player_groupid(targ_json, target_raw.get('group_id'))
             return True
-        print('[GUILD] CANNOT CREATE NEW GUILD DUE A BUG')
+        if source_entry:
+            new_guild_entry = fast_deepcopy(source_entry)
+            raw = new_guild_entry['value']['RawData']['value']
+            raw['group_id'] = str(PalUUID(os.urandom(16)))
+            raw['players'] = [pl for pl in raw.get('players', []) if str(pl.get('player_uid')) == str(host_guid)]
+            for pl in raw['players']:
+                pl['player_uid'] = str(targ_uid)
+            guilds.append(new_guild_entry)
+            _set_player_groupid(targ_json, raw.get('group_id'))
+            return True
         return False
     except Exception as e:
         print(f'[GUILD ERROR] {e}')

@@ -7,6 +7,7 @@ from i18n import t
 from palworld_aio import constants
 from palworld_aio.ui.styles import PICKER_SEARCH_STYLE
 from palworld_aio.inventory_manager import ItemData
+from palworld_aio.ui.inventory_tab import ItemSlotWidget, GRID_COLS
 CONTAINER_TYPE_MAP = {4: 'WeaponLoadOutContainerId', 6: 'WeaponLoadOutContainerId', 9: 'PlayerEquipArmorContainerId', 5: 'FoodEquipContainerId', 42: 'CommonContainerId'}
 def get_container_type_display(slot_count):
     if slot_count in (4, 6):
@@ -93,43 +94,118 @@ class ContainerContentsDialog(QDialog):
     def __init__(self, container_data: dict, parent=None):
         super().__init__(parent)
         self.container_data = container_data
-        self.setWindowTitle(f"Container Contents - {container_data.get('id', '')[:8]}...")
-        self.setMinimumSize(500, 400)
+        cid = container_data.get('id', '')
+        self.setWindowTitle(f"Container Contents - {cid[:8]}...")
+        self.setMinimumSize(600, 500)
+        self.setStyleSheet('\n            QDialog {\n                background-color: rgba(18, 20, 24, 0.95);\n                border: 1px solid rgba(125, 211, 252, 0.2);\n            }\n        ')
         self._setup_ui()
     def _setup_ui(self):
         layout = QVBoxLayout(self)
-        header_label = QLabel(f"Container: {self.container_data.get('id', '')}")
-        header_label.setStyleSheet('font-weight: bold; font-size: 14px; margin: 5px;')
-        layout.addWidget(header_label)
-        info_label = QLabel(f"Type: {get_container_type_display(self.container_data.get('slot_count', 0))} | Slots: {self.container_data.get('slot_count', 0)} | Items: {self.container_data.get('item_count', 0)}")
-        info_label.setStyleSheet('font-size: 11px; color: #aaaaaa; margin: 5px;')
-        layout.addWidget(info_label)
-        self.items_list = QListWidget()
-        self.items_list.setStyleSheet('\n            QListWidget {\n                background-color: rgba(20, 25, 35, 0.8);\n                border: 1px solid rgba(255, 255, 255, 0.1);\n                border-radius: 6px;\n                color: #e0e0e0;\n            }\n            QListWidget::item {\n                padding: 8px;\n                border-radius: 4px;\n            }\n            QListWidget::item:selected {\n                background-color: rgba(74, 144, 226, 0.3);\n            }\n        ')
-        layout.addWidget(self.items_list)
+        layout.setContentsMargins(12, 12, 12, 12)
+        layout.setSpacing(8)
+        header = QHBoxLayout()
+        icon_label = QLabel(get_container_icon(self.container_data.get('slot_count', 0)))
+        icon_label.setStyleSheet('font-size: 24px;')
+        header.addWidget(icon_label)
+        info_text = f"<b>{get_container_type_display(self.container_data.get('slot_count', 0))}</b> | {self.container_data.get('slot_count', 0)} slots | {self.container_data.get('item_count', 0)} items"
+        info_label = QLabel(info_text)
+        info_label.setStyleSheet('font-size: 13px; color: #e2e8f0;')
+        header.addWidget(info_label)
+        header.addStretch()
+        close_btn = QPushButton('✕')
+        close_btn.setFixedSize(28, 28)
+        close_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #aaa; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; font-size: 14px; } QPushButton:hover { background: rgba(255,80,80,0.2); color: #ff6b6b; }')
+        close_btn.clicked.connect(self.accept)
+        header.addWidget(close_btn)
+        layout.addLayout(header)
+        cid_label = QLabel(self.container_data.get('id', ''))
+        cid_label.setStyleSheet('font-size: 10px; color: #666; font-family: monospace; padding-left: 4px;')
+        layout.addWidget(cid_label)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet('QScrollArea { border: none; background: transparent; }')
+        grid_widget = QWidget()
+        self.grid_layout = QGridLayout(grid_widget)
+        self.grid_layout.setHorizontalSpacing(2)
+        self.grid_layout.setVerticalSpacing(4)
+        self.grid_layout.setContentsMargins(0, 0, 0, 0)
+        scroll.setWidget(grid_widget)
+        layout.addWidget(scroll)
         items = self.container_data.get('items', [])
         if items:
-            for item in items:
-                item_name = item.get('item_name', 'Unknown')
-                item_id = item.get('item_id', '')
-                count = item.get('stack_count', 1)
-                icon_path = item.get('icon_path', '')
-                display_text = f'{item_name} x{count}'
-                if item_id:
-                    display_text += f' ({item_id})'
-                list_item = QListWidgetItem(display_text)
-                if icon_path:
-                    pixmap = ItemData.get_item_icon(icon_path, QSize(32, 32))
-                    if not pixmap.isNull():
-                        list_item.setIcon(pixmap)
-                self.items_list.addItem(list_item)
+            for i, item in enumerate(items):
+                row = i // GRID_COLS
+                col = i % GRID_COLS
+                slot = ItemSlotWidget(i, 'container')
+                slot.set_item(item)
+                self.grid_layout.addWidget(slot, row, col)
         else:
-            empty_label = QLabel('No items in this container')
-            empty_label.setStyleSheet('color: #666666; font-style: italic;')
-            self.items_list.addItem(QListWidgetItem('No items in this container'))
-        close_btn = QPushButton(t('button.close') if t else 'Close')
-        close_btn.clicked.connect(self.accept)
-        layout.addWidget(close_btn)
+            empty = QLabel('No items in this container')
+            empty.setAlignment(Qt.AlignCenter)
+            empty.setStyleSheet('color: #555; font-style: italic; font-size: 14px; padding: 40px;')
+            self.grid_layout.addWidget(empty, 0, 0, 1, GRID_COLS)
+class _InlineContainerPanel(QFrame):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setVisible(False)
+        self._current_container_id = None
+        self._setup_ui()
+    def _setup_ui(self):
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(8, 8, 8, 8)
+        layout.setSpacing(6)
+        header = QHBoxLayout()
+        self._icon_label = QLabel()
+        self._icon_label.setStyleSheet('font-size: 20px;')
+        header.addWidget(self._icon_label)
+        self._info_label = QLabel()
+        self._info_label.setStyleSheet('font-size: 12px; color: #e2e8f0; font-weight: bold;')
+        header.addWidget(self._info_label)
+        header.addStretch()
+        self._container_id_label = QLabel()
+        self._container_id_label.setStyleSheet('font-size: 9px; color: #666; font-family: monospace;')
+        header.addWidget(self._container_id_label)
+        close_btn = QPushButton('✕')
+        close_btn.setFixedSize(22, 22)
+        close_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #aaa; border: 1px solid rgba(255,255,255,0.1); border-radius: 11px; font-size: 12px; } QPushButton:hover { background: rgba(255,80,80,0.2); color: #ff6b6b; }')
+        close_btn.clicked.connect(self.hide)
+        header.addWidget(close_btn)
+        layout.addLayout(header)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setStyleSheet('QScrollArea { border: none; background: transparent; }')
+        scroll.setFixedHeight(220)
+        grid_widget = QWidget()
+        self._grid_layout = QGridLayout(grid_widget)
+        self._grid_layout.setHorizontalSpacing(2)
+        self._grid_layout.setVerticalSpacing(4)
+        self._grid_layout.setContentsMargins(0, 0, 0, 0)
+        scroll.setWidget(grid_widget)
+        layout.addWidget(scroll)
+        self.setStyleSheet('_InlineContainerPanel { background: rgba(18, 20, 24, 0.8); border: 1px solid rgba(125, 211, 252, 0.2); border-radius: 8px; }')
+    def show_container(self, container_data: dict):
+        self._current_container_id = container_data.get('id', '')
+        self._icon_label.setText(get_container_icon(container_data.get('slot_count', 0)))
+        self._info_label.setText(f"{get_container_type_display(container_data.get('slot_count', 0))} | {container_data.get('slot_count', 0)} slots | {container_data.get('item_count', 0)} items")
+        self._container_id_label.setText(container_data.get('id', ''))
+        for i in reversed(range(self._grid_layout.count())):
+            w = self._grid_layout.itemAt(i).widget()
+            if w:
+                w.deleteLater()
+        items = container_data.get('items', [])
+        if items:
+            for i, item in enumerate(items):
+                row = i // GRID_COLS
+                col = i % GRID_COLS
+                slot = ItemSlotWidget(i, 'container')
+                slot.set_item(item)
+                self._grid_layout.addWidget(slot, row, col)
+        else:
+            empty = QLabel('No items in this container')
+            empty.setAlignment(Qt.AlignCenter)
+            empty.setStyleSheet('color: #555; font-style: italic; font-size: 13px; padding: 20px;')
+            self._grid_layout.addWidget(empty, 0, 0, 1, GRID_COLS)
+        self.setVisible(True)
 class UnassignedContainersTab(QWidget):
     container_selected = Signal(dict)
     def __init__(self, parent=None):
@@ -174,6 +250,8 @@ class UnassignedContainersTab(QWidget):
         search_btn.clicked.connect(self._on_search)
         header_layout.addWidget(search_btn)
         main_layout.addLayout(header_layout)
+        self._inline_panel = _InlineContainerPanel()
+        main_layout.addWidget(self._inline_panel)
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setStyleSheet('QScrollArea { border: none; background: transparent; }')
@@ -349,17 +427,6 @@ class UnassignedContainersTab(QWidget):
             self.status_label.setText(f'Error loading containers: {str(e)}')
     def _on_container_clicked(self, container_data):
         self.container_selected.emit(container_data)
-    def _on_container_context_menu(self, container_data, pos):
-        menu = QMenu(self)
-        menu.setStyleSheet('\n            QMenu {\n                background-color: rgba(18, 20, 24, 0.95);\n                border: 1px solid rgba(125, 211, 252, 0.3: 4px);\n                border-radius;\n                color: #e2e8f0;\n                padding: 4px;\n            }\n            QMenu::item:selected {\n                background-color: rgba(59, 142, 208, 0.3);\n            }\n        ')
-        view_action = menu.addAction(t('containers.view_contents') if t else 'View Contents')
-        copy_action = menu.addAction(t('containers.copy_id') if t else 'Copy Container ID')
-        action = menu.exec_(pos)
-        if action == view_action:
-            self._show_container_contents(container_data)
-        elif action == copy_action:
-            self._copy_container_id(container_data)
-    def _show_container_contents(self, container_data):
         cont_id = container_data.get('id_clean', '')
         if not constants.loaded_level_json:
             return
@@ -367,11 +434,11 @@ class UnassignedContainersTab(QWidget):
             wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
             item_containers = wsd.get('ItemContainerSaveData', {}).get('value', [])
             for cont in item_containers:
-                cont_id_check = cont.get('key', {}).get('ID', {}).get('value', '')
-                if not cont_id_check:
+                cid_check = cont.get('key', {}).get('ID', {}).get('value', '')
+                if not cid_check:
                     continue
-                cont_id_clean = str(cont_id_check).replace('-', '').lower()
-                if cont_id_clean != cont_id:
+                cid_clean = str(cid_check).replace('-', '').lower()
+                if cid_clean != cont_id:
                     continue
                 slots = cont.get('value', {}).get('Slots', {}).get('value', {}).get('values', [])
                 items = []
@@ -392,10 +459,17 @@ class UnassignedContainersTab(QWidget):
                 break
         except:
             pass
-        dialog = ContainerContentsDialog(container_data, self)
-        dialog.exec()
-    def _copy_container_id(self, container_data):
-        cont_id = container_data.get('id', '')
+        self._inline_panel.show_container(container_data)
+    def _on_container_context_menu(self, container_data, pos):
+        menu = QMenu(self)
+        menu.setStyleSheet('\n            QMenu {\n                background-color: rgba(18, 20, 24, 0.95);\n                border: 1px solid rgba(125, 211, 252, 0.3: 4px);\n                border-radius;\n                color: #e2e8f0;\n                padding: 4px;\n            }\n            QMenu::item:selected {\n                background-color: rgba(59, 142, 208, 0.3);\n            }\n        ')
+        view_action = menu.addAction(t('containers.view_contents') if t else 'View Contents')
+        copy_action = menu.addAction(t('containers.copy_id') if t else 'Copy Container ID')
+        action = menu.exec_(pos)
+        if action == view_action:
+            self._on_container_clicked(container_data)
+        elif action == copy_action:
+            cont_id = container_data.get('id', '')
         clipboard = QApplication.clipboard()
         clipboard.setText(cont_id)
         QMessageBox.information(self, t('containers.copied') if t else 'Copied', t('containers.id_copied') if t else f'Container ID copied to clipboard:\n{cont_id}')
