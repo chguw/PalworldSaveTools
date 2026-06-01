@@ -9,6 +9,9 @@ from palworld_save_tools.paltypes import PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PR
 from palworld_save_tools.gvas import GvasFile
 from palworld_aio.ui.styles import ThemeManager
 from palworld_aio.container_ownership import ContainerOwnership
+from palworld_aio.inventory_manager import PlayerInventory
+from palworld_aio.edit_pals import _generate_pal_save_param
+from palworld_aio import constants
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 _TRANSFER_STEPS = {'character': True, 'tech_data': True, 'inventory': True, 'guild': True, 'pals': True, 'dynamics': True, 'timestamps': True}
 player_list_cache = []
@@ -420,6 +423,144 @@ def load_json_files():
 def gather_inventory_ids(json_data):
     inv_info = json_data['SaveData']['value']['InventoryInfo']['value']
     return {'main': inv_info['CommonContainerId']['value']['ID']['value'], 'key': inv_info['EssentialContainerId']['value']['ID']['value'], 'weps': inv_info['WeaponLoadOutContainerId']['value']['ID']['value'], 'armor': inv_info['PlayerEquipArmorContainerId']['value']['ID']['value'], 'foodbag': inv_info['FoodEquipContainerId']['value']['ID']['value'], 'pals': json_data['SaveData']['value']['PalStorageContainerId']['value']['ID']['value'], 'otomo': json_data['SaveData']['value']['OtomoCharacterContainerId']['value']['ID']['value']}
+def scan_source_inventory(host_json, level_json):
+    inv_ids = gather_inventory_ids(host_json)
+    inv_lookup = {v: k for k, v in inv_ids.items()}
+    type_map = {'main': 'main', 'key': 'key', 'weps': 'weapons', 'armor': 'armor', 'foodbag': 'foodbag'}
+    items = []
+    for c in level_json.get('ItemContainerSaveData', {}).get('value', []):
+        try:
+            cid = c['key']['ID']['value']
+            container_type = inv_lookup.get(cid)
+            mapped = type_map.get(container_type)
+            if not mapped:
+                continue
+            slots = c.get('value', {}).get('Slots', {}).get('value', {}).get('values', [])
+            for slot in slots:
+                raw = slot.get('RawData', {}).get('value', {})
+                item_data = raw.get('item', {})
+                static_id = item_data.get('static_id', '')
+                if not static_id:
+                    continue
+                count = raw.get('count', 0)
+                slot_idx = raw.get('slot_index', 0)
+                items.append({'container_type': mapped, 'item_id': static_id, 'count': count, 'slot_index': slot_idx})
+        except:
+            continue
+    return items
+def migrate_inventory_via_player_inventory(target_uid, items, t_level_sav_path, targ_lvl):
+    old_level = getattr(constants, 'loaded_level_json', None)
+    old_path = getattr(constants, 'current_save_path', None)
+    try:
+        constants.loaded_level_json = {'properties': {'worldSaveData': {'value': targ_lvl}}}
+        constants.current_save_path = os.path.dirname(t_level_sav_path)
+        inv = PlayerInventory(target_uid)
+        if not inv.load():
+            return False
+        needed = {}
+        for item in items:
+            needed.setdefault(item['container_type'], []).append(item['slot_index'])
+        for ctype, slots in needed.items():
+            container = inv.get_container(ctype)
+            if container and hasattr(container, '_standardized_container'):
+                max_needed = max(slots) + 1
+                if max_needed > container._standardized_container.max_slots:
+                    container._standardized_container.expand_capacity(max_needed)
+                    sd = container._standardized_container.container_data.get('value', {})
+                    sn = sd.get('SlotNum', {})
+                    if sn:
+                        sn['value'] = max_needed
+        for item in items:
+            inv.add_item(item['container_type'], item['item_id'], item['count'], item['slot_index'])
+        inv.save()
+        return True
+    finally:
+        constants.loaded_level_json = old_level
+        constants.current_save_path = old_path
+def scan_source_pals(host_guid, level_json, host_json):
+    host_sd = host_json['SaveData']['value']
+    pal_ctr = host_sd['PalStorageContainerId']['value']['ID']['value']
+    oto_ctr = host_sd['OtomoCharacterContainerId']['value']['ID']['value']
+    pal_ctr_s = str(pal_ctr).lower()
+    oto_ctr_s = str(oto_ctr).lower()
+    ownership = ContainerOwnership.build(level_json.get('CharacterSaveParameterMap', {}).get('value', []), level_json.get('CharacterContainerSaveData', {}).get('value', []))
+    pals = []
+    for ch in level_json['CharacterSaveParameterMap']['value']:
+        try:
+            v = ch['value']['RawData']['value']['object']['SaveParameter']['value']
+            owner = v.get('OwnerPlayerUId')
+            inst_id = ch['key']['InstanceId']['value']
+            if not ownership.belongs_to_player(inst_id, owner, host_guid):
+                continue
+            slot_cid = v.get('SlotId', {}).get('value', {}).get('ContainerId', {}).get('value', {}).get('ID', {}).get('value')
+            slot_cid_s = str(slot_cid).lower() if slot_cid else ''
+            slot_idx = v.get('SlotId', {}).get('value', {}).get('SlotIndex', {}).get('value', 0)
+            if slot_cid_s == pal_ctr_s:
+                is_palbox = True
+            elif slot_cid_s == oto_ctr_s:
+                is_palbox = False
+            else:
+                continue
+            group_id = ch.get('value', {}).get('RawData', {}).get('value', {}).get('group_id', '')
+            pals.append({'source_entry': ch, 'save_parameter': v, 'instance_id': inst_id, 'is_palbox': is_palbox, 'slot_index': slot_idx, 'group_id': group_id})
+        except:
+            continue
+    return pals
+def migrate_pal_via_api(pal_data, target_uid, targ_lvl, target_player_json, target_guild_id):
+    sd = target_player_json['SaveData']['value']
+    pal_ctr = sd['PalStorageContainerId']['value']['ID']['value']
+    oto_ctr = sd['OtomoCharacterContainerId']['value']['ID']['value']
+    container_id = pal_ctr if pal_data['is_palbox'] else oto_ctr
+    src_sp = pal_data['save_parameter']
+    cid = extract_value(src_sp, 'CharacterID', '')
+    nick = extract_value(src_sp, 'NickName', '')
+    slot_idx = pal_data['slot_index']
+    skeleton = _generate_pal_save_param(cid, nick, target_uid, container_id, slot_idx, target_guild_id)
+    instance_id = skeleton['key']['InstanceId']['value']
+    used_ids = set()
+    for ch in targ_lvl.get('CharacterSaveParameterMap', {}).get('value', []):
+        used_ids.add(str(ch['key']['InstanceId']['value']))
+    def bump_guid_str(s):
+        v = str(s).lower()
+        t = str.maketrans('0123456789abcdef', '123456789abcdef0')
+        bumped = v.translate(t)
+        while bumped in used_ids:
+            bumped = bumped.translate(t)
+        used_ids.add(bumped)
+        return bumped
+    new_inst_str = bump_guid_str(instance_id)
+    from palworld_save_tools.archive import UUID as PalUUID
+    new_instance = PalUUID.from_str(new_inst_str)
+    skeleton['key']['InstanceId']['value'] = new_instance
+    sp = skeleton['value']['RawData']['value']['object']['SaveParameter']['value']
+    for k, v in src_sp.items():
+        if k in ('OwnerPlayerUId', 'IndividualId', 'SlotId'):
+            continue
+        sp[k] = fast_deepcopy(v)
+    sp['OwnerPlayerUId'] = {'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': target_uid, 'type': 'StructProperty'}
+    sp['SlotId']['value']['SlotIndex']['value'] = slot_idx
+    sp['SlotId']['value']['ContainerId']['value']['ID']['value'] = container_id
+    for k in ['OldOwnerPlayerUIds', 'MapObjectConcreteInstanceIdAssignedToExpedition']:
+        sp.pop(k, None)
+    cmap = targ_lvl.setdefault('CharacterSaveParameterMap', {}).setdefault('value', [])
+    cmap.append(skeleton)
+    char_containers = targ_lvl.setdefault('CharacterContainerSaveData', {}).setdefault('value', [])
+    found = False
+    for cont in char_containers:
+        if cont.get('key', {}).get('ID', {}).get('value') == container_id:
+            slots = cont.setdefault('value', {}).setdefault('Slots', {}).setdefault('value', {}).setdefault('values', [])
+            slots.append({'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_idx}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': new_instance, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}})
+            found = True
+            break
+    if not found:
+        char_containers.append({'key': {'ID': {'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': container_id, 'type': 'StructProperty'}}, 'value': {'Slots': {'id': None, 'value': {'values': [{'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_idx}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': new_instance, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}}], 'type': 'ArrayProperty'}, 'key_type': 'None', 'value_type': 'StructProperty'}, 'type': 'StructProperty'}})
+    zero = PalUUID.from_str('00000000-0000-0000-0000-000000000000')
+    for g in targ_lvl.get('GroupSaveDataMap', {}).get('value', []):
+        if g['value']['RawData']['value']['group_id'] == target_guild_id:
+            hids = g['value']['RawData']['value'].setdefault('individual_character_handle_ids', [])
+            hids.append({'guid': zero, 'instance_id': new_instance})
+            break
+    return True
 modified_target_players = set()
 modified_targets_data = {}
 def transfer_all_characters():
@@ -488,8 +629,6 @@ def transfer_all_characters():
             modified_target_players.add(selected_target_player)
             modified_targets_data[selected_target_player] = (fast_deepcopy(targ_json), targ_json_gvas, selected_source_player)
             print(f'[{i + 1}/{total_players}]{player_uuid} | Char: {t_char:.3f}s | Inv: {t_inv:.3f}s | Pals: {t_pals:.3f}s | Total: {time.perf_counter() - player_start:.3f}s')
-        if _TRANSFER_STEPS['dynamics']:
-            gather_and_update_dynamic_containers()
         print(f'Bulk transfer completed in {time.perf_counter() - total_start:.2f}s.')
     def on_bulk_finished():
         load_players(targ_lvl, is_source=False)
@@ -605,8 +744,6 @@ def main(skip_msgbox=False, skip_gui=False):
             print('[FAIL]Pals')
             return
         print('[SUCCESS]Pals')
-    if _TRANSFER_STEPS['dynamics']:
-        gather_and_update_dynamic_containers()
     if _TRANSFER_STEPS['timestamps']:
         sync_player_timestamps(targ_uid, targ_lvl)
     modified_target_players.add(selected_target_player)
@@ -647,151 +784,7 @@ def _bump_guid_str(s, used):
         bumped = bumped.translate(t)
     used.add(bumped)
     return bumped
-def _collect_container_ids(player_json):
-    try:
-        ii = player_json['SaveData']['value']['InventoryInfo']['value']
-        return {ii['CommonContainerId']['value']['ID']['value'], ii['EssentialContainerId']['value']['ID']['value'], ii['WeaponLoadOutContainerId']['value']['ID']['value'], ii['PlayerEquipArmorContainerId']['value']['ID']['value'], ii['FoodEquipContainerId']['value']['ID']['value']}
-    except:
-        return set()
-def _collect_dynamic_ids(container, needed_set):
-    for slot in container.get('value', {}).get('Slots', {}).get('value', {}).get('values', []):
-        try:
-            item = slot.get('RawData', {}).get('value', {}).get('item', {})
-            if not isinstance(item, dict):
-                continue
-            dyn_id = item.get('dynamic_id', {})
-            if not isinstance(dyn_id, dict):
-                continue
-            lid = dyn_id.get('local_id_in_created_world', '')
-            norm = _normalize_lid(lid)
-            if norm:
-                needed_set.add(norm)
-        except:
-            continue
-_session_transferred_dynamics = set()
-_session_id_map = {}
-def gather_and_update_dynamic_containers():
-    global targ_lvl, dynamic_guids
-    from palworld_save_tools.archive import UUID as PalUUID
-    src_container_ids = _collect_container_ids(host_json)
-    tgt_container_ids = _collect_container_ids(targ_json)
-    src_char_ids = set()
-    tgt_char_ids = set()
-    if host_json and 'SaveData' in host_json:
-        hsd = host_json['SaveData']['value']
-        src_char_ids.add(hsd['PalStorageContainerId']['value']['ID']['value'])
-        src_char_ids.add(hsd['OtomoCharacterContainerId']['value']['ID']['value'])
-    if targ_json and 'SaveData' in targ_json:
-        tsd = targ_json['SaveData']['value']
-        tgt_char_ids.add(tsd['PalStorageContainerId']['value']['ID']['value'])
-        tgt_char_ids.add(tsd['OtomoCharacterContainerId']['value']['ID']['value'])
-    for _, (pj, _, _) in modified_targets_data.items():
-        ids = _collect_container_ids(pj)
-        src_container_ids |= ids
-        tgt_container_ids |= ids
-    for _, (pj, _, _) in modified_targets_data.items():
-        pj_sd = pj['SaveData']['value']
-        cids = {pj_sd['PalStorageContainerId']['value']['ID']['value'], pj_sd['OtomoCharacterContainerId']['value']['ID']['value']}
-        src_char_ids |= cids
-        tgt_char_ids |= cids
-    all_needed_ids = src_container_ids | src_char_ids | tgt_container_ids | tgt_char_ids
-    needed = set()
-    for container_type in ['ItemContainerSaveData', 'CharacterContainerSaveData']:
-        for c in level_json.get(container_type, {}).get('value', []):
-            try:
-                if c['key']['ID']['value'] not in all_needed_ids:
-                    continue
-            except:
-                continue
-            _collect_dynamic_ids(c, needed)
-        for c in targ_lvl.get(container_type, {}).get('value', []):
-            try:
-                if c['key']['ID']['value'] not in all_needed_ids:
-                    continue
-            except:
-                continue
-            _collect_dynamic_ids(c, needed)
-    src_containers = level_json['DynamicItemSaveData']['value']['values']
-    tgt_containers = targ_lvl['DynamicItemSaveData']['value']['values']
-    dynamic_guids = set()
-    existing = set()
-    tgt_dict = {}
-    existing = set()
-    for dc in tgt_containers:
-        try:
-            norm = _normalize_lid(dc['RawData']['value']['id']['local_id_in_created_world'])
-            if norm:
-                existing.add(norm)
-        except:
-            continue
-    id_map = dict(_session_id_map)
-    for dc in src_containers:
-        try:
-            lid = dc['RawData']['value']['id']['local_id_in_created_world']
-            if isinstance(lid, bytes) and lid == b'\x00' * 16:
-                continue
-            norm = _normalize_lid(lid)
-            if not norm or norm not in needed:
-                continue
-        except:
-            continue
-        if norm in _session_transferred_dynamics:
-            continue
-        bumped = _bump_guid_str(norm, existing)
-        copy = fast_deepcopy(dc)
-        copy['RawData']['value']['id']['local_id_in_created_world'] = PalUUID.from_str(bumped)
-        dynamic_guids.add(lid)
-        tgt_dict[bumped] = copy
-        id_map[norm] = bumped
-        _session_transferred_dynamics.add(norm)
-        _session_id_map[norm] = bumped
-    preserved_map = {}
-    for dc in tgt_containers:
-        try:
-            lid = dc['RawData']['value']['id']['local_id_in_created_world']
-            norm = _normalize_lid(lid)
-            if norm and norm not in needed:
-                preserved_map[norm] = dc
-        except:
-            continue
-    tgt_dict.update(preserved_map)
-    all_container_ids = src_container_ids | tgt_container_ids | src_char_ids | tgt_char_ids
-    remap_count = 0
-    for container_type in ['ItemContainerSaveData', 'CharacterContainerSaveData']:
-        for c in targ_lvl.get(container_type, {}).get('value', []):
-            try:
-                if c['key']['ID']['value'] not in all_container_ids:
-                    continue
-            except:
-                continue
-            for slot in c.get('value', {}).get('Slots', {}).get('value', {}).get('values', []):
-                try:
-                    raw = slot.get('RawData', {})
-                    if not isinstance(raw, dict):
-                        continue
-                    val = raw.get('value', {})
-                    if not isinstance(val, dict):
-                        continue
-                    if 'item' not in val:
-                        continue
-                    item = val.get('item', {})
-                    if not isinstance(item, dict):
-                        continue
-                    dyn_id = item.get('dynamic_id', {})
-                    if not isinstance(dyn_id, dict) or not dyn_id:
-                        continue
-                    lid = dyn_id.get('local_id_in_created_world', '')
-                    norm = _normalize_lid(lid)
-                    if not norm:
-                        continue
-                    if norm in id_map:
-                        dyn_id['local_id_in_created_world'] = PalUUID.from_str(id_map[norm])
-                        remap_count += 1
-                except:
-                    continue
-    if remap_count:
-        print(f'[DYNAMICS] Remapped: {remap_count}')
-    targ_lvl['DynamicItemSaveData']['value']['values'] = list(tgt_dict.values())
+
 def sync_player_timestamps(targ_uid, target_lvl):
     global target_world_tick
     try:
@@ -958,33 +951,13 @@ def transfer_character_only(host_guid, targ_uid):
     return True
 def transfer_inventory_only():
     try:
-        inv_src = gather_inventory_ids(host_json)
-        inv_tgt = gather_inventory_ids(targ_json)
-    except:
+        items = scan_source_inventory(host_json, level_json)
+        if not items:
+            return True
+        return migrate_inventory_via_player_inventory(str(targ_uid), items, t_level_sav_path, targ_lvl)
+    except Exception as e:
+        print(f'[FAIL] transfer_inventory_only: {e}')
         return False
-    inv_lookup_src = {v: k for k, v in inv_src.items()}
-    inv_lookup_tgt = {v: k for k, v in inv_tgt.items()}
-    containers_src = {}
-    containers_tgt = {}
-    for c in level_json.get('ItemContainerSaveData', {}).get('value', []):
-        cid = c['key']['ID']['value']
-        if cid in inv_lookup_src:
-            containers_src[inv_lookup_src[cid]] = c
-    for c in targ_lvl.get('ItemContainerSaveData', {}).get('value', []):
-        cid = c['key']['ID']['value']
-        if cid in inv_lookup_tgt:
-            containers_tgt[inv_lookup_tgt[cid]] = c
-    found_keys = set(containers_tgt.keys())
-    for k in ['main', 'key', 'weps', 'armor', 'foodbag']:
-        if k in containers_src and k not in containers_tgt:
-            for sc in level_json.get('ItemContainerSaveData', {}).get('value', []):
-                if sc['key']['ID']['value'] == inv_src[k]:
-                    targ_lvl['ItemContainerSaveData']['value'].append(fast_deepcopy(sc))
-                    containers_tgt[k] = targ_lvl['ItemContainerSaveData']['value'][-1]
-                    break
-        if k in containers_src and k in containers_tgt:
-            containers_tgt[k]['value'] = fast_deepcopy(containers_src[k]['value'])
-    return True
 def transfer_pals_only():
     global host_guid, targ_uid
     try:
@@ -992,113 +965,47 @@ def transfer_pals_only():
         targ_uid = UUID.from_str(selected_target_player or selected_source_player)
     except:
         return False
+    from palworld_save_tools.archive import UUID as PalUUID
     zero = PalUUID.from_str('00000000-0000-0000-0000-000000000000')
-    used_ids = set()
-    for ch in targ_lvl.get('CharacterSaveParameterMap', {}).get('value', []):
-        used_ids.add(str(ch['key']['InstanceId']['value']))
-    def bump_guid_str(s):
-        v = str(s).lower()
-        t = str.maketrans('0123456789abcdef', '123456789abcdef0')
-        bumped = v.translate(t)
-        while bumped in used_ids:
-            bumped = bumped.translate(t)
-        used_ids.add(bumped)
-        return bumped
-    targ_guild_id = zero
+    target_guild_id = zero
     for entry in targ_lvl.get('GroupSaveDataMap', {}).get('value', []):
         raw = entry['value']['RawData']['value']
         plist = raw.get('players', [])
         if any((str(p.get('player_uid')) == str(targ_uid) for p in plist)):
-            targ_guild_id = raw.get('group_id', zero)
+            target_guild_id = raw.get('group_id', zero)
             break
-    ownership = ContainerOwnership.build(level_json.get('CharacterSaveParameterMap', {}).get('value', []), level_json.get('CharacterContainerSaveData', {}).get('value', []))
-    src_params = []
-    id_map = {}
-    for ch in level_json['CharacterSaveParameterMap']['value']:
-        try:
-            v = ch['value']['RawData']['value']['object']['SaveParameter']['value']
-            owner = v.get('OwnerPlayerUId')
-            inst_id = ch['key']['InstanceId']['value']
-            if not ownership.belongs_to_player(inst_id, owner, host_guid):
-                continue
-            old_inst = inst_id
-            bumped = bump_guid_str(old_inst)
-            new_inst = UUID.from_str(bumped)
-            id_map[str(old_inst)] = new_inst
-            cp = fast_deepcopy(ch)
-            cp['key']['InstanceId']['value'] = new_inst
-            cp_raw = cp['value']['RawData']['value']
-            cp_raw['group_id'] = str(targ_guild_id)
-            pv = cp_raw['object']['SaveParameter']['value']
-            if 'OwnerPlayerUId' not in pv:
-                pv['OwnerPlayerUId'] = {'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': targ_uid, 'type': 'StructProperty'}
-            else:
-                pv['OwnerPlayerUId']['value'] = targ_uid
-            for k in ['OldOwnerPlayerUIds', 'MapObjectConcreteInstanceIdAssignedToExpedition']:
-                pv.pop(k, None)
-            src_params.append(cp)
-        except:
-            continue
-    try:
-        s_pal_id = host_json['SaveData']['value']['PalStorageContainerId']['value']['ID']['value']
-        s_oto_id = host_json['SaveData']['value']['OtomoCharacterContainerId']['value']['ID']['value']
-        t_pal_id = targ_json['SaveData']['value']['PalStorageContainerId']['value']['ID']['value']
-        t_oto_id = targ_json['SaveData']['value']['OtomoCharacterContainerId']['value']['ID']['value']
-        ids_to_find = {s_pal_id, s_oto_id}
-        src_containers = {c['key']['ID']['value']: c for c in level_json['CharacterContainerSaveData']['value'] if c['key']['ID']['value'] in ids_to_find}
-        ids_to_find_targ = {t_pal_id, t_oto_id}
-        targ_containers = {c['key']['ID']['value']: c for c in targ_lvl['CharacterContainerSaveData']['value'] if c['key']['ID']['value'] in ids_to_find_targ}
-        src_pal, src_oto = (src_containers.get(s_pal_id), src_containers.get(s_oto_id))
-        tgt_pal, tgt_oto = (targ_containers.get(t_pal_id), targ_containers.get(t_oto_id))
-    except:
-        return False
-    if not all([src_pal, src_oto, tgt_pal, tgt_oto]):
-        return False
-    param_map_by_inst = {str(p['key']['InstanceId']['value']): p for p in src_params}
-    def remap_slots(slots, new_cid):
-        for idx, slot in enumerate(slots):
-            raw = slot.get('RawData', {}).get('value', {})
-            old = str(raw.get('instance_id', ''))
-            if old in id_map:
-                new_i = id_map[old]
-                raw['instance_id'] = new_i
-                p = param_map_by_inst.get(str(new_i))
-                if p:
-                    pv = p['value']['RawData']['value']['object']['SaveParameter']['value']
-                    pv['SlotId']['value']['ContainerId']['value']['ID']['value'] = new_cid
-                    pv['SlotId']['value']['SlotIndex']['value'] = slot.get('SlotIndex', {}).get('value', idx)
-    new_box = fast_deepcopy(src_pal['value']['Slots']['value'].get('values', []))
-    remap_slots(new_box, t_pal_id)
-    tgt_pal['value']['Slots']['value']['values'] = new_box
-    new_oto = fast_deepcopy(src_oto['value']['Slots']['value'].get('values', []))
-    remap_slots(new_oto, t_oto_id)
-    tgt_oto['value']['Slots']['value']['values'] = new_oto
-    tgt_pal['value']['SlotNum']['value'] = src_pal['value']['SlotNum']['value']
-    tgt_oto['value']['SlotNum']['value'] = src_oto['value']['SlotNum']['value']
     targ_uid_str = str(targ_uid)
-    t_chars = targ_lvl['CharacterSaveParameterMap']['value']
-    new_map = [ch for ch in t_chars if str(get_val_safe(ch).get('OwnerPlayerUId', {}).get('value')) != targ_uid_str]
-    new_map += src_params
-    targ_lvl['CharacterSaveParameterMap']['value'] = new_map
+    removed_instances = set()
+    cmap = targ_lvl.get('CharacterSaveParameterMap', {}).get('value', [])
+    new_cmap = []
+    for ch in cmap:
+        v = get_val_safe(ch)
+        if str(v.get('OwnerPlayerUId', {}).get('value')) == targ_uid_str:
+            removed_instances.add(str(ch['key']['InstanceId']['value']))
+        else:
+            new_cmap.append(ch)
+    cmap[:] = new_cmap
+    targ_sd = targ_json['SaveData']['value']
+    t_pal_id = targ_sd['PalStorageContainerId']['value']['ID']['value']
+    t_oto_id = targ_sd['OtomoCharacterContainerId']['value']['ID']['value']
+    for cont in targ_lvl.get('CharacterContainerSaveData', {}).get('value', []):
+        cid = cont.get('key', {}).get('ID', {}).get('value')
+        if cid in (t_pal_id, t_oto_id):
+            slots = cont.get('value', {}).get('Slots', {}).get('value', {}).get('values', [])
+            if slots:
+                slots[:] = [s for s in slots if str(s.get('RawData', {}).get('value', {}).get('instance_id', '')) not in removed_instances]
     for entry in targ_lvl.get('GroupSaveDataMap', {}).get('value', []):
         raw = entry['value']['RawData']['value']
-        if raw.get('group_id') == targ_guild_id:
+        if raw.get('group_id') == target_guild_id:
             handles = raw.get('individual_character_handle_ids', [])
-            handles[:] = [h for h in handles if str(h.get('instance_id', '')) not in id_map]
-            seen = {}
-            unique_handles = []
-            for h in handles:
-                try:
-                    inst = str(h['instance_id'])
-                    if inst not in seen:
-                        seen[inst] = True
-                        unique_handles.append(h)
-                except:
-                    unique_handles.append(h)
-            handles[:] = unique_handles
-            for new_inst in id_map.values():
-                handles.append({'guid': zero, 'instance_id': new_inst})
+            if handles:
+                handles[:] = [h for h in handles if str(h.get('instance_id', '')) not in removed_instances]
             break
+    source_pals = scan_source_pals(host_guid, level_json, host_json)
+    for pal_data in source_pals:
+        if not migrate_pal_via_api(pal_data, targ_uid, targ_lvl, targ_json, target_guild_id):
+            print(f'[FAIL] Pal migration failed for instance {pal_data["instance_id"]}')
+            return False
     return True
 def get_val_safe(p):
     try:
@@ -1172,9 +1079,7 @@ def load_players(save_json, is_source):
             item = QTreeWidgetItem([safe_uuid_str(guild_id), playerUId, player_name, str(player_level), str(player_pals_count), last_seen])
             list_box.addTopLevelItem(item)
 def source_level_file():
-    global level_sav_path, level_json, selected_source_player, _session_transferred_dynamics, _session_id_map
-    _session_transferred_dynamics.clear()
-    _session_id_map.clear()
+    global level_sav_path, level_json, selected_source_player
     tmp = select_file()
     if not tmp:
         return
@@ -1213,9 +1118,7 @@ def source_level_file():
     run_with_loading(on_finished, task)
 def target_level_file():
     global t_level_sav_path, targ_lvl, target_gvas_file, selected_target_player
-    global modified_target_players, modified_targets_data, _session_transferred_dynamics, _session_id_map
-    _session_transferred_dynamics.clear()
-    _session_id_map.clear()
+    global modified_target_players, modified_targets_data
     tmp = select_file()
     if not tmp:
         return
