@@ -681,13 +681,13 @@ class ItemPickerDialog(QDialog):
                     continue
             if item.get('sort_id', 0) == 9999:
                 continue
+            if item.get('asset', '') in self._exclude_assets:
+                continue
             if type_a != 'EPalItemTypeA::Essential':
                 if item['asset'].startswith('PalEgg_') or item['asset'].startswith('YakushimaParts'):
                     continue
             if type_a == 'EPalItemTypeA::Essential':
                 if 'Effigy' in item.get('name', ''):
-                    continue
-                if item.get('asset', '') in self._exclude_assets:
                     continue
                 desc = item.get('description', '').strip()
                 if desc in ('', '-'):
@@ -1315,7 +1315,15 @@ class PlayerInventoryTab(QWidget):
             return
         slot_type = self._get_equip_slot_type(slot_name)
         slot_filter = EQUIP_SLOT_FILTERS.get(slot_type, {})
-        dialog = ItemPickerDialog(self, filter_type_a=slot_filter.get('type_a'), filter_type_b=slot_filter.get('type_b'), hide_quantity=slot_type != 'food')
+        exclude_assets = set()
+        if slot_type == 'accessory' and self.inventory:
+            armor = self.inventory.get_container('armor')
+            if armor:
+                accessory_indices = {b['index'] for b in UI_SLOT_BINDINGS if b['slot_name'].startswith('accessory')}
+                for s in armor.slots:
+                    if s.get('slot_index') in accessory_indices:
+                        exclude_assets.add(s.get('item_id', ''))
+        dialog = ItemPickerDialog(self, filter_type_a=slot_filter.get('type_a'), filter_type_b=slot_filter.get('type_b'), hide_quantity=slot_type != 'food', exclude_assets=exclude_assets)
         dialog.item_selected.connect(lambda item_id, qty: self._do_add_to_equip_slot(slot_name, container_type, item_id, qty))
         dialog.exec()
     def _do_add_to_equip_slot(self, slot_name: str, container_type: str, item_id: str, quantity: int):
