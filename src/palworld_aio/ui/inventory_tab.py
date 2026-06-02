@@ -7,6 +7,7 @@ from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t
 from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text
 from palworld_aio.inventory_manager import PlayerInventory, ItemData, get_player_inventory, UI_SLOT_BINDINGS, FOOD_POUCH_ITEMS, ACCESSORY_UNLOCK_ITEMS, WEAPON_UNLOCK_ITEMS
+from palworld_aio.edit_pals import _clean_desc_for_tooltip
 from palworld_aio.player_manager import add_all_effigies_to_players, EFFIGY_ITEM_IDS
 SINGLETON_TYPE_A = {'EPalItemTypeA::Weapon', 'EPalItemTypeA::MonsterEquipWeapon', 'EPalItemTypeA::Armor', 'EPalItemTypeA::Accessory', 'EPalItemTypeA::Glider', 'EPalItemTypeA::CaptureItemModifier'}
 from palworld_aio import constants
@@ -94,7 +95,8 @@ class ItemSlotWidget(QFrame):
             item_desc = self.slot_data.get('description', '')
             tooltip = f'<b>{item_name}</b><br>Qty: {qty}<br><i>{item_id}</i>'
             if item_desc:
-                tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(item_desc)}</span>'
+                cleaned = _clean_desc_for_tooltip(item_desc)
+                tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(cleaned)}</span>'
             QToolTip.showText(QCursor.pos(), tooltip)
         super().enterEvent(event)
 class EquipmentSlotWidget(QFrame):
@@ -228,7 +230,8 @@ class EquipmentSlotWidget(QFrame):
             item_desc = self.current_item.get('description', '')
             tooltip = f'<b>{item_name}</b><br><i>{item_id}</i>'
             if item_desc:
-                tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(item_desc)}</span>'
+                cleaned = _clean_desc_for_tooltip(item_desc)
+                tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(cleaned)}</span>'
             QToolTip.showText(QCursor.pos(), tooltip)
         super().enterEvent(event)
 def _load_exp_table():
@@ -711,7 +714,8 @@ class ItemPickerDialog(QDialog):
             category = item.get('category', 'misc')
             tooltip = f'<b>{item_name}</b><br>ID: {item_id}<br>Category: {category}'
             if item_desc:
-                tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(item_desc)}</span>'
+                cleaned = _clean_desc_for_tooltip(item_desc)
+                tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(cleaned)}</span>'
             list_item.setToolTip(tooltip)
             list_item.setSizeHint(QSize(80, 80))
             self.results_list.addItem(list_item)
@@ -740,7 +744,7 @@ class ItemPickerDialog(QDialog):
             if is_singleton:
                 self.qty_spin.setValue(1)
         if item_desc:
-            self.desc_label.setText(item_desc)
+            self.desc_label.setText(_clean_desc_for_tooltip(item_desc))
             self.desc_label.setVisible(True)
         else:
             self.desc_label.setVisible(False)

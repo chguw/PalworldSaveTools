@@ -8,6 +8,7 @@ from i18n import t
 from palworld_aio import constants
 from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
 from palworld_aio.data_manager import get_guilds, get_guild_members
+from palworld_aio.edit_pals import _clean_desc_for_tooltip
 from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, wrap_tooltip_text
 class PlayerTechnologyActionDialog(QDialog):
     def __init__(self, parent=None):
@@ -109,7 +110,8 @@ class PlayerTechnologyActionDialog(QDialog):
             desc = tech.get('description', '')
             tip = f'<b>{name}</b><br>({asset})'
             if desc:
-                tip += f'<br><br>{wrap_tooltip_text(desc)}'
+                cleaned = _clean_desc_for_tooltip(desc)
+                tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
             item.setToolTip(tip)
             icon = self._get_tech_icon(tech)
             if icon:

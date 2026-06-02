@@ -20,6 +20,7 @@ from palworld_aio.utils import format_duration_short
 from i18n import t
 from palworld_aio.inventory_manager import ItemData
 from palworld_aio.ui.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE, PICKER_SEARCH_STYLE, wrap_tooltip_text
+from palworld_aio.edit_pals import _clean_desc_for_tooltip
 class RarityBorderDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         super().paint(painter, option, index)
@@ -179,7 +180,8 @@ class GuildItemPickerDialog(QDialog):
             item_desc = item.get('description', '')
             tip = f'<b>{name}</b><br>({asset})'
             if item_desc:
-                tip += f'<br><br>{wrap_tooltip_text(item_desc)}'
+                cleaned = _clean_desc_for_tooltip(item_desc)
+                tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
             list_item.setToolTip(tip)
             icon_path = item.get('icon', '')
             if icon_path:
@@ -204,7 +206,7 @@ class GuildItemPickerDialog(QDialog):
         self.code_label.setText(self.selected_item_id)
         self.code_label.setVisible(True)
         if item_desc:
-            self.desc_label.setText(item_desc)
+            self.desc_label.setText(_clean_desc_for_tooltip(item_desc))
             self.desc_label.setVisible(True)
         else:
             self.desc_label.setVisible(False)

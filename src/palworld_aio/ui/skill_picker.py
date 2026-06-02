@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QStyle
 from i18n import t
 from palworld_aio import constants as palworld_constants
 import palworld_aio.edit_pals as _ep
-from palworld_aio.edit_pals import _get_cached_pixmap, _get_element_pixmap, _ensure_skill_data, _ensure_passive_data
+from palworld_aio.edit_pals import _get_cached_pixmap, _get_element_pixmap, _ensure_skill_data, _ensure_passive_data, _clean_desc_for_tooltip
 import palworld_aio.data_manager as dm
 from palworld_aio.ui.styles import PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
 class _PassiveSkillDelegate(QStyledItemDelegate):
@@ -193,7 +193,7 @@ class SkillPicker(QWidget):
                 desc = info.get('description', '')
                 if desc:
                     tip_parts.append('')
-                    tip_parts.append(desc)
+                    tip_parts.append(_clean_desc_for_tooltip(desc))
                 item.setToolTip('<br>'.join(tip_parts))
                 self._list.addItem(item)
                 if skip_items and asset in skip_items:
@@ -233,7 +233,7 @@ class SkillPicker(QWidget):
                 tip_parts = [f'<b style="color:{tc}">{name}</b>', f"<i>{dm.rank_labels.get(rank, f'Rank {rank}')}</i>"]
                 if p_desc:
                     tip_parts.append('')
-                    tip_parts.append(p_desc)
+                    tip_parts.append(_clean_desc_for_tooltip(p_desc))
                 item.setToolTip('<br>'.join(tip_parts))
                 self._list.addItem(item)
                 if skip_items and asset.lower() in skip_items:

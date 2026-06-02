@@ -10,6 +10,7 @@ from palworld_aio.data_manager import get_guilds, get_guild_members
 from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
 from palworld_aio.player_manager import add_all_effigies_to_players
 from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, wrap_tooltip_text
+from palworld_aio.edit_pals import _clean_desc_for_tooltip
 SINGLETON_TYPE_A = {'EPalItemTypeA::Weapon', 'EPalItemTypeA::MonsterEquipWeapon', 'EPalItemTypeA::Armor', 'EPalItemTypeA::Accessory', 'EPalItemTypeA::Glider', 'EPalItemTypeA::CaptureItemModifier'}
 class RarityBorderDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
@@ -196,7 +197,8 @@ class PlayerItemActionDialog(QDialog):
                 desc = item.get('description', '')
                 tip = f'<b>{name}</b><br>({asset})'
                 if desc:
-                    tip += f'<br><br>{wrap_tooltip_text(desc)}'
+                    cleaned = _clean_desc_for_tooltip(desc)
+                    tip += f'<br><br>{wrap_tooltip_text(cleaned)}'
                 list_item.setToolTip(tip)
                 icon_path = item.get('icon', '')
                 if icon_path:
@@ -221,7 +223,7 @@ class PlayerItemActionDialog(QDialog):
         self.item_info_label.setText(f'{self.selected_item_name}: {self.selected_item_id}')
         self.item_info_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
         if item_desc:
-            self.item_desc_label.setText(item_desc)
+            self.item_desc_label.setText(_clean_desc_for_tooltip(item_desc))
             self.item_desc_label.setVisible(True)
         else:
             self.item_desc_label.setVisible(False)

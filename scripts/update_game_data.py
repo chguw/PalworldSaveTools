@@ -41,15 +41,26 @@ def _spinner(label):
     spinner_chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
     stop_event = threading.Event()
     out = sys.__stdout__
+    try:
+        out.encoding
+    except AttributeError:
+        pass
     def _spin():
         for c in itertools.cycle(spinner_chars):
             if stop_event.is_set():
                 break
-            out.write(f'\r  {c} {label}')
-            out.flush()
+            try:
+                out.write(f'\r  {c} {label}')
+                out.flush()
+            except UnicodeEncodeError:
+                out.write(f'\r  . {label}')
+                out.flush()
             time.sleep(0.08)
-        out.write('\r')
-        out.flush()
+        try:
+            out.write('\r')
+            out.flush()
+        except UnicodeEncodeError:
+            pass
     t = threading.Thread(target=_spin, daemon=True)
     t.start()
     return stop_event
@@ -249,6 +260,7 @@ def _ensure_name_caches():
 def resolve_rich_text(text: str) -> str:
     import re
     _ensure_name_caches()
+    _RARITY_MAP = {'RARITY_COMMON': 'Common', 'RARITY_UNCOMMON': 'Uncommon', 'RARITY_RARE': 'Rare', 'RARITY_EPIC': 'Epic', 'RARITY_LEGENDARY': 'Legendary'}
     def _replace(m):
         tag_type = m.group(1).lower()
         asset_id = m.group(2).lower()
@@ -265,7 +277,10 @@ def resolve_rich_text(text: str) -> str:
         if name and '<' not in name:
             return name
         return asset_id
+    def _replace_rarity(m):
+        return _RARITY_MAP.get(m.group(1), m.group(1))
     text = re.sub('<(itemName|mapObjectName|characterName|activeSkillName)\\s+id=\\|([^|]+)\\|/>', _replace, text, flags=re.I)
+    text = re.sub('<uiCommon\\s+id=\\|(RARITY_\\w+)\\|[^/>]*/>', _replace_rarity, text, flags=re.I)
     text = re.sub('<[^>]+>', '', text).strip()
     return text
 def find_and_copy_icon(search_name: str, target_subdir: str, export_subdirs: list[Path]=None) -> str | None:
@@ -1346,7 +1361,7 @@ def update_pal_descriptions():
         if text:
             text = _cleanup_game_tags(text)
             return text
-        return ''
+        return '{ReferenceMsgId_' + msg_id + '}'
     def _cleanup_game_tags(desc):
         if not desc:
             return desc
@@ -1357,7 +1372,7 @@ def update_pal_descriptions():
             if text:
                 text = _cleanup_game_tags(text)
                 return text
-            return ''
+            return '{ReferenceMsgId_' + msg_id + '}'
         def _pipe_to_readable(match):
             pipe_val = match.group(1)
             parts = pipe_val.split('_')
@@ -1371,27 +1386,30 @@ def update_pal_descriptions():
             tail = tail[0].upper() + tail[1:].lower() if tail else ''
             return tail
         desc = re.sub('\\{ReferenceMsgId_(\\w+)\\}', _resolve_reference_msg, desc)
+        def _preserve_effect(m):
+            return f'_PH({m.group(1)})_'
+        desc = re.sub('\\{(Passive\\d+_EffectValue\\d+|ReferencePassive\\d+_EffectValue\\d+|ActiveSkillMainValueByRank|ActiveSkillOverWriteEffectTime|ReferenceMsgId_\\w+)\\}', _preserve_effect, desc)
         desc = re.sub('\\{[^}]*\\}', '?', desc)
+        desc = re.sub(r'_PH\(([^)]+)\)_', r'{\1}', desc)
         desc = re.sub('<Status_Up>([^<]*)</>', '\\1', desc)
         desc = re.sub('<Status_Keyword>([^<]*)</>', '\\1', desc)
-        desc = re.sub('<uiCommon\\s+id=\\|([^|]+)\\|[^/>]*/>', _ui_common_readable, desc)
+        desc = re.sub('<img\\s+id=\\|ElemIcon_([^|]+)\\|[^/>]*/>', r'[ICON:ElemIcon_\1]', desc)
         desc = re.sub('<img\\s[^/>]*/>', '', desc)
+        desc = re.sub('<uiCommon\\s+id=\\|COMMON_ELEMENT_NAME_(\\w+)\\|[^/>]*/>', r'[ELEM:\1]', desc)
+        desc = re.sub('<uiCommon\\s+id=\\|ADDITIONAL_EFFECT_(\\w+)\\|[^/>]*/>', r'[EFFECT:\1]', desc)
+        desc = re.sub('<uiCommon\\s+id=\\|([^|]+)\\|[^/>]*/>', _ui_common_readable, desc)
         desc = re.sub('<(activeSkillName|characterName|itemName|mapObjectName)\\s[^/>]*/>', '', desc)
         desc = re.sub('<[^>]*>', '', desc)
         desc = re.sub('\\|([A-Za-z0-9_]+)\\|', _pipe_to_readable, desc)
         desc = re.sub('\\s+', ' ', desc)
         desc = desc.strip()
         return desc
-        desc = re.sub('\\{ReferenceMsgId_(\\w+)\\}', _resolve_reference_msg, desc)
-        desc = re.sub('\\{[^}]*\\}', '', desc)
-        desc = re.sub('<Status_Up>([^<]*)</>', '\\1', desc)
-        desc = re.sub('<Status_Keyword>([^<]*)</>', '\\1', desc)
-        desc = re.sub('<(activeSkillName|img|uiCommon|characterName|itemName|mapObjectName)\\s[^/>]*/>', '', desc)
-        desc = re.sub('<[^>]*>', '', desc)
-        desc = re.sub('\\|\\w+\\|', '', desc)
-        desc = re.sub('\\s+', ' ', desc)
-        desc = desc.strip()
-        return desc
+    def _work_suitability_readable(m):
+        name = m.group(1)
+        parts = re.findall(r'[A-Z][a-z]*', name)
+        if parts:
+            return parts[0] if len(parts) == 1 else ' '.join(parts)
+        return name
     updated = 0
     for pal_entry in existing['pals']:
         if not isinstance(pal_entry, dict):
@@ -1403,14 +1421,151 @@ def update_pal_descriptions():
         pskill_name = partner_skill_names.get(base_asset, partner_skill_names.get(asset.lower(), ''))
         pal_desc = pal_descriptions.get(base_asset, pal_descriptions.get(asset.lower(), ''))
         if pal_desc:
+            pal_desc = re.sub('<img\\s+id=\\|ElemIcon_([^|]+)\\|[^/>]*/>', r'[ICON:ElemIcon_\1]', pal_desc)
+            pal_desc = re.sub('<uiCommon\\s+id=\\|COMMON_ELEMENT_NAME_(\\w+)\\|[^/>]*/>', r'[ELEM:\1]', pal_desc)
+            pal_desc = re.sub('<uiCommon\\s+id=\\|ADDITIONAL_EFFECT_(\\w+)\\|[^/>]*/>', r'[EFFECT:\1]', pal_desc)
+            pal_desc = re.sub('<uiCommon\\s+id=\\|COMMON_WORK_SUITABILITY_(\\w+)\\|[^/>]*/>', _work_suitability_readable, pal_desc)
             pal_desc = resolve_rich_text(pal_desc)
             pal_desc = _cleanup_game_tags(pal_desc)
             pal_desc = pal_desc.replace('\r\n', '\n').replace('\r', '\n')
         pal_entry['partner_skill'] = pskill_name
         pal_entry['description'] = pal_desc
         updated += 1
-    save_resource_json('paldata.json', existing)
+    partner_skill_param = load_export_json('PassiveSkill/DT_PartnerSkillParameter.json')
+    skill_data_list = partner_skill_param if isinstance(partner_skill_param, list) else [partner_skill_param]
+    pal_to_partner_passives = {}
+    pal_to_skill_type = {}
+    pal_to_main_values = {}
+    pal_to_overwrite_effect = {}
+    for table in skill_data_list:
+        if isinstance(table, dict):
+            for bp_class, params in table.get('Rows', {}).items():
+                if isinstance(params, dict):
+                    active_skill = params.get('ActiveSkill', {})
+                    if isinstance(active_skill, dict):
+                        pal_to_skill_type[bp_class.lower()] = active_skill.get('SkillName', '')
+                        by_rank = active_skill.get('ActiveSkill_MainValueByRank', [])
+                        values = []
+                        for entry in by_rank:
+                            if isinstance(entry, dict):
+                                v = entry.get('value', entry.get('Value', None))
+                                if v is not None:
+                                    values.append(float(v))
+                            elif isinstance(entry, (int, float)):
+                                values.append(float(entry))
+                        if values:
+                            pal_to_main_values[bp_class.lower()] = values
+                        overwrite_by_rank = active_skill.get('ActiveSkill_OverWriteEffectTimeByRank', [])
+                        o_values = []
+                        for entry in overwrite_by_rank:
+                            if isinstance(entry, dict):
+                                v = entry.get('value', entry.get('Value', None))
+                                if v is not None:
+                                    o_values.append(float(v))
+                            elif isinstance(entry, (int, float)):
+                                o_values.append(float(entry))
+                        if o_values:
+                            pal_to_overwrite_effect[bp_class.lower()] = o_values
+                    passive_list = []
+                    for slot in params.get('PassiveSkills', []):
+                        if isinstance(slot, dict):
+                            arr = slot.get('SkillAndParametersArray', [])
+                            chosen = ''
+                            for item in arr:
+                                if isinstance(item, dict):
+                                    sn = item.get('SkillName', {})
+                                    if isinstance(sn, dict):
+                                        key = sn.get('Key', '')
+                                        if key and ('PartnerSkill' in key or 'GiveElement' in key):
+                                            chosen = key
+                            if not chosen:
+                                for item in arr:
+                                    if isinstance(item, dict):
+                                        sn = item.get('SkillName', {})
+                                        if isinstance(sn, dict):
+                                            key = sn.get('Key', '')
+                                            if key:
+                                                chosen = key
+                                                break
+                            if chosen:
+                                passive_list.append(chosen)
+                    if passive_list:
+                        pal_to_partner_passives[bp_class.lower()] = passive_list
+    monster_param = load_export_json('Character/DT_PalMonsterParameter.json')
+    monster_param_common = load_export_json('Character/DT_PalMonsterParameter_Common.json')
+    monster_rows = {}
+    for data in [monster_param, monster_param_common]:
+        if data:
+            if isinstance(data, list):
+                for table in data:
+                    if isinstance(table, dict):
+                        rows = table.get('Rows', {})
+                        if rows:
+                            monster_rows.update(rows)
+            elif isinstance(data, dict):
+                rows = data.get('Rows', {})
+                if rows:
+                    monster_rows.update(rows)
+    for pal_entry in existing['pals']:
+        if not isinstance(pal_entry, dict):
+            continue
+        desc = pal_entry.get('description', '')
+        if not desc or ('{ReferencePassive' not in desc and '{Passive' not in desc):
+            continue
+        if pal_entry.get('passives'):
+            continue
+        asset = pal_entry.get('asset', '').lower()
+        partner_ps = pal_to_partner_passives.get(asset, [])
+        if partner_ps:
+            pal_entry['passives'] = partner_ps
+            continue
+        skill_type = pal_to_skill_type.get(asset, '')
+        if skill_type == 'StatusUp_GiveElement':
+            el1 = ''
+            monster_row = monster_rows.get(asset, None) or monster_rows.get(pal_entry.get('asset', ''), None)
+            if monster_row and isinstance(monster_row, dict):
+                raw = monster_row.get('ElementType1', '')
+                if isinstance(raw, str) and raw.startswith('EPalElementType::'):
+                    el1 = raw.replace('EPalElementType::', '')
+            if el1:
+                pal_entry['passives'] = [f'AttackUp_{el1}_PartnerSkill_{r}' for r in range(1, 6)]
+                continue
+        monster_row = monster_rows.get(asset, None) or monster_rows.get(pal_entry.get('asset', ''), None)
+        if monster_row and isinstance(monster_row, dict):
+            raw_passives = []
+            for i in range(1, 5):
+                key = f'PassiveSkill{i}'
+                val = monster_row.get(key, 'None')
+                if isinstance(val, str) and val not in ('None', 'none', ''):
+                    raw_passives.append(val)
+            if raw_passives:
+                pal_entry['passives'] = raw_passives
+    for pal_entry in existing['pals']:
+        if not isinstance(pal_entry, dict):
+            continue
+        desc = pal_entry.get('description', '')
+        asset = pal_entry.get('asset', '').lower()
+        if desc and '{ActiveSkillMainValueByRank}' in desc:
+            values = pal_to_main_values.get(asset, [])
+            if values:
+                pal_entry['active_skill_main_value'] = values
+        if desc and '{ActiveSkillOverWriteEffectTime}' in desc:
+            values = pal_to_overwrite_effect.get(asset, [])
+            if values:
+                pal_entry['active_skill_overwrite_effect'] = values
+    append_text = {}
+    for k, v in _append_l10n_lower.items():
+        rank_match = re.search(r'_Rank_\d+', k, re.IGNORECASE)
+        if rank_match:
+            append_text[k] = v
+    ref_data = load_resource_json('reference_unlock_data.json')
+    if isinstance(ref_data, dict):
+        ref_data['append_text'] = append_text
+        save_resource_json('reference_unlock_data.json', ref_data)
+    else:
+        save_resource_json('reference_unlock_data.json', {'append_text': append_text})
     print(f'  Updated {updated} pals with descriptions and partner skills')
+    save_resource_json('paldata.json', existing)
 def update_items_dynamic():
     print('\n=== Updating Items PSP ===')
     item_table = load_export_json('Item/DT_ItemDataTable.json')
@@ -2025,6 +2180,12 @@ def _cleanup_stale_icons():
 def main():
     if os.name == 'nt':
         os.system('title PalworldSaveTools - Game Data Extractor and Updater')
+    vpy = _venv_python()
+    if not vpy.exists() or os.path.abspath(sys.executable) != os.path.abspath(str(vpy)):
+        if not _ensure_venv():
+            input('Press Enter to exit...')
+            sys.exit(1)
+        os.execv(str(vpy), [str(vpy), __file__] + sys.argv[1:])
     logo = "\n  ___      _                _    _ ___              _____         _    \n | _ \\__ _| |_ __ _____ _ _| |__| / __| __ ___ ____|_   _|__  ___| |___\n |  _/ _` | \\ V  V / _ \\ '_| / _` \\__ \\/ _` \\ V / -_)| |/ _ \\/ _ \\(_-<\n |_| \\__,_|_|\\_/\\_/\\___/_| |_\\__,_|___/\\__,_|\\_/\\___||_|\\___/\\___/_/__/\n"
     print(logo)
     print('=' * 60)
@@ -2043,12 +2204,6 @@ def main():
         print('Nothing to update.\n')
         input('Press Enter to exit...')
         sys.exit(1)
-    vpy = _venv_python()
-    if not vpy.exists() or os.path.abspath(sys.executable) != os.path.abspath(str(vpy)):
-        if not _ensure_venv():
-            input('Press Enter to exit...')
-            sys.exit(1)
-        os.execv(str(vpy), [str(vpy), __file__] + sys.argv[1:])
     print()
     def _run_step(label, fn):
         stop = _spinner(label)
@@ -2107,5 +2262,6 @@ def main():
     print('=' * 60)
     print('  Update successfully completed! Enjoy latest update!')
     print('=' * 60)
+    input('\nPress Enter to exit...')
 if __name__ == '__main__':
     main()

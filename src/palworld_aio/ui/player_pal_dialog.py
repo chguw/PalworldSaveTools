@@ -5,9 +5,9 @@ from PySide6.QtCore import Qt, Signal, QSize, QTimer
 from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor
 from i18n import t
 from palworld_aio import constants
-from palworld_aio.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data
+from palworld_aio.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data, _resolve_partner_desc, _partner_desc_to_html, PalInfoWidget
 from palworld_aio.ui.skill_picker import SkillPicker
-from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text
+from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
 class PalSlotDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         super().paint(painter, option, index)
@@ -162,6 +162,9 @@ class PlayerPalActionDialog(QDialog):
     def _build_pal_icon_map(self):
         self._pal_icon_map = {}
         self._pal_desc_map = {}
+        self._pal_passives_map = {}
+        self._pal_main_value_map = {}
+        self._pal_overwrite_effect_map = {}
         base_dir = constants.get_base_path()
         try:
             paldata_path = os.path.join(base_dir, 'resources', 'game_data', 'characters.json')
@@ -176,6 +179,15 @@ class PlayerPalActionDialog(QDialog):
                 desc = pal.get('description', '')
                 if desc:
                     self._pal_desc_map[asset] = desc
+                passives = pal.get('passives', [])
+                if passives:
+                    self._pal_passives_map[asset] = passives
+                mv = pal.get('active_skill_main_value', [])
+                if mv:
+                    self._pal_main_value_map[asset] = mv
+                ov = pal.get('active_skill_overwrite_effect', [])
+                if ov:
+                    self._pal_overwrite_effect_map[asset] = ov
         except:
             pass
     def _get_pal_icon(self, pal_id):
@@ -221,8 +233,12 @@ class PlayerPalActionDialog(QDialog):
             list_item.setData(Qt.UserRole, pal_id)
             tip = f'<b>{pal_name}</b><br>({pal_id})'
             pdesc = self._pal_desc_map.get(pal_id.lower(), '')
+            passives = self._pal_passives_map.get(pal_id.lower(), [])
             if pdesc:
-                tip += f'<br><br>{wrap_tooltip_text(pdesc)}'
+                resolved = _resolve_partner_desc(pdesc, passives, 0, self._pal_main_value_map.get(pal_id.lower()), self._pal_overwrite_effect_map.get(pal_id.lower()))
+                elem_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
+                html_desc = _partner_desc_to_html(resolved, elem_colors, tooltip=True)
+                tip += f'<br><br>{html_desc}'
             list_item.setToolTip(tip)
             pixmap = self._get_pal_icon(pal_id)
             if pixmap and (not pixmap.isNull()):

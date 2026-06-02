@@ -399,8 +399,17 @@ class PalIcon(QFrame):
             pal_name = f'{nick}'
         tip = f'{pal_name} [Lv.{level}]'
         base = get_pal_base_data(cid)
-        if base and base.get('description'):
-            tip += f"\n\n{wrap_tooltip_text(base['description'])}"
+        if base:
+            pskill_desc = base.get('description', '')
+            if pskill_desc:
+                _p = raw.get('PassiveSkillList', {})
+                if isinstance(_p, dict): _pl = _p.get('value', {}).get('values', [])
+                elif isinstance(_p, list): _pl = _p
+                else: _pl = []
+                _cr = int(extract_value(raw, 'Rank', 0)) if isinstance(extract_value(raw, 'Rank', 0), (int, float)) else 0
+                _res = _resolve_partner_desc(pskill_desc, _pl, _cr, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []))
+                _ht = _partner_desc_to_html(_res, PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}, tooltip=True)
+                tip += f"<br><br>{_ht}"
         self.setToolTip(tip)
         self.setStyleSheet('QFrame#palIconNew { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; } QFrame#palIconNew:hover { background: rgba(125,211,252,0.08); border: 1px solid rgba(125,211,252,0.25); }')
         self.bg.lower()
@@ -704,8 +713,17 @@ class PartySlotWidget(QFrame):
             pal_name = f'{nick}'
         tip = f'{pal_name} [Lv.{level}]'
         base = get_pal_base_data(cid)
-        if base and base.get('description'):
-            tip += f"<br><br>{wrap_tooltip_text(base['description'])}"
+        if base:
+            pskill_desc = base.get('description', '')
+            if pskill_desc:
+                _p = raw.get('PassiveSkillList', {})
+                if isinstance(_p, dict): _pl = _p.get('value', {}).get('values', [])
+                elif isinstance(_p, list): _pl = _p
+                else: _pl = []
+                _cr = int(extract_value(raw, 'Rank', 0)) if isinstance(extract_value(raw, 'Rank', 0), (int, float)) else 0
+                _res = _resolve_partner_desc(pskill_desc, _pl, _cr, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []))
+                _ht = _partner_desc_to_html(_res, PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}, tooltip=True)
+                tip += f"<br><br>{_ht}"
         self.setToolTip(tip)
         is_boss = cid.upper().startswith('BOSS_')
         is_lucky = extract_value(raw, 'IsRarePal', False)
@@ -1112,8 +1130,17 @@ class PalboxSlotWidget(QFrame):
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
         tip = f'{pal_name} [Lv.{level}]'
         base = get_pal_base_data(cid)
-        if base and base.get('description'):
-            tip += f"<br><br>{wrap_tooltip_text(base['description'])}"
+        if base:
+            pskill_desc = base.get('description', '')
+            if pskill_desc:
+                _p = raw.get('PassiveSkillList', {})
+                if isinstance(_p, dict): _pl = _p.get('value', {}).get('values', [])
+                elif isinstance(_p, list): _pl = _p
+                else: _pl = []
+                _cr = int(extract_value(raw, 'Rank', 0)) if isinstance(extract_value(raw, 'Rank', 0), (int, float)) else 0
+                _res = _resolve_partner_desc(pskill_desc, _pl, _cr, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []))
+                _ht = _partner_desc_to_html(_res, PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}, tooltip=True)
+                tip += f"<br><br>{_ht}"
         self.setToolTip(tip)
         self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; } QFrame#palboxSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
         self.resizeEvent(None)
@@ -1242,6 +1269,165 @@ def _get_element_pixmap(element_name, variant='small', size=16):
         if os.path.exists(webp_path):
             full_path = webp_path
     return _get_cached_pixmap(full_path, size)
+_APPEND_TEXT_DATA = None
+def _ensure_append_text_data():
+    global _APPEND_TEXT_DATA
+    if _APPEND_TEXT_DATA is not None:
+        return _APPEND_TEXT_DATA
+    _APPEND_TEXT_DATA = {}
+    try:
+        base_dir = constants.get_base_path()
+        path = os.path.join(base_dir, 'resources', 'game_data', 'reference_unlock_data.json')
+        data = json_tools.load(path)
+        for k, v in data.get('append_text', {}).items():
+            _APPEND_TEXT_DATA[k.lower()] = v
+    except Exception:
+        pass
+    return _APPEND_TEXT_DATA
+def _resolve_partner_desc(desc_raw, p_list, condenser_rank=0, active_main_values=None, active_overwrite_effect=None, default_passives=None):
+    if not desc_raw:
+        return ''
+    _ensure_passive_data()
+    star_count = max(0, condenser_rank - 1)
+    def _resolve_effect(m):
+        prefix_num = m.group(1)
+        eff_num = m.group(2)
+        idx = int(prefix_num) - 1
+        p_val = None
+        if default_passives and idx < len(default_passives):
+            p_val = default_passives[idx]
+        elif idx < len(p_list) and p_list[idx]:
+            p_val = p_list[idx]
+            if isinstance(p_val, dict):
+                p_val = p_val.get('value', '')
+        if p_val:
+            p_clean = str(p_val).lower()
+            if p_clean:
+                p_info = _PASSIVE_DATA.get(p_clean, {})
+                rank_variant = min(star_count + 1, 5)
+                if rank_variant > 1:
+                    base_clean = re.sub(r'_\d+$', '', p_clean)
+                    variant_key = f'{base_clean}_{rank_variant}'
+                    variant_info = _PASSIVE_DATA.get(variant_key.lower(), {})
+                    if isinstance(variant_info, dict) and variant_info.get(f'effect{eff_num}', None) is not None:
+                        p_info = variant_info
+                if isinstance(p_info, dict):
+                    ev = p_info.get(f'effect{eff_num}', None)
+                    if ev is not None:
+                        if isinstance(ev, float) and ev == int(ev):
+                            return str(int(ev))
+                        return str(ev)
+        return '?'
+    def _resolve_ranked_value(values):
+        if values:
+            idx = min(star_count, len(values) - 1)
+            if idx >= 0:
+                v = values[idx]
+                if isinstance(v, float) and v == int(v):
+                    return str(int(v))
+                return f'{v:.1f}'
+        return '?'
+    def _resolve_main_value(m):
+        return _resolve_ranked_value(active_main_values)
+    def _resolve_overwrite_effect(m):
+        return _resolve_ranked_value(active_overwrite_effect)
+    def _resolve_refmsgid(m):
+        msg_id = m.group(1)
+        rank = min(star_count + 1, 5)
+        key = f'{msg_id}_Rank_{rank}'
+        append_data = _ensure_append_text_data()
+        text = append_data.get(key.lower(), '')
+        if text:
+            text = re.sub(r'<Status_Up>([^<]*)</>', r'\1', text)
+            text = re.sub(r'<[^>]+>', '', text)
+            return text
+        return ''
+    desc = re.sub(r'\{Passive(\d+)_EffectValue(\d+)\}', _resolve_effect, desc_raw)
+    desc = re.sub(r'\{ReferencePassive(\d+)_EffectValue(\d+)\}', _resolve_effect, desc)
+    desc = re.sub(r'\{ActiveSkillMainValueByRank\}', _resolve_main_value, desc)
+    desc = re.sub(r'\{ActiveSkillOverWriteEffectTime\}', _resolve_overwrite_effect, desc)
+    desc = re.sub(r'\{ReferenceMsgId_(\w+)\}', _resolve_refmsgid, desc)
+    return desc
+def _partner_desc_to_html(desc, elem_colors_map, tooltip=False):
+    if not desc:
+        return ''
+    def _elem_icon_html(m):
+        full_id = m.group(1)
+        elem_name = full_id.replace('ElemIcon_', '')
+        _ELEM_ICON_TO_NAME = {'ground': 'earth', 'electric': 'electricity'}
+        lookup_name = _ELEM_ICON_TO_NAME.get(elem_name.lower(), elem_name.lower())
+        data = _ensure_element_data()
+        entry = data.get(lookup_name, {})
+        icons = entry.get('icons', {})
+        icon_rel = icons.get('small', '')
+        if icon_rel:
+            base_dir = constants.get_base_path()
+            full_path = os.path.join(base_dir, 'resources', 'game_data', icon_rel.lstrip('/'))
+            if not os.path.exists(full_path):
+                webp_path = os.path.splitext(full_path)[0] + '.webp'
+                if os.path.exists(webp_path):
+                    full_path = webp_path
+            file_url = 'file:///' + full_path.replace('\\', '/')
+            return f'<img src="{file_url}" width="16" height="16" style="vertical-align:middle; margin:0 1px;">'
+        return ''
+    def _elem_name_html(m):
+        elem = m.group(1)
+        color = elem_colors_map.get(elem, '#9CA3AF')
+        return f'<span style="color:{color};font-weight:600;">{elem}</span>'
+    def _effect_name_html(m):
+        effect = m.group(1)
+        return f'<span style="color:#FBBF24;font-weight:600;">{effect}</span>'
+    desc = re.sub(r'\[ICON:([^\]]+)\]', _elem_icon_html, desc)
+    desc = re.sub(r'\[ELEM:([^\]]+)\]', _elem_name_html, desc)
+    desc = re.sub(r'\[EFFECT:([^\]]+)\]', _effect_name_html, desc)
+    if tooltip:
+        return desc
+    return f'<div style="color:#9CA3AF;font-size:8px;line-height:1.4;">{desc}</div>'
+def _clean_desc_for_tooltip(desc, passives=None):
+    if not desc:
+        return desc
+    if passives is not None:
+        _ensure_passive_data()
+        def _resolve_effect(m):
+            prefix_num = m.group(1)
+            eff_num = m.group(2)
+            idx = int(prefix_num) - 1
+            if idx < len(passives) and passives[idx]:
+                p_val = passives[idx]
+                p_clean = str(p_val).lower() if p_val else ''
+                if p_clean:
+                    p_info = _PASSIVE_DATA.get(p_clean, {})
+                    if isinstance(p_info, dict):
+                        ev = p_info.get(f'effect{eff_num}', None)
+                        if ev is not None:
+                            if isinstance(ev, float) and ev == int(ev):
+                                return str(int(ev))
+                            return str(ev)
+            return '?'
+        desc = re.sub(r'\{Passive(\d+)_EffectValue(\d+)\}', _resolve_effect, desc)
+        desc = re.sub(r'\{ReferencePassive(\d+)_EffectValue(\d+)\}', _resolve_effect, desc)
+        desc = re.sub(r'\{ActiveSkillMainValueByRank\}', '?', desc)
+        desc = re.sub(r'\{ActiveSkillOverWriteEffectTime\}', '?', desc)
+    else:
+        desc = re.sub(r'\{Passive\d+_EffectValue\d+\}', '?', desc)
+        desc = re.sub(r'\{ReferencePassive\d+_EffectValue\d+\}', '?', desc)
+        desc = re.sub(r'\{ActiveSkillMainValueByRank\}', '?', desc)
+        desc = re.sub(r'\{ActiveSkillOverWriteEffectTime\}', '?', desc)
+    def _resolve_refmsgid_clean(m):
+        msg_id = m.group(1)
+        append_data = _ensure_append_text_data()
+        text = append_data.get(f'{msg_id.lower()}_rank_1', '')
+        if text:
+            text = re.sub(r'<Status_Up>([^<]*)</>', r'\1', text)
+            text = re.sub(r'<[^>]+>', '', text)
+            return text
+        return ''
+    desc = re.sub(r'\{ReferenceMsgId_(\w+)\}', _resolve_refmsgid_clean, desc)
+    desc = re.sub(r'\s+', ' ', desc).strip()
+    desc = re.sub(r'\[ICON:[^\]]+\]', '', desc)
+    desc = re.sub(r'\[ELEM:([^\]]+)\]', r'\1', desc)
+    desc = re.sub(r'\[EFFECT:([^\]]+)\]', r'\1', desc)
+    return desc
 _UI_ICONS_DATA = None
 def _ensure_ui_icons_data():
     global _UI_ICONS_DATA
@@ -1706,8 +1892,8 @@ class PassiveEffectOverlay(QWidget):
             painter.fillRect(QRectF(0, 0, w, h), grad)
         painter.end()
 class PalInfoWidget(QFrame):
-    _ELEMENT_MAP = {'Normal': ('⚪', '#9CA3AF'), 'Fire': ('🔥', '#EF4444'), 'Water': ('💧', '#3B82F6'), 'Leaf': ('🌿', '#4ADE80'), 'Grass': ('🌿', '#4ADE80'), 'Electricity': ('⚡', '#FBBF24'), 'Electric': ('⚡', '#FBBF24'), 'Ice': ('❄️', '#67E8F9'), 'Earth': ('🪨', '#A78BFA'), 'Ground': ('🪨', '#A78BFA'), 'Dark': ('🌑', '#6B21A8'), 'Dragon': ('🐉', '#818CF8')}
-    _ELEMENT_COLORS = {'Normal': '#9CA3AF', 'Fire': '#EF4444', 'Water': '#3B82F6', 'Leaf': '#4ADE80', 'Grass': '#4ADE80', 'Electricity': '#FBBF24', 'Electric': '#FBBF24', 'Ice': '#67E8F9', 'Earth': '#A78BFA', 'Ground': '#A78BFA', 'Dark': '#6B21A8', 'Dragon': '#818CF8'}
+    _ELEMENT_MAP = {'Normal': ('⚪', '#9CA3AF'), 'Fire': ('🔥', '#EF4444'), 'Water': ('💧', '#3B82F6'), 'Leaf': ('🌿', '#4ADE80'), 'Grass': ('🌿', '#4ADE80'), 'Electricity': ('⚡', '#FBBF24'), 'Electric': ('⚡', '#FBBF24'), 'Ice': ('❄️', '#67E8F9'), 'Earth': ('🪨', '#A78BFA'), 'Ground': ('🪨', '#A78BFA'), 'Dark': ('🌑', '#6B21A8'), 'Dragon': ('🐉', '#818CF8'), 'None': ('○', '#6B7280')}
+    _ELEMENT_COLORS = {'Normal': '#9CA3AF', 'Fire': '#EF4444', 'Water': '#3B82F6', 'Leaf': '#4ADE80', 'Grass': '#4ADE80', 'Electricity': '#FBBF24', 'Electric': '#FBBF24', 'Ice': '#67E8F9', 'Earth': '#A78BFA', 'Ground': '#A78BFA', 'Dark': '#6B21A8', 'Dragon': '#818CF8', 'None': '#6B7280'}
     NATIVE_WORK_ORDER = ('EmitFlame', 'Watering', 'Seeding', 'GenerateElectricity', 'Handcraft', 'Collection', 'Deforest', 'Mining', 'ProductMedicine', 'Cool', 'Transport', 'MonsterFarm')
     _WORK_SUITABILITY_DISPLAY = {'EmitFlame': 'Kindling', 'Watering': 'Watering', 'Seeding': 'Seeding', 'GenerateElectricity': 'Electricity', 'Handcraft': 'Handiwork', 'Collection': 'Harvesting', 'Deforest': 'Lumbering', 'Mining': 'Mining', 'ProductMedicine': 'Medicine', 'Cool': 'Cooling', 'Transport': 'Transport', 'MonsterFarm': 'Farming'}
     _WORK_SUITABILITY_ICON_KEYS = ['palwork_00', 'palwork_01', 'palwork_02', 'palwork_03', 'palwork_04', 'palwork_05', 'palwork_06', 'palwork_07', 'palwork_08', 'palwork_10', 'palwork_11', 'palwork_12']
@@ -2810,9 +2996,20 @@ class PalInfoWidget(QFrame):
             pix = _get_cached_pixmap(icon_path, 80)
             if pix:
                 self.portrait_icon.setPixmap(pix)
+            p_skills = raw.get('PassiveSkillList', {})
+            if isinstance(p_skills, dict):
+                p_list = p_skills.get('value', {}).get('values', [])
+            elif isinstance(p_skills, list):
+                p_list = p_skills
+            else:
+                p_list = []
             tip = f'<b>{pal_name}</b> [Lv.{level}]'
-            if base and base.get('description'):
-                tip += f"""<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(base['description'])}</span>"""
+            if base:
+                pskill_desc = base.get('description', '')
+                if pskill_desc:
+                    pskill_resolved = _resolve_partner_desc(pskill_desc, p_list, condenser_rank, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []))
+                    pskill_html = _partner_desc_to_html(pskill_resolved, self._ELEMENT_COLORS, tooltip=True)
+                    tip += f"""<br><br><span style="color:#94a3b8;font-size:11px">{pskill_html}</span>"""
             self.portrait_frame.setToolTip(tip)
             equip_waza_data = raw.get('EquipWaza', {})
             if isinstance(equip_waza_data, dict):
@@ -2870,7 +3067,7 @@ class PalInfoWidget(QFrame):
                 else:
                     elem_badge.setStyleSheet('background: transparent; border: none;')
                 slot_layout.addWidget(elem_badge)
-                power_lbl = QLabel(str(skill_power) if skill_power else '--')
+                power_lbl = QLabel(str(skill_power) if skill_power is not None else '--')
                 power_lbl.setFixedWidth(24)
                 power_lbl.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
                 power_lbl.setStyleSheet('font-size: 9px; font-weight: 700; color: #F59E0B; background: transparent; border: none;')
@@ -2886,13 +3083,6 @@ class PalInfoWidget(QFrame):
                         tip_parts.append(desc)
                     slot.setToolTip('<br>'.join(tip_parts))
                 self.active_skills_list.addWidget(slot)
-            p_skills = raw.get('PassiveSkillList', {})
-            if isinstance(p_skills, dict):
-                p_list = p_skills.get('value', {}).get('values', [])
-            elif isinstance(p_skills, list):
-                p_list = p_skills
-            else:
-                p_list = []
             _ensure_passive_data()
             for i in range(4):
                 display_name = '--'
@@ -2958,7 +3148,12 @@ class PalInfoWidget(QFrame):
             pal_desc = base.get('description', '') if base else ''
             self.partner_name_lbl.setText(pskill_name or pal_name)
             self.partner_lvl_lbl.setText(f'Lv {max(1, condenser_rank)}')
-            self.partner_desc_lbl.setText(pal_desc or f'Partner skill for {pal_name}. Effects scale with level.')
+            if pal_desc:
+                resolved = _resolve_partner_desc(pal_desc, p_list, condenser_rank, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), base.get('passives', []))
+                html = _partner_desc_to_html(resolved, self._ELEMENT_COLORS)
+                self.partner_desc_lbl.setText(html)
+            else:
+                self.partner_desc_lbl.setText(f'Partner skill for {pal_name}. Effects scale with level.')
             QTimer.singleShot(0, self._fit_labels)
         except Exception:
             import traceback
@@ -4232,6 +4427,9 @@ class PalCreateDialog(QDialog):
         self.pal_list.setItemDelegate(_PalSlotDelegate(self.pal_list))
         self.selected_pal = {'asset': None, 'name': None}
         pal_descs = {}
+        pal_passives = {}
+        pal_main_values = {}
+        pal_overwrite_effects = {}
         try:
             base_dir = constants.get_base_path()
             cp = os.path.join(base_dir, 'resources', 'game_data', 'characters.json')
@@ -4239,6 +4437,13 @@ class PalCreateDialog(QDialog):
             for p in cd.get('pals', []):
                 if isinstance(p, dict) and p.get('description'):
                     pal_descs[p['asset'].lower()] = p['description']
+                    pal_passives[p['asset'].lower()] = p.get('passives', [])
+                    mv = p.get('active_skill_main_value', [])
+                    if mv:
+                        pal_main_values[p['asset'].lower()] = mv
+                    ov = p.get('active_skill_overwrite_effect', [])
+                    if ov:
+                        pal_overwrite_effects[p['asset'].lower()] = ov
         except:
             pass
         def on_select(item):
@@ -4248,6 +4453,9 @@ class PalCreateDialog(QDialog):
         self.pal_list.itemClicked.connect(on_select)
         self.pal_list.itemDoubleClicked.connect(lambda item: (on_select(item), self.accept()))
         self._pal_descs_cache = pal_descs
+        self._pal_passives_cache = pal_passives
+        self._pal_main_values_cache = pal_main_values
+        self._pal_overwrite_effects_cache = pal_overwrite_effects
         self._filter_pal_list()
         self._search_edit.textChanged.connect(self._filter_pal_list)
         layout.addWidget(self.pal_list)
@@ -4295,9 +4503,13 @@ class PalCreateDialog(QDialog):
             if pix:
                 li.setIcon(QIcon(pix))
             pdesc = self._pal_descs_cache.get(asset.lower(), '')
+            passives = self._pal_passives_cache.get(asset.lower(), [])
             tip = f'<b>{name}</b><br>ID: {asset}'
             if pdesc:
-                tip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(pdesc)}</span>'
+                resolved = _resolve_partner_desc(pdesc, passives, 0, self._pal_main_values_cache.get(asset.lower()), self._pal_overwrite_effects_cache.get(asset.lower()))
+                elem_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
+                html_desc = _partner_desc_to_html(resolved, elem_colors, tooltip=True)
+                tip += f'<br><br>{html_desc}'
             li.setToolTip(tip)
             li.setSizeHint(QSize(80, 80))
             is_variant = any((asset.upper().startswith(p) for p in _BOSS_PREFIXES))
