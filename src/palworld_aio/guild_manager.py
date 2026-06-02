@@ -419,6 +419,20 @@ def rebuild_all_guilds():
             player_containers[pu_norm] = (nu(palbox), nu(otomo) if otomo else '', palbox, otomo)
         except Exception:
             pass
+    player_instances_per_guild = {}
+    for ch in cmap:
+        try:
+            sp = ch['value']['RawData']['value']['object']['SaveParameter']['value']
+            if not sp.get('IsPlayer', {}).get('value', False):
+                continue
+            pu = ch['key']['PlayerUId']['value']
+            pu_norm = nu(pu)
+            gn = player_to_guild.get(pu_norm)
+            if gn:
+                inst = ch['key']['InstanceId']['value']
+                player_instances_per_guild.setdefault(gn, []).append(inst)
+        except:
+            pass
     new_entries = []
     new_container_slots = []
     new_guild_handles = {}
@@ -555,21 +569,22 @@ def rebuild_all_guilds():
             container_map[cid_norm] = cont
         slots = cont.get('value', {}).get('Slots', {}).get('value', {}).get('values', [])
         slots.append(slot_entry)
-    for gn, inst_list in new_guild_handles.items():
-        gi = guild_info.get(gn)
-        if not gi:
-            continue
+    for gn, gi in guild_info.items():
         raw = gi['group']['value']['RawData']['value']
-        handles = raw.get('individual_character_handle_ids', [])
-        if not isinstance(handles, list):
-            handles = []
-            raw['individual_character_handle_ids'] = handles
-        existing = {nu(h['instance_id']) for h in handles if h.get('instance_id')}
-        for inst in inst_list:
-            inst_str = str(inst)
-            if nu(inst_str) not in existing:
-                handles.append({'guid': zero, 'instance_id': inst})
-                existing.add(nu(inst_str))
+        raw['individual_character_handle_ids'] = []
+        players = guild_players.get(gn, set())
+        seen = set()
+        for pu_norm in players:
+            for inst in player_instances_per_guild.get(gn, []):
+                key = nu(inst)
+                if key not in seen:
+                    raw['individual_character_handle_ids'].append({'guid': zero, 'instance_id': inst})
+                    seen.add(key)
+        for inst in new_guild_handles.get(gn, []):
+            key = nu(inst)
+            if key not in seen:
+                raw['individual_character_handle_ids'].append({'guid': zero, 'instance_id': inst})
+                seen.add(key)
     duplicates = debug_check_duplicate_handles()
     if duplicates:
         print(f'DUPLICATE HANDLES DETECTED: {duplicates}')

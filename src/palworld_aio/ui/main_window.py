@@ -239,11 +239,12 @@ class MainWindow(QMainWindow):
         self.status_stream.detach_state_changed.connect(self._on_detach_state_changed)
         sys.stdout = self.status_stream
         sys.stderr = self.status_stream
-        import logging
+        from palworld_save_tools import setup_logging
         handler = logging.StreamHandler(self.status_stream)
         handler.setLevel(logging.INFO)
         handler.setFormatter(logging.Formatter('{message}', style='{'))
         logging.getLogger().addHandler(handler)
+        setup_logging()
         if self.user_settings.get('console_detached', False):
             self.status_stream.detach()
             self.sidebar.set_console_visible(True)

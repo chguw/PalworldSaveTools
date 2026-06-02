@@ -6,6 +6,7 @@ import time
 import os
 import logging
 logger = logging.getLogger(__name__)
+from palworld_save_tools import setup_logging
 from palworld_save_tools.gvas import GvasFile
 from palworld_save_tools import json_tools
 from palworld_save_tools.palsav import compress_gvas_to_sav, decompress_sav_to_gvas
@@ -37,13 +38,7 @@ def main():
     parser.add_argument('--debug', action='store_true', help='Enable debug logging')
     parser.add_argument('--debug-log', action='store_true', help='Enable debug logging to file')
     args = parser.parse_args()
-    level = logging.DEBUG if args.debug else logging.INFO
-    logging.basicConfig(level=level, format='%(asctime)s | %(levelname)-8s | %(name)s | %(message)s')
-    if args.debug_log:
-        fh = logging.FileHandler('palworld-save-tools-debug.log')
-        fh.setLevel(logging.DEBUG)
-        fh.setFormatter(logging.Formatter('%(asctime)s | %(levelname)-8s | %(name)s:%(funcName)s:%(lineno)d | %(message)s'))
-        logging.getLogger().addHandler(fh)
+    setup_logging(debug=args.debug, debug_log=args.debug_log)
     if args.to_json and args.from_json:
         logger.error('Cannot specify both --to-json and --from-json')
         exit(1)
