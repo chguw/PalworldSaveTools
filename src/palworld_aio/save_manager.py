@@ -23,7 +23,6 @@ from i18n import t
 from palworld_aio import constants
 from palworld_aio.utils import sav_to_json, json_to_sav, sav_to_gvas_wrapper, wrapper_to_sav, sav_to_gvasfile, extract_value, sanitize_filename, format_duration_short, resolve_name
 from palworld_aio.container_ownership import ContainerOwnership
-from palworld_aio.guild_manager import rebuild_all_guilds
 from palworld_aio.func_manager import check_is_illegal_pal
 class SaveManager(QObject):
     load_started = Signal()
@@ -170,7 +169,6 @@ class SaveManager(QObject):
         level_sav_path = os.path.join(constants.current_save_path, 'Level.sav')
         def save_task():
             t0 = time.perf_counter()
-            rebuild_all_guilds()
             wrapper_to_sav(constants.loaded_level_json, level_sav_path)
             t1 = time.perf_counter()
             players_folder = os.path.join(constants.current_save_path, 'Players')
