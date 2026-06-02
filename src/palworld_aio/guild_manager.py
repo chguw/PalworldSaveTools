@@ -422,6 +422,7 @@ def rebuild_all_guilds():
     new_entries = []
     new_container_slots = []
     new_guild_handles = {}
+    container_next_slot = {}
     create_ok = 0
     create_skip = 0
     for gn, entries in guild_pal_entries.items():
@@ -468,12 +469,15 @@ def rebuild_all_guilds():
                     slot_idx = 0
                     tgt_cont = container_map.get(nu(target_cid))
                     if tgt_cont:
+                        cid_n = nu(target_cid)
+                        next_idx = container_next_slot.get(cid_n, 0)
                         slots = tgt_cont.get('value', {}).get('Slots', {}).get('value', {}).get('values', [])
                         used = {s.get('SlotIndex', {}).get('value', -1) for s in slots}
-                        i = 0
+                        i = next_idx
                         while i in used:
                             i += 1
                         slot_idx = i
+                        container_next_slot[cid_n] = i + 1
                 else:
                     eff_owner = pe.get('effective_owner', '')
                     if not owner_norm and eff_owner:
@@ -514,6 +518,16 @@ def rebuild_all_guilds():
                 group_id_str = str(group_id) if not isinstance(group_id, str) else group_id
                 skeleton['value']['RawData']['value']['group_id'] = group_id_str
                 new_sp.pop('MapObjectConcreteInstanceIdAssignedToExpedition', None)
+                new_sp.pop('SanityValue', None)
+                new_sp.pop('HungerType', None)
+                new_sp.pop('PhysicalHealth', None)
+                new_sp.pop('WorkerSick', None)
+                new_sp.pop('CurrentWorkSuitability', None)
+                new_sp.pop('FoodWithStatusEffect', None)
+                new_sp.pop('Tiemr_FoodWithStatusEffect', None)
+                new_sp.pop('FoodRegeneEffectInfo', None)
+                new_sp.pop('ArenaRestoreParameter', None)
+                new_sp.pop('WorkSuitabilityOptionInfo', None)
                 sp_cleaned = _uuid_to_str(new_sp)
                 for k in list(new_sp.keys()):
                     new_sp[k] = sp_cleaned[k]

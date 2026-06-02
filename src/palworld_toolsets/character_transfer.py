@@ -540,7 +540,7 @@ def migrate_pal_via_api(pal_data, target_uid, targ_lvl, target_player_json, targ
     sp['OwnerPlayerUId'] = {'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': target_uid, 'type': 'StructProperty'}
     sp['SlotId']['value']['SlotIndex']['value'] = slot_idx
     sp['SlotId']['value']['ContainerId']['value']['ID']['value'] = container_id
-    for k in ['OldOwnerPlayerUIds', 'MapObjectConcreteInstanceIdAssignedToExpedition']:
+    for k in ['OldOwnerPlayerUIds', 'MapObjectConcreteInstanceIdAssignedToExpedition', 'SanityValue', 'HungerType', 'PhysicalHealth', 'WorkerSick', 'CurrentWorkSuitability', 'FoodWithStatusEffect', 'Tiemr_FoodWithStatusEffect', 'FoodRegeneEffectInfo', 'ArenaRestoreParameter', 'WorkSuitabilityOptionInfo']:
         sp.pop(k, None)
     cmap = targ_lvl.setdefault('CharacterSaveParameterMap', {}).setdefault('value', [])
     cmap.append(skeleton)
