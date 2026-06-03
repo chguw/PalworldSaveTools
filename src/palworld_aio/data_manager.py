@@ -838,7 +838,7 @@ def gather_update_dynamic_containers_with_reporting():
 _RANK_COLORS = {-99: ('qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #5C1515,stop:0.5 #8A2020,stop:1 #5C1515)', '#7FFF5050', '#FF5555'), 1: ('rgba(255,255,255,0.12)', '#7FFFFFFF', '#FFFFFF'), 2: ('qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #5C4033,stop:0.5 #8B6914,stop:1 #5C4033)', '#7FFFD700', '#FFD700'), 4: ('qlineargradient(x1:0,y1:0,x2:1,y2:1,stop:0 #0D3B66,stop:0.5 #1A6B8A,stop:1 #0D3B66)', '#7F7DD3FC', '#7DD3FC'), 5: ('qlineargradient(x1:0,y1:0,x2:1,y2:1,stop:0 #0D3B66,stop:0.5 #1A6B8A,stop:1 #0D3B66)', '#7F7DD3FC', '#7DD3FC')}
 rank_labels = {1: 'Common', 2: 'Rare', 3: 'Rare', 4: 'Epic', 5: 'Epic', -99: 'Negative'}
 _SKILL_EXCLUSION_NAMES = ['unknown skills', 'unknown skill', 'en_text', 'en text']
-_SKILL_EXCLUSION_PATTERNS = ['Predator', 'RaidCutter', '_GYM_', 'PartnerSkill', 'Unique_', 'Funnel_', 'Human_', 'Scratch', 'Throw', 'WorkAttack', 'SelfDestruct_Bee', 'Weapon_Use', 'CreepingBubble']
+_SKILL_EXCLUSION_PATTERNS = ['Predator', '_GYM_', 'PartnerSkill', 'Unique_', 'Funnel_', 'Human_', 'Scratch', 'WorkAttack', 'SelfDestruct_Bee', 'Weapon_Use', 'CreepingBubble']
 _anim_phase = 0.0
 def passive_rank_color(rank):
     if rank <= 0:
