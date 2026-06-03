@@ -1473,5 +1473,14 @@
   "base_inventory.tab_base_pals": "Amigos básicos",
   "base_inventory.working_pals_count": "Compañeros de trabajo: {count}",
   "base_inventory.base_pals_empty": "Seleccione un gremio/base para ver a los compañeros que trabajan",
-  "base_inventory.page": "Página {página}/{total}"
+  "base_inventory.page": "Página {página}/{total}",
+  "edit_pals.work_skill_level": "Establecer nivel de habilidad laboral",
+  "edit_pals.work_skill_level_msg": "{habilidad} (0-10, 0=eliminar):",
+  "edit_pals.set_trust": "Establecer nivel de confianza",
+  "edit_pals.set_trust_msg": "Puntos de amistad (0-200000):",
+  "edit_pals.select_pals_to_sync": "Selecciona amigos para sincronizar:",
+  "edit_pals.bulk_sync_preview": "Vista previa (amigo fuente):",
+  "edit_pals.bulk_sync_no_selection": "No se seleccionaron amigos para sincronizar.",
+  "edit_pals.set_trust_rank_msg": "Rango de confianza (0-10):",
+  "edit_pals.work_skill_books_hint": "Los niveles de habilidades laborales se derivan de pasivos y estadísticas básicas. Utilice libros de trabajo para aumentarlos."
 }

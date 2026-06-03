@@ -1,6 +1,7 @@
 import os
 import math
 import re
+import copy
 from palworld_save_tools import json_tools
 import uuid
 import threading
@@ -13,7 +14,7 @@ from i18n import t
 from loading_manager import show_information, show_warning, show_question
 import nerdfont as nf
 from palworld_aio import constants
-from palworld_aio.utils import sav_to_json, sav_to_gvasfile, gvasfile_to_sav, extract_value, format_character_key, json_to_sav, calculate_max_hp, get_pal_data, safe_dict_get, safe_nested_get, resolve_name
+from palworld_aio.utils import sav_to_json, sav_to_gvasfile, gvasfile_to_sav, extract_value, format_character_key, json_to_sav, calculate_max_hp, calculate_shot_attack, get_pal_data, safe_dict_get, safe_nested_get, resolve_name
 from palworld_aio import data_manager as dm
 from palworld_aio.ui.styles import DIALOG_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, INPUT_DIALOG_STYLE, TOOLTIP_STYLE, wrap_tooltip_text, CONTENT_PANEL_STYLE, slot_full, slot_selected
 from palworld_aio.ui.sidebar_widget import NerdBtn
@@ -73,18 +74,37 @@ def _load_pal_base_data():
                 if boss_entry.get('stats'):
                     p['stats'] = {**boss_entry['stats'], **p.get('stats', {})}
                 _PAL_BASE_DATA_CACHE[a] = p
+        for a, p in list(_PAL_BASE_DATA_CACHE.items()):
+            if a.startswith('gym_') and (not a.endswith('_otomo')):
+                otomo_key = f'{a}_otomo'
+                otomo_entry = _PAL_BASE_DATA_CACHE.get(otomo_key)
+                if otomo_entry and (otomo_entry.get('elements') or otomo_entry.get('stats')):
+                    p = dict(p)
+                    if otomo_entry.get('elements'):
+                        p['elements'] = otomo_entry['elements']
+                    if otomo_entry.get('stats'):
+                        p['stats'] = {**p.get('stats', {}), **otomo_entry['stats']}
+                    _PAL_BASE_DATA_CACHE[a] = p
         return _PAL_BASE_DATA_CACHE
     except Exception as e:
         print(f'Error loading pal base data: {e}')
         return {}
 def get_pal_base_data(cid):
     cache = _load_pal_base_data()
-    key = cid.lower().replace('boss_', '').replace('b_o_s_s_', '')
-    entry = cache.get(key)
+    cid_lower = cid.lower()
+    entry = cache.get(cid_lower)
     if entry:
         return entry
+    normalized = cid_lower.replace('boss_', '').replace('b_o_s_s_', '')
+    entry = cache.get(normalized)
+    if entry:
+        return entry
+    for prefix in ('gym_', 'tower_', 'raid_', 'predator_'):
+        prefixed = f'{prefix}{normalized}'
+        if prefixed in cache:
+            return cache[prefixed]
     for ckey, centry in cache.items():
-        if key in ckey or ckey in key:
+        if normalized in ckey or ckey in normalized:
             return centry
     return None
 class FramelessDialog(QDialog):
@@ -2471,6 +2491,9 @@ class PalInfoWidget(QFrame):
         trust_icon.setAlignment(Qt.AlignCenter)
         trust_icon.setAttribute(Qt.WA_TranslucentBackground)
         trust_icon.setStyleSheet('background: transparent; border: none;')
+        trust_icon.setCursor(Qt.PointingHandCursor)
+        trust_icon.installEventFilter(self)
+        self.trust_icon = trust_icon
         trust_pix = _get_ui_icon_pixmap('friendship', 10)
         if trust_pix:
             trust_icon.setPixmap(trust_pix)
@@ -2602,6 +2625,7 @@ class PalInfoWidget(QFrame):
             ic.setFixedSize(22, 22)
             ic.setAttribute(Qt.WA_TranslucentBackground)
             ic.setStyleSheet('background: transparent; border: none;')
+            ic.installEventFilter(self)
             palwork_key = self._WORK_SUITABILITY_ICON_KEYS[idx]
             ws_pix = _get_ui_icon_pixmap(palwork_key, 18)
             if ws_pix:
@@ -2621,6 +2645,7 @@ class PalInfoWidget(QFrame):
             wl.setAlignment(Qt.AlignCenter)
             wl.setStyleSheet('font-size: 8px; font-weight: 700; color: transparent; background: transparent; border: none;')
             wl.setFixedHeight(10)
+            wl.installEventFilter(self)
             bd_layout.addWidget(wl)
             vl.addWidget(wl_badge, 0, Qt.AlignCenter)
             self.work_icons_layout.addWidget(wc)
@@ -2868,12 +2893,15 @@ class PalInfoWidget(QFrame):
             stats = base.get('stats', {}) if base else {}
             base_hp = stats.get('hp', 100)
             base_atk = stats.get('melee_attack', 100)
+            base_shot = stats.get('shot_attack', 100)
             base_def = stats.get('defense', 100)
             base_craft = stats.get('craft_speed', 100)
             base_stomach = stats.get('max_full_stomach', 300)
             base_food = stats.get('food_amount', 5)
-            if atk_val == 0:
-                atk_val = base_atk
+            if atk_val == 0 or True:
+                talent_shot_tmp = extract_value(raw, 'Talent_Shot', 0)
+                rank_atk_tmp = extract_value(raw, 'Rank_Attack', 0)
+                atk_val = calculate_shot_attack(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank)
             if def_val == 0:
                 def_val = base_def
             if wspd_val == 0:
@@ -2889,6 +2917,9 @@ class PalInfoWidget(QFrame):
                     val_lbl.setText(str(ws_level))
                     val_lbl.setStyleSheet('font-size: 8px; font-weight: 700; color: #4ADE80; background: transparent; border: none;')
                     val_badge.setStyleSheet('background: rgba(0,0,0,0.45); border: 1px solid rgba(74,222,128,0.2); border-radius: 2px;')
+                    icon_lbl._ws_key = ws_key
+                    icon_lbl.setCursor(Qt.PointingHandCursor)
+                    val_lbl._ws_key = ws_key
                 else:
                     icon_lbl.setStyleSheet('background: transparent; border: none;')
                     eff = icon_lbl.graphicsEffect()
@@ -2897,6 +2928,7 @@ class PalInfoWidget(QFrame):
                     val_lbl.setText('')
                     val_lbl.setStyleSheet('font-size: 8px; font-weight: 700; color: transparent; background: transparent; border: none;')
                     val_badge.setStyleSheet('background: transparent; border: none;')
+                    val_lbl._ws_key = None
             hunger_max = float(base_stomach) if base_stomach else 300.0
             hp_pct = int(min(hp_val / max_hp * 100, 100))
             hunger_pct = int(min(hunger_full / hunger_max * 100, 100))
@@ -3234,6 +3266,9 @@ class PalInfoWidget(QFrame):
             if obj is self.level_num_lbl or obj is self.stat_plus_lbl:
                 self._on_level_click()
                 return True
+            if obj is self.trust_bar or obj is self.trust_icon:
+                self._on_trust_click()
+                return True
             if obj in (self.ivs_hp_lbl, self.ivs_atk_lbl, self.ivs_def_lbl):
                 self._on_talent_click(obj)
                 return True
@@ -3242,6 +3277,9 @@ class PalInfoWidget(QFrame):
                 return True
             if hasattr(obj, '_skill_slot_idx'):
                 self._on_active_skill_click(obj._skill_slot_idx)
+                return True
+            if hasattr(obj, '_ws_key') and obj._ws_key:
+                self._on_work_skill_click(obj._ws_key, obj)
                 return True
         return super().eventFilter(obj, event)
     def _on_name_click(self):
@@ -3312,6 +3350,31 @@ class PalInfoWidget(QFrame):
         dlg.setStyleSheet(INPUT_DIALOG_STYLE)
         if dlg.exec() == QDialog.Accepted:
             self._set_level(dlg.intValue())
+    def _on_work_skill_click(self, ws_key, lbl):
+        show_information(self, t('edit_pals.work_skill_level'), t('edit_pals.work_skill_books_hint'))
+    def _on_trust_click(self):
+        if not self._raw:
+            return
+        cur = int(extract_value(self._raw, 'FriendshipPoint', 0))
+        dlg = QInputDialog(self)
+        cur_rank = 0
+        thr = _ensure_friendship_thresholds()
+        for r in range(len(thr) - 1, 0, -1):
+            if cur >= thr[r]:
+                cur_rank = r
+                break
+        dlg = QInputDialog(self)
+        dlg.setWindowTitle(t('edit_pals.set_trust'))
+        dlg.setLabelText(t('edit_pals.set_trust_rank_msg'))
+        dlg.setInputMode(QInputDialog.IntInput)
+        dlg.setIntRange(0, 10)
+        dlg.setIntValue(cur_rank)
+        dlg.setStyleSheet(INPUT_DIALOG_STYLE)
+        if dlg.exec() == QDialog.Accepted:
+            rank = dlg.intValue()
+            fp = thr[rank] if rank < len(thr) else 200000
+            self._raw['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': fp}
+            self._recalc_hp()
     def _set_level(self, value):
         raw = self._raw
         cid = extract_value(raw, 'CharacterID', '')
@@ -3442,7 +3505,10 @@ class PalInfoWidget(QFrame):
             cur = []
         while len(cur) <= slot_idx:
             cur.append('')
+        if asset and '::' not in asset:
+            asset = f'EPalWazaID::{asset}'
         cur[slot_idx] = asset
+        cur = [s for s in cur if s]
         self._raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': cur[:3]}, 'type': 'ArrayProperty'}
         self._refresh()
     def _set_passive_skill(self, slot_idx, asset):
@@ -3698,9 +3764,9 @@ def _show_learned_moves_dialog(raw, parent):
     il.addLayout(btn_row)
     dlg.content_layout.addWidget(inner)
     dlg.exec()
-_EDITABLE_KEYS = {'CharacterID', 'NickName', 'Level', 'Exp', 'Gender', 'Talent_HP', 'Talent_Shot', 'Talent_Defense', 'Rank_HP', 'Rank_Attack', 'Rank_Defence', 'Rank_CraftSpeed', 'Rank', 'FriendshipPoint', 'IsRarePal', 'bIsAwakening', 'bImportedCharacter', 'FavoriteIndex', 'EquipWaza', 'MasteredWaza', 'PassiveSkillList', 'Hp', 'MaxHP'}
+_EDITABLE_KEYS = {'Level', 'Exp', 'Gender', 'Talent_HP', 'Talent_Shot', 'Talent_Defense', 'Rank_HP', 'Rank_Attack', 'Rank_Defence', 'Rank_CraftSpeed', 'Rank', 'FriendshipPoint', 'IsRarePal', 'bIsAwakening', 'bImportedCharacter', 'FavoriteIndex', 'EquipWaza', 'MasteredWaza', 'PassiveSkillList', 'Hp', 'MaxHP'}
 class BulkSyncPalDialog(FramelessDialog):
-    def __init__(self, pal_item, pal_editor, parent=None):
+    def __init__(self, pal_item, pal_editor, parent=None, candidates=None):
         super().__init__('edit_pals.bulk_sync_pal_title', parent)
         self.pal_editor = pal_editor
         raw = _get_raw_from_item(pal_item)
@@ -3711,17 +3777,27 @@ class BulkSyncPalDialog(FramelessDialog):
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
         self.set_title_text(f"{t('edit_pals.bulk_sync_pal_title')} - {pal_name}")
         self.setModal(True)
-        self.setMinimumSize(380, 700)
-        base_id = cid.lower().replace('boss_', '')
-        self._affected = []
-        for pi in list(pal_editor.party_pals.values()):
-            pr = _get_raw_from_item(pi)
-            if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
-                self._affected.append(pi)
-        for pi in pal_editor.palbox_pal_dict.values():
-            pr = _get_raw_from_item(pi)
-            if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
-                self._affected.append(pi)
+        self.setMinimumSize(420, 750)
+        self._all_candidates = []
+        if candidates is not None:
+            self._all_candidates = list(candidates)
+        else:
+            base_id = cid.lower().replace('boss_', '')
+            seen = set()
+            for pi in list(pal_editor.party_pals.values()):
+                pr = _get_raw_from_item(pi)
+                if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
+                    inst_id = str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+                    if inst_id not in seen:
+                        seen.add(inst_id)
+                        self._all_candidates.append(pi)
+            for pi in pal_editor.palbox_pal_dict.values():
+                pr = _get_raw_from_item(pi)
+                if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
+                    inst_id = str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+                    if inst_id not in seen:
+                        seen.add(inst_id)
+                        self._all_candidates.append(pi)
         inner = QWidget()
         inner.setStyleSheet('QWidget#bulkSyncInner { background: transparent; }')
         il = QVBoxLayout(inner)
@@ -3743,59 +3819,120 @@ class BulkSyncPalDialog(FramelessDialog):
         name_lbl = QLabel(pal_name)
         name_lbl.setStyleSheet('font-size: 14px; font-weight: 700; color: #E2E8F0; background: transparent; border: none;')
         info_col.addWidget(name_lbl)
-        count_lbl = QLabel(t('edit_pals.bulk_sync_found', count=len(self._affected), name=pal_name))
+        count_lbl = QLabel(t('edit_pals.bulk_sync_found', count=len(self._all_candidates), name=pal_name))
         count_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #9CA3AF; background: transparent; border: none;')
         info_col.addWidget(count_lbl)
         info_col.addStretch()
         header.addLayout(info_col, 1)
         il.addLayout(header)
+        body = QHBoxLayout()
+        body.setSpacing(6)
+        left_col = QVBoxLayout()
+        left_col.setSpacing(3)
+        pal_list_label = QLabel(t('edit_pals.select_pals_to_sync'))
+        pal_list_label.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none; padding: 2px 0;')
+        left_col.addWidget(pal_list_label)
+        pal_scroll = QScrollArea()
+        pal_scroll.setWidgetResizable(True)
+        pal_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        pal_scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); }')
+        pal_list_inner = QWidget()
+        pal_list_inner.setStyleSheet('background: transparent; border: none;')
+        pal_list_layout = QVBoxLayout(pal_list_inner)
+        pal_list_layout.setContentsMargins(2, 2, 2, 2)
+        pal_list_layout.setSpacing(2)
+        self._checkboxes = []
+        for pi in self._all_candidates:
+            pr = _get_raw_from_item(pi)
+            nick = extract_value(pr, 'NickName', '') if pr else ''
+            lv = extract_value(pr, 'Level', 1) if pr else 1
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            cb = QCheckBox(display)
+            cb.setChecked(True)
+            cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
+            pal_list_layout.addWidget(cb)
+            self._checkboxes.append(cb)
+        pal_scroll.setWidget(pal_list_inner)
+        left_col.addWidget(pal_scroll, 1)
+        body.addLayout(left_col)
+        right_col = QVBoxLayout()
+        right_col.setSpacing(3)
+        preview_label = QLabel(t('edit_pals.bulk_sync_preview'))
+        preview_label.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none; padding: 2px 0;')
+        right_col.addWidget(preview_label)
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); } QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }')
+        scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); }')
         self._pal_info = PalInfoWidget()
         self._pal_info.set_clicked_pal(pal_item)
         self._pal_info.setStyleSheet(self._pal_info.styleSheet() + '\nQWidget#palInfoInner { border: none; }')
         scroll.setWidget(self._pal_info)
-        il.addWidget(scroll, 1)
+        right_col.addWidget(scroll, 1)
+        body.addLayout(right_col, 1)
+        il.addLayout(body, 1)
         btn_row = QHBoxLayout()
         btn_row.addStretch()
         cancel_btn = QPushButton('Cancel')
         cancel_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 16px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
         cancel_btn.clicked.connect(self.reject)
         btn_row.addWidget(cancel_btn)
+        sel_all_btn = QPushButton('All')
+        sel_all_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.15); color: #FFFFFF; }')
+        sel_all_btn.clicked.connect(lambda: self._set_all_checked(True))
+        btn_row.addWidget(sel_all_btn)
+        sel_none_btn = QPushButton('None')
+        sel_none_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.04); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.08); color: #FFFFFF; }')
+        sel_none_btn.clicked.connect(lambda: self._set_all_checked(False))
+        btn_row.addWidget(sel_none_btn)
         apply_btn = QPushButton(t('edit_pals.bulk_sync_apply'))
         apply_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.15); color: #4ADE80; border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.25); color: #FFFFFF; }')
         apply_btn.clicked.connect(lambda: self._on_apply(pal_name))
         btn_row.addWidget(apply_btn)
         il.addLayout(btn_row)
         self.content_layout.addWidget(inner)
+    def _set_all_checked(self, checked):
+        for cb in self._checkboxes:
+            cb.setChecked(checked)
     def _on_apply(self, pal_name):
         current_raw = self._pal_info._raw if hasattr(self._pal_info, '_raw') and self._pal_info._raw else None
         if not current_raw:
             self.reject()
             return
-        for pal_item in self._affected:
+        selected = []
+        for pi, cb in zip(self._all_candidates, self._checkboxes):
+            if cb.isChecked():
+                selected.append(pi)
+        if not selected:
+            show_warning(self, 'Bulk Sync', t('edit_pals.bulk_sync_no_selection'))
+            return
+        for pal_item in selected:
             target_raw = _get_raw_from_item(pal_item)
             if not target_raw:
                 continue
             for key in _EDITABLE_KEYS:
                 if key in current_raw:
-                    target_raw[key] = current_raw[key]
+                    target_raw[key] = copy.deepcopy(current_raw[key])
                 else:
                     target_raw.pop(key, None)
-            ew = target_raw.get('EquipWaza', {})
-            ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
-            mw = target_raw.get('MasteredWaza', {})
-            mw_list = mw.get('value', {}).get('values', []) if isinstance(mw, dict) else mw if isinstance(mw, list) else []
-            if isinstance(ew_list, list) and isinstance(mw_list, list):
-                cleaned = [s for s in ew_list if s not in mw_list]
-                if len(cleaned) != len(ew_list):
-                    target_raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': cleaned}, 'type': 'ArrayProperty'}
+            if 'EquipWaza' in target_raw:
+                ew = target_raw['EquipWaza']
+                ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
+                if isinstance(ew_list, list):
+                    normalized = []
+                    for v in ew_list:
+                        if v and '::' not in v:
+                            normalized.append(f'EPalWazaID::{v}')
+                        else:
+                            normalized.append(v)
+                    if isinstance(ew, dict):
+                        ew['value']['values'] = normalized
+                    else:
+                        target_raw['EquipWaza'] = normalized
         self.pal_editor.pal_info._refresh()
         self.pal_editor._update_party_slots()
         self.pal_editor._update_palbox_page()
-        show_information(self, 'Bulk Sync', t('edit_pals.bulk_sync_success', count=len(self._affected), name=pal_name))
+        show_information(self, 'Bulk Sync', t('edit_pals.bulk_sync_success', count=len(selected), name=pal_name))
         self.accept()
 class PalEditorWidget(QWidget):
     _process_lock = threading.Lock()
@@ -4483,6 +4620,8 @@ class PalCreateDialog(QDialog):
         pal_passives = {}
         pal_main_values = {}
         pal_overwrite_effects = {}
+        self._npc_assets = set()
+        self._named_npc_assets = set()
         try:
             base_dir = constants.get_base_path()
             cp = os.path.join(base_dir, 'resources', 'game_data', 'characters.json')
@@ -4497,6 +4636,25 @@ class PalCreateDialog(QDialog):
                     ov = p.get('active_skill_overwrite_effect', [])
                     if ov:
                         pal_overwrite_effects[p['asset'].lower()] = ov
+            for p in cd.get('npcs', []):
+                if isinstance(p, dict) and p.get('asset'):
+                    self._npc_assets.add(p['asset'].lower())
+            exports_dir = os.path.join(constants.get_base_path(), '..', '..', 'Exports', 'Pal', 'Content', 'Pal', 'DataTable')
+            unique_npc_path = os.path.join(exports_dir, 'Character', 'DT_UniqueNPC.json')
+            if os.path.exists(unique_npc_path):
+                ud = json_tools.load(unique_npc_path)
+                urows = {}
+                if isinstance(ud, list):
+                    for tbl in ud:
+                        if isinstance(tbl, dict):
+                            urows.update(tbl.get('Rows', {}))
+                elif isinstance(ud, dict):
+                    urows = ud.get('Rows', {})
+                for v in urows.values():
+                    if isinstance(v, dict):
+                        cid = v.get('CharacterID', '')
+                        if cid:
+                            self._named_npc_assets.add(cid.lower())
         except:
             pass
         def on_select(item):
@@ -4533,21 +4691,33 @@ class PalCreateDialog(QDialog):
         self.pal_list.clear()
         for asset, name in sorted(PalFrame._NAMEMAP.items()):
             asset_lower = asset.lower()
-            if any((asset_lower.startswith(p) for p in ('summon_', 'quest_', 'raid_', 'predator_', 'gym_', 'police_'))):
+            if any((asset_lower.startswith(p) for p in ('summon_', 'quest_', 'raid_', 'predator_', 'police_'))):
                 continue
             if 'oilrig' in asset_lower:
                 continue
             if 'tower' in asset_lower:
                 continue
-            if asset_lower.startswith('boss_'):
-                base_id = asset[5:]
-                base_zukan = PalFrame._PAL_ZUKAN.get(base_id.lower(), -1)
-                if base_zukan < 0:
-                    continue
-            else:
-                zukan_index = PalFrame._PAL_ZUKAN.get(asset_lower, 0)
-                if zukan_index < 0:
-                    continue
+            if '_bossrush' in asset_lower:
+                continue
+            if asset_lower.startswith('gym_') and (not asset_lower.endswith('_otomo')):
+                continue
+            otomo_key = asset_lower + '_otomo'
+            if otomo_key in PalFrame._NAMEMAP:
+                continue
+            boss_otomo_key = 'boss_' + asset_lower + '_otomo'
+            if boss_otomo_key in PalFrame._NAMEMAP:
+                continue
+            base_id = asset_lower
+            for prefix in ('boss_', 'gym_'):
+                if base_id.startswith(prefix):
+                    base_id = base_id[len(prefix):]
+            base_id = re.sub('_\\d+$', '', base_id)
+            base_id = re.sub('_avatar|_servant|_otomo', '', base_id)
+            zukan = PalFrame._PAL_ZUKAN.get(base_id, -99)
+            if zukan == -99:
+                pass
+            elif zukan < 0:
+                continue
             if search_text and search_text not in name.lower() and (search_text not in asset.lower()):
                 continue
             li = QListWidgetItem(name)

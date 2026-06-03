@@ -1768,5 +1768,14 @@
   "base_inventory.tab_base_pals": "Base Pals",
   "base_inventory.working_pals_count": "Working Pals: {count}",
   "base_inventory.base_pals_empty": "Select a Guild/Base to view working pals",
-  "base_inventory.page": "Page {page}/{total}"
+  "base_inventory.page": "Page {page}/{total}",
+  "edit_pals.work_skill_level": "Set Work Skill Level",
+  "edit_pals.work_skill_level_msg": "{skill} (0-10, 0=remove):",
+  "edit_pals.set_trust": "Set Trust Level",
+  "edit_pals.set_trust_msg": "Friendship Points (0-200000):",
+  "edit_pals.select_pals_to_sync": "Select pals to sync:",
+  "edit_pals.bulk_sync_preview": "Preview (source pal):",
+  "edit_pals.bulk_sync_no_selection": "No pals selected for syncing.",
+  "edit_pals.set_trust_rank_msg": "Trust Rank (0-10):",
+  "edit_pals.work_skill_books_hint": "Work skill levels are derived from passives and base stats. Use work books to increase them."
 }

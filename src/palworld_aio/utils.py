@@ -214,10 +214,21 @@ def calculate_max_hp(pal_data, level, talent_hp=0, rank_hp=0, is_boss=False, is_
     trust_mult = 1 + friendship_rank * 0.03
     awaken_mult = 1.028 if is_awake else 1
     return math.floor(hp * (1 + condenser_bonus) * (1 + hp_soul_bonus) * trust_mult * awaken_mult) * 1000
+def calculate_shot_attack(pal_data, level, talent_shot=0, rank_attack=0, friendship_rank=0):
+    if not pal_data:
+        return 0
+    stats = pal_data.get('stats', pal_data.get('scaling', {}))
+    shot_scaling = stats.get('shot_attack', 0) if stats else 0
+    condenser_bonus = (1 if rank_attack > 0 else 0) * 0.05
+    attack_iv = talent_shot * 0.3 / 100
+    attack_soul_bonus = rank_attack * 0.03
+    trust_mult = 1 + friendship_rank * pal_data.get('friendship_shotattack', 0) / 100
+    attack = math.floor(shot_scaling * 0.075 * level * (1 + attack_iv))
+    return math.floor(attack * (1 + condenser_bonus) * (1 + attack_soul_bonus) * trust_mult)
 def calculate_attack(pal_data, level, talent_shot=0, rank_attack=0):
     if not pal_data:
         return 0
-    stats = pal_data.get('scaling', None) or pal_data.get('stats', {})
+    stats = pal_data.get('stats', pal_data.get('scaling', {}))
     attack_scaling = stats.get('melee_attack', 0) if stats else 0
     condenser_bonus = (1 if rank_attack > 0 else 0) * 0.05
     attack_iv = talent_shot * 0.3 / 100

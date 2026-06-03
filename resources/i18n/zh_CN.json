@@ -1482,5 +1482,14 @@
   "base_inventory.tab_base_pals": "基地伙伴",
   "base_inventory.working_pals_count": "工作伙伴：{count}",
   "base_inventory.base_pals_empty": "选择公会/基地查看工作伙伴",
-  "base_inventory.page": "第 {页}/{共} 页"
+  "base_inventory.page": "第 {页}/{共} 页",
+  "edit_pals.work_skill_level": "设置工作技能水平",
+  "edit_pals.work_skill_level_msg": "{技能}（0-10，0=删除）：",
+  "edit_pals.set_trust": "设置信任级别",
+  "edit_pals.set_trust_msg": "友情点（0-200000）：",
+  "edit_pals.select_pals_to_sync": "选择要同步的好友：",
+  "edit_pals.bulk_sync_preview": "预览（来源朋友）：",
+  "edit_pals.bulk_sync_no_selection": "没有选择同步好友。",
+  "edit_pals.set_trust_rank_msg": "信任等级（0-10）：",
+  "edit_pals.work_skill_books_hint": "工作技能水平源自被动技能和基础统计数据。使用工作簿来增加它们。"
 }

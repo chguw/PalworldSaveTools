@@ -1478,5 +1478,14 @@
   "base_inventory.tab_base_pals": "Базовые приятели",
   "base_inventory.working_pals_count": "Друзья по работе: {count}",
   "base_inventory.base_pals_empty": "Выберите гильдию/базу, чтобы просмотреть рабочих друзей",
-  "base_inventory.page": "Страница {страница}/{всего}"
+  "base_inventory.page": "Страница {страница}/{всего}",
+  "edit_pals.work_skill_level": "Установить уровень навыков работы",
+  "edit_pals.work_skill_level_msg": "{skill} (0-10, 0=удалить):",
+  "edit_pals.set_trust": "Установить уровень доверия",
+  "edit_pals.set_trust_msg": "Очки дружбы (0-200000):",
+  "edit_pals.select_pals_to_sync": "Выберите друзей для синхронизации:",
+  "edit_pals.bulk_sync_preview": "Предварительный просмотр (источник: приятель):",
+  "edit_pals.bulk_sync_no_selection": "Друзья для синхронизации не выбраны.",
+  "edit_pals.set_trust_rank_msg": "Ранг доверия (0-10):",
+  "edit_pals.work_skill_books_hint": "Уровни рабочих навыков определяются на основе пассивных способностей и базовых характеристик. Используйте трудовые книжки для их увеличения."
 }

@@ -12,8 +12,8 @@ except ImportError:
     from deep_translator import GoogleTranslator
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
-NEW_TRANSLATIONS = {'base_inventory.page': 'Page {page}/{total}'}
-OLD_KEYS = ['inventory.max_all_abilities', 'inventory.max_all_abilities_confirm.title', 'inventory.max_all_abilities_confirm.msg', 'inventory.max_all_abilities_done', 'inventory.max_all_abilities_done.title', 'inventory.max_all_abilities_done.bulk', 'paldefender.filter_type', 'paldefender.instructions', 'paldefender.output', 'paldefender.max_level_label', 'paldefender.inactivity', 'paldefender_opened']
+NEW_TRANSLATIONS = {'base_inventory.page': 'Page {page}/{total}', 'edit_pals.work_skill_level': 'Set Work Skill Level', 'edit_pals.work_skill_level_msg': '{skill} (0-10, 0=remove):', 'edit_pals.work_skill_books_hint': 'Work skill levels are derived from passives and base stats. Use work books to increase them.', 'edit_pals.set_trust': 'Set Trust Level', 'edit_pals.set_trust_rank_msg': 'Trust Rank (0-10):', 'edit_pals.select_pals_to_sync': 'Select pals to sync:', 'edit_pals.bulk_sync_preview': 'Preview (source pal):', 'edit_pals.bulk_sync_no_selection': 'No pals selected for syncing.'}
+OLD_KEYS = []
 def remove_old_keys_from_all():
     for lang_code in list(LANGUAGES.keys()) + ['en_US']:
         lang_file = PROJECT_ROOT / 'resources' / 'i18n' / f'{lang_code}.json'

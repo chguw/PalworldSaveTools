@@ -1479,5 +1479,14 @@
   "base_inventory.tab_base_pals": "기본 친구",
   "base_inventory.working_pals_count": "일하는 친구: {count}",
   "base_inventory.base_pals_empty": "일하는 친구를 보려면 길드/기지를 선택하세요.",
-  "base_inventory.page": "페이지 {페이지}/{전체}"
+  "base_inventory.page": "페이지 {페이지}/{전체}",
+  "edit_pals.work_skill_level": "업무 기술 수준 설정",
+  "edit_pals.work_skill_level_msg": "{skill} (0-10, 0=제거):",
+  "edit_pals.set_trust": "신뢰 수준 설정",
+  "edit_pals.set_trust_msg": "우정 포인트(0-200000):",
+  "edit_pals.select_pals_to_sync": "동기화할 친구 선택:",
+  "edit_pals.bulk_sync_preview": "미리보기(소스 친구):",
+  "edit_pals.bulk_sync_no_selection": "동기화할 친구를 선택하지 않았습니다.",
+  "edit_pals.set_trust_rank_msg": "신뢰 순위(0-10):",
+  "edit_pals.work_skill_books_hint": "작업 스킬 레벨은 패시브 및 기본 통계에서 파생됩니다. 통합 문서를 사용하여 늘리십시오."
 }

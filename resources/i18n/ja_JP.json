@@ -1480,5 +1480,14 @@
   "base_inventory.tab_base_pals": "ベースフレンド",
   "base_inventory.working_pals_count": "働く仲間: {count}",
   "base_inventory.base_pals_empty": "ギルド/拠点を選択して協力仲間を表示します",
-  "base_inventory.page": "ページ {ページ}/{合計}"
+  "base_inventory.page": "ページ {ページ}/{合計}",
+  "edit_pals.work_skill_level": "作業スキルレベルの設定",
+  "edit_pals.work_skill_level_msg": "{スキル} (0-10、0=削除):",
+  "edit_pals.set_trust": "信頼レベルの設定",
+  "edit_pals.set_trust_msg": "フレンドシップポイント (0-200000):",
+  "edit_pals.select_pals_to_sync": "同期する友達を選択してください:",
+  "edit_pals.bulk_sync_preview": "プレビュー (ソース pal):",
+  "edit_pals.bulk_sync_no_selection": "同期する友達が選択されていません。",
+  "edit_pals.set_trust_rank_msg": "信頼ランク (0-10):",
+  "edit_pals.work_skill_books_hint": "作業スキル レベルは、パッシブと基本ステータスから派生します。ワークブックを使用して増やしてください。"
 }

@@ -1305,7 +1305,6 @@ class BasePalsContentWidget(QFrame):
         elif action == 'bulk_sync_pal':
             from palworld_aio.edit_pals import _get_raw_from_item, BulkSyncPalDialog
             stub = type('Stub', (), {'party_pals': {}, 'palbox_pal_dict': {}, 'pal_info': type('Stub', (), {'_refresh': lambda self: None})(), '_update_party_slots': lambda self: None, '_update_palbox_page': lambda self: None})()
-            dlg = BulkSyncPalDialog(pal['character_entry'], stub, self)
             cid = extract_value(raw, 'CharacterID', '')
             base_id = cid.lower().replace('boss_', '')
             affected = []
@@ -1313,7 +1312,7 @@ class BasePalsContentWidget(QFrame):
                 pr = _get_raw_from_item(p['character_entry'])
                 if pr and pr is not raw and (extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id):
                     affected.append(p['character_entry'])
-            dlg._affected = affected
+            dlg = BulkSyncPalDialog(pal['character_entry'], stub, self, candidates=affected)
             display_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
             for child in dlg.findChildren(QLabel):
                 text = child.text()

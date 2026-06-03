@@ -1462,5 +1462,14 @@
   "base_inventory.tab_base_pals": "Copains de base",
   "base_inventory.working_pals_count": "Copains de travail : {count}",
   "base_inventory.base_pals_empty": "Sélectionnez une guilde/base pour voir les amis qui travaillent",
-  "base_inventory.page": "Page {page}/{total}"
+  "base_inventory.page": "Page {page}/{total}",
+  "edit_pals.work_skill_level": "Définir le niveau de compétence professionnelle",
+  "edit_pals.work_skill_level_msg": "{compétence} (0-10, 0=supprimer) :",
+  "edit_pals.set_trust": "Définir le niveau de confiance",
+  "edit_pals.set_trust_msg": "Points d'amitié (0-200 000) :",
+  "edit_pals.select_pals_to_sync": "Sélectionnez les amis à synchroniser :",
+  "edit_pals.bulk_sync_preview": "Aperçu (copain source) :",
+  "edit_pals.bulk_sync_no_selection": "Aucun ami sélectionné pour la synchronisation.",
+  "edit_pals.set_trust_rank_msg": "Niveau de confiance (0-10) :",
+  "edit_pals.work_skill_books_hint": "Les niveaux de compétences professionnelles sont dérivés des passifs et des statistiques de base. Utilisez des cahiers de travail pour les augmenter."
 }

@@ -1504,5 +1504,14 @@
   "base_inventory.tab_base_pals": "Basisfreunde",
   "base_inventory.working_pals_count": "Arbeitsfreunde: {count}",
   "base_inventory.base_pals_empty": "Wählen Sie eine Gilde/Basis aus, um Arbeitsfreunde anzuzeigen",
-  "base_inventory.page": "Seite {page}/{total}"
+  "base_inventory.page": "Seite {page}/{total}",
+  "edit_pals.work_skill_level": "Legen Sie das Arbeitsfähigkeitsniveau fest",
+  "edit_pals.work_skill_level_msg": "{Fähigkeit} (0-10, 0=entfernen):",
+  "edit_pals.set_trust": "Legen Sie die Vertrauensstufe fest",
+  "edit_pals.set_trust_msg": "Freundschaftspunkte (0-200000):",
+  "edit_pals.select_pals_to_sync": "Wählen Sie die zu synchronisierenden Freunde aus:",
+  "edit_pals.bulk_sync_preview": "Vorschau (Quelle: Kumpel):",
+  "edit_pals.bulk_sync_no_selection": "Keine Freunde für die Synchronisierung ausgewählt.",
+  "edit_pals.set_trust_rank_msg": "Vertrauensrang (0-10):",
+  "edit_pals.work_skill_books_hint": "Die Arbeitsfähigkeitsstufen werden aus Passiven und Basiswerten abgeleitet. Verwenden Sie Arbeitsbücher, um sie zu steigern."
 }
