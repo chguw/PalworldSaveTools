@@ -1603,6 +1603,7 @@ def _max_stats_raw(raw):
     raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
     raw['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
     raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
+    raw['Level'] = {'id': None, 'type': 'IntProperty', 'value': {'id': None, 'value': 80}}
 def build_pal_context_menu(parent, raw):
     from PySide6.QtWidgets import QMenu
     menu = QMenu(parent)
