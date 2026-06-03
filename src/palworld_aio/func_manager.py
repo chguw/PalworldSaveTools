@@ -739,7 +739,7 @@ def delete_all_skins(parent=None):
                 except:
                     pass
                 return 0
-            with ThreadPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+            with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
                 results = list(executor.map(process_player_file, player_files))
                 fixed_player_files = sum(results)
     return removed_level_skins + fixed_player_files
@@ -872,7 +872,7 @@ def remove_invalid_items_from_save(parent=None):
             except Exception as e:
                 pass
             return 0
-        with ThreadPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+        with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
             results = list(executor.map(process_player_file, player_files))
             fixed_files = sum(results)
     remove_invalid_items_from_level(parent)
@@ -961,7 +961,7 @@ def fix_missions(parent=None):
                 return (1, 0, 0)
         except Exception as e:
             return (1, 0, 1)
-    with ThreadPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+    with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
         results = list(executor.map(process_player_file, player_files))
     total = sum((r[0] for r in results))
     fixed = sum((r[1] for r in results))
@@ -1313,7 +1313,7 @@ def remove_invalid_passives_from_save(parent=None):
                 except:
                     pass
                 return local_removed
-            with ThreadPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+            with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
                 results = list(executor.map(process_player_file, player_files))
                 removed_count += sum(results)
     return removed_count
@@ -1900,7 +1900,7 @@ def fix_illegal_pals_in_save(parent=None):
                         pass
                     return None
                 from concurrent.futures import ThreadPoolExecutor
-                with ThreadPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+                with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
                     results = executor.map(load_player_file, player_files)
                     for result in results:
                         if result:
@@ -2028,7 +2028,7 @@ def fix_illegal_pals_in_save(parent=None):
             if dps_files:
                 print(f'Processing {len(dps_files)} DPS files using {os.cpu_count()} CPU cores...')
                 args_list = [(f, players_dir, PAL_EXP_TABLE, NAMEMAP) for f in dps_files]
-                with ProcessPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+                with ProcessPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
                     futures = {executor.submit(_process_dps_file_worker, args): args[0] for args in args_list}
                     for future in as_completed(futures):
                         filename = futures[future]

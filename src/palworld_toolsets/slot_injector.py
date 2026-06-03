@@ -44,7 +44,7 @@ def load_player_container_mapping(players_folder, valid_player_uids):
         except:
             pass
         return None
-    with ThreadPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+    with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
         results = executor.map(load_player_file, player_files)
         for result in results:
             if result:

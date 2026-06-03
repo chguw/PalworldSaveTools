@@ -252,7 +252,7 @@ class SaveManager(QObject):
                     except:
                         pass
                     return None
-                with ThreadPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+                with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
                     results = executor.map(load_player_file, player_files)
                     for result in results:
                         if result:
@@ -540,7 +540,7 @@ class SaveManager(QObject):
                 illegal_pals_by_owner = defaultdict(lambda: defaultdict(list))
             else:
                 illegal_pals_by_owner = defaultdict(lambda: defaultdict(list), illegal_pals_by_owner)
-            with ProcessPoolExecutor(max_workers=min(32, (os.cpu_count() or 1) + 4) as executor:
+            with ProcessPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
                 futures = {executor.submit(_process_dps_scan_worker, task): task for task in self.dps_tasks}
                 for future in as_completed(futures):
                     try:
