@@ -1309,6 +1309,9 @@ class BasePalsContentWidget(QFrame):
                 for icon in self._icons:
                     icon.update_display()
         elif action == 'delete':
+            reply = show_question(self, t('edit_pals.confirm_delete'), 'Delete this pal?')
+            if not reply:
+                return
             import gc
             pal['character_entry']['value']['RawData']['value']['object']['SaveParameter']['value']['IsPlayer'] = {'id': None, 'type': 'BoolProperty', 'value': True}
             pal['character_entry']['value']['RawData']['value']['object']['SaveParameter']['value']['CharacterID']['value'] = 'None'
