@@ -1245,12 +1245,21 @@ class BasePalsContentWidget(QFrame):
                 self._pals.append(new_pal)
             self._rebuild()
             self._trigger_save()
+            self._refresh_dashboard()
 
     def _trigger_save(self):
         parent = self.parent()
         while parent:
             if hasattr(parent, '_trigger_auto_save'):
                 parent._trigger_auto_save()
+                break
+            parent = parent.parent()
+
+    def _refresh_dashboard(self):
+        parent = self.parent()
+        while parent:
+            if hasattr(parent, 'tools_tab'):
+                parent.tools_tab.refresh()
                 break
             parent = parent.parent()
 
@@ -1338,6 +1347,7 @@ class BasePalsContentWidget(QFrame):
             self.pal_info.last_clicked_data = None
             self.pal_info._hovered_data = None
             self.pal_info._clear_display()
+            self._refresh_dashboard()
             return
         item = self.grid.itemAt(idx)
         if item and item.widget():
