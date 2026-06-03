@@ -1,6 +1,6 @@
 import os
 from palworld_save_tools import json_tools
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QTabWidget, QDialog, QPushButton, QSizePolicy, QHeaderView
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QStackedWidget, QDialog, QPushButton, QSizePolicy, QHeaderView
 from PySide6.QtCore import Qt, QRectF, QPointF, QPoint, QSize, QTimer, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QPixmap, QPen, QBrush, QColor, QPainter, QFont, QIcon
 from i18n import t
@@ -89,9 +89,10 @@ class MapTab(QWidget):
             self.base_tree.setHeaderLabels([t('map.header.guild') if t else 'Guild', t('map.header.leader') if t else 'Leader', t('map.header.lastseen') if t else 'Last Seen', t('map.header.bases') if t else 'Bases'])
         if hasattr(self, 'player_tree'):
             self.player_tree.setHeaderLabels([t('map.header.player') if t else 'Player', t('map.info.level') if t else 'Level', t('map.header.lastseen') if t else 'Last Seen', t('player.pals') if t else 'Pals'])
-        if hasattr(self, 'sidebar_tabs'):
-            self.sidebar_tabs.setTabText(0, t('map.toggle.bases') if t else 'Bases')
-            self.sidebar_tabs.setTabText(1, t('map.toggle.players') if t else 'Players')
+        if hasattr(self, 'bases_tab_btn'):
+            self.bases_tab_btn.setText(t('map.toggle.bases') if t else 'Bases')
+        if hasattr(self, 'players_tab_btn'):
+            self.players_tab_btn.setText(t('map.toggle.players') if t else 'Players')
         if hasattr(self, 'info_label'):
             self.info_label.setText(t('map.info.select_base') if t else 'Click on a base marker or list item to view details')
         if hasattr(self, 'view'):
@@ -273,15 +274,29 @@ class MapTab(QWidget):
         sidebar_layout = QVBoxLayout(self._sidebar_widget)
         sidebar_layout.setContentsMargins(0, 0, 0, 0)
         sidebar_layout.setSpacing(0)
+        search_tab_layout = QHBoxLayout()
+        search_tab_layout.setContentsMargins(0, 0, 0, 0)
+        search_tab_layout.setSpacing(4)
         self.search_input = QLineEdit()
         self.search_input.setObjectName('searchInput')
         self.search_input.setPlaceholderText(t('map.search.placeholder') if t else 'Search guilds,leaders,bases...')
         self.search_input.textChanged.connect(self._on_search_changed)
-        sidebar_layout.addWidget(self.search_input)
-        self.sidebar_tabs = QTabWidget()
-        self.sidebar_tabs.setObjectName('mapSidebarTabs')
-        self.sidebar_tabs.tabBar().setDocumentMode(True)
-        self.sidebar_tabs.tabBar().setExpanding(True)
+        search_tab_layout.addWidget(self.search_input, 1)
+        self.bases_tab_btn = QPushButton(t('map.toggle.bases') if t else 'Bases')
+        self.bases_tab_btn.setFixedHeight(28)
+        self.bases_tab_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.2); color: #fff; border: 1px solid rgba(125,211,252,0.4); border-radius: 6px; padding: 4px 12px; font-weight: 700; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.25); }')
+        self.bases_tab_btn.setCursor(Qt.PointingHandCursor)
+        self.bases_tab_btn.clicked.connect(lambda: self._switch_map_tab(0))
+        search_tab_layout.addWidget(self.bases_tab_btn)
+        self.players_tab_btn = QPushButton(t('map.toggle.players') if t else 'Players')
+        self.players_tab_btn.setFixedHeight(28)
+        self.players_tab_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; padding: 4px 12px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.2); border-color: rgba(125,211,252,0.4); color: #FFFFFF; }')
+        self.players_tab_btn.setCursor(Qt.PointingHandCursor)
+        self.players_tab_btn.clicked.connect(lambda: self._switch_map_tab(1))
+        search_tab_layout.addWidget(self.players_tab_btn)
+        sidebar_layout.addLayout(search_tab_layout)
+        self.map_tab_stack = QStackedWidget()
+        self.map_tab_stack.setStyleSheet('QStackedWidget { border: none; background: transparent; }')
         self.base_tree = QTreeWidget()
         self.base_tree.setObjectName('baseTree')
         self.base_tree.setHeaderLabels([t('map.header.guild') if t else 'Guild', t('map.header.leader') if t else 'Leader', t('map.header.lastseen') if t else 'Last Seen', t('map.header.bases') if t else 'Bases'])
@@ -313,11 +328,9 @@ class MapTab(QWidget):
         self.player_tree.header().setSectionResizeMode(QHeaderView.Stretch)
         self.player_tree.header().setDefaultAlignment(Qt.AlignCenter)
         self.player_tree.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.sidebar_tabs.addTab(self.base_tree, t('map.toggle.bases') if t else 'Bases')
-        self.sidebar_tabs.addTab(self.player_tree, t('map.toggle.players') if t else 'Players')
-        self.sidebar_tabs.currentChanged.connect(self._on_tab_changed)
-        QTimer.singleShot(50, self._update_tab_widths)
-        sidebar_layout.addWidget(self.sidebar_tabs)
+        self.map_tab_stack.addWidget(self.base_tree)
+        self.map_tab_stack.addWidget(self.player_tree)
+        sidebar_layout.addWidget(self.map_tab_stack)
         self.info_label = QLabel(t('map.info.select_base') if t else 'Click on a base marker or list item to view details')
         self.info_label.setWordWrap(True)
         self.info_label.setObjectName('sectionHeader')
@@ -388,10 +401,7 @@ class MapTab(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self._reposition_map_overlay()
-        self._update_tab_widths()
         QTimer.singleShot(100, self._fit_map_to_viewport)
-    def _update_tab_widths(self):
-        pass
     def _setup_animation(self):
         self.anim_timer = QTimer(self)
         self.anim_timer.timeout.connect(self._update_animations)
@@ -770,7 +780,12 @@ class MapTab(QWidget):
                 else:
                     ix, iy = self._to_image_coordinates(player['coords'][0], player['coords'][1], self.map_width, self.map_height, coord_range)
                 player['img_coords'] = (ix, iy)
-    def _on_tab_changed(self, index):
+    def _switch_map_tab(self, index):
+        self.map_tab_stack.setCurrentIndex(index)
+        bases_active = index == 0
+        players_active = index == 1
+        self.bases_tab_btn.setStyleSheet(f'QPushButton {{ background: rgba(125,211,252,{"0.2" if bases_active else "0.12"}); color: {"#fff" if bases_active else "#7DD3FC"}; border: 1px solid rgba(125,211,252,{"0.4" if bases_active else "0.2"}); border-radius: 6px; padding: 4px 12px; font-weight: {"700" if bases_active else "600"}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}')
+        self.players_tab_btn.setStyleSheet(f'QPushButton {{ background: rgba(125,211,252,{"0.2" if players_active else "0.12"}); color: {"#fff" if players_active else "#7DD3FC"}; border: 1px solid rgba(125,211,252,{"0.4" if players_active else "0.2"}); border-radius: 6px; padding: 4px 12px; font-weight: {"700" if players_active else "600"}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}')
         if index == 0:
             self.info_label.setText(t('map.info.select_base') if t else 'Click on a base marker or list item to view details')
         else:
@@ -1290,7 +1305,7 @@ class MapTab(QWidget):
             if save_radius is not None:
                 self.current_radius_ring.update_radius(save_radius)
     def _on_tree_context_menu(self, pos):
-        current_tab = self.sidebar_tabs.currentIndex()
+        current_tab = self.map_tab_stack.currentIndex()
         if current_tab == 0:
             tree = self.base_tree
         else:
