@@ -1763,5 +1763,10 @@
   "paldefender.level_label": "Level",
   "paldefender.col_guild_uid": "Guild UID",
   "paldefender.col_player_uid": "Player UID",
-  "paldefender.col_pals": "Pals"
+  "paldefender.col_pals": "Pals",
+  "base_inventory.tab_inventory": "Inventory",
+  "base_inventory.tab_base_pals": "Base Pals",
+  "base_inventory.working_pals_count": "Working Pals: {count}",
+  "base_inventory.base_pals_empty": "Select a Guild/Base to view working pals",
+  "base_inventory.page": "Page {page}/{total}"
 }

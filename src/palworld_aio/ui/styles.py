@@ -83,6 +83,42 @@ PICKER_SEARCH_STYLE = 'QLineEdit { background: rgba(255,255,255,0.06); color: #e
 PICKER_LIST_STYLE = 'QListWidget { background: transparent; color: #e2e8f0; border: none; font-size: 12px; } QListWidget::item { padding: 3px 8px; border-radius: 3px; } QListWidget::item:hover { background: rgba(59,142,208,0.2); } QListWidget::item:selected { background: rgba(59,142,208,0.35); }'
 INPUT_DIALOG_STYLE = 'QInputDialog{background:rgba(18,20,24,0.98);color:#e2e8f0}QLabel{color:#e2e8f0}QLineEdit{background:rgba(255,255,255,0.06);color:#e2e8f0;border:1px solid rgba(125,211,252,0.2);border-radius:4px;padding:4px 8px}QSpinBox{background:rgba(255,255,255,0.06);color:#e2e8f0;border:1px solid rgba(125,211,252,0.2);border-radius:4px;padding:4px}QPushButton{background:rgba(125,211,252,0.12);color:#7DD3FC;border:1px solid rgba(125,211,252,0.2);border-radius:4px;padding:4px 12px}QPushButton:hover{background:rgba(125,211,252,0.2)}'
 TOOLTIP_STYLE = '\nQToolTip { background: rgba(18,20,24,0.98); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.25); border-radius: 6px; padding: 6px 10px; font-size: 11px; }'
+# --- Shared panel/slot styles ---
+# Content panel (outer container for inventory/pal/base panels)
+CONTENT_PANEL_STYLE = (
+    'background: rgba(18,20,24,0.65);'
+    ' border: 1px solid rgba(125,211,252,0.15);'
+    ' border-radius: 10px;'
+)
+# Slot: empty/default (item slots, pal icon slots, equipment slots)
+SLOT_EMPTY_STYLE = (
+    'background: rgba(255,255,255,0.03);'
+    ' border: 1px solid rgba(255,255,255,0.08);'
+    ' border-radius: 8px;'
+)
+SLOT_HOVER_STYLE = (
+    'background: rgba(125,211,252,0.06);'
+    ' border: 1px solid rgba(125,211,252,0.2);'
+)
+SLOT_SELECTED_STYLE = (
+    'background: rgba(125,211,252,0.1);'
+    ' border: 2px solid #7DD3FC;'
+    ' border-radius: 8px;'
+)
+def slot_default(slot_class: str = '') -> str:
+    sel = f'{slot_class} {{ {SLOT_EMPTY_STYLE} }}' if slot_class else SLOT_EMPTY_STYLE
+    return sel
+def slot_full(slot_class: str = '') -> str:
+    s = slot_class or ''
+    return (f'{s} {{ {SLOT_EMPTY_STYLE} }}'
+            f' {s}:hover {{ {SLOT_HOVER_STYLE} }}')
+def slot_rarity(slot_class: str, color: str) -> str:
+    return (f'{slot_class} {{ {SLOT_EMPTY_STYLE} border: 2px solid {color}; }}'
+            f' {slot_class}:hover {{ {SLOT_HOVER_STYLE} border: 2px solid {color}; }}')
+def slot_selected(slot_class: str = '') -> str:
+    s = slot_class or ''
+    return f'{s} {{ {SLOT_SELECTED_STYLE} }}'
+
 def wrap_tooltip_text(text: str, width: int=80) -> str:
     if not text:
         return text

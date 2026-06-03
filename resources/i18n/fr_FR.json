@@ -1457,5 +1457,10 @@
   "paldefender.both": "Les deux",
   "paldefender.col_guild_uid": "UID de guilde",
   "paldefender.col_player_uid": "UID du joueur",
-  "paldefender.col_pals": "Copains"
+  "paldefender.col_pals": "Copains",
+  "base_inventory.tab_inventory": "Inventaire",
+  "base_inventory.tab_base_pals": "Copains de base",
+  "base_inventory.working_pals_count": "Copains de travail : {count}",
+  "base_inventory.base_pals_empty": "Sélectionnez une guilde/base pour voir les amis qui travaillent",
+  "base_inventory.page": "Page {page}/{total}"
 }

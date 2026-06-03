@@ -1474,5 +1474,10 @@
   "paldefender.both": "둘 다",
   "paldefender.col_guild_uid": "길드 UID",
   "paldefender.col_player_uid": "플레이어 UID",
-  "paldefender.col_pals": "친구들"
+  "paldefender.col_pals": "친구들",
+  "base_inventory.tab_inventory": "목록",
+  "base_inventory.tab_base_pals": "기본 친구",
+  "base_inventory.working_pals_count": "일하는 친구: {count}",
+  "base_inventory.base_pals_empty": "일하는 친구를 보려면 길드/기지를 선택하세요.",
+  "base_inventory.page": "페이지 {페이지}/{전체}"
 }

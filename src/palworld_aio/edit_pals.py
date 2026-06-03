@@ -15,10 +15,10 @@ import nerdfont as nf
 from palworld_aio import constants
 from palworld_aio.utils import sav_to_json, sav_to_gvasfile, gvasfile_to_sav, extract_value, format_character_key, json_to_sav, calculate_max_hp, get_pal_data, safe_dict_get, safe_nested_get, resolve_name
 from palworld_aio import data_manager as dm
-from palworld_aio.ui.styles import DIALOG_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, INPUT_DIALOG_STYLE, TOOLTIP_STYLE, wrap_tooltip_text
+from palworld_aio.ui.styles import DIALOG_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, INPUT_DIALOG_STYLE, TOOLTIP_STYLE, wrap_tooltip_text, CONTENT_PANEL_STYLE, slot_full, slot_selected
 from palworld_aio.ui.sidebar_widget import NerdBtn
 from palworld_aio.container_ownership import ContainerOwnership
-_PAL_STYLESHEET = '\nQWidget#palRoot {\n    background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,\n        stop:0 rgba(8,10,16,0.98),stop:0.5 rgba(6,12,20,0.98),stop:1 rgba(4,8,16,0.98));\n}\nQWidget#partyPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#partyPanel QLabel {\n    color: #C8D8E8;\n}\nQWidget#palboxPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#palInfoPanel {\n    background: rgba(12,16,24,0.85);\n    border: 1px solid rgba(125,211,252,0.15);\n    border-radius: 8px;\n}\nQWidget#palInfoPanel QLabel {\n    color: #C8D8E8;\n}\nQLabel#boxHeader {\n    font-size: 18px;\n    font-weight: 700;\n    color: #7DD3FC;\n    padding: 4px 8px;\n    background: rgba(125,211,252,0.06);\n    border-radius: 4px;\n    min-width: 80px;\n    qproperty-alignment: AlignCenter;\n}\nQPushButton#navBtn {\n    background: rgba(125,211,252,0.08);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 14px;\n    font-size: 14px;\n    font-weight: 600;\n    min-width: 32px;\n}\nQPushButton#navBtn:hover {\n    background: rgba(125,211,252,0.18);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}\nQPushButton#navBtn:pressed {\n    background: rgba(125,211,252,0.1);\n}\n'
+_PAL_STYLESHEET = f'\nQWidget#palRoot {{\n    background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,\n        stop:0 rgba(8,10,16,0.98),stop:0.5 rgba(6,12,20,0.98),stop:1 rgba(4,8,16,0.98));\n}}\nQWidget#partyPanel {{\n    {CONTENT_PANEL_STYLE}\n}}\nQWidget#partyPanel QLabel {{\n    color: #C8D8E8;\n}}\nQWidget#palboxPanel {{\n    {CONTENT_PANEL_STYLE}\n}}\nQWidget#palInfoPanel {{\n    {CONTENT_PANEL_STYLE}\n}}\nQWidget#palInfoPanel QLabel {{\n    color: #C8D8E8;\n}}\nQLabel#boxHeader {{\n    font-size: 18px;\n    font-weight: 700;\n    color: #7DD3FC;\n    padding: 4px 8px;\n    background: rgba(125,211,252,0.06);\n    border-radius: 4px;\n    min-width: 80px;\n    qproperty-alignment: AlignCenter;\n}}\nQPushButton#navBtn {{\n    background: rgba(125,211,252,0.08);\n    color: #7DD3FC;\n    border: 1px solid rgba(125,211,252,0.2);\n    border-radius: 6px;\n    padding: 6px 14px;\n    font-size: 14px;\n    font-weight: 600;\n    min-width: 32px;\n}}\nQPushButton#navBtn:hover {{\n    background: rgba(125,211,252,0.18);\n    border-color: rgba(125,211,252,0.4);\n    color: #FFFFFF;\n}}\nQPushButton#navBtn:pressed {{\n    background: rgba(125,211,252,0.1);\n}}\n'
 def _load_pal_exp_table():
     try:
         base_dir = constants.get_base_path()
@@ -334,7 +334,7 @@ class PalIcon(QFrame):
         self.bg = bg
         raw = self._get_raw_data()
         if not raw or not isinstance(raw, dict):
-            self.setStyleSheet('QFrame#palIconNew { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; }')
+            self.setStyleSheet(slot_full('QFrame#palIconNew'))
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
@@ -469,9 +469,9 @@ class PalIcon(QFrame):
     def set_selected(self, selected):
         self.selected = selected
         if selected:
-            self.setStyleSheet('QFrame#palIconNew { background: rgba(125,211,252,0.12); border: 2px solid #7DD3FC; border-radius: 6px; }')
+            self.setStyleSheet(slot_selected('QFrame#palIconNew'))
         else:
-            self.setStyleSheet('QFrame#palIconNew { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; } QFrame#palIconNew:hover { background: rgba(125,211,252,0.08); border: 1px solid rgba(125,211,252,0.25); }')
+            self.setStyleSheet(slot_full('QFrame#palIconNew'))
     def update_display(self):
         self._setup_ui()
     def hide_badges(self):
@@ -519,7 +519,7 @@ class PalCardWidget(QFrame):
         raw = self._get_raw_data()
         self.setFixedHeight(72)
         if not raw or not isinstance(raw, dict):
-            self.setStyleSheet('QFrame#palCardNew { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; }')
+            self.setStyleSheet(slot_full('QFrame#palCardNew'))
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
@@ -596,13 +596,13 @@ class PalCardWidget(QFrame):
         lock_btn.setStyleSheet('QPushButton { background: transparent; border: none; font-size: 14px; color: rgba(255,255,255,0.3); } QPushButton:hover { color: #FFFFFF; }')
         lock_btn.setCheckable(True)
         layout.addWidget(lock_btn)
-        self.setStyleSheet('QFrame#palCardNew { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; } QFrame#palCardNew:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+        self.setStyleSheet(slot_full('QFrame#palCardNew'))
     def set_selected(self, selected):
         self.selected = selected
         if selected:
-            self.setStyleSheet('QFrame#palCardNew { background: rgba(125,211,252,0.1); border: 2px solid #7DD3FC; border-radius: 8px; }')
+            self.setStyleSheet(slot_selected('QFrame#palCardNew'))
         else:
-            self.setStyleSheet('QFrame#palCardNew { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; } QFrame#palCardNew:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+            self.setStyleSheet(slot_full('QFrame#palCardNew'))
 class PartySlotWidget(QFrame):
     clicked = Signal()
     rightClicked = Signal(int, str)
@@ -705,7 +705,7 @@ class PartySlotWidget(QFrame):
             child.deleteLater()
         raw = self._get_raw()
         if not raw or not isinstance(raw, dict):
-            self.setStyleSheet('QFrame#partySlot { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; }')
+            self.setStyleSheet(slot_full('QFrame#partySlot'))
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
@@ -905,13 +905,13 @@ class PartySlotWidget(QFrame):
                     el_icon.show()
                     self._el_badges.append(el_icon)
                     el_x += 14
-        self.setStyleSheet('QFrame#partySlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; } QFrame#partySlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+        self.setStyleSheet(slot_full('QFrame#partySlot'))
     def set_selected(self, selected):
         self.selected = selected
         if selected:
-            self.setStyleSheet('QFrame#partySlot { background: rgba(125,211,252,0.1); border: 2px solid #7DD3FC; border-radius: 8px; }')
+            self.setStyleSheet(slot_selected('QFrame#partySlot'))
         else:
-            self.setStyleSheet('QFrame#partySlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; } QFrame#partySlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+            self.setStyleSheet(slot_full('QFrame#partySlot'))
     def update_display(self):
         self._build()
 class PalboxSlotWidget(QFrame):
@@ -1151,14 +1151,14 @@ class PalboxSlotWidget(QFrame):
                 _ht = _partner_desc_to_html(_res, PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}, tooltip=True)
                 tip += f'<br><br>{_ht}'
         self.setToolTip(tip)
-        self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; } QFrame#palboxSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+        self.setStyleSheet(slot_full('QFrame#palboxSlot'))
         self.resizeEvent(None)
     def set_selected(self, selected):
         self.selected = selected
         if selected:
-            self.setStyleSheet('QFrame#palboxSlot { background: rgba(125,211,252,0.1); border: 2px solid #7DD3FC; border-radius: 6px; }')
+            self.setStyleSheet(slot_selected('QFrame#palboxSlot'))
         else:
-            self.setStyleSheet('QFrame#palboxSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; } QFrame#palboxSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+            self.setStyleSheet(slot_full('QFrame#palboxSlot'))
     def update_display(self):
         self._build()
 class _ShinyStar(QWidget):

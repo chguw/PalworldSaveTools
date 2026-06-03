@@ -1499,5 +1499,10 @@
   "paldefender.both": "Beide",
   "paldefender.col_guild_uid": "Gilden-UID",
   "paldefender.col_player_uid": "Spieler-UID",
-  "paldefender.col_pals": "Freunde"
+  "paldefender.col_pals": "Freunde",
+  "base_inventory.tab_inventory": "Inventar",
+  "base_inventory.tab_base_pals": "Basisfreunde",
+  "base_inventory.working_pals_count": "Arbeitsfreunde: {count}",
+  "base_inventory.base_pals_empty": "Wählen Sie eine Gilde/Basis aus, um Arbeitsfreunde anzuzeigen",
+  "base_inventory.page": "Seite {page}/{total}"
 }

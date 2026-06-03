@@ -4,7 +4,7 @@ from PySide6.QtGui import QFont, QCursor
 from i18n import t
 from palworld_aio.edit_pals import PalEditorWidget
 from palworld_aio import constants
-from palworld_aio.ui.styles import PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
+from palworld_aio.ui.styles import PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, CONTENT_PANEL_STYLE
 class PalEditorTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -18,9 +18,12 @@ class PalEditorTab(QWidget):
         main_layout.setContentsMargins(10, 10, 10, 10)
         main_layout.setSpacing(10)
         header = QHBoxLayout()
+        header.setContentsMargins(0, 0, 0, 0)
         self.title_label = QLabel(t('pal_editor.title'))
         self.title_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
         self.title_label.setObjectName('sectionHeader')
+        self.title_label.setStyleSheet('QLabel#sectionHeader { margin-left: 0px; padding-left: 10px; }')
+        self.title_label.setAlignment(Qt.AlignCenter)
         header.addWidget(self.title_label)
         header.addStretch()
         self.player_select_btn = QPushButton(t('inventory.select_player', default='Select Player...'))
@@ -37,16 +40,16 @@ class PalEditorTab(QWidget):
         frame = QFrame()
         frame.setObjectName('palEditorContent')
         frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        frame.setStyleSheet('QFrame#palEditorContent { background: rgba(18,20,24,0.65); border: 1px solid rgba(125,211,252,0.15); border-radius: 10px; }')
+        frame.setStyleSheet(f'QFrame#palEditorContent {{ {CONTENT_PANEL_STYLE} }}')
         layout = QVBoxLayout(frame)
-        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(0)
         self.placeholder_label = QLabel(t('pal_editor.select_player_hint', default='Select a player to edit their pals'))
         self.placeholder_label.setAlignment(Qt.AlignCenter)
         self.placeholder_label.setMinimumHeight(400)
         self.placeholder_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.placeholder_label.setStyleSheet('QLabel { color: #A6B8C8; font-size: 14px; background: transparent; }')
-        layout.addWidget(self.placeholder_label)
+        self.placeholder_label.setStyleSheet('QLabel { color: #888; font-size: 14px; background: transparent; }')
+        layout.addWidget(self.placeholder_label, 1)
         self.pal_editor_widget = PalEditorWidget()
         self.pal_editor_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.pal_editor_widget.hide()

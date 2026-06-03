@@ -1475,5 +1475,10 @@
   "paldefender.both": "両方",
   "paldefender.col_guild_uid": "ギルドUID",
   "paldefender.col_player_uid": "プレーヤーUID",
-  "paldefender.col_pals": "仲間"
+  "paldefender.col_pals": "仲間",
+  "base_inventory.tab_inventory": "在庫",
+  "base_inventory.tab_base_pals": "ベースフレンド",
+  "base_inventory.working_pals_count": "働く仲間: {count}",
+  "base_inventory.base_pals_empty": "ギルド/拠点を選択して協力仲間を表示します",
+  "base_inventory.page": "ページ {ページ}/{合計}"
 }

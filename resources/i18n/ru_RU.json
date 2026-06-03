@@ -1446,7 +1446,7 @@
   "Fog cleared successfully!": "Туман успешно рассеялся!",
   "inventory.add_all_effigies": "Добавить все чучела",
   "inventory.add_all_effigies_confirm.title": "Добавить все чучела",
-  "inventory.add_all_effigies_confirm.msg": "Добавить все типы изображений ({count}) в ключевые элементы?",
+  "inventory.add_all_effigies_confirm.msg": "Добавить все типы чучел ({count}) в ключевые элементы?",
   "inventory.add_all_effigies_done": "Добавлены изображения к ключевым предметам.",
   "player_item.no_effigies_found": "Фигурок не обнаружено.",
   "inventory.add_all_effigies_qty.title": "Добавить все чучела",
@@ -1473,5 +1473,10 @@
   "paldefender.both": "Оба",
   "paldefender.col_guild_uid": "UID гильдии",
   "paldefender.col_player_uid": "UID игрока",
-  "paldefender.col_pals": "приятели"
+  "paldefender.col_pals": "приятели",
+  "base_inventory.tab_inventory": "Инвентарь",
+  "base_inventory.tab_base_pals": "Базовые приятели",
+  "base_inventory.working_pals_count": "Друзья по работе: {count}",
+  "base_inventory.base_pals_empty": "Выберите гильдию/базу, чтобы просмотреть рабочих друзей",
+  "base_inventory.page": "Страница {страница}/{всего}"
 }

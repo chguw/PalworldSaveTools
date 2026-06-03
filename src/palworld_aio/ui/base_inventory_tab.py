@@ -20,7 +20,7 @@ from palworld_aio.ui.styled_combo import StyledCombo
 from palworld_aio.utils import format_duration_short
 from i18n import t
 from palworld_aio.inventory_manager import ItemData
-from palworld_aio.ui.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE, PICKER_SEARCH_STYLE, wrap_tooltip_text
+from palworld_aio.ui.styles import MENU_STYLE, DIALOG_STYLE as _DIALOG_STYLE, PICKER_SEARCH_STYLE, wrap_tooltip_text, CONTENT_PANEL_STYLE, slot_full, slot_selected
 from palworld_aio.edit_pals import _clean_desc_for_tooltip, build_pal_context_menu, _get_cached_pixmap, _get_pal_icon_path, safe_nested_get, extract_value, resolve_name, get_pal_base_data, _resolve_partner_desc, _partner_desc_to_html, StrokedLabel, _get_element_pixmap, PalFrame, _strip_prefix_label, PalInfoWidget, _get_boss_alpha_pixmap, _get_boss_shiny_pixmap, _get_awake_pixmap, _get_ui_icon_pixmap, _generate_pal_save_param, _toggle_boss_raw, _toggle_lucky_raw, _toggle_awake_raw, _toggle_dna_raw, _set_fav_raw, _learn_all_skills_raw, _show_learned_moves_dialog
 from palworld_aio.base_inventory_manager import get_base_worker_pals
 class RarityBorderDelegate(QStyledItemDelegate):
@@ -455,7 +455,7 @@ class ContainerListWidget(QTreeWidget):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self._show_context_menu)
         self.itemSelectionChanged.connect(self._on_selection_changed)
-        self.setStyleSheet('\n            QTreeWidget {\n                background: transparent;\n                border: 1px solid rgba(255, 255, 255, 0.08);\n                border-radius: 6px;\n                color: #e0e0e0;\n                outline: none;\n            }\n            QTreeWidget::item {\n                padding: 6px;\n                margin: 1px 2px;\n                border: 1px solid rgba(255, 255, 255, 0.06);\n                border-radius: 3px;\n                background-color: rgba(30, 35, 45, 0.8);\n            }\n            QTreeWidget::item:selected {\n                background-color: rgba(74, 144, 226, 0.5);\n                border: 2px solid rgba(74, 144, 226, 0.7);\n            }\n            QTreeWidget::item:hover {\n                background-color: rgba(50, 55, 65, 0.8);\n                border-color: rgba(255, 255, 255, 0.12);\n            }\n            QTreeWidget::item:selected:hover {\n                background-color: rgba(74, 144, 226, 0.55);\n            }\n            QTreeWidget::branch {\n                background-color: transparent;\n            }\n        ')
+        self.setStyleSheet(f'\n            QTreeWidget {{\n                background: transparent;\n                border: 1px solid rgba(125,211,252,0.15);\n                border-radius: 10px;\n                color: #e0e0e0;\n                outline: none;\n            }}\n            QTreeWidget::item {{\n                padding: 6px;\n                margin: 1px 2px;\n                border: 1px solid rgba(255,255,255,0.08);\n                border-radius: 8px;\n                background: rgba(255,255,255,0.03);\n            }}\n            QTreeWidget::item:selected {{\n                background: rgba(125,211,252,0.1);\n                border: 2px solid #7DD3FC;\n            }}\n            QTreeWidget::item:hover {{\n                background: rgba(125,211,252,0.06);\n                border-color: rgba(125,211,252,0.2);\n            }}\n            QTreeWidget::item:selected:hover {{\n                background: rgba(125,211,252,0.1);\n            }}\n            QTreeWidget::branch {{\n                background-color: transparent;\n            }}\n        ')
     def clear(self):
         super().clear()
         self.setHeaderHidden(True)
@@ -475,7 +475,7 @@ class ContainerListWidget(QTreeWidget):
         image_label = QLabel()
         image_label.setFixedSize(60, 60)
         image_label.setAlignment(Qt.AlignCenter)
-        image_label.setStyleSheet(f'QLabel {{ background-color: rgba(30, 35, 45, 0.9); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; }}')
+        image_label.setStyleSheet(f'QLabel {{ background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; }}')
         image_path = get_container_image_path(container_info['type'])
         if image_path and os.path.exists(image_path):
             pixmap = QPixmap(image_path)
@@ -709,7 +709,7 @@ class ContainerInfoWidget(QWidget):
         else:
             self.image_label.setText('📦')
     def _update_styles(self):
-        self.setStyleSheet('\n                QWidget {\n                    background-color: rgba(20, 25, 35, 0.8);\n                    border: 1px solid rgba(255, 255, 255, 0.1);\n                    border-radius: 6px;\n                    color: #e0e0e0;\n                }\n                QLabel {\n                    color: #e0e0e0;\n                }\n                QLabel[bold="true"] {\n                    font-weight: bold;\n                }\n            ')
+        self.setStyleSheet(f'\n                QWidget {{\n                    {CONTENT_PANEL_STYLE}\n                    color: #e0e0e0;\n                }}\n                QLabel {{\n                    color: #e0e0e0;\n                }}\n                QLabel[bold="true"] {{\n                    font-weight: bold;\n                }}\n            ')
 class _BasePalIcon(QFrame):
     clicked = Signal(int)
     rightClicked = Signal(int, str)
@@ -817,7 +817,7 @@ class _BasePalIcon(QFrame):
         self._children = []
         raw = self._get_raw()
         if not raw or not isinstance(raw, dict):
-            self.setStyleSheet('QFrame#basePalSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; } QFrame#basePalSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+            self.setStyleSheet(slot_full('QFrame#basePalSlot'))
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
@@ -953,56 +953,49 @@ class _BasePalIcon(QFrame):
                 _ht = _partner_desc_to_html(_res, el_colors, tooltip=True)
                 tip += f'<br><br>{_ht}'
         self.setToolTip(tip)
-        self.setStyleSheet('QFrame#basePalSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; } QFrame#basePalSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+        self.setStyleSheet(slot_full('QFrame#basePalSlot'))
         if was_selected:
-            self.setStyleSheet('QFrame#basePalSlot { background: rgba(125,211,252,0.1); border: 2px solid #7DD3FC; border-radius: 6px; }')
+            self.setStyleSheet(slot_selected('QFrame#basePalSlot'))
         self.resizeEvent(None)
     def set_selected(self, selected):
         self.selected = selected
         if selected:
-            self.setStyleSheet('QFrame#basePalSlot { background: rgba(125,211,252,0.1); border: 2px solid #7DD3FC; border-radius: 6px; }')
+            self.setStyleSheet(slot_selected('QFrame#basePalSlot'))
         else:
-            self.setStyleSheet('QFrame#basePalSlot { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; } QFrame#basePalSlot:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+            self.setStyleSheet(slot_full('QFrame#basePalSlot'))
     def update_display(self):
         self._build()
 
-class BasePalsContentWidget(QWidget):
+class BasePalsContentWidget(QFrame):
     COLS = 6
     ROWS = 5
+    SLOTS_PER_PAGE = 30
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setObjectName('basePalsContent')
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.setMinimumHeight(400)
+        self.setStyleSheet('QFrame#basePalsContent { border: none; background: transparent; }')
         self._pals = []
         self._icons = []
         self._selected_idx = -1
         self._current_base_id = None
-        self._grid_size = self.COLS * self.ROWS
+        self._current_page = 1
+        self._total_pages = 1
         self._setup_ui()
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        self.placeholder_frame = QFrame()
-        self.placeholder_frame.setObjectName('basePalsPlaceholder')
-        self.placeholder_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.placeholder_frame.setStyleSheet('QFrame#basePalsPlaceholder { background: rgba(18,20,24,0.65); border: 1px solid rgba(125,211,252,0.15); border-radius: 10px; }')
-        ph_layout = QVBoxLayout(self.placeholder_frame)
+        layout.setContentsMargins(8, 8, 8, 8)
+        layout.setSpacing(8)
         self.placeholder = QLabel(t('base_inventory.base_pals_empty') if t else 'Select a Guild/Base to view working pals')
         self.placeholder.setAlignment(Qt.AlignCenter)
         self.placeholder.setMinimumHeight(400)
         self.placeholder.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.placeholder.setStyleSheet('QLabel { color: #A6B8C8; font-size: 14px; background: transparent; }')
-        ph_layout.addWidget(self.placeholder)
-        layout.addWidget(self.placeholder_frame)
-        self.content_frame = QFrame()
-        self.content_frame.setObjectName('basePalsContent')
-        self.content_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.content_frame.setStyleSheet('QFrame#basePalsContent { background: rgba(18,20,24,0.65); border: 1px solid rgba(125,211,252,0.15); border-radius: 10px; }')
-        content_layout = QVBoxLayout(self.content_frame)
-        content_layout.setContentsMargins(8, 8, 8, 8)
-        content_layout.setSpacing(8)
-        self.splitter = QSplitter(Qt.Horizontal)
-        self.splitter.setChildrenCollapsible(False)
+        self.placeholder.setStyleSheet('QLabel { color: #888; font-size: 14px; background: transparent; }')
+        layout.addWidget(self.placeholder, 1)
+        self.hsplit = QHBoxLayout()
+        self.hsplit.setSpacing(4)
         left_panel = QWidget()
         left_layout = QVBoxLayout(left_panel)
         left_layout.setContentsMargins(0, 0, 0, 0)
@@ -1024,11 +1017,30 @@ class BasePalsContentWidget(QWidget):
                 slot.left.connect(self._on_pal_hover_left)
                 self.grid.addWidget(slot, row, col)
                 self._icons.append(slot)
+        self.grid_container_widget = grid_container
+        grid_container.installEventFilter(self)
         left_layout.addWidget(grid_container)
-        self.stats_label = QLabel(t('base_inventory.working_pals_count').format(count=0) if t else 'Working Pals: 0')
+        page_row = QHBoxLayout()
+        page_row.setSpacing(6)
+        self.prev_page_btn = QPushButton('◀')
+        self.prev_page_btn.setFixedSize(28, 24)
+        self.prev_page_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.18); color: #FFFFFF; } QPushButton:disabled { background: rgba(100,100,100,0.1); color: #666; border-color: rgba(255,255,255,0.05); }')
+        self.prev_page_btn.clicked.connect(self._prev_page)
+        page_row.addWidget(self.prev_page_btn)
+        self.page_label = QLabel('Page 1/1')
+        self.page_label.setStyleSheet('font-size: 11px; font-weight: 600; color: #7DD3FC; padding: 0 4px;')
+        page_row.addWidget(self.page_label)
+        self.next_page_btn = QPushButton('▶')
+        self.next_page_btn.setFixedSize(28, 24)
+        self.next_page_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.18); color: #FFFFFF; } QPushButton:disabled { background: rgba(100,100,100,0.1); color: #666; border-color: rgba(255,255,255,0.05); }')
+        self.next_page_btn.clicked.connect(self._next_page)
+        page_row.addWidget(self.next_page_btn)
+        page_row.addStretch()
+        self.stats_label = QLabel()
         self.stats_label.setStyleSheet('font-weight: bold; font-size: 12px; color: #7DD3FC; padding: 2px 4px;')
-        left_layout.addWidget(self.stats_label)
-        self.splitter.addWidget(left_panel)
+        page_row.addWidget(self.stats_label)
+        left_layout.addLayout(page_row)
+        self.hsplit.addWidget(left_panel, 1)
         right_panel = QWidget()
         right_panel.setFixedWidth(350)
         right_layout = QVBoxLayout(right_panel)
@@ -1037,59 +1049,103 @@ class BasePalsContentWidget(QWidget):
         self.pal_info = PalInfoWidget()
         self.pal_info.pal_data_changed.connect(self._on_pal_info_changed)
         right_layout.addWidget(self.pal_info)
-        self.splitter.addWidget(right_panel)
-        self.splitter.setStretchFactor(0, 1)
-        self.splitter.setStretchFactor(1, 0)
-        content_layout.addWidget(self.splitter)
-        layout.addWidget(self.content_frame)
-        self.content_frame.hide()
+        self.hsplit.addWidget(right_panel, 0)
+        layout.addLayout(self.hsplit)
+        self.grid_container_widget.hide()
+        self.stats_label.hide()
+        self.page_label.hide()
+        self.prev_page_btn.hide()
+        self.next_page_btn.hide()
 
     def set_pals(self, pals_data, base_id=None):
         self._pals = pals_data
         self._current_base_id = base_id
+        self._current_page = 1
+        self._total_pages = max(1, (len(self._pals) + self.SLOTS_PER_PAGE - 1) // self.SLOTS_PER_PAGE)
         self._rebuild()
 
     def clear(self):
         self._pals = []
+        self._current_page = 1
+        self._total_pages = 1
         self._rebuild()
 
     def refresh_labels(self):
+        page_text = t('base_inventory.page') if t else None
+        if page_text:
+            try:
+                self.page_label.setText(page_text.format(page=self._current_page, total=self._total_pages))
+            except (KeyError, ValueError):
+                self.page_label.setText(page_text)
+        else:
+            self.page_label.setText(f'Page {self._current_page}/{self._total_pages}')
         if self._pals:
             self.stats_label.setText(t('base_inventory.working_pals_count').format(count=len(self._pals)) if t else f'Working Pals: {len(self._pals)}')
         else:
             self.placeholder.setText(t('base_inventory.base_pals_empty') if t else 'Select a Guild/Base to view working pals')
 
-    def _rebuild(self):
-        needed = len(self._pals)
-        if needed > self._grid_size:
-            extra = needed - self._grid_size
-            for i in range(extra):
-                row = (self._grid_size + i) // self.COLS
-                col = (self._grid_size + i) % self.COLS
-                slot = _BasePalIcon(None, self._grid_size + i)
-                slot.clicked.connect(self._on_pal_clicked)
-                slot.rightClicked.connect(self._on_pal_right_clicked)
-                slot.entered.connect(self._on_pal_hovered)
-                slot.left.connect(self._on_pal_hover_left)
-                self.grid.addWidget(slot, row, col)
-                self._icons.append(slot)
-            self._grid_size = max(self._grid_size + extra, needed)
+    def _prev_page(self):
+        if self._current_page > 1:
+            self._current_page -= 1
+            self._update_page()
+
+    def _next_page(self):
+        if self._current_page < self._total_pages:
+            self._current_page += 1
+            self._update_page()
+
+    def _update_page(self):
+        start = (self._current_page - 1) * self.SLOTS_PER_PAGE
         for i, slot in enumerate(self._icons):
-            if i < len(self._pals):
-                slot.pal_data = self._pals[i]['character_entry']
+            pal_idx = start + i
+            if pal_idx < len(self._pals):
+                slot.pal_data = self._pals[pal_idx]['character_entry']
             else:
                 slot.pal_data = None
             slot.slot_index = i
             slot.update_display()
-        if not self._pals:
-            self.placeholder_frame.show()
-            self.content_frame.hide()
-            return
-        self.placeholder_frame.hide()
-        self.content_frame.show()
-        self.stats_label.setText(t('base_inventory.working_pals_count').format(count=len(self._pals)) if t else f'Working Pals: {len(self._pals)}')
+        page_text = t('base_inventory.page') if t else None
+        if page_text:
+            try:
+                self.page_label.setText(page_text.format(page=self._current_page, total=self._total_pages))
+            except (KeyError, ValueError):
+                self.page_label.setText(page_text)
+        else:
+            self.page_label.setText(f'Page {self._current_page}/{self._total_pages}')
+        self.prev_page_btn.setEnabled(self._current_page > 1)
+        self.next_page_btn.setEnabled(self._current_page < self._total_pages)
         self._selected_idx = -1
         self._select_pal(0)
+
+    def _rebuild(self):
+        self._total_pages = max(1, (len(self._pals) + self.SLOTS_PER_PAGE - 1) // self.SLOTS_PER_PAGE)
+        if self._current_page > self._total_pages:
+            self._current_page = self._total_pages
+        if not self._pals:
+            self.placeholder.show()
+            self.grid_container_widget.hide()
+            self.stats_label.hide()
+            self.page_label.hide()
+            self.prev_page_btn.hide()
+            self.next_page_btn.hide()
+            return
+        self.placeholder.hide()
+        self.grid_container_widget.show()
+        self.stats_label.show()
+        self.page_label.show()
+        self.prev_page_btn.show()
+        self.next_page_btn.show()
+        self.stats_label.setText(t('base_inventory.working_pals_count').format(count=len(self._pals)) if t else f'Working Pals: {len(self._pals)}')
+        self._update_page()
+
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.Type.Wheel and self._total_pages > 1:
+            if event.angleDelta().y() < 0:
+                self._next_page()
+            else:
+                self._prev_page()
+            return True
+        return super().eventFilter(obj, event)
 
     def _select_pal(self, idx):
         if self._selected_idx >= 0:
@@ -1306,9 +1362,10 @@ class BaseInventoryTab(QWidget):
             self.inventory_grid.refresh_labels()
         if hasattr(self, 'placeholder_label'):
             self.placeholder_label.setText(t('base_inventory.select_guild_base_hint', default='Select a Guild/Base to edit their inventory'))
-        if hasattr(self, 'tab_bar') and self.tab_bar.count() == 2:
-            self.tab_bar.setTabText(0, t('base_inventory.tab_inventory') if t else 'Inventory')
-            self.tab_bar.setTabText(1, t('base_inventory.tab_base_pals') if t else 'Base Pals')
+        if hasattr(self, 'inv_tab_btn'):
+            self.inv_tab_btn.setText(t('base_inventory.tab_inventory') if t else 'Inventory')
+        if hasattr(self, 'pals_tab_btn'):
+            self.pals_tab_btn.setText(t('base_inventory.tab_base_pals') if t else 'Base Pals')
         if hasattr(self, 'base_pals_widget'):
             self.base_pals_widget.refresh_labels()
         current_container_id = None
@@ -1324,9 +1381,12 @@ class BaseInventoryTab(QWidget):
         layout.setSpacing(10)
         header_layout = QHBoxLayout()
         header_layout.setSpacing(8)
+        header_layout.setContentsMargins(0, 0, 0, 0)
         self.title_label = QLabel(t('base_inventory.title', default='Base Inventory'))
         self.title_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
         self.title_label.setObjectName('sectionHeader')
+        self.title_label.setStyleSheet('QLabel#sectionHeader { margin-left: 0px; padding-left: 10px; }')
+        self.title_label.setAlignment(Qt.AlignCenter)
         header_layout.addWidget(self.title_label)
         self.guild_button = QPushButton(t('base_inventory.select_guild') if t else 'Select Guild')
         self.guild_button.setMinimumWidth(160)
@@ -1342,6 +1402,18 @@ class BaseInventoryTab(QWidget):
         self.base_button.setCursor(Qt.PointingHandCursor)
         self.base_button.clicked.connect(self._show_base_popup)
         header_layout.addWidget(self.base_button)
+        self.inv_tab_btn = QPushButton(t('base_inventory.tab_inventory') if t else 'Inventory')
+        self.inv_tab_btn.setFixedHeight(28)
+        self.inv_tab_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.2); color: #fff; border: 1px solid rgba(125,211,252,0.4); border-radius: 6px; padding: 4px 12px; font-weight: 700; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.25); }')
+        self.inv_tab_btn.setCursor(Qt.PointingHandCursor)
+        self.inv_tab_btn.clicked.connect(lambda: self._switch_tab(0))
+        header_layout.addWidget(self.inv_tab_btn)
+        self.pals_tab_btn = QPushButton(t('base_inventory.tab_base_pals') if t else 'Base Pals')
+        self.pals_tab_btn.setFixedHeight(28)
+        self.pals_tab_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; padding: 4px 12px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(125,211,252,0.2); border-color: rgba(125,211,252,0.4); color: #FFFFFF; }')
+        self.pals_tab_btn.setCursor(Qt.PointingHandCursor)
+        self.pals_tab_btn.clicked.connect(lambda: self._switch_tab(1))
+        header_layout.addWidget(self.pals_tab_btn)
         header_layout.addStretch()
         self.item_button = QPushButton(t('base_inventory.all_items') if t else 'All Items')
         self.item_button.setMinimumWidth(100)
@@ -1360,26 +1432,27 @@ class BaseInventoryTab(QWidget):
         self.clear_item_button.setVisible(False)
         header_layout.addWidget(self.clear_item_button)
         layout.addLayout(header_layout)
-        self.tab_bar = QTabBar()
-        self.tab_bar.addTab(t('base_inventory.tab_inventory') if t else 'Inventory')
-        self.tab_bar.addTab(t('base_inventory.tab_base_pals') if t else 'Base Pals')
-        self.tab_bar.setStyleSheet('QTabBar { font-size: 11px; } QTabBar::tab { background: rgba(40,45,55,0.5); color: #aaa; border: 1px solid rgba(255,255,255,0.05); border-bottom: none; border-top-left-radius: 4px; border-top-right-radius: 4px; padding: 6px 14px; margin-right: 2px; } QTabBar::tab:selected { background: rgba(125,211,252,0.15); color: #fff; border-color: rgba(125,211,252,0.3); } QTabBar::tab:hover:!selected { background: rgba(255,255,255,0.05); color: #ddd; }')
-        layout.addWidget(self.tab_bar)
+        self.content_area = QFrame()
+        self.content_area.setObjectName('baseInventoryContent')
+        self.content_area.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.content_area.setStyleSheet(f'QFrame#baseInventoryContent {{ {CONTENT_PANEL_STYLE} }}')
+        layout.addWidget(self.content_area, 1)
+        content_area_layout = QVBoxLayout(self.content_area)
+        content_area_layout.setContentsMargins(0, 0, 0, 0)
+        content_area_layout.setSpacing(0)
         self.content_stack = QStackedWidget()
-        self.content_stack.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.content_stack.setStyleSheet('QStackedWidget { border: none; background: transparent; }')
+        content_area_layout.addWidget(self.content_stack)
         self.inventory_page = QFrame()
-        self.inventory_page.setObjectName('baseInventoryContent')
-        self.inventory_page.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.inventory_page.setStyleSheet('QFrame#baseInventoryContent { background: rgba(18,20,24,0.65); border: 1px solid rgba(125,211,252,0.15); border-radius: 10px; }')
         inv_layout = QVBoxLayout(self.inventory_page)
-        inv_layout.setContentsMargins(8, 8, 8, 8)
+        inv_layout.setContentsMargins(10, 10, 10, 10)
         inv_layout.setSpacing(0)
         self.placeholder_label = QLabel(t('base_inventory.select_guild_base_hint', default='Select a Guild/Base to edit their inventory'))
         self.placeholder_label.setAlignment(Qt.AlignCenter)
         self.placeholder_label.setMinimumHeight(400)
         self.placeholder_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.placeholder_label.setStyleSheet('QLabel { color: #A6B8C8; font-size: 14px; background: transparent; }')
-        inv_layout.addWidget(self.placeholder_label)
+        self.placeholder_label.setStyleSheet('QLabel { color: #888; font-size: 14px; background: transparent; }')
+        inv_layout.addWidget(self.placeholder_label, 1)
         self.splitter = QSplitter(Qt.Horizontal)
         self.splitter.setChildrenCollapsible(False)
         left_panel = QWidget()
@@ -1408,10 +1481,22 @@ class BaseInventoryTab(QWidget):
         self.content_stack.addWidget(self.inventory_page)
         self.base_pals_widget = BasePalsContentWidget()
         self.content_stack.addWidget(self.base_pals_widget)
-        layout.addWidget(self.content_stack)
-        self.tab_bar.currentChanged.connect(self._on_tab_changed)
-        self.tab_bar.setCurrentIndex(0)
-        self._last_tab_index = 0
+        self._current_tab = 0
+
+    def _switch_tab(self, index):
+        self._current_tab = index
+        self.content_stack.setCurrentIndex(index)
+        inv_active = index == 0
+        pals_active = index == 1
+        self.inv_tab_btn.setStyleSheet(f'QPushButton {{ background: rgba(125,211,252,{"0.2" if inv_active else "0.12"}); color: {"#fff" if inv_active else "#7DD3FC"}; border: 1px solid rgba(125,211,252,{"0.4" if inv_active else "0.2"}); border-radius: 6px; padding: 4px 12px; font-weight: {"700" if inv_active else "600"}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}')
+        self.pals_tab_btn.setStyleSheet(f'QPushButton {{ background: rgba(125,211,252,{"0.2" if pals_active else "0.12"}); color: {"#fff" if pals_active else "#7DD3FC"}; border: 1px solid rgba(125,211,252,{"0.4" if pals_active else "0.2"}); border-radius: 6px; padding: 4px 12px; font-weight: {"700" if pals_active else "600"}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}')
+        if pals_active and self._current_base_id:
+            from palworld_aio.base_inventory_manager import get_base_worker_pals
+            pals = get_base_worker_pals(self._current_base_id)
+            self.base_pals_widget.set_pals(pals, self._current_base_id)
+        can_filter = inv_active
+        self.item_button.setVisible(can_filter)
+        self.clear_item_button.setVisible(can_filter and bool(self.selected_item_id))
     def _create_styled_combo(self):
         combo = StyledCombo()
         combo.setMinimumWidth(180)
@@ -1423,14 +1508,7 @@ class BaseInventoryTab(QWidget):
         self.inventory_grid.item_added.connect(self._trigger_auto_save)
         self.inventory_grid.item_removed.connect(self._trigger_auto_save)
         self.inventory_grid.item_count_changed.connect(self._trigger_auto_save)
-    def _on_tab_changed(self, index):
-        self.content_stack.setCurrentIndex(index)
-        if index == 1 and self._current_base_id:
-            pals = get_base_worker_pals(self._current_base_id)
-            self.base_pals_widget.set_pals(pals, self._current_base_id)
-        can_filter = index == 0
-        self.item_button.setVisible(can_filter)
-        self.clear_item_button.setVisible(can_filter and bool(self.selected_item_id))
+
 
     def _show_content(self):
         self.placeholder_label.hide()

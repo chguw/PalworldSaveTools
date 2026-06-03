@@ -5,7 +5,7 @@ from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer, QThread
 from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen
 from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t
-from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text
+from palworld_aio.ui.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE
 from palworld_aio.inventory_manager import PlayerInventory, ItemData, get_player_inventory, UI_SLOT_BINDINGS, FOOD_POUCH_ITEMS, ACCESSORY_UNLOCK_ITEMS, WEAPON_UNLOCK_ITEMS
 from palworld_aio.edit_pals import _clean_desc_for_tooltip
 from palworld_aio.player_manager import add_all_effigies_to_players, EFFIGY_ITEM_IDS
@@ -43,7 +43,7 @@ class ItemSlotWidget(QFrame):
         self.qty_label.setStyleSheet('font-size: 10px; font-weight: bold; color: white; background: transparent;')
         layout.addWidget(self.qty_label, alignment=Qt.AlignRight)
     def _apply_empty_style(self):
-        self.setStyleSheet('ItemSlotWidget { background-color: rgba(30, 30, 40, 180); border: 1px solid #444; border-radius: 4px; } ItemSlotWidget:hover { background-color: rgba(50, 50, 60, 200); border: 1px solid #666; }')
+        self.setStyleSheet(slot_full('ItemSlotWidget'))
         self.icon_label.clear()
         self.qty_label.clear()
     def set_item(self, slot_data: dict):
@@ -73,7 +73,7 @@ class ItemSlotWidget(QFrame):
             color = '#a855f7'
         else:
             color = '#fbbf24'
-        self.setStyleSheet(f'ItemSlotWidget {{ background-color: rgba(30, 30, 40, 200); border: 2px solid {color}; border-radius: 4px; }} ItemSlotWidget:hover {{ background-color: rgba(60, 60, 70, 220); border: 2px solid {color}; }}')
+        self.setStyleSheet(slot_rarity('ItemSlotWidget', color))
     def clear_item(self):
         self.slot_data = None
         self._apply_empty_style()
@@ -141,7 +141,7 @@ class EquipmentSlotWidget(QFrame):
         self.name_label.setWordWrap(True)
         layout.addWidget(self.name_label)
     def _apply_style(self):
-        self.setStyleSheet('EquipmentSlotWidget { background-color: rgba(40, 40, 50, 200); border: 2px solid #555; border-radius: 4px; } EquipmentSlotWidget:hover { background-color: rgba(60, 60, 70, 220); border: 2px solid #777; }')
+        self.setStyleSheet(slot_full('EquipmentSlotWidget'))
     def set_item(self, slot_data: dict):
         self.current_item = slot_data
         if not slot_data:
@@ -175,7 +175,7 @@ class EquipmentSlotWidget(QFrame):
             color = '#a855f7'
         else:
             color = '#fbbf24'
-        self.setStyleSheet(f'EquipmentSlotWidget {{ background-color: rgba(40, 40, 50, 200); border: 2px solid {color}; border-radius: 4px; }} EquipmentSlotWidget:hover {{ background-color: rgba(60, 60, 70, 220); }}')
+        self.setStyleSheet(slot_rarity('EquipmentSlotWidget', color))
     def set_locked(self, locked: bool, lock_type: str=None):
         self._locked = locked
         self._lock_type = lock_type if locked else None
@@ -186,7 +186,7 @@ class EquipmentSlotWidget(QFrame):
             self.icon_label.setStyleSheet('font-size: 20px;')
             self.name_label.setText(t('inventory.locked', default='Locked'))
             self.name_label.setStyleSheet('font-size: 7px; color: #faa61a;')
-            self.setStyleSheet('EquipmentSlotWidget { background-color: rgba(20, 20, 25, 200); border: 2px dashed #faa61a; border-radius: 4px; } EquipmentSlotWidget:hover { background-color: rgba(40, 35, 20, 220); border: 2px dashed #ffc107; }')
+            self.setStyleSheet('EquipmentSlotWidget { background: rgba(255,255,255,0.03); border: 2px dashed #faa61a; border-radius: 8px; } EquipmentSlotWidget:hover { background: rgba(125,211,252,0.06); border: 2px dashed #ffc107; }')
         else:
             self.setEnabled(True)
             self.setCursor(Qt.PointingHandCursor)
@@ -471,6 +471,8 @@ class InventoryGridWidget(QWidget):
         self.tab_label = QLabel(t(f'inventory.{self.container_type}', default=self.container_type.title()))
         self.tab_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
         self.tab_label.setObjectName('sectionHeader')
+        self.tab_label.setStyleSheet('QLabel#sectionHeader { margin-left: 0px; padding-left: 10px; }')
+        self.tab_label.setAlignment(Qt.AlignCenter)
         header.addWidget(self.tab_label)
         header.addStretch()
         self.sort_btn = QPushButton(t('inventory.sort', default='Sort'))
@@ -776,9 +778,12 @@ class PlayerInventoryTab(QWidget):
         main_layout.setContentsMargins(10, 10, 10, 10)
         main_layout.setSpacing(10)
         header = QHBoxLayout()
+        header.setContentsMargins(0, 0, 0, 0)
         self.title_label = QLabel(t('inventory.title', default='Player Inventory'))
         self.title_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
         self.title_label.setObjectName('sectionHeader')
+        self.title_label.setStyleSheet('QLabel#sectionHeader { margin-left: 0px; padding-left: 10px; }')
+        self.title_label.setAlignment(Qt.AlignCenter)
         header.addWidget(self.title_label)
         header.addStretch()
         self.player_select_btn = QPushButton(t('inventory.select_player', default='Select Player...'))
@@ -792,7 +797,7 @@ class PlayerInventoryTab(QWidget):
         self.content_area = QFrame()
         self.content_area.setObjectName('inventoryContent')
         self.content_area.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.content_area.setStyleSheet('QFrame#inventoryContent { background: rgba(18,20,24,0.65); border: 1px solid rgba(125,211,252,0.15); border-radius: 10px; }')
+        self.content_area.setStyleSheet(f'QFrame#inventoryContent {{ {CONTENT_PANEL_STYLE} }}')
         content_layout = QVBoxLayout(self.content_area)
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(0)
@@ -801,7 +806,7 @@ class PlayerInventoryTab(QWidget):
         self.placeholder_label.setMinimumHeight(400)
         self.placeholder_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.placeholder_label.setStyleSheet('QLabel { color: #888; font-size: 14px; background: transparent; }')
-        content_layout.addWidget(self.placeholder_label)
+        content_layout.addWidget(self.placeholder_label, 1)
         inner_content = QHBoxLayout()
         inner_content.setContentsMargins(10, 10, 10, 10)
         inner_content.setSpacing(10)

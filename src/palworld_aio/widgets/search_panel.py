@@ -21,6 +21,8 @@ class SearchPanel(QWidget):
         self.search_label = QLabel(t(self.label_key) if t else self.label_key)
         self.search_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
         self.search_label.setObjectName('sectionHeader')
+        self.search_label.setStyleSheet('QLabel#sectionHeader { margin-left: 0px; padding-left: 10px; }')
+        self.search_label.setAlignment(Qt.AlignCenter)
         search_layout.addWidget(self.search_label)
         self.search_input = QLineEdit()
         self.search_input.setObjectName('searchInput')

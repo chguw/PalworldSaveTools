@@ -1477,5 +1477,10 @@
   "paldefender.level_label": "等级",
   "paldefender.col_guild_uid": "公会UID",
   "paldefender.col_player_uid": "玩家UID",
-  "paldefender.col_pals": "好朋友"
+  "paldefender.col_pals": "好朋友",
+  "base_inventory.tab_inventory": "存货",
+  "base_inventory.tab_base_pals": "基地伙伴",
+  "base_inventory.working_pals_count": "工作伙伴：{count}",
+  "base_inventory.base_pals_empty": "选择公会/基地查看工作伙伴",
+  "base_inventory.page": "第 {页}/{共} 页"
 }

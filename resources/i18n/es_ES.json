@@ -1468,5 +1468,10 @@
   "paldefender.both": "Ambos",
   "paldefender.col_guild_uid": "UID del gremio",
   "paldefender.col_player_uid": "ID del jugador",
-  "paldefender.col_pals": "amigos"
+  "paldefender.col_pals": "amigos",
+  "base_inventory.tab_inventory": "Inventario",
+  "base_inventory.tab_base_pals": "Amigos básicos",
+  "base_inventory.working_pals_count": "Compañeros de trabajo: {count}",
+  "base_inventory.base_pals_empty": "Seleccione un gremio/base para ver a los compañeros que trabajan",
+  "base_inventory.page": "Página {página}/{total}"
 }

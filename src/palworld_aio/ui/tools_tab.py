@@ -382,6 +382,8 @@ class ToolsTab(QWidget):
         section_layout.setSpacing(8)
         title = QLabel(t(section_key) if t else section_key)
         title.setObjectName('sectionHeader')
+        title.setStyleSheet('QLabel#sectionHeader { margin-left: 0px; padding-left: 10px; }')
+        title.setAlignment(Qt.AlignCenter)
         title.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
         self._section_titles.append((title, section_key))
         section_layout.addWidget(title, alignment=Qt.AlignLeft)
