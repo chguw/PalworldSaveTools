@@ -1622,7 +1622,6 @@ def _register_pal_instance_to_guild(instance_id, group_id):
                 break
         except Exception:
             pass
-
 def build_pal_context_menu(parent, raw):
     from PySide6.QtWidgets import QMenu
     menu = QMenu(parent)
@@ -2008,7 +2007,7 @@ class PalInfoWidget(QFrame):
                 eff.setOpacity(0.14)
         self.partner_name_lbl.setText('--')
         self.partner_lvl_lbl.setText('Lv --')
-        self.partner_desc_lbl.setText('Select a pal to view details')
+        self.partner_desc_lbl.setText(t('pal_editor.no_pal_data') if t else 'No Pal Data')
         while self.active_skills_list.count():
             item = self.active_skills_list.takeAt(0)
             if item and item.widget():
@@ -3556,6 +3555,8 @@ class PalInfoWidget(QFrame):
             pass
     def refresh_labels(self):
         self._no_data_overlay.setText(t('pal_editor.no_pal_data') if t else 'No Pal Data')
+        if hasattr(self, 'partner_desc_lbl'):
+            self.partner_desc_lbl.setText(t('pal_editor.no_pal_data') if t else 'No Pal Data')
         if hasattr(self, '_lv_label'):
             self._lv_label.setText(t('pal_editor.level') if t else 'LEVEL')
         if hasattr(self, '_atk_label'):
@@ -3943,6 +3944,12 @@ class PalEditorWidget(QWidget):
             self.selected_pal_slot = ('party', idx)
             self._highlight_party_slot(idx)
             self._clear_palbox_highlight()
+        else:
+            self._clicked_pal = None
+            self.selected_pal_slot = None
+            self._clear_party_highlight()
+            self._clear_palbox_highlight()
+            self.pal_info.set_clicked_pal(None)
     def _on_party_slot_entered(self, idx):
         if idx in self.party_pals:
             pal = self.party_pals[idx]
@@ -3970,6 +3977,12 @@ class PalEditorWidget(QWidget):
             self.selected_pal_slot = ('palbox', idx)
             self._highlight_palbox_slot(idx)
             self._clear_party_highlight()
+        else:
+            self._clicked_pal = None
+            self.selected_pal_slot = None
+            self._clear_palbox_highlight()
+            self._clear_party_highlight()
+            self.pal_info.set_clicked_pal(None)
     def _on_palbox_slot_entered(self, idx):
         pals_on_page = self._get_palbox_page_pals()
         if idx < len(pals_on_page) and pals_on_page[idx] is not None:

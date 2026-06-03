@@ -966,7 +966,6 @@ class _BasePalIcon(QFrame):
             self.setStyleSheet(slot_full('QFrame#basePalSlot'))
     def update_display(self):
         self._build()
-
 class BasePalsContentWidget(QFrame):
     COLS = 6
     ROWS = 5
@@ -984,7 +983,6 @@ class BasePalsContentWidget(QFrame):
         self._current_page = 1
         self._total_pages = 1
         self._setup_ui()
-
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 8, 8, 8)
@@ -1057,20 +1055,17 @@ class BasePalsContentWidget(QFrame):
         self.page_label.hide()
         self.prev_page_btn.hide()
         self.next_page_btn.hide()
-
     def set_pals(self, pals_data, base_id=None):
         self._pals = pals_data
         self._current_base_id = base_id
         self._current_page = 1
         self._total_pages = max(1, (len(self._pals) + self.SLOTS_PER_PAGE - 1) // self.SLOTS_PER_PAGE)
         self._rebuild()
-
     def clear(self):
         self._pals = []
         self._current_page = 1
         self._total_pages = 1
         self._rebuild()
-
     def refresh_labels(self):
         page_text = t('base_inventory.page') if t else None
         if page_text:
@@ -1084,17 +1079,16 @@ class BasePalsContentWidget(QFrame):
             self.stats_label.setText(t('base_inventory.working_pals_count').format(count=self._pal_count()) if t else f'Working Pals: {self._pal_count()}')
         else:
             self.placeholder.setText(t('base_inventory.base_pals_empty') if t else 'Select a Guild/Base to view working pals')
-
+        if hasattr(self, 'pal_info') and self.pal_info:
+            self.pal_info.refresh_labels()
     def _prev_page(self):
         if self._current_page > 1:
             self._current_page -= 1
             self._update_page()
-
     def _next_page(self):
         if self._current_page < self._total_pages:
             self._current_page += 1
             self._update_page()
-
     def _update_page(self):
         start = (self._current_page - 1) * self.SLOTS_PER_PAGE
         for i, slot in enumerate(self._icons):
@@ -1116,8 +1110,6 @@ class BasePalsContentWidget(QFrame):
         self.prev_page_btn.setEnabled(self._current_page > 1)
         self.next_page_btn.setEnabled(self._current_page < self._total_pages)
         self._selected_idx = -1
-        self._select_pal(0)
-
     def _rebuild(self):
         self._total_pages = max(1, (self._pal_count() + self.SLOTS_PER_PAGE - 1) // self.SLOTS_PER_PAGE)
         if self._current_page > self._total_pages:
@@ -1138,7 +1130,6 @@ class BasePalsContentWidget(QFrame):
         self.next_page_btn.show()
         self.stats_label.setText(t('base_inventory.working_pals_count').format(count=self._pal_count()) if t else f'Working Pals: {self._pal_count()}')
         self._update_page()
-
     def eventFilter(self, obj, event):
         if event.type() == QEvent.Type.Wheel and self._total_pages > 1:
             if event.angleDelta().y() < 0:
@@ -1147,13 +1138,10 @@ class BasePalsContentWidget(QFrame):
                 self._prev_page()
             return True
         return super().eventFilter(obj, event)
-
     def _pal_count(self):
-        return sum(1 for p in self._pals if p is not None)
-
+        return sum((1 for p in self._pals if p is not None))
     def _grid_idx_to_pal_idx(self, grid_idx):
         return (self._current_page - 1) * self.SLOTS_PER_PAGE + grid_idx
-
     def _select_pal(self, idx):
         pal_idx = self._grid_idx_to_pal_idx(idx)
         pal = self._pals[pal_idx] if pal_idx < len(self._pals) and self._pals[pal_idx] is not None else None
@@ -1162,6 +1150,12 @@ class BasePalsContentWidget(QFrame):
             if prev and prev.widget():
                 prev.widget().set_selected(False)
         if pal:
+            if self._selected_idx == idx:
+                self._selected_idx = -1
+                self.pal_info.last_clicked_data = None
+                self.pal_info._hovered_data = None
+                self.pal_info._clear_display()
+                return
             self._selected_idx = idx
             item = self.grid.itemAt(idx)
             if item and item.widget():
@@ -1169,29 +1163,20 @@ class BasePalsContentWidget(QFrame):
             self.pal_info.set_clicked_pal(pal['character_entry'])
         else:
             self._selected_idx = -1
-
+            self.pal_info.set_clicked_pal(None)
     def _on_pal_hovered(self, idx):
         pal_idx = self._grid_idx_to_pal_idx(idx)
         pal = self._pals[pal_idx] if pal_idx < len(self._pals) and self._pals[pal_idx] is not None else None
         if pal:
             self.pal_info.set_hover_pal(pal['character_entry'])
-
     def _on_pal_hover_left(self):
         self.pal_info.clear_hover()
-
     def _on_pal_clicked(self, idx):
         self._select_pal(idx)
-
     def _add_new_pal(self):
         from palworld_aio.edit_pals import PalCreateDialog, _generate_pal_save_param
         PalFrame._load_maps()
-        stub = type('Stub', (), {
-            'party_container': None,
-            'palbox_container': '00000000-0000-0000-0000-000000000000',
-            'player_uid': '00000000-0000-0000-0000-000000000000',
-            'current_box_index': 1,
-            'palbox_pal_dict': {},
-        })()
+        stub = type('Stub', (), {'party_container': None, 'palbox_container': '00000000-0000-0000-0000-000000000000', 'player_uid': '00000000-0000-0000-0000-000000000000', 'current_box_index': 1, 'palbox_pal_dict': {}})()
         dlg = PalCreateDialog(stub, False, 0)
         from PySide6.QtWidgets import QPushButton
         for btn in dlg.findChildren(QPushButton):
@@ -1246,7 +1231,6 @@ class BasePalsContentWidget(QFrame):
             self._rebuild()
             self._trigger_save()
             self._refresh_dashboard()
-
     def _trigger_save(self):
         parent = self.parent()
         while parent:
@@ -1254,7 +1238,6 @@ class BasePalsContentWidget(QFrame):
                 parent._trigger_auto_save()
                 break
             parent = parent.parent()
-
     def _refresh_dashboard(self):
         app = QApplication.instance()
         if app is None:
@@ -1263,11 +1246,9 @@ class BasePalsContentWidget(QFrame):
             if hasattr(w, 'tools_tab'):
                 w.tools_tab.refresh()
                 break
-
     def _on_pal_info_changed(self):
         for icon in self._icons:
             icon.update_display()
-
     def _on_pal_right_clicked(self, idx, action):
         pal_idx = self._grid_idx_to_pal_idx(idx)
         pal = self._pals[pal_idx] if pal_idx < len(self._pals) and self._pals[pal_idx] is not None else None
@@ -1307,20 +1288,14 @@ class BasePalsContentWidget(QFrame):
             _show_learned_moves_dialog(raw, self)
         elif action == 'bulk_sync_pal':
             from palworld_aio.edit_pals import _get_raw_from_item, BulkSyncPalDialog
-            stub = type('Stub', (), {
-                'party_pals': {},
-                'palbox_pal_dict': {},
-                'pal_info': type('Stub', (), {'_refresh': lambda self: None})(),
-                '_update_party_slots': lambda self: None,
-                '_update_palbox_page': lambda self: None,
-            })()
+            stub = type('Stub', (), {'party_pals': {}, 'palbox_pal_dict': {}, 'pal_info': type('Stub', (), {'_refresh': lambda self: None})(), '_update_party_slots': lambda self: None, '_update_palbox_page': lambda self: None})()
             dlg = BulkSyncPalDialog(pal['character_entry'], stub, self)
             cid = extract_value(raw, 'CharacterID', '')
             base_id = cid.lower().replace('boss_', '')
             affected = []
             for p in self._pals:
                 pr = _get_raw_from_item(p['character_entry'])
-                if pr and pr is not raw and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
+                if pr and pr is not raw and (extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id):
                     affected.append(p['character_entry'])
             dlg._affected = affected
             display_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
@@ -1354,7 +1329,6 @@ class BasePalsContentWidget(QFrame):
         if item and item.widget():
             item.widget().update_display()
         self.pal_info.set_clicked_pal(pal['character_entry'])
-
 class BaseInventoryTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -1533,14 +1507,13 @@ class BaseInventoryTab(QWidget):
         self.base_pals_widget = BasePalsContentWidget()
         self.content_stack.addWidget(self.base_pals_widget)
         self._current_tab = 0
-
     def _switch_tab(self, index):
         self._current_tab = index
         self.content_stack.setCurrentIndex(index)
         inv_active = index == 0
         pals_active = index == 1
-        self.inv_tab_btn.setStyleSheet(f'QPushButton {{ background: rgba(125,211,252,{"0.2" if inv_active else "0.12"}); color: {"#fff" if inv_active else "#7DD3FC"}; border: 1px solid rgba(125,211,252,{"0.4" if inv_active else "0.2"}); border-radius: 6px; padding: 4px 12px; font-weight: {"700" if inv_active else "600"}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}')
-        self.pals_tab_btn.setStyleSheet(f'QPushButton {{ background: rgba(125,211,252,{"0.2" if pals_active else "0.12"}); color: {"#fff" if pals_active else "#7DD3FC"}; border: 1px solid rgba(125,211,252,{"0.4" if pals_active else "0.2"}); border-radius: 6px; padding: 4px 12px; font-weight: {"700" if pals_active else "600"}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}')
+        self.inv_tab_btn.setStyleSheet(f"QPushButton {{ background: rgba(125,211,252,{('0.2' if inv_active else '0.12')}); color: {('#fff' if inv_active else '#7DD3FC')}; border: 1px solid rgba(125,211,252,{('0.4' if inv_active else '0.2')}); border-radius: 6px; padding: 4px 12px; font-weight: {('700' if inv_active else '600')}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}")
+        self.pals_tab_btn.setStyleSheet(f"QPushButton {{ background: rgba(125,211,252,{('0.2' if pals_active else '0.12')}); color: {('#fff' if pals_active else '#7DD3FC')}; border: 1px solid rgba(125,211,252,{('0.4' if pals_active else '0.2')}); border-radius: 6px; padding: 4px 12px; font-weight: {('700' if pals_active else '600')}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}")
         if pals_active and self._current_base_id:
             from palworld_aio.base_inventory_manager import get_base_worker_pals
             pals = get_base_worker_pals(self._current_base_id)
@@ -1559,8 +1532,6 @@ class BaseInventoryTab(QWidget):
         self.inventory_grid.item_added.connect(self._trigger_auto_save)
         self.inventory_grid.item_removed.connect(self._trigger_auto_save)
         self.inventory_grid.item_count_changed.connect(self._trigger_auto_save)
-
-
     def _show_content(self):
         self.placeholder_label.hide()
         self.splitter.show()
@@ -2187,4 +2158,3 @@ class BaseInventoryTab(QWidget):
                         self._load_containers_for_base(base_id)
                         self._restore_container_selection(current_container_id)
             self._trigger_save()
-

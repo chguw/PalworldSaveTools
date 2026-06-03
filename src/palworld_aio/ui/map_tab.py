@@ -784,8 +784,8 @@ class MapTab(QWidget):
         self.map_tab_stack.setCurrentIndex(index)
         bases_active = index == 0
         players_active = index == 1
-        self.bases_tab_btn.setStyleSheet(f'QPushButton {{ background: rgba(125,211,252,{"0.2" if bases_active else "0.12"}); color: {"#fff" if bases_active else "#7DD3FC"}; border: 1px solid rgba(125,211,252,{"0.4" if bases_active else "0.2"}); border-radius: 6px; padding: 4px 12px; font-weight: {"700" if bases_active else "600"}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}')
-        self.players_tab_btn.setStyleSheet(f'QPushButton {{ background: rgba(125,211,252,{"0.2" if players_active else "0.12"}); color: {"#fff" if players_active else "#7DD3FC"}; border: 1px solid rgba(125,211,252,{"0.4" if players_active else "0.2"}); border-radius: 6px; padding: 4px 12px; font-weight: {"700" if players_active else "600"}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}')
+        self.bases_tab_btn.setStyleSheet(f"QPushButton {{ background: rgba(125,211,252,{('0.2' if bases_active else '0.12')}); color: {('#fff' if bases_active else '#7DD3FC')}; border: 1px solid rgba(125,211,252,{('0.4' if bases_active else '0.2')}); border-radius: 6px; padding: 4px 12px; font-weight: {('700' if bases_active else '600')}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}")
+        self.players_tab_btn.setStyleSheet(f"QPushButton {{ background: rgba(125,211,252,{('0.2' if players_active else '0.12')}); color: {('#fff' if players_active else '#7DD3FC')}; border: 1px solid rgba(125,211,252,{('0.4' if players_active else '0.2')}); border-radius: 6px; padding: 4px 12px; font-weight: {('700' if players_active else '600')}; font-size: 12px; }} QPushButton:hover {{ background: rgba(125,211,252,0.25); }}")
         if index == 0:
             self.info_label.setText(t('map.info.select_base') if t else 'Click on a base marker or list item to view details')
         else:

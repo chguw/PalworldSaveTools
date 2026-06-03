@@ -1122,7 +1122,6 @@ def remove_item_from_players(item_id, percentage=None, player_uids=None):
 def add_item_to_players(item_id, quantity=1, container_type='key', player_uids=None):
     if not constants.loaded_level_json:
         return {'added': 0, 'players_affected': 0, 'containers_modified': 0}
-
 def get_base_worker_pals(base_id):
     if not constants.loaded_level_json:
         return []
@@ -1160,7 +1159,6 @@ def get_base_worker_pals(base_id):
         except Exception:
             continue
     return pals
-
 def get_base_worker_container_id(base_id):
     if not constants.loaded_level_json:
         return None
