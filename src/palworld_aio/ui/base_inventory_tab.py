@@ -1147,7 +1147,11 @@ class BasePalsContentWidget(QFrame):
             return True
         return super().eventFilter(obj, event)
 
+    def _grid_idx_to_pal_idx(self, grid_idx):
+        return (self._current_page - 1) * self.SLOTS_PER_PAGE + grid_idx
+
     def _select_pal(self, idx):
+        pal_idx = self._grid_idx_to_pal_idx(idx)
         if self._selected_idx >= 0:
             prev = self.grid.itemAt(self._selected_idx)
             if prev and prev.widget():
@@ -1156,12 +1160,13 @@ class BasePalsContentWidget(QFrame):
         item = self.grid.itemAt(idx)
         if item and item.widget():
             item.widget().set_selected(True)
-        pal = self._pals[idx] if idx < len(self._pals) else None
+        pal = self._pals[pal_idx] if pal_idx < len(self._pals) else None
         if pal:
             self.pal_info.set_clicked_pal(pal['character_entry'])
 
     def _on_pal_hovered(self, idx):
-        pal = self._pals[idx] if idx < len(self._pals) else None
+        pal_idx = self._grid_idx_to_pal_idx(idx)
+        pal = self._pals[pal_idx] if pal_idx < len(self._pals) else None
         if pal:
             self.pal_info.set_hover_pal(pal['character_entry'])
 
@@ -1234,7 +1239,8 @@ class BasePalsContentWidget(QFrame):
             icon.update_display()
 
     def _on_pal_right_clicked(self, idx, action):
-        pal = self._pals[idx] if idx < len(self._pals) else None
+        pal_idx = self._grid_idx_to_pal_idx(idx)
+        pal = self._pals[pal_idx] if pal_idx < len(self._pals) else None
         if not pal:
             if action == 'add_new':
                 self._add_new_pal()
@@ -1296,7 +1302,7 @@ class BasePalsContentWidget(QFrame):
             import gc
             pal['character_entry']['value']['RawData']['value']['object']['SaveParameter']['value']['IsPlayer'] = {'id': None, 'type': 'BoolProperty', 'value': True}
             pal['character_entry']['value']['RawData']['value']['object']['SaveParameter']['value']['CharacterID']['value'] = 'None'
-            self._pals.pop(idx)
+            self._pals.pop(pal_idx)
             self._rebuild()
             return
         item = self.grid.itemAt(idx)
