@@ -1119,9 +1119,6 @@ def remove_item_from_players(item_id, percentage=None, player_uids=None):
         import traceback
         traceback.print_exc()
         return {'removed': 0, 'players_affected': 0, 'containers_modified': 0}
-def add_item_to_players(item_id, quantity=1, container_type='key', player_uids=None):
-    if not constants.loaded_level_json:
-        return {'added': 0, 'players_affected': 0, 'containers_modified': 0}
 def get_base_worker_pals(base_id):
     if not constants.loaded_level_json:
         return []
@@ -1172,6 +1169,9 @@ def get_base_worker_container_id(base_id):
         return str(base_entry['value']['WorkerDirector']['value']['RawData']['value'].get('container_id', ''))
     except (KeyError, TypeError):
         return None
+def add_item_to_players(item_id, quantity=1, container_type='key', player_uids=None):
+    if not constants.loaded_level_json:
+        return {'added': 0, 'players_affected': 0, 'containers_modified': 0}
     from palworld_aio.inventory_manager import ItemData
     if container_type == 'main' and ItemData.is_essential_item(item_id):
         container_type = 'key'
