@@ -1320,7 +1320,7 @@
   "xgp.err.extraction_exception": "Error running save extractor: {err}",
   "xgp.err.import_exception": "Error importing palworld_xgp_import module: {err}",
   "xgp.err.import_failed": "Import failed: {err}",
-  "xgp.err.module_missing": "palworld_save_tools module not found. Please ensure it's installed.",
+  "xgp.err.module_missing": "palsav module not found. Please ensure it's installed.",
   "xgp.err.no_saves": "No save files found",
   "xgp.err.no_valid_saves": "No valid saves found to convert",
   "xgp.err.no_xgp_saves": "No save files found on XGP. Please reinstall the game on XGP and try again.",

@@ -1,6 +1,6 @@
 import uuid
 import os
-from palworld_save_tools import json_tools
+from palsav import json_tools
 from typing import Any, Dict, Optional, List
 class UnifiedUUID:
     def __init__(self, value):

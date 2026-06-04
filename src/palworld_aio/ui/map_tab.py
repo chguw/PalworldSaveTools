@@ -1,5 +1,5 @@
 import os
-from palworld_save_tools import json_tools
+from palsav import json_tools
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QStackedWidget, QDialog, QPushButton, QSizePolicy, QHeaderView
 from PySide6.QtCore import Qt, QRectF, QPointF, QPoint, QSize, QTimer, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QPixmap, QPen, QBrush, QColor, QPainter, QFont, QIcon
@@ -9,6 +9,7 @@ import palworld_coord
 from palworld_aio import constants
 from palworld_aio.data_manager import delete_base_camp, get_tick
 from palworld_aio.base_manager import export_base_json, import_base_json, update_base_area_range
+from palworld_aio.backup_manager import export_base_backup
 from palworld_aio.guild_manager import rename_guild
 from palworld_aio.widgets import BaseHoverOverlay, PlayerHoverOverlay
 from palworld_aio.dialogs import RadiusInputDialog, InputDialog, ZoneManagementDialog
@@ -1396,17 +1397,33 @@ class MapTab(QWidget):
     def _export_base(self, base_data):
         try:
             bid = str(base_data['base_id'])
-            data = export_base_json(constants.loaded_level_json, bid)
-            if not data:
-                show_warning(self, t('error.title') if t else 'Error', t('base.export.not_found') if t else 'Base data not found')
+            default_name = f'base_{bid[:8]}'
+            file_path, selected_filter = QFileDialog.getSaveFileName(
+                self, t('base.export.title') if t else 'Export Base', default_name,
+                'PSTB Base Files (*.pstbase);;JSON Files (*.json)'
+            )
+            if not file_path:
                 return
-            default_name = f'base_{bid[:8]}.json'
-            file_path, _ = QFileDialog.getSaveFileName(self, t('base.export.title') if t else 'Export Base', default_name, 'JSON Files(*.json)')
-            if file_path:
+            is_pstbase = 'pstbase' in selected_filter if selected_filter else file_path.endswith('.pstbase')
+            if is_pstbase:
+                if not file_path.endswith('.pstbase'):
+                    file_path += '.pstbase'
+                level_sav = os.path.join(constants.current_save_path, 'Level.sav')
+                if not os.path.exists(level_sav):
+                    show_warning(self, t('error.title') if t else 'Error', 'Level.sav not found')
+                    return
+                export_base_backup(level_sav, bid, file_path, compressed=True)
+            else:
+                if not file_path.endswith('.json'):
+                    file_path += '.json'
+                data = export_base_json(constants.loaded_level_json, bid)
+                if not data:
+                    show_warning(self, t('error.title') if t else 'Error', t('base.export.not_found') if t else 'Base data not found')
+                    return
                 json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
-                img_x, img_y = base_data['img_coords']
-                self._play_effect(ExportEffect, img_x, img_y)
-                show_information(self, t('success.title') if t else 'Success', t('base.export.success') if t else 'Base exported successfully')
+            img_x, img_y = base_data['img_coords']
+            self._play_effect(ExportEffect, img_x, img_y)
+            show_information(self, t('success.title') if t else 'Success', t('base.export.success') if t else 'Base exported successfully')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f'Failed to export base: {str(e)}')
     def _adjust_base_radius(self, base_data):
@@ -1570,24 +1587,35 @@ class MapTab(QWidget):
         if not guild_bases:
             show_information(self, t('Info') if t else 'Info', f'No bases found for guild "{guild_name}".')
             return
+        export_type = show_question(self, 'Export Format', 'Export as compressed .pstbase files?\n\nYes = .pstbase (smaller)\nNo = .json')
+        compressed = export_type if export_type is not None else False
         export_dir = QFileDialog.getExistingDirectory(self, f'Select Export Directory for "{guild_name}"')
         if not export_dir:
             return
+        level_sav = os.path.join(constants.current_save_path, 'Level.sav')
         successful_exports = 0
         failed_exports = 0
         failed_bases = []
         for base_data in guild_bases:
             bid = str(base_data['base_id'])
             try:
-                data = export_base_json(constants.loaded_level_json, bid)
-                if not data:
-                    failed_exports += 1
-                    failed_bases.append(f'Base {bid}(no data)')
-                    continue
                 safe_gname = ''.join((c for c in guild_name if c.isalnum() or c in (' ', '-', '_'))).rstrip()
-                filename = f'base_{bid}_{safe_gname}.json'
+                ext = '.pstbase' if compressed else '.json'
+                filename = f'base_{bid}_{safe_gname}{ext}'
                 file_path = os.path.join(export_dir, filename)
-                json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
+                if compressed:
+                    if not os.path.exists(level_sav):
+                        failed_exports += 1
+                        failed_bases.append(f'Base {bid}(Level.sav not found)')
+                        continue
+                    export_base_backup(level_sav, bid, file_path, compressed=True)
+                else:
+                    data = export_base_json(constants.loaded_level_json, bid)
+                    if not data:
+                        failed_exports += 1
+                        failed_bases.append(f'Base {bid}(no data)')
+                        continue
+                    json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
                 successful_exports += 1
                 img_x, img_y = base_data['img_coords']
                 self._play_effect(ExportEffect, img_x, img_y)

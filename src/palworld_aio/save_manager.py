@@ -2,7 +2,7 @@ import os
 import sys
 import time
 import shutil
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import logging
 import threading
 import re
@@ -11,10 +11,10 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_compl
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtCore import QObject, Signal
 from loading_manager import show_critical
-from palworld_save_tools.gvas import GvasFile
-from palworld_save_tools.palsav import decompress_sav_to_gvas
+from palsav.gvas import GvasFile
+from palsav.palsav import decompress_sav_to_gvas
 from palworld_aio.data_manager import load_game_data_map
-from palworld_save_tools.paltypes import PALWORLD_TYPE_HINTS
+from palsav.paltypes import PALWORLD_TYPE_HINTS
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palobject import MappingCacheObject, toUUID
 from import_libs import backup_whole_directory, run_with_loading

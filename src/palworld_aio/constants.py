@@ -43,7 +43,7 @@ def get_src_path():
         return os.path.join(os.path.dirname(sys.executable), 'src')
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def get_icon_path():
-    return os.path.join(get_base_path(), 'resources', 'pal.ico')
+    return os.path.join(get_base_path(), 'resources', 'icon.ico')
 ICON_PATH = get_icon_path()
 EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'deletion_exclusions.json')
 ZONE_EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'zone_exclusions.json')

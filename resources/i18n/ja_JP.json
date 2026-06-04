@@ -994,7 +994,7 @@
   "xgp.err.extraction_exception": "抽出器実行中にエラー発生：{err}",
   "xgp.err.import_exception": "palworld_xgp_import モジュールのインポートに失敗：{err}",
   "xgp.err.import_failed": "インポートに失敗しました：{err}",
-  "xgp.err.module_missing": "palworld_save_tools モジュールが見つかりません、インストールを確認してください。",
+  "xgp.err.module_missing": "palsav モジュールが見つかりません、インストールを確認してください。",
   "xgp.err.no_saves": "セーブデータが見つかりません",
   "xgp.err.no_valid_saves": "変換する有効なセーブが見つかりません",
   "xgp.err.no_xgp_saves": "XGP にセーブデータが見つかりません、XGP 版ゲームを再インストールして再試行してください",

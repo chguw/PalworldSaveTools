@@ -1,5 +1,5 @@
 import os
-from palworld_save_tools.archive import UUID
+from palsav.archive import UUID
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.utils import are_equal_uuids, as_uuid, fast_deepcopy, extract_value
@@ -496,7 +496,7 @@ def rebuild_all_guilds():
                     eff_owner = pe.get('effective_owner', '')
                     if not owner_norm and eff_owner:
                         owner_norm = eff_owner
-                        from palworld_save_tools.archive import UUID as _ArchUUID
+                        from palsav.archive import UUID as _ArchUUID
                         owner = _ArchUUID.from_str(eff_owner)
                     owner_pc = player_containers.get(owner_norm, ('', '', ''))
                     palbox_cid = owner_pc[2]
@@ -545,7 +545,7 @@ def rebuild_all_guilds():
                 sp_cleaned = _uuid_to_str(new_sp)
                 for k in list(new_sp.keys()):
                     new_sp[k] = sp_cleaned[k]
-                from palworld_save_tools.archive import UUID as _ArchUUID
+                from palsav.archive import UUID as _ArchUUID
                 if not is_base:
                     new_sp['OwnerPlayerUId']['value'] = _ArchUUID.from_str(str(new_sp['OwnerPlayerUId']['value']))
                 new_sp['SlotId']['value']['ContainerId']['value']['ID']['value'] = _ArchUUID.from_str(str(new_sp['SlotId']['value']['ContainerId']['value']['ID']['value']))
@@ -563,7 +563,7 @@ def rebuild_all_guilds():
     for cid_norm, slot_entry in new_container_slots:
         cont = container_map.get(cid_norm)
         if cont is None:
-            from palworld_save_tools.archive import UUID as PalUUID
+            from palsav.archive import UUID as PalUUID
             cont = {'key': {'ID': {'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': str(PalUUID.from_str(cid_norm)), 'type': 'StructProperty'}}, 'value': {'Slots': {'id': None, 'value': {'values': [], 'type': 'ArrayProperty'}, 'key_type': 'None', 'value_type': 'StructProperty', 'type': 'StructProperty'}}}
             containers.append(cont)
             container_map[cid_norm] = cont

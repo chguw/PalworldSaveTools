@@ -1,11 +1,11 @@
 import os
-from palworld_save_tools import json_tools
+from palsav import json_tools
 from PySide6.QtWidgets import QApplication, QMessageBox
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.utils import are_equal_uuids, as_uuid, sav_to_gvasfile, gvasfile_to_sav
 from palworld_aio.data_manager import delete_player
-from palworld_save_tools.palsav import compress_gvas_to_sav
+from palsav.palsav import compress_gvas_to_sav
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 def _load_exp_data():
     base_dir = constants.get_base_path()

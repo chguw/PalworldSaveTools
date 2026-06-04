@@ -994,7 +994,7 @@
   "xgp.err.extraction_exception": "추출기 실행 중 오류: {err}",
   "xgp.err.import_exception": "palworld_xgp_import 모듈 가져오기 실패: {err}",
   "xgp.err.import_failed": "가져오기 실패: {err}",
-  "xgp.err.module_missing": "palworld_save_tools 모듈을 찾을 수 없습니다. 설치를 확인하세요.",
+  "xgp.err.module_missing": "palsav 모듈을 찾을 수 없습니다. 설치를 확인하세요.",
   "xgp.err.no_saves": "세이브를 찾을 수 없습니다",
   "xgp.err.no_valid_saves": "변환할 유효한 세이브를 찾을 수 없습니다",
   "xgp.err.no_xgp_saves": "XGP에서 세이브를 찾을 수 없습니다. XGP 버전 게임 재설치 후 다시 시도하세요",

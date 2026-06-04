@@ -1,5 +1,5 @@
 import os
-from palworld_save_tools import json_tools
+from palsav import json_tools
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QScrollArea, QGroupBox, QCheckBox, QMessageBox, QAbstractItemView, QListView
 from PySide6.QtCore import Qt, Signal, QSize, QEvent
 from PySide6.QtGui import QShowEvent

@@ -2,7 +2,7 @@ import os
 import math
 import re
 import copy
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import uuid
 import threading
 from functools import partial

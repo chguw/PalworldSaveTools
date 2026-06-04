@@ -1,9 +1,9 @@
 import os
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import uuid
 import sys
 from collections import defaultdict
-from palworld_save_tools.archive import UUID
+from palsav.archive import UUID
 from i18n import t
 from typing import Optional, Dict, List, Any
 from palworld_aio import constants

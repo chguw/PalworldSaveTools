@@ -1,6 +1,6 @@
 import os
 import time
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import palworld_coord
 from i18n import t
 from palworld_aio import constants
@@ -174,9 +174,14 @@ def generate_world_map(output_path=None, map_type='world'):
         painter.drawText(x_offset - rect.width() - 2, y_offset - 2, line)
         painter.setPen(QColor(255, 0, 0))
         painter.drawText(x_offset - rect.width(), y_offset, line)
-    logo_name = 'PalworldSaveTools_Blue.png' if is_dark_mode else 'PalworldSaveTools_Black.png'
-    logo_path = os.path.join(base_dir, 'resources', logo_name)
-    if os.path.exists(logo_path):
+    logo_candidates = ['logo.png', 'PalworldSaveTools_Blue.png', 'PalworldSaveTools_Black.png']
+    logo_path = None
+    for name in logo_candidates:
+        p = os.path.join(base_dir, 'resources', name)
+        if os.path.exists(p):
+            logo_path = p
+            break
+    if logo_path:
         try:
             logo = QImage(logo_path)
             if not logo.isNull():

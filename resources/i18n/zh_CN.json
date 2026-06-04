@@ -997,7 +997,7 @@
   "xgp.err.extraction_exception": "运行提取器时出错：{err}",
   "xgp.err.import_exception": "导入 palworld_xgp_import 模块失败：{err}",
   "xgp.err.import_failed": "导入失败：{err}",
-  "xgp.err.module_missing": "未找到 palworld_save_tools 模块，请确认已安装。",
+  "xgp.err.module_missing": "未找到 palsav 模块，请确认已安装。",
   "xgp.err.no_saves": "未找到任何存档",
   "xgp.err.no_valid_saves": "未找到要转换的有效存档",
   "xgp.err.no_xgp_saves": "未在 XGP 找到存档，请重新安装 XGP 版游戏后重试",

@@ -2,7 +2,7 @@ from __future__ import annotations
 import os
 import sys
 from typing import Dict, Any
-from palworld_save_tools import json_tools
+from palsav import json_tools
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 if getattr(sys, 'frozen', False):
     base_dir = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))

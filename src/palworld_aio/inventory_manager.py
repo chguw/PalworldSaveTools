@@ -1,7 +1,7 @@
 import os
 import json
 import re
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import sys
 import uuid
 from PySide6.QtGui import QPixmap, QIcon

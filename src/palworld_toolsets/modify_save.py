@@ -254,7 +254,7 @@ def _build_selector_window():
     win.setModal(True)
     win.setFixedSize(520, 250)
     try:
-        ico_path = os.path.join(get_base_directory(), 'resources', 'pal.ico')
+        ico_path = os.path.join(get_base_directory(), 'resources', 'icon.ico')
         if os.path.exists(ico_path):
             win.setWindowIcon(QIcon(ico_path))
     except Exception as e:
@@ -401,7 +401,7 @@ class MenuGUI(QMainWindow):
     def __init__(self):
         super().__init__()
         try:
-            ico_path = os.path.join(get_base_directory(), 'resources', 'pal.ico')
+            ico_path = os.path.join(get_base_directory(), 'resources', 'icon.ico')
             if os.path.exists(ico_path):
                 self.setWindowIcon(QIcon(ico_path))
         except Exception:

@@ -4,7 +4,7 @@ import uuid
 import copy
 import math
 import random
-from palworld_save_tools.archive import UUID as PalUUID
+from palsav.archive import UUID as PalUUID
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.utils import fast_deepcopy, are_equal_uuids, as_uuid
@@ -333,7 +333,7 @@ def import_base_json(loaded_level_json, exported_data, target_guild_id, offset=(
         guild_name = target_group['value']['RawData']['value'].get('guild_name', 'Unknown')
         constants.base_guild_lookup[str(new_base_id)] = {'GuildName': guild_name, 'GuildID': tgt_gid_str}
     from palworld_aio.edit_pals import _generate_pal_save_param, _register_pal_instance_to_guild
-    from palworld_save_tools.archive import UUID as _ArchUUID
+    from palsav.archive import UUID as _ArchUUID
     def _uuid_to_str(obj):
         if isinstance(obj, dict):
             return {k: _uuid_to_str(v) for k, v in obj.items()}

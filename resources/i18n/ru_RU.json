@@ -992,7 +992,7 @@
   "xgp.err.extraction_exception": "Ошибка при запуске извлекателя сохранений: {err}",
   "xgp.err.import_exception": "Ошибка при импорте модуля palworld_xgp_import: {err}",
   "xgp.err.import_failed": "Импорт не удался: {err}",
-  "xgp.err.module_missing": "Модуль palworld_save_tools не найден. Убедитесь, что он установлен.",
+  "xgp.err.module_missing": "Модуль palsav не найден. Убедитесь, что он установлен.",
   "xgp.err.no_saves": "Сохранения не найдены",
   "xgp.err.no_valid_saves": "Не найдено допустимых сохранений для конвертации",
   "xgp.err.no_xgp_saves": "Сохранения XGP не найдены. Переустановите игру на XGP и попробуйте снова.",

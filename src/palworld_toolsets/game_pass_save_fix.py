@@ -319,7 +319,7 @@ class GamePassSaveFixWidget(QWidget):
             try:
                 import logging
                 logging.disable(logging.CRITICAL)
-                from palworld_save_tools.commands import convert
+                from palsav.commands import convert
                 old_argv = sys.argv
                 sys.argv = ['convert', save_path]
                 convert.main()
@@ -352,7 +352,7 @@ class GamePassSaveFixWidget(QWidget):
             try:
                 import logging
                 logging.disable(logging.CRITICAL)
-                from palworld_save_tools.commands import convert
+                from palsav.commands import convert
                 if os.path.exists(sav_path) and (not os.path.exists(json_path)):
                     old = sys.argv
                     sys.argv = ['convert', sav_path]

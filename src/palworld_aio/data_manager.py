@@ -1,7 +1,7 @@
 import os
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import palworld_coord
-from palworld_save_tools.archive import UUID
+from palsav.archive import UUID
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.utils import are_equal_uuids, as_uuid, fast_deepcopy

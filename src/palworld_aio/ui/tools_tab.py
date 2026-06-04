@@ -1,6 +1,6 @@
 import os
 import sys
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import traceback
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QScrollArea, QSizePolicy, QSpacerItem, QGridLayout, QApplication, QDialog, QStylePainter, QStyleOptionButton, QStyle
 from PySide6.QtCore import Qt, QSize, Signal, QPropertyAnimation, QEasingCurve, QRectF
@@ -134,7 +134,7 @@ class ToolCard(QFrame):
                 pix = pix.scaled(40, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.icon_label.setPixmap(pix)
         else:
-            default_icon = os.path.join(constants.get_base_path(), 'resources', 'pal.ico')
+            default_icon = os.path.join(constants.get_base_path(), 'resources', 'icon.ico')
             if os.path.exists(default_icon):
                 pix = QPixmap(default_icon)
                 if pix.width() > 40 or pix.height() > 40:

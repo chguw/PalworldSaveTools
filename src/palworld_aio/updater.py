@@ -2,7 +2,7 @@ import os
 import sys
 import re
 import ssl
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import subprocess
 import tempfile
 import shutil

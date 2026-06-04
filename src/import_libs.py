@@ -25,15 +25,14 @@ class NerdBtn(QPushButton):
         p.drawText(int(x), int(y), self.text())
         p.end()
 from i18n import init_language, t, set_language, get_language, load_resources
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'palworld_save_tools', 'commands')))
-from palworld_save_tools.archive import *
-from palworld_save_tools.palsav import *
-from palworld_save_tools.paltypes import *
-import palworld_save_tools.rawdata.group as palworld_save_group
+from palsav.archive import *
+from palsav import *
+from palsav.paltypes import *
+import palsav.rawdata.group as palworld_save_group
 from palobject import *
-from palworld_save_tools.gvas import *
-from palworld_save_tools.rawdata import *
-from palworld_save_tools.json_tools import *
+from palsav.gvas import *
+from palsav.rawdata import *
+from palsav.json_tools import *
 from palworld_coord import sav_to_map
 from common import ICON_PATH
 from collections import defaultdict

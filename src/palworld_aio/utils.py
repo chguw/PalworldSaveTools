@@ -4,13 +4,13 @@ import re
 import ssl
 import mmap
 import pickle
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import math
 import urllib.request
-from palworld_save_tools.archive import UUID
-from palworld_save_tools.gvas import GvasFile
-from palworld_save_tools.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
-from palworld_save_tools.paltypes import PALWORLD_TYPE_HINTS
+from palsav.archive import UUID
+from palsav.gvas import GvasFile
+from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
+from palsav.paltypes import PALWORLD_TYPE_HINTS
 from common import get_versions, get_base_directory
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palworld_aio import constants

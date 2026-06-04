@@ -145,13 +145,19 @@ class HeaderWidget(QWidget):
         webbrowser.open('https://discord.gg/sYcZwcT4cT')
     def update_logo(self):
         base_path = constants.get_base_path()
-        logo_path = os.path.join(base_path, 'resources', 'PalworldSaveTools_Blue.png')
-        if os.path.exists(logo_path):
-            pixmap = QPixmap(logo_path)
-            if not pixmap.isNull():
-                scaled = pixmap.scaledToHeight(44, Qt.SmoothTransformation)
-                self.logo_label.setPixmap(scaled)
-                self.logo_label.setFixedSize(scaled.size())
+        logo_candidates = ['logo.png', 'PalworldSaveTools_Blue.png', 'PST.png']
+        pixmap = None
+        for name in logo_candidates:
+            path = os.path.join(base_path, 'resources', name)
+            if os.path.exists(path):
+                pm = QPixmap(path)
+                if not pm.isNull():
+                    pixmap = pm
+                    break
+        if pixmap is not None:
+            scaled = pixmap.scaledToHeight(44, Qt.SmoothTransformation)
+            self.logo_label.setPixmap(scaled)
+            self.logo_label.setFixedSize(scaled.size())
         else:
             self.logo_label.setText('PALWORLD SAVE TOOLS')
             self.logo_label.setFont(QFont('', 14, QFont.Bold))

@@ -1,5 +1,5 @@
 import os, sys, subprocess, configparser
-from palworld_save_tools import json_tools
+from palsav import json_tools
 APP_NAME = 'PalworldSaveTools'
 APP_VERSION = '2.0.0'
 APP_BETA_VERSION = '2.0.1'
@@ -15,7 +15,7 @@ def get_src_directory():
     return os.path.join(base_dir, 'src')
 def get_resources_directory():
     return os.path.join(get_base_directory(), 'resources')
-ICON_PATH = os.path.join(get_resources_directory(), 'pal.ico')
+ICON_PATH = os.path.join(get_resources_directory(), 'icon.ico')
 BACKUP_BASE_DIR = os.path.join(get_base_directory(), 'Backups')
 def get_backup_directory(tool_name):
     return os.path.join(BACKUP_BASE_DIR, tool_name)

@@ -52,18 +52,11 @@ tmp/
 
 .build/
 uv.lock
-/PST.Bootstrapper/
 
 Logs/
 
-# Build
-build/dist/
-build/PST.Bootstrapper/bin/
-build/PST.Bootstrapper/obj/
-build/PST.Bootstrapper/payload/
-
 # pyooz (Cython)
-src/palworld_save_tools/pyooz/build/
+src/palsav/pyooz/build/
 
 # External assets
 Exports/

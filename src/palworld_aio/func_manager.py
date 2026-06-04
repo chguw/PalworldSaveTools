@@ -1,11 +1,11 @@
 import os
-from palworld_save_tools import json_tools
+from palsav import json_tools
 import random
 import logging
 import shutil
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
-from palworld_save_tools.archive import UUID
+from palsav.archive import UUID
 from PySide6.QtWidgets import QMessageBox, QInputDialog
 from i18n import t
 from palworld_aio import constants

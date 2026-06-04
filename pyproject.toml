@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 name = "PalworldSaveTools"
 version="2.0.0"
 description = "All-in-one tool for fixing/transferring/editing Palworld saves"
-readme = "readme.md"
+readme = "README.md"
 license = "MIT"
 authors = [{ name = "Pylar" }]
 requires-python = ">=3.11"
@@ -13,12 +13,17 @@ dependencies = [
     "pyside6-essentials",
     "Pillow",
     "cx-freeze>=8.3.0",
+    "loguru",
     "nerdfont",
-    "pyooz",
+    "packaging",
+    "palsav-flex",
+    "brotli",
+    "cbor2",
+    "zstandard",
 ]
 
 [tool.uv.sources]
-pyooz = { path = "./src/palworld_save_tools/pyooz" }
+palsav-flex = { path = "./src/palsav" }
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["src*"]

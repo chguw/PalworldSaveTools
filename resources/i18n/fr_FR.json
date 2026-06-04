@@ -976,7 +976,7 @@
   "xgp.err.extraction_exception": "Erreur lors de l'exécution de l'extracteur : {err}",
   "xgp.err.import_exception": "Échec de l'import du module palworld_xgp_import : {err}",
   "xgp.err.import_failed": "Import échoué : {err}",
-  "xgp.err.module_missing": "Module palworld_save_tools introuvable, veuillez vérifier l'installation.",
+  "xgp.err.module_missing": "Module palsav introuvable, veuillez vérifier l'installation.",
   "xgp.err.no_saves": "Aucune sauvegarde trouvée",
   "xgp.err.no_valid_saves": "Aucune sauvegarde valide trouvée à convertir",
   "xgp.err.no_xgp_saves": "Aucune sauvegarde XGP trouvée, réinstallez le jeu GamePass et réessayez",

@@ -1,6 +1,6 @@
 import uuid
 from typing import Any, Dict, List, Optional, Union
-from palworld_save_tools.archive import UUID as ArchiveUUID
+from palsav.archive import UUID as ArchiveUUID
 UUID = uuid.UUID
 from palworld_aio.dynamic_item_manager import get_dynamic_item_manager, generate_dynamic_item_uuid, as_uuid, are_equal_uuids
 from palworld_aio.utils import fast_deepcopy

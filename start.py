@@ -50,8 +50,20 @@ def ensure_venv():
         if VENV_DIR.exists():
             shutil.rmtree(VENV_DIR, ignore_errors=True)
         return False
+def ensure_submodules():
+    log('Initializing git submodules...', CYAN)
+    result = subprocess.run(['git', 'submodule', 'update', '--init', '--recursive'], cwd=PROJECT_DIR)
+    if result.returncode != 0:
+        log('Failed to initialize submodules', RED)
+        return False
+    log('Submodules ready', GREEN)
+    return True
 def main():
     print(f'{BOLD}{LOGO}{RESET}')
+    if not ensure_submodules():
+        log('Setup failed', RED)
+        input('Press Enter to exit...')
+        sys.exit(1)
     if not ensure_venv():
         log('Setup failed', RED)
         input('Press Enter to exit...')
@@ -59,7 +71,10 @@ def main():
     vpy = venv_python()
     bootup_py = PROJECT_DIR / 'src' / 'bootup.py'
     log('Starting PalworldSaveTools...', GREEN)
-    result = subprocess.run([str(vpy), str(bootup_py)])
-    sys.exit(result.returncode)
+    try:
+        result = subprocess.run([str(vpy), str(bootup_py)])
+        sys.exit(result.returncode)
+    except KeyboardInterrupt:
+        sys.exit(0)
 if __name__ == '__main__':
     main()

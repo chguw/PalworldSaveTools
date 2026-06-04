@@ -1018,7 +1018,7 @@
   "xgp.err.extraction_exception": "Fehler beim Ausführen des Extractors: {err}",
   "xgp.err.import_exception": "Fehler beim Import des Moduls palworld_xgp_import: {err}",
   "xgp.err.import_failed": "Import fehlgeschlagen: {err}",
-  "xgp.err.module_missing": "palworld_save_tools Modul nicht gefunden, bitte prüfen ob installiert",
+  "xgp.err.module_missing": "palsav Modul nicht gefunden, bitte prüfen ob installiert",
   "xgp.err.no_saves": "Keine Speicher gefunden",
   "xgp.err.no_valid_saves": "Keine gültigen Speicherstände zum Konvertieren gefunden",
   "xgp.err.no_xgp_saves": "Keine XGP-Speicher gefunden, GamePass neu installieren und erneut versuchen",

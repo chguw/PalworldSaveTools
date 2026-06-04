@@ -11,9 +11,12 @@ import atexit
 from pathlib import Path
 from packaging.requirements import Requirement
 from importlib.metadata import version, PackageNotFoundError
-from palworld_save_tools import json_tools
 from typing import Optional, Tuple
 PROJECT_DIR = Path(__file__).resolve().parent.parent
+_src = str(PROJECT_DIR / 'src')
+if _src not in sys.path:
+    sys.path.insert(0, _src)
+from palsav import json_tools
 if os.environ.get('PST_NO_GUI', '') in ('1', 'true', 'True'):
     GUI_AVAILABLE = False
 else:
@@ -219,17 +222,61 @@ def load_splash_styles():
         with open(qss_path, 'r') as f:
             return f.read()
     return DARK_STYLE_SPLASH
+if GUI_AVAILABLE:
+    def _find_resource(*paths: str) -> Optional[Path]:
+        for p in paths:
+            candidate = PROJECT_DIR / p
+            if candidate.exists():
+                return candidate
+        base = PROJECT_DIR / 'resources'
+        for p in paths:
+            candidate = base / os.path.basename(p)
+            if candidate.exists():
+                return candidate
+        return None
+
+    def _load_bg_pixmap() -> Optional[QPixmap]:
+        bg_path = _find_resource('resources/background.png', 'resources/background.png')
+        if bg_path:
+            pix = QPixmap(str(bg_path))
+            if not pix.isNull():
+                return pix
+        return None
+
+    def _load_logo_pixmap() -> Optional[QPixmap]:
+        logo_path = _find_resource('resources/logo.png', 'resources/PalworldSaveTools_Blue.png')
+        if logo_path:
+            pix = QPixmap(str(logo_path))
+            if not pix.isNull():
+                return pix
+        return None
+
 def build_splash_ui():
     global app, _logo_original_pixmap
     container = QWidget(None, Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
     container.setAttribute(Qt.WA_TranslucentBackground, True)
-    container.setFixedSize(600, 320)
+    container.setFixedSize(620, 360)
     container.setStyleSheet(load_splash_styles())
+
+    bg_pixmap = _load_bg_pixmap()
+    if bg_pixmap is not None:
+        bg_label = QLabel(container)
+        bg_label.setGeometry(0, 0, container.width(), container.height())
+        scaled_bg = bg_pixmap.scaled(container.width(), container.height(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+        bg_label.setPixmap(scaled_bg)
+        bg_label.lower()
+        container._bg_label = bg_label
+
+    overlay = QFrame(container)
+    overlay.setGeometry(0, 0, container.width(), container.height())
+    overlay.setStyleSheet('background: rgba(10,12,16,0.45);')
+    overlay.lower()
+
     frame = QFrame(container)
     frame.setObjectName('glass')
-    frame.setGeometry(12, 12, container.width() - 24, container.height() - 24)
+    frame.setGeometry(14, 14, container.width() - 28, container.height() - 28)
     layout = QVBoxLayout(frame)
-    layout.setContentsMargins(16, 16, 16, 16)
+    layout.setContentsMargins(20, 18, 20, 18)
     layout.setSpacing(12)
     logo_box = QFrame()
     logo_box.setObjectName('logoBox')
@@ -242,12 +289,8 @@ def build_splash_ui():
     logo_layout.addWidget(logo_label)
     logo_layout.addItem(QSpacerItem(8, 10, QSizePolicy.Expanding, QSizePolicy.Minimum))
     layout.addWidget(logo_box)
-    logo_path = PROJECT_DIR / 'resources' / 'PalworldSaveTools_Blue.png'
-    if logo_path.exists():
-        pix = QPixmap(str(logo_path))
-        if not pix.isNull():
-            _logo_original_pixmap = pix
-    else:
+    _logo_original_pixmap = _load_logo_pixmap()
+    if _logo_original_pixmap is None:
         logo_label.setText('PALWORLD')
         logo_label.setStyleSheet('font-weight: 800; color: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,stop:0 #7DD3FC,stop:1 #A78BFA);')
     short_lbl = QLabel('starting')
@@ -268,13 +311,8 @@ def build_splash_ui():
         effect = QGraphicsOpacityEffect(frame)
         frame.setGraphicsEffect(effect)
         effect.setOpacity(0.0)
-        anim = QPropertyAnimation(effect, b'opacity', container)
-        anim.setDuration(700)
-        anim.setStartValue(0.0)
-        anim.setEndValue(1.0)
-        anim.setEasingCurve(QEasingCurve.InOutQuad)
-        anim.start()
-        container._fade_anim = anim
+        container._frame_effect = effect
+        container._frame = frame
     except Exception:
         if DEBUG:
             traceback.print_exc()
@@ -581,9 +619,6 @@ def main():
                 splash_window, short_label, gui_progress_bar, tiny_label = build_splash_ui()
                 splash_window.show()
                 app.processEvents()
-                _start_tick_timer()
-                _start_install_timer()
-                _start_joke_timer()
             except Exception:
                 if DEBUG:
                     traceback.print_exc()
@@ -726,7 +761,31 @@ def main():
             else:
                 print_small('Startup failed')
                 sys.exit(rc_final)
-    start_worker()
+    if GUI_AVAILABLE and splash_window is not None:
+        def _fade_in_and_start():
+            try:
+                effect = splash_window._frame_effect
+                anim = QPropertyAnimation(effect, b'opacity', splash_window)
+                anim.setDuration(800)
+                anim.setStartValue(0.0)
+                anim.setEndValue(1.0)
+                anim.setEasingCurve(QEasingCurve.OutQuad)
+                def on_fade_done():
+                    _start_tick_timer()
+                    _start_install_timer()
+                    _start_joke_timer()
+                    start_worker()
+                anim.finished.connect(on_fade_done)
+                anim.start()
+                splash_window._entry_anim = anim
+            except Exception:
+                if DEBUG:
+                    traceback.print_exc()
+                start_worker()
+        wait_ms = max(200, min(3000, int(get_config_value('bootup_delay', 800))))
+        QTimer.singleShot(wait_ms, _fade_in_and_start)
+    else:
+        start_worker()
     if GUI_AVAILABLE and app is not None:
         try:
             sys.exit(app.exec())

@@ -4,9 +4,9 @@ from PySide6.QtWidgets import QHeaderView, QWidget, QTreeWidget, QTreeWidgetItem
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QIcon, QFont
 import os
-from palworld_save_tools.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
-from palworld_save_tools.paltypes import PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PROPERTIES
-from palworld_save_tools.gvas import GvasFile
+from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
+from palsav.paltypes import PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PROPERTIES
+from palsav.gvas import GvasFile
 from palworld_aio.ui.styles import ThemeManager
 from palworld_aio.container_ownership import ContainerOwnership
 from palworld_aio.inventory_manager import PlayerInventory
@@ -529,7 +529,7 @@ def migrate_pal_via_api(pal_data, target_uid, targ_lvl, target_player_json, targ
         used_ids.add(bumped)
         return bumped
     new_inst_str = bump_guid_str(instance_id)
-    from palworld_save_tools.archive import UUID as PalUUID
+    from palsav.archive import UUID as PalUUID
     new_instance = PalUUID.from_str(new_inst_str)
     skeleton['key']['InstanceId']['value'] = new_instance
     sp = skeleton['value']['RawData']['value']['object']['SaveParameter']['value']
@@ -812,8 +812,8 @@ def sync_player_timestamps(targ_uid, target_lvl):
         return True
     except:
         return False
-from palworld_save_tools.archive import UUID as PalUUID
-from palworld_save_tools.archive import FArchiveWriter
+from palsav.archive import UUID as PalUUID
+from palsav.archive import FArchiveWriter
 def _new_guid():
     return PalUUID(os.urandom(16))
 def _set_player_groupid(targ_json, group_id):
@@ -964,7 +964,7 @@ def transfer_pals_only():
         targ_uid = UUID.from_str(selected_target_player or selected_source_player)
     except:
         return False
-    from palworld_save_tools.archive import UUID as PalUUID
+    from palsav.archive import UUID as PalUUID
     zero = PalUUID.from_str('00000000-0000-0000-0000-000000000000')
     target_guild_id = zero
     for entry in targ_lvl.get('GroupSaveDataMap', {}).get('value', []):

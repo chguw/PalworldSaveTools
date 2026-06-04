@@ -1,8 +1,14 @@
 pyside6-essentials
 cx-freeze>=8.3.0
+loguru
 nerdfont
 py7zr
 orjson
+packaging
 Pillow
+brotli
+cbor2
+zstandard
 
-./src/palworld_save_tools/pyooz
+./src/palsav
+./src/palsav/pyooz
