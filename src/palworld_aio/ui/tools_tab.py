@@ -114,32 +114,57 @@ class ConversionOptionsDialog(QDialog):
             super().keyPressEvent(event)
     def _load_theme(self):
         ThemeManager.apply_to_widget(self)
+class _SquareLabel(QLabel):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        sp = self.sizePolicy()
+        sp.setHeightForWidth(True)
+        self.setSizePolicy(sp)
+    def heightForWidth(self, width):
+        return width
+    def hasHeightForWidth(self):
+        return True
+    def sizeHint(self):
+        sh = super().sizeHint()
+        s = max(sh.width(), sh.height())
+        return QSize(s, s)
+    def minimumSizeHint(self):
+        msh = super().minimumSizeHint()
+        s = max(msh.width(), msh.height())
+        return QSize(s, s)
 class ToolCard(QFrame):
     clicked = Signal()
+    _ICON_MIN = 24
+    _ICON_MAX = 72
     def __init__(self, label_text, tooltip_text, description_text=None, icon_path=None, parent=None):
         super().__init__(parent)
         self.setObjectName('toolCard')
         self.setProperty('class', 'toolCard')
         self.setCursor(QCursor(Qt.PointingHandCursor))
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(12)
-        self.icon_label = QLabel()
-        self.icon_label.setFixedSize(40, 40)
+        self._orig_pixmap = QPixmap()
+        self._last_icon_size = 0
+        self._card_layout = QHBoxLayout(self)
+        self._card_layout.setContentsMargins(10, 10, 10, 10)
+        self._card_layout.setSpacing(12)
+        layout = self._card_layout
+        self.icon_label = _SquareLabel()
+        self.icon_label.setMinimumSize(self._ICON_MIN, self._ICON_MIN)
+        self.icon_label.setMaximumSize(self._ICON_MAX, self._ICON_MAX)
+        self.icon_label.setAlignment(Qt.AlignCenter)
         self.icon_label.setObjectName('toolCardIcon')
+        loaded = False
         if icon_path and os.path.exists(icon_path):
             pix = QPixmap(icon_path)
-            if pix.width() > 40 or pix.height() > 40:
-                pix = pix.scaled(40, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-            self.icon_label.setPixmap(pix)
-        else:
+            if not pix.isNull():
+                self._orig_pixmap = pix
+                loaded = True
+        if not loaded:
             default_icon = os.path.join(constants.get_base_path(), 'resources', 'icon.ico')
             if os.path.exists(default_icon):
                 pix = QPixmap(default_icon)
-                if pix.width() > 40 or pix.height() > 40:
-                    pix = pix.scaled(40, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-                self.icon_label.setPixmap(pix)
+                if not pix.isNull():
+                    self._orig_pixmap = pix
         layout.addWidget(self.icon_label)
         text_column = QVBoxLayout()
         text_column.setSpacing(4)
@@ -161,6 +186,21 @@ class ToolCard(QFrame):
             self.desc_label = None
         text_column.addStretch()
         layout.addLayout(text_column, 1)
+    def _update_icon_size(self):
+        if self._orig_pixmap is None or self._orig_pixmap.isNull():
+            return
+        target = self.icon_label.width()
+        if target <= 1:
+            return
+        target = max(self._ICON_MIN, min(target, self._ICON_MAX))
+        if abs(target - self._last_icon_size) < 2:
+            return
+        self._last_icon_size = target
+        scaled = self._orig_pixmap.scaled(target, target, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.icon_label.setPixmap(scaled)
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._update_icon_size()
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.clicked.emit()
