@@ -210,7 +210,7 @@ class MapGraphicsView(QGraphicsView):
         if self.zone_drawing_mode and self.zone_shape_type == 'rect' and (self.zone_point_a is not None):
             scene_pos = self.mapToScene(event.pos())
             if self.zone_preview_item:
-                self.zone_preview_item.set_preview_point(scene_pos)
+                self.zone_preview_item.update_preview(self.zone_point_a, scene_pos)
             if self.scene() and self.scene().sceneRect().contains(scene_pos):
                 rect = self.scene().sceneRect()
                 width, height = (rect.width(), rect.height())
