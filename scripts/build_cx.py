@@ -46,7 +46,7 @@ def build_with_cx_freeze():
     if os.path.exists('uv.lock'):
         os.remove('uv.lock')
 def clean_build_artifacts():
-    items = ['build', 'PalworldSaveTools.egg-info', 'src/PalworldSaveTools.egg-info', 'Backups', 'PST_standalone', 'Logs', 'psp_windows', 'ppe_windows', 'updated_worldmap.png', 'PalDefender', 'XGP_converted_saves', 'saves']
+    items = ['PalworldSaveTools.egg-info', 'src/PalworldSaveTools.egg-info', 'Backups', 'PST_standalone', 'Logs', 'psp_windows', 'ppe_windows', 'updated_worldmap.png', 'PalDefender', 'XGP_converted_saves', 'saves']
     if not USE_EXISTING_VENV:
         items.extend(['.venv'])
     for item in items:
