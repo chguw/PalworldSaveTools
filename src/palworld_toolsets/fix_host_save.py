@@ -1,4 +1,5 @@
 from import_libs import *
+from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
 from loading_manager import show_information, show_warning
 from PySide6.QtWidgets import QHeaderView, QMainWindow, QWidget, QLineEdit, QTreeWidget, QTreeWidgetItem, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
