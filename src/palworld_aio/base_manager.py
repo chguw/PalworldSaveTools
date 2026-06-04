@@ -332,63 +332,89 @@ def import_base_json(loaded_level_json, exported_data, target_guild_id, offset=(
     if target_group:
         guild_name = target_group['value']['RawData']['value'].get('guild_name', 'Unknown')
         constants.base_guild_lookup[str(new_base_id)] = {'GuildName': guild_name, 'GuildID': tgt_gid_str}
-    worker_id_map = {}
+    from palworld_aio.edit_pals import _generate_pal_save_param, _register_pal_instance_to_guild
+    from palworld_save_tools.archive import UUID as _ArchUUID
+    def _uuid_to_str(obj):
+        if isinstance(obj, dict):
+            return {k: _uuid_to_str(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [_uuid_to_str(v) for v in obj]
+        elif hasattr(obj, 'raw_bytes'):
+            return str(obj)
+        return obj
     try:
         src_worker_container_id = _s(exported_data['base_camp']['value']['WorkerDirector']['value']['RawData']['value']['container_id'])
-    except:
+    except Exception:
         src_worker_container_id = ''
-    src_worker_container = next((c for c in exported_data.get('char_containers', []) if _s(c.get('key', {}).get('ID', {}).get('value')) == src_worker_container_id), None)
+    worker_containers = exported_data.get('char_containers', [])
+    src_worker_container = next((c for c in worker_containers if _s(c.get('key', {}).get('ID', {}).get('value')) == src_worker_container_id), None)
     if src_worker_container:
         ncnt = _deep(src_worker_container)
         ncnt['key']['ID']['value'] = new_worker_container_id
         if 'instance_id' in ncnt.get('value', {}):
             ncnt['value']['instance_id'] = new_worker_container_id
-        old_slots = ncnt['value']['Slots']['value'].get('values', [])
+        old_slots = src_worker_container['value']['Slots']['value'].get('values', [])
         new_slots = []
-        for slot in old_slots:
+        exported_chars = exported_data.get('characters', [])
+        empty_uid = '00000000-0000-0000-0000-000000000000'
+        for slot_idx, slot in enumerate(old_slots):
             s_raw = slot.get('RawData', {}).get('value', {})
             old_inst = _s(s_raw.get('instance_id', z))
-            if old_inst != _s(z):
-                new_inst = _new_uuid()
-                worker_id_map[old_inst] = new_inst
-                s_raw['instance_id'] = new_inst
+            if old_inst == _s(z):
                 new_slots.append(slot)
+                continue
+            char_entry = next((c for c in exported_chars if _s(c['key']['InstanceId']['value']) == old_inst), None)
+            if not char_entry:
+                new_slots.append(slot)
+                continue
+            try:
+                spv = char_entry['value']['RawData']['value']['object']['SaveParameter']['value']
+                cid = spv['CharacterID']['value']
+                nick = spv.get('NickName', {}).get('value', '')
+            except:
+                new_slots.append(slot)
+                continue
+            skeleton = _generate_pal_save_param(cid, nick, empty_uid, new_worker_container_id, slot_idx, target_guild_id)
+            new_inst = skeleton['key']['InstanceId']['value']
+            new_sp = skeleton['value']['RawData']['value']['object']['SaveParameter']['value']
+            for k, v in spv.items():
+                if k in ('CharacterID', 'NickName', 'OwnerPlayerUId', 'SlotId', 'IndividualId'):
+                    continue
+                new_sp[k] = _uuid_to_str(fast_deepcopy(v))
+            new_sp.pop('OwnerPlayerUId', None)
+            new_sp.pop('MapObjectConcreteInstanceIdAssignedToExpedition', None)
+            new_sp.pop('SanityValue', None)
+            new_sp.pop('HungerType', None)
+            new_sp.pop('PhysicalHealth', None)
+            new_sp.pop('WorkerSick', None)
+            new_sp.pop('CurrentWorkSuitability', None)
+            new_sp.pop('FoodWithStatusEffect', None)
+            new_sp.pop('Tiemr_FoodWithStatusEffect', None)
+            new_sp.pop('FoodRegeneEffectInfo', None)
+            new_sp.pop('ArenaRestoreParameter', None)
+            new_sp.pop('WorkSuitabilityOptionInfo', None)
+            sp_cleaned = _uuid_to_str(new_sp)
+            for k in list(new_sp.keys()):
+                new_sp[k] = sp_cleaned[k]
+            new_sp['SlotId']['value']['ContainerId']['value']['ID']['value'] = _ArchUUID.from_str(str(new_sp['SlotId']['value']['ContainerId']['value']['ID']['value']))
+            skeleton['value']['RawData']['value']['group_id'] = _ArchUUID.from_str(str(skeleton['value']['RawData']['value']['group_id']))
+            char_map.append(skeleton)
+            _register_pal_instance_to_guild(new_inst, target_guild_id)
+            new_slots.append({
+                'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_idx},
+                'RawData': {
+                    'array_type': 'ByteProperty', 'id': None,
+                    'value': {
+                        'player_uid': empty_uid,
+                        'instance_id': new_inst,
+                        'permission_tribe_id': 0
+                    },
+                    'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData',
+                    'type': 'ArrayProperty'
+                }
+            })
         ncnt['value']['Slots']['value']['values'] = new_slots
         char_containers.append(ncnt)
-    for old_iid, new_iid in worker_id_map.items():
-        char_entry = next((c for c in exported_data.get('characters', []) if _s(c['key']['InstanceId']['value']) == old_iid), None)
-        if char_entry:
-            n_char = _deep(char_entry)
-            n_char['key']['InstanceId']['value'] = new_iid
-            try:
-                c_raw = n_char['value']['RawData']['value']
-                c_raw['group_id'] = target_guild_id
-                spv = c_raw['object']['SaveParameter']['value']
-                spv['SlotId']['value']['ContainerId']['value']['ID']['value'] = new_worker_container_id
-                if 'MapObjectConcreteInstanceIdAssignedToExpedition' in spv:
-                    spv['MapObjectConcreteInstanceIdAssignedToExpedition']['value'] = z
-            except:
-                pass
-            char_map.append(n_char)
-            if target_group:
-                try:
-                    raw = target_group['value']['RawData']['value']
-                    handles = raw.setdefault('individual_character_handle_ids', [])
-                    seen = {}
-                    unique_handles = []
-                    for h in handles:
-                        try:
-                            inst = str(h['instance_id'])
-                            if inst not in seen:
-                                seen[inst] = True
-                                unique_handles.append(h)
-                        except:
-                            unique_handles.append(h)
-                    handles[:] = unique_handles
-                    if str(new_iid) not in seen:
-                        handles.append({'guid': z, 'instance_id': new_iid})
-                except:
-                    pass
     for nwe in cloned_works:
         work_root['value']['values'].append(nwe)
     for obj in exported_data.get('map_objects', []):
