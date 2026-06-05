@@ -205,7 +205,6 @@ class CharacterTransferWindow(QWidget):
         global level_json, host_json, targ_lvl, targ_json
         global target_gvas_file, targ_json_gvas, player_list_cache
         global modified_target_players, modified_targets_data
-        global _induction_mode, _induction_guild_choice, _selected_target_guild_id
         level_json = None
         host_json = None
         targ_lvl = None
@@ -214,9 +213,6 @@ class CharacterTransferWindow(QWidget):
         targ_json_gvas = None
         modified_target_players = set()
         modified_targets_data = {}
-        _induction_mode = False
-        _induction_guild_choice = None
-        _selected_target_guild_id = None
         import gc
         gc.collect()
         event.accept()
@@ -322,19 +318,12 @@ class CharacterTransferWindow(QWidget):
         self.current_selection_label.setWordWrap(True)
         self.current_selection_label.setAlignment(Qt.AlignCenter)
         glass_layout.addWidget(self.current_selection_label)
-        self._induction_active = False
-        self._target_player_header = ['Guild ID', 'GUID', 'Name', 'Level', 'Pals', 'Last Seen']
-        self._target_guild_header = ['Guild Name', 'Guild ID', 'Members', 'Bases', '', '']
         actions_row = QHBoxLayout()
         actions_row.setSpacing(12)
         transfer_all_btn = QPushButton(t('Transfer All'))
         transfer_all_btn.setToolTip(t('character_transfer.transfer_all_tooltip'))
         transfer_all_btn.clicked.connect(self.transfer_all_characters)
         actions_row.addWidget(transfer_all_btn)
-        self.induct_btn = QPushButton('Induct Character')
-        self.induct_btn.setToolTip('Induct source character as a NEW player into the target world')
-        self.induct_btn.clicked.connect(self.do_induct)
-        actions_row.addWidget(self.induct_btn)
         transfer_btn = QPushButton(t('Transfer'))
         transfer_btn.setToolTip(t('character_transfer.transfer_tooltip'))
         transfer_btn.clicked.connect(lambda: self.main(skip_msgbox=False))
@@ -391,10 +380,7 @@ class CharacterTransferWindow(QWidget):
             self.current_selection_label.setText(t('character_transfer.selection_status', source=selected_source_player or 'N/A', target=selected_target_player or 'N/A'))
     def on_selection_of_target_player(self):
         try:
-            if self._induction_active:
-                on_selection_of_target_guild()
-            else:
-                on_selection_of_target_player()
+            on_selection_of_target_player()
         except Exception:
             selected_items = self.target_player_list.selectedItems()
             global selected_target_player
@@ -421,62 +407,6 @@ class CharacterTransferWindow(QWidget):
             finalize_save(self)
         except Exception as e:
             print(f'GUI finalize_save error: {e}')
-    def do_induct(self):
-        global selected_source_player, _induction_guild_choice, _selected_target_guild_id
-        try:
-            if not self._induction_active:
-                if not targ_lvl:
-                    show_warning(None, t('Error!'), 'Please load the Target Level.sav first.')
-                    return
-                self._induction_active = True
-                self.induct_btn.setText('Confirm Induction')
-                self.target_player_list.itemSelectionChanged.disconnect()
-                self.target_player_list.itemSelectionChanged.connect(self.on_selection_of_target_player)
-                self._switch_target_to_guilds()
-                current_selection_label.setText('Select a target guild, then click "Confirm Induction" again.')
-                return
-            if not _induction_guild_choice:
-                show_warning(None, t('Error!'), 'Please select a target guild or "Create New Solo Guild".')
-                return
-            result = induct_character(skip_msgbox=False)
-            if result:
-                self._induction_active = False
-                self._switch_target_to_players()
-                self.induct_btn.setText('Induct Character')
-                selected_source_player = None
-                _induction_guild_choice = None
-                _selected_target_guild_id = None
-                self.source_player_list.clearSelection()
-                self.target_player_list.clearSelection()
-                current_selection_label.setText('Source: None,Target: None')
-            else:
-                self._induction_active = False
-                self._switch_target_to_players()
-                self.induct_btn.setText('Induct Character')
-                _induction_guild_choice = None
-                _selected_target_guild_id = None
-        except Exception as e:
-            print(f'GUI do_induct error: {e}')
-            self._induction_active = False
-            self._switch_target_to_players()
-            self.induct_btn.setText('Induct Character')
-    def _switch_target_to_guilds(self):
-        target_title = self.target_player_list.parent().findChild(QLabel)
-        if target_title:
-            target_title.setText('Target Guilds')
-        self.target_search_entry.setPlaceholderText('Search target guilds...')
-        self.target_player_list.setHeaderLabels(self._target_guild_header)
-        self.target_player_list.clear()
-        load_target_guilds_into_tree()
-    def _switch_target_to_players(self):
-        target_title = self.target_player_list.parent().findChild(QLabel)
-        if target_title:
-            target_title.setText(t('character_transfer.target_players'))
-        self.target_search_entry.setPlaceholderText(t('character_transfer.search_target_players'))
-        self.target_player_list.setHeaderLabels(self._target_player_header)
-        self.target_player_list.clear()
-        if targ_lvl:
-            load_players(targ_lvl, is_source=False)
 def load_json_files():
     global host_json_gvas, targ_json_gvas, host_json, targ_json
     host_json_gvas = load_player_file(level_sav_path, selected_source_player)
@@ -484,11 +414,15 @@ def load_json_files():
         return False
     host_json = host_json_gvas.properties
     target_uid = selected_target_player or selected_source_player
-    targ_json_gvas = load_player_file(t_level_sav_path, target_uid)
-    if not targ_json_gvas:
-        print(f'Target player file for {target_uid} not found. Player does not exist in target world. Load the game once with this save, then run the transfer again.')
-        return False
-    targ_json = targ_json_gvas.properties
+    if not selected_target_player or selected_target_player == selected_source_player:
+        targ_json_gvas = fast_deepcopy(host_json_gvas)
+        targ_json = fast_deepcopy(host_json)
+    else:
+        targ_json_gvas = load_player_file(t_level_sav_path, target_uid)
+        if not targ_json_gvas:
+            print(f'Target player file for {target_uid} not found.')
+            return False
+        targ_json = targ_json_gvas.properties
     return True
 def gather_inventory_ids(json_data):
     inv_info = json_data['SaveData']['value']['InventoryInfo']['value']
@@ -666,14 +600,7 @@ def transfer_all_characters():
                 print(f'[SKIP] {player_uuid} - Player level {player_level} < 2 (not leveled up)')
                 continue
             host_json = host_json_gvas.properties
-            try:
-                targ_json_gvas = load_player_file(t_level_sav_path, selected_target_player)
-                if targ_json_gvas is None:
-                    print(f'[SKIP] {player_uuid} - Player does not exist in target world. Run the transfer again after loading the game once.')
-                    continue
-            except:
-                print(f'[SKIP] {player_uuid} - Player does not exist in target world. Run the transfer again after loading the game once.')
-                continue
+            targ_json_gvas = fast_deepcopy(host_json_gvas)
             targ_json = targ_json_gvas.properties
             t0 = time.perf_counter()
             if _TRANSFER_STEPS['character']:
@@ -700,6 +627,7 @@ def transfer_all_characters():
             modified_target_players.add(selected_target_player)
             modified_targets_data[selected_target_player] = (fast_deepcopy(targ_json), targ_json_gvas, selected_source_player)
             print(f'[{i + 1}/{total_players}]{player_uuid} | Char: {t_char:.3f}s | Inv: {t_inv:.3f}s | Pals: {t_pals:.3f}s | Total: {time.perf_counter() - player_start:.3f}s')
+        gather_and_update_dynamic_containers()
         print(f'Bulk transfer completed in {time.perf_counter() - total_start:.2f}s.')
     def on_bulk_finished():
         load_players(targ_lvl, is_source=False)
@@ -815,6 +743,7 @@ def main(skip_msgbox=False, skip_gui=False):
             print('[FAIL]Pals')
             return
         print('[SUCCESS]Pals')
+    gather_and_update_dynamic_containers()
     if _TRANSFER_STEPS['timestamps']:
         sync_player_timestamps(targ_uid, targ_lvl)
     modified_target_players.add(selected_target_player)
@@ -883,6 +812,25 @@ def sync_player_timestamps(targ_uid, target_lvl):
         return True
     except:
         return False
+def gather_and_update_dynamic_containers():
+    src_items = level_json.get('DynamicItemSaveData', {}).get('value', {}).get('values', [])
+    tgt_items = targ_lvl.setdefault('DynamicItemSaveData', {}).setdefault('value', {}).setdefault('values', [])
+    tgt_by_id = {}
+    for item in tgt_items:
+        try:
+            lid = item.get('RawData', {}).get('value', {}).get('id', {}).get('local_id_in_created_world')
+            if lid:
+                tgt_by_id[lid] = item
+        except:
+            continue
+    for item in src_items:
+        try:
+            lid = item.get('RawData', {}).get('value', {}).get('id', {}).get('local_id_in_created_world')
+            if lid:
+                tgt_by_id[lid] = item
+        except:
+            continue
+    targ_lvl['DynamicItemSaveData']['value']['values'] = list(tgt_by_id.values())
 from palsav.archive import UUID as PalUUID
 from palsav.archive import FArchiveWriter
 def _new_guid():
@@ -893,7 +841,7 @@ def _set_player_groupid(targ_json, group_id):
 def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, target_world_tick=None):
     try:
         if 'GroupSaveDataMap' not in targ_lvl or targ_lvl['GroupSaveDataMap'].get('value') is None:
-            return False
+            targ_lvl['GroupSaveDataMap'] = {'value': []}
         guilds = targ_lvl['GroupSaveDataMap']['value']
         if not source_guild_dict:
             return False
@@ -929,7 +877,19 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, 
                 target_raw['admin_player_uid'] = targ_uid
             _set_player_groupid(targ_json, target_raw.get('group_id'))
             return True
-        return False
+        cloned = fast_deepcopy(source_entry)
+        cloned['key'] = _new_guid()
+        raw = cloned['value']['RawData']['value']
+        raw['group_id'] = _new_guid()
+        raw['group_name'] = 'Transferred Guild'
+        raw['guild_name'] = 'Transferred Guild'
+        raw['players'] = [source_player] if source_player else [{'player_uid': targ_uid, 'player_info': {'last_online_real_time': target_world_tick or 0, 'player_name': 'Player'}}]
+        raw['admin_player_uid'] = targ_uid
+        player_inst_id = targ_json['SaveData']['value']['IndividualId']['value']['InstanceId']['value']
+        raw['individual_character_handle_ids'] = [{'guid': PalUUID.from_str('00000000-0000-0000-0000-000000000000'), 'instance_id': player_inst_id}]
+        guilds.append(cloned)
+        _set_player_groupid(targ_json, raw['group_id'])
+        return True
     except Exception as e:
         print(f'[GUILD ERROR] {e}')
         return False
@@ -1092,8 +1052,6 @@ def finalize_save_task():
             _write_sav(target_gvas_file, t_level_sav_path)
         except Exception as e:
             errors.append(f'Level.sav: {e}')
-            print(f"[ERROR] Level.sav write failed: {e}")
-            return False
     for target_uid, (json_data, gvas_obj, src_uid) in modified_targets_data.items():
         try:
             tgt_dir = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
@@ -1280,486 +1238,6 @@ def finalize_save(window):
         run_with_loading(on_finished, finalize_save_task)
     except Exception as e:
         print(f'Exception in finalize_save: {e}')
-_induction_mode = False
-_induction_guild_choice = None
-_selected_target_guild_id = None
-def load_target_guilds():
-    global target_guild_dict
-    target_guild_dict.clear()
-    guilds = []
-    for g in targ_lvl.get('GroupSaveDataMap', {}).get('value', []):
-        try:
-            raw = g['value']['RawData']['value']
-            if 'values' in raw:
-                continue
-            gtype = g['value']['GroupType']['value']['value']
-            if gtype != 'EPalGroupType::Guild':
-                continue
-            gid = raw.get('group_id', '')
-            gname = raw.get('guild_name', '')
-            players = raw.get('players', [])
-            bases = raw.get('base_ids', [])
-            target_guild_dict[gid] = g
-            guilds.append({'group_id': gid, 'guild_name': gname, 'player_count': len(players), 'base_count': len(bases)})
-        except:
-            continue
-    return guilds
-def load_target_guilds_into_tree():
-    target_player_list.clear()
-    new_guild_item = QTreeWidgetItem(['(Create New Solo Guild)', '(auto)', '0', '0', '', ''])
-    target_player_list.addTopLevelItem(new_guild_item)
-    guilds = load_target_guilds()
-    for g in guilds:
-        item = QTreeWidgetItem([g['guild_name'], safe_uuid_str(g['group_id']), str(g['player_count']), str(g['base_count']), '', ''])
-        target_player_list.addTopLevelItem(item)
-def on_selection_of_target_guild():
-    global _induction_guild_choice, _selected_target_guild_id
-    selections = target_player_list.selectedItems()
-    if selections:
-        text0 = selections[0].text(0)
-        if text0 == '(Create New Solo Guild)':
-            _induction_guild_choice = 'new'
-            _selected_target_guild_id = None
-        else:
-            _induction_guild_choice = 'existing'
-            _selected_target_guild_id = selections[0].text(1)
-    else:
-        _induction_guild_choice = None
-        _selected_target_guild_id = None
-    current_selection_label.setText(f'Source: {selected_source_player}, Target Guild: {_selected_target_guild_id or _induction_guild_choice or "N/A"}')
-def mint_induction_ids(source_container_ids):
-    remap = {'container_ids': {}, 'dynamic_ids': {}}
-    for ctype in ['main', 'key', 'weps', 'armor', 'foodbag', 'drop', 'pals', 'otomo']:
-        old_id = source_container_ids.get(ctype, '')
-        if old_id:
-            remap['container_ids'][str(old_id).lower()] = _new_guid()
-    return remap
-def build_player_skeleton(src_host_json_gvas, remap, target_guild_id, src_is_post_v1, tgt_is_post_v1):
-    skeleton_gvas = fast_deepcopy(src_host_json_gvas)
-    sd = skeleton_gvas.properties['SaveData']['value']
-    inv_info = sd.get('InventoryInfo', {}).get('value', {})
-    inv_map = {'CommonContainerId': 'main', 'EssentialContainerId': 'key', 'WeaponLoadOutContainerId': 'weps', 'PlayerEquipArmorContainerId': 'armor', 'FoodEquipContainerId': 'foodbag', 'DropSlotContainerId': 'drop'}
-    for field, ctype in inv_map.items():
-        if field in inv_info:
-            old_cid = inv_info[field].get('value', {}).get('ID', {}).get('value', '')
-            new_cid = remap['container_ids'].get(str(old_cid).lower())
-            if new_cid:
-                inv_info[field]['value']['ID']['value'] = new_cid
-    for field in ['PalStorageContainerId', 'OtomoCharacterContainerId']:
-        if field in sd:
-            old_cid = sd[field].get('value', {}).get('ID', {}).get('value', '')
-            new_cid = remap['container_ids'].get(str(old_cid).lower())
-            if new_cid:
-                sd[field]['value']['ID']['value'] = new_cid
-    _set_player_groupid(skeleton_gvas.properties, target_guild_id)
-    if src_is_post_v1 is not None and tgt_is_post_v1 is not None and (src_is_post_v1 != tgt_is_post_v1):
-        _normalize_player_save_data(sd, tgt_is_post_v1)
-    return skeleton_gvas
-def induct_character_entry(src_level_json, host_guid, host_json_data, target_guild_id, src_is_post_v1, tgt_is_post_v1):
-    host_instance_id = host_json_data['SaveData']['value']['IndividualId']['value']['InstanceId']['value']
-    exported_map = None
-    for character_save_param in src_level_json['CharacterSaveParameterMap']['value']:
-        try:
-            uid = character_save_param['key']['PlayerUId']['value']
-            inst = character_save_param['key']['InstanceId']['value']
-            if str(uid) == str(host_guid) and str(inst) == str(host_instance_id):
-                exported_map = character_save_param
-                break
-        except:
-            pass
-    if not exported_map:
-        print(f'[ERROR] Could not find source character entry for {host_guid}')
-        return False
-    new_entry = fast_deepcopy(exported_map)
-    raw = new_entry['value']['RawData']['value']
-    raw['group_id'] = target_guild_id
-    sp = raw.get('object', {}).get('SaveParameter', {}).get('value', {})
-    if src_is_post_v1 is not None and tgt_is_post_v1 is not None and (src_is_post_v1 != tgt_is_post_v1):
-        _normalize_save_parameter(sp, tgt_is_post_v1)
-    cmap = targ_lvl.setdefault('CharacterSaveParameterMap', {}).setdefault('value', [])
-    cmap.append(new_entry)
-    return True
-def induct_item_containers(src_level_json, host_json_data, remap, target_lvl):
-    host_sd = host_json_data['SaveData']['value']
-    inv_info = host_sd['InventoryInfo']['value']
-    src_item_ids = set()
-    for field in ['CommonContainerId', 'EssentialContainerId', 'WeaponLoadOutContainerId', 'PlayerEquipArmorContainerId', 'FoodEquipContainerId', 'DropSlotContainerId']:
-        cid = inv_info.get(field, {}).get('value', {}).get('ID', {}).get('value', '')
-        if cid:
-            src_item_ids.add(str(cid).lower())
-    target_containers = target_lvl.setdefault('ItemContainerSaveData', {}).setdefault('value', [])
-    existing_target_ids = set()
-    for c in target_containers:
-        cid = c.get('key', {}).get('ID', {}).get('value', '')
-        if cid:
-            existing_target_ids.add(str(cid).lower())
-    added = 0
-    for c in src_level_json.get('ItemContainerSaveData', {}).get('value', []):
-        try:
-            old_cid = c['key']['ID']['value']
-            old_cid_lower = str(old_cid).lower()
-            if old_cid_lower not in src_item_ids:
-                continue
-            new_cid = remap['container_ids'].get(old_cid_lower)
-            if not new_cid:
-                continue
-            new_cid_lower = str(new_cid).lower()
-            if new_cid_lower in existing_target_ids:
-                continue
-            new_container = fast_deepcopy(c)
-            new_container['key']['ID']['value'] = new_cid
-            slots = new_container.get('value', {}).get('Slots', {}).get('value', {}).get('values', [])
-            for slot in slots:
-                raw = slot.get('RawData', {}).get('value', {})
-                item = raw.get('item', {})
-                dyn_id = item.get('dynamic_id', {})
-                local_id = dyn_id.get('local_id_in_created_world', '')
-                if local_id and str(local_id).lower() != '00000000-0000-0000-0000-000000000000':
-                    old_dyn = str(local_id).lower()
-                    if old_dyn not in remap['dynamic_ids']:
-                        remap['dynamic_ids'][old_dyn] = _new_guid()
-                    dyn_id['local_id_in_created_world'] = remap['dynamic_ids'][old_dyn]
-            target_containers.append(new_container)
-            existing_target_ids.add(new_cid_lower)
-            added += 1
-        except Exception as e:
-            print(f'[WARN] Item container skip {old_cid_lower if "old_cid_lower" in dir() else "?"}: {e}')
-            continue
-    print(f'[INFO] Inducted {added} item containers ({len(src_item_ids)} source IDs)')
-    return True
-def induct_character_containers(src_level_json, host_json_data, remap, target_lvl):
-    host_sd = host_json_data['SaveData']['value']
-    src_char_ids = set()
-    for field in ['PalStorageContainerId', 'OtomoCharacterContainerId']:
-        cid = host_sd.get(field, {}).get('value', {}).get('ID', {}).get('value', '')
-        if cid:
-            src_char_ids.add(str(cid).lower())
-    target_containers = target_lvl.setdefault('CharacterContainerSaveData', {}).setdefault('value', [])
-    existing_target_ids = set()
-    for c in target_containers:
-        cid = c.get('key', {}).get('ID', {}).get('value', '')
-        if cid:
-            existing_target_ids.add(str(cid).lower())
-    for c in src_level_json.get('CharacterContainerSaveData', {}).get('value', []):
-        try:
-            old_cid = c['key']['ID']['value']
-            old_cid_lower = str(old_cid).lower()
-            if old_cid_lower not in src_char_ids:
-                continue
-            new_cid = remap['container_ids'].get(old_cid_lower)
-            if not new_cid:
-                continue
-            new_cid_lower = str(new_cid).lower()
-            if new_cid_lower in existing_target_ids:
-                continue
-            new_container = fast_deepcopy(c)
-            new_container['key']['ID']['value'] = new_cid
-            _slots_val = new_container.get('value', {}).get('Slots', {}).get('value', {})
-            if isinstance(_slots_val, dict) and 'values' in _slots_val:
-                _slots_val['values'] = []
-            target_containers.append(new_container)
-            existing_target_ids.add(new_cid_lower)
-        except:
-            continue
-    return True
-def induct_dynamic_items(src_level_json, remap, target_lvl):
-    if not remap['dynamic_ids']:
-        return True
-    dyn_save = target_lvl.get('DynamicItemSaveData')
-    if not dyn_save:
-        return True
-    target_values = dyn_save.get('value', {}).get('values', [])
-    source_values = src_level_json.get('DynamicItemSaveData', {}).get('value', {}).get('values', [])
-    old_dyn_set = set(remap['dynamic_ids'].keys())
-    for item_entry in source_values:
-        try:
-            raw = item_entry.get('RawData', {}).get('value', {})
-            item_id = raw.get('id', {})
-            local_id = item_id.get('local_id_in_created_world', '')
-            if local_id and str(local_id).lower() in old_dyn_set:
-                new_item = fast_deepcopy(item_entry)
-                new_raw = new_item['RawData']['value']
-                new_raw['id']['local_id_in_created_world'] = remap['dynamic_ids'][str(local_id).lower()]
-                target_values.append(new_item)
-        except:
-            continue
-    return True
-def induct_pals(src_level_json, host_guid, host_json_data, remap, target_guild_id, target_lvl):
-    source_pals = scan_source_pals(host_guid, src_level_json, host_json_data)
-    if not source_pals:
-        return True
-    zero = PalUUID.from_str('00000000-0000-0000-0000-000000000000')
-    used_ids = set()
-    for ch in target_lvl.get('CharacterSaveParameterMap', {}).get('value', []):
-        used_ids.add(str(ch['key']['InstanceId']['value']).lower())
-    cmap = target_lvl.setdefault('CharacterSaveParameterMap', {}).setdefault('value', [])
-    char_containers = target_lvl.setdefault('CharacterContainerSaveData', {}).setdefault('value', [])
-    guild_entry = None
-    for g in target_lvl.get('GroupSaveDataMap', {}).get('value', []):
-        raw_gid = g.get('value', {}).get('RawData', {}).get('value', {}).get('group_id', '')
-        if str(raw_gid).lower() == str(target_guild_id).lower():
-            guild_entry = g
-            break
-    for pal_data in source_pals:
-        try:
-            old_inst = str(pal_data['instance_id'])
-            old_slot_cid = pal_data['save_parameter'].get('SlotId', {}).get('value', {}).get('ContainerId', {}).get('value', {}).get('ID', {}).get('value', '')
-            new_slot_cid = remap['container_ids'].get(str(old_slot_cid).lower())
-            if not new_slot_cid:
-                continue
-            new_inst = str(_new_guid())
-            while new_inst.lower() in used_ids:
-                new_inst = str(_new_guid())
-            used_ids.add(new_inst.lower())
-            remap['instance_ids'][old_inst.lower()] = new_inst
-            src_entry = pal_data['source_entry']
-            new_entry = fast_deepcopy(src_entry)
-            new_entry['key']['InstanceId']['value'] = PalUUID.from_str(new_inst)
-            raw = new_entry['value']['RawData']['value']
-            raw['group_id'] = target_guild_id
-            sp = raw.get('object', {}).get('SaveParameter', {}).get('value', {})
-            if 'SlotId' in sp:
-                sp['SlotId']['value']['ContainerId']['value']['ID']['value'] = new_slot_cid
-            for k in ['MapObjectConcreteInstanceIdAssignedToExpedition', 'WorkerSick', 'CurrentWorkSuitability', 'FoodWithStatusEffect', 'Tiemr_FoodWithStatusEffect', 'ArenaRestoreParameter', 'WorkSuitabilityOptionInfo']:
-                sp.pop(k, None)
-            cmap.append(new_entry)
-            _new_slot = {'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': pal_data['slot_index']}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': zero, 'instance_id': PalUUID.from_str(new_inst), 'permission_tribe_id': 0, 'unknown_bytes': b'\x00\x00\x00\x00\x00'}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}, 'CustomVersionData': {'array_type': 'ByteProperty', 'id': None, 'value': {'values': b'\x01\x00\x00\x008\x0b\x00\xdeII\xd7\xce\x97\xdf-\x99\xc0\xc1\xc3i\x01\x00\x00\x00'}, 'type': 'ArrayProperty'}}
-            found = False
-            for cont in char_containers:
-                if str(cont.get('key', {}).get('ID', {}).get('value', '')).lower() == str(new_slot_cid).lower():
-                    slots = cont.setdefault('value', {}).setdefault('Slots', {}).setdefault('value', {}).setdefault('values', [])
-                    slots.append(_new_slot)
-                    found = True
-                    break
-            if not found:
-                char_containers.append({'key': {'ID': {'struct_type': 'Guid', 'struct_id': zero, 'id': None, 'value': new_slot_cid, 'type': 'StructProperty'}}, 'value': {'bReferenceSlot': {'id': None, 'type': 'BoolProperty', 'value': False}, 'Slots': {'id': None, 'value': {'values': [_new_slot], 'type': 'ArrayProperty'}, 'key_type': 'None', 'value_type': 'StructProperty'}, 'SlotNum': {'id': None, 'type': 'IntProperty', 'value': pal_data['slot_index'] + 1}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'values': b''}, 'type': 'ArrayProperty'}, 'CustomVersionData': {'array_type': 'ByteProperty', 'id': None, 'value': {'values': b''}, 'type': 'ArrayProperty'}}, 'CustomVersionData': {'array_type': 'ByteProperty', 'id': None, 'value': {'values': b''}, 'type': 'ArrayProperty'}})
-            if guild_entry:
-                hids = guild_entry['value']['RawData']['value'].setdefault('individual_character_handle_ids', [])
-                hids.append({'guid': host_guid, 'instance_id': PalUUID.from_str(new_inst)})
-        except Exception as e:
-            print(f'[WARN] Pal induction failed for instance {pal_data.get("instance_id", "?")}: {e}')
-            continue
-    return True
-def create_solo_guild(target_lvl, host_guid, host_instance_id, player_name, target_world_tick):
-    new_guild_id = _new_guid()
-    zero = PalUUID.from_str('00000000-0000-0000-0000-000000000000')
-    uid_str = str(host_guid).upper().replace('-', '')
-    guild_name_val = player_name or 'Solo Guild'
-    _zero_bytes4 = b'\x00\x00\x00\x00'
-    _guild_cv = b'\x07\x00\x00\x00\x00'
-    guild_entry = {'key': new_guild_id, 'value': {'GroupType': {'id': None, 'value': {'type': 'EPalGroupType', 'value': 'EPalGroupType::Guild'}, 'type': 'EnumProperty'}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'group_type': 'EPalGroupType::Guild', 'group_id': new_guild_id, 'group_name': uid_str, 'individual_character_handle_ids': [{'guid': host_guid, 'instance_id': host_instance_id}], 'org_type': 0, 'leading_bytes': _zero_bytes4, 'base_ids': [], 'unknown_1': 0, 'base_camp_level': 1, 'map_object_instance_ids_base_camp_points': [], 'guild_name': guild_name_val, 'last_guild_name_modifier_player_uid': host_guid, 'unknown_2': _zero_bytes4, 'admin_player_uid': host_guid, 'players': [{'player_uid': host_guid, 'player_info': {'last_online_real_time': target_world_tick or 0, 'player_name': guild_name_val}}], 'trailing_bytes': _zero_bytes4}, 'custom_type': '.worldSaveData.GroupSaveDataMap', 'type': 'ArrayProperty'}, 'CustomVersionData': {'array_type': 'ByteProperty', 'id': None, 'value': {'values': _guild_cv}, 'type': 'ArrayProperty'}}}
-    guilds = target_lvl.setdefault('GroupSaveDataMap', {}).setdefault('value', [])
-    guilds.append(guild_entry)
-    guild_extra = target_lvl.setdefault('GuildExtraSaveDataMap', {}).setdefault('value', [])
-    existing_extra = {str(g.get('key', '')) for g in guild_extra}
-    if str(new_guild_id) not in existing_extra:
-        _expedition_cv = b'\x03\x00\x00\x00\x00\x00\x00\x00\x00'
-        guild_extra.append({'key': new_guild_id, 'value': {'GuildItemStorage': {'struct_type': 'PalGuildItemStorageSaveData', 'struct_id': zero, 'id': None, 'value': {'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'container_id': '00000000-0000-0000-0000-000000000000'}, 'custom_type': '.worldSaveData.GuildExtraSaveDataMap.Value.GuildItemStorage.RawData', 'type': 'ArrayProperty'}}, 'type': 'StructProperty'}, 'Lab': {'struct_type': 'PalGuildLabSaveData', 'struct_id': zero, 'id': None, 'value': {'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'research_info': [], 'current_research_id': 'None'}, 'custom_type': '.worldSaveData.GuildExtraSaveDataMap.Value.Lab.RawData', 'type': 'ArrayProperty'}}, 'type': 'StructProperty'}, 'Expedition': {'id': None, 'value': {'values': _expedition_cv}, 'type': 'ArrayProperty'}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'values': b''}, 'type': 'ArrayProperty'}, 'CustomVersionData': {'array_type': 'ByteProperty', 'id': None, 'value': {'values': b''}, 'type': 'ArrayProperty'}}})
-    return new_guild_id
-def induct_into_guild(target_lvl, host_guid, host_instance_id, player_name, target_guild_id, target_world_tick):
-    guild_entry = None
-    for g in target_lvl.get('GroupSaveDataMap', {}).get('value', []):
-        raw = g.get('value', {}).get('RawData', {}).get('value', {})
-        if str(raw.get('group_id', '')).lower() == str(target_guild_id).lower():
-            guild_entry = g
-            break
-    if not guild_entry:
-        return False
-    raw = guild_entry['value']['RawData']['value']
-    players = raw.setdefault('players', [])
-    for p in players:
-        if str(p.get('player_uid', '')).lower() == str(host_guid).lower():
-            players.remove(p)
-            break
-    players.append({'player_uid': host_guid, 'player_info': {'last_online_real_time': target_world_tick or 0, 'player_name': player_name or 'Player'}})
-    hids = raw.setdefault('individual_character_handle_ids', [])
-    hids.append({'guid': host_guid, 'instance_id': host_instance_id})
-    return True
-def validate_induction(target_lvl, host_guid, remap, target_guild_id):
-    errors = []
-    host_lower = str(host_guid).lower()
-    cspm = target_lvl.get('CharacterSaveParameterMap', {}).get('value', [])
-    player_entries = 0
-    for entry in cspm:
-        try:
-            key_uid = str(entry['key']['PlayerUId']['value']).lower()
-            if key_uid == host_lower:
-                sp = entry['value']['RawData']['value']['object']['SaveParameter']['value']
-                if sp.get('IsPlayer', {}).get('value', False):
-                    player_entries += 1
-                raw_gid = entry['value']['RawData']['value'].get('group_id', '')
-                if str(raw_gid).lower() != str(target_guild_id).lower():
-                    errors.append(f'Character entry group_id mismatch: {raw_gid} != {target_guild_id}')
-        except:
-            continue
-    if player_entries == 0:
-        errors.append('No player entry found in CharacterSaveParameterMap for source UID')
-    elif player_entries > 1:
-        errors.append(f'Multiple player entries ({player_entries}) found for source UID')
-    found_in_guild = False
-    for g in target_lvl.get('GroupSaveDataMap', {}).get('value', []):
-        raw = g.get('value', {}).get('RawData', {}).get('value', {})
-        for p in raw.get('players', []):
-            if str(p.get('player_uid', '')).lower() == host_lower:
-                found_in_guild = True
-                break
-        if found_in_guild:
-            break
-    if not found_in_guild:
-        errors.append('Source UID not found in any guild players[] roster')
-    item_containers = target_lvl.get('ItemContainerSaveData', {}).get('value', [])
-    char_containers = target_lvl.get('CharacterContainerSaveData', {}).get('value', [])
-    all_container_ids = set()
-    for c in item_containers + char_containers:
-        cid = c.get('key', {}).get('ID', {}).get('value', '')
-        if cid:
-            all_container_ids.add(str(cid).lower())
-    for old_cid, new_cid in remap['container_ids'].items():
-        if str(new_cid).lower() not in all_container_ids:
-            errors.append(f'Container ID {new_cid} (from {old_cid}) not found in target containers')
-    for entry in cspm:
-        try:
-            sp = entry['value']['RawData']['value']['object']['SaveParameter']['value']
-            if sp.get('IsPlayer', {}).get('value', False):
-                continue
-            owner = str(sp.get('OwnerPlayerUId', {}).get('value', '')).lower()
-            if owner != host_lower:
-                continue
-            slot_cid = sp.get('SlotId', {}).get('value', {}).get('ContainerId', {}).get('value', {}).get('ID', {}).get('value', '')
-            if slot_cid and str(slot_cid).lower() not in all_container_ids:
-                errors.append(f'Pal SlotId references non-existent container: {slot_cid}')
-            raw_gid = entry['value']['RawData']['value'].get('group_id', '')
-            if str(raw_gid).lower() != str(target_guild_id).lower():
-                errors.append(f'Pal group_id mismatch: {raw_gid} != {target_guild_id}')
-        except:
-            continue
-    return errors
-def induct_character(skip_msgbox=False, skip_gui=False):
-    global host_guid, host_json, host_json_gvas
-    global remap, exported_map
-    if not all([level_sav_path, t_level_sav_path, selected_source_player]):
-        print('Error! Please have both level files and source player selected.')
-        return False
-    if not _induction_guild_choice:
-        print('Error! Please select a target guild or "Create New Solo Guild".')
-        return False
-    try:
-        host_guid = UUID.from_str(selected_source_player)
-    except Exception as e:
-        print(f'UUID Error: Invalid source UUID format: {e}')
-        return False
-    host_json_gvas = load_player_file(level_sav_path, selected_source_player)
-    if not host_json_gvas:
-        print('Error: Could not load source player .sav file.')
-        return False
-    host_json = host_json_gvas.properties
-    host_instance_id = host_json['SaveData']['value']['IndividualId']['value']['InstanceId']['value']
-    source_player_level = get_player_level_from_cspm(level_json, selected_source_player)
-    if source_player_level < 2:
-        print(f'Error: Source player must be at least level 2. Current level: {source_player_level}')
-        if not skip_gui:
-            show_warning(None, t('Error!'), f'Source player must be at least level 2 (current: {source_player_level}).')
-        return False
-    tgt_players_folder = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
-    os.makedirs(tgt_players_folder, exist_ok=True)
-    source_container_ids = gather_inventory_ids(host_json)
-    create_new = (_induction_guild_choice == 'new')
-    remap = mint_induction_ids(source_container_ids)
-    remap['instance_ids'] = {}
-    host_lower = str(host_guid).lower()
-    for ch in targ_lvl.get('CharacterSaveParameterMap', {}).get('value', []):
-        if str(ch['key']['PlayerUId']['value']).lower() == host_lower:
-            print(f'[WARNING] Source UID {host_guid} already exists in target CharacterSaveParameterMap.')
-            break
-    player_name = ''
-    try:
-        for ch in level_json.get('CharacterSaveParameterMap', {}).get('value', []):
-            if str(ch['key']['PlayerUId']['value']).lower() == host_lower:
-                sp = ch['value']['RawData']['value']['object']['SaveParameter']['value']
-                player_name = sp.get('NickName', {}).get('value', '')
-                break
-    except:
-        pass
-    if not player_name:
-        try:
-            nick = host_json['SaveData']['value'].get('NickName', {})
-            player_name = nick.get('value', '') if isinstance(nick, dict) else str(nick)
-        except:
-            pass
-    if not player_name:
-        player_name = 'Player'
-    if source_is_post_v1 is not None and target_is_post_v1 is not None and (source_is_post_v1 != target_is_post_v1):
-        _normalize_level_data(targ_lvl, target_is_post_v1)
-    print('[STEP 1/10] Creating guild / resolving guild membership...')
-    if create_new:
-        target_guild_id = create_solo_guild(targ_lvl, host_guid, host_instance_id, player_name, target_world_tick)
-        print('[SUCCESS] Created new solo guild')
-    else:
-        target_guild_id = _selected_target_guild_id
-        if not induct_into_guild(targ_lvl, host_guid, host_instance_id, player_name, target_guild_id, target_world_tick):
-            print('[FAIL] Guild induction')
-            return False
-        print('[SUCCESS] Added to existing guild')
-    if not target_guild_id:
-        print('[ERROR] No target guild ID resolved.')
-        return False
-    skeleton_gvas = build_player_skeleton(host_json_gvas, remap, target_guild_id, source_is_post_v1, target_is_post_v1)
-    skeleton_sd = skeleton_gvas.properties
-    print('[STEP 2/10] Inducting character entry...')
-    if not induct_character_entry(level_json, host_guid, host_json, target_guild_id, source_is_post_v1, target_is_post_v1):
-        print('[FAIL] Character entry induction')
-        return False
-    print('[SUCCESS] Character entry inducted')
-    print('[STEP 3/10] Transferring tech & data...')
-    old_targ_json = targ_json
-    globals()['targ_json'] = skeleton_sd
-    if not transfer_tech_and_data():
-        print('[FAIL] Tech + data transfer')
-        globals()['targ_json'] = old_targ_json
-        return False
-    globals()['targ_json'] = skeleton_sd
-    print('[SUCCESS] Tech + data transferred')
-    print('[STEP 4/10] Inducting item containers...')
-    if not induct_item_containers(level_json, host_json, remap, targ_lvl):
-        print('[FAIL] Item containers')
-        return False
-    print('[SUCCESS] Item containers inducted')
-    print('[STEP 5/10] Inducting character containers...')
-    if not induct_character_containers(level_json, host_json, remap, targ_lvl):
-        print('[FAIL] Character containers')
-        return False
-    print('[SUCCESS] Character containers inducted')
-    print('[STEP 6/10] Inducting dynamic items...')
-    if not induct_dynamic_items(level_json, remap, targ_lvl):
-        print('[FAIL] Dynamic items')
-        return False
-    print('[SUCCESS] Dynamic items inducted')
-    print('[STEP 7/10] Inducting pals...')
-    if not induct_pals(level_json, host_guid, host_json, remap, target_guild_id, targ_lvl):
-        print('[FAIL] Pal induction')
-        return False
-    print('[SUCCESS] Pals inducted')
-    print('[STEP 8/10] Syncing timestamps...')
-    sync_player_timestamps(host_guid, targ_lvl)
-    print('[SUCCESS] Timestamps synced')
-    print('[STEP 9/10] Validating graph integrity...')
-    validation_errors = validate_induction(targ_lvl, host_guid, remap, target_guild_id)
-    if validation_errors:
-        print(f'[WARNING] Validation found {len(validation_errors)} issue(s):')
-        for err in validation_errors:
-            print(f'  - {err}')
-    else:
-        print('[SUCCESS] All validation checks passed')
-    print('[STEP 10/10] Registering for save...')
-    uid_str = str(host_guid).upper().replace('-', '')
-    modified_target_players.add(uid_str)
-    modified_targets_data[uid_str] = (fast_deepcopy(skeleton_sd), skeleton_gvas, selected_source_player)
-    if not skip_gui:
-        load_players(targ_lvl, is_source=False)
-    if not skip_msgbox:
-        show_information(None, t('Transfer Successful'), t("Induction successful in memory! Hit 'Save Changes' to save."))
-    globals()['targ_json'] = old_targ_json
-    return True
 def character_transfer():
     return CharacterTransferWindow()
 if __name__ == '__main__':
