@@ -1,4 +1,4 @@
-import os, subprocess, shutil, re, argparse, configparser
+import os, sys, subprocess, shutil, re, argparse, configparser
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 os.chdir(ROOT_DIR)
@@ -42,7 +42,11 @@ def sync_version():
     print(f'Synchronized version to {version} and branch to main')
 def build_with_cx_freeze():
     print('Running cx_Freeze build...')
-    subprocess.check_call(['uv', 'run', 'setup_freeze.py', 'build'])
+    python_exe = os.path.join(VENV_DIR, 'Scripts', 'python.exe') if sys.platform == 'win32' else os.path.join(VENV_DIR, 'bin', 'python')
+    if os.path.exists(python_exe):
+        subprocess.check_call([python_exe, 'setup_freeze.py', 'build'])
+    else:
+        subprocess.check_call(['uv', 'run', 'setup_freeze.py', 'build'])
     if os.path.exists('uv.lock'):
         os.remove('uv.lock')
 def clean_build_artifacts():
