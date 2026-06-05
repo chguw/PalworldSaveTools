@@ -6,6 +6,10 @@ where uv >nul 2>&1 || (
     pause
     exit /b 1
 )
+if not exist .venv\Scripts\python.exe (
+    uv venv .venv
+)
+uv pip install -r requirements.txt
 if "%~1"=="" (
     if exist "scripts\Level.sav" (
         ".venv\Scripts\python.exe" scripts\scripts\auto_update.py "scripts\Level.sav"

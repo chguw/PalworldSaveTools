@@ -6,6 +6,10 @@ where uv >nul 2>&1 || (
     pause
     exit /b 1
 )
+if not exist .venv\Scripts\python.exe (
+    uv venv .venv
+)
+uv pip install -r requirements.txt
 if "%~1"=="" (
     echo No .sav file specified. Drag a .sav file onto this .cmd.
     pause
