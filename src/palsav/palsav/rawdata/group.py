@@ -2,6 +2,8 @@ from typing import Sequence
 
 from palsav.archive import *
 
+V1_MARKER = b"\x02\x00\x00\x00\x02\x03\x00\x00\x00\x00"
+
 
 def player_info_reader(reader: FArchiveReader) -> dict[str, Any]:
     return {
@@ -52,11 +54,31 @@ def decode_bytes(
         "EPalGroupType::Organization",
     ]:
         group_data |= {"org_type": reader.byte()}
+
     if group_type == "EPalGroupType::Organization":
         group_data |= {"trailing_bytes": reader.byte_list(12)}
+        if not reader.eof():
+            group_data |= {"unknown_bytes": reader.read_to_end()}
+        return group_data
+
+    if group_type == "EPalGroupType::IndependentGuild":
+        group_data |= {
+            "base_camp_level": reader.i32(),
+            "map_object_instance_ids_base_camp_points": reader.tarray(uuid_reader),
+            "guild_name": reader.fstring(),
+            "player_uid": reader.guid(),
+            "guild_name_2": reader.fstring(),
+            "player_info": {
+                "last_online_real_time": reader.i64(),
+                "player_name": reader.fstring(),
+            },
+        }
+        if not reader.eof():
+            group_data |= {"unknown_bytes": reader.read_to_end()}
+        return group_data
 
     if group_type == "EPalGroupType::Guild":
-        guild: dict[str, Any] = {
+        group_data |= {
             "leading_bytes": reader.byte_list(4),
             "base_ids": reader.tarray(uuid_reader),
             "unknown_1": reader.i32(),
@@ -65,29 +87,55 @@ def decode_bytes(
             "guild_name": reader.fstring(),
             "last_guild_name_modifier_player_uid": reader.guid(),
             "unknown_2": reader.byte_list(4),
-            "admin_player_uid": reader.guid(),
-            "players": reader.tarray(player_info_reader),
-            "trailing_bytes": reader.byte_list(4),
         }
-        group_data |= guild
-    if group_type == "EPalGroupType::IndependentGuild":
-        guild: dict[str, Any] = {
-            "base_camp_level": reader.i32(),
-            "map_object_instance_ids_base_camp_points": reader.tarray(uuid_reader),
-            "guild_name": reader.fstring(),
-        }
-        group_data |= guild
-        indie = {
-            "player_uid": reader.guid(),
-            "guild_name_2": reader.fstring(),
-            "player_info": {
-                "last_online_real_time": reader.i64(),
-                "player_name": reader.fstring(),
-            },
-        }
-        group_data |= indie
+
+        # Newer save versions embed admin_player_uid + players after a V1 marker
+        # that appears inside the remaining bytes. Detect it and parse the tail
+        # with a sub-reader so we can round-trip saves without raising.
+        remaining = reader.read_to_end()
+        v1_offset = remaining.find(V1_MARKER)
+        if v1_offset >= 0:
+            if v1_offset > 0:
+                group_data |= {"_pre_v1_bytes": remaining[:v1_offset]}
+            group_data |= {"_v1_header": V1_MARKER}
+            post_v1 = remaining[v1_offset + len(V1_MARKER):]
+            use_u8 = v1_offset > 0
+        else:
+            # Pre-V1 (or unknown) layout: try to read admin/players directly,
+            # otherwise preserve as opaque trailing bytes.
+            post_v1 = remaining
+            use_u8 = False
+
+        if post_v1:
+            sub = parent_reader.internal_copy(post_v1, debug=False)
+            try:
+                admin_player_uid = sub.guid()
+                player_count = sub.i32()
+                players: list[dict[str, Any]] = []
+                for _ in range(player_count):
+                    entry: dict[str, Any] = {
+                        "player_uid": sub.guid(),
+                        "player_info": {
+                            "last_online_real_time": sub.i64(),
+                            "player_name": sub.fstring(),
+                        },
+                    }
+                    if use_u8 and not sub.eof():
+                        entry["_u8_flag"] = sub.byte()
+                    players.append(entry)
+                group_data |= {"admin_player_uid": admin_player_uid}
+                group_data |= {"players": players}
+                trailing = sub.read_to_end()
+                if trailing:
+                    group_data |= {"_trailing_bytes": trailing}
+            except Exception:
+                group_data |= {"_raw_tail": post_v1}
+        elif not group_data.get("players"):
+            # Ensure the structure has a players list so downstream code is happy.
+            group_data |= {"players": []}
+
     if not reader.eof():
-        raise Exception("Warning: EOF not reached")
+        group_data |= {"unknown_bytes": reader.read_to_end()}
     return group_data
 
 
@@ -118,9 +166,15 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
         "EPalGroupType::Organization",
     ]:
         writer.byte(p["org_type"])
-    if p["group_type"] == "EPalGroupType::Organization":
+
+    gt = p["group_type"]
+    if gt == "EPalGroupType::Organization":
         writer.write(coerce_bytes(p["trailing_bytes"]))
-    if p["group_type"] == "EPalGroupType::IndependentGuild":
+        if "unknown_bytes" in p:
+            writer.write(coerce_bytes(p["unknown_bytes"]))
+        return writer.bytes()
+
+    if gt == "EPalGroupType::IndependentGuild":
         writer.i32(p["base_camp_level"])
         writer.tarray(uuid_writer, p["map_object_instance_ids_base_camp_points"])
         writer.fstring(p["guild_name"])
@@ -128,7 +182,11 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
         writer.fstring(p["guild_name_2"])
         writer.i64(p["player_info"]["last_online_real_time"])
         writer.fstring(p["player_info"]["player_name"])
-    if p["group_type"] == "EPalGroupType::Guild":
+        if "unknown_bytes" in p:
+            writer.write(coerce_bytes(p["unknown_bytes"]))
+        return writer.bytes()
+
+    if gt == "EPalGroupType::Guild":
         writer.write(coerce_bytes(p["leading_bytes"]))
         writer.tarray(uuid_writer, p["base_ids"])
         writer.i32(p["unknown_1"])
@@ -137,8 +195,34 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
         writer.fstring(p["guild_name"])
         writer.guid(p["last_guild_name_modifier_player_uid"])
         writer.write(coerce_bytes(p["unknown_2"]))
-        writer.guid(p["admin_player_uid"])
-        writer.tarray(player_info_writer, p["players"])
-        writer.write(coerce_bytes(p["trailing_bytes"]))
-    encoded_bytes = writer.bytes()
-    return encoded_bytes
+
+        if "_raw_tail" in p:
+            writer.write(coerce_bytes(p["_raw_tail"]))
+        elif "admin_player_uid" in p:
+            # V1 layout (with header bytes) takes precedence; otherwise emit
+            # the flat admin/players/trailing layout used by older saves and
+            # by code that constructs synthetic guild entries.
+            if "_pre_v1_bytes" in p:
+                writer.write(coerce_bytes(p["_pre_v1_bytes"]))
+            if "_v1_header" in p:
+                writer.write(coerce_bytes(p["_v1_header"]))
+            writer.guid(p["admin_player_uid"])
+            players = p.get("players", [])
+            writer.i32(len(players))
+            for pl in players:
+                writer.guid(pl["player_uid"])
+                writer.i64(pl["player_info"]["last_online_real_time"])
+                writer.fstring(pl["player_info"]["player_name"])
+                if "_u8_flag" in pl:
+                    writer.byte(pl["_u8_flag"])
+            if "_trailing_bytes" in p:
+                writer.write(coerce_bytes(p["_trailing_bytes"]))
+            elif "trailing_bytes" in p:
+                # Flat-layout fallback (e.g. synthetic guild entries).
+                writer.write(coerce_bytes(p["trailing_bytes"]))
+
+        if "unknown_bytes" in p:
+            writer.write(coerce_bytes(p["unknown_bytes"]))
+        return writer.bytes()
+
+    return writer.bytes()
