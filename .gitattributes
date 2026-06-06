@@ -1,0 +1,7 @@
+
+# Vendored SIMDe headers — don't count toward language stats
+src/palsav/pyooz/ooz/dep/ooz/simde/** linguist-vendored
+
+# Always detect actual C++ source
+*.cpp linguist-detectable
+*.h linguist-detectable
