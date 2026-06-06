@@ -66,7 +66,7 @@ class OozLib(Compressor):
         if save_type != SaveType.PLM.value:
             raise ValueError(f'Unhandled compression type: 0x{save_type:02X}, only 0x31 (PLM) is supported')
         logger.debug('Compressing data...')
-        compressed_data = self.ooz.compress(OodleCompressor.Mermaid, OodleLevel.Normal, data, uncompressed_len)
+        compressed_data = self.ooz.compress(OodleCompressor.Kraken, OodleLevel.Normal, data, uncompressed_len)
         if not compressed_data:
             raise RuntimeError(f'Ooz_Compress failed or returned empty result (code: {compressed_data})')
         compressed_len = len(compressed_data)

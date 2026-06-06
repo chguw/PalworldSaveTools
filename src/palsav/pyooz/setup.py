@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, Extension
 from wheel.bdist_wheel import bdist_wheel
-ooz_sources = [os.path.join('ooz/dep/ooz/', x) for x in ['bitknit.cpp', 'kraken.cpp', 'lzna.cpp', 'compress.cpp', 'compr_kraken.cpp', 'compr_leviathan.cpp', 'compr_mermaid.cpp', 'compr_entropy.cpp', 'compr_match_finder.cpp', 'compr_multiarray.cpp', 'compr_tans.cpp']]
+ooz_sources = [os.path.join('ooz/dep/ooz/', x) for x in ['bitknit.cpp', 'kraken.cpp', 'lzna.cpp', 'compress.cpp', 'compr_kraken.cpp', 'compr_leviathan.cpp', 'compr_entropy.cpp', 'compr_match_finder.cpp', 'compr_multiarray.cpp', 'compr_tans.cpp']]
 extra_compile_args = ['-O3']
 if os.environ.get('DEBUG') == '1':
     extra_compile_args = ['-g', '-O0']

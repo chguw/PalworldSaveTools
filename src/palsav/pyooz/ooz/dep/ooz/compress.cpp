@@ -7,9 +7,7 @@
 #include "qsort.h"
 #include "match_hasher.h"
 #include "compr_match_finder.h"
-#include "compr_leviathan.h"
 #include "compr_kraken.h"
-#include "compr_mermaid.h"
 
 int ilog2round(uint v) {
   union { float f; uint32 u; };
@@ -191,12 +189,8 @@ int CompressQuantum(LzCoder *coder, LzTemp *lztemp, MatchLenStorage *mls,
       } else {
         float lzcost = kInvalidCost;
         int chunk_type = -1, n;
-        if (coder->codec_id == kCompressorLeviathan) {
-          n = LeviathanDoCompress(coder, lztemp, mls, src, round_bytes, dst + 3, dst_end, offset + src - src_org, &chunk_type, &lzcost);
-        } else if (coder->codec_id == kCompressorKraken) {
+        if (coder->codec_id == kCompressorKraken) {
           n = KrakenDoCompress(coder, lztemp, mls, src, round_bytes, dst + 3, dst_end, offset + src - src_org, &chunk_type, &lzcost);
-        } else if (coder->codec_id == kCompressorMermaid || coder->codec_id == kCompressorSelkie) {
-          n = MermaidDoCompress(coder, lztemp, mls, src, round_bytes, dst + 3, dst_end, offset + src - src_org, &chunk_type, &lzcost);
         } else {
           return -1;
         }
@@ -371,21 +365,6 @@ const CompressOptions *GetDefaultCompressOpts(int level) {
   return (level >= 5) ? &compress_options_level5 : (level >= 4) ? &compress_options_level4 : &compress_options_level0;
 }
 
-int CompressBlock_Leviathan(uint8 *src_in, uint8 *dst_in, int src_size, int level,
-                            const CompressOptions *compressopts, uint8 *src_window_base, LRMCascade *lrm) {
-  LzCoder coder = { 0 };
-  if (!compressopts)
-    compressopts = GetDefaultCompressOpts(level);
-
-  if (src_window_base == NULL)
-    src_window_base = src_in;
-  
-  coder.last_chunk_type = -1;
-  SetupEncoder_Leviathan(&coder, src_size, level, compressopts, src_window_base, src_in);
-  int n = Compress(&coder, src_in, dst_in, src_size, src_window_base, lrm);
-  return n;
-}
-
 int CompressBlock_Kraken(uint8 *src_in, uint8 *dst_in, int src_size, int level,
                          const CompressOptions *compressopts, uint8 *src_window_base, LRMCascade *lrm) {
   LzCoder coder = { 0 };
@@ -401,32 +380,12 @@ int CompressBlock_Kraken(uint8 *src_in, uint8 *dst_in, int src_size, int level,
   return n;
 }
 
-int CompressBlock_Mermaid(int codec_id, uint8 *src_in, uint8 *dst_in, int src_size, int level,
-                          const CompressOptions *compressopts, uint8 *src_window_base, LRMCascade *lrm) {
-  LzCoder coder = { 0 };
-  if (!compressopts)
-    compressopts = GetDefaultCompressOpts(level);
-
-  if (src_window_base == NULL)
-    src_window_base = src_in;
-
-  coder.last_chunk_type = -1;
-  SetupEncoder_Mermaid(&coder, codec_id, src_size, level, compressopts, src_window_base, src_in);
-  int n = Compress(&coder, src_in, dst_in, src_size, src_window_base, lrm);
-  return n;
-}
-
-
 int CompressBlock(int codec_id, uint8 *src_in, uint8 *dst_in, int src_size, int level,
                   const CompressOptions *compressopts, uint8 *src_window_base, LRMCascade *lrm) {
   switch (codec_id) {
   case kCompressorKraken: return CompressBlock_Kraken(src_in, dst_in, src_size, level, compressopts, src_window_base, lrm);
-  case kCompressorLeviathan: return CompressBlock_Leviathan(src_in, dst_in, src_size, level, compressopts, src_window_base, lrm);
-  case kCompressorMermaid:
-  case kCompressorSelkie: return CompressBlock_Mermaid(codec_id, src_in, dst_in, src_size, level, compressopts, src_window_base, lrm);
   default:
     return -1;
   }
-
 }
 
