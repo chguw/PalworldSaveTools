@@ -234,7 +234,6 @@ if GUI_AVAILABLE:
             if candidate.exists():
                 return candidate
         return None
-
     def _load_bg_pixmap() -> Optional[QPixmap]:
         bg_path = _find_resource('resources/background.png', 'resources/background.png')
         if bg_path:
@@ -242,7 +241,6 @@ if GUI_AVAILABLE:
             if not pix.isNull():
                 return pix
         return None
-
     def _load_logo_pixmap() -> Optional[QPixmap]:
         logo_path = _find_resource('resources/logo.png', 'resources/PalworldSaveTools_Blue.png')
         if logo_path:
@@ -250,14 +248,12 @@ if GUI_AVAILABLE:
             if not pix.isNull():
                 return pix
         return None
-
 def build_splash_ui():
     global app, _logo_original_pixmap
     container = QWidget(None, Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
     container.setAttribute(Qt.WA_TranslucentBackground, True)
     container.setFixedSize(620, 360)
     container.setStyleSheet(load_splash_styles())
-
     bg_pixmap = _load_bg_pixmap()
     if bg_pixmap is not None:
         bg_label = QLabel(container)
@@ -266,12 +262,10 @@ def build_splash_ui():
         bg_label.setPixmap(scaled_bg)
         bg_label.lower()
         container._bg_label = bg_label
-
     overlay = QFrame(container)
     overlay.setGeometry(0, 0, container.width(), container.height())
     overlay.setStyleSheet('background: rgba(10,12,16,0.45);')
     overlay.lower()
-
     frame = QFrame(container)
     frame.setObjectName('glass')
     frame.setGeometry(14, 14, container.width() - 28, container.height() - 28)

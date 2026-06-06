@@ -400,19 +400,7 @@ def import_base_json(loaded_level_json, exported_data, target_guild_id, offset=(
             skeleton['value']['RawData']['value']['group_id'] = _ArchUUID.from_str(str(skeleton['value']['RawData']['value']['group_id']))
             char_map.append(skeleton)
             _register_pal_instance_to_guild(new_inst, target_guild_id)
-            new_slots.append({
-                'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_idx},
-                'RawData': {
-                    'array_type': 'ByteProperty', 'id': None,
-                    'value': {
-                        'player_uid': empty_uid,
-                        'instance_id': new_inst,
-                        'permission_tribe_id': 0
-                    },
-                    'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData',
-                    'type': 'ArrayProperty'
-                }
-            })
+            new_slots.append({'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_idx}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': empty_uid, 'instance_id': new_inst, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}})
         ncnt['value']['Slots']['value']['values'] = new_slots
         char_containers.append(ncnt)
     for nwe in cloned_works:

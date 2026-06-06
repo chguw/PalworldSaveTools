@@ -468,7 +468,7 @@ class GuildStructurePickerDialog(QDialog):
                 continue
             asset_lower = asset.lower()
             name_lower = name.lower()
-            if any(asset_lower.startswith(p) or name_lower.startswith(p) for p in ('common', 'enemycamp', 'palegg', 'pickupitem', 'damagable', 'destroyable', 'treasurebox', 'yakushima', 'dev_itemchest', 'altar_raidbossarea', 'antiair', 'banyan', 'deathpenaltychest', 'decal', 'dummyfoliage', 'oilrig', 'palbox_raidbossarea', 'meteordrop_', 'supplydrop', 'table1', 'droppedcharacter', 'trap_movingpanel', 'woodcrusher', 'palstorage_terminal', 'house_1')) or any(q in asset_lower or q in name_lower for q in ('_grade', '_test', '_autoturret')):
+            if any((asset_lower.startswith(p) or name_lower.startswith(p) for p in ('common', 'enemycamp', 'palegg', 'pickupitem', 'damagable', 'destroyable', 'treasurebox', 'yakushima', 'dev_itemchest', 'altar_raidbossarea', 'antiair', 'banyan', 'deathpenaltychest', 'decal', 'dummyfoliage', 'oilrig', 'palbox_raidbossarea', 'meteordrop_', 'supplydrop', 'table1', 'droppedcharacter', 'trap_movingpanel', 'woodcrusher', 'palstorage_terminal', 'house_1'))) or any((q in asset_lower or q in name_lower for q in ('_grade', '_test', '_autoturret'))):
                 continue
             list_item = QListWidgetItem(name)
             list_item.setData(Qt.UserRole, asset)
@@ -597,7 +597,6 @@ class GuildStructurePickerDialog(QDialog):
         reply = msg_box.exec()
         if reply == QMessageBox.Yes:
             self.structure_action_selected.emit(self.selected_structure_asset, 'delete_all', selected_guilds)
-
 class EconomyStatsDialog(QDialog):
     def __init__(self, stats, item_name=None, parent=None):
         super().__init__(parent)
@@ -1385,6 +1384,8 @@ class BasePalsContentWidget(QFrame):
         self._selected_idx = -1
     def _rebuild(self):
         self._total_pages = max(1, (self._pal_count() + self.SLOTS_PER_PAGE - 1) // self.SLOTS_PER_PAGE)
+        if self._pal_count() > 0 and self._pal_count() % self.SLOTS_PER_PAGE == 0:
+            self._total_pages += 1
         if self._current_page > self._total_pages:
             self._current_page = self._total_pages
         if self._pal_count() == 0:
@@ -1407,6 +1408,9 @@ class BasePalsContentWidget(QFrame):
             self.page_label.hide()
             self.prev_page_btn.hide()
             self.next_page_btn.hide()
+            self._selected_idx = -1
+            self.pal_info.set_clicked_pal(None)
+            self.pal_info._clear_display()
             return
         self.placeholder.hide()
         self.grid_container_widget.show()
@@ -1504,6 +1508,9 @@ class BasePalsContentWidget(QFrame):
                             if str(cont.get('key', {}).get('ID', {}).get('value', '')).replace('-', '').lower() == container_id.replace('-', '').lower():
                                 slots = cont.get('value', {}).get('Slots', {}).get('value', {}).get('values', [])
                                 slots.append({'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_idx}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': instance_id, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}})
+                                current_slot_num = cont.get('value', {}).get('SlotNum', {}).get('value', 0)
+                                if len(slots) > current_slot_num:
+                                    cont['value']['SlotNum']['value'] = len(slots)
                                 break
                     if guild_id:
                         _register_pal_instance_to_guild(instance_id, guild_id)
@@ -2435,7 +2442,7 @@ class BaseInventoryTab(QWidget):
         dialog = GuildStructurePickerDialog(self)
         dialog.structure_action_selected.connect(self._on_structure_action_selected)
         dialog.exec()
-    def _on_structure_action_selected(self, structure_asset: str, action: str, guild_ids: list = None):
+    def _on_structure_action_selected(self, structure_asset: str, action: str, guild_ids: list=None):
         structure_name = structure_asset.replace('_', ' ').title()
         if action == 'find':
             self._filter_guilds_and_bases_by_structure(structure_asset)

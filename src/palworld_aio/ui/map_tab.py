@@ -1398,10 +1398,7 @@ class MapTab(QWidget):
         try:
             bid = str(base_data['base_id'])
             default_name = f'base_{bid[:8]}'
-            file_path, selected_filter = QFileDialog.getSaveFileName(
-                self, t('base.export.title') if t else 'Export Base', default_name,
-                'PSTB Base Files (*.pstbase);;JSON Files (*.json)'
-            )
+            file_path, selected_filter = QFileDialog.getSaveFileName(self, t('base.export.title') if t else 'Export Base', default_name, 'PSTB Base Files (*.pstbase);;JSON Files (*.json)')
             if not file_path:
                 return
             is_pstbase = 'pstbase' in selected_filter if selected_filter else file_path.endswith('.pstbase')

@@ -1213,7 +1213,7 @@ def find_structure_locations_efficient(structure_asset):
                 result[guild_id_low] = {}
             if base_id_low not in result[guild_id_low]:
                 result[guild_id_low][base_id_low] = []
-            if instance_id and instance_id != '00000000000000000000000000000000' and instance_id not in result[guild_id_low][base_id_low]:
+            if instance_id and instance_id != '00000000000000000000000000000000' and (instance_id not in result[guild_id_low][base_id_low]):
                 result[guild_id_low][base_id_low].append(instance_id)
         return result
     except Exception as e:
@@ -1230,7 +1230,7 @@ def get_structure_economy_stats(structure_asset):
             return {'structure_asset': structure_asset, 'total_count': 0, 'guilds_with_item': 0, 'avg_per_guild': 0, 'guild_details': []}
         guild_counts = {}
         for guild_id_low, bases in locations.items():
-            count = sum(len(instances) for instances in bases.values())
+            count = sum((len(instances) for instances in bases.values()))
             if count > 0:
                 guild_counts[guild_id_low] = count
         total = sum(guild_counts.values())

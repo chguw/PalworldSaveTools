@@ -1695,11 +1695,7 @@ class MainWindow(QMainWindow):
         export_dir = QFileDialog.getExistingDirectory(self, 'Select Export Directory')
         if not export_dir:
             return
-        export_type = show_question(
-            self,
-            'Export Format',
-            'Export as compressed .pstbase files?\n\nYes = .pstbase (smaller, requires reload to export)\nNo = .json'
-        )
+        export_type = show_question(self, 'Export Format', 'Export as compressed .pstbase files?\n\nYes = .pstbase (smaller, requires reload to export)\nNo = .json')
         compressed = export_type if export_type is not None else False
         level_sav = os.path.join(constants.current_save_path, 'Level.sav')
         def task():
@@ -1756,11 +1752,7 @@ class MainWindow(QMainWindow):
         if not guild_bases:
             self._show_info(t('Info') if t else 'Info', f'No bases found for guild "{guild_name}".')
             return
-        export_type = show_question(
-            self,
-            'Export Format',
-            'Export as compressed .pstbase files?\n\nYes = .pstbase (smaller)\nNo = .json'
-        )
+        export_type = show_question(self, 'Export Format', 'Export as compressed .pstbase files?\n\nYes = .pstbase (smaller)\nNo = .json')
         compressed = export_type if export_type is not None else False
         export_dir = QFileDialog.getExistingDirectory(self, f'Select Export Directory for "{guild_name}"')
         if not export_dir:
@@ -1806,10 +1798,7 @@ class MainWindow(QMainWindow):
             self._show_warning(t('Error') if t else 'Error', t('error.no_save_loaded') if t else 'No save file loaded.')
             return
         default_filename = f'base_{bid}'
-        file_path, selected_filter = QFileDialog.getSaveFileName(
-            self, t('base.export.title') if t else 'Export Base', default_filename,
-            'PSTB Base Files (*.pstbase);;JSON Files (*.json)'
-        )
+        file_path, selected_filter = QFileDialog.getSaveFileName(self, t('base.export.title') if t else 'Export Base', default_filename, 'PSTB Base Files (*.pstbase);;JSON Files (*.json)')
         if not file_path:
             return
         try:
