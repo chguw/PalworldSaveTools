@@ -101,6 +101,7 @@ class ItemSlotWidget(QFrame):
         super().enterEvent(event)
 class EquipmentSlotWidget(QFrame):
     item_changed = Signal(str, object)
+    double_clicked = Signal(object)
     context_menu_requested = Signal(object, QPoint)
     unlock_requested = Signal(str)
     def __init__(self, slot_name: str, label: str, parent=None):
@@ -209,6 +210,10 @@ class EquipmentSlotWidget(QFrame):
             self.unlock_requested.emit(self.slot_name)
             return
         super().mousePressEvent(event)
+    def mouseDoubleClickEvent(self, event):
+        if event.button() == Qt.LeftButton and not self._locked:
+            self.double_clicked.emit(self)
+        super().mouseDoubleClickEvent(event)
     def contextMenuEvent(self, event):
         if self._locked:
             return
@@ -451,6 +456,8 @@ class InventoryGridWidget(QWidget):
     item_count_changed = Signal(int, int)
     item_context_menu = Signal(dict, QPoint)
     empty_slot_context_menu = Signal(str, int, QPoint)
+    item_double_clicked = Signal(dict)
+    empty_slot_double_clicked = Signal(str, int)
     item_selected = Signal(dict)
     add_all_effigies_requested = Signal()
     add_all_key_items_requested = Signal()
@@ -541,7 +548,14 @@ class InventoryGridWidget(QWidget):
     def _on_slot_clicked(self, slot_data):
         pass
     def _on_slot_double_clicked(self, slot_data):
-        pass
+        if slot_data:
+            self.item_double_clicked.emit(slot_data)
+        else:
+            sender = self.sender()
+            for idx, w in self.slots.items():
+                if w == sender:
+                    self.empty_slot_double_clicked.emit(self.container_type, idx)
+                    break
     def _on_slot_context_menu(self, slot_data, pos):
         if slot_data:
             self.item_context_menu.emit(slot_data, pos)
@@ -816,6 +830,8 @@ class PlayerInventoryTab(QWidget):
         self.main_grid.item_selected.connect(self._on_item_selected)
         self.main_grid.item_context_menu.connect(self._show_item_context_menu)
         self.main_grid.empty_slot_context_menu.connect(self._show_empty_slot_context_menu)
+        self.main_grid.item_double_clicked.connect(self._delete_item_direct)
+        self.main_grid.empty_slot_double_clicked.connect(self._on_empty_slot_double_clicked)
         self.unlock_all_map_btn = QPushButton(t('inventory.unlock_all_map', default='Unlock All Map + Fast Travel'))
         self.unlock_all_map_btn.setStyleSheet('QPushButton { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 11px; } QPushButton:hover { background: rgba(74,222,128,0.25); border-color: rgba(74,222,128,0.5); color: #FFFFFF; }')
         self.unlock_all_map_btn.setCursor(Qt.PointingHandCursor)
@@ -827,6 +843,8 @@ class PlayerInventoryTab(QWidget):
         self.key_grid.item_selected.connect(self._on_item_selected)
         self.key_grid.item_context_menu.connect(self._show_item_context_menu)
         self.key_grid.empty_slot_context_menu.connect(self._show_empty_slot_context_menu)
+        self.key_grid.item_double_clicked.connect(self._delete_item_direct)
+        self.key_grid.empty_slot_double_clicked.connect(self._on_empty_slot_double_clicked)
         self.key_grid.add_all_effigies_requested.connect(self._on_add_all_effigies)
         self.key_grid.add_all_key_items_requested.connect(self._on_add_all_key_items)
         self.inv_tabs.addTab(self.key_grid, t('inventory.key_items', default='Key Items'))
@@ -955,6 +973,8 @@ class PlayerInventoryTab(QWidget):
         self.equip_slots['sphere_mod'] = slot
         slot.context_menu_requested.connect(self._show_equip_context_menu)
         right_col.addWidget(slot)
+        for equip_slot in self.equip_slots.values():
+            equip_slot.double_clicked.connect(self._on_equip_double_clicked)
         equip_main_layout.addLayout(right_col)
         center_layout.addLayout(equip_main_layout)
         equip_scroll.setWidget(equip_content)
@@ -1270,6 +1290,22 @@ class PlayerInventoryTab(QWidget):
         menu.addSeparator()
         menu.addAction(t('inventory.clear_slot', default='Clear Slot')).triggered.connect(lambda: self._clear_corrupted_slot(container_type, slot_index))
         menu.exec(pos)
+    def _on_empty_slot_double_clicked(self, container_type: str, slot_index: int):
+        self._context_container_type = container_type
+        self._context_slot_index = slot_index
+        self._show_add_item_dialog()
+    def _delete_item_direct(self, slot_data: dict):
+        if not self.inventory or not slot_data:
+            return
+        container_type = slot_data.get('container_type', 'main')
+        slot_index = slot_data.get('slot_index', 0)
+        container = self.inventory.get_container(container_type)
+        if container:
+            container.update_slots([s for s in container.slots if s.get('slot_index') != slot_index])
+            self._update_raw_save_data(container_type, container)
+            self.inventory.save()
+            self.selected_item = None
+            self._refresh_display()
     def _clear_corrupted_slot(self, container_type: str, slot_index: int):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('error.title', default='Error'), t('inventory.no_player', default='Please select a player first'))
@@ -1315,6 +1351,19 @@ class PlayerInventoryTab(QWidget):
         else:
             menu.addAction(t('inventory.add_item', default='Add Item')).triggered.connect(lambda: self._add_to_equip_slot(slot_name))
         menu.exec(pos)
+    def _on_equip_double_clicked(self, slot_widget):
+        slot_name = slot_widget.slot_name
+        if slot_widget.current_item:
+            container_type = self._get_equip_container_type(slot_name)
+            slot_index = self._get_equip_slot_index(slot_name)
+            container = self.inventory.get_container(container_type)
+            if container:
+                container.update_slots([s for s in container.slots if s.get('slot_index') != slot_index])
+                self._update_raw_save_data_with_recursive_clean(container_type, container, slot_index)
+                self.inventory.save()
+                self._refresh_display()
+        else:
+            self._add_to_equip_slot(slot_name)
     def _add_to_equip_slot(self, slot_name: str):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('error.title', default='Error'), t('inventory.no_player', default='Please select a player first'))

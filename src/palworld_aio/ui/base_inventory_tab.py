@@ -88,6 +88,7 @@ class GuildItemPickerDialog(QDialog):
         self.results_list.setDragEnabled(False)
         self.results_list.viewport().setAcceptDrops(False)
         self.results_list.itemClicked.connect(self._on_item_clicked)
+        self.results_list.itemDoubleClicked.connect(self._on_find_containers)
         left_layout.addWidget(self.results_list)
         right_widget = QWidget()
         right_layout = QVBoxLayout(right_widget)
@@ -382,6 +383,7 @@ class GuildStructurePickerDialog(QDialog):
         self.results_list.setDragEnabled(False)
         self.results_list.viewport().setAcceptDrops(False)
         self.results_list.itemClicked.connect(self._on_structure_clicked)
+        self.results_list.itemDoubleClicked.connect(self._on_find_bases)
         left_layout.addWidget(self.results_list)
         right_widget = QWidget()
         right_layout = QVBoxLayout(right_widget)
@@ -1034,6 +1036,13 @@ class _BasePalIcon(QFrame):
         if event.button() == Qt.LeftButton:
             self.clicked.emit(self.slot_index)
         super().mousePressEvent(event)
+    def mouseDoubleClickEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            if self.pal_data:
+                self.rightClicked.emit(self.slot_index, 'delete_direct')
+            else:
+                self.rightClicked.emit(self.slot_index, 'add_new')
+        super().mouseDoubleClickEvent(event)
     def contextMenuEvent(self, event):
         if self.pal_data:
             self.clicked.emit(self.slot_index)
@@ -1477,6 +1486,14 @@ class BasePalsContentWidget(QFrame):
                     pass
                 btn.clicked.connect(lambda checked, d=dlg: d.accept())
                 break
+        try:
+            dlg.pal_list.itemDoubleClicked.disconnect()
+        except:
+            pass
+        dlg.pal_list.itemDoubleClicked.connect(lambda item: (
+            dlg.selected_pal.update({'asset': item.data(Qt.UserRole), 'name': item.text()}),
+            dlg.accept()
+        ))
         if dlg.exec() == QDialog.Accepted and dlg.selected_pal['asset']:
             cid = dlg.selected_pal['asset']
             nick = dlg.nick_edit.text().strip() or ''
@@ -1539,6 +1556,21 @@ class BasePalsContentWidget(QFrame):
             if hasattr(w, 'tools_tab'):
                 w.tools_tab.refresh()
                 break
+    def _delete_base_pal(self, pal_idx):
+        import gc
+        pal = self._pals[pal_idx]
+        try:
+            cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
+            if pal['character_entry'] in cmap:
+                cmap.remove(pal['character_entry'])
+        except Exception:
+            pass
+        self._pals[pal_idx] = None
+        self._rebuild()
+        self.pal_info.last_clicked_data = None
+        self.pal_info._hovered_data = None
+        self.pal_info._clear_display()
+        self._refresh_dashboard()
     def _on_pal_info_changed(self):
         for icon in self._icons:
             icon.update_display()
@@ -1603,19 +1635,10 @@ class BasePalsContentWidget(QFrame):
             reply = show_question(self, t('edit_pals.confirm_delete'), 'Delete this pal?')
             if not reply:
                 return
-            import gc
-            try:
-                cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
-                if pal['character_entry'] in cmap:
-                    cmap.remove(pal['character_entry'])
-            except Exception:
-                pass
-            self._pals[pal_idx] = None
-            self._rebuild()
-            self.pal_info.last_clicked_data = None
-            self.pal_info._hovered_data = None
-            self.pal_info._clear_display()
-            self._refresh_dashboard()
+            self._delete_base_pal(pal_idx)
+            return
+        elif action == 'delete_direct':
+            self._delete_base_pal(pal_idx)
             return
         item = self.grid.itemAt(idx)
         if item and item.widget():
@@ -1831,6 +1854,8 @@ class BaseInventoryTab(QWidget):
     def _setup_connections(self):
         self.inventory_grid.item_context_menu.connect(self._show_item_context_menu)
         self.inventory_grid.empty_slot_context_menu.connect(self._show_empty_slot_context_menu)
+        self.inventory_grid.item_double_clicked.connect(self._remove_item_from_slot)
+        self.inventory_grid.empty_slot_double_clicked.connect(lambda ct, idx: self._add_item_to_slot(idx))
         self.inventory_grid.item_added.connect(self._trigger_auto_save)
         self.inventory_grid.item_removed.connect(self._trigger_auto_save)
         self.inventory_grid.item_count_changed.connect(self._trigger_auto_save)

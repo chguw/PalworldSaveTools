@@ -157,6 +157,7 @@ class PlayerItemActionDialog(QDialog):
         grid.setAcceptDrops(False)
         grid.setItemDelegate(RarityBorderDelegate(grid))
         grid.itemClicked.connect(self._on_item_clicked)
+        grid.itemDoubleClicked.connect(self._on_add_item)
         return grid
     def _load_items(self):
         self._all_items = ItemData.get_all_items()

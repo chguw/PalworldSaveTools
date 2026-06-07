@@ -669,6 +669,13 @@ class PartySlotWidget(QFrame):
         if event.button() == Qt.LeftButton:
             self.clicked.emit()
         super().mousePressEvent(event)
+    def mouseDoubleClickEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            if self.pal_data:
+                self.rightClicked.emit(self.slot_index, 'delete_direct')
+            else:
+                self.rightClicked.emit(self.slot_index, 'add_new')
+        super().mouseDoubleClickEvent(event)
     def contextMenuEvent(self, event):
         if self.pal_data:
             self._context_click = True
@@ -988,6 +995,13 @@ class PalboxSlotWidget(QFrame):
         if event.button() == Qt.LeftButton:
             self.clicked.emit()
         super().mousePressEvent(event)
+    def mouseDoubleClickEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            if self.pal_data:
+                self.rightClicked.emit(self.slot_index, 'delete_direct')
+            else:
+                self.rightClicked.emit(self.slot_index, 'add_new')
+        super().mouseDoubleClickEvent(event)
     def contextMenuEvent(self, event):
         if self.pal_data:
             self._context_click = True
@@ -4268,6 +4282,8 @@ class PalEditorWidget(QWidget):
         raw = sender._get_raw() if hasattr(sender, '_get_raw') else None
         if action == 'delete':
             self._delete_pal_at_slot(slot_index, is_party)
+        elif action == 'delete_direct':
+            self._delete_pal_at_slot_direct(slot_index, is_party)
         elif action == 'add_new':
             self._add_new_pal_at_slot(slot_index)
         elif action == 'boss_toggle':
@@ -4363,6 +4379,40 @@ class PalEditorWidget(QWidget):
                 reply = show_question(self, t('edit_pals.confirm_delete'), 'Delete this pal?')
                 if not reply:
                     return
+                try:
+                    cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
+                    if pal in cmap:
+                        cmap.remove(pal)
+                except Exception:
+                    pass
+                del self.palbox_pal_dict[abs_idx]
+                self._update_palbox_page()
+                self.pal_info.last_clicked_data = None
+                self.pal_info._hovered_data = None
+                self.pal_info._clear_display()
+                self._update_dashboard_stats()
+    def _delete_pal_at_slot_direct(self, slot_index, is_party=None):
+        if is_party is None:
+            is_party = self.selected_pal_slot and self.selected_pal_slot[0] == 'party'
+        if is_party:
+            if slot_index in self.party_pals:
+                pal = self.party_pals[slot_index]
+                try:
+                    cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
+                    if pal in cmap:
+                        cmap.remove(pal)
+                except Exception:
+                    pass
+                del self.party_pals[slot_index]
+                self._update_party_slots()
+                self.pal_info.last_clicked_data = None
+                self.pal_info._hovered_data = None
+                self.pal_info._clear_display()
+                self._update_dashboard_stats()
+        else:
+            abs_idx = (self.current_box_index - 1) * 30 + slot_index
+            if abs_idx in self.palbox_pal_dict:
+                pal = self.palbox_pal_dict[abs_idx]
                 try:
                     cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
                     if pal in cmap:
@@ -4797,7 +4847,7 @@ class PalCreateDialog(QDialog):
                 self.selected_pal['asset'] = item.data(Qt.UserRole)
                 self.selected_pal['name'] = item.text()
         self.pal_list.itemClicked.connect(on_select)
-        self.pal_list.itemDoubleClicked.connect(lambda item: (on_select(item), self.accept()))
+        self.pal_list.itemDoubleClicked.connect(lambda item: (on_select(item), self._on_create()))
         self._pal_descs_cache = pal_descs
         self._pal_passives_cache = pal_passives
         self._pal_main_values_cache = pal_main_values

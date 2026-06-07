@@ -78,6 +78,7 @@ class PlayerPalActionDialog(QDialog):
         self.pal_list.setAcceptDrops(False)
         self.pal_list.setItemDelegate(PalSlotDelegate(self.pal_list))
         self.pal_list.itemClicked.connect(self._on_pal_clicked)
+        self.pal_list.itemDoubleClicked.connect(self._on_delete_pal_direct)
         search_layout.addWidget(self.pal_list)
         self.pal_info_label = QLabel(t('player_pal.select_pal') if t else 'Select a pal to delete from everywhere')
         self.pal_info_label.setStyleSheet('color: #888; font-style: italic; padding: 5px;')
@@ -331,6 +332,13 @@ class PlayerPalActionDialog(QDialog):
             action = f'delete_pal:{self.selected_pal_id}'
             self.pal_action_selected.emit('all', action, [])
             self._refresh_after_action()
+
+    def _on_delete_pal_direct(self):
+        if not self.selected_pal_id:
+            return
+        action = f'delete_pal:{self.selected_pal_id}'
+        self.pal_action_selected.emit('all', action, [])
+        self._refresh_after_action()
     def _on_remove_skills(self):
         if not self.selected_active_skill_id and (not self.selected_passive_skill_id):
             QMessageBox.warning(self, t('player_pal.no_skill_selected') if t else 'No Skill Selected', t('player_pal.select_skill_first') if t else 'Please select at least one skill.')

@@ -49,6 +49,7 @@ class PlayerTechnologyActionDialog(QDialog):
         self.results_list.setDragEnabled(False)
         self.results_list.setAcceptDrops(False)
         self.results_list.itemClicked.connect(self._on_tech_clicked)
+        self.results_list.itemDoubleClicked.connect(self._on_add_technology_direct)
         search_layout.addWidget(self.results_list)
         self.tech_info_label = QLabel(t('player_technology.select_tech_prompt') if t else 'Select a technology to perform actions')
         self.tech_info_label.setStyleSheet('color: #888; font-style: italic; padding: 5px;')
@@ -218,18 +219,30 @@ class PlayerTechnologyActionDialog(QDialog):
             return
         reply = QMessageBox.question(self, t('player_technology.confirm_add') if t else 'Confirm Add', t('player_technology.confirm_add_msg').format(tech_name=self.selected_tech_name, count=len(players)) if t else f'Add "{self.selected_tech_name}" to {len(players)} selected player(s)?', QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
-            success_count = 0
-            for uid in players:
-                if self._add_technology_to_player(uid, self.selected_tech_asset):
-                    success_count += 1
-            if success_count > 0:
-                self.status_label.setText(t('player_technology.add_complete') if t else 'Bulk Add Complete')
-                self.status_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
-                if hasattr(self.parent(), 'refresh_all'):
-                    self.parent().refresh_all()
-            else:
-                self.status_label.setText(t('player_technology.error') if t else 'Error')
-                self.status_label.setStyleSheet('color: #f87171; font-weight: bold; padding: 5px;')
+            self._do_add_technology(players)
+
+    def _on_add_technology_direct(self):
+        if not self.selected_tech_asset:
+            return
+        players = self._get_selected_players()
+        if not players:
+            QMessageBox.warning(self, t('player_technology.no_players_selected') if t else 'No Players Selected', t('player_technology.select_at_least_one') if t else 'Please select at least one player.')
+            return
+        self._do_add_technology(players)
+
+    def _do_add_technology(self, players):
+        success_count = 0
+        for uid in players:
+            if self._add_technology_to_player(uid, self.selected_tech_asset):
+                success_count += 1
+        if success_count > 0:
+            self.status_label.setText(t('player_technology.add_complete') if t else 'Bulk Add Complete')
+            self.status_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
+            if hasattr(self.parent(), 'refresh_all'):
+                self.parent().refresh_all()
+        else:
+            self.status_label.setText(t('player_technology.error') if t else 'Error')
+            self.status_label.setStyleSheet('color: #f87171; font-weight: bold; padding: 5px;')
     def _on_remove_technology(self):
         if not self.selected_tech_asset:
             return
