@@ -2164,8 +2164,11 @@ class BaseInventoryTab(QWidget):
                     break
                 self.manager.add_item_to_slot(slot_idx, item['id'], item['qty'])
             _consolidate_container_slots(self.manager.inventory_container, 'main', SINGLETON_TYPE_A)
-            if self.manager.current_container and expanded:
-                self._on_container_selected(self.manager.current_container['id'])
+            if expanded:
+                cid = self.manager.current_container['id']
+                self._load_containers_for_base(self._current_base_id)
+                self._restore_container_selection(cid)
+                self._on_container_selected(cid)
             else:
                 self._refresh_container_ui()
             self._trigger_auto_save()
