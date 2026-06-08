@@ -26,12 +26,10 @@ class NerdBtn(QPushButton):
         p.end()
 from i18n import init_language, t, set_language, get_language, load_resources
 from palsav.archive import *
-from palsav import *
 from palsav.paltypes import *
 import palsav.rawdata.group as palworld_save_group
 from palobject import *
 from palsav.gvas import *
-from palsav.rawdata import *
 from palsav.json_tools import *
 from palworld_coord import sav_to_map
 from common import ICON_PATH

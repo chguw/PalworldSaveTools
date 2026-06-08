@@ -18,6 +18,7 @@ dependencies = [
     "palsav-flex",
     "brotli",
     "cbor2",
+    "msgpack",
     "zstandard",
 ]
 

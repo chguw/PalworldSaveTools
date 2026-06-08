@@ -7,6 +7,7 @@ import os
 from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
 from palsav.paltypes import PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PROPERTIES
 from palsav.gvas import GvasFile
+from palsav.archive import UUID
 from palworld_aio.ui.styles import ThemeManager
 from palworld_aio.container_ownership import ContainerOwnership
 from palworld_aio.inventory_manager import PlayerInventory

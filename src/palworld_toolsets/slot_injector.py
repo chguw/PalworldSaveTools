@@ -1,4 +1,7 @@
 from import_libs import *
+from palsav.gvas import GvasFile
+from palsav.paltypes import PALWORLD_TYPE_HINTS
+from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from loading_manager import show_information, show_critical, run_with_loading
 from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QFileDialog, QApplication, QFrame, QGridLayout, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QAbstractItemView, QMessageBox, QSpinBox, QGroupBox, QWidget, QScrollArea, QProgressBar

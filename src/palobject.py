@@ -1,4 +1,8 @@
 from import_libs import *
+try:
+    import msgpack
+except ImportError:
+    msgpack = None
 def toUUID(uuid_str):
     if isinstance(uuid_str, UUID):
         return uuid_str
@@ -45,8 +49,8 @@ class MPMapProperty(list):
         else:
             self.shm = shared_memory.SharedMemory(create=True, size=size)
         self.memaddr = ctypes.addressof(ctypes.c_void_p.from_buffer(self.shm.buf.obj))
-        self.prop = MMapProperty.from_address(self.memaddr)
-        struct_head_size = ctypes.sizeof(MMapProperty)
+        self.prop = MPMapProperty.from_address(self.memaddr)
+        struct_head_size = ctypes.sizeof(MPMapProperty)
         struct_content_size = intsize * count * (3 if self.__class__.WithKeys else 2)
         if kwargs.get('name', None) is None:
             ctypes.memset(self.memaddr, 0, struct_head_size + struct_content_size)
