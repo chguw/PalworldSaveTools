@@ -1264,9 +1264,11 @@ class PlayerInventoryTab(QWidget):
                 _merge_or_add_items(self.inventory, 'key', item['id'], item['qty'])
             main_c = self.inventory.get_container('main')
             if main_c:
+                _consolidate_container_slots(main_c, 'main', SINGLETON_TYPE_A)
                 self._update_raw_save_data('main', main_c)
             key_c = self.inventory.get_container('key')
             if key_c:
+                _consolidate_container_slots(key_c, 'key', SINGLETON_TYPE_A)
                 self._update_raw_save_data('key', key_c)
             self._refresh_display()
         dlg = InventoryLoadoutDialog(self, _get_items, _apply_items, loadouts_path=_INV_LOADOUTS_PATH)
@@ -1285,32 +1287,7 @@ class PlayerInventoryTab(QWidget):
             return
         if not container:
             return
-        slots = container.slots
-        merged = {}
-        for s in slots:
-            item_id = s.get('item_id', '')
-            if not item_id:
-                continue
-            qty = s.get('stack_count', 1)
-            item_info = ItemData.get_item_by_asset(item_id)
-            if item_info.get('type_a') in SINGLETON_TYPE_A:
-                merged[item_id] = qty
-            else:
-                merged[item_id] = merged.get(item_id, 0) + qty
-        new_slots = []
-        idx = 0
-        for item_id, total_qty in merged.items():
-            item_info = ItemData.get_item_by_asset(item_id)
-            if item_info.get('type_a') in SINGLETON_TYPE_A:
-                new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': 1, 'category': ItemData.get_item_category(item_id), 'container_type': ct, 'raw_data': None})
-                idx += 1
-            else:
-                while total_qty > 0:
-                    stack = min(total_qty, 9999)
-                    new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': stack, 'category': ItemData.get_item_category(item_id), 'container_type': ct, 'raw_data': None})
-                    idx += 1
-                    total_qty -= stack
-        container.update_slots(new_slots)
+        _consolidate_container_slots(container, ct, SINGLETON_TYPE_A)
         self._update_raw_save_data(ct, container)
         self._refresh_display()
     def _on_equipment_loadout(self):
@@ -1930,6 +1907,34 @@ def _merge_or_add_items(inventory, container_type, item_id, quantity):
         if remaining <= 0:
             return
     inventory.add_item(container_type, item_id, remaining)
+def _consolidate_container_slots(container, container_type, singleton_set):
+    slots = container.slots
+    merged = {}
+    for s in slots:
+        item_id = s.get('item_id', '')
+        if not item_id:
+            continue
+        qty = s.get('stack_count', 1)
+        item_info = ItemData.get_item_by_asset(item_id)
+        if item_info.get('type_a') in singleton_set:
+            merged[item_id] = 1
+        else:
+            merged[item_id] = merged.get(item_id, 0) + qty
+    new_slots = []
+    idx = 0
+    for item_id, total_qty in merged.items():
+        item_info = ItemData.get_item_by_asset(item_id)
+        is_singleton = item_info.get('type_a') in singleton_set
+        if is_singleton:
+            new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': 1, 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
+            idx += 1
+        else:
+            while total_qty > 0:
+                stack = min(total_qty, 9999)
+                new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': stack, 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
+                idx += 1
+                total_qty -= stack
+    container.update_slots(new_slots)
 class InventoryLoadoutDialog(QDialog):
     def __init__(self, parent, get_current_items_fn, apply_loadout_fn, title=None, get_extra_fn=None, loadouts_path=None, key_prefix='inventory'):
         super().__init__(parent)
