@@ -1877,8 +1877,8 @@ class InventoryLoadoutDialog(QDialog):
         self.setMaximumSize(520, 500)
         self.setStyleSheet(DARK_THEME_STYLE)
         self._setup_ui()
-    def _t(self, key, default=''):
-        return t(f'{self._kp}_{key}', default=default)
+    def _t(self, key, default='', **kwargs):
+        return t(f'{self._kp}_{key}', default=default, **kwargs)
     def _setup_ui(self):
         self._load_loadouts()
         inner = QWidget()
@@ -1949,20 +1949,28 @@ class InventoryLoadoutDialog(QDialog):
             show_warning(self, self.windowTitle(), self._t('loadouts_no_items', default='No items to save.'))
             return
         name, ok = QInputDialog.getText(self, self._t('loadouts_save_title', default='Save Loadout'), self._t('loadouts_save_prompt', default='Loadout name:'), text='')
+
         if not ok or not name.strip():
             return
         name = name.strip()
-        reg, key = _split_regular_key(items)
-        data = {'regular': reg, 'key_items': key}
-        if self._get_extra_fn:
+        if isinstance(items, dict):
+            reg, key = [], []
+            equipment = items
+        else:
+            reg, key = _split_regular_key(items)
+            equipment = {}
+        if not equipment and self._get_extra_fn:
             extra = self._get_extra_fn()
             if extra:
-                data['equipment'] = extra
+                equipment = extra
+        data = {'regular': reg, 'key_items': key}
+        if equipment:
+            data['equipment'] = equipment
         self._loadouts[name] = data
         self._save_loadouts()
         self._refresh_list()
         from loading_manager import show_information
-        show_information(self, self.windowTitle(), self._t('loadouts_saved_ok', default=f'Loadout "{name}" saved.'))
+        show_information(self, self.windowTitle(), self._t('loadouts_saved_ok', name=name, default=f'Loadout "{name}" saved.'))
     def _do_load(self):
         sel = self.list_widget.currentItem()
         if not sel:
@@ -1975,7 +1983,7 @@ class InventoryLoadoutDialog(QDialog):
             return
         self._apply_fn(data.get('regular', []), data.get('key_items', []), data.get('equipment', {}))
         from loading_manager import show_information
-        show_information(self, self.windowTitle(), self._t('loadouts_applied', default=f'Loadout "{name}" applied.'))
+        show_information(self, self.windowTitle(), self._t('loadouts_applied', name=name, default=f'Loadout "{name}" applied.'))
     def _do_delete(self):
         sel = self.list_widget.currentItem()
         if not sel:
@@ -1984,11 +1992,11 @@ class InventoryLoadoutDialog(QDialog):
             return
         name = sel.data(Qt.UserRole)
         from loading_manager import show_question
-        if not show_question(self, self.windowTitle(), self._t('loadouts_delete_confirm', default=f'Delete "{name}"?')):
+        if not show_question(self, self.windowTitle(), self._t('loadouts_delete_confirm', name=name, default=f'Delete "{name}"?')):
             return
         self._loadouts.pop(name, None)
         self._save_loadouts()
         row = self.list_widget.row(sel)
         self.list_widget.takeItem(row)
         from loading_manager import show_information
-        show_information(self, self.windowTitle(), self._t('loadouts_deleted', default=f'Loadout "{name}" deleted.'))
+        show_information(self, self.windowTitle(), self._t('loadouts_deleted', name=name, default=f'Loadout "{name}" deleted.'))

@@ -1,0 +1,22 @@
+{
+  "GuildChest1": {
+    "regular": [
+      {
+        "id": "ElectricArcAssaultRifle_5",
+        "qty": 1,
+        "name": "Plasma Rifle"
+      },
+      {
+        "id": "Accessory_Avoid_1",
+        "qty": 1,
+        "name": "Phantom Ring"
+      },
+      {
+        "id": "PalSphere_Ancient_2",
+        "qty": 9999,
+        "name": "Ancient Sphere"
+      }
+    ],
+    "key_items": []
+  }
+}

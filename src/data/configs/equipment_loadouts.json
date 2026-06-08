@@ -1,0 +1,73 @@
+{
+  "Meta": {
+    "regular": [],
+    "key_items": [],
+    "equipment": {
+      "weapon1": {
+        "id": "ElectricArcAssaultRifle_5",
+        "qty": 1,
+        "name": "Plasma Rifle"
+      },
+      "weapon2": {
+        "id": "DroneLauncher_5",
+        "qty": 1,
+        "name": "Drone Launcher"
+      },
+      "head": {
+        "id": "AncientHelmet_5",
+        "qty": 1,
+        "name": "Ancient Helm"
+      },
+      "body": {
+        "id": "AncientArmorCold_5",
+        "qty": 1,
+        "name": "Cold-Resistant Ancient Armor"
+      },
+      "accessory1": {
+        "id": "Accessory_NonkChecker_1",
+        "qty": 1,
+        "name": "Pal Tamer's Glasses"
+      },
+      "accessory2": {
+        "id": "Accessory_PPAT_1",
+        "qty": 1,
+        "name": "Dogen Emblem"
+      },
+      "shield": {
+        "id": "Shield_07",
+        "qty": 1,
+        "name": "Shield 07"
+      },
+      "glider": {
+        "id": "WingGlider",
+        "qty": 1,
+        "name": "Wing Pack"
+      },
+      "accessory3": {
+        "id": "Accessory_DFHP_1",
+        "qty": 1,
+        "name": "Warsect Terra's Belt"
+      },
+      "accessory4": {
+        "id": "Accessory_JumpCount_Increase3",
+        "qty": 1,
+        "name": "Quadruple Jump Boots"
+      },
+      "sphere_mod": {
+        "id": "SphereModule_Homing",
+        "qty": 1,
+        "name": "Homing Module"
+      },
+      "food1": {
+        "id": "Cake05",
+        "qty": 9986,
+        "name": "Special Cake"
+      },
+      "food2": {
+        "id": "Cake05",
+        "qty": 9994,
+        "name": "Special Cake"
+      }
+    }
+  }
+}
