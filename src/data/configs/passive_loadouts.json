@@ -16,5 +16,17 @@
     "legend",
     "pal_allattack_up3",
     "worldtree_atk"
+  ],
+  "Player booster": [
+    "traineratk_up_1",
+    "trainerdef_up_1",
+    "mutationpal_immortal",
+    "mutationpal_mutant"
+  ],
+  "Player $$$": [
+    "traineratk_up_1",
+    "trainerdef_up_1",
+    "saleprice_up_1",
+    "saleprice_up_2"
   ]
 }
