@@ -2170,6 +2170,7 @@ class BaseInventoryTab(QWidget):
                             c['slot_count'] = sc.max_slots
                             break
                     self.container_list.update_slot_count_label(self.manager.current_container['id'], sc.max_slots)
+                    self._on_container_selected(self.manager.current_container['id'])
                     slot_idx = self.manager.find_empty_slot()
                 if slot_idx == -1:
                     break
