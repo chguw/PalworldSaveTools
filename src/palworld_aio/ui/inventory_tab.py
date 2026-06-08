@@ -1286,11 +1286,35 @@ class PlayerInventoryTab(QWidget):
                 return
             if not equipment:
                 return
-            from palworld_aio.inventory_manager import UI_SLOT_BINDINGS
+            from palworld_aio.inventory_manager import UI_SLOT_BINDINGS, FOOD_POUCH_ITEMS, ACCESSORY_UNLOCK_ITEMS, WEAPON_UNLOCK_ITEMS
             binding_map = {b['slot_name']: b for b in UI_SLOT_BINDINGS}
+            def _ensure_slot_unlocked(slot_name):
+                import re
+                m = re.match(r'(food|accessory|weapon)(\d+)', slot_name)
+                if not m:
+                    return
+                kind, num_str = m.group(1), int(m.group(2))
+                if kind == 'food':
+                    unlocked = self.inventory.get_unlocked_food_slots()
+                    while num_str > unlocked and unlocked < len(FOOD_POUCH_ITEMS):
+                        self.inventory.add_key_item(FOOD_POUCH_ITEMS[unlocked])
+                        unlocked += 1
+                elif kind == 'accessory':
+                    base = 2
+                    unlocked = self.inventory.get_unlocked_accessory_slots()
+                    while num_str > unlocked and unlocked - base < len(ACCESSORY_UNLOCK_ITEMS):
+                        self.inventory.add_key_item(ACCESSORY_UNLOCK_ITEMS[unlocked - base])
+                        unlocked += 1
+                elif kind == 'weapon':
+                    base = 4
+                    unlocked = self.inventory.get_unlocked_weapon_slots()
+                    while num_str > unlocked and unlocked - base < len(WEAPON_UNLOCK_ITEMS):
+                        self.inventory.add_key_item(WEAPON_UNLOCK_ITEMS[unlocked - base])
+                        unlocked += 1
             for slot_name, equip_item in equipment.items():
                 if slot_name not in binding_map:
                     continue
+                _ensure_slot_unlocked(slot_name)
                 binding = binding_map[slot_name]
                 slot_idx = binding['index']
                 container = self.inventory.get_container(binding['container'])
