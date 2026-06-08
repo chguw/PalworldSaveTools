@@ -1,0 +1,20 @@
+{
+  "Speedster": [
+    "WorldTree_MoveSpeed",
+    "MoveSpeed_up_3",
+    "MoveSpeed_up_2",
+    "Legend"
+  ],
+  "Immortality": [
+    "worldtree_atk",
+    "worldtree_atk_def",
+    "pal_allattack_up3",
+    "mutationpal_immortal"
+  ],
+  "Serenity Wrath": [
+    "cooltimereduction_up_1",
+    "legend",
+    "pal_allattack_up3",
+    "worldtree_atk"
+  ]
+}

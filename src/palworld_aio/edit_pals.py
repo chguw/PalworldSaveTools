@@ -8,7 +8,7 @@ import threading
 from functools import partial
 import shiboken6
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QSpinBox, QComboBox, QTextEdit, QFileDialog, QGroupBox, QFormLayout, QCheckBox, QFrame, QTabWidget, QScrollArea, QWidget, QGridLayout, QListWidget, QListWidgetItem, QInputDialog, QTableWidget, QApplication, QProgressBar, QAbstractItemView, QCompleter, QGraphicsOpacityEffect, QMenu, QStyledItemDelegate, QSizePolicy, QStyle, QStackedWidget
-from PySide6.QtCore import Qt, QTimer, Signal, QPoint, QPointF, QEvent, QSize, QRect, QRectF, QThread
+from PySide6.QtCore import Qt, QTimer, QObject, Signal, QPoint, QPointF, QEvent, QSize, QRect, QRectF, QThread
 from PySide6.QtGui import QIcon, QFont, QPixmap, QRegion, QCursor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics, QPalette, QColor, QShortcut, QKeySequence, QLinearGradient
 from i18n import t
 from loading_manager import show_information, show_warning, show_question
@@ -2186,8 +2186,10 @@ class PalInfoWidget(QFrame):
         self._no_data_overlay.show()
         scroll.hide()
         self._c_shortcut = QShortcut(QKeySequence(Qt.Key_C), self)
-        self._c_shortcut.activated.connect(self._toggle_skills_view)
+        self._c_shortcut.activated.connect(lambda: self.last_clicked_data is not None and self._toggle_skills_view())
         self._showing_active_skills = True
+        self._l_shortcut = QShortcut(QKeySequence(Qt.Key_L), self)
+        self._l_shortcut.activated.connect(lambda: self.last_clicked_data is not None and self._on_passive_loadout())
     def resizeEvent(self, event):
         super().resizeEvent(event)
         if hasattr(self, '_no_data_overlay'):
@@ -2793,11 +2795,13 @@ class PalInfoWidget(QFrame):
         self.partner_lvl_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #F59E0B; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.15); border-radius: 3px; padding: 0 4px;')
         pheader.addWidget(self.partner_lvl_lbl)
         pheader.addStretch()
-        c_icon = QLabel('[C]')
-        c_icon.setFixedSize(22, 16)
-        c_icon.setAlignment(Qt.AlignCenter)
-        c_icon.setStyleSheet('font-size: 8px; font-weight: 700; color: #7DD3FC; background: rgba(125,211,252,0.08); border: 1px solid rgba(125,211,252,0.2); border-radius: 3px;')
-        pheader.addWidget(c_icon)
+        self._c_icon = QPushButton('[C]')
+        self._c_icon.setFixedSize(22, 16)
+        self._c_icon.setStyleSheet('QPushButton { font-size: 8px; font-weight: 700; color: #7DD3FC; background: rgba(125,211,252,0.08); border: 1px solid rgba(125,211,252,0.2); border-radius: 3px; padding: 0px; margin: 0px; } QPushButton:hover { background: rgba(125,211,252,0.15); }')
+        self._c_icon.setCursor(Qt.PointingHandCursor)
+        self._c_icon.setToolTip(t('edit_pals.toggle_skills_hint'))
+        self._c_icon.clicked.connect(lambda: self.last_clicked_data is not None and self._toggle_skills_view())
+        pheader.addWidget(self._c_icon)
         partner_layout.addLayout(pheader)
         self.partner_desc_lbl = QLabel('Fires a barrage of missiles at nearby enemies, dealing massive damage and knocking them back.')
         self.partner_desc_lbl.setWordWrap(True)
@@ -2816,11 +2820,13 @@ class PalInfoWidget(QFrame):
         as_title.setStyleSheet('font-size: 9px; font-weight: 700; color: #7DD3FC; background: transparent; border: none;')
         as_header.addWidget(as_title)
         as_header.addStretch()
-        as_c_icon = QLabel('[C]')
-        as_c_icon.setFixedSize(22, 14)
-        as_c_icon.setAlignment(Qt.AlignCenter)
-        as_c_icon.setStyleSheet('font-size: 7px; font-weight: 700; color: #7DD3FC; background: rgba(125,211,252,0.08); border: 1px solid rgba(125,211,252,0.2); border-radius: 3px;')
-        as_header.addWidget(as_c_icon)
+        self._as_c_icon = QPushButton('[C]')
+        self._as_c_icon.setFixedSize(22, 14)
+        self._as_c_icon.setStyleSheet('QPushButton { font-size: 7px; font-weight: 700; color: #7DD3FC; background: rgba(125,211,252,0.08); border: 1px solid rgba(125,211,252,0.2); border-radius: 3px; padding: 0px; margin: 0px; } QPushButton:hover { background: rgba(125,211,252,0.15); }')
+        self._as_c_icon.setCursor(Qt.PointingHandCursor)
+        self._as_c_icon.setToolTip(t('edit_pals.toggle_skills_hint'))
+        self._as_c_icon.clicked.connect(lambda: self.last_clicked_data is not None and self._toggle_skills_view())
+        as_header.addWidget(self._as_c_icon)
         as_layout.addLayout(as_header)
         self.active_skills_list = QVBoxLayout()
         self.active_skills_list.setContentsMargins(0, 0, 0, 0)
@@ -2830,10 +2836,21 @@ class PalInfoWidget(QFrame):
         sb_layout.addWidget(self.active_skills_frame)
         self.partner_frame.setFixedHeight(100)
         sb_layout.addWidget(self.partner_frame)
+        passive_header = QHBoxLayout()
+        passive_header.setSpacing(4)
         passive_title = QLabel(t('pal_editor.passive_skills') if t else 'Passive Skills')
         self._passive_title = passive_title
         passive_title.setStyleSheet('font-size: 9px; font-weight: 700; color: #7DD3FC; background: transparent; border: none;')
-        sb_layout.addWidget(passive_title)
+        passive_header.addWidget(passive_title)
+        passive_header.addStretch()
+        self._l_icon = QPushButton('[L]')
+        self._l_icon.setFixedSize(22, 14)
+        self._l_icon.setStyleSheet('QPushButton { font-size: 7px; font-weight: 700; color: #7DD3FC; background: rgba(125,211,252,0.08); border: 1px solid rgba(125,211,252,0.2); border-radius: 3px; padding: 0px; margin: 0px; } QPushButton:hover { background: rgba(125,211,252,0.15); }')
+        self._l_icon.setCursor(Qt.PointingHandCursor)
+        self._l_icon.setToolTip(t('edit_pals.loadouts_hint'))
+        self._l_icon.clicked.connect(lambda: self.last_clicked_data is not None and self._on_passive_loadout())
+        passive_header.addWidget(self._l_icon)
+        sb_layout.addLayout(passive_header)
         pg = QWidget()
         pg.setStyleSheet('background: transparent; border: none;')
         pg_layout = QGridLayout(pg)
@@ -3662,6 +3679,262 @@ class PalInfoWidget(QFrame):
         cur[slot_idx] = asset
         self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': cur[:4]}, 'type': 'ArrayProperty'}
         self._refresh()
+    def _get_current_passive_list(self):
+        if not self._raw:
+            return []
+        ps = self._raw.get('PassiveSkillList', {})
+        cur = ps.get('value', {}).get('values', []) if isinstance(ps, dict) else ps if isinstance(ps, list) else []
+        result = []
+        for v in cur:
+            clean = v['value'] if isinstance(v, dict) else v
+            result.append(clean if isinstance(clean, str) else '')
+        return result
+    def _on_passive_loadout(self):
+        from palworld_aio.dialogs import ThemedDialog
+        base_dir = constants.get_src_path()
+        loadouts_path = os.path.join(base_dir, 'data', 'configs', 'passive_loadouts.json')
+        _ensure_passive_data()
+        if os.path.exists(loadouts_path):
+            try:
+                loadouts = json_tools.load(loadouts_path)
+            except Exception:
+                loadouts = {}
+        else:
+            loadouts = {}
+        dlg = ThemedDialog(self)
+        dlg.setWindowTitle(t('edit_pals.passive_loadouts'))
+        dlg.setMinimumSize(420, 400)
+        dlg.setMaximumSize(520, 500)
+        inner = QWidget()
+        inner.setStyleSheet('QWidget { background: transparent; }')
+        il = QVBoxLayout(inner)
+        il.setContentsMargins(8, 4, 8, 8)
+        il.setSpacing(6)
+        list_lbl = QLabel(t('edit_pals.loadouts_saved'))
+        list_lbl.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none;')
+        il.addWidget(list_lbl)
+        list_widget = QListWidget()
+        list_widget.setMouseTracking(True)
+        list_widget.setStyleSheet('QListWidget { background: rgba(10,14,20,0.95); border: 1px solid rgba(125,211,252,0.15); border-radius: 4px; color: #E2E8F0; font-size: 10px; } QListWidget::item { padding: 6px 8px; } QListWidget::item:hover { background: rgba(125,211,252,0.08); } QListWidget::item:selected { background: rgba(125,211,252,0.15); color: #7DD3FC; }')
+        for name in sorted(loadouts.keys()):
+            item = QListWidgetItem(name)
+            item.setData(Qt.UserRole, name)
+            list_widget.addItem(item)
+        il.addWidget(list_widget, 1)
+        btn_row = QHBoxLayout()
+        btn_row.setSpacing(4)
+        save_btn = QPushButton(t('edit_pals.loadouts_save'))
+        save_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.12); color: #4ADE80; border: 1px solid rgba(16,185,129,0.25); border-radius: 4px; padding: 6px 14px; font-size: 10px; font-weight: 600; } QPushButton:hover { background: rgba(16,185,129,0.22); color: #FFFFFF; }')
+        btn_row.addWidget(save_btn)
+        load_btn = QPushButton(t('edit_pals.loadouts_apply'))
+        load_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.25); border-radius: 4px; padding: 6px 14px; font-size: 10px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.22); color: #FFFFFF; }')
+        btn_row.addWidget(load_btn)
+        delete_btn = QPushButton(t('edit_pals.loadouts_delete_btn'))
+        delete_btn.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.25); border-radius: 4px; padding: 6px 14px; font-size: 10px; font-weight: 600; } QPushButton:hover { background: rgba(251,113,133,0.22); color: #FFFFFF; }')
+        btn_row.addWidget(delete_btn)
+        btn_row.addStretch()
+        close_btn = QPushButton(t('edit_pals.loadouts_close'))
+        close_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 20px; font-size: 10px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.16); color: #FFFFFF; }')
+        btn_row.addWidget(close_btn)
+        il.addLayout(btn_row)
+        def _do_save():
+            cur_list = self._get_current_passive_list()
+            if not cur_list or all((not p for p in cur_list)):
+                show_warning(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_no_passives'))
+                return
+            name, ok = QInputDialog.getText(dlg, t('edit_pals.loadouts_save_title'), t('edit_pals.loadouts_save_prompt'), text='')
+            if not ok or not name.strip():
+                return
+            name = name.strip()
+            loadouts[name] = cur_list
+            try:
+                os.makedirs(os.path.dirname(loadouts_path), exist_ok=True)
+                json_tools.dump(loadouts, loadouts_path, indent=2)
+            except Exception as e:
+                show_warning(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_save_error', error=str(e)))
+                return
+            item = QListWidgetItem(name)
+            item.setData(Qt.UserRole, name)
+            list_widget.addItem(item)
+            show_information(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_saved_ok', name=name))
+        def _do_load():
+            sel = list_widget.currentItem()
+            if not sel:
+                show_warning(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_select_first'))
+                return
+            name = sel.data(Qt.UserRole)
+            passive_list = loadouts.get(name)
+            if not passive_list:
+                return
+            if not self._raw:
+                show_warning(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_no_pal'))
+                return
+            self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': passive_list[:4]}, 'type': 'ArrayProperty'}
+            self._refresh()
+            show_information(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_applied', name=name))
+        def _do_delete():
+            sel = list_widget.currentItem()
+            if not sel:
+                show_warning(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_select_first'))
+                return
+            name = sel.data(Qt.UserRole)
+            confirm = show_question(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_delete_confirm', name=name))
+            if not confirm:
+                return
+            loadouts.pop(name, None)
+            try:
+                json_tools.dump(loadouts, loadouts_path, indent=2)
+            except Exception as e:
+                show_warning(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_delete_error', error=str(e)))
+                return
+            row = list_widget.row(sel)
+            list_widget.takeItem(row)
+            show_information(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_deleted', name=name))
+        save_btn.clicked.connect(_do_save)
+        load_btn.clicked.connect(_do_load)
+        delete_btn.clicked.connect(_do_delete)
+        close_btn.clicked.connect(dlg.accept)
+        _hover_frame = None
+        def _build_hover_frame(passive_list):
+            nonlocal _hover_frame
+            if _hover_frame is not None:
+                try:
+                    _hover_frame.close()
+                    _hover_frame.deleteLater()
+                except RuntimeError:
+                    pass
+            _hover_frame = QFrame(None)
+            _hover_frame.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.ToolTip)
+            _hover_frame.setAttribute(Qt.WA_ShowWithoutActivating)
+            _hover_frame.setAttribute(Qt.WA_TranslucentBackground)
+            _hover_frame.setStyleSheet('QFrame { background: rgba(10,14,20,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; }')
+            fl = QVBoxLayout(_hover_frame)
+            fl.setContentsMargins(6, 4, 6, 6)
+            fl.setSpacing(2)
+            _ensure_passive_data()
+            pg = QWidget()
+            pg.setStyleSheet('background: transparent; border: none;')
+            pgl = QGridLayout(pg)
+            pgl.setContentsMargins(0, 0, 0, 0)
+            pgl.setSpacing(2)
+            pgl.setColumnStretch(0, 1)
+            pgl.setColumnStretch(1, 1)
+            for i in range(4):
+                p_clean = ''
+                display_name = '--'
+                tc = 'rgba(255,255,255,0.3)'
+                bg = 'rgba(255,255,255,0.03)'
+                bd = 'rgba(255,255,255,0.06)'
+                anim_mode = None
+                icon_path = ''
+                p_info = {}
+                rank = 1
+                if i < len(passive_list) and passive_list[i]:
+                    p_val = passive_list[i]
+                    if isinstance(p_val, dict):
+                        p_val = p_val.get('value', '')
+                    p_clean = str(p_val).lower() if p_val else ''
+                    display_name = PalFrame._PASSMAP.get(p_clean, str(p_val))
+                    bg, bd, tc = PalFrame._passive_rank_color(p_clean)
+                    rank = PalFrame._PASSRANK.get(p_clean, 1)
+                    if rank >= 5:
+                        anim_mode = 'world_tree'
+                    elif rank >= 4:
+                        anim_mode = 'legend'
+                    p_info = _PASSIVE_DATA.get(p_clean, {}) if isinstance(_PASSIVE_DATA, dict) else {}
+                    icon_path = p_info.get('icon', '') if isinstance(p_info, dict) else ''
+                card = QFrame()
+                card.setObjectName('hCard')
+                card.setFixedHeight(26)
+                card.setStyleSheet(f'QFrame#hCard {{ background: {bg}; border: 1.5px solid {bd}; border-radius: 4px; padding: 3px 6px; }}')
+                cl = QHBoxLayout(card)
+                cl.setContentsMargins(6, 0, 6, 0)
+                cl.setSpacing(2)
+                cl.setAlignment(Qt.AlignVCenter)
+                plbl = QLabel(display_name)
+                plbl.setStyleSheet(f'font-size: 9px; font-weight: 700; color: {tc}; background: transparent; border: none;')
+                cl.addWidget(plbl, 1)
+                if icon_path:
+                    full_path = os.path.join(constants.get_base_path(), 'resources', 'game_data', icon_path.lstrip('/'))
+                    pix = _get_cached_pixmap(full_path, 14)
+                    if pix:
+                        ilbl = QLabel()
+                        ilbl.setFixedSize(14, 14)
+                        ilbl.setPixmap(pix)
+                        ilbl.setStyleSheet('background: transparent; border: none;')
+                        cl.addWidget(ilbl)
+                chev = QLabel('❯❯❯')
+                chev.setStyleSheet('font-size: 6px; color: rgba(255,255,255,0.15); background: transparent; border: none; letter-spacing: -1px;')
+                cl.addWidget(chev)
+                if anim_mode:
+                    ov = PassiveEffectOverlay(card)
+                    ov.setGeometry(0, 0, 200, 26)
+                    ov.set_mode(anim_mode)
+                if p_clean:
+                    tip_parts = [f'<b style="color:{tc}">{display_name}</b>']
+                    rank_labels = {1: 'Common', 2: 'Rare', 3: 'Rare', 4: 'Epic', 5: 'Epic', -99: 'Negative'}
+                    tip_parts.append(f"<i>{rank_labels.get(rank, f'Rank {rank}')}</i>")
+                    p_desc = p_info.get('description', '')
+                    if p_desc:
+                        p_desc = p_desc.replace('{CharacterName}', 'Pal')
+                        for ei in range(1, 5):
+                            ev = p_info.get(f'effect{ei}', 0)
+                            ev_str = str(int(ev)) if isinstance(ev, float) and ev == int(ev) else f'{ev:.0f}' if isinstance(ev, float) else str(ev)
+                            p_desc = p_desc.replace(f'{{EffectValue{ei}}}', ev_str)
+                        tip_parts.append('')
+                        tip_parts.append(p_desc)
+                    card.setToolTip('<br>'.join(tip_parts))
+                pgl.addWidget(card, i // 2, i % 2)
+            fl.addWidget(pg)
+            _hover_frame.adjustSize()
+            if _hover_frame.width() < 340:
+                _hover_frame.setFixedWidth(340)
+        def _on_item_enter(item):
+            nonlocal _hover_frame
+            name = item.data(Qt.UserRole)
+            passive_list = loadouts.get(name)
+            if not passive_list:
+                return
+            _build_hover_frame(passive_list)
+            if not _hover_frame:
+                return
+            item_rect = list_widget.visualItemRect(item)
+            global_pos = list_widget.mapToGlobal(item_rect.topRight())
+            screen = QApplication.primaryScreen().availableGeometry()
+            fw = _hover_frame.width()
+            x = min(global_pos.x() + 6, screen.right() - fw - 4)
+            y = global_pos.y()
+            _hover_frame.move(x, y)
+            _hover_frame.show()
+        def _on_item_leave():
+            nonlocal _hover_frame
+            if _hover_frame is not None:
+                try:
+                    _hover_frame.close()
+                    _hover_frame.hide()
+                except RuntimeError:
+                    pass
+        class _HoverFilter(QObject):
+            def __init__(self, parent, callback):
+                super().__init__(parent)
+                self._cb = callback
+            def eventFilter(self, obj, event):
+                if event.type() == QEvent.Type.Leave:
+                    self._cb()
+                return super().eventFilter(obj, event)
+        list_widget.viewport().installEventFilter(_HoverFilter(list_widget, _on_item_leave))
+        list_widget.itemEntered.connect(_on_item_enter)
+        list_widget.itemDoubleClicked.connect(_do_load)
+        dlg_layout = QVBoxLayout(dlg)
+        dlg_layout.setContentsMargins(0, 0, 0, 0)
+        dlg_layout.addWidget(inner)
+        dlg.exec()
+        if _hover_frame is not None:
+            try:
+                _hover_frame.close()
+                _hover_frame.deleteLater()
+            except RuntimeError:
+                pass
     def _learn_all_skills(self):
         if not self._raw:
             return
@@ -3782,6 +4055,12 @@ class PalInfoWidget(QFrame):
             self._as_title.setText(t('pal_editor.active_skills') if t else 'Active Skills')
         if hasattr(self, '_passive_title'):
             self._passive_title.setText(t('pal_editor.passive_skills') if t else 'Passive Skills')
+        if hasattr(self, '_c_icon'):
+            self._c_icon.setToolTip(t('edit_pals.toggle_skills_hint'))
+        if hasattr(self, '_as_c_icon'):
+            self._as_c_icon.setToolTip(t('edit_pals.toggle_skills_hint'))
+        if hasattr(self, '_l_icon'):
+            self._l_icon.setToolTip(t('edit_pals.loadouts_hint'))
 def _show_learned_moves_dialog(raw, parent):
     if not isinstance(raw, dict):
         return
