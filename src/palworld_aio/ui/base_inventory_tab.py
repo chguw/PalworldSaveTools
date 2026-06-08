@@ -2158,6 +2158,18 @@ class BaseInventoryTab(QWidget):
                 if slot_idx == -1:
                     break
                 self.manager.add_item_to_slot(slot_idx, item['id'], item['qty'])
+            sc = self.manager.inventory_container._standardized_container
+            needed = len(regular) + len(key_items)
+            if needed > sc.max_slots:
+                new_max = min(needed + 50, 999)
+                sc.expand_capacity(new_max)
+                cont_data = None
+                for c in self.manager.containers:
+                    if c['id'] == self.manager.current_container['id']:
+                        cont_data = c
+                        break
+                if cont_data:
+                    cont_data['slot_count'] = new_max
             _consolidate_container_slots(self.manager.inventory_container, 'main', SINGLETON_TYPE_A)
             self._refresh_container_ui()
             self._trigger_auto_save()
