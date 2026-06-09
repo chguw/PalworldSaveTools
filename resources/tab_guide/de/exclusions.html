@@ -8,21 +8,18 @@ li { margin: 0; }
 </style>
 <div>
 <h4>Funktionsübersicht</h4>
+<p>Drei nebeneinander liegende Suchfelder, in denen ausgeschlossene Spieler-UIDs, Gilden-IDs und Basis-IDs angezeigt werden. Die hier aufgeführten Elemente sind vor Lösch- und Bereinigungsvorgängen geschützt.</p>
+<h4>Grundfunktionen (Linksklick und Tasten)</h4>
 <ul>
-  <li>Drei nebeneinander liegende Suchfelder, in denen ausgeschlossene Spieler-UIDs, Gilden-IDs und Basis-IDs angezeigt werden.</li>
-  <li>Die hier aufgeführten Elemente sind vor Lösch- und Bereinigungsvorgängen geschützt.</li>
-</ul>
-<h4>Grundfunktionen (Linksklick und Schaltflächen)</h4>
-<ul>
-  <li>Klicken Sie auf einen beliebigen Ausschlusseintrag, um ihn auszuwählen.</li>
-  <li>Geben Sie in die Suchleiste ein, um Ausschluss-IDs in Echtzeit zu filtern.</li>
-  <li>Fügen Sie Einträge über Kontextmenüs mit der rechten Maustaste auf den Registerkarten „Spieler“, „Gilden“ oder „Basen“ hinzu.</li>
-  <li>Speichern und laden Sie Ausschlusslisten über <b>Menü → Ausschlüsse → Ausschlüsse speichern</b> und <b>Ausschlüsse laden</b>.</li>
+  <li>Klicken Sie auf einen Ausschlusseintrag, um ihn auszuwählen.</li>
+  <li>Geben Sie die Suchleiste ein, um Ausschluss-IDs in Echtzeit zu filtern.</li>
+  <li>Einträge über Rechtsklick-Kontextmenüs in den Registerkarten „Spieler“, „Gilden“ oder „Basen“ hinzufügen.</li>
+  <li>Ausschlusslisten speichern und laden über <b>Menü → Ausschlüsse → Ausschlüsse speichern</b> und <b>Ausschlüsse laden</b>.</li>
 </ul>
 <h4>Erweiterte Verknüpfungen (Doppelklick-Interaktionen)</h4>
 <ul>
-  <li>Durch Doppelklicken auf eine Ausschlusszeile wird das Signal <code>item_double_clicked</code> ausgegeben.</li>
-  <li>Es ist kein Standardhandler verbunden – ein Doppelklick hat derzeit keine sichtbare Auswirkung auf eines der drei Ausschlussfenster.</li>
+  <li>Ein Doppelklick auf eine Ausschlusszeile gibt das Signal <code>item_double_clicked</code> aus.</li>
+  <li>Es ist kein Standardhandler verbunden – Doppelklick hat derzeit keine sichtbare Auswirkung auf eines der drei Ausschlussfenster.</li>
 </ul>
 <h4>Versteckte Menüs (Rechtsklick-Kontext)</h4>
 <p>Klicken Sie mit der rechten Maustaste auf einen beliebigen Ausschlusseintrag für: <b>Ausschluss entfernen</b> – entfernt die ausgewählte ID aus der Schutzliste und macht sie wieder für Bereinigungsvorgänge verfügbar.</p>

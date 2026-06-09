@@ -1492,6 +1492,8 @@
   "tab_guide.intro": "Vous trouverez ci-dessous une description complète de chaque onglet de Palworld Save Tools – couvrant les clics de base, les raccourcis double-clic, les menus contextuels du clic droit et les conseils des utilisateurs expérimentés.",
   "tab_guide.footer": "Astuce : les menus contextuels sont vos amis : vérifiez-les toujours pour des options plus approfondies dans chaque onglet.",
   "tab_guide.tooltip": "Guide d'utilisation des onglets : cliquez pour afficher les instructions d'utilisation détaillées pour chaque onglet.",
+  "tab_guide.intro_page.title": "Bienvenue sur PST V2",
+  "tab_guide.intro_page.toc": "🏠 Accueil",
   "tab_guide.toc_title": "📑 Table des matières — cliquez sur un onglet pour accéder :",
   "tab_guide.section.map.title": "🗺️ Visionneuse de carte",
   "tab_guide.section.map.toc": "🗺️ Carte",

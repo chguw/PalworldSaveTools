@@ -1509,6 +1509,8 @@
   "tab_guide.intro": "다음은 기본 클릭, 두 번 클릭 바로 가기, 마우스 오른쪽 버튼 클릭 상황에 맞는 메뉴 및 고급 사용자 팁을 다루는 Palworld 저장 도구의 모든 탭에 대한 포괄적인 분석입니다.",
   "tab_guide.footer": "팁: 마우스 오른쪽 버튼 클릭 메뉴는 여러분의 친구입니다. 모든 탭에서 더 자세한 옵션을 보려면 항상 메뉴를 확인하세요.",
   "tab_guide.tooltip": "탭 사용 가이드 - 모든 탭에 대한 자세한 사용 지침을 보려면 클릭하세요.",
+  "tab_guide.intro_page.title": "PST V2에 오신 것을 환영합니다",
+  "tab_guide.intro_page.toc": "🏠 환영",
   "tab_guide.toc_title": "📑 목차 — 이동하려면 탭을 클릭하세요.",
   "tab_guide.section.map.title": "🗺️ 지도 뷰어",
   "tab_guide.section.map.toc": "🗺️ 지도",

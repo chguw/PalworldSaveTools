@@ -1512,6 +1512,8 @@
   "tab_guide.intro": "下面是 Palworld 保存工具中每个选项卡的全面细分 - 涵盖基本单击、双击快捷方式、右键单击上下文菜单和高级用户提示。",
   "tab_guide.footer": "提示：右键单击菜单是您的朋友 - 请务必检查它们以获取每个选项卡中的更深层次选项。",
   "tab_guide.tooltip": "选项卡使用指南 — 单击可查看每个选项卡的详细使用说明",
+  "tab_guide.intro_page.title": "欢迎使用 PST V2",
+  "tab_guide.intro_page.toc": "🏠 欢迎",
   "tab_guide.toc_title": "📑 目录 — 单击选项卡即可跳转：",
   "tab_guide.section.map.title": "🗺️ 地图查看器",
   "tab_guide.section.map.toc": "🗺️地图",

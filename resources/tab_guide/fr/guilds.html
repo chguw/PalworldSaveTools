@@ -8,28 +8,25 @@ li { margin: 0; }
 </style>
 <div>
 <h4>Aperçu fonctionnel</h4>
-<ul>
-  <li>Vue à deux panneaux : le panneau supérieur répertorie toutes les guildes avec des colonnes pour le nom de guilde, l'ID de guilde et le niveau de guilde.</li>
-  <li>Le panneau inférieur affiche les membres de la guilde sélectionnée avec des colonnes pour le nom du membre, la dernière visite, le niveau, les amis et l'UID.</li>
-</ul>
+<p>Vue à deux panneaux : le panneau supérieur répertorie toutes les guildes avec des colonnes pour le nom de guilde, l'identifiant de guilde et le niveau de guilde. Le panneau inférieur affiche les membres de la guilde sélectionnée avec des colonnes pour le nom du membre, la dernière visite, le niveau, les amis et l'UID.</p>
 <h4>Opérations de base (clic gauche et boutons)</h4>
 <ul>
   <li>Tapez dans la barre de recherche pour filtrer les guildes par n'importe quelle colonne.</li>
-  <li>Cliquez sur une ligne de guilde pour la sélectionner : le panneau inférieur se remplit automatiquement avec les joueurs membres de cette guilde.</li>
+  <li>Cliquez sur une ligne de guilde pour la sélectionner : le panneau inférieur se remplit automatiquement avec les joueurs membres de cette guilde.</li>
   <li>Cliquez sur une ligne de membre pour afficher ses détails.</li>
 </ul>
 <h4>Raccourcis avancés (interactions par double-clic)</h4>
 <ul>
-  <li>Un double-clic sur une ligne de guilde ou de membre émet le signal <code>item_double_clicked</code>.</li>
+  <li>Double-cliquer sur une ligne de guilde ou de membre émet le signal <code>item_double_clicked</code>.</li>
   <li>Aucun gestionnaire par défaut n'est connecté — le double-clic n'a actuellement aucun effet visible sur aucun des deux panneaux.</li>
 </ul>
-<h4>Menus cachés (contexte du clic droit)</h4>
+<h4>Menus cachés (clic droit contextuel)</h4>
 <ul>
   <li>Cliquez avec le bouton droit sur une <b>ligne de guilde</b> pour : ajouter/supprimer une exclusion, supprimer une guilde, renommer une guilde, définir le niveau de guilde, débloquer toutes les recherches en laboratoire, exporter des bases pour une guilde, importer des bases (multi-fichiers), déplacer le joueur sélectionné vers la guilde sélectionnée.</li>
-  <li>Cliquez avec le bouton droit sur une ligne de membre <b></b> pour : Créer un chef de guilde, débloquer toutes les recherches de laboratoire pour la guilde, ajouter/supprimer une exclusion de joueur, supprimer un joueur, renommer un joueur, réinitialiser l'horodatage, définir le niveau du joueur.</li>
+  <li>Cliquez avec le bouton droit sur une ligne de <b>membre</b> pour : devenir chef de guilde, débloquer toutes les recherches de laboratoire pour la guilde, ajouter/supprimer une exclusion de joueur, supprimer un joueur, renommer un joueur, réinitialiser l'horodatage, définir le niveau du joueur.</li>
 </ul>
 <div class="tip">
 <p class="tip-title">Conseil d'utilisateur expérimenté</p>
-<p>Utilisez <b>Menu → Fonctions → Supprimer les guildes vides</b> pour supprimer les guildes ne comptant aucun membre en un seul clic. L'ID de guilde (index de colonne 1) est la référence clé utilisée par les listes d'exclusion et les opérations de suppression.</p>
+<p>Utilisez <b>Menu → Fonctions → Supprimer les guildes vides</b> pour supprimer les guildes sans membre en un seul clic. L'ID de guilde (index de colonne 1) est la référence clé utilisée par les listes d'exclusion et les opérations de suppression.</p>
 </div>
 </div>

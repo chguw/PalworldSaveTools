@@ -1510,6 +1510,8 @@
   "tab_guide.intro": "以下は、Palworld Save Tools の各タブの包括的な内訳であり、基本的なクリック、ダブルクリックのショートカット、右クリックのコンテキスト メニュー、およびパワーユーザー向けのヒントをカバーしています。",
   "tab_guide.footer": "ヒント: 右クリック メニューはあなたの友人です。すべてのタブで詳細なオプションがないか常にチェックしてください。",
   "tab_guide.tooltip": "タブの使用ガイド — クリックすると、各タブの詳細な使用手順が表示されます。",
+  "tab_guide.intro_page.title": "PST V2 へようこそ",
+  "tab_guide.intro_page.toc": "🏠 ようこそ",
   "tab_guide.toc_title": "📑 目次 — タブをクリックしてジャンプします。",
   "tab_guide.section.map.title": "🗺️ マップビューア",
   "tab_guide.section.map.toc": "🗺️ 地図",

@@ -1503,6 +1503,8 @@
   "tab_guide.intro": "A continuación se muestra un desglose completo de cada pestaña en Palworld Save Tools, que cubre clics básicos, atajos de doble clic, menús contextuales al hacer clic con el botón derecho y sugerencias para usuarios avanzados.",
   "tab_guide.footer": "Consejo: Los menús contextuales son tus amigos; revísalos siempre para ver opciones más detalladas en cada pestaña.",
   "tab_guide.tooltip": "Guía de uso de pestañas: haga clic para ver instrucciones de uso detalladas para cada pestaña",
+  "tab_guide.intro_page.title": "Bienvenido a PST V2",
+  "tab_guide.intro_page.toc": "🏠 Bienvenido",
   "button.close": "Cerrar",
   "tab_guide.toc_title": "📑 Tabla de contenido: haga clic en una pestaña para saltar:",
   "tab_guide.section.map.title": "🗺️ Visor de mapas",

@@ -8,32 +8,28 @@ li { margin: 0; }
 </style>
 <div>
 <h4>Descripción funcional</h4>
-<ul>
-  <li>Tabla con capacidad de búsqueda de todos los jugadores guardados.</li>
-  <li>Las columnas muestran el nombre del jugador, el último visto, el nivel, el número de amigos, el UID, el nombre del gremio, el ID del gremio y el nivel del gremio.</li>
-  <li>Utilice los botones de acción masiva en la parte inferior para administrar elementos, amigos y tecnología en varios jugadores.</li>
-</ul>
+<p>Tabla de búsqueda de todos los jugadores guardados. Las columnas muestran el nombre del jugador, el último visto, el nivel, el número de amigos, el UID, el nombre del gremio, el ID del gremio y el nivel del gremio. Utilice los botones de acción masiva en la parte inferior para administrar elementos, amigos y tecnología en varios jugadores.</p>
 <h4>Operaciones básicas (clic izquierdo y botones)</h4>
 <ul>
   <li>Escriba en la barra de búsqueda para filtrar jugadores en tiempo real; se mostrará cualquier coincidencia de columna.</li>
   <li>Haga clic en una fila para seleccionarla.</li>
-  <li>Haga clic en <b>Gestión masiva de elementos</b> para abrir el cuadro de diálogo Acción de elementos del jugador (agregar/eliminar elementos en los jugadores seleccionados).</li>
-  <li>Haga clic en <b>Bulk Pal Management</b> para operaciones Pal.</li>
+  <li>Haga clic en <b>Gestión masiva de elementos</b> para abrir el cuadro de diálogo Acción de elementos del jugador (agregar/eliminar elementos entre los jugadores seleccionados).</li>
+  <li>Haga clic en <b>Gestión masiva de Pal</b> para operaciones Pal.</li>
   <li>Haga clic en <b>Gestión de tecnología masiva</b> para desbloquear tecnología.</li>
 </ul>
 <h4>Atajos avanzados (interacciones de doble clic)</h4>
 <ul>
-  <li>Al hacer doble clic en una fila de reproductor se emite la señal <code>item_double_clicked</code>.</li>
+  <li>Al hacer doble clic en una fila de jugador se emite la señal <code>item_double_clicked</code>.</li>
   <li>Sin embargo, no hay ningún controlador predeterminado conectado en el código actual; actualmente, hacer doble clic no tiene ningún efecto visible.</li>
-  <li>(Diseñado para uso futuro).</li>
+  <li>(Diseñado para uso futuro.)</li>
 </ul>
 <h4>Menús ocultos (contexto de clic derecho)</h4>
 <ul>
-  <li>Haga clic derecho en una fila de jugador para: Agregar o quitar exclusión, eliminar jugador, cambiar el nombre del jugador, desbloquear la jaula de visualización, restablecer la marca de tiempo, actualizar los ID de los contenedores, desbloquear todas las tecnologías, editar puntos tecnológicos, editar estadísticas del jugador, establecer el nivel del jugador.</li>
-  <li>También incluye acciones a nivel de gremio para el gremio del jugador: Convertirse en líder de gremio, eliminar gremio, cambiar nombre de gremio, desbloquear todas las investigaciones de laboratorio, establecer nivel de gremio, importar base a gremio.</li>
+  <li>Haga clic derecho en una fila de jugador para: Agregar/eliminar exclusión, eliminar jugador, cambiar nombre de jugador, desbloquear jaula de visualización, restablecer marca de tiempo, actualizar ID de contenedores, desbloquear todas las tecnologías, editar puntos tecnológicos, editar estadísticas de jugador, establecer nivel de jugador.</li>
+  <li>También incluye acciones a nivel de gremio para el gremio del jugador: Convertir en líder de gremio, eliminar gremio, cambiar nombre de gremio, desbloquear todas las investigaciones de laboratorio, establecer nivel de gremio, importar base a gremio.</li>
 </ul>
 <div class="tip">
-<p class="tip-title">Consejo de usuario avanzado</p>
+<p class="tip-title">Consejo para usuarios avanzados</p>
 <p>Ordene cualquier columna haciendo clic en su encabezado. La columna UID (índice de columna 4) se utiliza como clave para las operaciones de exclusión y eliminación. Utilice <b>Menú → Funciones → Eliminar jugadores inactivos</b> después de verificar las fechas de última vista para limpiar los jugadores abandonados en masa.</p>
 </div>
 </div>
