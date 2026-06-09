@@ -42,7 +42,10 @@ class ThemedDialog(QDialog):
             if hasattr(current, 'isWindow') and current.isWindow() and current.isVisible():
                 if hasattr(current, 'windowTitle') and current.windowTitle():
                     return current
-            current = current.parent()
+            try:
+                current = current.parent()
+            except TypeError:
+                break
         for widget in QApplication.topLevelWidgets():
             if widget.isVisible() and widget.isWindow() and hasattr(widget, 'windowTitle') and widget.windowTitle() and (not isinstance(widget, QDialog)) and hasattr(widget, 'geometry'):
                 return widget

@@ -1569,5 +1569,11 @@
   "inventory.equip_loadouts_delete_confirm": "Supprimer \"{name}\" ?",
   "inventory.equip_loadouts_delete_error": "Échec de la suppression du chargement : {erreur}",
   "inventory.equip_loadouts_deleted": "Chargement \"{name}\" supprimé.",
-  "inventory.equip_loadouts_info": "L'équipement comprend des armes, des armures, des accessoires, de la nourriture et des modules."
+  "inventory.equip_loadouts_info": "L'équipement comprend des armes, des armures, des accessoires, de la nourriture et des modules.",
+  "inventory.clear_btn": "Clair",
+  "inventory.equip_clear_btn": "Clair",
+  "inventory.clear_confirm_title": "Effacer l'inventaire",
+  "inventory.clear_confirm_msg": "Supprimer tous les articles de l'inventaire et les articles clés ?",
+  "inventory.equip_clear_title": "Effacer l'équipement",
+  "inventory.equip_clear_msg": "Supprimer tout l'équipement des emplacements d'armes, d'armures et de nourriture ?"
 }

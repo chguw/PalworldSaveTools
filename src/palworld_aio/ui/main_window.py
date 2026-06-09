@@ -37,7 +37,7 @@ from palworld_aio.ui.player_technology_dialog import PlayerTechnologyActionDialo
 class DetachedStatusWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__()
-        self.parent = parent
+        self._main_window = parent
         self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.Tool)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setMinimumSize(600, 400)
@@ -115,18 +115,18 @@ class DetachedStatusWindow(QWidget):
         cursor.movePosition(QTextCursor.End)
         self.text_edit.setTextCursor(cursor)
     def closeEvent(self, event):
-        if self.parent and hasattr(self.parent, 'user_settings'):
+        if self._main_window and hasattr(self._main_window, 'user_settings'):
             try:
-                self.parent.user_settings['console_window_geometry'] = self.save_geometry()
-                if hasattr(self.parent, '_save_user_settings'):
-                    self.parent._save_user_settings()
+                self._main_window.user_settings['console_window_geometry'] = self.save_geometry()
+                if hasattr(self._main_window, '_save_user_settings'):
+                    self._main_window._save_user_settings()
             except (RuntimeError, AttributeError):
                 pass
-        if self.parent and hasattr(self.parent, 'status_stream'):
+        if self._main_window and hasattr(self._main_window, 'status_stream'):
             try:
-                self.parent.status_stream.detach_window = None
-                self.parent.status_stream.detached = False
-                self.parent.status_stream.detach_state_changed.emit(False)
+                self._main_window.status_stream.detach_window = None
+                self._main_window.status_stream.detached = False
+                self._main_window.status_stream.detach_state_changed.emit(False)
             except (RuntimeError, AttributeError):
                 pass
         event.accept()
@@ -136,7 +136,7 @@ class StatusBarStream(QObject):
     def __init__(self, status_bar, parent=None):
         QObject.__init__(self)
         self.status_bar = status_bar
-        self.parent = parent
+        self._main_window = parent
         self.stringio = io.StringIO()
         self.detached = False
         self.detach_window = None
@@ -155,9 +155,9 @@ class StatusBarStream(QObject):
     def detach(self):
         if not self.detached:
             self.detached = True
-            self.detach_window = DetachedStatusWindow(self.parent)
+            self.detach_window = DetachedStatusWindow(self._main_window)
             self.detach_window.setWindowOpacity(0.0)
-            saved_geo = self.parent.user_settings.get('console_window_geometry') if self.parent and hasattr(self.parent, 'user_settings') else None
+            saved_geo = self._main_window.user_settings.get('console_window_geometry') if self._main_window and hasattr(self._main_window, 'user_settings') else None
             if saved_geo:
                 self.detach_window.load_geometry(saved_geo)
             self.detach_window.show()

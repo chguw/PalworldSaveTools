@@ -1587,5 +1587,11 @@
   "inventory.equip_loadouts_delete_confirm": "「{名前}」を削除しますか?",
   "inventory.equip_loadouts_delete_error": "ロードアウトの削除に失敗しました: {error}",
   "inventory.equip_loadouts_deleted": "ロードアウト「{name}」が削除されました。",
-  "inventory.equip_loadouts_info": "装備には、武器、防具、アクセサリー、食料、モジュールが含まれます。"
+  "inventory.equip_loadouts_info": "装備には、武器、防具、アクセサリー、食料、モジュールが含まれます。",
+  "inventory.clear_btn": "クリア",
+  "inventory.equip_clear_btn": "クリア",
+  "inventory.clear_confirm_title": "在庫のクリア",
+  "inventory.clear_confirm_msg": "インベントリとキーアイテムからすべてのアイテムを削除しますか?",
+  "inventory.equip_clear_title": "クリア装備",
+  "inventory.equip_clear_msg": "武器、防具、食料スロットからすべての装備を削除しますか?"
 }

@@ -1589,5 +1589,11 @@
   "inventory.equip_loadouts_delete_confirm": "删除“{name}”？",
   "inventory.equip_loadouts_delete_error": "无法删除加载：{error}",
   "inventory.equip_loadouts_deleted": "加载“{name}”已删除。",
-  "inventory.equip_loadouts_info": "装备包括武器、盔甲、配件、食物和模块。"
+  "inventory.equip_loadouts_info": "装备包括武器、盔甲、配件、食物和模块。",
+  "inventory.clear_btn": "清除",
+  "inventory.equip_clear_btn": "清除",
+  "inventory.clear_confirm_title": "清库存",
+  "inventory.clear_confirm_msg": "从库存和关键物品中删除所有物品？",
+  "inventory.equip_clear_title": "清除装备",
+  "inventory.equip_clear_msg": "移除武器、盔甲和食物槽中的所有装备？"
 }

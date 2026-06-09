@@ -1581,5 +1581,11 @@
   "inventory.equip_loadouts_delete_confirm": "¿Eliminar \"{nombre}\"?",
   "inventory.equip_loadouts_delete_error": "No se pudo eliminar el equipamiento: {error}",
   "inventory.equip_loadouts_deleted": "Equipamiento \"{name}\" eliminado.",
-  "inventory.equip_loadouts_info": "El equipo incluye armas, armaduras, accesorios, comida y módulos."
+  "inventory.equip_loadouts_info": "El equipo incluye armas, armaduras, accesorios, comida y módulos.",
+  "inventory.clear_btn": "Claro",
+  "inventory.equip_clear_btn": "Claro",
+  "inventory.clear_confirm_title": "Limpiar inventario",
+  "inventory.clear_confirm_msg": "¿Eliminar todos los artículos del inventario y los artículos clave?",
+  "inventory.equip_clear_title": "Borrar equipo",
+  "inventory.equip_clear_msg": "¿Quitar todo el equipo de las ranuras para armas, armaduras y comida?"
 }

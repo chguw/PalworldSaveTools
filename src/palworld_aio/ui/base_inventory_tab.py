@@ -1658,7 +1658,7 @@ class BasePalsContentWidget(QFrame):
 class BaseInventoryTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.parent = parent
+        self._main_window = parent
         self.manager = BaseInventoryManager()
         self.selected_item_id = None
         self.selected_item_name = None
@@ -1721,6 +1721,8 @@ class BaseInventoryTab(QWidget):
             self.pals_tab_btn.setText(t('base_inventory.tab_base_pals') if t else 'Base Pals')
         if hasattr(self, 'base_inv_loadout_btn'):
             self.base_inv_loadout_btn.setText(t('inventory.loadouts_btn', default='Loadouts'))
+        if hasattr(self, 'base_inv_clear_btn'):
+            self.base_inv_clear_btn.setText(t('inventory.clear_btn', default='Clear'))
         if hasattr(self, 'base_pals_widget'):
             self.base_pals_widget.refresh_labels()
         current_container_id = None
@@ -1842,6 +1844,12 @@ class BaseInventoryTab(QWidget):
         self.base_inv_loadout_btn.setCursor(Qt.PointingHandCursor)
         self.base_inv_loadout_btn.clicked.connect(self._on_inventory_loadout)
         self.inventory_grid.header_layout.insertWidget(self.inventory_grid.header_layout.indexOf(self.inventory_grid.sort_btn), self.base_inv_loadout_btn)
+        self.base_inv_clear_btn = QPushButton(t('inventory.clear_btn', default='Clear'))
+        self.base_inv_clear_btn.setFixedHeight(24)
+        self.base_inv_clear_btn.setStyleSheet('QPushButton { background: rgba(251,113,133,0.15); color: #FB7185; border: 1px solid rgba(251,113,133,0.3); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 11px; } QPushButton:hover { background: rgba(251,113,133,0.25); border-color: rgba(251,113,133,0.5); color: #FFFFFF; }')
+        self.base_inv_clear_btn.setCursor(Qt.PointingHandCursor)
+        self.base_inv_clear_btn.clicked.connect(self._clear_container)
+        self.inventory_grid.header_layout.insertWidget(self.inventory_grid.header_layout.indexOf(self.inventory_grid.sort_btn) + 1, self.base_inv_clear_btn)
         self.inventory_grid.sort_requested.connect(self._on_base_sort_requested)
         self.splitter.addWidget(right_panel)
         inv_layout.addWidget(self.splitter)
@@ -1897,7 +1905,7 @@ class BaseInventoryTab(QWidget):
         self._load_guilds()
         self._load_items()
         self.refresh_labels()
-        if hasattr(self.parent, 'parent') and hasattr(self.parent.parent, 'results_widget'):
+        if hasattr(self._main_window, 'parent') and hasattr(self._main_window.parent, 'results_widget'):
             pass
     def _show_guild_popup(self):
         popup = QWidget()
@@ -2319,8 +2327,8 @@ class BaseInventoryTab(QWidget):
             QApplication.restoreOverrideCursor()
             elapsed = time.time() - start_time
             if elapsed > 0.5:
-                if hasattr(self.parent, 'status_bar'):
-                    self.parent.status_bar.showMessage(f'Item filter completed in {elapsed:.2f}s', 3000)
+                if hasattr(self._main_window, 'status_bar'):
+                    self._main_window.status_bar.showMessage(f'Item filter completed in {elapsed:.2f}s', 3000)
     def _reset_filters(self):
         self._item_locations = None
         self._load_guilds()
@@ -2446,8 +2454,8 @@ class BaseInventoryTab(QWidget):
             return
         try:
             if self.manager.save_changes():
-                if hasattr(self.parent, 'status_bar'):
-                    self.parent.status_bar.showMessage(t('base_inventory.auto_save_success') if t else 'Auto-saved changes', 2000)
+                if hasattr(self._main_window, 'status_bar'):
+                    self._main_window.status_bar.showMessage(t('base_inventory.auto_save_success') if t else 'Auto-saved changes', 2000)
             else:
                 self._show_warning(t('base_inventory.auto_save_failed') if t else 'Auto-save failed - changes not saved')
         except Exception as e:
@@ -2558,8 +2566,8 @@ class BaseInventoryTab(QWidget):
                         self._guilds_data.append(guild)
                 if self._guilds_data:
                     self._on_guild_changed(self._guilds_data[0]['id'])
-                    if hasattr(self.parent, 'status_bar'):
-                        self.parent.status_bar.showMessage(f'Found {structure_asset} in {len(self._guilds_data)} guild(s)', 3000)
+                    if hasattr(self._main_window, 'status_bar'):
+                        self._main_window.status_bar.showMessage(f'Found {structure_asset} in {len(self._guilds_data)} guild(s)', 3000)
             else:
                 self._show_info(t('base_inventory.no_structures') if t else f'No guilds found with this structure')
                 self._load_guilds()

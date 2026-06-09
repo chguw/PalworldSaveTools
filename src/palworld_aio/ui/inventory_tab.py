@@ -849,6 +849,12 @@ class PlayerInventoryTab(QWidget):
         self.inv_loadout_btn.setCursor(Qt.PointingHandCursor)
         self.inv_loadout_btn.clicked.connect(self._on_inventory_loadout)
         self.main_grid.header_layout.insertWidget(sort_idx, self.inv_loadout_btn)
+        self.inv_clear_btn = QPushButton(t('inventory.clear_btn', default='Clear'))
+        self.inv_clear_btn.setFixedHeight(24)
+        self.inv_clear_btn.setStyleSheet('QPushButton { background: rgba(251,113,133,0.15); color: #FB7185; border: 1px solid rgba(251,113,133,0.3); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 11px; } QPushButton:hover { background: rgba(251,113,133,0.25); border-color: rgba(251,113,133,0.5); color: #FFFFFF; }')
+        self.inv_clear_btn.setCursor(Qt.PointingHandCursor)
+        self.inv_clear_btn.clicked.connect(self._clear_all_inventory)
+        self.main_grid.header_layout.insertWidget(sort_idx + 1, self.inv_clear_btn)
         self.inv_tabs.addTab(self.main_grid, t('inventory.main', default='Inventory'))
         self.key_grid = InventoryGridWidget('key_items')
         self.key_grid.item_selected.connect(self._on_item_selected)
@@ -889,6 +895,12 @@ class PlayerInventoryTab(QWidget):
         self.equip_loadout_btn.setCursor(Qt.PointingHandCursor)
         self.equip_loadout_btn.clicked.connect(self._on_equipment_loadout)
         equip_header_row.addWidget(self.equip_loadout_btn)
+        self.equip_clear_btn = QPushButton(t('inventory.equip_clear_btn', default='Clear'))
+        self.equip_clear_btn.setFixedHeight(22)
+        self.equip_clear_btn.setStyleSheet('QPushButton { background: rgba(251,113,133,0.15); color: #FB7185; border: 1px solid rgba(251,113,133,0.3); border-radius: 4px; padding: 2px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(251,113,133,0.25); border-color: rgba(251,113,133,0.5); color: #FFFFFF; }')
+        self.equip_clear_btn.setCursor(Qt.PointingHandCursor)
+        self.equip_clear_btn.clicked.connect(self._clear_all_equipment)
+        equip_header_row.addWidget(self.equip_clear_btn)
         equip_wrapper_layout.addLayout(equip_header_row)
         equip_scroll = QScrollArea()
         equip_scroll.setWidgetResizable(True)
@@ -1358,6 +1370,36 @@ class PlayerInventoryTab(QWidget):
             self._refresh_display()
         dlg = InventoryLoadoutDialog(self, _get_equipment, _apply_equipment, title=t('inventory.equip_loadouts_title', default='Equipment Loadouts'), loadouts_path=_EQ_LOADOUTS_PATH, key_prefix='inventory.equip')
         dlg.exec()
+    def _clear_all_inventory(self):
+        if not self.current_player_uid:
+            QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
+            return
+        reply = self._themed_message_box(QMessageBox.Question, t('inventory.clear_confirm_title', default='Clear Inventory'), t('inventory.clear_confirm_msg', default='Remove all items from inventory and key items?'), QMessageBox.Yes | QMessageBox.No)
+        if reply != QMessageBox.Yes:
+            return
+        for ct in ('main', 'key'):
+            container = self.inventory.get_container(ct) if self.inventory else None
+            if container:
+                container.update_slots([])
+                self._update_raw_save_data(ct, container)
+        if self.inventory:
+            self.inventory.save()
+        self._refresh_display()
+    def _clear_all_equipment(self):
+        if not self.current_player_uid:
+            QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
+            return
+        reply = self._themed_message_box(QMessageBox.Question, t('inventory.equip_clear_title', default='Clear Equipment'), t('inventory.equip_clear_msg', default='Remove all equipment from weapon, armor, and food slots?'), QMessageBox.Yes | QMessageBox.No)
+        if reply != QMessageBox.Yes:
+            return
+        for ct in ('weapons', 'armor', 'foodbag'):
+            container = self.inventory.get_container(ct) if self.inventory else None
+            if container:
+                container.update_slots([])
+                self._update_raw_save_data(ct, container)
+        if self.inventory:
+            self.inventory.save()
+        self._refresh_display()
     def _on_unlock_all_map_clicked(self):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
@@ -1655,6 +1697,14 @@ class PlayerInventoryTab(QWidget):
                         raw['count'] = mod_slot.get('stack_count', 1)
                         if 'item' in raw and isinstance(raw['item'], dict):
                             raw['item']['static_id'] = mod_slot.get('item_id', '')
+                            mod_raw_data = mod_slot.get('raw_data')
+                            if mod_raw_data:
+                                mod_item = mod_raw_data.get('RawData', {}).get('value', {}).get('item', {})
+                                mod_local = mod_item.get('dynamic_id', {}).get('local_id_in_created_world')
+                                if mod_local and mod_local != '00000000-0000-0000-0000-000000000000':
+                                    raw['item'].setdefault('dynamic_id', {})['local_id_in_created_world'] = mod_local
+                                elif 'dynamic_id' in raw.get('item', {}):
+                                    raw['item']['dynamic_id']['local_id_in_created_world'] = '00000000-0000-0000-0000-000000000000'
                         del modified_slots[slot_idx]
                     else:
                         slots_to_remove.append(i)
@@ -1838,8 +1888,12 @@ class PlayerInventoryTab(QWidget):
         self.key_grid.refresh_labels()
         if hasattr(self, 'inv_loadout_btn'):
             self.inv_loadout_btn.setText(t('inventory.loadouts_btn', default='Loadouts'))
+        if hasattr(self, 'inv_clear_btn'):
+            self.inv_clear_btn.setText(t('inventory.clear_btn', default='Clear'))
         if hasattr(self, 'equip_loadout_btn'):
             self.equip_loadout_btn.setText(t('inventory.equip_loadouts_btn', default='Loadouts'))
+        if hasattr(self, 'equip_clear_btn'):
+            self.equip_clear_btn.setText(t('inventory.equip_clear_btn', default='Clear'))
         if hasattr(self, 'unlock_all_map_btn'):
             self.unlock_all_map_btn.setText(t('inventory.unlock_all_map', default='Unlock All Map + Fast Travel'))
         self.inv_tabs.setTabText(0, t('inventory.main', default='Inventory'))
@@ -1920,6 +1974,7 @@ def _merge_or_add_items(inventory, container_type, item_id, quantity):
 def _consolidate_container_slots(container, container_type, singleton_set):
     slots = container.slots
     merged = {}
+    singletons = []
     for s in slots:
         item_id = s.get('item_id', '')
         if not item_id:
@@ -1927,23 +1982,23 @@ def _consolidate_container_slots(container, container_type, singleton_set):
         qty = s.get('stack_count', 1)
         item_info = ItemData.get_item_by_asset(item_id)
         if item_info.get('type_a') in singleton_set:
-            merged[item_id] = 1
+            singletons.append(s)
         else:
             merged[item_id] = merged.get(item_id, 0) + qty
     new_slots = []
     idx = 0
+    for s in singletons:
+        item_id = s.get('item_id', '')
+        item_info = ItemData.get_item_by_asset(item_id)
+        new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': s.get('stack_count', 1), 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
+        idx += 1
     for item_id, total_qty in merged.items():
         item_info = ItemData.get_item_by_asset(item_id)
-        is_singleton = item_info.get('type_a') in singleton_set
-        if is_singleton:
-            new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': 1, 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
+        while total_qty > 0:
+            stack = min(total_qty, 9999)
+            new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': stack, 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
             idx += 1
-        else:
-            while total_qty > 0:
-                stack = min(total_qty, 9999)
-                new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': stack, 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
-                idx += 1
-                total_qty -= stack
+            total_qty -= stack
     container.update_slots(new_slots)
 class InventoryLoadoutDialog(QDialog):
     def __init__(self, parent, get_current_items_fn, apply_loadout_fn, title=None, get_extra_fn=None, loadouts_path=None, key_prefix='inventory'):

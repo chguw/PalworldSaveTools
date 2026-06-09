@@ -14944,6 +14944,22 @@
             "description": ""
         },
         {
+            "name": "Police Rifle Crime Lv4",
+            "asset": "Police_Rifle_Crime_Lv4",
+            "icon": "/icons/pals/T_Police_icon_normal.webp",
+            "elements": {},
+            "partner_skill": "",
+            "description": ""
+        },
+        {
+            "name": "Police Rifle Crime Lv5",
+            "asset": "Police_Rifle_Crime_Lv5",
+            "icon": "/icons/pals/T_Police_icon_normal.webp",
+            "elements": {},
+            "partner_skill": "",
+            "description": ""
+        },
+        {
             "name": "Police Rifle Tower",
             "asset": "Police_Rifle_Tower",
             "icon": "/icons/pals/T_Police_icon_normal.webp",
@@ -31316,8 +31332,8 @@
                 "zukan_index": -1,
                 "rarity": 8,
                 "size": "EPalSizeType::XL",
-                "run_speed": 600,
-                "ride_sprint_speed": 600
+                "run_speed": 500,
+                "ride_sprint_speed": 500
             },
             "scaling": {
                 "hp": 216,
@@ -43772,7 +43788,7 @@
                 "EmitFlame": 0,
                 "Watering": 0,
                 "Seeding": 0,
-                "GenerateElectricity": 3,
+                "GenerateElectricity": 4,
                 "Handcraft": 0,
                 "Collection": 0,
                 "Deforest": 0,

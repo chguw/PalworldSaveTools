@@ -1585,5 +1585,11 @@
   "inventory.equip_loadouts_delete_confirm": "Удалить \"{name}\"?",
   "inventory.equip_loadouts_delete_error": "Не удалось удалить загрузку: {ошибка}",
   "inventory.equip_loadouts_deleted": "Снаряжение \"{name}\" удалено.",
-  "inventory.equip_loadouts_info": "Снаряжение включает в себя оружие, броню, аксессуары, еду и модули."
+  "inventory.equip_loadouts_info": "Снаряжение включает в себя оружие, броню, аксессуары, еду и модули.",
+  "inventory.clear_btn": "Прозрачный",
+  "inventory.equip_clear_btn": "Прозрачный",
+  "inventory.clear_confirm_title": "Очистить инвентарь",
+  "inventory.clear_confirm_msg": "Удалить все предметы из инвентаря и ключевые предметы?",
+  "inventory.equip_clear_title": "Очистить оборудование",
+  "inventory.equip_clear_msg": "Удалить все оборудование из слотов для оружия, брони и еды?"
 }

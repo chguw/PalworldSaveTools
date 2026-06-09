@@ -1611,5 +1611,11 @@
   "inventory.equip_loadouts_delete_confirm": "„{name}“ löschen?",
   "inventory.equip_loadouts_delete_error": "Loadout konnte nicht gelöscht werden: {error}",
   "inventory.equip_loadouts_deleted": "Loadout „{name}“ gelöscht.",
-  "inventory.equip_loadouts_info": "Zur Ausrüstung gehören Waffen, Rüstungen, Zubehör, Lebensmittel und Module."
+  "inventory.equip_loadouts_info": "Zur Ausrüstung gehören Waffen, Rüstungen, Zubehör, Lebensmittel und Module.",
+  "inventory.clear_btn": "Klar",
+  "inventory.equip_clear_btn": "Klar",
+  "inventory.clear_confirm_title": "Inventar löschen",
+  "inventory.clear_confirm_msg": "Alle Artikel aus dem Inventar und Schlüsselartikel entfernen?",
+  "inventory.equip_clear_title": "Klare Ausrüstung",
+  "inventory.equip_clear_msg": "Sämtliche Ausrüstung aus den Waffen-, Rüstungs- und Nahrungsplätzen entfernen?"
 }

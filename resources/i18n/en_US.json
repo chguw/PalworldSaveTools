@@ -1875,5 +1875,11 @@
   "inventory.equip_loadouts_delete_confirm": "Delete \"{name}\"?",
   "inventory.equip_loadouts_delete_error": "Failed to delete loadout: {error}",
   "inventory.equip_loadouts_deleted": "Loadout \"{name}\" deleted.",
-  "inventory.equip_loadouts_info": "Equipment includes weapons, armor, accessories, food, and modules."
+  "inventory.equip_loadouts_info": "Equipment includes weapons, armor, accessories, food, and modules.",
+  "inventory.clear_btn": "Clear",
+  "inventory.equip_clear_btn": "Clear",
+  "inventory.clear_confirm_title": "Clear Inventory",
+  "inventory.clear_confirm_msg": "Remove all items from inventory and key items?",
+  "inventory.equip_clear_title": "Clear Equipment",
+  "inventory.equip_clear_msg": "Remove all equipment from weapon, armor, and food slots?"
 }

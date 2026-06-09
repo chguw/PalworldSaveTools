@@ -1586,5 +1586,11 @@
   "inventory.equip_loadouts_delete_confirm": "\"{name}\"을(를) 삭제하시겠습니까?",
   "inventory.equip_loadouts_delete_error": "로드아웃 삭제 실패: {오류}",
   "inventory.equip_loadouts_deleted": "\"{name}\" 로드아웃이 삭제되었습니다.",
-  "inventory.equip_loadouts_info": "장비에는 무기, 방어구, 액세서리, 음식, 모듈이 포함됩니다."
+  "inventory.equip_loadouts_info": "장비에는 무기, 방어구, 액세서리, 음식, 모듈이 포함됩니다.",
+  "inventory.clear_btn": "분명한",
+  "inventory.equip_clear_btn": "분명한",
+  "inventory.clear_confirm_title": "인벤토리 지우기",
+  "inventory.clear_confirm_msg": "인벤토리 및 주요 항목에서 모든 항목을 제거하시겠습니까?",
+  "inventory.equip_clear_title": "장비 지우기",
+  "inventory.equip_clear_msg": "무기, 방어구, 음식 슬롯에서 모든 장비를 제거하시겠습니까?"
 }
