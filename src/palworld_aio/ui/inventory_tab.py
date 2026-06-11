@@ -1399,27 +1399,29 @@ class PlayerInventoryTab(QWidget):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
             return
-        reply = self._themed_message_box(QMessageBox.Question, t('inventory.clear_key_confirm_title', default='Clear Key Items'), t('inventory.clear_key_confirm_msg', default='Remove all key items? (Unlock items will be re-added automatically)'), QMessageBox.Yes | QMessageBox.No)
+        reply = self._themed_message_box(QMessageBox.Question, t('inventory.clear_key_confirm_title', default='Clear Key Items'), t('inventory.clear_key_confirm_msg', default='Remove all key items, reset unlocked slots, and clear items in those slots?'), QMessageBox.Yes | QMessageBox.No)
         if reply != QMessageBox.Yes:
             return
-        before = set()
-        key_container = self.inventory.get_container('key') if self.inventory else None
+        if not self.inventory:
+            return
+        key_container = self.inventory.get_container('key')
         if key_container:
-            for slot in key_container.slots:
-                before.add(slot.get('item_id', ''))
-        for ct in ('key',):
-            container = self.inventory.get_container(ct) if self.inventory else None
-            if container:
-                container.update_slots([])
-                self._update_raw_save_data(ct, container)
-        if self.inventory:
-            for item_id in (FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS + INVENTORY_EXPANSION_ITEMS):
-                if item_id in before:
-                    self.inventory.add_key_item(item_id)
-            key_container = self.inventory.get_container('key')
-            if key_container:
-                self._update_raw_save_data('key', key_container)
-            self.inventory.save()
+            key_container.update_slots([])
+            self._update_raw_save_data('key', key_container)
+        foodbag = self.inventory.get_container('foodbag')
+        if foodbag:
+            foodbag.update_slots([s for s in foodbag.slots if s.get('slot_index', 0) == 0])
+            self._update_raw_save_data('foodbag', foodbag)
+        armor = self.inventory.get_container('armor')
+        if armor:
+            armor.update_slots([s for s in armor.slots if s.get('slot_index', 0) not in (6, 7)])
+            self._update_raw_save_data('armor', armor)
+        weapons = self.inventory.get_container('weapons')
+        if weapons:
+            weapons.update_slots([s for s in weapons.slots if s.get('slot_index', 0) < 4])
+            self._update_raw_save_data('weapons', weapons)
+        self.inventory._calculate_max_slots()
+        self.inventory.save()
         self._refresh_display()
     def _clear_all_equipment(self):
         if not self.current_player_uid:
