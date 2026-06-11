@@ -1374,10 +1374,10 @@ class PlayerInventoryTab(QWidget):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
             return
-        reply = self._themed_message_box(QMessageBox.Question, t('inventory.clear_confirm_title', default='Clear Inventory'), t('inventory.clear_confirm_msg', default='Remove all items from inventory and key items?'), QMessageBox.Yes | QMessageBox.No)
+        reply = self._themed_message_box(QMessageBox.Question, t('inventory.clear_confirm_title', default='Clear Inventory'), t('inventory.clear_confirm_msg', default='Remove all items from inventory? (Key items, equipment, and unlocks will be preserved)'), QMessageBox.Yes | QMessageBox.No)
         if reply != QMessageBox.Yes:
             return
-        for ct in ('main', 'key'):
+        for ct in ('main',):
             container = self.inventory.get_container(ct) if self.inventory else None
             if container:
                 container.update_slots([])
