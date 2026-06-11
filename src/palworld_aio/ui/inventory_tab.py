@@ -463,6 +463,7 @@ class InventoryGridWidget(QWidget):
     item_selected = Signal(dict)
     add_all_effigies_requested = Signal()
     add_all_key_items_requested = Signal()
+    clear_key_items_requested = Signal()
     sort_requested = Signal()
     def __init__(self, container_type: str='main', parent=None):
         super().__init__(parent)
@@ -504,6 +505,13 @@ class InventoryGridWidget(QWidget):
         self.key_items_btn.clicked.connect(self.add_all_key_items_requested.emit)
         self.key_items_btn.setVisible(self.container_type == 'key_items')
         header.addWidget(self.key_items_btn)
+        self.clear_key_btn = QPushButton(t('inventory.clear_key_btn', default='Clear Key Items'))
+        self.clear_key_btn.setFixedSize(100, 24)
+        self.clear_key_btn.setStyleSheet('QPushButton { background: rgba(251,113,133,0.15); color: #FB7185; border: 1px solid rgba(251,113,133,0.3); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 11px; } QPushButton:hover { background: rgba(251,113,133,0.25); border-color: rgba(251,113,133,0.5); color: #FFFFFF; }')
+        self.clear_key_btn.setCursor(Qt.PointingHandCursor)
+        self.clear_key_btn.setVisible(self.container_type == 'key_items')
+        self.clear_key_btn.clicked.connect(self.clear_key_items_requested.emit)
+        header.addWidget(self.clear_key_btn)
         header.addSpacing(4)
         self.sort_btn = QPushButton(t('inventory.sort', default='Sort'))
         self.sort_btn.setFixedSize(60, 24)
@@ -580,6 +588,7 @@ class InventoryGridWidget(QWidget):
         self.sort_btn.setText(t('inventory.sort', default='Sort'))
         self.effigies_btn.setText(t('inventory.add_all_effigies', default='Add All Effigies'))
         self.key_items_btn.setText(t('inventory.add_all_key_items', default='Add All Key Items'))
+        self.clear_key_btn.setText(t('inventory.clear_key_btn', default='Clear Key Items'))
     def clear(self):
         self.load_items([])
     def get_selected_slot(self):
@@ -864,6 +873,7 @@ class PlayerInventoryTab(QWidget):
         self.key_grid.empty_slot_double_clicked.connect(self._on_empty_slot_double_clicked)
         self.key_grid.add_all_effigies_requested.connect(self._on_add_all_effigies)
         self.key_grid.add_all_key_items_requested.connect(self._on_add_all_key_items)
+        self.key_grid.clear_key_items_requested.connect(self._clear_all_key_items)
         self.key_grid.sort_requested.connect(self._on_sort_requested)
         self.inv_tabs.addTab(self.key_grid, t('inventory.key_items', default='Key Items'))
         self.stats_tab = QWidget()
@@ -1383,6 +1393,32 @@ class PlayerInventoryTab(QWidget):
                 container.update_slots([])
                 self._update_raw_save_data(ct, container)
         if self.inventory:
+            self.inventory.save()
+        self._refresh_display()
+    def _clear_all_key_items(self):
+        if not self.current_player_uid:
+            QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
+            return
+        reply = self._themed_message_box(QMessageBox.Question, t('inventory.clear_key_confirm_title', default='Clear Key Items'), t('inventory.clear_key_confirm_msg', default='Remove all key items? (Unlock items will be re-added automatically)'), QMessageBox.Yes | QMessageBox.No)
+        if reply != QMessageBox.Yes:
+            return
+        before = set()
+        key_container = self.inventory.get_container('key') if self.inventory else None
+        if key_container:
+            for slot in key_container.slots:
+                before.add(slot.get('item_id', ''))
+        for ct in ('key',):
+            container = self.inventory.get_container(ct) if self.inventory else None
+            if container:
+                container.update_slots([])
+                self._update_raw_save_data(ct, container)
+        if self.inventory:
+            for item_id in (FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS + INVENTORY_EXPANSION_ITEMS):
+                if item_id in before:
+                    self.inventory.add_key_item(item_id)
+            key_container = self.inventory.get_container('key')
+            if key_container:
+                self._update_raw_save_data('key', key_container)
             self.inventory.save()
         self._refresh_display()
     def _clear_all_equipment(self):
