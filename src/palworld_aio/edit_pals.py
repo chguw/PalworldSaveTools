@@ -5180,7 +5180,7 @@ class PalCreateDialog(QDialog):
             zukan = PalFrame._PAL_ZUKAN.get(base_id, -99)
             if zukan == -99:
                 pass
-            elif zukan < 0:
+            elif zukan < 0 and 'Yakushima' not in asset and not base_id.startswith('yakushima'):
                 continue
             if search_text and search_text not in name.lower() and (search_text not in asset.lower()):
                 continue

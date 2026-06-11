@@ -239,7 +239,7 @@ class PlayerPalActionDialog(QDialog):
             zukan = PalFrame._PAL_ZUKAN.get(base_id, -99)
             if zukan == -99:
                 pass
-            elif zukan < 0:
+            elif zukan < 0 and 'Yakushima' not in asset and not base_id.startswith('yakushima'):
                 continue
             if query_lower and query_lower not in name.lower() and (query_lower not in asset.lower()):
                 continue
