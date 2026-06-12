@@ -98,12 +98,21 @@ class Runner:
         self.verbose = True
         self.stop_first = False
         self.show_stdout = False
+        self.deep_audit = True
+        self.strict_paths = True
+
+    def _structural_flags(self) -> list[str]:
+        flags: list[str] = []
+        if not self.deep_audit:
+            flags.append('--no-deep-audit')
+        if not self.strict_paths:
+            flags.append('--no-strict-paths')
+        return flags
 
     def _pytest(self, target: str, label: str, include_slow: bool = False) -> int:
-        return _run(
-            _build_pytest_args(target, self.verbose, self.stop_first, self.show_stdout, include_slow),
-            label=label,
-        )
+        args = _build_pytest_args(target, self.verbose, self.stop_first, self.show_stdout, include_slow)
+        args.extend(self._structural_flags())
+        return _run(args, label=label)
 
     def all_tests(self) -> int:
         return self._pytest(str(TESTS), 'Full test suite (fast)')
@@ -163,15 +172,41 @@ class Runner:
     def validate_imports(self) -> int:
         return _run([PYTHON, str(VALIDATOR)], label='Check all module imports')
 
+    def structural_audit_all(self) -> int:
+        flags = ['--deep-audit', '--strict-paths', '--dump-structural']
+        cmd = [PYTHON, '-m', 'pytest', str(TESTS), '-v', '--tb=short']
+        cmd.extend(flags)
+        return _run(cmd, label='Structural audit (ALL checks)')
+
+    def structural_file_pairing(self) -> int:
+        flags = ['--deep-audit', '--no-strict-paths', '--dump-structural']
+        cmd = [PYTHON, '-m', 'pytest', str(TESTS), '-v', '--tb=short']
+        cmd.extend(flags)
+        return _run(cmd, label='Structural audit — file pairing')
+
+    def structural_import_graph(self) -> int:
+        flags = ['--deep-audit', '--no-strict-paths', '--dump-structural']
+        cmd = [PYTHON, '-m', 'pytest', str(TESTS), '-v', '--tb=short']
+        cmd.extend(flags)
+        return _run(cmd, label='Structural audit — import graph')
+
+    def structural_resource_audit(self) -> int:
+        flags = ['--no-deep-audit', '--strict-paths', '--dump-structural']
+        cmd = [PYTHON, '-m', 'pytest', str(TESTS), '-v', '--tb=short']
+        cmd.extend(flags)
+        return _run(cmd, label='Structural audit — resource paths')
+
     def menu(self) -> str:
         v = GREEN('ON') if self.verbose else RED('OFF')
         x = GREEN('ON') if self.stop_first else RED('OFF')
         s = GREEN('ON') if self.show_stdout else RED('OFF')
+        da = GREEN('ON') if self.deep_audit else RED('OFF')
+        sp = GREEN('ON') if self.strict_paths else RED('OFF')
 
         print(f'''
   {BOLD("───── Test suites ─────")}
-    {CYAN("1")}   Full test suite (fast)    {DIM("(182 tests, excludes save I/O)")}
-    {CYAN("2")}   Full test suite (ALL)      {DIM("(202 tests, includes save file tests)")}
+    {CYAN("1")}   Full test suite (fast)    {DIM("(excludes save I/O)")}
+    {CYAN("2")}   Full test suite (ALL)      {DIM("(includes save file tests)")}
     {CYAN("3")}   Integration tests          {DIM("(imports + save files)")}
     {CYAN("4")}   Unit tests                 {DIM("(all unit tests)")}
 
@@ -199,20 +234,32 @@ class Runner:
     {CYAN("23")}  test_check_theme_violations  {DIM("scanner")}
     {CYAN("24")}  test_resource_integrity     {DIM("integration")}
 
+  {BOLD("───── Structural audit ──")}
+    {CYAN("A")}   Structural audit (ALL)     {DIM("file pairing + import graph + resource audit")}
+    {CYAN("P")}   File pairing only          {DIM("source ↔ test mapping check")}
+    {CYAN("G")}   Import graph only          {DIM("circular deps + test purity")}
+    {CYAN("R")}   Resource audit only        {DIM("AST path harvest + filesystem cross-check")}
+
   {BOLD("───── Scanners ────────")}
     {CYAN("T")}   Theme scan (normal)        {DIM("whitelist on, skips theme files")}
-    {CYAN("R")}   Theme scan (NO MERCY)      {DIM("whitelist OFF, scans EVERYTHING")}
+    {CYAN("U")}   Theme scan (NO MERCY)      {DIM("whitelist OFF, scans EVERYTHING")}
     {CYAN("I")}   Validate imports           {DIM("check all modules import cleanly")}
 
   {BOLD("───── Settings ────────")}
     {CYAN("V")}   Verbose output             {v}
     {CYAN("X")}   Stop on first fail         {x}
     {CYAN("S")}   Show stdout                {s}
+    {CYAN("D")}   Deep audit                 {da} {DIM("(file pairing + import graph)")}
+    {CYAN("C")}   Strict paths               {sp} {DIM("(resource path audit)")}
 
   {DIM("─────")}
     {CYAN("Q")}   Quit
 ''')
-        return input(f'  {BOLD("Pick one")} [{CYAN("1")}-{CYAN("24")} {DIM("|")} {CYAN("T")}{DIM("/")}{CYAN("R")}{DIM("/")}{CYAN("I")} {DIM("|")} {CYAN("V")}{DIM("/")}{CYAN("X")}{DIM("/")}{CYAN("S")} {DIM("|")} {CYAN("Q")}]: ').strip().lower()
+        try:
+            return input(f'  {BOLD("Pick one")} [{CYAN("1")}-{CYAN("24")} {DIM("|")} {CYAN("A")}{DIM("/")}{CYAN("P")}{DIM("/")}{CYAN("G")}{DIM("/")}{CYAN("R")} {DIM("|")} {CYAN("T")}{DIM("/")}{CYAN("U")}{DIM("/")}{CYAN("I")} {DIM("|")} {CYAN("V")}{DIM("/")}{CYAN("X")}{DIM("/")}{CYAN("S")}{DIM("/")}{CYAN("D")}{DIM("/")}{CYAN("C")} {DIM("|")} {CYAN("Q")}]: ').strip().lower()
+        except (KeyboardInterrupt, EOFError):
+            print()
+            return 'q'
 
     def run_forever(self) -> None:
         print(f'\n  {BANNER}\n')
@@ -249,12 +296,18 @@ class Runner:
                 '22': lambda: self.single(str(TESTS / 'unit' / 'palworld_aio_tests' / 'test_utils.py'), 'test_utils'),
                 '23': lambda: self.single(str(TESTS / 'unit' / 'scripts' / 'test_check_theme_violations.py'), 'test_check_theme_violations'),
                 '24': lambda: self.single(str(TESTS / 'integration' / 'test_resource_integrity.py'), 'test_resource_integrity'),
+                'a': lambda: self.structural_audit_all(),
+                'p': lambda: self.structural_file_pairing(),
+                'g': lambda: self.structural_import_graph(),
+                'r': lambda: self.structural_resource_audit(),
                 't': lambda: self.theme_scan(ruthless=False),
-                'r': lambda: self.theme_scan(ruthless=True),
+                'u': lambda: self.theme_scan(ruthless=True),
                 'i': lambda: self.validate_imports(),
                 'v': lambda: self._toggle('verbose'),
                 'x': lambda: self._toggle('stop_first'),
                 's': lambda: self._toggle('show_stdout'),
+                'd': lambda: self._toggle('deep_audit'),
+                'c': lambda: self._toggle('strict_paths'),
             }.get(choice)
 
             if handler:

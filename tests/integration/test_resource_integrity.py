@@ -21,6 +21,9 @@ _RE_RESOURCE_CALL_MULTI = re.compile(
 _RE_LEGACY_JOIN = re.compile(
     r"os\.path\.join\s*\([^)]*'resources'[^)]*\)"
 )
+_RE_FIND_RESOURCE = re.compile(
+    r"_find_resource\s*\(((?:['\"][^'\"]*?['\"],?\s*)+)\)"
+)
 _PATH_EXTENSIONS = {
     '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.ico', '.bmp',
     '.ttf', '.otf', '.woff', '.woff2',
@@ -95,6 +98,36 @@ def _scan_for_legacy_resource_paths(filepath):
             if not is_whitelisted:
                 violations.append((filepath, i, matched))
     return violations
+
+
+def _extract_resource_path_call_args(filepath):
+    args_list = []
+    try:
+        with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+            content = f.read()
+    except OSError:
+        return args_list
+
+    for m in _RE_RESOURCE_CALL_MULTI.finditer(content):
+        base_var = m.group(1).strip()
+        paths_part = m.group(2).strip()
+        parts = [p.strip().strip("'\"") for p in paths_part.split(',') if p.strip()]
+        args_list.append((base_var, tuple(parts)))
+    return args_list
+
+
+def _extract_find_resource_calls(filepath):
+    calls = []
+    try:
+        with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
+            content = f.read()
+    except OSError:
+        return calls
+    for m in _RE_FIND_RESOURCE.finditer(content):
+        paths_part = m.group(1).strip()
+        parts = [p.strip().strip("'\"") for p in paths_part.split(',') if p.strip()]
+        calls.extend(parts)
+    return calls
 
 
 def _collect_py_files(*dirs):
@@ -250,3 +283,61 @@ class TestResourcePathResolution:
         assert os.path.isdir(result)
         assert os.path.isdir(os.path.join(result, 'src'))
         assert os.path.isdir(os.path.join(result, 'resources'))
+
+    def test_all_resource_path_calls_return_absolute(self):
+        base = str(PROJECT_ROOT)
+        errors = []
+        for py_file in _collect_py_files(SRC_DIR):
+            for var_name, parts in _extract_resource_path_call_args(py_file):
+                rel = os.path.join(*parts).replace('\\', '/')
+                result = resource_path(base, rel)
+                if not os.path.isabs(result):
+                    errors.append(f"{py_file}: resource_path({var_name}, {parts!r}) -> {result!r}")
+        assert not errors, (
+            "resource_path() calls that did not return an absolute path:\n"
+            + '\n'.join(errors)
+        )
+
+    def test_all_resource_path_resolved_files_exist(self):
+        base = str(PROJECT_ROOT)
+        missing = []
+        for py_file in _collect_py_files(SRC_DIR):
+            for var_name, parts in _extract_resource_path_call_args(py_file):
+                rel = os.path.join(*parts).replace('\\', '/')
+                resolved = resource_path(base, rel)
+                if not os.path.exists(resolved):
+                    missing.append(f"{py_file}: {parts!r} -> {resolved}")
+        assert not missing, (
+            "resource_path() calls resolving to non-existent files:\n"
+            + '\n'.join(missing)
+        )
+
+    def test_all_find_resource_calls_resolve_absolute(self):
+        bootup_py = Path(SRC_DIR) / 'bootup.py'
+        if not bootup_py.exists():
+            pytest.skip('bootup.py not found')
+        base = str(PROJECT_ROOT)
+        errors = []
+        for path_str in _extract_find_resource_calls(bootup_py):
+            candidate = os.path.join(base, path_str)
+            if not os.path.isabs(candidate):
+                errors.append(f"_find_resource({path_str!r}) -> {candidate!r}")
+        assert not errors, (
+            "_find_resource() calls that did not resolve to an absolute path:\n"
+            + '\n'.join(errors)
+        )
+
+    def test_all_find_resource_calls_file_exists(self):
+        bootup_py = Path(SRC_DIR) / 'bootup.py'
+        if not bootup_py.exists():
+            pytest.skip('bootup.py not found')
+        base = str(PROJECT_ROOT)
+        missing = []
+        for path_str in _extract_find_resource_calls(bootup_py):
+            candidate = os.path.join(base, path_str)
+            if not os.path.exists(candidate):
+                missing.append(f"_find_resource({path_str!r}) -> {candidate}")
+        assert not missing, (
+            "_find_resource() references non-existent files:\n"
+            + '\n'.join(missing)
+        )

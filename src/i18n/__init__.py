@@ -22,7 +22,10 @@ _RESOURCES_BASE: str = os.path.join(base_dir, 'resources')
 if _RESOURCES_BASE not in sys.path:
     sys.path.insert(0, _RESOURCES_BASE)
 _SUPPORTED_LANGS = ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']
-_LANG: str = 'zh_CN'
+try:
+    _LANG: str = json_tools.load(_CFG).get('lang', 'en_US') if os.path.exists(_CFG) else 'en_US'
+except Exception:
+    _LANG: str = 'en_US'
 _RES: Dict[str, Dict[str, str]] = {}
 def _load_json(path: str) -> Dict[str, Any]:
     try:
@@ -40,7 +43,9 @@ def get_language() -> str:
 def set_language(lang: str) -> None:
     global _LANG
     if lang not in _SUPPORTED_LANGS:
-        lang = 'zh_CN'
+        return
+    if lang == _LANG:
+        return
     _LANG = lang
     try:
         cfg = _load_json(_CFG) if os.path.exists(_CFG) else {}
@@ -60,7 +65,7 @@ def init_language(default_lang: str='zh_CN') -> None:
         cfg = _load_json(_CFG)
         lang = cfg.get('lang', default_lang)
     load_resources(lang)
-    set_language(lang)
+    _LANG = lang
 _DEF = object()
 def t(key: str, default: str | object=_DEF, **fmt) -> str:
     src = _RES.get(_LANG, {})

@@ -24,7 +24,5 @@ def test_get_language_returns_string():
 
 
 def test_set_language_and_get():
-    original = get_language()
     set_language("en_US")
     assert get_language() == "en_US"
-    set_language(original)
