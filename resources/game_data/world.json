@@ -8248,6 +8248,20 @@
             "description": "The Tocotoco's Gloves becomes craftable at the Pal Gear Workbench."
         },
         {
+            "name": "skillunlock_cubeturtle",
+            "asset": "SkillUnlock_CubeTurtle",
+            "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
+            "type": "standard",
+            "description": ""
+        },
+        {
+            "name": "skillunlock_cubeturtle_neutral",
+            "asset": "SkillUnlock_CubeTurtle_Neutral",
+            "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
+            "type": "standard",
+            "description": ""
+        },
+        {
             "name": "Xenolord Saddle",
             "asset": "SkillUnlock_DarkMechaDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
@@ -8747,20 +8761,6 @@
         {
             "name": "Tarantriss Saddle",
             "asset": "SkillUnlock_PurpleSpider",
-            "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
-            "type": "standard",
-            "description": ""
-        },
-        {
-            "name": "Pharapace Saddle",
-            "asset": "SkillUnlock_PyramidTurtle",
-            "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
-            "type": "standard",
-            "description": ""
-        },
-        {
-            "name": "Pharapace Primo Saddle",
-            "asset": "SkillUnlock_PyramidTurtle_Neutral",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
             "description": ""

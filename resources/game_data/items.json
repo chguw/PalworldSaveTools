@@ -8071,6 +8071,26 @@
             "sort_id": 20010
         },
         {
+            "name": "BossDefeatReward_CubeTurtle",
+            "asset": "BossDefeatReward_CubeTurtle",
+            "icon": "/icons/items/T_icon_item_BossDefeatReward_CubeTurtle.webp",
+            "rarity": 2,
+            "type_a": "EPalItemTypeA::Essential",
+            "type_b": "EPalItemTypeB::Essential_BossReward",
+            "description": "-",
+            "sort_id": 20075
+        },
+        {
+            "name": "BossDefeatReward_CubeTurtle_Neutral",
+            "asset": "BossDefeatReward_CubeTurtle_Neutral",
+            "icon": "/icons/items/T_icon_item_BossDefeatReward_CubeTurtle_Neutral.webp",
+            "rarity": 3,
+            "type_a": "EPalItemTypeA::Essential",
+            "type_b": "EPalItemTypeB::Essential_BossReward",
+            "description": "-",
+            "sort_id": 20096
+        },
+        {
             "name": "Menasting Bounty Token",
             "asset": "BossDefeatReward_DarkScorpion",
             "icon": "/icons/items/T_icon_item_BossDefeatReward_DarkScorpion.webp",
@@ -8663,21 +8683,21 @@
         {
             "name": "BossDefeatReward_PyramidTurtle",
             "asset": "BossDefeatReward_PyramidTurtle",
-            "icon": "/icons/items/T_icon_item_BossDefeatReward_PyramidTurtle.webp",
+            "icon": "/icons/items/T_icon_item_BossDefeatReward_CubeTurtle_Neutral.webp",
             "rarity": 2,
             "type_a": "EPalItemTypeA::Essential",
             "type_b": "EPalItemTypeB::Essential_BossReward",
-            "description": "-",
+            "description": "",
             "sort_id": 20075
         },
         {
             "name": "BossDefeatReward_PyramidTurtle_Neutral",
             "asset": "BossDefeatReward_PyramidTurtle_Neutral",
-            "icon": "/icons/items/T_icon_item_BossDefeatReward_PyramidTurtle_Neutral.webp",
+            "icon": "/icons/items/T_icon_item_BossDefeatReward_CubeTurtle_Neutral.webp",
             "rarity": 3,
             "type_a": "EPalItemTypeA::Essential",
             "type_b": "EPalItemTypeB::Essential_BossReward",
-            "description": "-",
+            "description": "",
             "sort_id": 20096
         },
         {
@@ -21021,6 +21041,26 @@
             "sort_id": 10127
         },
         {
+            "name": "Pharapace Saddle",
+            "asset": "SkillUnlock_CubeTurtle",
+            "icon": "/icons/items/T_itemicon_Essential_SkillUnlock_Saddle.webp",
+            "rarity": 3,
+            "type_a": "EPalItemTypeA::Essential",
+            "type_b": "EPalItemTypeB::Essential_PalGear",
+            "description": "Saddle for safely riding cubeturtle.",
+            "sort_id": 10198
+        },
+        {
+            "name": "Pharapace Primo Saddle",
+            "asset": "SkillUnlock_CubeTurtle_Neutral",
+            "icon": "/icons/items/T_itemicon_Essential_SkillUnlock_Saddle.webp",
+            "rarity": 3,
+            "type_a": "EPalItemTypeA::Essential",
+            "type_b": "EPalItemTypeB::Essential_PalGear",
+            "description": "Saddle for safely riding cubeturtle_neutral.",
+            "sort_id": 10199
+        },
+        {
             "name": "Xenolord Saddle",
             "asset": "SkillUnlock_DarkMechaDragon",
             "icon": "/icons/items/T_itemicon_Essential_SkillUnlock_Saddle.webp",
@@ -21871,23 +21911,23 @@
             "sort_id": 10134
         },
         {
-            "name": "Pharapace Saddle",
+            "name": "SkillUnlock_PyramidTurtle",
             "asset": "SkillUnlock_PyramidTurtle",
             "icon": "/icons/items/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "rarity": 3,
             "type_a": "EPalItemTypeA::Essential",
             "type_b": "EPalItemTypeB::Essential_PalGear",
-            "description": "Saddle for safely riding Pharapace.",
+            "description": "",
             "sort_id": 10198
         },
         {
-            "name": "Pharapace Primo Saddle",
+            "name": "SkillUnlock_PyramidTurtle_Neutral",
             "asset": "SkillUnlock_PyramidTurtle_Neutral",
             "icon": "/icons/items/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "rarity": 3,
             "type_a": "EPalItemTypeA::Essential",
             "type_b": "EPalItemTypeB::Essential_PalGear",
-            "description": "Saddle for safely riding Pharapace Primo.",
+            "description": "",
             "sort_id": 10199
         },
         {

@@ -293,11 +293,6 @@
             "desert_orange_G",
             "desert_orange_Oasis"
         ],
-        "BossDefeatReward_PyramidTurtle": [
-            "81_2_dessert_FBOSS_5",
-            "worldtree_9_55_WorldTreeAura",
-            "desert_orange_C"
-        ],
         "BossDefeatReward_JetDragon": [
             "81_3_volcano_FBOSS_1",
             "skyisland_8_04_B_highland_FBOSS_1"
@@ -567,10 +562,6 @@
             "yamijima_IceLand_pink_C",
             "yamijima_IceLand_pink_D",
             "yamijima_IceLand_pink_F"
-        ],
-        "BossDefeatReward_PyramidTurtle_Neutral": [
-            "81_5_Yamijima_FBOSS_16",
-            "worldtree_9_11_N"
         ],
         "BossDefeatReward_PinkRabbit_Grass": [
             "81_5_Yamijima_FBOSS_17",

@@ -3024,6 +3024,130 @@
             "description": "Sometimes drops Milk when assigned to Ranch."
         },
         {
+            "name": "Pharapace",
+            "asset": "CubeTurtle",
+            "icon": "/icons/pals/T_CubeTurtle_icon_normal.webp",
+            "elements": {
+                "Earth": {
+                    "name": "Earth",
+                    "icon": "/icons/elements/T_Icon_element_s_07.png",
+                    "icon_large": "/icons/elements/T_Icon_element_07.png",
+                    "icon_passive_base": "/icons/elements/T_prt_pal_skill_base_element_07.png"
+                }
+            },
+            "stats": {
+                "hp": 95,
+                "melee_attack": 100,
+                "shot_attack": 100,
+                "defense": 135,
+                "support": 100,
+                "craft_speed": 100,
+                "max_full_stomach": 580,
+                "food_amount": 8,
+                "element_type1": "Earth",
+                "element_type2": "None",
+                "zukan_index": 142,
+                "rarity": 8,
+                "size": "EPalSizeType::XL",
+                "run_speed": 360,
+                "ride_sprint_speed": 540
+            },
+            "scaling": {
+                "hp": 95,
+                "attack": 100,
+                "defense": 135
+            },
+            "friendship_hp": 4.3,
+            "friendship_shotattack": 2.5,
+            "friendship_defense": 1.1,
+            "work_suitabilities": {
+                "EmitFlame": 0,
+                "Watering": 0,
+                "Seeding": 0,
+                "GenerateElectricity": 0,
+                "Handcraft": 0,
+                "Collection": 0,
+                "Deforest": 0,
+                "Mining": 4,
+                "OilExtraction": 0,
+                "ProductMedicine": 0,
+                "Cool": 0,
+                "Transport": 0,
+                "MonsterFarm": 0
+            },
+            "partner_skill": "Masonry Archelon",
+            "description": "Can be ridden. While at a base, +{Passive1_EffectValue1} Mining Work Suitability Level by for all other Base Pals. (Does not stack)",
+            "passives": [
+                "WorkSuitabilityAddRank_Mining",
+                "WorkSuitabilityAddRank_Mining",
+                "WorkSuitabilityAddRank_Mining",
+                "WorkSuitabilityAddRank_Mining",
+                "WorkSuitabilityAddRank_Mining"
+            ]
+        },
+        {
+            "name": "Pharapace Primo",
+            "asset": "CubeTurtle_Neutral",
+            "icon": "/icons/pals/T_CubeTurtle_Neutral_icon_normal.webp",
+            "elements": {
+                "Normal": {
+                    "name": "Neutral",
+                    "icon": "/icons/elements/T_Icon_element_s_00.png",
+                    "icon_large": "/icons/elements/T_Icon_element_00.png",
+                    "icon_passive_base": "/icons/elements/T_prt_pal_skill_base_element_00.png"
+                }
+            },
+            "stats": {
+                "hp": 95,
+                "melee_attack": 100,
+                "shot_attack": 100,
+                "defense": 140,
+                "support": 100,
+                "craft_speed": 100,
+                "max_full_stomach": 550,
+                "food_amount": 8,
+                "element_type1": "Normal",
+                "element_type2": "None",
+                "zukan_index": 142,
+                "rarity": 8,
+                "size": "EPalSizeType::XL",
+                "run_speed": 360,
+                "ride_sprint_speed": 540
+            },
+            "scaling": {
+                "hp": 95,
+                "attack": 100,
+                "defense": 140
+            },
+            "friendship_hp": 4.3,
+            "friendship_shotattack": 2.5,
+            "friendship_defense": 1.0,
+            "work_suitabilities": {
+                "EmitFlame": 0,
+                "Watering": 0,
+                "Seeding": 0,
+                "GenerateElectricity": 0,
+                "Handcraft": 0,
+                "Collection": 0,
+                "Deforest": 0,
+                "Mining": 6,
+                "OilExtraction": 0,
+                "ProductMedicine": 0,
+                "Cool": 0,
+                "Transport": 0,
+                "MonsterFarm": 0
+            },
+            "partner_skill": "Stone-Chaser Archelon",
+            "description": "Can be ridden. While in party, increases the durability of all weapons and armor by {Passive1_EffectValue1}%. (Does not stack)",
+            "passives": [
+                "CubeTurtle_Neutral_PartnerSkill_1_Armor",
+                "CubeTurtle_Neutral_PartnerSkill_2_Armor",
+                "CubeTurtle_Neutral_PartnerSkill_3_Armor",
+                "CubeTurtle_Neutral_PartnerSkill_4_Armor",
+                "CubeTurtle_Neutral_PartnerSkill_5_Armor"
+            ]
+        },
+        {
             "name": "Cinnamoth",
             "asset": "CuteButterfly",
             "icon": "/icons/pals/T_CuteButterfly_icon_normal.webp",
@@ -15144,130 +15268,6 @@
             "description": "Can be ridden. Can double jump while mounted. Additionally, can shoot spider silk to grapple and move at high speed. {ReferenceMsgId_RideSpeedUp}"
         },
         {
-            "name": "Pharapace",
-            "asset": "PyramidTurtle",
-            "icon": "/icons/pals/T_PyramidTurtle_icon_normal.webp",
-            "elements": {
-                "Earth": {
-                    "name": "Earth",
-                    "icon": "/icons/elements/T_Icon_element_s_07.png",
-                    "icon_large": "/icons/elements/T_Icon_element_07.png",
-                    "icon_passive_base": "/icons/elements/T_prt_pal_skill_base_element_07.png"
-                }
-            },
-            "stats": {
-                "hp": 95,
-                "melee_attack": 100,
-                "shot_attack": 100,
-                "defense": 135,
-                "support": 100,
-                "craft_speed": 100,
-                "max_full_stomach": 580,
-                "food_amount": 8,
-                "element_type1": "Earth",
-                "element_type2": "None",
-                "zukan_index": 142,
-                "rarity": 8,
-                "size": "EPalSizeType::XL",
-                "run_speed": 360,
-                "ride_sprint_speed": 540
-            },
-            "scaling": {
-                "hp": 95,
-                "attack": 100,
-                "defense": 135
-            },
-            "friendship_hp": 4.3,
-            "friendship_shotattack": 2.5,
-            "friendship_defense": 1.1,
-            "work_suitabilities": {
-                "EmitFlame": 0,
-                "Watering": 0,
-                "Seeding": 0,
-                "GenerateElectricity": 0,
-                "Handcraft": 0,
-                "Collection": 0,
-                "Deforest": 0,
-                "Mining": 4,
-                "OilExtraction": 0,
-                "ProductMedicine": 0,
-                "Cool": 0,
-                "Transport": 0,
-                "MonsterFarm": 0
-            },
-            "partner_skill": "Masonry Archelon",
-            "description": "Can be ridden. While at a base, +{Passive1_EffectValue1} Mining Work Suitability Level by for all other Base Pals. (Does not stack)",
-            "passives": [
-                "WorkSuitabilityAddRank_Mining",
-                "WorkSuitabilityAddRank_Mining",
-                "WorkSuitabilityAddRank_Mining",
-                "WorkSuitabilityAddRank_Mining",
-                "WorkSuitabilityAddRank_Mining"
-            ]
-        },
-        {
-            "name": "Pharapace Primo",
-            "asset": "PyramidTurtle_Neutral",
-            "icon": "/icons/pals/T_PyramidTurtle_Neutral_icon_normal.webp",
-            "elements": {
-                "Normal": {
-                    "name": "Neutral",
-                    "icon": "/icons/elements/T_Icon_element_s_00.png",
-                    "icon_large": "/icons/elements/T_Icon_element_00.png",
-                    "icon_passive_base": "/icons/elements/T_prt_pal_skill_base_element_00.png"
-                }
-            },
-            "stats": {
-                "hp": 95,
-                "melee_attack": 100,
-                "shot_attack": 100,
-                "defense": 140,
-                "support": 100,
-                "craft_speed": 100,
-                "max_full_stomach": 550,
-                "food_amount": 8,
-                "element_type1": "Normal",
-                "element_type2": "None",
-                "zukan_index": 142,
-                "rarity": 8,
-                "size": "EPalSizeType::XL",
-                "run_speed": 360,
-                "ride_sprint_speed": 540
-            },
-            "scaling": {
-                "hp": 95,
-                "attack": 100,
-                "defense": 140
-            },
-            "friendship_hp": 4.3,
-            "friendship_shotattack": 2.5,
-            "friendship_defense": 1.0,
-            "work_suitabilities": {
-                "EmitFlame": 0,
-                "Watering": 0,
-                "Seeding": 0,
-                "GenerateElectricity": 0,
-                "Handcraft": 0,
-                "Collection": 0,
-                "Deforest": 0,
-                "Mining": 6,
-                "OilExtraction": 0,
-                "ProductMedicine": 0,
-                "Cool": 0,
-                "Transport": 0,
-                "MonsterFarm": 0
-            },
-            "partner_skill": "Stone-Chaser Archelon",
-            "description": "Can be ridden. While in party, increases the durability of all weapons and armor by {Passive1_EffectValue1}%. (Does not stack)",
-            "passives": [
-                "PyramidTurtle_Neutral_PartnerSkill_1_Armor",
-                "PyramidTurtle_Neutral_PartnerSkill_2_Armor",
-                "PyramidTurtle_Neutral_PartnerSkill_3_Armor",
-                "PyramidTurtle_Neutral_PartnerSkill_4_Armor",
-                "PyramidTurtle_Neutral_PartnerSkill_5_Armor"
-            ]
-        },
-        {
             "name": "Elizabee",
             "asset": "QueenBee",
             "icon": "/icons/pals/T_QueenBee_icon_normal.webp",
@@ -24503,6 +24503,130 @@
             },
             "partner_skill": "Milk Maker",
             "description": "Sometimes drops Milk when assigned to Ranch."
+        },
+        {
+            "name": "Pharapace (Boss)",
+            "asset": "BOSS_CubeTurtle",
+            "icon": "/icons/pals/T_CubeTurtle_icon_normal.webp",
+            "elements": {
+                "Earth": {
+                    "name": "Earth",
+                    "icon": "/icons/elements/T_Icon_element_s_07.png",
+                    "icon_large": "/icons/elements/T_Icon_element_07.png",
+                    "icon_passive_base": "/icons/elements/T_prt_pal_skill_base_element_07.png"
+                }
+            },
+            "stats": {
+                "hp": 114,
+                "melee_attack": 100,
+                "shot_attack": 100,
+                "defense": 135,
+                "support": 100,
+                "craft_speed": 100,
+                "max_full_stomach": 580,
+                "food_amount": 8,
+                "element_type1": "Earth",
+                "element_type2": "None",
+                "zukan_index": -1,
+                "rarity": 8,
+                "size": "EPalSizeType::XL",
+                "run_speed": 360,
+                "ride_sprint_speed": 640
+            },
+            "scaling": {
+                "hp": 114,
+                "attack": 100,
+                "defense": 135
+            },
+            "friendship_hp": 3.3,
+            "friendship_shotattack": 2.5,
+            "friendship_defense": 1.1,
+            "work_suitabilities": {
+                "EmitFlame": 0,
+                "Watering": 0,
+                "Seeding": 0,
+                "GenerateElectricity": 0,
+                "Handcraft": 0,
+                "Collection": 0,
+                "Deforest": 0,
+                "Mining": 4,
+                "OilExtraction": 0,
+                "ProductMedicine": 0,
+                "Cool": 0,
+                "Transport": 0,
+                "MonsterFarm": 0
+            },
+            "partner_skill": "Masonry Archelon",
+            "description": "Can be ridden. While at a base, +{Passive1_EffectValue1} Mining Work Suitability Level by for all other Base Pals. (Does not stack)",
+            "passives": [
+                "WorkSuitabilityAddRank_Mining",
+                "WorkSuitabilityAddRank_Mining",
+                "WorkSuitabilityAddRank_Mining",
+                "WorkSuitabilityAddRank_Mining",
+                "WorkSuitabilityAddRank_Mining"
+            ]
+        },
+        {
+            "name": "Pharapace Primo (Boss)",
+            "asset": "BOSS_CubeTurtle_Neutral",
+            "icon": "/icons/pals/T_CubeTurtle_Neutral_icon_normal.webp",
+            "elements": {
+                "Normal": {
+                    "name": "Neutral",
+                    "icon": "/icons/elements/T_Icon_element_s_00.png",
+                    "icon_large": "/icons/elements/T_Icon_element_00.png",
+                    "icon_passive_base": "/icons/elements/T_prt_pal_skill_base_element_00.png"
+                }
+            },
+            "stats": {
+                "hp": 114,
+                "melee_attack": 100,
+                "shot_attack": 100,
+                "defense": 140,
+                "support": 100,
+                "craft_speed": 100,
+                "max_full_stomach": 550,
+                "food_amount": 8,
+                "element_type1": "Normal",
+                "element_type2": "None",
+                "zukan_index": -1,
+                "rarity": 8,
+                "size": "EPalSizeType::XL",
+                "run_speed": 360,
+                "ride_sprint_speed": 640
+            },
+            "scaling": {
+                "hp": 114,
+                "attack": 100,
+                "defense": 140
+            },
+            "friendship_hp": 3.3,
+            "friendship_shotattack": 2.5,
+            "friendship_defense": 1.0,
+            "work_suitabilities": {
+                "EmitFlame": 0,
+                "Watering": 0,
+                "Seeding": 0,
+                "GenerateElectricity": 0,
+                "Handcraft": 0,
+                "Collection": 0,
+                "Deforest": 0,
+                "Mining": 6,
+                "OilExtraction": 0,
+                "ProductMedicine": 0,
+                "Cool": 0,
+                "Transport": 0,
+                "MonsterFarm": 0
+            },
+            "partner_skill": "Stone-Chaser Archelon",
+            "description": "Can be ridden. While in party, increases the durability of all weapons and armor by {Passive1_EffectValue1}%. (Does not stack)",
+            "passives": [
+                "CubeTurtle_Neutral_PartnerSkill_1_Armor",
+                "CubeTurtle_Neutral_PartnerSkill_2_Armor",
+                "CubeTurtle_Neutral_PartnerSkill_3_Armor",
+                "CubeTurtle_Neutral_PartnerSkill_4_Armor",
+                "CubeTurtle_Neutral_PartnerSkill_5_Armor"
+            ]
         },
         {
             "name": "Cinnamoth (Boss)",
@@ -35688,130 +35812,6 @@
             },
             "partner_skill": "Tarantriss’ Web",
             "description": "Can be ridden. Can double jump while mounted. Additionally, can shoot spider silk to grapple and move at high speed. {ReferenceMsgId_RideSpeedUp}"
-        },
-        {
-            "name": "Pharapace (Boss)",
-            "asset": "BOSS_PyramidTurtle",
-            "icon": "/icons/pals/T_PyramidTurtle_icon_normal.webp",
-            "elements": {
-                "Earth": {
-                    "name": "Earth",
-                    "icon": "/icons/elements/T_Icon_element_s_07.png",
-                    "icon_large": "/icons/elements/T_Icon_element_07.png",
-                    "icon_passive_base": "/icons/elements/T_prt_pal_skill_base_element_07.png"
-                }
-            },
-            "stats": {
-                "hp": 114,
-                "melee_attack": 100,
-                "shot_attack": 100,
-                "defense": 135,
-                "support": 100,
-                "craft_speed": 100,
-                "max_full_stomach": 580,
-                "food_amount": 8,
-                "element_type1": "Earth",
-                "element_type2": "None",
-                "zukan_index": -1,
-                "rarity": 8,
-                "size": "EPalSizeType::XL",
-                "run_speed": 360,
-                "ride_sprint_speed": 640
-            },
-            "scaling": {
-                "hp": 114,
-                "attack": 100,
-                "defense": 135
-            },
-            "friendship_hp": 3.3,
-            "friendship_shotattack": 2.5,
-            "friendship_defense": 1.1,
-            "work_suitabilities": {
-                "EmitFlame": 0,
-                "Watering": 0,
-                "Seeding": 0,
-                "GenerateElectricity": 0,
-                "Handcraft": 0,
-                "Collection": 0,
-                "Deforest": 0,
-                "Mining": 4,
-                "OilExtraction": 0,
-                "ProductMedicine": 0,
-                "Cool": 0,
-                "Transport": 0,
-                "MonsterFarm": 0
-            },
-            "partner_skill": "Masonry Archelon",
-            "description": "Can be ridden. While at a base, +{Passive1_EffectValue1} Mining Work Suitability Level by for all other Base Pals. (Does not stack)",
-            "passives": [
-                "WorkSuitabilityAddRank_Mining",
-                "WorkSuitabilityAddRank_Mining",
-                "WorkSuitabilityAddRank_Mining",
-                "WorkSuitabilityAddRank_Mining",
-                "WorkSuitabilityAddRank_Mining"
-            ]
-        },
-        {
-            "name": "Pharapace Primo (Boss)",
-            "asset": "BOSS_PyramidTurtle_Neutral",
-            "icon": "/icons/pals/T_PyramidTurtle_Neutral_icon_normal.webp",
-            "elements": {
-                "Normal": {
-                    "name": "Neutral",
-                    "icon": "/icons/elements/T_Icon_element_s_00.png",
-                    "icon_large": "/icons/elements/T_Icon_element_00.png",
-                    "icon_passive_base": "/icons/elements/T_prt_pal_skill_base_element_00.png"
-                }
-            },
-            "stats": {
-                "hp": 114,
-                "melee_attack": 100,
-                "shot_attack": 100,
-                "defense": 140,
-                "support": 100,
-                "craft_speed": 100,
-                "max_full_stomach": 550,
-                "food_amount": 8,
-                "element_type1": "Normal",
-                "element_type2": "None",
-                "zukan_index": -1,
-                "rarity": 8,
-                "size": "EPalSizeType::XL",
-                "run_speed": 360,
-                "ride_sprint_speed": 640
-            },
-            "scaling": {
-                "hp": 114,
-                "attack": 100,
-                "defense": 140
-            },
-            "friendship_hp": 3.3,
-            "friendship_shotattack": 2.5,
-            "friendship_defense": 1.0,
-            "work_suitabilities": {
-                "EmitFlame": 0,
-                "Watering": 0,
-                "Seeding": 0,
-                "GenerateElectricity": 0,
-                "Handcraft": 0,
-                "Collection": 0,
-                "Deforest": 0,
-                "Mining": 6,
-                "OilExtraction": 0,
-                "ProductMedicine": 0,
-                "Cool": 0,
-                "Transport": 0,
-                "MonsterFarm": 0
-            },
-            "partner_skill": "Stone-Chaser Archelon",
-            "description": "Can be ridden. While in party, increases the durability of all weapons and armor by {Passive1_EffectValue1}%. (Does not stack)",
-            "passives": [
-                "PyramidTurtle_Neutral_PartnerSkill_1_Armor",
-                "PyramidTurtle_Neutral_PartnerSkill_2_Armor",
-                "PyramidTurtle_Neutral_PartnerSkill_3_Armor",
-                "PyramidTurtle_Neutral_PartnerSkill_4_Armor",
-                "PyramidTurtle_Neutral_PartnerSkill_5_Armor"
-            ]
         },
         {
             "name": "Elizabee (Boss)",
