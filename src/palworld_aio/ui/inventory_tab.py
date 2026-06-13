@@ -2021,7 +2021,6 @@ def _consolidate_container_slots(container, container_type, singleton_set):
     slots = container.slots
     merged = {}
     singletons = []
-    preserved = []
     for s in slots:
         item_id = s.get('item_id', '')
         if not item_id:
@@ -2030,18 +2029,11 @@ def _consolidate_container_slots(container, container_type, singleton_set):
         item_info = ItemData.get_item_by_asset(item_id)
         if item_info.get('type_a') in singleton_set:
             singletons.append(s)
-        elif qty > 9999:
-            preserved.append(s)
         else:
             merged[item_id] = merged.get(item_id, 0) + qty
     new_slots = []
     idx = 0
     for s in singletons:
-        item_id = s.get('item_id', '')
-        item_info = ItemData.get_item_by_asset(item_id)
-        new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': s.get('stack_count', 1), 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
-        idx += 1
-    for s in preserved:
         item_id = s.get('item_id', '')
         item_info = ItemData.get_item_by_asset(item_id)
         new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': s.get('stack_count', 1), 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
