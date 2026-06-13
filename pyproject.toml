@@ -39,4 +39,5 @@ include = ["src*"]
 [dependency-groups]
 dev = [
     "cx-freeze>=8.6.0",
+    "pytest",
 ]
