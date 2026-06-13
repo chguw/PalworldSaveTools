@@ -1,49 +1,22 @@
-name: Release
+name: CI
 
 on:
+  push:
+    branches:
+      - master
+      - main
+      - 'dev/**'
+  pull_request:
+    branches:
+      - master
+      - main
   workflow_dispatch:
-    inputs:
-      version:
-        description: "Version number (e.g., v2.0.0)"
-        required: true
-      release_name:
-        description: "Release name"
-        required: true
-        default: "New Release"
-      draft:
-        description: "Create as draft release"
-        required: false
-        default: true
-        type: boolean
-      prerelease:
-        description: "Is this a prerelease"
-        required: false
-        default: false
-        type: boolean
-
-permissions:
-  contents: write
 
 concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  prepare-source:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Create source tarball
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          git archive --format=tar.gz -o "PalworldSaveTools-${VERSION}-source.tar.gz" HEAD
-      - uses: actions/upload-artifact@v4
-        with:
-          name: source-tarball
-          path: PalworldSaveTools-*-source.tar.gz
-
   build-windows:
     runs-on: windows-latest
     steps:
@@ -117,7 +90,7 @@ jobs:
         run: uv run python build/nuitka/build_nuitka.py --onedir
       - name: Create DMG
         run: |
-          VERSION="${{ github.event.inputs.version }}"
+          VERSION="$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo 'dev')"
           app=$(ls -d dist/*.app 2>/dev/null | head -1)
           if [ -n "$app" ]; then
             hdiutil create -volname "Palworld Save Tools" -srcfolder "$app" -ov -format UDZO "dist/PalworldSaveTools-${VERSION}-macos.dmg"
@@ -130,22 +103,3 @@ jobs:
         with:
           name: macos-build
           path: dist/PalworldSaveTools-*-macos.dmg
-
-  create-release:
-    needs: [prepare-source, build-windows, build-linux, build-mac]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-      - name: List all artifacts
-        run: find artifacts -type f -ls
-      - uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.event.inputs.version }}
-          name: ${{ github.event.inputs.release_name }}
-          draft: ${{ github.event.inputs.draft }}
-          prerelease: ${{ github.event.inputs.prerelease }}
-          files: artifacts/**/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
