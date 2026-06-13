@@ -2021,6 +2021,7 @@ def _consolidate_container_slots(container, container_type, singleton_set):
     slots = container.slots
     merged = {}
     singletons = []
+    preserved = []
     for s in slots:
         item_id = s.get('item_id', '')
         if not item_id:
@@ -2029,6 +2030,8 @@ def _consolidate_container_slots(container, container_type, singleton_set):
         item_info = ItemData.get_item_by_asset(item_id)
         if item_info.get('type_a') in singleton_set:
             singletons.append(s)
+        elif item_id == 'Money' and qty > 9999:
+            preserved.append(s)
         else:
             merged[item_id] = merged.get(item_id, 0) + qty
     new_slots = []
@@ -2046,6 +2049,21 @@ def _consolidate_container_slots(container, container_type, singleton_set):
             idx += 1
             total_qty -= stack
     container.update_slots(new_slots)
+    if preserved:
+        sc = container._standardized_container
+        from palworld_aio.standardized_container import ContainerSlot
+        for s in preserved:
+            item_id = s.get('item_id', '')
+            qty = s.get('stack_count', 1)
+            empty_idx = sc._find_empty_slot()
+            if empty_idx is not None:
+                while len(sc.slots) <= empty_idx:
+                    sc.slots.append(ContainerSlot(slot_index=len(sc.slots)))
+                slot = sc.slots[empty_idx]
+                slot.item_id = item_id
+                slot.count = qty
+                slot.dynamic_id = None
+                slot.raw_data = slot._create_raw_data()
 class InventoryLoadoutDialog(QDialog):
     def __init__(self, parent, get_current_items_fn, apply_loadout_fn, title=None, get_extra_fn=None, loadouts_path=None, key_prefix='inventory'):
         super().__init__(parent)

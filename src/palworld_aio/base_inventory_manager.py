@@ -303,7 +303,7 @@ class BaseInventoryManager:
                         else:
                             return False
             dynamic_item_id = generate_dynamic_item_uuid()
-            success = self.inventory_container.add_item(item_id, count, slot_index, dynamic_item_id)
+            success = self.inventory_container.add_item(item_id, min(count, 9999), slot_index, dynamic_item_id)
             if not success:
                 return False
             result = self._update_container_contents_from_inventory()

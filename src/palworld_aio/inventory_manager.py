@@ -462,7 +462,7 @@ class PlayerInventory:
             dynamic_item_data = dynamic_item_manager.create_dynamic_item(item_id, container_id, dynamic_item_id)
             if not dynamic_item_manager.register_item(item_id, container_id, dynamic_item_id):
                 return False
-        success = container._standardized_container.add_item(item_id, quantity, slot_index, dynamic_item_id)
+        success = container._standardized_container.add_item(item_id, min(quantity, 9999), slot_index, dynamic_item_id)
         if success:
             self.save()
             self._ensure_boss_defeat_flags([item_id])

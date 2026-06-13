@@ -41,7 +41,7 @@ class ContainerSlot:
             pass
     def set_item(self, item_id: str, count: int, dynamic_id: Optional[UUID]=None) -> None:
         self.item_id = item_id
-        self.count = max(0, min(count, 9999))
+        self.count = max(0, count)
         self.dynamic_id = dynamic_id
         self.raw_data = self._create_raw_data()
     def clear(self) -> None:
@@ -150,7 +150,7 @@ class StandardizedContainer:
         slot = self.get_slot(slot_index)
         if not slot:
             return False
-        slot.count = max(0, min(count, 9999))
+        slot.count = max(0, count)
         slot.raw_data = slot._create_raw_data()
         return True
     def _find_empty_slot(self) -> Optional[int]:
