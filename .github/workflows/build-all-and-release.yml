@@ -39,10 +39,13 @@ jobs:
         run: |
           VERSION="${{ github.event.inputs.version }}"
           git archive --format=tar.gz -o "PalworldSaveTools-${VERSION}-source.tar.gz" HEAD
+      - name: List built files
+        run: ls -la PalworldSaveTools-*-source.tar.gz || echo "source tarball not found"
       - uses: actions/upload-artifact@v4
         with:
           name: source-tarball
           path: PalworldSaveTools-*-source.tar.gz
+          if-no-files-found: error
 
   build-windows:
     runs-on: windows-latest
@@ -63,10 +66,16 @@ jobs:
           uv pip install --no-cache -r requirements.txt nuitka
       - name: Build with Nuitka
         run: uv run python build/nuitka/build_nuitka.py --onefile
+      - name: List built files
+        shell: bash
+        run: |
+          echo "=== Files in dist/ ==="
+          ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: dist/PalworldSaveTools-*.exe
+          if-no-files-found: error
 
   build-linux:
     runs-on: ubuntu-latest
@@ -91,10 +100,15 @@ jobs:
           uv pip install --no-cache -r requirements.txt nuitka
       - name: Build with Nuitka
         run: uv run python build/nuitka/build_nuitka.py --onefile
+      - name: List built files
+        run: |
+          echo "=== Files in dist/ ==="
+          ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v4
         with:
           name: linux-build
           path: dist/PalworldSaveTools-*-linux
+          if-no-files-found: error
 
   build-mac:
     runs-on: macos-latest
@@ -126,10 +140,15 @@ jobs:
             ls -la dist/ 2>/dev/null || echo "dist/ does not exist"
             exit 1
           fi
+      - name: List built files
+        run: |
+          echo "=== Files in dist/ ==="
+          ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v4
         with:
           name: macos-build
           path: dist/PalworldSaveTools-*-macos.dmg
+          if-no-files-found: error
 
   create-release:
     needs: [prepare-source, build-windows, build-linux, build-mac]
