@@ -1,0 +1,33 @@
+name: Build Windows
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: build-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: "requirements.txt"
+      - name: Install dependencies
+        run: |
+          uv venv
+          uv pip install --no-cache -r requirements.txt nuitka
+      - name: Build with Nuitka
+        run: uv run python build/nuitka/build_nuitka.py --onefile
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: dist/PalworldSaveTools-*.exe

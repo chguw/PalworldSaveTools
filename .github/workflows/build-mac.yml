@@ -1,0 +1,44 @@
+name: Build Mac
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: build-mac-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: "requirements.txt"
+      - name: Install dependencies
+        run: |
+          uv venv
+          uv pip install --no-cache -r requirements.txt nuitka imageio
+      - name: Build with Nuitka
+        run: uv run python build/nuitka/build_nuitka.py --onedir
+      - name: Create DMG
+        run: |
+          VERSION="$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo 'dev')"
+          app=$(ls -d dist/*.app 2>/dev/null | head -1)
+          if [ -n "$app" ]; then
+            hdiutil create -volname "Palworld Save Tools" -srcfolder "$app" -ov -format UDZO "dist/PalworldSaveTools-${VERSION}-macos.dmg"
+          else
+            echo "No .app bundle found in dist/"
+            ls -la dist/ 2>/dev/null || echo "dist/ does not exist"
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: dist/PalworldSaveTools-*-macos.dmg
