@@ -1449,6 +1449,7 @@ def update_pal_descriptions():
     partner_skill_param = load_export_json('PassiveSkill/DT_PartnerSkillParameter.json')
     skill_data_list = partner_skill_param if isinstance(partner_skill_param, list) else [partner_skill_param]
     pal_to_partner_passives = {}
+    pal_to_textref_passives = {}
     pal_to_skill_type = {}
     pal_to_main_values = {}
     pal_to_overwrite_effect = {}
@@ -1504,16 +1505,18 @@ def update_pal_descriptions():
                                                 break
                             if chosen:
                                 passive_list.append(chosen)
-                    if not passive_list:
-                        for ref_group in params.get('TextReferencePassiveSkills', []):
-                            if isinstance(ref_group, dict):
-                                for item in ref_group.get('PassiveSkillIds', []):
-                                    if isinstance(item, dict):
-                                        key = item.get('Key', '')
-                                        if key:
-                                            passive_list.append(key)
+                    text_ref_passives = []
+                    for ref_group in params.get('TextReferencePassiveSkills', []):
+                        if isinstance(ref_group, dict):
+                            for item in ref_group.get('PassiveSkillIds', []):
+                                if isinstance(item, dict):
+                                    key = item.get('Key', '')
+                                    if key:
+                                        text_ref_passives.append(key)
                     if passive_list:
                         pal_to_partner_passives[bp_class.lower()] = passive_list
+                    if text_ref_passives:
+                        pal_to_textref_passives[bp_class.lower()] = text_ref_passives
     monster_param = load_export_json('Character/DT_PalMonsterParameter.json')
     monster_param_common = load_export_json('Character/DT_PalMonsterParameter_Common.json')
     monster_rows = {}
@@ -1538,6 +1541,11 @@ def update_pal_descriptions():
         if pal_entry.get('passives'):
             continue
         asset = pal_entry.get('asset', '').lower()
+        if '{ReferencePassive' in desc:
+            ref_ps = pal_to_textref_passives.get(asset, [])
+            if ref_ps:
+                pal_entry['passives'] = ref_ps
+                continue
         partner_ps = pal_to_partner_passives.get(asset, [])
         if partner_ps:
             pal_entry['passives'] = partner_ps

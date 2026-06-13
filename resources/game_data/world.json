@@ -8248,14 +8248,14 @@
             "description": "The Tocotoco's Gloves becomes craftable at the Pal Gear Workbench."
         },
         {
-            "name": "skillunlock_cubeturtle",
+            "name": "Pharapace Saddle",
             "asset": "SkillUnlock_CubeTurtle",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
             "description": ""
         },
         {
-            "name": "skillunlock_cubeturtle_neutral",
+            "name": "Pharapace Primo Saddle",
             "asset": "SkillUnlock_CubeTurtle_Neutral",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",

@@ -4137,11 +4137,11 @@
             "partner_skill": "Drill Crusher",
             "description": "Enters Shell Spin state when activated. Follows the player while spinning and mines ore {ReferencePassive1_EffectValue1}% more efficiently.",
             "passives": [
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame"
+                "Dummy_Mining_up_PartnerSkill_DrillGame_1",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_2",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_3",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_4",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_5"
             ]
         },
         {
@@ -6082,11 +6082,11 @@
             "partner_skill": "Mist Stalwart",
             "description": "When activated, infuses the player's attacks with [EFFECT:Poison] {ReferencePassive1_EffectValue1}. While in party, grants the player and Pals immunity to [EFFECT:Poison], and nullifies the effects of toxic gas in the World Tree area. (Does not stack)",
             "passives": [
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_1",
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_2",
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_3",
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_4",
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_5"
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_1",
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_2",
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_3",
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_4",
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_5"
             ]
         },
         {
@@ -6617,11 +6617,11 @@
             "partner_skill": "Soothing Shower",
             "description": "While in party, restores {Passive1_EffectValue1}% of the player's Health when they fall below 30%. (Does not stack) ({ReferencePassive1_EffectValue1}-second cooldown after activation)",
             "passives": [
-                "RecoverHPOnHPThreshold_Ganesha_1",
-                "RecoverHPOnHPThreshold_Ganesha_2",
-                "RecoverHPOnHPThreshold_Ganesha_3",
-                "RecoverHPOnHPThreshold_Ganesha_4",
-                "RecoverHPOnHPThreshold_Ganesha_5"
+                "Dummy_Ganesha_CoolTime",
+                "Dummy_Ganesha_CoolTime",
+                "Dummy_Ganesha_CoolTime",
+                "Dummy_Ganesha_CoolTime",
+                "Dummy_Ganesha_CoolTime"
             ]
         },
         {
@@ -19804,11 +19804,11 @@
             "partner_skill": "Blessing of Chaos",
             "description": "Can be ridden. While in party, increases the Attack of the Pal fighting alongside you by {ReferencePassive1_EffectValue1}% in exchange for a steady loss of Health.(Does not stack)",
             "passives": [
-                "SnakeGirl_PartnerSkill_1",
-                "SnakeGirl_PartnerSkill_2",
-                "SnakeGirl_PartnerSkill_3",
-                "SnakeGirl_PartnerSkill_4",
-                "SnakeGirl_PartnerSkill_5"
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_1",
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_2",
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_3",
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_4",
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_5"
             ]
         },
         {
@@ -25657,11 +25657,11 @@
             "partner_skill": "Drill Crusher",
             "description": "Enters Shell Spin state when activated. Follows the player while spinning and mines ore {ReferencePassive1_EffectValue1}% more efficiently.",
             "passives": [
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame"
+                "Dummy_Mining_up_PartnerSkill_DrillGame_1",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_2",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_3",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_4",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_5"
             ]
         },
         {
@@ -27152,11 +27152,11 @@
             "partner_skill": "Mist Stalwart",
             "description": "When activated, infuses the player's attacks with [EFFECT:Poison] {ReferencePassive1_EffectValue1}. While in party, grants the player and Pals immunity to [EFFECT:Poison], and nullifies the effects of toxic gas in the World Tree area. (Does not stack)",
             "passives": [
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_1",
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_2",
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_3",
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_4",
-                "ResistAdditionalEffect_Poison_PartnerSkill_FlowerPrince_5"
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_1",
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_2",
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_3",
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_4",
+                "AdditionalEffect_Poison_PartnerSkill_FlowerPrince_5"
             ]
         },
         {
@@ -27687,11 +27687,11 @@
             "partner_skill": "Soothing Shower",
             "description": "While in party, restores {Passive1_EffectValue1}% of the player's Health when they fall below 30%. (Does not stack) ({ReferencePassive1_EffectValue1}-second cooldown after activation)",
             "passives": [
-                "RecoverHPOnHPThreshold_Ganesha_1",
-                "RecoverHPOnHPThreshold_Ganesha_2",
-                "RecoverHPOnHPThreshold_Ganesha_3",
-                "RecoverHPOnHPThreshold_Ganesha_4",
-                "RecoverHPOnHPThreshold_Ganesha_5"
+                "Dummy_Ganesha_CoolTime",
+                "Dummy_Ganesha_CoolTime",
+                "Dummy_Ganesha_CoolTime",
+                "Dummy_Ganesha_CoolTime",
+                "Dummy_Ganesha_CoolTime"
             ]
         },
         {
@@ -40443,11 +40443,11 @@
             "partner_skill": "Blessing of Chaos",
             "description": "Can be ridden. While in party, increases the Attack of the Pal fighting alongside you by {ReferencePassive1_EffectValue1}% in exchange for a steady loss of Health.(Does not stack)",
             "passives": [
-                "SnakeGirl_PartnerSkill_1",
-                "SnakeGirl_PartnerSkill_2",
-                "SnakeGirl_PartnerSkill_3",
-                "SnakeGirl_PartnerSkill_4",
-                "SnakeGirl_PartnerSkill_5"
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_1",
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_2",
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_3",
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_4",
+                "ActiveOtomoATK_UP_LifeDrain_PartnerSkill_5"
             ]
         },
         {
@@ -44271,11 +44271,11 @@
             "partner_skill": "Drill Crusher",
             "description": "Enters Shell Spin state when activated. Follows the player while spinning and mines ore {ReferencePassive1_EffectValue1}% more efficiently.",
             "passives": [
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame",
-                "Mining_up_PartnerSkill_DrillGame"
+                "Dummy_Mining_up_PartnerSkill_DrillGame_1",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_2",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_3",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_4",
+                "Dummy_Mining_up_PartnerSkill_DrillGame_5"
             ]
         },
         {

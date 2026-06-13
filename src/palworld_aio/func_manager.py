@@ -1857,7 +1857,7 @@ def fix_unassigned_pals(parent=None):
 def fix_illegal_pals_in_save(parent=None):
     if not constants.current_save_path or not constants.loaded_level_json:
         return 0
-    base_path = constants.get_base_path()
+    base_path = '.'
     illegal_log_folder = os.path.join(base_path, 'Logs', 'Illegal Pal Logger')
     if os.path.exists(illegal_log_folder):
         try:
@@ -2044,7 +2044,7 @@ def fix_illegal_pals_in_save(parent=None):
                                     illegal_pals_by_owner[uid_str].append(illegal_info)
                         except Exception as e:
                             print(f'Error collecting results from {filename}: {e}')
-        base_path = constants.get_base_path()
+        base_path = '.'
         illegal_log_dir = os.path.join(base_path, 'Logs', 'Illegal Pal Logger')
         os.makedirs(illegal_log_dir, exist_ok=True)
         guild_illegals = defaultdict(list)

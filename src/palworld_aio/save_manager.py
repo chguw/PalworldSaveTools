@@ -34,7 +34,7 @@ class SaveManager(QObject):
         super().__init__()
         self.dps_tasks = []
     def load_save(self, path=None, parent=None):
-        base_path = constants.get_base_path()
+        base_path = '.'
         if path is None:
             p, _ = QFileDialog.getOpenFileName(parent, 'Select Level.sav', '', 'SAV Files(*.sav)')
         else:
@@ -126,7 +126,7 @@ class SaveManager(QObject):
         level_sav_path = os.path.join(constants.current_save_path, 'Level.sav')
         if not os.path.exists(level_sav_path):
             raise Exception(f'Level.sav not found at {level_sav_path}')
-        base_path = constants.get_base_path()
+        base_path = '.'
         t0 = time.perf_counter()
         constants.loaded_level_json = sav_to_gvas_wrapper(level_sav_path)
         t1 = time.perf_counter()
@@ -211,7 +211,7 @@ class SaveManager(QObject):
                 continue
         constants.player_levels = dict(uid_level_map)
     def _count_pals_found(self, data, player_pals_count, log_folder, current_save_path, guild_name_map, illegal_pals_by_owner=None):
-        base_dir = constants.get_base_path()
+        base_dir = '.'
         if illegal_pals_by_owner is None:
             illegal_pals_by_owner = defaultdict(lambda: defaultdict(list))
         else:

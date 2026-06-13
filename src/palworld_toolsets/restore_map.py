@@ -8,7 +8,7 @@ from palworld_aio.ui.styles import ThemeManager
 from palworld_aio import constants
 import os, time, shutil
 savegames_path = os.path.join(os.environ['LOCALAPPDATA'], 'Pal', 'Saved', 'SaveGames')
-restore_map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'Backups', 'Restore Map')
+restore_map_path = os.path.join('.', 'Backups', 'Restore Map')
 os.makedirs(restore_map_path, exist_ok=True)
 def backup_local_data(subfolder_path):
     timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')

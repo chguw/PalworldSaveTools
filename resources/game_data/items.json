@@ -21047,7 +21047,7 @@
             "rarity": 3,
             "type_a": "EPalItemTypeA::Essential",
             "type_b": "EPalItemTypeB::Essential_PalGear",
-            "description": "Saddle for safely riding cubeturtle.",
+            "description": "Saddle for safely riding Pharapace.",
             "sort_id": 10198
         },
         {
@@ -21057,7 +21057,7 @@
             "rarity": 3,
             "type_a": "EPalItemTypeA::Essential",
             "type_b": "EPalItemTypeB::Essential_PalGear",
-            "description": "Saddle for safely riding cubeturtle_neutral.",
+            "description": "Saddle for safely riding Pharapace Primo.",
             "sort_id": 10199
         },
         {
