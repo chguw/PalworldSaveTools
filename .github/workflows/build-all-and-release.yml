@@ -1,4 +1,4 @@
-name: Release
+name: Build All & Release
 
 on:
   workflow_dispatch:
@@ -94,7 +94,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: linux-build
-          path: dist/PalworldSaveTools-*-linux-*
+          path: dist/PalworldSaveTools-*-linux
 
   build-mac:
     runs-on: macos-latest

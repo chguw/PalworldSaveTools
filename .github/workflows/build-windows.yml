@@ -3,6 +3,9 @@ name: Build Windows
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 concurrency:
   group: build-windows-${{ github.ref }}
   cancel-in-progress: true
@@ -27,7 +30,29 @@ jobs:
           uv pip install --no-cache -r requirements.txt nuitka
       - name: Build with Nuitka
         run: uv run python build/nuitka/build_nuitka.py --onefile
+      - name: List built files
+        shell: bash
+        run: |
+          echo "=== Files in dist/ ==="
+          ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v4
         with:
           name: windows-build
           path: dist/PalworldSaveTools-*.exe
+          if-no-files-found: error
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo '0.0.0')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=build-windows-v${VERSION}-$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "Windows Build ${{ steps.version.outputs.version }}"
+          draft: true
+          prerelease: true
+          files: dist/PalworldSaveTools-*.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
