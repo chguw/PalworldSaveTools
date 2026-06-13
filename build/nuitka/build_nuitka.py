@@ -132,6 +132,8 @@ def build_with_nuitka(onefile: bool = True):
     else:
         cmd.append('--standalone')
 
+    cmd.append('--prefer-source-code')
+
     cmd += [
         '--enable-plugin=pyside6',
         '--include-data-dir=resources=resources',
