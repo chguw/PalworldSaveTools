@@ -28,27 +28,6 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
-env:
-  INCLUDE_MODULES: >-
-    palsav,palsav.core,palsav.archive,palsav.paltypes,palsav.gvas,
-    palsav.json_tools,palsav._cityhash,palsav.compressor,
-    palsav.compressor.enums,palsav.compressor.oozlib,
-    palsav.compressor.zlib,palsav.commands,palsav.commands.convert,
-    palsav.commands.backup,palsav.commands.diag,
-    palsav.commands.resave_test,palsav.commands.auto_update,
-    palsav.commands.roundtrip_validation,palsav.rawdata,
-    palooz,palworld_coord,palworld_toolsets,palworld_xgp_import,
-    nerdfont,orjson,brotli,cbor2,zstandard,py7zr,packaging
-  EXCLUDE_MODULES: >-
-    tkinter,unittest,pdb,lib2to3,distutils,setuptools,pip,wheel,
-    venv,ensurepip,numpy,pandas,matplotlib,scipy,IPython,
-    PySide6.QtQuick,PySide6.QtQml,PySide6.QtDesigner,PySide6.QtHelp,
-    PySide6.QtTest,PySide6.QtDBus,PySide6.QtPrintSupport,PySide6.QtSql,
-    PySide6.QtUiTools,PySide6.QtSvgWidgets,PySide6.QtXml,
-    PySide6.QtBluetooth,PySide6.QtNetwork,PySide6.QtOpenGL,
-    PySide6.QtPositioning,PySide6.QtSensors,PySide6.QtSerialPort,
-    PySide6.QtWebSockets,PySide6.QtMultimedia,PySide6.QtMultimediaWidgets
-
 jobs:
   prepare-source:
     runs-on: ubuntu-latest
@@ -82,28 +61,12 @@ jobs:
         run: |
           uv venv
           uv pip install --no-cache -r requirements.txt nuitka
-      - name: Build with Nuitka (onefile)
-        shell: pwsh
-        run: |
-          $v = "${{ github.event.inputs.version }}"
-          uv run nuitka --onefile --enable-plugin=pyside6 --disable-console `
-            --include-module=$env:INCLUDE_MODULES `
-            --nofollow-import-to=$env:EXCLUDE_MODULES `
-            --include-data-dir=resources=resources `
-            --include-data-dir=src/data=src/data `
-            --include-data-file=src/games.json=games.json `
-            --include-data-file=README.md=README.md `
-            --include-data-file=license=license `
-            --windows-icon-from-ico=resources/assets/icons/app/icon.ico `
-            --product-name="Palworld Save Tools" `
-            --file-version=$v `
-            --output-dir=dist `
-            --output-filename="PalworldSaveTools-${v}-windows-x86_64.exe" `
-            src/palworld_aio/main.py
+      - name: Build with Nuitka
+        run: uv run python build/nuitka/build_nuitka.py --onefile
       - uses: actions/upload-artifact@v4
         with:
           name: windows-build
-          path: dist/PalworldSaveTools-*-windows-*.exe
+          path: dist/PalworldSaveTools-*.exe
 
   build-linux:
     runs-on: ubuntu-latest
@@ -126,22 +89,8 @@ jobs:
         run: |
           uv venv
           uv pip install --no-cache -r requirements.txt nuitka
-      - name: Build with Nuitka (onefile)
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          uv run nuitka --onefile --enable-plugin=pyside6 \
-            --include-module="$INCLUDE_MODULES" \
-            --nofollow-import-to="$EXCLUDE_MODULES" \
-            --include-data-dir=resources=resources \
-            --include-data-dir=src/data=src/data \
-            --include-data-file=src/games.json=games.json \
-            --include-data-file=README.md=README.md \
-            --include-data-file=license=license \
-            --product-name="Palworld Save Tools" \
-            --file-version="$VERSION" \
-            --output-dir=dist \
-            --output-filename="PalworldSaveTools-${VERSION}-linux-x86_64" \
-            src/palworld_aio/main.py
+      - name: Build with Nuitka
+        run: uv run python build/nuitka/build_nuitka.py --onefile
       - uses: actions/upload-artifact@v4
         with:
           name: linux-build
@@ -164,29 +113,13 @@ jobs:
         run: |
           uv venv
           uv pip install --no-cache -r requirements.txt nuitka
-      - name: Build with Nuitka (app bundle)
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          uv run nuitka --standalone --enable-plugin=pyside6 \
-            --include-module="$INCLUDE_MODULES" \
-            --nofollow-import-to="$EXCLUDE_MODULES" \
-            --include-data-dir=resources=resources \
-            --include-data-dir=src/data=src/data \
-            --include-data-file=src/games.json=games.json \
-            --include-data-file=README.md=README.md \
-            --include-data-file=license=license \
-            --macos-create-app-bundle \
-            --macos-app-name="Palworld Save Tools" \
-            --macos-app-icon=resources/assets/icons/app/icon.ico \
-            --product-name="Palworld Save Tools" \
-            --file-version="$VERSION" \
-            --output-dir=dist \
-            src/palworld_aio/main.py
+      - name: Build with Nuitka
+        run: uv run python build/nuitka/build_nuitka.py --onefile
       - name: Create DMG
         run: |
           VERSION="${{ github.event.inputs.version }}"
           mkdir -p dmg
-          mv dist/*.app dmg/
+          mv dist/*.app dmg/ 2>/dev/null || true
           hdiutil create -volname "Palworld Save Tools" -srcfolder dmg -ov -format UDZO "dist/PalworldSaveTools-${VERSION}-macos.dmg"
       - uses: actions/upload-artifact@v4
         with:
