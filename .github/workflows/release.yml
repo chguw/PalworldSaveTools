@@ -114,13 +114,18 @@ jobs:
           uv venv
           uv pip install --no-cache -r requirements.txt nuitka
       - name: Build with Nuitka
-        run: uv run python build/nuitka/build_nuitka.py --onefile
+        run: uv run python build/nuitka/build_nuitka.py --onedir
       - name: Create DMG
         run: |
           VERSION="${{ github.event.inputs.version }}"
-          mkdir -p dmg
-          mv dist/*.app dmg/ 2>/dev/null || true
-          hdiutil create -volname "Palworld Save Tools" -srcfolder dmg -ov -format UDZO "dist/PalworldSaveTools-${VERSION}-macos.dmg"
+          app=$(ls -d dist/*.app 2>/dev/null | head -1)
+          if [ -n "$app" ]; then
+            hdiutil create -volname "Palworld Save Tools" -srcfolder "$app" -ov -format UDZO "dist/PalworldSaveTools-${VERSION}-macos.dmg"
+          else
+            echo "No .app bundle found in dist/"
+            ls dist/
+            exit 1
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: macos-build
