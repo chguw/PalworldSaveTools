@@ -1280,7 +1280,12 @@
             "partner_skill": "Black Ankylosaur",
             "description": "Can be ridden as a flying mount. Increases the damage dealt to ores by {Passive1_EffectValue1}%, and you can obtain {Passive2_EffectValue1}% more Ore while mounted.",
             "passives": [
-                "CollectItemDrop_PartnerSkill_Ride_1"
+                "Mining_up4_Otomo_only",
+                "CollectItemDrop_PartnerSkill_Ride_1",
+                "Mining_up5_Otomo_only",
+                "Mining_up6_Otomo_only",
+                "Mining_up7_Otomo_only",
+                "Mining_up8_Otomo_only"
             ]
         },
         {
@@ -1474,6 +1479,7 @@
             "partner_skill": "Waterwing Dance",
             "description": "Can be ridden to travel on water. Changes the player's attack type to [ICON:ElemIcon_Water][ELEM:Water] with {Passive2_EffectValue1}% increased Attack while mounted. {ReferenceMsgId_SwimSpeedUp}",
             "passives": [
+                "GiveAWater_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1",
                 "SwimSpeed_up_PartnerSkill_1"
             ]
@@ -1539,6 +1545,7 @@
             "partner_skill": "Icewing Dance",
             "description": "Can be ridden to travel on water. Changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice] with {Passive2_EffectValue1}% increased Attack while mounted. {ReferenceMsgId_SwimSpeedUp}",
             "passives": [
+                "GiveAIce_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1",
                 "SwimSpeed_up_PartnerSkill_1"
             ]
@@ -1850,7 +1857,11 @@
             "partner_skill": "Hard Head",
             "description": "Can be ridden. Increases efficiency of destroying boulders by {Passive1_EffectValue1}% while mounted.",
             "passives": [
-                "Mining_up2_Otomo_only"
+                "Mining_up2_Otomo_only",
+                "Mining_up3_Otomo_only",
+                "Mining_up4_Otomo_only",
+                "Mining_up5_Otomo_only",
+                "Mining_up6_Otomo_only"
             ]
         },
         {
@@ -2228,7 +2239,11 @@
             "partner_skill": "Brave Sailor",
             "description": "While in party, [ICON:ElemIcon_Fire][ELEM:Fire] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Fire_1_PAL"
+                "ElementAddDrop_Fire_1_PAL",
+                "ElementAddDrop_Fire_2_PAL",
+                "ElementAddDrop_Fire_3_PAL",
+                "ElementAddDrop_Fire_4_PAL",
+                "ElementAddDrop_Fire_5_PAL"
             ]
         },
         {
@@ -2492,7 +2507,12 @@
             "partner_skill": "Mystical Black Magic",
             "description": "While in party, [ICON:ElemIcon_Neutral][ELEM:Normal] Pals drop {Passive1_EffectValue1}% more items when defeated. Also has a {Passive2_EffectValue1}% chance to prevent Pal Sphere consumption when thrown. (Does not stack)",
             "passives": [
-                "CatMage_Fire_PartnerSkill_1"
+                "ElementAddDrop_Normal_1_PAL",
+                "CatMage_Fire_PartnerSkill_1",
+                "ElementAddDrop_Normal_2_PAL",
+                "ElementAddDrop_Normal_3_PAL",
+                "ElementAddDrop_Normal_4_PAL",
+                "ElementAddDrop_Normal_5_PAL"
             ]
         },
         {
@@ -3622,7 +3642,12 @@
             "partner_skill": "Steel Scorpion",
             "description": "While in party, player's Defense increases by {Passive2_EffectValue1}%, and [ICON:ElemIcon_Electric][ELEM:Electricity] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "TrainerDEF_UP_PartnerSkill_Otomo_1"
+                "ElementAddDrop_Thunder_1_PAL",
+                "TrainerDEF_UP_PartnerSkill_Otomo_1",
+                "ElementAddDrop_Thunder_2_PAL",
+                "ElementAddDrop_Thunder_3_PAL",
+                "ElementAddDrop_Thunder_4_PAL",
+                "ElementAddDrop_Thunder_5_PAL"
             ]
         },
         {
@@ -3680,7 +3705,12 @@
             "partner_skill": "Golden Scorpion",
             "description": "While in party, player's Defense increases by {Passive2_EffectValue1}%, and [ICON:ElemIcon_Electric][ELEM:Electricity] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "TrainerDEF_UP_PartnerSkill_Otomo_1"
+                "ElementAddDrop_Thunder_1_PAL",
+                "TrainerDEF_UP_PartnerSkill_Otomo_1",
+                "ElementAddDrop_Thunder_2_PAL",
+                "ElementAddDrop_Thunder_3_PAL",
+                "ElementAddDrop_Thunder_4_PAL",
+                "ElementAddDrop_Thunder_5_PAL"
             ]
         },
         {
@@ -3746,7 +3776,11 @@
             "partner_skill": "Guardian of the Forest",
             "description": "Can be ridden. Can perform a double jump while mounted. Increases lumbering efficiency by {Passive1_EffectValue1}%.",
             "passives": [
-                "Logging_up2_Otomo_only"
+                "Logging_up2_Otomo_only",
+                "Logging_up3_Otomo_only",
+                "Logging_up4_Otomo_only",
+                "Logging_up5_Otomo_only",
+                "Logging_up6_Otomo_only"
             ]
         },
         {
@@ -4688,7 +4722,11 @@
             "partner_skill": "Amicable Holy Dragon",
             "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, [ICON:ElemIcon_Dark][ELEM:Dark] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Dark_1_PAL"
+                "ElementAddDrop_Dark_1_PAL",
+                "ElementAddDrop_Dark_2_PAL",
+                "ElementAddDrop_Dark_3_PAL",
+                "ElementAddDrop_Dark_4_PAL",
+                "ElementAddDrop_Dark_5_PAL"
             ]
         },
         {
@@ -5228,7 +5266,11 @@
             "description": "Can be ridden. Can double jump while mounted. While in party, [ICON:ElemIcon_Water][ELEM:Water] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack) {ReferenceMsgId_RideSpeedUp}",
             "passives": [
                 "ElementAddDrop_Aqua_1_PAL",
-                "MoveSpeed_up_PartnerSkill_Ride_1"
+                "ElementAddDrop_Aqua_2_PAL",
+                "MoveSpeed_up_PartnerSkill_Ride_1",
+                "ElementAddDrop_Aqua_3_PAL",
+                "ElementAddDrop_Aqua_4_PAL",
+                "ElementAddDrop_Aqua_5_PAL"
             ]
         },
         {
@@ -5366,6 +5408,7 @@
             "partner_skill": "Red Hare",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Fire][ELEM:Fire] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAFire_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -5430,6 +5473,7 @@
             "partner_skill": "Black Hare",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Dark][ELEM:Dark] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveADark_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -7004,6 +7048,7 @@
             "partner_skill": "Sandstorm's Blessing",
             "description": "Can be ridden. While mounted, changes the player's attack type to [ICON:ElemIcon_Ground][ELEM:Earth] with {Passive2_EffectValue1}% increased Attack.",
             "passives": [
+                "GiveAEarth_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -7326,7 +7371,16 @@
             "partner_skill": "Gaia Crusher",
             "description": "Can be ridden. Improves efficiency of cutting trees by {Passive1_EffectValue1}% and mining ores by {Passive2_EffectValue1}% while mounted.",
             "passives": [
-                "Logging_up2_Otomo_only"
+                "Logging_up2_Otomo_only",
+                "Mining_up2_Otomo_only",
+                "Logging_up3_Otomo_only",
+                "Mining_up3_Otomo_only",
+                "Logging_up4_Otomo_only",
+                "Mining_up4_Otomo_only",
+                "Logging_up5_Otomo_only",
+                "Mining_up5_Otomo_only",
+                "Logging_up6_Otomo_only",
+                "Mining_up6_Otomo_only"
             ]
         },
         {
@@ -7390,7 +7444,16 @@
             "partner_skill": "Ice Crusher",
             "description": "Can be ridden. Improves efficiency of cutting trees by {Passive1_EffectValue1}% and mining ores by {Passive2_EffectValue1}% while mounted.",
             "passives": [
-                "Logging_up2_Otomo_only"
+                "Logging_up2_Otomo_only",
+                "Mining_up2_Otomo_only",
+                "Logging_up3_Otomo_only",
+                "Mining_up3_Otomo_only",
+                "Logging_up4_Otomo_only",
+                "Mining_up4_Otomo_only",
+                "Logging_up5_Otomo_only",
+                "Mining_up5_Otomo_only",
+                "Logging_up6_Otomo_only",
+                "Mining_up6_Otomo_only"
             ]
         },
         {
@@ -7865,6 +7928,7 @@
             "partner_skill": "Wings of Death",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Dark][ELEM:Dark] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveADark_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -7929,6 +7993,7 @@
             "partner_skill": "Wings of Thunder",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Electric][ELEM:Electricity] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAElectricity_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -8364,7 +8429,11 @@
             "partner_skill": "Scorching Predator",
             "description": "Can be ridden as a flying mount. While in party, [ICON:ElemIcon_Ice][ELEM:Ice] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Ice_1_PAL"
+                "ElementAddDrop_Ice_1_PAL",
+                "ElementAddDrop_Ice_2_PAL",
+                "ElementAddDrop_Ice_3_PAL",
+                "ElementAddDrop_Ice_4_PAL",
+                "ElementAddDrop_Ice_5_PAL"
             ]
         },
         {
@@ -8422,7 +8491,11 @@
             "partner_skill": "Tidal Predator",
             "description": "Can be ridden as a flying mount. While in party, [ICON:ElemIcon_Fire][ELEM:Fire] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Fire_1_PAL"
+                "ElementAddDrop_Fire_1_PAL",
+                "ElementAddDrop_Fire_2_PAL",
+                "ElementAddDrop_Fire_3_PAL",
+                "ElementAddDrop_Fire_4_PAL",
+                "ElementAddDrop_Fire_5_PAL"
             ]
         },
         {
@@ -9098,7 +9171,9 @@
             "partner_skill": "Ice Steed",
             "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice], infuses it with [EFFECT:Freeze] {Passive3_EffectValue1}, and grants {Passive2_EffectValue1}% increased Attack.",
             "passives": [
-                "GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1"
+                "GiveAIce_Ride",
+                "GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1",
+                "AdditionalEffect_Freeze_Ride_1"
             ]
         },
         {
@@ -9156,7 +9231,9 @@
             "partner_skill": "Black Steed",
             "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to [ICON:ElemIcon_Dark][ELEM:Dark], infuses it with [EFFECT:Darkness] {Passive3_EffectValue1}, and grants {Passive2_EffectValue1}% increased Attack.",
             "passives": [
-                "GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1"
+                "GiveADark_Ride",
+                "GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1",
+                "AdditionalEffect_Darkness_Ride_1"
             ]
         },
         {
@@ -9545,6 +9622,7 @@
             "description": "While in party, increases items obtained from fishing by {Passive1_EffectValue1}%. While Jelliette and Jellroy are in your base, Jelliette's watering speed increases by {Passive3_EffectValue1}%. (Does not stack)",
             "passives": [
                 "Fishing_ItemAddDrop_JellyfishFairy_PartnerSkill_1",
+                "Fishing_EnemyAddDrop_JellyfishFairy_1",
                 "WorkSpeedUp_JellyfishFairy_PartnerSkill_1",
                 "WorkSpeedUp_Farm_JellyfishFairy_PartnerSkill_1"
             ]
@@ -10279,6 +10357,7 @@
             "partner_skill": "Shocking Fish",
             "description": "Can be ridden to travel on water. Changes the player's attack type to [ICON:ElemIcon_Electric][ELEM:Electricity] with {Passive2_EffectValue1}% increased Attack while mounted. While in party, also makes it easier to fish up talented Pals. (Does not stack) {ReferenceMsgId_SwimSpeedUp}",
             "passives": [
+                "GiveAElectricity_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1",
                 "KingSunfish_Thunder_PartnerSkill_1",
                 "SwimSpeed_up_PartnerSkill_1"
@@ -10405,6 +10484,7 @@
             "partner_skill": "Frigid Deity",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAIce_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -12103,7 +12183,11 @@
             "partner_skill": "Hellflame Lion",
             "description": "Can be ridden. While in party, [ICON:ElemIcon_Grass][ELEM:Leaf] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Leaf_1_PAL"
+                "ElementAddDrop_Leaf_1_PAL",
+                "ElementAddDrop_Leaf_2_PAL",
+                "ElementAddDrop_Leaf_3_PAL",
+                "ElementAddDrop_Leaf_4_PAL",
+                "ElementAddDrop_Leaf_5_PAL"
             ]
         },
         {
@@ -12167,7 +12251,11 @@
             "partner_skill": "Darkflame Lion",
             "description": "Can be ridden. While in party, [ICON:ElemIcon_Neutral][ELEM:Normal] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Normal_1_PAL"
+                "ElementAddDrop_Normal_1_PAL",
+                "ElementAddDrop_Normal_2_PAL",
+                "ElementAddDrop_Normal_3_PAL",
+                "ElementAddDrop_Normal_4_PAL",
+                "ElementAddDrop_Normal_5_PAL"
             ]
         },
         {
@@ -12542,7 +12630,8 @@
             "partner_skill": "Celestial Darkness",
             "description": "Can be ridden as a flying mount. Enhances [ICON:ElemIcon_Neutral][ELEM:Normal] and [ICON:ElemIcon_Dark][ELEM:Dark] attacks by {Passive1_EffectValue1}% while mounted.",
             "passives": [
-                "ElementBoost_Normal_PAL_PartnerSKill_1"
+                "ElementBoost_Normal_PAL_PartnerSKill_1",
+                "ElementBoost_Dark_PAL_PartnerSKill_1"
             ]
         },
         {
@@ -13393,6 +13482,7 @@
             "partner_skill": "Night Dancer",
             "description": "Can be ridden. Boosts jumping ability while mounted, and increases movement speed at night by +{Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
+                "MoveSpeed_Night_01",
                 "JumpPower_Increase_Ride_PartnerSkill"
             ]
         },
@@ -14293,7 +14383,8 @@
             "partner_skill": "Happy-Go-Lucky Bunny",
             "description": "While in party, increases Attack of [ICON:ElemIcon_Neutral][ELEM:Normal] Pals by {Passive1_EffectValue1}%. (Does not stack) While at a base, +{Passive2_EffectValue1} Handcraft Work Suitability Level for all other Base Pals. (Does not stack)",
             "passives": [
-                "AttackUp_Normal_PartnerSkill_1"
+                "AttackUp_Normal_PartnerSkill_1",
+                "WorkSuitabilityAddRank_Handcraft"
             ]
         },
         {
@@ -14833,7 +14924,8 @@
             "partner_skill": "Queen Bee Command",
             "description": "This Pal's Attack increases by {Passive1_EffectValue1}% for each Beegarde in party.",
             "passives": [
-                "PAL_TribePassive_Test"
+                "PAL_TribePassive_Test",
+                "PAL_TribePassive_1"
             ]
         },
         {
@@ -15087,6 +15179,7 @@
             "partner_skill": "Flame Wing",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Fire][ELEM:Fire] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAFire_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -16722,6 +16815,7 @@
             "partner_skill": "Grass Dragon Affection",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Grass][ELEM:Leaf] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveALeaf_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -17767,6 +17861,7 @@
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Electric][ELEM:Electricity] with {Passive3_EffectValue1}% increased Attack while mounted. This Pal's Movement Speed increases by {Passive1_EffectValue1}% for each other [ICON:ElemIcon_Electric][ELEM:Electricity] Pal in party.",
             "passives": [
                 "MoveSpeed_PartnerSkill_SpecificElement_1",
+                "GiveAElectricity_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -17826,6 +17921,7 @@
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice] with {Passive3_EffectValue1}% increased Attack while mounted. This Pal's Movement Speed increases by {Passive1_EffectValue1}% for each other [ICON:ElemIcon_Ice][ELEM:Ice] Pal in party.",
             "passives": [
                 "MoveSpeed_PartnerSkill_SpecificElement_1",
+                "GiveAIce_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -18442,7 +18538,11 @@
             "partner_skill": "Purification of Gaia",
             "description": "While in party, [ICON:ElemIcon_Ground][ELEM:Earth] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack) Sometimes drops various seeds when assigned to Ranch.",
             "passives": [
-                "ElementAddDrop_Earth_1_PAL"
+                "ElementAddDrop_Earth_1_PAL",
+                "ElementAddDrop_Earth_2_PAL",
+                "ElementAddDrop_Earth_3_PAL",
+                "ElementAddDrop_Earth_4_PAL",
+                "ElementAddDrop_Earth_5_PAL"
             ]
         },
         {
@@ -18749,6 +18849,7 @@
             "partner_skill": "Wriggling Weasel",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Dragon][ELEM:Dragon] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveADragon_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -18813,6 +18914,7 @@
             "partner_skill": "Sparkling Weasel",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Fire][ELEM:Fire] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAFire_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -19359,7 +19461,11 @@
             "partner_skill": "Dragon Hunter",
             "description": "While in party, [ICON:ElemIcon_Dragon][ELEM:Dragon] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Dragon_1_PAL"
+                "ElementAddDrop_Dragon_1_PAL",
+                "ElementAddDrop_Dragon_2_PAL",
+                "ElementAddDrop_Dragon_3_PAL",
+                "ElementAddDrop_Dragon_4_PAL",
+                "ElementAddDrop_Dragon_5_PAL"
             ]
         },
         {
@@ -20326,7 +20432,11 @@
             "partner_skill": "Enchant",
             "description": "While in party, [ICON:ElemIcon_Dark][ELEM:Dark] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Dark_1_PAL"
+                "ElementAddDrop_Dark_1_PAL",
+                "ElementAddDrop_Dark_2_PAL",
+                "ElementAddDrop_Dark_3_PAL",
+                "ElementAddDrop_Dark_4_PAL",
+                "ElementAddDrop_Dark_5_PAL"
             ]
         },
         {
@@ -21875,7 +21985,12 @@
             "partner_skill": "Black Ankylosaur",
             "description": "Can be ridden as a flying mount. Increases the damage dealt to ores by {Passive1_EffectValue1}%, and you can obtain {Passive2_EffectValue1}% more Ore while mounted.",
             "passives": [
-                "CollectItemDrop_PartnerSkill_Ride_1"
+                "Mining_up4_Otomo_only",
+                "CollectItemDrop_PartnerSkill_Ride_1",
+                "Mining_up5_Otomo_only",
+                "Mining_up6_Otomo_only",
+                "Mining_up7_Otomo_only",
+                "Mining_up8_Otomo_only"
             ]
         },
         {
@@ -22061,6 +22176,7 @@
             "partner_skill": "Waterwing Dance",
             "description": "Can be ridden to travel on water. Changes the player's attack type to [ICON:ElemIcon_Water][ELEM:Water] with {Passive2_EffectValue1}% increased Attack while mounted. {ReferenceMsgId_SwimSpeedUp}",
             "passives": [
+                "GiveAWater_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1",
                 "SwimSpeed_up_PartnerSkill_1"
             ]
@@ -22126,6 +22242,7 @@
             "partner_skill": "Icewing Dance",
             "description": "Can be ridden to travel on water. Changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice] with {Passive2_EffectValue1}% increased Attack while mounted. {ReferenceMsgId_SwimSpeedUp}",
             "passives": [
+                "GiveAIce_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1",
                 "SwimSpeed_up_PartnerSkill_1"
             ]
@@ -22600,7 +22717,11 @@
             "partner_skill": "Hard Head",
             "description": "Can be ridden. Increases efficiency of destroying boulders by {Passive1_EffectValue1}% while mounted.",
             "passives": [
-                "Mining_up2_Otomo_only"
+                "Mining_up2_Otomo_only",
+                "Mining_up3_Otomo_only",
+                "Mining_up4_Otomo_only",
+                "Mining_up5_Otomo_only",
+                "Mining_up6_Otomo_only"
             ]
         },
         {
@@ -22969,7 +23090,11 @@
             "partner_skill": "Brave Sailor",
             "description": "While in party, [ICON:ElemIcon_Fire][ELEM:Fire] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Fire_1_PAL"
+                "ElementAddDrop_Fire_1_PAL",
+                "ElementAddDrop_Fire_2_PAL",
+                "ElementAddDrop_Fire_3_PAL",
+                "ElementAddDrop_Fire_4_PAL",
+                "ElementAddDrop_Fire_5_PAL"
             ]
         },
         {
@@ -23201,7 +23326,12 @@
             "partner_skill": "Mystical Black Magic",
             "description": "While in party, [ICON:ElemIcon_Neutral][ELEM:Normal] Pals drop {Passive1_EffectValue1}% more items when defeated. Also has a {Passive2_EffectValue1}% chance to prevent Pal Sphere consumption when thrown. (Does not stack)",
             "passives": [
-                "CatMage_Fire_PartnerSkill_1"
+                "ElementAddDrop_Normal_1_PAL",
+                "CatMage_Fire_PartnerSkill_1",
+                "ElementAddDrop_Normal_2_PAL",
+                "ElementAddDrop_Normal_3_PAL",
+                "ElementAddDrop_Normal_4_PAL",
+                "ElementAddDrop_Normal_5_PAL"
             ]
         },
         {
@@ -24433,7 +24563,12 @@
             "partner_skill": "Steel Scorpion",
             "description": "While in party, player's Defense increases by {Passive2_EffectValue1}%, and [ICON:ElemIcon_Electric][ELEM:Electricity] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "TrainerDEF_UP_PartnerSkill_Otomo_1"
+                "ElementAddDrop_Thunder_1_PAL",
+                "TrainerDEF_UP_PartnerSkill_Otomo_1",
+                "ElementAddDrop_Thunder_2_PAL",
+                "ElementAddDrop_Thunder_3_PAL",
+                "ElementAddDrop_Thunder_4_PAL",
+                "ElementAddDrop_Thunder_5_PAL"
             ]
         },
         {
@@ -24491,7 +24626,12 @@
             "partner_skill": "Golden Scorpion",
             "description": "While in party, player's Defense increases by {Passive2_EffectValue1}%, and [ICON:ElemIcon_Electric][ELEM:Electricity] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "TrainerDEF_UP_PartnerSkill_Otomo_1"
+                "ElementAddDrop_Thunder_1_PAL",
+                "TrainerDEF_UP_PartnerSkill_Otomo_1",
+                "ElementAddDrop_Thunder_2_PAL",
+                "ElementAddDrop_Thunder_3_PAL",
+                "ElementAddDrop_Thunder_4_PAL",
+                "ElementAddDrop_Thunder_5_PAL"
             ]
         },
         {
@@ -24549,7 +24689,11 @@
             "partner_skill": "Guardian of the Forest",
             "description": "Can be ridden. Can perform a double jump while mounted. Increases lumbering efficiency by {Passive1_EffectValue1}%.",
             "passives": [
-                "Logging_up2_Otomo_only"
+                "Logging_up2_Otomo_only",
+                "Logging_up3_Otomo_only",
+                "Logging_up4_Otomo_only",
+                "Logging_up5_Otomo_only",
+                "Logging_up6_Otomo_only"
             ]
         },
         {
@@ -25417,7 +25561,11 @@
             "partner_skill": "Amicable Holy Dragon",
             "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, [ICON:ElemIcon_Dark][ELEM:Dark] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Dark_1_PAL"
+                "ElementAddDrop_Dark_1_PAL",
+                "ElementAddDrop_Dark_2_PAL",
+                "ElementAddDrop_Dark_3_PAL",
+                "ElementAddDrop_Dark_4_PAL",
+                "ElementAddDrop_Dark_5_PAL"
             ]
         },
         {
@@ -25653,7 +25801,11 @@
             "description": "Can be ridden. Can double jump while mounted. While in party, [ICON:ElemIcon_Water][ELEM:Water] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack) {ReferenceMsgId_RideSpeedUp}",
             "passives": [
                 "ElementAddDrop_Aqua_1_PAL",
-                "MoveSpeed_up_PartnerSkill_Ride_1"
+                "ElementAddDrop_Aqua_2_PAL",
+                "MoveSpeed_up_PartnerSkill_Ride_1",
+                "ElementAddDrop_Aqua_3_PAL",
+                "ElementAddDrop_Aqua_4_PAL",
+                "ElementAddDrop_Aqua_5_PAL"
             ]
         },
         {
@@ -25711,6 +25863,7 @@
             "partner_skill": "Red Hare",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Fire][ELEM:Fire] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAFire_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -25775,6 +25928,7 @@
             "partner_skill": "Black Hare",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Dark][ELEM:Dark] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveADark_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -27349,6 +27503,7 @@
             "partner_skill": "Sandstorm's Blessing",
             "description": "Can be ridden. While mounted, changes the player's attack type to [ICON:ElemIcon_Ground][ELEM:Earth] with {Passive2_EffectValue1}% increased Attack.",
             "passives": [
+                "GiveAEarth_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -27710,7 +27865,16 @@
             "partner_skill": "Gaia Crusher",
             "description": "Can be ridden. Improves efficiency of cutting trees by {Passive1_EffectValue1}% and mining ores by {Passive2_EffectValue1}% while mounted.",
             "passives": [
-                "Logging_up2_Otomo_only"
+                "Logging_up2_Otomo_only",
+                "Mining_up2_Otomo_only",
+                "Logging_up3_Otomo_only",
+                "Mining_up3_Otomo_only",
+                "Logging_up4_Otomo_only",
+                "Mining_up4_Otomo_only",
+                "Logging_up5_Otomo_only",
+                "Mining_up5_Otomo_only",
+                "Logging_up6_Otomo_only",
+                "Mining_up6_Otomo_only"
             ]
         },
         {
@@ -27774,7 +27938,16 @@
             "partner_skill": "Ice Crusher",
             "description": "Can be ridden. Improves efficiency of cutting trees by {Passive1_EffectValue1}% and mining ores by {Passive2_EffectValue1}% while mounted.",
             "passives": [
-                "Logging_up2_Otomo_only"
+                "Logging_up2_Otomo_only",
+                "Mining_up2_Otomo_only",
+                "Logging_up3_Otomo_only",
+                "Mining_up3_Otomo_only",
+                "Logging_up4_Otomo_only",
+                "Mining_up4_Otomo_only",
+                "Logging_up5_Otomo_only",
+                "Mining_up5_Otomo_only",
+                "Logging_up6_Otomo_only",
+                "Mining_up6_Otomo_only"
             ]
         },
         {
@@ -28233,6 +28406,7 @@
             "partner_skill": "Wings of Death",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Dark][ELEM:Dark] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveADark_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -28297,6 +28471,7 @@
             "partner_skill": "Wings of Thunder",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Electric][ELEM:Electricity] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAElectricity_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -28700,7 +28875,11 @@
             "partner_skill": "Scorching Predator",
             "description": "Can be ridden as a flying mount. While in party, [ICON:ElemIcon_Ice][ELEM:Ice] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Ice_1_PAL"
+                "ElementAddDrop_Ice_1_PAL",
+                "ElementAddDrop_Ice_2_PAL",
+                "ElementAddDrop_Ice_3_PAL",
+                "ElementAddDrop_Ice_4_PAL",
+                "ElementAddDrop_Ice_5_PAL"
             ]
         },
         {
@@ -28813,7 +28992,11 @@
             "partner_skill": "Tidal Predator",
             "description": "Can be ridden as a flying mount. While in party, [ICON:ElemIcon_Fire][ELEM:Fire] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Fire_1_PAL"
+                "ElementAddDrop_Fire_1_PAL",
+                "ElementAddDrop_Fire_2_PAL",
+                "ElementAddDrop_Fire_3_PAL",
+                "ElementAddDrop_Fire_4_PAL",
+                "ElementAddDrop_Fire_5_PAL"
             ]
         },
         {
@@ -29049,7 +29232,9 @@
             "partner_skill": "Ice Steed",
             "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice], infuses it with [EFFECT:Freeze] {Passive3_EffectValue1}, and grants {Passive2_EffectValue1}% increased Attack.",
             "passives": [
-                "GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1"
+                "GiveAIce_Ride",
+                "GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1",
+                "AdditionalEffect_Freeze_Ride_1"
             ]
         },
         {
@@ -29107,7 +29292,9 @@
             "partner_skill": "Black Steed",
             "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to [ICON:ElemIcon_Dark][ELEM:Dark], infuses it with [EFFECT:Darkness] {Passive3_EffectValue1}, and grants {Passive2_EffectValue1}% increased Attack.",
             "passives": [
-                "GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1"
+                "GiveADark_Ride",
+                "GiveElement_TrainerATK_UP_PartnerSkill_Ride_Legend_1",
+                "AdditionalEffect_Darkness_Ride_1"
             ]
         },
         {
@@ -29549,6 +29736,7 @@
             "description": "While in party, increases items obtained from fishing by {Passive1_EffectValue1}%. While Jelliette and Jellroy are in your base, Jelliette's watering speed increases by {Passive3_EffectValue1}%. (Does not stack)",
             "passives": [
                 "Fishing_ItemAddDrop_JellyfishFairy_PartnerSkill_1",
+                "Fishing_EnemyAddDrop_JellyfishFairy_1",
                 "WorkSpeedUp_JellyfishFairy_PartnerSkill_1",
                 "WorkSpeedUp_Farm_JellyfishFairy_PartnerSkill_1"
             ]
@@ -30385,6 +30573,7 @@
             "partner_skill": "Shocking Fish",
             "description": "Can be ridden to travel on water. Changes the player's attack type to [ICON:ElemIcon_Electric][ELEM:Electricity] with {Passive2_EffectValue1}% increased Attack while mounted. While in party, also makes it easier to fish up talented Pals. (Does not stack) {ReferenceMsgId_SwimSpeedUp}",
             "passives": [
+                "GiveAElectricity_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1",
                 "KingSunfish_Thunder_PartnerSkill_1",
                 "SwimSpeed_up_PartnerSkill_1"
@@ -30613,6 +30802,7 @@
             "partner_skill": "Frigid Deity",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAIce_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -31869,7 +32059,11 @@
             "partner_skill": "Hellflame Lion",
             "description": "Can be ridden. While in party, [ICON:ElemIcon_Grass][ELEM:Leaf] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Leaf_1_PAL"
+                "ElementAddDrop_Leaf_1_PAL",
+                "ElementAddDrop_Leaf_2_PAL",
+                "ElementAddDrop_Leaf_3_PAL",
+                "ElementAddDrop_Leaf_4_PAL",
+                "ElementAddDrop_Leaf_5_PAL"
             ]
         },
         {
@@ -31933,7 +32127,11 @@
             "partner_skill": "Darkflame Lion",
             "description": "Can be ridden. While in party, [ICON:ElemIcon_Neutral][ELEM:Normal] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Normal_1_PAL"
+                "ElementAddDrop_Normal_1_PAL",
+                "ElementAddDrop_Normal_2_PAL",
+                "ElementAddDrop_Normal_3_PAL",
+                "ElementAddDrop_Normal_4_PAL",
+                "ElementAddDrop_Normal_5_PAL"
             ]
         },
         {
@@ -32516,7 +32714,8 @@
             "partner_skill": "Celestial Darkness",
             "description": "Can be ridden as a flying mount. Enhances [ICON:ElemIcon_Neutral][ELEM:Normal] and [ICON:ElemIcon_Dark][ELEM:Dark] attacks by {Passive1_EffectValue1}% while mounted.",
             "passives": [
-                "ElementBoost_Normal_PAL_PartnerSKill_1"
+                "ElementBoost_Normal_PAL_PartnerSKill_1",
+                "ElementBoost_Dark_PAL_PartnerSKill_1"
             ]
         },
         {
@@ -33404,6 +33603,7 @@
             "partner_skill": "Night Dancer",
             "description": "Can be ridden. Boosts jumping ability while mounted, and increases movement speed at night by +{Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
+                "MoveSpeed_Night_01",
                 "JumpPower_Increase_Ride_PartnerSkill"
             ]
         },
@@ -34237,7 +34437,8 @@
             "partner_skill": "Happy-Go-Lucky Bunny",
             "description": "While in party, increases Attack of [ICON:ElemIcon_Neutral][ELEM:Normal] Pals by {Passive1_EffectValue1}%. (Does not stack) While at a base, +{Passive2_EffectValue1} Handcraft Work Suitability Level for all other Base Pals. (Does not stack)",
             "passives": [
-                "AttackUp_Normal_PartnerSkill_1"
+                "AttackUp_Normal_PartnerSkill_1",
+                "WorkSuitabilityAddRank_Handcraft"
             ]
         },
         {
@@ -34654,7 +34855,8 @@
             "partner_skill": "Queen Bee Command",
             "description": "This Pal's Attack increases by {Passive1_EffectValue1}% for each Beegarde in party.",
             "passives": [
-                "PAL_TribePassive_Test"
+                "PAL_TribePassive_Test",
+                "PAL_TribePassive_1"
             ]
         },
         {
@@ -34828,6 +35030,7 @@
             "partner_skill": "Flame Wing",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Fire][ELEM:Fire] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAFire_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -36214,6 +36417,7 @@
             "partner_skill": "Grass Dragon Affection",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Grass][ELEM:Leaf] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveALeaf_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -37563,6 +37767,7 @@
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Electric][ELEM:Electricity] with {Passive3_EffectValue1}% increased Attack while mounted. This Pal's Movement Speed increases by {Passive1_EffectValue1}% for each other [ICON:ElemIcon_Electric][ELEM:Electricity] Pal in party.",
             "passives": [
                 "MoveSpeed_PartnerSkill_SpecificElement_1",
+                "GiveAElectricity_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -37622,6 +37827,7 @@
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice] with {Passive3_EffectValue1}% increased Attack while mounted. This Pal's Movement Speed increases by {Passive1_EffectValue1}% for each other [ICON:ElemIcon_Ice][ELEM:Ice] Pal in party.",
             "passives": [
                 "MoveSpeed_PartnerSkill_SpecificElement_1",
+                "GiveAIce_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -38227,7 +38433,11 @@
             "partner_skill": "Purification of Gaia",
             "description": "While in party, [ICON:ElemIcon_Ground][ELEM:Earth] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack) Sometimes drops various seeds when assigned to Ranch.",
             "passives": [
-                "ElementAddDrop_Earth_1_PAL"
+                "ElementAddDrop_Earth_1_PAL",
+                "ElementAddDrop_Earth_2_PAL",
+                "ElementAddDrop_Earth_3_PAL",
+                "ElementAddDrop_Earth_4_PAL",
+                "ElementAddDrop_Earth_5_PAL"
             ]
         },
         {
@@ -38663,6 +38873,7 @@
             "partner_skill": "Wriggling Weasel",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Dragon][ELEM:Dragon] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveADragon_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -38727,6 +38938,7 @@
             "partner_skill": "Sparkling Weasel",
             "description": "Can be ridden. Changes the player's attack type to [ICON:ElemIcon_Fire][ELEM:Fire] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAFire_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -39273,7 +39485,11 @@
             "partner_skill": "Dragon Hunter",
             "description": "While in party, [ICON:ElemIcon_Dragon][ELEM:Dragon] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Dragon_1_PAL"
+                "ElementAddDrop_Dragon_1_PAL",
+                "ElementAddDrop_Dragon_2_PAL",
+                "ElementAddDrop_Dragon_3_PAL",
+                "ElementAddDrop_Dragon_4_PAL",
+                "ElementAddDrop_Dragon_5_PAL"
             ]
         },
         {
@@ -41114,7 +41330,8 @@
             "partner_skill": "Celestial Darkness",
             "description": "Can be ridden as a flying mount. Enhances [ICON:ElemIcon_Neutral][ELEM:Normal] and [ICON:ElemIcon_Dark][ELEM:Dark] attacks by {Passive1_EffectValue1}% while mounted.",
             "passives": [
-                "ElementBoost_Normal_PAL_PartnerSKill_1"
+                "ElementBoost_Normal_PAL_PartnerSKill_1",
+                "ElementBoost_Dark_PAL_PartnerSKill_1"
             ]
         },
         {
@@ -42478,6 +42695,7 @@
             "description": "Can be ridden. While in party, player and Pal take {Passive1_EffectValue1}% less [ICON:ElemIcon_Ice][ELEM:Ice] damage and are immune to [EFFECT:Freeze] status. (Does not stack) {ReferenceMsgId_RideSpeedUp}",
             "passives": [
                 "TemperatureInvalid_Cold",
+                "TemperatureInvalid_Heat",
                 "MoveSpeed_up_PartnerSkill_Ride_1"
             ]
         },
@@ -42732,7 +42950,12 @@
             "partner_skill": "Steel Scorpion",
             "description": "While in party, player's Defense increases by {Passive2_EffectValue1}%, and [ICON:ElemIcon_Electric][ELEM:Electricity] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "TrainerDEF_UP_PartnerSkill_Otomo_1"
+                "ElementAddDrop_Thunder_1_PAL",
+                "TrainerDEF_UP_PartnerSkill_Otomo_1",
+                "ElementAddDrop_Thunder_2_PAL",
+                "ElementAddDrop_Thunder_3_PAL",
+                "ElementAddDrop_Thunder_4_PAL",
+                "ElementAddDrop_Thunder_5_PAL"
             ]
         },
         {
@@ -42852,7 +43075,11 @@
             "partner_skill": "Amicable Holy Dragon",
             "description": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, [ICON:ElemIcon_Dark][ELEM:Dark] Pals drop {Passive1_EffectValue1}% more items when defeated. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Dark_1_PAL"
+                "ElementAddDrop_Dark_1_PAL",
+                "ElementAddDrop_Dark_2_PAL",
+                "ElementAddDrop_Dark_3_PAL",
+                "ElementAddDrop_Dark_4_PAL",
+                "ElementAddDrop_Dark_5_PAL"
             ]
         },
         {
@@ -43197,6 +43424,7 @@
             "partner_skill": "Messenger of Death",
             "description": "Can be ridden. While in party, all Party Pals' skill cooldowns are reduced by {Passive1_EffectValue1}% whenever you defeat an enemy. (Does not stack)",
             "passives": [
+                "GiveADark_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -43255,6 +43483,7 @@
             "partner_skill": "Sandstorm's Blessing",
             "description": "Can be ridden. While mounted, changes the player's attack type to [ICON:ElemIcon_Ground][ELEM:Earth] with {Passive2_EffectValue1}% increased Attack.",
             "passives": [
+                "GiveAEarth_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -44092,6 +44321,7 @@
             "partner_skill": "Night Dancer",
             "description": "Can be ridden. Boosts jumping ability while mounted, and increases movement speed at night by +{Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
+                "MoveSpeed_Night_01",
                 "JumpPower_Increase_Ride_PartnerSkill"
             ]
         },
@@ -44376,6 +44606,7 @@
             "partner_skill": "Flame Wing",
             "description": "Can be ridden as a flying mount. Changes the player's attack type to [ICON:ElemIcon_Fire][ELEM:Fire] with {Passive2_EffectValue1}% increased Attack while mounted.",
             "passives": [
+                "GiveAFire_Ride",
                 "GiveElement_TrainerATK_UP_PartnerSkill_Ride_1"
             ]
         },
@@ -45229,7 +45460,11 @@
             "partner_skill": "Explosive Strength",
             "description": "While in party, when attacking a weak point, increases the power of the next weak point attack by {Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
-                "ElementAddDrop_Thunder_1_PAL"
+                "ElementAddDrop_Thunder_1_PAL",
+                "ElementAddDrop_Thunder_2_PAL",
+                "ElementAddDrop_Thunder_3_PAL",
+                "ElementAddDrop_Thunder_4_PAL",
+                "ElementAddDrop_Thunder_5_PAL"
             ]
         },
         {
