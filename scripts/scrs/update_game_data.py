@@ -1486,29 +1486,16 @@ def update_pal_descriptions():
                     seen_bases = set()
                     for slot in params.get('PassiveSkills', []):
                         if isinstance(slot, dict):
-                            arr = slot.get('SkillAndParametersArray', [])
-                            for item in arr:
+                            for item in slot.get('SkillAndParametersArray', []):
                                 if isinstance(item, dict):
                                     sn = item.get('SkillName', {})
                                     if isinstance(sn, dict):
                                         key = sn.get('Key', '')
-                                        if key and ('PartnerSkill' in key or 'GiveElement' in key):
+                                        if key:
                                             base = re.sub(r'_\d+$', '', key)
                                             if base not in seen_bases:
                                                 seen_bases.add(base)
                                                 passive_list.append(key)
-                            if not seen_bases:
-                                for item in arr:
-                                    if isinstance(item, dict):
-                                        sn = item.get('SkillName', {})
-                                        if isinstance(sn, dict):
-                                            key = sn.get('Key', '')
-                                            if key:
-                                                base = re.sub(r'_\d+$', '', key)
-                                                if base not in seen_bases:
-                                                    seen_bases.add(base)
-                                                    passive_list.append(key)
-                                                    break
                     text_ref_passives = []
                     for ref_group in params.get('TextReferencePassiveSkills', []):
                         if isinstance(ref_group, dict):
