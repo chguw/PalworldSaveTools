@@ -1110,6 +1110,7 @@ class _BasePalIcon(QFrame):
         raw = self._get_raw()
         if not raw or not isinstance(raw, dict):
             self.setStyleSheet(slot_full('QFrame#basePalSlot'))
+            self.setToolTip('')
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)

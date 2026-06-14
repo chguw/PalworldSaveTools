@@ -356,6 +356,7 @@ class PalIcon(QFrame):
         raw = self._get_raw_data()
         if not raw or not isinstance(raw, dict):
             self.setStyleSheet(slot_full('QFrame#palIconNew'))
+            self.setToolTip('')
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
@@ -734,6 +735,7 @@ class PartySlotWidget(QFrame):
         raw = self._get_raw()
         if not raw or not isinstance(raw, dict):
             self.setStyleSheet(slot_full('QFrame#partySlot'))
+            self.setToolTip('')
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
@@ -1056,6 +1058,8 @@ class PalboxSlotWidget(QFrame):
         self._children = []
         raw = self._get_raw()
         if not raw or not isinstance(raw, dict):
+            self.setStyleSheet(slot_full('QFrame#palboxSlot'))
+            self.setToolTip('')
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
