@@ -1446,6 +1446,63 @@ def update_pal_descriptions():
         pal_entry['partner_skill'] = pskill_name
         pal_entry['description'] = pal_desc
         updated += 1
+    from collections import defaultdict
+    name_groups = defaultdict(list)
+    for pal_entry in existing['pals']:
+        if not isinstance(pal_entry, dict):
+            continue
+        ename = pal_entry.get('name', '')
+        base_name = re.sub(r'\s*\(.*?\)\s*$', '', ename).strip()
+        if base_name:
+            name_groups[base_name.lower()].append(pal_entry)
+    inherited = 0
+    for pal_entry in existing['pals']:
+        if not isinstance(pal_entry, dict):
+            continue
+        if pal_entry.get('description', ''):
+            continue
+        ename = pal_entry.get('name', '')
+        base_name = re.sub(r'\s*\(.*?\)\s*$', '', ename).strip()
+        if not base_name:
+            continue
+        candidates = name_groups.get(base_name.lower(), [])
+        if not candidates:
+            continue
+        tgt_elems = pal_entry.get('elements', {})
+        best = None
+        for c in candidates:
+            if c is pal_entry:
+                continue
+            if not c.get('description', ''):
+                continue
+            src_elems = c.get('elements', {})
+            if tgt_elems and src_elems and not (set(tgt_elems.keys()) & set(src_elems.keys())):
+                continue
+            best = c
+            break
+        if best:
+            pal_entry['description'] = best['description']
+            if not pal_entry.get('partner_skill', ''):
+                pal_entry['partner_skill'] = best.get('partner_skill', '')
+            inherited += 1
+    if inherited:
+        print(f'  Inherited descriptions for {inherited} pals from same-name variants')
+    npc_msg = 'Humans are not Pals. Therefore, they do not possess Partner Skills.'
+    npc_fixed = 0
+    for pal_entry in existing['pals']:
+        if not isinstance(pal_entry, dict):
+            continue
+        if pal_entry.get('elements', {}):
+            continue
+        if 'stats' in pal_entry:
+            continue
+        if pal_entry.get('description', '') == npc_msg:
+            continue
+        pal_entry['description'] = npc_msg
+        pal_entry['partner_skill'] = ''
+        npc_fixed += 1
+    if npc_fixed:
+        print(f'  Set NPC description for {npc_fixed} human entries')
     partner_skill_param = load_export_json('PassiveSkill/DT_PartnerSkillParameter.json')
     skill_data_list = partner_skill_param if isinstance(partner_skill_param, list) else [partner_skill_param]
     pal_to_partner_passives = {}
