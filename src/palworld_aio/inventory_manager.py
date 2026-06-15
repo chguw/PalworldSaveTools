@@ -226,6 +226,10 @@ class InventoryContainer:
             item_id = slot_data.get('item_id', '')
             count = slot_data.get('stack_count', 0)
             dynamic_id = slot_data.get('dynamic_id')
+            if not dynamic_id:
+                raw_data = slot_data.get('raw_data')
+                if raw_data:
+                    dynamic_id = raw_data.get('RawData', {}).get('value', {}).get('item', {}).get('dynamic_id', {}).get('local_id_in_created_world')
             from palworld_aio.dynamic_item_manager import as_uuid
             dynamic_uuid = as_uuid(dynamic_id)
             if item_id and item_id != '':

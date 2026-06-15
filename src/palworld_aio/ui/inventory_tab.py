@@ -1305,6 +1305,7 @@ class PlayerInventoryTab(QWidget):
             if key_c:
                 _consolidate_container_slots(key_c, 'key', SINGLETON_TYPE_A)
                 self._update_raw_save_data('key', key_c)
+            self.inventory.save()
             self._refresh_display()
         dlg = InventoryLoadoutDialog(self, _get_items, _apply_items, loadouts_path=_INV_LOADOUTS_PATH)
         dlg.exec()
@@ -2039,7 +2040,7 @@ def _consolidate_container_slots(container, container_type, singleton_set):
     for s in singletons:
         item_id = s.get('item_id', '')
         item_info = ItemData.get_item_by_asset(item_id)
-        new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': s.get('stack_count', 1), 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
+        new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': s.get('stack_count', 1), 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': s.get('raw_data')})
         idx += 1
     for item_id, total_qty in merged.items():
         item_info = ItemData.get_item_by_asset(item_id)
