@@ -98,11 +98,25 @@ def main():
         os.execv(str(vpy), [str(vpy), __file__] + sys.argv[1:])
     saves_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), '..', '..', 'TestSaves', 'PylarUpdated', 'Players')
     output = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(__file__), '..', '..', 'resources', 'game_data', 'reference_unlock_data.json')
-    if not os.path.isdir(saves_dir):
-        print(f'Directory not found: {saves_dir}')
+    if os.path.isfile(saves_dir):
+        print(f'Scanning single file: {saves_dir}')
+        gvas = sav_to_gvasfile(saves_dir)
+        record = get_record_data(gvas)
+        if record is None:
+            print('No RecordData found')
+            sys.exit(1)
+        scanned = 1
+        per_player_ft = [extract_map_keys(record, 'FastTravelPointUnlockFlag')]
+        area_keys = extract_map_keys(record, 'FindAreaFlagMap')
+        wf = extract_world_map_flags(record)
+        world_flags = {k: True for k, v in wf.items() if v}
+        area_barrier = extract_map_keys(record, 'AreaBarrierUnlockFlags')
+    elif os.path.isdir(saves_dir):
+        print(f'Scanning: {saves_dir}')
+        scanned, per_player_ft, area_keys, world_flags, area_barrier = scan_saves(saves_dir)
+    else:
+        print(f'Not found: {saves_dir}')
         sys.exit(1)
-    print(f'Scanning: {saves_dir}')
-    scanned, per_player_ft, area_keys, world_flags, area_barrier = scan_saves(saves_dir)
     print(f'Scanned {scanned} player save(s)')
     ft_guids = set.union(*per_player_ft) if per_player_ft else set()
     ref_path = os.path.join(os.path.dirname(__file__), '..', '..', 'resources', 'game_data', 'reference_unlock_data.json')
@@ -113,7 +127,21 @@ def main():
             before = len(ft_guids)
             ft_guids |= old_ft
             if len(ft_guids) > before:
-                print(f'  Added {len(ft_guids) - before} GUIDs from existing reference')
+                print(f'  Added {len(ft_guids) - before} FT GUIDs from existing reference')
+            old_area_keys = set(old_ref.get('FindAreaFlagMap_keys', []))
+            before = len(area_keys)
+            area_keys |= old_area_keys
+            if len(area_keys) > before:
+                print(f'  Added {len(area_keys) - before} area keys from existing reference')
+            old_world_flags = old_ref.get('UnlockedWorldMapFlags', {})
+            for k, v in old_world_flags.items():
+                if v:
+                    world_flags.setdefault(k, True)
+            old_barrier = set(old_ref.get('AreaBarrierUnlockFlags_guids', []))
+            before = len(area_barrier)
+            area_barrier |= old_barrier
+            if len(area_barrier) > before:
+                print(f'  Added {len(area_barrier) - before} barrier GUIDs from existing reference')
         except Exception:
             pass
     result = {'FastTravelPointUnlockFlag_guids': sorted(ft_guids), 'FindAreaFlagMap_keys': sorted(area_keys), 'UnlockedWorldMapFlags': world_flags or {'MainMap': True, 'Tree': True}, 'AreaBarrierUnlockFlags_guids': sorted(area_barrier)}
