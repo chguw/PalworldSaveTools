@@ -43882,7 +43882,7 @@
             "description": "Summons a sharp ice lance\r\nunder an enemy."
         },
         {
-            "name": "Unknown Skill (BlueThunderHorse_PartnerSkill)",
+            "name": "BlueThunderHorse_PartnerSkill",
             "asset": "BlueThunderHorse_PartnerSkill",
             "element": "Electricity",
             "power": 30,
@@ -44146,7 +44146,7 @@
             "description": "Enshrouds an enemy in a frigid blast of air,\r\ndealing continuous damage."
         },
         {
-            "name": "Unknown Skill (Funnel_DreamDemon)",
+            "name": "Funnel_DreamDemon",
             "asset": "Funnel_DreamDemon",
             "element": "Dark",
             "power": 20,
@@ -44154,7 +44154,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Funnel_RaijinDaughter)",
+            "name": "Funnel_RaijinDaughter",
             "asset": "Funnel_RaijinDaughter",
             "element": "Electricity",
             "power": 30,
@@ -44162,7 +44162,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Funnel_RaijinDaughter_Water)",
+            "name": "Funnel_RaijinDaughter_Water",
             "asset": "Funnel_RaijinDaughter_Water",
             "element": "Dark",
             "power": 30,
@@ -44226,7 +44226,7 @@
             "description": "Punch with conviction; believe in the power of the fist."
         },
         {
-            "name": "Unknown Skill (Human_Rolling)",
+            "name": "Human_Rolling",
             "asset": "Human_Rolling",
             "element": "Normal",
             "power": 0,
@@ -44333,7 +44333,7 @@
             "name": "Splash",
             "asset": "LineGeyser",
             "element": "Water",
-            "power": 140,
+            "power": 160,
             "cooldown": 8.0,
             "description": "Generates a column of water that travels in a straight line."
         },
@@ -44378,7 +44378,7 @@
             "description": "Hurls poison sludge\r\nat an enemy."
         },
         {
-            "name": "Unknown Skill (PoseidonOrca_PartnerSkill)",
+            "name": "PoseidonOrca_PartnerSkill",
             "asset": "PoseidonOrca_PartnerSkill",
             "element": "Water",
             "power": 60,
@@ -44386,7 +44386,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (PoseidonOrca_PartnerSkill_SpearBullet)",
+            "name": "PoseidonOrca_PartnerSkill_SpearBullet",
             "asset": "PoseidonOrca_PartnerSkill_SpearBullet",
             "element": "Water",
             "power": 50,
@@ -44458,7 +44458,7 @@
             "description": "Shoots countless wind swords \r\nthat fly straight towards the enemy."
         },
         {
-            "name": "Thunder Rail",
+            "name": "Railbolt",
             "asset": "Railbolt",
             "element": "Electricity",
             "power": 600,
@@ -44621,7 +44621,7 @@
             "name": "Multicutter",
             "asset": "SpecialCutter",
             "element": "Leaf",
-            "power": 140,
+            "power": 160,
             "cooldown": 8.0,
             "description": "The user fires three high-speed blades of wind\r\nin quick succession that fly straight at enemies."
         },
@@ -45557,7 +45557,7 @@
             "name": "Beam Comet",
             "asset": "Unique_JetDragon_JumpBeam",
             "element": "Dragon",
-            "power": 600,
+            "power": 700,
             "cooldown": 30.0,
             "description": "Jetragon's exclusive skill.\r\nIlluminates its wings and fires innumerable beams as it flies towards the enemy.\r\nThe beams explode on impact."
         },
@@ -45690,7 +45690,7 @@
             "description": "Herbil's exclusive skill.\r\nAfter a brief moment of preparation,\r\ncharges at the enemy at high speed, finishing with a flip."
         },
         {
-            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Grass)",
+            "name": "Unique_LegendDeer_BarrierRelease_Grass",
             "asset": "Unique_LegendDeer_BarrierRelease_Grass",
             "element": "Leaf",
             "power": 220,
@@ -45698,7 +45698,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Normal)",
+            "name": "Unique_LegendDeer_BarrierRelease_Normal",
             "asset": "Unique_LegendDeer_BarrierRelease_Normal",
             "element": "Normal",
             "power": 300,
@@ -45706,7 +45706,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_LegendDeer_BarrierRelease_Water)",
+            "name": "Unique_LegendDeer_BarrierRelease_Water",
             "asset": "Unique_LegendDeer_BarrierRelease_Water",
             "element": "Water",
             "power": 220,
@@ -45734,7 +45734,7 @@
             "asset": "Unique_LegendDeer_RadiantWingRush",
             "element": "Normal",
             "power": 700,
-            "cooldown": 35.0,
+            "cooldown": 30.0,
             "description": "Hartalis' exclusive skill. \r\nLeaps back and sprouts wings of light,\r\nthen dives toward the enemy."
         },
         {
@@ -45742,7 +45742,7 @@
             "asset": "Unique_LegendDeer_WarpPillarBurst",
             "element": "Normal",
             "power": 800,
-            "cooldown": 60.0,
+            "cooldown": 30.0,
             "description": "Hartalis' exclusive skill. \r\nFades from sight, then calls down a massive barrage of light pillars centered on its position."
         },
         {
@@ -45938,7 +45938,7 @@
             "description": "Bellanoir's exclusive skill.\r\nDisappears suddenly, then reappears while firing a barrage of beams."
         },
         {
-            "name": "Smoke Jet",
+            "name": "Unique_OctopursGirl_InkJet",
             "asset": "Unique_OctopursGirl_InkJet",
             "element": "Water",
             "power": 120,
@@ -46106,7 +46106,7 @@
             "description": "Prixter Lux's exclusive skill.\r\nChannels its superconductivity to close the distance to the enemy, then swings its pincers upward with full force."
         },
         {
-            "name": "Upper Smash",
+            "name": "Unique_ScorpionMan_Uppercut",
             "asset": "Unique_ScorpionMan_Uppercut",
             "element": "Dark",
             "power": 350,
@@ -46157,8 +46157,8 @@
             "name": "Glacial Impact",
             "asset": "Unique_SnowTigerBeastman_SnowImpact",
             "element": "Ice",
-            "power": 500,
-            "cooldown": 24.0,
+            "power": 650,
+            "cooldown": 30.0,
             "description": "Bastigor's exclusive skill.\r\nLet out a mighty roar and leap into the air. Then, embed both arms into the ground to create a massive ice crack. \r\nContinue to channel power into the ground, ultimately causing a large explosion of ice energy"
         },
         {
@@ -46357,7 +46357,7 @@
             "name": "Magma Laser",
             "asset": "Unique_VolcanoDragon_VolcanicLaser",
             "element": "Fire",
-            "power": 600,
+            "power": 700,
             "cooldown": 30.0,
             "description": "Moldron's exclusive skill.\r\nBurns the very earth itself with a ray of heat spilling from its mouth.\r\nThe superheated earth turns into a magma pool, damaging enemies that come into contact with it."
         },
@@ -46397,7 +46397,7 @@
             "name": "Holy Nova",
             "asset": "Unique_WhiteDeer_HolyPillar",
             "element": "Normal",
-            "power": 600,
+            "power": 700,
             "cooldown": 30.0,
             "description": "Celesdir's exclusive skill.\r\nAfter igniting a burst of holy light across a vast area ahead, \r\nit strides forward, radiating holy light around itself."
         },
@@ -46538,7 +46538,7 @@
             "description": "Eye of Cthulhu's exclusive skill. \r\nSummons four Servants that charge at enemies to deal damage. \r\nServants disappear after taking damage or after a short time."
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalBolt)",
+            "name": "Unique_YakushimaBoss001_Green_2_PhantasmalBolt",
             "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalBolt",
             "element": "None",
             "power": 40,
@@ -46546,7 +46546,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalDeathray)",
+            "name": "Unique_YakushimaBoss001_Green_2_PhantasmalDeathray",
             "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalDeathray",
             "element": "None",
             "power": 200,
@@ -46554,7 +46554,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalEye)",
+            "name": "Unique_YakushimaBoss001_Green_2_PhantasmalEye",
             "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalEye",
             "element": "None",
             "power": 10,
@@ -46562,7 +46562,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_2_PhantasmalSphere)",
+            "name": "Unique_YakushimaBoss001_Green_2_PhantasmalSphere",
             "asset": "Unique_YakushimaBoss001_Green_2_PhantasmalSphere",
             "element": "None",
             "power": 90,
@@ -46570,7 +46570,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalBolt)",
+            "name": "Unique_YakushimaBoss001_Green_PhantasmalBolt",
             "asset": "Unique_YakushimaBoss001_Green_PhantasmalBolt",
             "element": "None",
             "power": 40,
@@ -46578,7 +46578,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalDeathray)",
+            "name": "Unique_YakushimaBoss001_Green_PhantasmalDeathray",
             "asset": "Unique_YakushimaBoss001_Green_PhantasmalDeathray",
             "element": "None",
             "power": 200,
@@ -46586,7 +46586,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalEye)",
+            "name": "Unique_YakushimaBoss001_Green_PhantasmalEye",
             "asset": "Unique_YakushimaBoss001_Green_PhantasmalEye",
             "element": "None",
             "power": 10,
@@ -46594,7 +46594,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss001_Green_PhantasmalSphere)",
+            "name": "Unique_YakushimaBoss001_Green_PhantasmalSphere",
             "asset": "Unique_YakushimaBoss001_Green_PhantasmalSphere",
             "element": "None",
             "power": 90,
@@ -46610,7 +46610,7 @@
             "description": "Demon Eye's exclusive skill. \r\nCharges at the enemy, bouncing off the ground or walls on impact."
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalBolt)",
+            "name": "Unique_YakushimaBoss002_2_PhantasmalBolt",
             "asset": "Unique_YakushimaBoss002_2_PhantasmalBolt",
             "element": "None",
             "power": 80,
@@ -46618,7 +46618,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalDeathray)",
+            "name": "Unique_YakushimaBoss002_2_PhantasmalDeathray",
             "asset": "Unique_YakushimaBoss002_2_PhantasmalDeathray",
             "element": "None",
             "power": 450,
@@ -46626,7 +46626,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalEye)",
+            "name": "Unique_YakushimaBoss002_2_PhantasmalEye",
             "asset": "Unique_YakushimaBoss002_2_PhantasmalEye",
             "element": "None",
             "power": 25,
@@ -46634,7 +46634,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_2_PhantasmalSphere)",
+            "name": "Unique_YakushimaBoss002_2_PhantasmalSphere",
             "asset": "Unique_YakushimaBoss002_2_PhantasmalSphere",
             "element": "None",
             "power": 180,
@@ -46642,7 +46642,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalBolt)",
+            "name": "Unique_YakushimaBoss002_PhantasmalBolt",
             "asset": "Unique_YakushimaBoss002_PhantasmalBolt",
             "element": "None",
             "power": 80,
@@ -46650,7 +46650,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalDeathray)",
+            "name": "Unique_YakushimaBoss002_PhantasmalDeathray",
             "asset": "Unique_YakushimaBoss002_PhantasmalDeathray",
             "element": "None",
             "power": 450,
@@ -46658,7 +46658,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalEye)",
+            "name": "Unique_YakushimaBoss002_PhantasmalEye",
             "asset": "Unique_YakushimaBoss002_PhantasmalEye",
             "element": "None",
             "power": 25,
@@ -46666,7 +46666,7 @@
             "description": ""
         },
         {
-            "name": "Unknown Skill (Unique_YakushimaBoss002_PhantasmalSphere)",
+            "name": "Unique_YakushimaBoss002_PhantasmalSphere",
             "asset": "Unique_YakushimaBoss002_PhantasmalSphere",
             "element": "None",
             "power": 180,
@@ -46810,7 +46810,7 @@
             "description": "Launches sharp blades of air that fan out."
         },
         {
-            "name": "Unknown Skill (WorkAttack)",
+            "name": "WorkAttack",
             "asset": "WorkAttack",
             "element": "Normal",
             "power": 100,

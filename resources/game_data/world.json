@@ -353,7 +353,7 @@
         {
             "name": "Campfire",
             "asset": "Campfire",
-            "icon": "/icons/structures/T_icon_buildObject_CampFire.webp"
+            "icon": "/icons/structures/Campfire.webp"
         },
         {
             "name": "Majestic Candlestick",
@@ -3203,7 +3203,7 @@
         {
             "name": "Glass Pillar",
             "asset": "Glass_Pillars",
-            "icon": "/icons/structures/T_icon_buildObject_Glass_pillar.webp"
+            "icon": "/icons/structures/Glass_Pillars.webp"
         },
         {
             "name": "Glass Pyramid Roof",
@@ -3778,7 +3778,7 @@
         {
             "name": "Metal Pillar",
             "asset": "Metal_Pillars",
-            "icon": "/icons/structures/T_icon_buildObject_Metal_pillar.webp"
+            "icon": "/icons/structures/Metal_Pillars.webp"
         },
         {
             "name": "Metal_Roof",
@@ -3813,7 +3813,7 @@
         {
             "name": "Metal Foundation",
             "asset": "Metal_foundation",
-            "icon": "/icons/structures/T_icon_buildObject_Metal_Foundation.webp"
+            "icon": "/icons/structures/Metal_foundation.webp"
         },
         {
             "name": "Metal_pillars",
@@ -3823,12 +3823,12 @@
         {
             "name": "Metal Roof",
             "asset": "Metal_roof",
-            "icon": "/icons/structures/T_icon_buildObject_Metal_Roof.webp"
+            "icon": "/icons/structures/Metal_roof.webp"
         },
         {
             "name": "Metal Stairs",
             "asset": "Metal_stair",
-            "icon": "/icons/structures/T_icon_buildObject_Metal_Stair.webp"
+            "icon": "/icons/structures/Metal_stair.webp"
         },
         {
             "name": "Metal Wall",
@@ -4668,7 +4668,7 @@
         {
             "name": "Stone Pillar",
             "asset": "Stone_Pillar",
-            "icon": "/icons/structures/T_icon_buildObject_Stone_pillar.webp"
+            "icon": "/icons/structures/Stone_Pillar.webp"
         },
         {
             "name": "Stone Pyramid Roof",
@@ -4743,7 +4743,7 @@
         {
             "name": "Stone Foundation",
             "asset": "Stone_foundation",
-            "icon": "/icons/structures/T_icon_buildObject_Stone_Foundation.webp"
+            "icon": "/icons/structures/Stone_foundation.webp"
         },
         {
             "name": "Stone_pillar",
@@ -4753,12 +4753,12 @@
         {
             "name": "Stone Roof",
             "asset": "Stone_roof",
-            "icon": "/icons/structures/T_icon_buildObject_Stone_Roof.webp"
+            "icon": "/icons/structures/Stone_roof.webp"
         },
         {
             "name": "Stone Stairs",
             "asset": "Stone_stair",
-            "icon": "/icons/structures/T_icon_buildObject_Stone_Stair.webp"
+            "icon": "/icons/structures/Stone_stair.webp"
         },
         {
             "name": "Stone Wall",
@@ -5293,7 +5293,7 @@
         {
             "name": "Wooden Pillar",
             "asset": "Wooden_Pillar",
-            "icon": "/icons/structures/T_icon_buildObject_Wooden_pillar.webp"
+            "icon": "/icons/structures/Wooden_Pillar.webp"
         },
         {
             "name": "Wooden Pyramid Roof",
@@ -7459,7 +7459,7 @@
         {
             "name": "Metal Structure Set",
             "asset": "Metal_houseset",
-            "icon": "/icons/technologies/T_icon_buildObject_Metal_Foundation.webp",
+            "icon": "/icons/technologies/T_icon_buildObject_Metal_Wall_V2.webp",
             "type": "standard",
             "description": "Set for building bases using metal.\r\nAllows building of metal foundations, walls, ceilings, stairs and other things necessary for shelters."
         },
@@ -7872,14 +7872,14 @@
         {
             "name": "Metal Pickaxe",
             "asset": "Product_Pickaxe_Grade_02",
-            "icon": "/icons/technologies/T_itemicon_Weapon_Pickaxe_Tier_00.webp",
+            "icon": "/icons/technologies/Product_Pickaxe_Grade_02.webp",
             "type": "standard",
             "description": "A pickaxe used for mining.\r\nMade from metal, its durability and efficiency have improved.\r\nRequires High-Quality Workbench to craft."
         },
         {
             "name": "Refined Metal Pickaxe",
             "asset": "Product_Pickaxe_Grade_03",
-            "icon": "/icons/technologies/T_itemicon_Weapon_Pickaxe_Tier_00.webp",
+            "icon": "/icons/technologies/Product_Pickaxe_Grade_03.webp",
             "type": "standard",
             "description": "A pickaxe used for mining.\r\nIts durability and efficiency have further improved.\r\nRequires Production Assembly Line to craft."
         },
@@ -9321,7 +9321,7 @@
         {
             "name": "Stone Structure Set",
             "asset": "Stone_houseset",
-            "icon": "/icons/technologies/T_icon_buildObject_Stone_Foundation.webp",
+            "icon": "/icons/technologies/T_icon_buildObject_Stone_Wall_V2.webp",
             "type": "standard",
             "description": "Set for building bases using stone.\r\nAllows building of stone foundations, walls, ceilings, stairs and other things necessary for shelters."
         },

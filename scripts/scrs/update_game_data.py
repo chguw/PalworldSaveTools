@@ -378,8 +378,6 @@ def update_pal_data():
     export_data_common = load_export_json('Character/DT_PalCharacterIconDataTable_Common.json')
     monster_param = load_export_json('Character/DT_PalMonsterParameter.json')
     monster_param_common = load_export_json('Character/DT_PalMonsterParameter_Common.json')
-    existing = load_resource_json('paldata.json')
-    existing_pals = {p.get('asset', '').lower(): p for p in existing.get('pals', [])}
     pal_name_l10n = load_l10n_table('DT_PalNameText_Common.json')
     name_prefix_l10n = load_l10n_table('DT_NamePrefixText_Common.json')
     icon_rows = {}
@@ -471,7 +469,6 @@ def update_pal_data():
     for pal_id, row_data in sorted(icon_rows.items()):
         pal_id_lower = pal_id.lower()
         processed_ids.add(pal_id_lower)
-        existing_entry = existing_pals.get(pal_id_lower, {})
         icon_data = row_data.get('Icon', {})
         icon_path = icon_data.get('AssetPathName', '') if isinstance(icon_data, dict) else ''
         if icon_path:
@@ -481,11 +478,8 @@ def update_pal_data():
             copied_icon = None
         monster_row = monster_rows.get(pal_id, None)
         display_name = resolve_pal_name(pal_id, monster_row)
-        existing_icon = existing_entry.get('icon', '')
-        if existing_icon and (not existing_icon.startswith('/icons/')):
-            existing_icon = None
-        final_icon = copied_icon or existing_icon or f'/icons/pals/{pal_id}_icon_normal.webp'
-        if final_icon == f'/icons/pals/{pal_id}_icon_normal.webp' and (not existing_icon):
+        final_icon = copied_icon or f'/icons/pals/{pal_id}_icon_normal.webp'
+        if not copied_icon:
             t_prefixed = f'/icons/pals/T_{pal_id}_icon_normal.webp'
             t_file = RESOURCES_DIR / t_prefixed.lstrip('/')
             if t_file.exists():
@@ -523,24 +517,19 @@ def update_pal_data():
             continue
         processed_ids.add(pal_id_lower)
         monster_row = monster_rows[pal_id_lower] if pal_id_lower in monster_rows else monster_rows.get(pal_id, {})
-        existing_entry = existing_pals.get(pal_id_lower, {})
         base_pal_id = pal_id
         if pal_id.startswith('BOSS_'):
             base_pal_id = pal_id[5:]
         elif pal_id.startswith('POLICE_'):
             base_pal_id = pal_id[7:]
         base_icon = None
-        if base_pal_id != pal_id:
-            base_lower = base_pal_id.lower()
-            if base_lower in existing_pals:
-                base_icon = existing_pals[base_lower].get('icon', None)
-            elif base_pal_id in icon_rows:
-                base_icon_data = icon_rows[base_pal_id].get('Icon', {})
-                if isinstance(base_icon_data, dict):
-                    base_icon_path = base_icon_data.get('AssetPathName', '')
-                    if base_icon_path:
-                        fn = base_icon_path.split('/')[-1].split('.')[0] if '.' in base_icon_path else base_icon_path.split('/')[-1]
-                        base_icon = find_and_copy_icon(fn, 'pals', pal_icon_subdirs)
+        if base_pal_id != pal_id and base_pal_id in icon_rows:
+            base_icon_data = icon_rows[base_pal_id].get('Icon', {})
+            if isinstance(base_icon_data, dict):
+                base_icon_path = base_icon_data.get('AssetPathName', '')
+                if base_icon_path:
+                    fn = base_icon_path.split('/')[-1].split('.')[0] if '.' in base_icon_path else base_icon_path.split('/')[-1]
+                    base_icon = find_and_copy_icon(fn, 'pals', pal_icon_subdirs)
         icon_path = None
         if not base_icon:
             for fname in (f'T_{pal_id}_icon_normal', f'T_{pal_id}_icon', f'T_{pal_id}', f'T_{base_pal_id}_icon_normal', f'T_{base_pal_id}'):
@@ -555,25 +544,9 @@ def update_pal_data():
                                     break
                     if icon_path:
                         break
-        if not icon_path and (not base_icon):
-            pal_lower = pal_id.lower()
-            for pfx in PREFIX_MAP:
-                if pal_lower.startswith(pfx.lower()):
-                    pal_lower = pal_lower[len(pfx):]
-                    break
-            parts = pal_lower.split('_')
-            for i in range(len(parts) - 1, 0, -1):
-                candidate = '_'.join(parts[:i])
-                if candidate in existing_pals:
-                    base_icon = existing_pals[candidate].get('icon', None)
-                    if base_icon:
-                        break
         display_name = resolve_pal_name(pal_id, monster_row)
-        existing_icon = existing_entry.get('icon', '')
-        if existing_icon and (not existing_icon.startswith('/icons/')):
-            existing_icon = None
-        final_icon = icon_path or base_icon or existing_icon or f'/icons/pals/{pal_id}_icon_normal.webp'
-        if final_icon == f'/icons/pals/{pal_id}_icon_normal.webp' and (not existing_icon):
+        final_icon = icon_path or base_icon or f'/icons/pals/{pal_id}_icon_normal.webp'
+        if not icon_path and not base_icon:
             t_prefixed = f'/icons/pals/T_{pal_id}_icon_normal.webp'
             t_file = RESOURCES_DIR / t_prefixed.lstrip('/')
             if t_file.exists():
@@ -611,8 +584,6 @@ def update_pal_data():
 def update_npc_data():
     print('\n=== Updating NPC Data ===')
     npc_icon_data = load_export_json('Character/DT_PalBossNPCIcon.json')
-    existing = load_resource_json('npcdata.json')
-    existing_npcs = {n.get('asset', '').lower(): n for n in existing.get('npcs', [])}
     npc_name_l10n = load_l10n_table('DT_HumanNameText_Common.json')
     _npc_l10n_lower = {k.lower(): v for k, v in npc_name_l10n.items()}
     def _resolve_npc_name(npc_id: str) -> str:
@@ -644,7 +615,6 @@ def update_npc_data():
     updated_npcs = []
     for npc_id, row_data in sorted(all_rows.items()):
         npc_id_lower = npc_id.lower()
-        existing_entry = existing_npcs.get(npc_id_lower, {})
         icon_data = row_data.get('Icon', {})
         icon_path = icon_data.get('AssetPathName', '') if isinstance(icon_data, dict) else ''
         copied_icon = None
@@ -652,7 +622,7 @@ def update_npc_data():
             icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
             copied_icon = find_and_copy_icon(icon_filename, 'npcs', npc_icon_subdirs)
         l10n_name = _resolve_npc_name(npc_id)
-        npc_entry = {'name': l10n_name or existing_entry.get('name', npc_id), 'asset': npc_id, 'icon': copied_icon or existing_entry.get('icon', f'/icons/npcs/{npc_id}_icon_normal.webp')}
+        npc_entry = {'name': l10n_name or npc_id, 'asset': npc_id, 'icon': copied_icon or f'/icons/npcs/{npc_id}_icon_normal.webp'}
         updated_npcs.append(npc_entry)
     result = {'npcs': updated_npcs}
     save_resource_json('npcdata.json', result)
@@ -662,8 +632,6 @@ def update_item_data():
     item_table_common = load_export_json('Item/DT_ItemDataTable_Common.json')
     icon_table = load_export_json('Item/DT_ItemIconDataTable.json')
     icon_table_common = load_export_json('Item/DT_ItemIconDataTable_Common.json')
-    existing = load_resource_json('itemdata.json')
-    existing_items = {i.get('asset', '').lower(): i for i in existing.get('items', [])}
     item_name_l10n = load_l10n_table('DT_ItemNameText_Common.json')
     item_desc_l10n = load_l10n_table('DT_ItemDescriptionText_Common.json')
     all_item_rows = {}
@@ -736,7 +704,6 @@ def update_item_data():
     updated_items = []
     for item_id in sorted(all_item_ids):
         item_id_lower = item_id.lower()
-        existing_entry = existing_items.get(item_id_lower, {})
         item_row = all_item_rows.get(item_id, {})
         item_name = resolve_item_name(item_id, item_row)
         item_name = resolve_rich_text(item_name)
@@ -792,7 +759,7 @@ def update_item_data():
                         break
             if copied_icon:
                 print(f'    Found icon for {item_id} via alt search: {copied_icon}')
-        final_icon = copied_icon or existing_entry.get('icon', f'/icons/items/{item_id}.webp')
+        final_icon = copied_icon or f'/icons/items/{item_id}.webp'
         if not final_icon.startswith('/icons/'):
             final_icon = f'/icons/items/{item_id}.webp'
         rarity = 0
@@ -859,8 +826,6 @@ def update_structure_data():
     icon_table = load_export_json('MapObject/Building/DT_BuildObjectIconDataTable.json')
     icon_table_common = load_export_json('MapObject/Building/DT_BuildObjectIconDataTable_Common.json')
     struct_name_l10n = load_l10n_table('DT_MapObjectNameText_Common.json')
-    existing = load_resource_json('structuredata.json')
-    existing_structures = {s.get('asset', '').lower(): s for s in existing.get('structures', [])}
     master_rows = {}
     for d in [master_data, master_common, master_enemy]:
         master_rows.update(load_single_table(d))
@@ -888,7 +853,6 @@ def update_structure_data():
     updated_structures = []
     for struct_id in sorted(all_struct_ids):
         struct_id_lower = struct_id.lower()
-        existing_entry = existing_structures.get(struct_id_lower, {})
         display_name = resolve_struct_name(struct_id)
         copied_icon = None
         icon_row = icon_rows.get(struct_id, {})
@@ -899,10 +863,6 @@ def update_structure_data():
                 if icon_path and icon_path != 'None':
                     icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
                     copied_icon = find_and_copy_icon(icon_filename, 'structures', structure_icon_subdirs)
-        if not copied_icon:
-            existing_icon = existing_entry.get('icon', '')
-            if existing_icon and existing_icon.startswith('/icons/'):
-                copied_icon = existing_icon
         final_icon = copied_icon or f'/icons/structures/{struct_id}.webp'
         struct_entry = {'name': display_name, 'asset': struct_id, 'icon': final_icon}
         updated_structures.append(struct_entry)
@@ -986,8 +946,6 @@ def update_passive_data():
     print('\n=== Updating Passive Data ===')
     passive_main = load_export_json('PassiveSkill/DT_PassiveSkill_Main.json')
     passive_main_common = load_export_json('PassiveSkill/DT_PassiveSkill_Main_Common.json')
-    existing = load_resource_json('passivedata.json')
-    existing_passives = {p.get('asset', '').lower(): p for p in existing.get('passives', [])}
     raw_skill_l10n = load_l10n_table('DT_SkillNameText_Common.json')
     raw_skill_desc = load_l10n_table('DT_SkillDescText_Common.json')
     passive_name_l10n = {}
@@ -1023,8 +981,7 @@ def update_passive_data():
     updated_passives = []
     for passive_id, row_data in sorted(all_rows.items()):
         passive_id_lower = passive_id.lower()
-        existing_entry = existing_passives.get(passive_id_lower, {})
-        rank = existing_entry.get('rank', 1)
+        rank = 1
         if isinstance(row_data, dict):
             rank_data = row_data.get('Rank', row_data.get('PassiveRank', {}))
             if isinstance(rank_data, dict):
@@ -1079,7 +1036,7 @@ def update_passive_data():
         add_weapon = bool(row_data.get('AddShotWeapon', False) or row_data.get('AddMeleeWeapon', False)) if isinstance(row_data, dict) else False
         invoke_always = bool(row_data.get('InvokeAlways', False)) if isinstance(row_data, dict) else False
         category = row_data.get('Category', '') if isinstance(row_data, dict) else ''
-        passive_entry = {'name': display_name, 'asset': passive_id, 'rank': rank, 'icon': copied_icon or existing_entry.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.png'), 'description': desc_text, 'effect1': ev1, 'effect2': ev2, 'effect3': ev3, 'effect4': ev4, 'efftype1': et1, 'efftype2': et2, 'efftype3': et3, 'add_pal': add_pal, 'add_rare_pal': add_rare_pal, 'add_world_tree_pal': add_world_tree_pal, 'add_mutation_pal': add_mutation_pal, 'add_armor': add_armor, 'add_accessory': add_accessory, 'add_weapon': add_weapon, 'invoke_always': invoke_always, 'category': category}
+        passive_entry = {'name': display_name, 'asset': passive_id, 'rank': rank, 'icon': copied_icon or '/icons/passives/T_icon_skillstatus_rank_arrow_04.png', 'description': desc_text, 'effect1': ev1, 'effect2': ev2, 'effect3': ev3, 'effect4': ev4, 'efftype1': et1, 'efftype2': et2, 'efftype3': et3, 'add_pal': add_pal, 'add_rare_pal': add_rare_pal, 'add_world_tree_pal': add_world_tree_pal, 'add_mutation_pal': add_mutation_pal, 'add_armor': add_armor, 'add_accessory': add_accessory, 'add_weapon': add_weapon, 'invoke_always': invoke_always, 'category': category}
         updated_passives.append(passive_entry)
     result = {'passives': updated_passives}
     save_resource_json('passivedata.json', result)
@@ -1232,8 +1189,6 @@ def _build_character_name_map():
 def update_skill_data():
     print('\n=== Updating Skill Data ===')
     all_rows = get_all_rows_for_tables(['Waza/DT_WazaDataTable.json'])
-    existing = load_resource_json('skilldata.json')
-    existing_skills = {s.get('asset', '').lower(): s for s in existing.get('skills', [])}
     raw_skill_l10n = load_l10n_table('DT_SkillNameText_Common.json')
     raw_skill_desc = load_l10n_table('DT_SkillDescText_Common.json')
     skill_name_l10n = {}
@@ -1286,9 +1241,8 @@ def update_skill_data():
     for skill_asset in sorted(skill_map.keys()):
         entry = skill_map[skill_asset]
         skill_lower = entry['asset'].lower()
-        existing_entry = existing_skills.get(skill_lower, {})
         l10n_name = skill_name_l10n.get(entry['asset'], None)
-        skill_entry = {'name': l10n_name or existing_entry.get('name', entry['name']), 'asset': entry['asset'], 'element': existing_entry.get('element', entry['element']), 'power': existing_entry.get('power', entry['power']), 'cooldown': existing_entry.get('cooldown', entry['cooldown']), 'description': skill_desc_l10n.get(entry['asset'], '')}
+        skill_entry = {'name': l10n_name or entry['name'], 'asset': entry['asset'], 'element': entry['element'], 'power': entry['power'], 'cooldown': entry['cooldown'], 'description': skill_desc_l10n.get(entry['asset'], '')}
         updated_skills.append(skill_entry)
     result = {'skills': updated_skills}
     save_resource_json('skilldata.json', result)
@@ -1701,8 +1655,6 @@ def update_items_dynamic():
 def update_pal_passive_data():
     print('\n=== Updating Pal Passive Data ===')
     partner_data = load_export_json('PartnerSkill/DT_PartnerSkill.json')
-    existing = load_resource_json('palpassivedata.json')
-    existing_passives = {p.get('asset', '').lower(): p for p in existing.get('passives', [])}
     partner_l10n = load_l10n_table('DT_PartnerSkillAppendText.json')
     all_rows = {}
     if partner_data:
@@ -1742,13 +1694,12 @@ def update_pal_passive_data():
         if skill_id_lower in seen_assets:
             continue
         seen_assets.add(skill_id_lower)
-        existing_entry = existing_passives.get(skill_id_lower, {})
         l10n_name = partner_l10n.get(skill_id, '') if skill_id in partner_l10n else None
         if l10n_name and l10n_name.strip().lower() not in _invalid_names:
             display_name = l10n_name
         else:
-            display_name = existing_entry.get('name', skill_id)
-        passive_entry = {'name': display_name, 'asset': skill_id, 'icon': existing_entry.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.png')}
+            display_name = skill_id
+        passive_entry = {'name': display_name, 'asset': skill_id, 'icon': '/icons/passives/T_icon_skillstatus_rank_arrow_04.png'}
         updated_passives.append(passive_entry)
     def _clean_asset_name(asset: str) -> str:
         cleaned = asset.replace('_', ' ').strip()

@@ -1233,7 +1233,7 @@
         {
             "name": "Antibiotic_Good",
             "asset": "Antibiotic_Good",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/Antibiotic_Good.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Consume",
             "type_b": "EPalItemTypeB::ConsumeBandage",
@@ -1243,7 +1243,7 @@
         {
             "name": "Antibiotic_Normal",
             "asset": "Antibiotic_Normal",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/Antibiotic_Normal.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Consume",
             "type_b": "EPalItemTypeB::ConsumeBandage",
@@ -1253,7 +1253,7 @@
         {
             "name": "Antibiotic_Super",
             "asset": "Antibiotic_Super",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/Antibiotic_Super.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Consume",
             "type_b": "EPalItemTypeB::ConsumeBandage",
@@ -9483,7 +9483,7 @@
         {
             "name": "ClawsPendant",
             "asset": "ClawsPendant",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/ClawsPendant.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Accessory",
             "type_b": "EPalItemTypeB::Accessory",
@@ -10753,7 +10753,7 @@
         {
             "name": "FangNecklace",
             "asset": "FangNecklace",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/FangNecklace.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Accessory",
             "type_b": "EPalItemTypeB::Accessory",
@@ -13813,7 +13813,7 @@
         {
             "name": "IronOre",
             "asset": "IronOre",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/IronOre.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialOre",
@@ -14003,7 +14003,7 @@
         {
             "name": "Kitsunebi_Fire",
             "asset": "Kitsunebi_Fire",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/Kitsunebi_Fire.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialMonster",
@@ -14323,7 +14323,7 @@
         {
             "name": "Lightz Helmet",
             "asset": "LightzHelmet",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/LightzHelmet.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Armor",
             "type_b": "EPalItemTypeB::ArmorHead",
@@ -15253,7 +15253,7 @@
         {
             "name": "Night Vision Goggles",
             "asset": "NightVisionGoggles",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/NightVisionGoggles.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Accessory",
             "type_b": "EPalItemTypeB::Accessory",
@@ -16133,7 +16133,7 @@
         {
             "name": "PAL_Growth_Stone_L",
             "asset": "PAL_Growth_Stone_L",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/PAL_Growth_Stone_L.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialStone",
@@ -16143,7 +16143,7 @@
         {
             "name": "PAL_Growth_Stone_M",
             "asset": "PAL_Growth_Stone_M",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/PAL_Growth_Stone_M.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialStone",
@@ -16153,7 +16153,7 @@
         {
             "name": "PAL_Growth_Stone_S",
             "asset": "PAL_Growth_Stone_S",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/PAL_Growth_Stone_S.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialStone",
@@ -16163,7 +16163,7 @@
         {
             "name": "PAL_Growth_Stone_XL",
             "asset": "PAL_Growth_Stone_XL",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/PAL_Growth_Stone_XL.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialStone",
@@ -16423,7 +16423,7 @@
         {
             "name": "PalDopingShot_3",
             "asset": "PalDopingShot_3",
-            "icon": "/icons/items/T_itemicon_Ammo_PalDopingShotBullet.webp",
+            "icon": "/icons/items/PalDopingShot_3.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Weapon",
             "type_b": "EPalItemTypeB::WeaponHandgun",
@@ -18343,7 +18343,7 @@
         {
             "name": "Metal Pickaxe",
             "asset": "Pickaxe_Tier_01",
-            "icon": "/icons/items/T_itemicon_Weapon_Pickaxe_Tier_00.webp",
+            "icon": "/icons/items/Pickaxe_Tier_01.webp",
             "rarity": 1,
             "type_a": "EPalItemTypeA::Weapon",
             "type_b": "EPalItemTypeB::WeaponMelee",
@@ -18353,7 +18353,7 @@
         {
             "name": "Refined Metal Pickaxe",
             "asset": "Pickaxe_Tier_02",
-            "icon": "/icons/items/T_itemicon_Weapon_Pickaxe_Tier_00.webp",
+            "icon": "/icons/items/Pickaxe_Tier_02.webp",
             "rarity": 2,
             "type_a": "EPalItemTypeA::Weapon",
             "type_b": "EPalItemTypeB::WeaponMelee",
@@ -19743,7 +19743,7 @@
         {
             "name": "Sharkkid_Scale",
             "asset": "Sharkkid_Scale",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/Sharkkid_Scale.webp",
             "rarity": 2,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialMonster",
@@ -23593,7 +23593,7 @@
         {
             "name": "VenisonBoiledInTomato",
             "asset": "VenisonBoiledInTomato",
-            "icon": "/icons/T_icon_unknown.webp",
+            "icon": "/icons/items/VenisonBoiledInTomato.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Food",
             "type_b": "EPalItemTypeB::FoodDishMeat",
