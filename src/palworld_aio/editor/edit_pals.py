@@ -160,7 +160,7 @@ class FramelessDialog(QDialog):
         self._apply_styles()
         self.title_bar.installEventFilter(self)
     def _apply_styles(self):
-        self.setStyleSheet('\n            QWidget#editPalsContainer {\n                background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,\n                            stop:0 rgba(12,14,18,0.98),stop:0.5 rgba(10,16,22,0.98),stop:1 rgba(8,12,18,0.98));\n                border: 1px solid rgba(125,211,252,0.2);\n                border-radius: 12px;\n            }\n            QWidget#editPalsTitleBar {\n                background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,\n                            stop:0 rgba(125,211,252,0.08),stop:1 rgba(167,139,250,0.08));\n                border: none;\n                border-top-left-radius: 12px;\n                border-top-right-radius: 12px;\n            }\n            QLabel#titleBarIcon {\n                font-size: 20px;\n                padding: 0px 4px;\n            }\n            QLabel#titleBarTitle {\n                font-size: 14px;\n                font-weight: 700;\n                color: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,\n                            stop:0 #7DD3FC,stop:1 #A78BFA);\n                padding: 0px 8px;\n            }\n            QPushButton#titleBarMinimize,QPushButton#titleBarMaximize {\n                background: transparent;\n                border: none;\n                color: #A6B8C8;\n                font-size: 16px;\n                font-weight: bold;\n                border-radius: 4px;\n            }\n            QPushButton#titleBarMinimize:hover,QPushButton#titleBarMaximize:hover {\n                background: rgba(255,255,255,0.1);\n                color: #FFFFFF;\n            }\n            QPushButton#titleBarClose {\n                background: transparent;\n                border: none;\n                color: #FB7185;\n                font-size: 20px;\n                font-weight: bold;\n                border-radius: 4px;\n            }\n            QPushButton#titleBarClose:hover {\n                background: rgba(251,113,133,0.2);\n            }\n            QWidget#editPalsContent {\n                background: transparent;\n            }\n        ')
+        self.setStyleSheet(TOOLTIP_STYLE + '\n            QWidget#editPalsContainer {\n                background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,\n                            stop:0 rgba(12,14,18,0.98),stop:0.5 rgba(10,16,22,0.98),stop:1 rgba(8,12,18,0.98));\n                border: 1px solid rgba(125,211,252,0.2);\n                border-radius: 12px;\n            }\n            QWidget#editPalsTitleBar {\n                background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,\n                            stop:0 rgba(125,211,252,0.08),stop:1 rgba(167,139,250,0.08));\n                border: none;\n                border-top-left-radius: 12px;\n                border-top-right-radius: 12px;\n            }\n            QLabel#titleBarIcon {\n                font-size: 20px;\n                padding: 0px 4px;\n            }\n            QLabel#titleBarTitle {\n                font-size: 14px;\n                font-weight: 700;\n                color: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,\n                            stop:0 #7DD3FC,stop:1 #A78BFA);\n                padding: 0px 8px;\n            }\n            QPushButton#titleBarMinimize,QPushButton#titleBarMaximize {\n                background: transparent;\n                border: none;\n                color: #A6B8C8;\n                font-size: 16px;\n                font-weight: bold;\n                border-radius: 4px;\n            }\n            QPushButton#titleBarMinimize:hover,QPushButton#titleBarMaximize:hover {\n                background: rgba(255,255,255,0.1);\n                color: #FFFFFF;\n            }\n            QPushButton#titleBarClose {\n                background: transparent;\n                border: none;\n                color: #FB7185;\n                font-size: 20px;\n                font-weight: bold;\n                border-radius: 4px;\n            }\n            QPushButton#titleBarClose:hover {\n                background: rgba(251,113,133,0.2);\n            }\n            QWidget#editPalsContent {\n                background: transparent;\n            }\n        ')
     def _toggle_maximize(self):
         if self._maximized:
             self.showNormal()
@@ -4074,7 +4074,8 @@ def _show_learned_moves_dialog(raw, parent):
     dlg.setMinimumSize(420, 400)
     dlg.setMaximumSize(500, 600)
     inner = QWidget()
-    inner.setStyleSheet('QWidget { background: transparent; }')
+    inner.setObjectName('learntSkillsInner')
+    inner.setStyleSheet('QWidget#learntSkillsInner { background: transparent; }')
     il = QVBoxLayout(inner)
     il.setContentsMargins(8, 4, 8, 8)
     il.setSpacing(4)
@@ -4087,7 +4088,8 @@ def _show_learned_moves_dialog(raw, parent):
     scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
     scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); } QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }')
     scroll_ct = QWidget()
-    scroll_ct.setStyleSheet('background: transparent; border: none;')
+    scroll_ct.setObjectName('learntSkillsScrollCt')
+    scroll_ct.setStyleSheet('QWidget#learntSkillsScrollCt { background: transparent; border: none; }')
     scl = QVBoxLayout(scroll_ct)
     scl.setContentsMargins(2, 2, 2, 2)
     scl.setSpacing(2)
@@ -4111,7 +4113,7 @@ def _show_learned_moves_dialog(raw, parent):
             skill_power = skill_info.get('power', 0)
             elem_color = elem_colors.get(skill_elem, '#9CA3AF')
             slot = SkillSlotFrame()
-            slot.setStyleSheet('QFrame { background: rgba(0,0,0,0); border: 1px solid rgba(125,211,252,0.08); border-radius: 3px; } QFrame:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+            slot.setStyleSheet('SkillSlotFrame { background: rgba(0,0,0,0); border: 1px solid rgba(125,211,252,0.08); border-radius: 3px; } SkillSlotFrame:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
             slot.setFixedHeight(28)
             slot.setCursor(Qt.PointingHandCursor)
             slot._skill_raw_value = skill_val
