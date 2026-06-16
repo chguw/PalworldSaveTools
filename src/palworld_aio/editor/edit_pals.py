@@ -2795,12 +2795,12 @@ class PalInfoWidget(QFrame):
         partner_layout.setSpacing(1)
         pheader = QHBoxLayout()
         pheader.setSpacing(4)
-        self.partner_name_lbl = QLabel('Aerial Missile')
-        self.partner_name_lbl.setStyleSheet('font-size: 11px; font-weight: 700; color: #7DD3FC; background: transparent; border: none;')
-        pheader.addWidget(self.partner_name_lbl)
         self.partner_lvl_lbl = QLabel('Lv 5')
         self.partner_lvl_lbl.setStyleSheet('font-size: 10px; font-weight: 600; color: #F59E0B; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.15); border-radius: 3px; padding: 0 4px;')
         pheader.addWidget(self.partner_lvl_lbl)
+        self.partner_name_lbl = QLabel('Aerial Missile')
+        self.partner_name_lbl.setStyleSheet('font-size: 11px; font-weight: 700; color: #7DD3FC; background: transparent; border: none;')
+        pheader.addWidget(self.partner_name_lbl)
         pheader.addStretch()
         self._c_icon = QPushButton('[C]')
         self._c_icon.setFixedSize(22, 16)
@@ -2883,15 +2883,13 @@ class PalInfoWidget(QFrame):
             plbl = QLabel(pname)
             plbl.setStyleSheet(f'font-size: 10px; font-weight: 700; color: {default_tc}; background: transparent; border: none;')
             card_layout.addWidget(plbl, 1)
+            card_layout.addStretch()
             rank_icon = QLabel()
             rank_icon.setFixedSize(14, 14)
             rank_icon.setAlignment(Qt.AlignCenter)
             rank_icon.setStyleSheet('background: transparent; border: none;')
             rank_icon.hide()
             card_layout.addWidget(rank_icon)
-            chev = QLabel('❯❯❯')
-            chev.setStyleSheet(f'font-size: 8px; color: rgba(255,255,255,0.15); background: transparent; border: none; letter-spacing: -1px;')
-            card_layout.addWidget(chev)
             card.setCursor(Qt.PointingHandCursor)
             btn = QPushButton('', card)
             btn.setStyleSheet('QPushButton { background: transparent; border: none; }')
@@ -3256,7 +3254,7 @@ class PalInfoWidget(QFrame):
                 slot_layout.setSpacing(4)
                 slot_layout.setAlignment(Qt.AlignVCenter)
                 name_lbl = QLabel(move_name)
-                name_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #E2E8F0; background: transparent; border: none;')
+                name_lbl.setStyleSheet('font-size: 10px; font-weight: 600; color: #E2E8F0; background: transparent; border: none;')
                 slot._name_lbl = name_lbl
                 slot_layout.addWidget(name_lbl, 1)
                 elem_badge = QLabel()
@@ -3315,7 +3313,7 @@ class PalInfoWidget(QFrame):
                     elif rank >= 4:
                         anim_mode = 'legend'
                 self.passive_slots[i].setText(display_name)
-                self.passive_slots[i].setStyleSheet(f'font-size: 9px; font-weight: 700; color: {tc}; background: transparent; border: none;')
+                self.passive_slots[i].setStyleSheet(f'font-size: 10px; font-weight: 700; color: {tc}; background: transparent; border: none;')
                 parent_frame = self.passive_slots[i].parentWidget()
                 if parent_frame and parent_frame.objectName() == 'passiveCard':
                     parent_frame.setStyleSheet(f'QFrame#passiveCard {{ background: {bg}; border: 1.5px solid {bd}; border-radius: 4px; padding: 3px 6px; }}')
@@ -3376,7 +3374,6 @@ class PalInfoWidget(QFrame):
             name_lbl = getattr(slot, '_name_lbl', None)
             if name_lbl:
                 self._shrink_to_fit(name_lbl)
-        self._shrink_to_fit(self.partner_name_lbl)
     def _shrink_to_fit(self, label):
         text = label.text()
         if not text or text in ('--', ''):
@@ -3861,6 +3858,7 @@ class PalInfoWidget(QFrame):
                 plbl = QLabel(display_name)
                 plbl.setStyleSheet(f'font-size: 9px; font-weight: 700; color: {tc}; background: transparent; border: none;')
                 cl.addWidget(plbl, 1)
+                cl.addStretch()
                 if icon_path:
                     full_path = resource_path(constants.get_base_path(), 'game_data', icon_path.lstrip('/'))
                     pix = _get_cached_pixmap(full_path, 14)
@@ -3870,9 +3868,6 @@ class PalInfoWidget(QFrame):
                         ilbl.setPixmap(pix)
                         ilbl.setStyleSheet('background: transparent; border: none;')
                         cl.addWidget(ilbl)
-                chev = QLabel('❯❯❯')
-                chev.setStyleSheet('font-size: 6px; color: rgba(255,255,255,0.15); background: transparent; border: none; letter-spacing: -1px;')
-                cl.addWidget(chev)
                 if anim_mode:
                     ov = PassiveEffectOverlay(card)
                     ov.setGeometry(0, 0, 200, 26)
