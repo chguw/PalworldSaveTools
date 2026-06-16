@@ -1879,10 +1879,11 @@
   "inventory.clear_btn": "Clear",
   "inventory.equip_clear_btn": "Clear",
   "inventory.clear_confirm_title": "Clear Inventory",
-  "inventory.clear_confirm_msg": "Remove all items from inventory and key items?",
+  "inventory.clear_confirm_msg": "Remove all items from inventory? (Key items, equipment, and unlocks will be preserved)",
   "inventory.equip_clear_title": "Clear Equipment",
   "inventory.equip_clear_msg": "Remove all equipment from weapon, armor, and food slots?",
   "inventory.clear_key_btn": "Clear Key Items",
   "inventory.clear_key_confirm_msg": "Remove all key items? (Unlock items will be re-added automatically)",
-  "inventory.clear_key_confirm_title": "Clear Key Items"
+  "inventory.clear_key_confirm_title": "Clear Key Items",
+  "character_transfer.no_players_folder": "No Players folder found next to Level.sav. Cannot load save."
 }

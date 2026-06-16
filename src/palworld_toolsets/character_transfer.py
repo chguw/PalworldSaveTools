@@ -1148,7 +1148,11 @@ def source_level_file():
     if not tmp:
         return
     if not tmp.endswith('Level.sav'):
-        show_warning(None, t('Error!'), t('This is NOT Level.sav.Please select Level.sav file.'))
+        show_warning(None, t('error.title'), t('This is NOT Level.sav.Please select Level.sav file.'))
+        return
+    players_dir = os.path.join(os.path.dirname(tmp), 'Players')
+    if not os.path.isdir(players_dir):
+        show_warning(None, t('error.title'), t('character_transfer.no_players_folder'))
         return
     level_json = None
     import gc
@@ -1187,7 +1191,11 @@ def target_level_file():
     if not tmp:
         return
     if not tmp.endswith('Level.sav'):
-        show_warning(None, t('Error!'), t('This is NOT Level.sav.Please select Level.sav file.'))
+        show_warning(None, t('error.title'), t('This is NOT Level.sav.Please select Level.sav file.'))
+        return
+    players_dir = os.path.join(os.path.dirname(tmp), 'Players')
+    if not os.path.isdir(players_dir):
+        show_warning(None, t('error.title'), t('character_transfer.no_players_folder'))
         return
     targ_lvl = None
     target_gvas_file = None

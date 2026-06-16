@@ -1591,7 +1591,11 @@
   "inventory.clear_btn": "クリア",
   "inventory.equip_clear_btn": "クリア",
   "inventory.clear_confirm_title": "在庫のクリア",
-  "inventory.clear_confirm_msg": "インベントリとキーアイテムからすべてのアイテムを削除しますか?",
+  "inventory.clear_confirm_msg": "在庫からすべてのアイテムを削除しますか? (キーアイテム、装備、ロック解除は保持されます)",
   "inventory.equip_clear_title": "クリア装備",
-  "inventory.equip_clear_msg": "武器、防具、食料スロットからすべての装備を削除しますか?"
+  "inventory.equip_clear_msg": "武器、防具、食料スロットからすべての装備を削除しますか?",
+  "inventory.clear_key_btn": "キーアイテムをクリアする",
+  "inventory.clear_key_confirm_msg": "重要なアイテムをすべて削除しますか? (アンロックアイテムは自動的に再追加されます)",
+  "inventory.clear_key_confirm_title": "キーアイテムをクリアする",
+  "character_transfer.no_players_folder": "Level.sav の隣に Players フォルダーが見つかりません。セーブをロードできません。"
 }

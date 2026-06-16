@@ -392,6 +392,10 @@ def choose_level_file(window, level_sav_entry, old_tree, new_tree):
     path, _ = QFileDialog.getOpenFileName(window, t('Select Level.sav file'), '', 'SAV Files(*.sav)')
     if not path:
         return
+    players_dir = os.path.join(os.path.dirname(path), 'Players')
+    if not os.path.isdir(players_dir):
+        show_warning(window, t('error.title'), t('character_transfer.no_players_folder'))
+        return
     def task():
         return background_load_task(path)
     def on_task_complete(result):

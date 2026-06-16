@@ -1589,7 +1589,11 @@
   "inventory.clear_btn": "Прозрачный",
   "inventory.equip_clear_btn": "Прозрачный",
   "inventory.clear_confirm_title": "Очистить инвентарь",
-  "inventory.clear_confirm_msg": "Удалить все предметы из инвентаря и ключевые предметы?",
+  "inventory.clear_confirm_msg": "Удалить все предметы из инвентаря? (Ключевые предметы, снаряжение и разблокировки будут сохранены)",
   "inventory.equip_clear_title": "Очистить оборудование",
-  "inventory.equip_clear_msg": "Удалить все оборудование из слотов для оружия, брони и еды?"
+  "inventory.equip_clear_msg": "Удалить все оборудование из слотов для оружия, брони и еды?",
+  "inventory.clear_key_btn": "Очистить ключевые элементы",
+  "inventory.clear_key_confirm_msg": "Удалить все ключевые элементы? (Элементы разблокировки будут добавлены автоматически)",
+  "inventory.clear_key_confirm_title": "Очистить ключевые элементы",
+  "character_transfer.no_players_folder": "Папка Players рядом с Level.sav не найдена. Не могу загрузить сохранение."
 }

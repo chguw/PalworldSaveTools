@@ -1593,7 +1593,11 @@
   "inventory.clear_btn": "清除",
   "inventory.equip_clear_btn": "清除",
   "inventory.clear_confirm_title": "清库存",
-  "inventory.clear_confirm_msg": "从库存和关键物品中删除所有物品？",
+  "inventory.clear_confirm_msg": "从库存中移除所有物品？ （关键物品、装备和解锁将被保留）",
   "inventory.equip_clear_title": "清除装备",
-  "inventory.equip_clear_msg": "移除武器、盔甲和食物槽中的所有装备？"
+  "inventory.equip_clear_msg": "移除武器、盔甲和食物槽中的所有装备？",
+  "inventory.clear_key_btn": "清除关键项目",
+  "inventory.clear_key_confirm_msg": "删除所有关键项目？ （解锁物品将自动重新添加）",
+  "inventory.clear_key_confirm_title": "清除关键项目",
+  "character_transfer.no_players_folder": "在 Level.sav 旁边找不到 Players 文件夹。无法加载保存。"
 }
