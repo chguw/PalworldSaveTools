@@ -1071,7 +1071,15 @@ class PlayerInventoryTab(QWidget):
             lst.addItem(item)
         search.textChanged.connect(lambda t, l=lst: [l.item(i).setHidden(t.lower() not in l.item(i).text().lower()) for i in range(l.count())])
         layout.addWidget(lst)
+        popup.setFixedWidth(self.player_select_btn.width())
         popup.move(self.player_select_btn.mapToGlobal(QPoint(0, self.player_select_btn.height())))
+        screen = QApplication.primaryScreen()
+        if screen:
+            screen_geo = screen.availableGeometry()
+            popup.adjustSize()
+            ph = popup.sizeHint().height()
+            if popup.y() + ph > screen_geo.bottom() and popup.y() - ph > screen_geo.top():
+                popup.move(popup.x(), popup.y() - ph - self.player_select_btn.height())
         popup.show()
         search.setFocus()
         chosen = None

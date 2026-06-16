@@ -1913,7 +1913,6 @@ class BaseInventoryTab(QWidget):
     def _show_guild_popup(self):
         popup = QWidget()
         popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-        popup.setMinimumWidth(260)
         popup.setStyleSheet('QWidget { background: rgba(18,20,24,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
         layout = QVBoxLayout(popup)
         layout.setContentsMargins(4, 4, 4, 4)
@@ -1948,7 +1947,15 @@ class BaseInventoryTab(QWidget):
                     self._on_guild_changed(guild_id)
             popup.close()
         list_widget.itemClicked.connect(select_guild)
-        popup.move(self.guild_button.mapToGlobal(self.guild_button.rect().bottomLeft()))
+        popup.setFixedWidth(self.guild_button.width())
+        popup.move(self.guild_button.mapToGlobal(QPoint(0, self.guild_button.height())))
+        screen = QApplication.primaryScreen()
+        if screen:
+            screen_geo = screen.availableGeometry()
+            popup.adjustSize()
+            ph = popup.sizeHint().height()
+            if popup.y() + ph > screen_geo.bottom() and popup.y() - ph > screen_geo.top():
+                popup.move(popup.x(), popup.y() - ph - self.guild_button.height())
         popup.show()
     def _clear_guild_selection(self):
         self._current_guild_id = None
@@ -1964,7 +1971,6 @@ class BaseInventoryTab(QWidget):
             return
         popup = QWidget()
         popup.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-        popup.setMinimumWidth(260)
         popup.setStyleSheet('QWidget { background: rgba(18,20,24,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
         layout = QVBoxLayout(popup)
         layout.setContentsMargins(4, 4, 4, 4)
@@ -1999,7 +2005,15 @@ class BaseInventoryTab(QWidget):
                     self._on_base_changed(base_id)
             popup.close()
         list_widget.itemClicked.connect(select_base)
-        popup.move(self.base_button.mapToGlobal(self.base_button.rect().bottomLeft()))
+        popup.setFixedWidth(self.base_button.width())
+        popup.move(self.base_button.mapToGlobal(QPoint(0, self.base_button.height())))
+        screen = QApplication.primaryScreen()
+        if screen:
+            screen_geo = screen.availableGeometry()
+            popup.adjustSize()
+            ph = popup.sizeHint().height()
+            if popup.y() + ph > screen_geo.bottom() and popup.y() - ph > screen_geo.top():
+                popup.move(popup.x(), popup.y() - ph - self.base_button.height())
         popup.show()
     def _clear_base_selection(self):
         self._current_base_id = None

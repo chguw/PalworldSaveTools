@@ -131,7 +131,7 @@ class SkillPicker(QWidget):
         layout.addWidget(self._search)
         self._list = QListWidget()
         self._list.setStyleSheet(PICKER_LIST_STYLE)
-        self._list.setMaximumHeight(300)
+        self._list.setMaximumHeight(100)
         self._list.setMinimumWidth(220)
         layout.addWidget(self._list)
         self._anim_timer = None
