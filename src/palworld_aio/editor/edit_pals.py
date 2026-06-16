@@ -4155,11 +4155,11 @@ def _show_learned_moves_dialog(raw, parent):
                     tip_parts.append('')
                     tip_parts.append(desc)
                 slot.setToolTip('<br>'.join(tip_parts))
-            def _make_handler(sv, parent_dlg):
+            def _make_handler(sv, parent_dlg, slot_widget, slot_layout, count_label):
                 def handler(event):
                     event.accept()
-                    sname = sv.split('::')[-1]
-                    confirm = show_question(slot, t('edit_pals.learnt_skills_title'), t('edit_pals.confirm_remove_skill', name=sname))
+                    sname = PalFrame._SKILLMAP.get(sv.split('::')[-1].lower(), sv.split('::')[-1])
+                    confirm = show_question(parent_dlg, t('edit_pals.learnt_skills_title'), t('edit_pals.confirm_remove_skill', name=sname))
                     if not confirm:
                         return
                     mw_data = raw.get('MasteredWaza', {})
@@ -4173,10 +4173,17 @@ def _show_learned_moves_dialog(raw, parent):
                         mlist.remove(sv)
                         new_mw = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': mlist}, 'type': 'ArrayProperty'}
                         raw['MasteredWaza'] = new_mw
-                    parent_dlg.accept()
-                    show_information(parent_dlg, t('edit_pals.learnt_skills_title'), t('edit_pals.learnt_skills_removed', name=sname))
+                    slot_layout.removeWidget(slot_widget)
+                    slot_widget.deleteLater()
+                    remaining = slot_layout.count() - 1
+                    count_label.setText(t('edit_pals.learnt_skills_count', count=remaining))
+                    if remaining == 0:
+                        nl = QLabel('--')
+                        nl.setAlignment(Qt.AlignCenter)
+                        nl.setStyleSheet('font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.25); background: transparent; border: none; padding: 20px;')
+                        slot_layout.insertWidget(0, nl)
                 return handler
-            slot.mousePressEvent = _make_handler(skill_val, dlg)
+            slot.mousePressEvent = _make_handler(skill_val, dlg, slot, scl, count_lbl)
             scl.insertWidget(scl.count() - 1, slot)
     scroll.setWidget(scroll_ct)
     il.addWidget(scroll, 1)
