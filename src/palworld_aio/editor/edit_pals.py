@@ -4773,6 +4773,11 @@ class PalEditorWidget(QWidget):
     def set_player(self, player_uid, player_name):
         self.player_uid = player_uid
         self.player_name = player_name
+        self._clicked_pal = None
+        self.selected_pal_slot = None
+        self._clear_party_highlight()
+        self._clear_palbox_highlight()
+        self.pal_info.set_clicked_pal(None)
         self._get_container_ids()
         PalFrame._load_maps()
         self._load_pals()

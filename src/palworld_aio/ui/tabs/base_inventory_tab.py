@@ -1987,7 +1987,7 @@ class BaseInventoryTab(QWidget):
         clear_item.setData(Qt.UserRole, '__clear__')
         list_widget.addItem(clear_item)
         for base in self._bases_data:
-            item = QListWidgetItem(f"{base['guild_name']} - Base {base['id'][:8]}")
+            item = QListWidgetItem(f"{base['id'][:8]}")
             item.setData(Qt.UserRole, base['id'])
             list_widget.addItem(item)
         def apply_filter(text):
@@ -2116,7 +2116,7 @@ class BaseInventoryTab(QWidget):
             return
         self._current_base_id = base_id
         base = next((b for b in self._bases_data if str(b['id']) == str(base_id)), None)
-        self._current_base_name = f"{base.get('guild_name', '')} - Base {str(base_id)[:8]}" if base else str(base_id)[:8]
+        self._current_base_name = str(base_id)[:8] if base else str(base_id)[:8]
         self.base_button.setText(self._current_base_name)
         guild_id_key = str(self._current_guild_id).replace('-', '').lower() if self._current_guild_id else None
         base_id_key = str(base_id).replace('-', '').lower()
