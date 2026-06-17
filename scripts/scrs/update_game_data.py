@@ -223,6 +223,7 @@ def _copy_icon_as_webp(source: str | Path, target_dir: Path) -> str | None:
             try:
                 from PIL import Image
                 Image.open(str(sp)).save(str(target), 'WEBP', quality=90)
+                print(f'    Converted: {sp.name} -> {target.name}')
             except ImportError:
                 print(f'    ERROR: Pillow is required to convert {sp.name} to WEBP')
                 return None
