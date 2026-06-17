@@ -883,7 +883,7 @@ class MapTab(QWidget):
         players_dir = os.path.join(constants.current_save_path, 'Players')
         if not os.path.exists(players_dir):
             return players
-        for uid, name, gid, lastseen, level in players_data:
+        for uid, name, gid, lastseen, level, *_ in players_data:
             player_uid = uid.replace('-', '').upper()
             if not player_uid:
                 continue

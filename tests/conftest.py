@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import os
+import re
+from collections import Counter
+
 import pytest
 from pathlib import Path
 
@@ -49,6 +53,20 @@ def pytest_addoption(parser):
         default=False,
         help='Print full structural report without aborting',
     )
+    parser.addoption(
+        '--ruthless',
+        action='store_true',
+        default=False,
+        help='No mercy mode — scan everything, flag potential false positives (e.g. '
+             'icon-asset correlations, heuristic checks)',
+    )
+    parser.addoption(
+        '--warning-mode',
+        action='store',
+        default='full',
+        choices=['full', 'compact', 'counts'],
+        help='Warning display mode: full (default), compact (summarized per test), counts (numbers only)',
+    )
 
 
 def _run_structural_audit(config) -> StructuralReport | None:
@@ -75,6 +93,10 @@ def pytest_sessionstart(session):
             pass
     except Exception:
         pass
+
+    # Propagate --ruthless to test_game_data_json via env var
+    if session.config.getoption('--ruthless', default=False):
+        os.environ.setdefault('PST_RUTHLESS', '1')
 
     for parent_dir in get_all_parent_dirs():
         parent_str = str(parent_dir)
@@ -139,3 +161,86 @@ class Helpers:
 @pytest.fixture
 def helpers() -> Helpers:
     return Helpers()
+
+
+# ---------------------------------------------------------------------------
+# Warning display modes (compact / counts)
+# ---------------------------------------------------------------------------
+
+_WARNING_PREFIX_RE = re.compile(r'^.*?:\d+: \w+: ')
+
+
+def _raw_msg(record):
+    """Get the raw warning text from a WarningReport, stripping pytest's
+    'file:line: category:' display prefix."""
+    formatted = str(record.message)
+    m = _WARNING_PREFIX_RE.match(formatted)
+    if m:
+        return formatted[m.end():]
+    return formatted
+
+
+def _parse_warning(record):
+    """Extract (count, entity, description) from a WarningReport whose
+    raw message follows '<N> <entity>(s) with <description>:\\n  ...'.
+    Returns a dict or None if parsing fails.
+    """
+    msg = _raw_msg(record)
+    first, *_ = msg.split('\n', 1)
+    m = re.match(r'^(\d+)\s+(.+?)\s+(with\s+.+)', first)
+    if not m:
+        return None
+    return {
+        'count': int(m.group(1)),
+        'entity': m.group(2).strip().rstrip('(s'),
+        'description': m.group(3).rstrip(':').strip(),
+    }
+
+
+def _first_example(record):
+    """Return a short (≤70 chars) example from the warning body."""
+    msg = _raw_msg(record)
+    for line in msg.split('\n')[1:]:
+        stripped = line.strip()
+        if stripped and not stripped.startswith('...'):
+            return stripped[:70]
+    return ''
+
+
+@pytest.hookimpl(tryfirst=True)
+def pytest_terminal_summary(terminalreporter, config):
+    """Override default warning summary when --warning-mode is compact/counts."""
+    mode = config.getoption('--warning-mode')
+    if mode == 'full':
+        return
+
+    records = terminalreporter.stats.pop('warnings', [])
+    if not records:
+        return
+
+    terminalreporter.write_sep('=', '')
+    tw = terminalreporter
+
+    if mode == 'counts':
+        per_test = Counter()
+        for r in records:
+            test_name = r.nodeid.split('::')[-1]
+            per_test[test_name] += 1
+        tw.write_line('Warnings (counts):')
+        for name, n in per_test.most_common():
+            tw.write_line(f'  {name:<50s} {n:>4d}')
+        tw.write_line(f'  {"─" * 55}')
+        tw.write_line(f'  {"Total":<50s} {sum(per_test.values()):>4d}')
+    else:  # compact
+        tw.write_line('Warnings (compact):')
+        for r in records:
+            parsed = _parse_warning(r)
+            if parsed:
+                example = _first_example(r)
+                ex_suffix = f'  e.g. {example}' if example else ''
+                tw.write_line(
+                    f'  {parsed["count"]:>5d} {parsed["entity"]:<30s}'
+                    f' {parsed["description"]:<50s}{ex_suffix}'
+                )
+            else:
+                tw.write_line(f'  {str(r.message)[:120]}')

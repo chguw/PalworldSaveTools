@@ -13,6 +13,7 @@ Menu mode:
 """
 from __future__ import annotations
 
+import datetime
 import os
 import subprocess
 import sys
@@ -31,6 +32,7 @@ SRC = PROJECT_ROOT / 'src'
 TESTS = PROJECT_ROOT / 'tests'
 SCANNER = PROJECT_ROOT / 'scripts' / 'scrs' / 'check_theme_violations.py'
 VALIDATOR = PROJECT_ROOT / 'scripts' / 'scrs' / 'validate_imports.py'
+LOG_DIR = PROJECT_ROOT / 'Logs' / 'Tests_Logger'
 
 _COLORS = (
     hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
@@ -77,7 +79,7 @@ def _build_pytest_args(
     return args
 
 
-def _run(cmd: list[str], *, label: str = '') -> int:
+def _run(cmd: list[str], *, label: str = '', log_to_file: bool = False) -> int:
     print(f'\n  {BOLD("─" * 60)}')
     if label:
         print(f'  {BLUE(BOLD(label))}')
@@ -85,12 +87,29 @@ def _run(cmd: list[str], *, label: str = '') -> int:
     print(f'  {BOLD("─" * 60)}\n')
 
     t0 = time.time()
-    result = subprocess.run(cmd, cwd=str(PROJECT_ROOT))
+    if log_to_file:
+        result = subprocess.run(cmd, cwd=str(PROJECT_ROOT), capture_output=True, text=True)
+        output = result.stdout + result.stderr
+        print(output, end='')
+        _append_log(output, label or cmd[0])
+    else:
+        result = subprocess.run(cmd, cwd=str(PROJECT_ROOT))
     elapsed = time.time() - t0
 
     mark = GREEN('PASS') if result.returncode == 0 else RED('FAIL')
     print(f'\n  [{mark}]  {elapsed:.1f}s  (exit code {result.returncode})\n')
     return result.returncode
+
+
+def _append_log(output: str, label: str) -> None:
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    path = LOG_DIR / f'test_run_{ts}.txt'
+    with open(path, 'w') as f:
+        f.write(f'--- {label} ---\n')
+        f.write(output)
+        if not output.endswith('\n'):
+            f.write('\n')
 
 
 class Runner:
@@ -100,6 +119,8 @@ class Runner:
         self.show_stdout = False
         self.deep_audit = True
         self.strict_paths = True
+        self.warning_mode = 'full'  # full | compact | counts
+        self.log_to_file = False
 
     def _structural_flags(self) -> list[str]:
         flags: list[str] = []
@@ -109,10 +130,16 @@ class Runner:
             flags.append('--no-strict-paths')
         return flags
 
+    def _warning_flags(self) -> list[str]:
+        if self.warning_mode == 'full':
+            return []
+        return ['--warning-mode', self.warning_mode]
+
     def _pytest(self, target: str, label: str, include_slow: bool = False) -> int:
         args = _build_pytest_args(target, self.verbose, self.stop_first, self.show_stdout, include_slow)
         args.extend(self._structural_flags())
-        return _run(args, label=label)
+        args.extend(self._warning_flags())
+        return _run(args, label=label, log_to_file=self.log_to_file)
 
     def all_tests(self) -> int:
         return self._pytest(str(TESTS), 'Full test suite (fast)')
@@ -167,34 +194,42 @@ class Runner:
         if ruthless:
             cmd.append('--ruthless')
         label = 'Theme scan (no mercy — scanning every file)' if ruthless else 'Theme scan (whitelist on)'
-        return _run(cmd, label=label)
+        return _run(cmd, label=label, log_to_file=self.log_to_file)
+
+    def json_pairing(self, ruthless: bool = False) -> int:
+        target = str(TESTS / 'integration' / 'test_game_data_json.py')
+        label = 'JSON pairing (no mercy — full heuristic checks)' if ruthless else 'JSON pairing (normal — false positives skipped)'
+        args = _build_pytest_args(target, self.verbose, self.stop_first, self.show_stdout)
+        if ruthless:
+            args.append('--ruthless')
+        return _run(args, label=label, log_to_file=self.log_to_file)
 
     def validate_imports(self) -> int:
-        return _run([PYTHON, str(VALIDATOR)], label='Check all module imports')
+        return _run([PYTHON, str(VALIDATOR)], label='Check all module imports', log_to_file=self.log_to_file)
 
     def structural_audit_all(self) -> int:
         flags = ['--deep-audit', '--strict-paths', '--dump-structural']
         cmd = [PYTHON, '-m', 'pytest', str(TESTS), '-v', '--tb=short']
         cmd.extend(flags)
-        return _run(cmd, label='Structural audit (ALL checks)')
+        return _run(cmd, label='Structural audit (ALL checks)', log_to_file=self.log_to_file)
 
     def structural_file_pairing(self) -> int:
         flags = ['--deep-audit', '--no-strict-paths', '--dump-structural']
         cmd = [PYTHON, '-m', 'pytest', str(TESTS), '-v', '--tb=short']
         cmd.extend(flags)
-        return _run(cmd, label='Structural audit — file pairing')
+        return _run(cmd, label='Structural audit — file pairing', log_to_file=self.log_to_file)
 
     def structural_import_graph(self) -> int:
         flags = ['--deep-audit', '--no-strict-paths', '--dump-structural']
         cmd = [PYTHON, '-m', 'pytest', str(TESTS), '-v', '--tb=short']
         cmd.extend(flags)
-        return _run(cmd, label='Structural audit — import graph')
+        return _run(cmd, label='Structural audit — import graph', log_to_file=self.log_to_file)
 
     def structural_resource_audit(self) -> int:
         flags = ['--no-deep-audit', '--strict-paths', '--dump-structural']
         cmd = [PYTHON, '-m', 'pytest', str(TESTS), '-v', '--tb=short']
         cmd.extend(flags)
-        return _run(cmd, label='Structural audit — resource paths')
+        return _run(cmd, label='Structural audit — resource paths', log_to_file=self.log_to_file)
 
     def menu(self) -> str:
         v = GREEN('ON') if self.verbose else RED('OFF')
@@ -202,6 +237,8 @@ class Runner:
         s = GREEN('ON') if self.show_stdout else RED('OFF')
         da = GREEN('ON') if self.deep_audit else RED('OFF')
         sp = GREEN('ON') if self.strict_paths else RED('OFF')
+        wm = {'full': GREEN('full'), 'compact': CYAN('compact'), 'counts': YELLOW('counts')}[self.warning_mode]
+        lf = GREEN('ON') if self.log_to_file else RED('OFF')
 
         print(f'''
   {BOLD("───── Test suites ─────")}
@@ -233,6 +270,8 @@ class Runner:
     {CYAN("22")}  test_utils                 {DIM("app")}
     {CYAN("23")}  test_check_theme_violations  {DIM("scanner")}
     {CYAN("24")}  test_resource_integrity     {DIM("integration")}
+    {CYAN("25")}  test_game_data_json       {DIM("game data JSON schema validation")}
+    {CYAN("26")}  test_relative_imports      {DIM("import audit meta-tests")}
 
   {BOLD("───── Structural audit ──")}
     {CYAN("A")}   Structural audit (ALL)     {DIM("file pairing + import graph + resource audit")}
@@ -240,23 +279,29 @@ class Runner:
     {CYAN("G")}   Import graph only          {DIM("circular deps + test purity")}
     {CYAN("R")}   Resource audit only        {DIM("AST path harvest + filesystem cross-check")}
 
+  {BOLD("───── JSON pairing ────")}
+    {CYAN("J")}   JSON pairing (normal)      {DIM("skips heuristic checks, no false positives")}
+    {CYAN("K")}   JSON pairing (NO MERCY)    {DIM("full heuristic checks, flags everything")}
+
   {BOLD("───── Scanners ────────")}
     {CYAN("T")}   Theme scan (normal)        {DIM("whitelist on, skips theme files")}
     {CYAN("U")}   Theme scan (NO MERCY)      {DIM("whitelist OFF, scans EVERYTHING")}
     {CYAN("I")}   Validate imports           {DIM("check all modules import cleanly")}
 
-  {BOLD("───── Settings ────────")}
+    {BOLD("───── Settings ────────")}
     {CYAN("V")}   Verbose output             {v}
     {CYAN("X")}   Stop on first fail         {x}
     {CYAN("S")}   Show stdout                {s}
     {CYAN("D")}   Deep audit                 {da} {DIM("(file pairing + import graph)")}
     {CYAN("C")}   Strict paths               {sp} {DIM("(resource path audit)")}
+    {CYAN("W")}   Warning mode               {wm} {DIM("(full / compact / counts)")}
+    {CYAN("L")}   Log to file                {lf}
 
   {DIM("─────")}
     {CYAN("Q")}   Quit
 ''')
         try:
-            return input(f'  {BOLD("Pick one")} [{CYAN("1")}-{CYAN("24")} {DIM("|")} {CYAN("A")}{DIM("/")}{CYAN("P")}{DIM("/")}{CYAN("G")}{DIM("/")}{CYAN("R")} {DIM("|")} {CYAN("T")}{DIM("/")}{CYAN("U")}{DIM("/")}{CYAN("I")} {DIM("|")} {CYAN("V")}{DIM("/")}{CYAN("X")}{DIM("/")}{CYAN("S")}{DIM("/")}{CYAN("D")}{DIM("/")}{CYAN("C")} {DIM("|")} {CYAN("Q")}]: ').strip().lower()
+            return input(f'  {BOLD("Pick one")} [{CYAN("1")}-{CYAN("26")} {DIM("|")} {CYAN("A")}{DIM("/")}{CYAN("P")}{DIM("/")}{CYAN("G")}{DIM("/")}{CYAN("R")} {DIM("|")} {CYAN("J")}{DIM("/")}{CYAN("K")} {DIM("|")} {CYAN("T")}{DIM("/")}{CYAN("U")}{DIM("/")}{CYAN("I")} {DIM("|")} {CYAN("V")}{DIM("/")}{CYAN("X")}{DIM("/")}{CYAN("S")}{DIM("/")}{CYAN("D")}{DIM("/")}{CYAN("C")}{DIM("/")}{CYAN("W")}{DIM("/")}{CYAN("L")} {DIM("|")} {CYAN("Q")}]: ').strip().lower()
         except (KeyboardInterrupt, EOFError):
             print()
             return 'q'
@@ -296,10 +341,14 @@ class Runner:
                 '22': lambda: self.single(str(TESTS / 'unit' / 'palworld_aio_tests' / 'test_utils.py'), 'test_utils'),
                 '23': lambda: self.single(str(TESTS / 'unit' / 'scripts' / 'test_check_theme_violations.py'), 'test_check_theme_violations'),
                 '24': lambda: self.single(str(TESTS / 'integration' / 'test_resource_integrity.py'), 'test_resource_integrity'),
+                '25': lambda: self.single(str(TESTS / 'integration' / 'test_game_data_json.py'), 'test_game_data_json'),
+                '26': lambda: self.single(str(TESTS / 'unit' / 'harness' / 'test_graph_validator_relative_imports.py'), 'test_relative_imports'),
                 'a': lambda: self.structural_audit_all(),
                 'p': lambda: self.structural_file_pairing(),
                 'g': lambda: self.structural_import_graph(),
                 'r': lambda: self.structural_resource_audit(),
+                'j': lambda: self.json_pairing(ruthless=False),
+                'k': lambda: self.json_pairing(ruthless=True),
                 't': lambda: self.theme_scan(ruthless=False),
                 'u': lambda: self.theme_scan(ruthless=True),
                 'i': lambda: self.validate_imports(),
@@ -308,6 +357,8 @@ class Runner:
                 's': lambda: self._toggle('show_stdout'),
                 'd': lambda: self._toggle('deep_audit'),
                 'c': lambda: self._toggle('strict_paths'),
+                'w': lambda: self._cycle_warning_mode(),
+                'l': lambda: self._toggle('log_to_file'),
             }.get(choice)
 
             if handler:
@@ -327,9 +378,17 @@ class Runner:
             'verbose': 'Verbose output',
             'stop_first': 'Stop on first fail',
             'show_stdout': 'Show stdout',
+            'log_to_file': 'Log to file',
         }.get(attr, attr)
         status = GREEN('ON') if not current else RED('OFF')
         print(f'  {label}: toggled {status}')
+
+    def _cycle_warning_mode(self) -> None:
+        order = ['full', 'compact', 'counts']
+        idx = order.index(self.warning_mode)
+        self.warning_mode = order[(idx + 1) % len(order)]
+        labels = {'full': 'full (all details)', 'compact': 'compact (summarized)', 'counts': 'counts only'}
+        print(f'  Warning mode: {CYAN(labels[self.warning_mode])}')
 
 
 def main() -> int:

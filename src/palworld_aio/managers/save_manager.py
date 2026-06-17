@@ -832,9 +832,10 @@ class SaveManager(QObject):
                 uid = str(uid_raw) if uid_raw is not None else ''
                 name = p.get('player_info', {}).get('player_name', 'Unknown')
                 last = p.get('player_info', {}).get('last_online_real_time')
-                lastseen = 'Unknown' if last is None else format_duration_short((tick - last) / 10000000.0)
+                elapsed = None if last is None else (tick - last) / 10000000.0
+                lastseen = 'Unknown' if last is None else format_duration_short(elapsed)
                 level = constants.player_levels.get(uid.replace('-', ''), '?') if uid else '?'
-                out.append((uid, name, gid, lastseen, level))
+                out.append((uid, name, gid, lastseen, level, elapsed))
         return out
     def get_guild_name_by_id(self, target_gid):
         if not constants.loaded_level_json:

@@ -92,13 +92,15 @@ def get_guild_members(gid):
             name = p.get('player_info', {}).get('player_name', 'Unknown')
             last = p.get('player_info', {}).get('last_online_real_time')
             lastseen = 'Unknown'
+            last_sort = None
             if last is not None:
+                last_sort = (tick - last) / 10000000.0
                 from ..utils import format_duration_short
-                lastseen = format_duration_short((tick - last) / 10000000.0)
+                lastseen = format_duration_short(last_sort)
             level = constants.player_levels.get(uid.replace('-', ''), '?')
             pals = constants.PLAYER_PAL_COUNTS.get(uid.lower(), 0)
             is_leader = as_uuid(uid) == admin_uid
-            out.append({'uid': uid, 'name': name, 'lastseen': lastseen, 'level': level, 'pals': pals, 'is_leader': is_leader})
+            out.append({'uid': uid, 'name': name, 'lastseen': lastseen, 'last_sort': last_sort, 'level': level, 'pals': pals, 'is_leader': is_leader})
         if out and (not any((m['is_leader'] for m in out))):
             out[0]['is_leader'] = True
         return out

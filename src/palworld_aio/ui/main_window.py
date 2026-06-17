@@ -709,13 +709,14 @@ class MainWindow(QMainWindow):
     def _refresh_players(self):
         self.players_panel.clear()
         players = save_manager.get_players()
-        for uid, name, gid, lastseen, level in players:
+        for uid, name, gid, lastseen, level, elapsed in players:
             pals = constants.PLAYER_PAL_COUNTS.get(uid.replace('-', '').lower(), 0)
             gname = save_manager.get_guild_name_by_id(gid)
             glevel = save_manager.get_guild_level_by_id(gid)
             is_leader = save_manager.is_player_guild_leader(gid, uid)
             display_name = f'[L]{name}' if is_leader else name
-            self.players_panel.add_item([display_name, lastseen, level, pals, uid, gname, gid, glevel])
+            sort_keys = {1: elapsed if elapsed is not None else float('inf')}
+            self.players_panel.add_item([display_name, lastseen, level, pals, uid, gname, gid, glevel], sort_keys=sort_keys)
     def _refresh_guilds(self):
         self.guilds_panel.clear()
         self.guild_members_panel.clear()
@@ -1020,7 +1021,9 @@ class MainWindow(QMainWindow):
             members = get_guild_members(data[1])
             for m in members:
                 prefix = '[L]' if m['is_leader'] else ''
-                self.guild_members_panel.add_item([prefix + m['name'], m['lastseen'], m['level'], m['pals'], m['uid']])
+                last_sort = m.get('last_sort')
+                sort_keys = {1: last_sort if last_sort is not None else float('inf')}
+                self.guild_members_panel.add_item([prefix + m['name'], m['lastseen'], m['level'], m['pals'], m['uid']], sort_keys=sort_keys)
     def _on_guild_member_selected(self, data):
         if data:
             name = data[0].replace('[L]', '')

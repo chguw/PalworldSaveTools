@@ -5116,6 +5116,13 @@ class PalCreateDialog(QDialog):
         self._search_edit = QLineEdit()
         self._search_edit.setPlaceholderText('Type to filter pals...')
         filter_layout.addWidget(self._search_edit)
+        self._show_standard_chk = QCheckBox('Standard')
+        self._show_standard_chk.setChecked(True)
+        self._show_standard_chk.toggled.connect(self._filter_pal_list)
+        filter_layout.addWidget(self._show_standard_chk)
+        self._show_boss_chk = QCheckBox('Boss')
+        self._show_boss_chk.toggled.connect(self._filter_pal_list)
+        filter_layout.addWidget(self._show_boss_chk)
         filter_layout.addStretch()
         layout.addLayout(filter_layout)
         self.pal_list = QListWidget()
@@ -5209,8 +5216,10 @@ class PalCreateDialog(QDialog):
         layout.addLayout(nick_layout)
     def _filter_pal_list(self):
         search_text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
+        show_standard = self._show_standard_chk.isChecked() if hasattr(self, '_show_standard_chk') else True
+        show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else False
         self.pal_list.clear()
-        for asset, name in sorted(PalFrame._NAMEMAP.items()):
+        for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda kv: (kv[1], kv[0])):
             asset_lower = asset.lower()
             if any((asset_lower.startswith(p) for p in ('summon_', 'quest_', 'raid_', 'predator_', 'police_'))):
                 continue
@@ -5241,6 +5250,11 @@ class PalCreateDialog(QDialog):
                 continue
             if search_text and search_text not in name.lower() and (search_text not in asset.lower()):
                 continue
+            is_variant = any((asset.upper().startswith(p) for p in _BOSS_PREFIXES))
+            if is_variant and not show_boss:
+                continue
+            if (not is_variant) and not show_standard:
+                continue
             li = QListWidgetItem(name)
             li.setData(Qt.UserRole, asset)
             pix = _get_cached_pixmap(_get_pal_icon_path(asset), 48)
@@ -5256,7 +5270,6 @@ class PalCreateDialog(QDialog):
                 tip += f'<br><br>{html_desc}'
             li.setToolTip(tip)
             li.setSizeHint(QSize(80, 80))
-            is_variant = any((asset.upper().startswith(p) for p in _BOSS_PREFIXES))
             if is_variant:
                 badge = _get_boss_alpha_pixmap(14)
                 if badge and (not badge.isNull()):

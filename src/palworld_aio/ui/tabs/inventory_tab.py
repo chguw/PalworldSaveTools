@@ -1043,7 +1043,7 @@ class PlayerInventoryTab(QWidget):
         if constants.loaded_level_json:
             from palworld_aio.managers.save_manager import save_manager
             players = save_manager.get_players()
-            for uid, name, gid, lastseen, level in players:
+            for uid, name, gid, lastseen, level, *_ in players:
                 display_name = f'{name} (Lv.{level})'
                 self._player_list.append({'uid': uid, 'name': name, 'level': level, 'display': display_name})
     def _open_player_popup(self):
