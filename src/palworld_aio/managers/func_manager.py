@@ -755,7 +755,7 @@ def unlock_all_private_chests(parent=None):
     def deep_unlock(data):
         nonlocal count
         if isinstance(data, dict):
-            if data.get('concrete_model_type') == 'PalMapObjectPalBoothModel':
+            if data.get('concrete_model_type') in ('PalMapObjectPalBoothModel', 'PalMapObjectItemBoothModel'):
                 return
             if 'private_lock_player_uid' in data:
                 data['private_lock_player_uid'] = '00000000-0000-0000-0000-000000000000'
