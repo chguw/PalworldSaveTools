@@ -147,7 +147,8 @@ def build_with_nuitka(onefile: bool = True):
     ]
 
     if sys.platform == 'win32':
-        cmd.append('--disable-console')
+        cmd.append('--windows-console-mode=disable')
+    cmd.append('--assume-yes-for-downloads')
 
     for mod in _INCLUDE_MODULES:
         cmd.append(f'--include-module={mod}')
@@ -228,4 +229,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
