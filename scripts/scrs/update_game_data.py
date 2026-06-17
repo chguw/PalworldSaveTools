@@ -207,19 +207,37 @@ def find_icon_file(export_texture_path: str, icon_subdir: str) -> str | None:
                     for found_file in search_dir.rglob(f'{pattern}{ext}'):
                         return f'/icons/{icon_subdir}/{found_file.name}'
     return None
+def _copy_icon_as_webp(source: str | Path, target_dir: Path) -> str | None:
+    if isinstance(source, str):
+        sp = Path(source)
+    else:
+        sp = source
+    if not sp.exists():
+        return None
+    stem = sp.stem
+    target = target_dir / f'{stem}.webp'
+    if not target.exists() or sp.stat().st_mtime > target.stat().st_mtime:
+        try:
+            if sp.suffix.lower() == '.webp':
+                shutil.copy2(str(sp), str(target))
+            else:
+                from PIL import Image
+                Image.open(str(sp)).save(str(target), 'WEBP', quality=90)
+        except ImportError:
+            shutil.copy2(str(sp), str(target))
+        except Exception as e:
+            print(f'    ERROR copying {sp.name}: {e}')
+            return None
+    return f'{stem}.webp'
 def copy_icon_to_resources(export_path: Path, target_subdir: str) -> str | None:
     if not export_path.exists():
         return None
     target_dir = ICONS_DIR / target_subdir
     ensure_dir(target_dir)
-    target_file = target_dir / export_path.name
-    if not target_file.exists() or export_path.stat().st_mtime > target_file.stat().st_mtime:
-        try:
-            shutil.copy2(str(export_path), str(target_file))
-        except Exception as e:
-            print(f'    ERROR copying {export_path.name}: {e}')
-            return None
-    return f'/icons/{target_subdir}/{export_path.name}'
+    basename = _copy_icon_as_webp(export_path, target_dir)
+    if basename is None:
+        return None
+    return f'/icons/{target_subdir}/{basename}'
 _ITEM_NAME_CACHE = {}
 _STRUCT_NAME_CACHE = {}
 _PAL_NAME_CACHE = {}
@@ -313,42 +331,37 @@ def find_and_copy_icon(search_name: str, target_subdir: str, export_subdirs: lis
     for term in unique_terms:
         full_path = icon_name_to_path.get(term)
         if full_path:
-            target_file = target_dir / os.path.basename(full_path)
-            if not target_file.exists():
-                shutil.copy2(full_path, str(target_file))
-            return f'/icons/{target_subdir}/{os.path.basename(full_path)}'
+            basename = _copy_icon_as_webp(full_path, target_dir)
+            if basename:
+                return f'/icons/{target_subdir}/{basename}'
     for term in unique_terms:
         with_ti = f't_itemicon_{term}'
         full_path = icon_name_to_path.get(with_ti)
         if full_path:
-            target_file = target_dir / os.path.basename(full_path)
-            if not target_file.exists():
-                shutil.copy2(full_path, str(target_file))
-            return f'/icons/{target_subdir}/{os.path.basename(full_path)}'
+            basename = _copy_icon_as_webp(full_path, target_dir)
+            if basename:
+                return f'/icons/{target_subdir}/{basename}'
     for term in unique_terms:
         with_t = f't_{term}'
         full_path = icon_name_to_path.get(with_t)
         if full_path:
-            target_file = target_dir / os.path.basename(full_path)
-            if not target_file.exists():
-                shutil.copy2(full_path, str(target_file))
-            return f'/icons/{target_subdir}/{os.path.basename(full_path)}'
+            basename = _copy_icon_as_webp(full_path, target_dir)
+            if basename:
+                return f'/icons/{target_subdir}/{basename}'
     for term in unique_terms:
         with_ibo = f't_icon_buildobject_{term}'
         full_path = icon_name_to_path.get(with_ibo)
         if full_path:
-            target_file = target_dir / os.path.basename(full_path)
-            if not target_file.exists():
-                shutil.copy2(full_path, str(target_file))
-            return f'/icons/{target_subdir}/{os.path.basename(full_path)}'
+            basename = _copy_icon_as_webp(full_path, target_dir)
+            if basename:
+                return f'/icons/{target_subdir}/{basename}'
     for term in unique_terms:
         with_ic = f't_icon_{term}'
         full_path = icon_name_to_path.get(with_ic)
         if full_path:
-            target_file = target_dir / os.path.basename(full_path)
-            if not target_file.exists():
-                shutil.copy2(full_path, str(target_file))
-            return f'/icons/{target_subdir}/{os.path.basename(full_path)}'
+            basename = _copy_icon_as_webp(full_path, target_dir)
+            if basename:
+                return f'/icons/{target_subdir}/{basename}'
     if not name_lower.startswith('t_itemicon_'):
         tier_stripped = re.sub('_\\d+$', '', name_lower)
         qualifier_stripped = re.sub('_(?:tier|rank|level)_\\d+$', '', name_lower)
@@ -377,10 +390,9 @@ def find_and_copy_icon(search_name: str, target_subdir: str, export_subdirs: lis
                 best_match = full_path
                 best_match_len = len(cache_key)
     if best_match:
-        target_file = target_dir / os.path.basename(best_match)
-        if not target_file.exists():
-            shutil.copy2(best_match, str(target_file))
-        return f'/icons/{target_subdir}/{os.path.basename(best_match)}'
+        basename = _copy_icon_as_webp(best_match, target_dir)
+        if basename:
+            return f'/icons/{target_subdir}/{basename}'
     return None
 def update_pal_data():
     print('\n=== Updating Pal Data ===')
@@ -495,10 +507,6 @@ def update_pal_data():
             t_file = RESOURCES_DIR / t_prefixed.lstrip('/')
             if t_file.exists():
                 final_icon = t_prefixed
-            else:
-                t_png = f'/icons/pals/T_{pal_id}_icon_normal.png'
-                if (RESOURCES_DIR / t_png.lstrip('/')).exists():
-                    final_icon = t_png
         pal_entry = {'name': display_name, 'asset': pal_id, 'icon': final_icon, 'elements': _build_element_icons(monster_row)}
         if monster_row and isinstance(monster_row, dict):
             el1 = monster_row.get('ElementType1', '')
@@ -1074,7 +1082,7 @@ def update_passive_data():
         add_weapon = bool(row_data.get('AddShotWeapon', False) or row_data.get('AddMeleeWeapon', False)) if isinstance(row_data, dict) else False
         invoke_always = bool(row_data.get('InvokeAlways', False)) if isinstance(row_data, dict) else False
         category = row_data.get('Category', '') if isinstance(row_data, dict) else ''
-        passive_entry = {'name': display_name, 'asset': passive_id, 'rank': rank, 'icon': copied_icon or '/icons/passives/T_icon_skillstatus_rank_arrow_04.png', 'description': desc_text, 'effect1': ev1, 'effect2': ev2, 'effect3': ev3, 'effect4': ev4, 'efftype1': et1, 'efftype2': et2, 'efftype3': et3, 'add_pal': add_pal, 'add_rare_pal': add_rare_pal, 'add_world_tree_pal': add_world_tree_pal, 'add_mutation_pal': add_mutation_pal, 'add_armor': add_armor, 'add_accessory': add_accessory, 'add_weapon': add_weapon, 'invoke_always': invoke_always, 'category': category}
+        passive_entry = {'name': display_name, 'asset': passive_id, 'rank': rank, 'icon': copied_icon or '/icons/passives/T_icon_skillstatus_rank_arrow_04.webp', 'description': desc_text, 'effect1': ev1, 'effect2': ev2, 'effect3': ev3, 'effect4': ev4, 'efftype1': et1, 'efftype2': et2, 'efftype3': et3, 'add_pal': add_pal, 'add_rare_pal': add_rare_pal, 'add_world_tree_pal': add_world_tree_pal, 'add_mutation_pal': add_mutation_pal, 'add_armor': add_armor, 'add_accessory': add_accessory, 'add_weapon': add_weapon, 'invoke_always': invoke_always, 'category': category}
         updated_passives.append(passive_entry)
     result = {'passives': updated_passives}
     save_resource_json('passivedata.json', result)
@@ -1737,7 +1745,7 @@ def update_pal_passive_data():
             display_name = l10n_name
         else:
             display_name = skill_id
-        passive_entry = {'name': display_name, 'asset': skill_id, 'icon': '/icons/passives/T_icon_skillstatus_rank_arrow_04.png'}
+        passive_entry = {'name': display_name, 'asset': skill_id, 'icon': '/icons/passives/T_icon_skillstatus_rank_arrow_04.webp'}
         updated_passives.append(passive_entry)
     def _clean_asset_name(asset: str) -> str:
         cleaned = asset.replace('_', ' ').strip()
@@ -1758,7 +1766,7 @@ def update_pal_passive_data():
             else:
                 display_name = _clean_asset_name(p['asset'])
             seen_assets.add(asset_lower)
-            updated_passives.append({'name': display_name, 'asset': p['asset'], 'icon': p.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.png')})
+            updated_passives.append({'name': display_name, 'asset': p['asset'], 'icon': p.get('icon', '/icons/passives/T_icon_skillstatus_rank_arrow_04.webp')})
     except Exception as e:
         print(f'    Warning: Could not merge passives: {e}')
     result = {'passives': updated_passives}
@@ -2048,12 +2056,13 @@ def update_element_data():
                     found = src
                     break
             if found:
-                dst = target_dir / found.name
-                if not dst.exists() or found.stat().st_mtime > dst.stat().st_mtime:
-                    shutil.copy2(str(found), str(dst))
-                edef['icons'][key] = f'/icons/elements/{found.name}'
+                basename = _copy_icon_as_webp(found, target_dir)
+                if basename:
+                    edef['icons'][key] = f'/icons/elements/{basename}'
+                else:
+                    edef['icons'][key] = f'/icons/elements/{stem}.webp'
             else:
-                edef['icons'][key] = f'/icons/elements/{stem}.png'
+                edef['icons'][key] = f'/icons/elements/{stem}.webp'
                 print(f'    WARNING: Element icon not found: {stem}.png')
     save_resource_json('elementdata.json', {'elements': _ELEMENT_DEFS})
     print(f'  Total elements: {len(_ELEMENT_DEFS)}')
@@ -2087,67 +2096,67 @@ def _convert_icons(Image):
                     pass
     if optimized:
         print(f'  Optimized {optimized} icons, saved {saved_bytes / 1024:.0f} KB')
-        updated_refs = 0
-        def _scan_icon_refs(data):
-            nonlocal updated_refs, modified
-            if isinstance(data, dict):
-                for key, entries in data.items():
-                    if isinstance(entries, list):
-                        for entry in entries:
-                            if isinstance(entry, dict):
-                                if 'icon' in entry:
-                                    icon = entry['icon']
-                                    if icon.endswith('.png'):
-                                        webp_icon = icon[:-4] + '.webp'
-                                        webp_path = RESOURCES_DIR / webp_icon.lstrip('/')
-                                        if webp_path.exists():
-                                            entry['icon'] = webp_icon
-                                            modified = True
-                                            updated_refs += 1
-                                icns = entry.get('icons', {})
-                                if isinstance(icns, dict):
-                                    for ikey, ival in list(icns.items()):
-                                        if isinstance(ival, str) and ival.endswith('.png'):
-                                            webp_val = ival[:-4] + '.webp'
-                                            webp_path = RESOURCES_DIR / webp_val.lstrip('/')
-                                            if webp_path.exists():
-                                                icns[ikey] = webp_val
-                                                modified = True
-                                                updated_refs += 1
-                    elif isinstance(entries, dict):
-                        for ikey, ival in entries.items():
-                            if isinstance(ival, str) and ival.endswith('.png'):
-                                webp_val = ival[:-4] + '.webp'
-                                webp_path = RESOURCES_DIR / webp_val.lstrip('/')
-                                if webp_path.exists():
-                                    data[key][ikey] = webp_val
-                                    modified = True
-                                    updated_refs += 1
-        scan_fnames = []
-        for fname in _MERGED_FILES:
-            scan_fnames.append(fname)
-        for fname in _MERGED_FILES_WHOLE:
-            if fname not in scan_fnames:
-                scan_fnames.append(fname)
-        scan_fnames += ['uidata.json']
-        for fname in scan_fnames:
-            fpath = RESOURCES_DIR / fname
-            if not fpath.exists():
-                continue
-            try:
-                with open(fpath, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-            except:
-                continue
-            modified = False
-            _scan_icon_refs(data)
-            if modified:
-                with open(fpath, 'w', encoding='utf-8') as f:
-                    json.dump(data, f, indent=4, ensure_ascii=False)
-        if updated_refs:
-            print(f'  Updated {updated_refs} icon references in data files')
     else:
         print('  No icons to optimize')
+    updated_refs = 0
+    def _scan_icon_refs(data):
+        nonlocal updated_refs, modified
+        if isinstance(data, dict):
+            for key, entries in data.items():
+                if isinstance(entries, list):
+                    for entry in entries:
+                        if isinstance(entry, dict):
+                            if 'icon' in entry:
+                                icon = entry['icon']
+                                if icon.endswith('.png'):
+                                    webp_icon = icon[:-4] + '.webp'
+                                    webp_path = RESOURCES_DIR / webp_icon.lstrip('/')
+                                    if webp_path.exists():
+                                        entry['icon'] = webp_icon
+                                        modified = True
+                                        updated_refs += 1
+                            icns = entry.get('icons', {})
+                            if isinstance(icns, dict):
+                                for ikey, ival in list(icns.items()):
+                                    if isinstance(ival, str) and ival.endswith('.png'):
+                                        webp_val = ival[:-4] + '.webp'
+                                        webp_path = RESOURCES_DIR / webp_val.lstrip('/')
+                                        if webp_path.exists():
+                                            icns[ikey] = webp_val
+                                            modified = True
+                                            updated_refs += 1
+                elif isinstance(entries, dict):
+                    for ikey, ival in entries.items():
+                        if isinstance(ival, str) and ival.endswith('.png'):
+                            webp_val = ival[:-4] + '.webp'
+                            webp_path = RESOURCES_DIR / webp_val.lstrip('/')
+                            if webp_path.exists():
+                                data[key][ikey] = webp_val
+                                modified = True
+                                updated_refs += 1
+    scan_fnames = []
+    for fname in _MERGED_FILES:
+        scan_fnames.append(fname)
+    for fname in _MERGED_FILES_WHOLE:
+        if fname not in scan_fnames:
+            scan_fnames.append(fname)
+    scan_fnames += ['uidata.json']
+    for fname in scan_fnames:
+        fpath = RESOURCES_DIR / fname
+        if not fpath.exists():
+            continue
+        try:
+            with open(fpath, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except:
+            continue
+        modified = False
+        _scan_icon_refs(data)
+        if modified:
+            with open(fpath, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4, ensure_ascii=False)
+    if updated_refs:
+        print(f'  Updated {updated_refs} icon references in data files')
 _MERGED_FILES = {'characters.json': ['pals', 'npcs'], 'skills.json': ['passives', 'skills', 'elements'], 'world.json': ['structures', 'technology'], 'items.json': ['items']}
 _MERGED_FILES_WHOLE = {'world.json': ['lab_research'], 'items.json': ['items_dynamic'], 'characters.json': ['friendship']}
 SPECIAL_KEEP_FILES = ['pal_exp_table.json', 'uidata.json', 'friendship.json']
