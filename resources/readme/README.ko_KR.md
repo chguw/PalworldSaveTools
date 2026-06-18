@@ -1,6 +1,6 @@
 <div align="center">
 
-![PalworldSaveTools Logo](../assets/branding/PalworldSaveTools_Blue.png)
+![PalworldSaveTools Logo](../PalworldSaveTools_Blue.png)
 
 # PalworldSaveTools
 
@@ -20,228 +20,281 @@
 ---
 
 </div>
+<div align="center">
+
+## 개요
+
+<img src="https://readme-typing-svg.demolab.com?lines=What+exactly+is+this+thing%3F;Your+save%2C+your+way;One+tool+to+rule+them+all&center=true&width=490&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+Palworld Save Tools (PST) is a fast, all-in-one desktop application for inspecting and editing Palworld save files. Python 및 PySide6으로 구축되어 게임의 압축된 저장 형식을 직접 읽고 씁니다. 게임 모드가 필요하지 않습니다.
+
+전용 서버 관리, 협동 서버와 전용 서버 간 마이그레이션, 버려진 데이터 정리 또는 개별 Pals 미세 조정이 필요한 경우 PST는 모든 작업에 대해 단일 통합 인터페이스를 제공합니다.
+
+### 하이라이트
+
+- **교차 플랫폼** — **Windows**, **Linux** 및 **macOS**용으로 사전 구축된 바이너리입니다.
+- **빠른 기본 구문 분석** — [`palsav`](src/palsav) 엔진으로 구동되는 사용 가능한 가장 빠른 저장 파일 리더 중 하나입니다.
+- **시각적 지도** — 기지/플레이어 마커, 제외 구역 및 좌표 보정이 포함된 대화형 세계 지도입니다.
+- **심층적인 Pal 편집** — 통계, IVs, 영혼, 기술, passives, 작업 적합성, 순위 및 외모 플래그를 완벽하게 제어할 수 있습니다.
+- **서버급 도구** — 관리자를 위해 구축된 대량 삭제, 정리, 변환 및 문자 전송.
+- **자동 백업** — 모든 저장 작업은 쓰기 전에 백업을 생성합니다.
+- **8개 언어** — 현지화된 UI, 인앱 가이드 및 문서.
+
+
+
+
+
+---
+
+
+
+
 
 ## 목차
 
+- [개요](#개요)
 - [기능](#기능)
 - [설치](#설치)
 - [빠른 시작](#빠른-시작)
-- [도구 개요](#도구-개요)
 - [가이드](#가이드)
 - [문제 해결](#문제-해결)
-- [독립형 실행 파일 빌드(Windows에만 해당)](#독립형-실행-파일-빌드windows에만-해당)
+- [소스에서 빌드](#소스에서-빌드)
 - [기여](#기여)
 - [라이센스](#라이센스)
+- [팔월드 팀](#팔월드-팀)
+
+- [지원](#지원)
+- [라이센스](#license)
+- [감사의 말씀](#acknowledgements)
+
+
+
+
 
 ---
+
+
+
+
+<div align="center">
 
 ## 기능
 
-### 핵심 기능
+<img src="https://readme-typing-svg.demolab.com?lines=The+good+stuff;Check+it+out;Packed+with+tools&center=true&width=290&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
-| 기능 | 설명 |
-|---------|-------------|
-| **빠른 저장 구문 분석** | 사용 가능한 가장 빠른 저장 파일 리더 중 하나 |
-| **플레이어 관리** | 보기, 편집, 이름 바꾸기, 레벨 변경, 기술 잠금 해제 및 플레이어 관리 |
-| **길드 관리** | 플레이어 생성, 이름 변경, 이동, 실험실 연구 잠금 해제 및 길드 관리 |
-| **Pal Editor** | 통계, 기술, IVs, 순위, 영혼, 성별, 보스/행운 토글에 대한 전체 편집기 |
-| **베이스캠프 도구** | 내보내기, 가져오기, 복제, 반경 조정 및 기지 관리 |
-| **맵 뷰어** | 좌표와 세부정보가 포함된 대화형 기지 및 플레이어 지도 |
-| **캐릭터 이전** | 다른 월드/서버 간 캐릭터 전송(교차 저장) |
-| **전환 저장** | Steam 및 GamePass 형식 간 변환 |
-| **월드 설정** | WorldOption 및 LevelMeta 설정 편집 |
-| **타임스탬프 도구** | 부정적인 타임스탬프 수정 및 플레이어 시간 재설정 |
+</div>
 
-### 올인원 도구
+### 플레이어 관리
 
-**올인원 도구** 제품군은 포괄적인 저장 관리 기능을 제공합니다.
+- 이름, 레벨, pal 수, UID, 길드, 마지막 접속 시간을 기준으로 모든 플레이어를 보고 검색할 수 있습니다.
+- 플레이어 이름, 레벨, 통계, 기술 포인트를 편집합니다.
+- 여러 플레이어에 걸친 **대량 작업**: 아이템 관리, pal 관리 및 기술 잠금 해제.
+- 시간 기준에 따라 비활성 플레이어를 삭제합니다. 중복을 제거하십시오.
 
-- **삭제 도구**
-  - 플레이어, 기지, 길드 삭제
-  - 시간 임계값에 따라 비활성 플레이어 삭제
-  - 중복 플레이어 및 빈 길드 제거
-  - 참조되지 않거나 분리된 데이터 삭제
+### Pal Editor
 
-- **정리 도구**
-  - 유효하지 않거나 수정된 항목 제거
-  - 유효하지 않은 pals 및 passives 제거
-  - 불법적인 pals 수정(법적 최대 통계로 제한)
-  - 유효하지 않은 구조 제거
-  - 대공 포탑 재설정
-  - private chests 잠금 해제
+모든 플레이어가 소유한 Pal에 대한 심층 편집 인터페이스입니다. Pals은 **파티**(활성 분대)와 **Palbox**(저장소)로 구성됩니다.
 
-- **길드 도구**
-  - 모든 길드 재건
-  - 길드 간 플레이어 이동
-  - 플레이어 길드장 만들기
-  - 길드 이름 바꾸기
-  - 최대 길드 레벨
-  - 모든 연구실 연구 잠금 해제
+- **통계 및 IVs** — HP, 공격, 방어(IV 0–100), 레벨(1–80), 신뢰 순위(0–10).
+- **소울** — HP, 공격, 방어, 제작 속도(0–20).
+- **스킬** — 활성 스킬 선택기; 모든 동작을 배우십시오. Pals 전반에 걸친 대량 동기화 기술.
+- **패시브 특성** — 전체 게임 데이터를 포함하는 패시브 선택기입니다.
+- **작업 적합성** — 개별 작업 적합성 수준(0~10)을 설정합니다.
+- **외모 플래그** — 보스/알파, 럭키/샤이니, 각성, 수입/DNA를 전환합니다.
+- **순위 및 잠금** — 순위 및 즐겨찾기 잠금 수준(0~3)을 설정합니다.
+- 새로운 Pals을 추가하거나 두 번 클릭하여 빠르게 삭제하세요.
 
-- **플레이어 도구**
-  - 플레이어 pal 통계 및 기술 편집
-  - 모든 기술 잠금 해제
-  - 관찰 케이지 잠금 해제
-  - 레벨 업/다운 플레이어
-  - 플레이어 이름 바꾸기
+### 길드 관리
 
-- **유틸리티 저장**
-  - 임무 재설정
-  - 던전 초기화
-  - 타임스탬프 수정
-  - 과도하게 채워진 재고 정리
-  - PalDefender 명령 생성
+2패널 보기: 상단에는 길드 목록, 하단에는 회원 명단이 표시됩니다.
 
-### 추가 도구
+- 길드 이름 바꾸기, 리더 변경, 길드 레벨 설정, 최대 길드 레벨 설정.
+- 모든 연구실 연구를 잠금 해제하세요. 모든 길드를 재건하세요.
+- 길드 간에 플레이어를 이동합니다. 비어 있거나 활동하지 않는 길드를 삭제하세요.
 
-| 도구 | 설명 |
-|------|-------------|
-| **플레이어 편집 Pals** | 통계, 기술, IVs, 재능, 영혼, 순위 및 성별이 포함된 전체 pal editor |
-| **SteamID 변환기** | Steam ID를 Palworld UID로 변환 |
-| **호스트 저장 수정** | 두 플레이어 간 UID 교환(예: 호스트 교환) |
-| **슬롯 인젝터** | 플레이어당 팔박스 슬롯 늘리기 |
-| **지도 복원** | 모든 세계/서버에 잠금 해제된 지도 진행 상황 적용 |
-| **세계 이름 바꾸기** | LevelMeta에서 세계 이름 변경 |
-| **월드옵션 편집기** | 세계 설정 및 구성 편집 |
-| **레벨메타 편집기** | 월드 메타데이터 편집(이름, 호스트, 레벨) |
+### 베이스캠프 도구
 
----
-
-## 설치
-
-### 전제 조건
-
-**독립형(Windows)의 경우:**
-- 윈도우 10/11
-- [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version) (2015-2022)
-
-**소스에서 실행하는 경우(모든 플랫폼):**
-- 파이썬 3.11 이상
-
-### 독립 실행형(Windows - 권장)
-
-1. [GitHub Releases](https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest)에서 최신 릴리스를 다운로드하세요.
-2. zip 파일 추출
-3. `PalworldSaveTools.exe`을 실행하세요.
-
-### 소스에서(모든 플랫폼)
-
-시작 스크립트는 자동으로 가상 환경을 생성하고 모든 종속성을 설치합니다.
-
-**uv 사용:**
-```bash
-git clone https://github.com/deafdudecomputers/PalworldSaveTools.git
-cd PalworldSaveTools
-uv venv --python 3.12
-uv run start.py
-```
-
-**윈도우:**
-```bash
-git clone https://github.com/deafdudecomputers/PalworldSaveTools.git
-cd PalworldSaveTools
-start_win.cmd
-```
-
-**리눅스:**
-```bash
-git clone https://github.com/deafdudecomputers/PalworldSaveTools.git
-cd PalworldSaveTools
-chmod +x start_linux.sh
-./start_linux.sh
-```
-
-### 지점
-
-- **안정적**(권장): `git clone https://github.com/deafdudecomputers/PalworldSaveTools.git`
-- **베타**(최신 기능): `git clone -b beta https://github.com/deafdudecomputers/PalworldSaveTools.git`
-
----
-
-## 빠른 시작
-
-1. **저장 파일 로드**
-   - 헤더의 메뉴 버튼을 클릭하세요.
-   - **저장 로드**를 선택합니다.
-   - Palworld 저장 폴더로 이동하세요.
-   - `Level.sav`을 선택하세요.
-
-2. **데이터 탐색**
-   - 탭을 사용하여 플레이어, 길드, 기지 또는 지도를 봅니다.
-   - 특정 항목을 찾기 위한 검색 및 필터링
-
-3. **변경**
-   - 편집, 삭제, 수정할 항목을 선택하세요.
-   - 추가 옵션이 있는 상황에 맞는 메뉴를 보려면 마우스 오른쪽 버튼을 클릭하세요.
-
-4. **변경 사항 저장**
-   - 메뉴 버튼 → **변경사항 저장**을 클릭합니다.
-   - 백업이 자동으로 생성됩니다.
-
----
-
-## 도구 개요
-
-### 올인원 도구(AIO)
-
-5개의 탭으로 구성된 포괄적인 저장 관리를 위한 기본 인터페이스:
-
-**플레이어 인벤토리 탭** - 서버에 있는 모든 플레이어의 인벤토리를 보고 관리합니다.
-- 플레이어 통계, 인벤토리, 장착 장비를 편집합니다.
-- 품질을 편집하고, 인벤토리 및 장착된 장비에서 무엇이든 추가, 제거하는 기능.
-
-**기지 인벤토리 탭** - 서버에 있는 모든 기지의 인벤토리를 보고 관리합니다.
-- 기본 인벤토리를 편집합니다.
-- 컨테이너를 지우고, 품질을 편집하고, 기본 인벤토리에서 무엇이든 추가하고 제거하는 기능.
-- 부정 행위 가능성에 대한 필터링이 포함되어 있습니다.
-
-**플레이어 탭** - 서버의 모든 플레이어를 보고 관리합니다.
-- 플레이어 이름, 레벨 및 pal 카운트 편집
-- 비활성 플레이어 삭제
-- 플레이어 길드 및 마지막 온라인 시간 보기
-
-**길드 탭** - 길드와 길드 기지를 관리합니다.
-- 길드 이름 변경, 리더 변경
-- 기본 위치 및 레벨 보기
-- 비어 있거나 활동하지 않는 길드 삭제
-
-**기지 탭** - 모든 베이스캠프 보기
-- 기본 설계도 내보내기/가져오기
-- 기지를 다른 길드에 복제
-- 기본 반경 조정
+- 길드 연합이 있는 모든 베이스캠프를 볼 수 있습니다.
+- 기본 청사진을 `.json`로 **내보내기**; **import** (single or multi-file) into any guild.
+- 오프셋 위치 지정을 통해 다른 길드에 기지를 **복제**합니다.
+- **기본 반경을 조정합니다**(50%~1000%).
+- 비활성 기지와 기지가 아닌 지도 개체를 삭제합니다.
 
 ### 맵 뷰어
 
-세상의 대화형 시각화:
-- 모든 기지 위치와 플레이어 위치 보기
-- 길드 또는 플레이어 이름으로 필터링
-- 자세한 정보를 보려면 마커를 클릭하세요.
-- PalDefender용 `killnearestbase` 명령 생성
+전체 세계를 대화형으로 시각화합니다.
 
-### 캐릭터 이전
+- 세부 패널이 포함된 기본 마커(집 아이콘) 및 플레이어 마커(사람 아이콘).
+- Toggle overlays: Bases, Players, Radius Rings, Exclusion Zones.
+- **구역 그리기** — 지도에 직접 직사각형 또는 다각형 제외 구역을 그립니다.
+- **Calibration mode** — Precisely align the map with game coordinates.
+- 세계 지도 및 트리 지도 보기 길드나 플레이어 이름으로 필터링하세요.
+- Zoom (1.0x–30.0x), pan, double-click to fly to a marker.
+- 관리 작업을 위한 마커 및 빈 공간을 마우스 오른쪽 버튼으로 클릭합니다.
 
-다른 세계/서버 간 캐릭터 전송(교차 저장):
-- 단일 또는 모든 플레이어 전송
-- 캐릭터, pals, 인벤토리, 기술을 보존합니다.
-- 협동 서버와 전용 서버 간 마이그레이션에 유용합니다.
+### 재고 관리
 
-### 호스트 저장 수정
+**플레이어 인벤토리** — 세 개의 하위 탭:
+- *Inventory* — All items and equipment in the main bag; 수량 편집, 추가, 제거.
+- *Key Items* — Quest items, effigies, and technology; 모든 조각상/핵심 항목을 대량 추가합니다.
+- *Stats* — Level, HP, Stamina, Attack, Defense, Work Speed, Weight.
+- Equipment panel for weapon, accessory, food, armor, shield, glider, and module slots.
+- Unlock all map + fast-travel points in one click.
 
-두 플레이어 간에 UID를 교환합니다.
-- 한 플레이어에서 다른 플레이어로 진행 상황 전송
-- 호스트/Co-op에서 서버로 이전하는 데 필수적입니다.
-- 플레이어 간 호스트 역할을 교환하는 데 유용합니다.
-- 플랫폼 교체에 유용합니다(Xbox ← Steam)
-- 호스트/서버 UID 할당 문제 해결
-- **참고:** 영향을 받는 플레이어는 먼저 대상에 생성된 캐릭터를 저장해야 합니다.
+**Base Inventory** — Browse and manage items and working Pals across all bases:
+- 컨테이너의 항목 보기/편집 투명한 용기; 컨테이너 슬롯을 수정합니다.
+- 길드 간 아이템 작업(모든 길드에서 아이템 찾기/제거)
+- 길드 간 구조 삭제.
+- **기본 Pals** 하위 탭 — 전체 pal 편집기 상황에 맞는 메뉴를 사용하여 각 기지에 할당된 작업 Pals을 관리합니다.
+
+### 제외
+
+플레이어, 길드, 기지를 청소 작업으로부터 보호하는 보호 목록입니다.
+
+- 3개의 나란히 있는 패널: 제외된 플레이어 UID, 길드 ID 및 기본 ID.
+- 플레이어, 길드 또는 기지 탭에서 마우스 오른쪽 버튼 클릭 상황에 맞는 메뉴를 통해 항목을 추가합니다.
+- 제외 목록을 지속적으로 저장하고 로드합니다.
+- 대량 정리를 실행하기 **전에** 목록을 작성하세요.
+
+### 저장 도구
+
+**도구** 탭에서 클릭 가능한 카드로 액세스 가능:
+
+| 도구 | 설명 |
+|------|-------------|
+| **저장 내용 변환** | SAV와 JSON 형식 간 변환 |
+| **GamePass → Steam** 변환 | Xbox/GamePass 변환은 Steam 형식으로 저장 |
+| **SteamID 변환** | Steam ID를 Palworld UID로 변환 |
+| **지도 복원** | 모든 월드/서버에 완전히 잠금 해제된 지도 진행 상황 적용 |
+| **슬롯 인젝터** | 플레이어당 팔박스 슬롯 늘리기 |
+| **수정 저장** | 원시 저장 데이터 열기 및 수정 |
+| **캐릭터 이전** | 다른 월드/서버 간 캐릭터 전송(교차 저장) |
+| **호스트 저장 수정** | 두 플레이어 간 UID 교환(호스트 교환, 플랫폼 마이그레이션) |
+
+### 정리 및 유틸리티 기능
+
+**메뉴 → 기능**을 통해 액세스할 수 있는 이러한 서버급 작업에는 다음이 포함됩니다.
+
+- **삭제** — 빈 길드, 비활성 기지/플레이어, 중복 플레이어, 참조되지 않은 데이터를 삭제합니다.
+- **정리** — 유효하지 않은/수정된 항목, 유효하지 않은 pals 및 passives, 유효하지 않은 구조를 제거합니다. 불법적인 pals을 수정합니다(법적 최대값으로 제한). 대공 포탑을 재설정합니다. private chests 잠금 해제; 모든 구조물을 수리하십시오.
+- **재설정** — 미션, 던전, 석유 굴착 장치, 침입자, 보급품 투하를 재설정합니다.
+- **타임스탬프** — 부정적인 타임스탬프를 수정합니다. 플레이어 시간을 재설정합니다.
+- **PalDefender** — `killnearestbase` 명령을 생성합니다.
+
+
+
+
 
 ---
 
+
+
+
+<div align="center">
+
+## 설치
+
+<img src="https://readme-typing-svg.demolab.com?lines=Get+it+running+in+minutes;Download+and+go;No+setup+required&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+### 독립형 빌드(권장)
+
+사전 빌드된 바이너리는 [GitHub Releases](https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest)의 세 가지 주요 플랫폼 모두에서 사용할 수 있습니다.
+
+| 플랫폼 | 다운로드 | 요구사항 |
+|------------|------------|-------------|
+| **창** | `PalworldSaveTools-*.exe` | 윈도우 10/11, [VC++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)(2015~2022) |
+| **리눅스** | `PalworldSaveTools-*-linux` | 모든 최신 배포판 |
+| **맥OS** | `PalworldSaveTools-*-macos.dmg` | macOS 12+(몬트레이 이상) |
+
+[Nexus Mods](https://www.nexusmods.com/palworld/mods/3190)에서도 사용 가능합니다.
+
+1. 귀하의 플랫폼에 적합한 빌드를 다운로드하십시오.
+2. 실행 파일을 추출하고(보관된 경우) 실행합니다.
+3. 그게 다입니다. Python이나 종속성이 필요하지 않습니다.
+
+> **Windows:** "VCRUNTIME140.dll을 찾을 수 없습니다."라는 메시지가 표시되면 [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)을 설치하세요.
+
+> **Linux:** 파일을 실행 가능으로 표시해야 할 수도 있습니다: `chmod +x PalworldSaveTools-*-linux`
+
+> **macOS:** Gatekeeper가 앱을 차단하는 경우 마우스 오른쪽 버튼을 클릭하고 → **처음 열기**를 클릭하거나 `xattr -d com.apple.quarantine /path/to/app`을 실행하세요.
+
+### 소스에서(모든 플랫폼)
+
+PST는 종속성 관리를 위해 [`uv`](https://docs.astral.sh/uv/)을 사용합니다. 시작 스크립트는 자동으로 가상 환경을 생성하고 모든 것을 설치합니다.
+
+**전제 조건:** [Python 3.11+](https://www.python.org/) 및 [uv](https://docs.astral.sh/uv/getting-started/installation/).
+
+```bash
+git clone https://github.com/deafdudecomputers/PalworldSaveTools.git
+cd PalworldSaveTools
+uv run start.py
+```
+
+**Windows**(더블클릭 실행 프로그램):
+```
+start.cmd
+```
+
+런처는 `.venv`을 생성하고, `uv sync`을 통해 종속성을 설치하고, 앱을 부팅합니다. 각 실행을 재현할 수 있도록 종료 시 잠금 파일을 정리합니다.
+
+
+
+
+
+---
+
+
+
+
+<div align="center">
+
+## 빠른 시작
+
+<img src="https://readme-typing-svg.demolab.com?lines=Load.+Edit.+Save.+That+simple.;Three+steps+to+glory;It%27s+that+easy&center=true&width=450&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+1. **저장 파일 로드**
+   - **메뉴 → 저장 로드**를 클릭하거나 `.sav` 파일을 창에 끌어다 놓습니다.
+   - Palworld 저장 폴더로 이동하여 `Level.sav`을 선택하세요.
+
+2. **데이터 탐색**
+   - **지도**, **도구**, **플레이어**, **길드**, **기지**, **플레이어 인벤토리**, **베이스 인벤토리**, **Pal Editor**, **제외** 탭을 사용하여 저장 내용을 살펴보세요.
+   - 통계 표시줄에는 실시간 카운트가 표시됩니다. 빠른 탐색 아이콘은 각 섹션으로 이동합니다.
+
+3. **변경**
+   - 선택하려면 마우스 왼쪽 버튼을 클릭하세요. 상황에 맞는 작업을 수행하려면 거의 모든 것을 마우스 오른쪽 버튼으로 클릭하세요.
+   - 더블클릭하면 빠른 편집, 빠른 삭제가 가능합니다. (자세한 내용은 앱 내 가이드를 참고하세요.)
+
+4. **변경 사항 저장**
+   - **메뉴 → 변경사항 저장**을 클릭합니다. 백업은 자동으로 생성됩니다.
+
+> **팁:** 각 탭에는 기본 제공 가이드가 있습니다. 탭에서 수행할 수 있는 작업을 정확히 보려면 ​​탭에서 도움말 아이콘을 클릭하세요. 더 자세한 내용을 보려면 **버튼, 필드 또는 컨트롤 위로 마우스를 가져가면** 헤더에 자세한 툴팁이 표시됩니다. 앱 내 도구 설명 도움말 시스템은 모든 기능의 기능과 사용 방법을 정확히 이해하는 데 가장 적합한 참고 자료입니다.
+
+
+
+
+
+---
+
+
+
+
+<div align="center">
+
 ## 가이드
+
+<img src="https://readme-typing-svg.demolab.com?lines=Step-by-step+walkthroughs;Follow+the+guide;We%27ll+show+you+how&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
 
 ### 저장 파일 위치
 
-**호스트/협동조합:**
+**호스트/협동조합(Windows):**
 ```
 %localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\
 ```
@@ -253,185 +306,321 @@ steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\
 
 ### 지도 잠금 해제
 
-<details>
-<summary>지도 잠금 해제 지침을 펼치려면 클릭하세요</summary>
+PST는 저장을 위해 전체 지도(모든 빠른 이동 지점)를 잠금 해제할 수 있습니다.
 
-1. `resources\`에서 `LocalData.sav`을 복사합니다.
-2. 서버/월드 저장 폴더 찾기
-3. 기존 `LocalData.sav`을 복사된 파일로 교체
-4. 완전히 잠금 해제된 지도로 게임을 시작하세요.
-
-> **참고:** 도구 탭의 **지도 복원** 도구를 사용하면 자동 백업을 통해 잠금 해제된 지도를 모든 월드/서버에 한 번에 적용할 수 있습니다.
-
-</details>
+1. PST로 저장 내용을 로드합니다.
+2. **플레이어 인벤토리** 탭을 열고 단일 플레이어의 경우 **모든 지도 잠금 해제 + 빠른 이동**을 클릭합니다. **또는**
+3. 도구 탭의 **지도 복원** 도구를 사용하여 **모든** 월드/서버에 잠금 해제된 지도 진행 상황을 한 번에 적용합니다.
+4. 변경 사항을 저장합니다. 자동 백업이 생성됩니다.
 
 ### 호스트 → 서버 이전
 
 <details>
-<summary>호스트-서버 전송 가이드를 확장하려면 클릭하세요</summary>
+<summary>확대하려면 클릭하세요</summary>
 
 1. 호스트 저장에서 `Level.sav` 및 `Players` 폴더를 복사합니다.
-2. 전용서버 저장폴더에 붙여넣기
-3. 서버 시작, 새 캐릭터 생성
-4. 자동 저장을 기다린 후 닫습니다.
-5. **Fix Host Save**를 사용하여 GUID를 마이그레이션합니다.
-6. 파일을 다시 복사하고 실행하세요.
-
-**수정 호스트 저장 사용:**
-- 임시 폴더에서 `Level.sav`을 선택하세요.
-- **기존 캐릭터** 선택(원본 저장에서)
-- **새 캐릭터**(방금 생성한 캐릭터)를 선택하세요.
-- **이전**을 클릭하세요.
+2. 전용서버 저장 폴더에 붙여넣으세요.
+3. 서버를 시작하고 새 캐릭터를 생성한 후 자동 저장을 기다립니다.
+4. 서버를 닫습니다.
+5. PST에서 **Fix Host Save**를 사용하여 기존 캐릭터의 GUID를 새 캐릭터로 마이그레이션합니다.
+6. 파일을 다시 복사하고 서버를 시작합니다.
 
 </details>
 
 ### 호스트 스왑(호스트 변경)
 
 <details>
-<summary>호스트 스왑 가이드를 펼치려면 클릭하세요</summary>
+<summary>확대하려면 클릭하세요</summary>
 
-**배경:**
-- 호스트는 항상 `0001.sav`을 사용합니다. 호스트가 누구든 동일한 UID입니다.
-- 각 클라이언트는 고유한 일반 UID 저장을 사용합니다(예: `123xxx.sav`, `987xxx.sav`).
+**배경:** 호스트는 항상 호스트 누구에게나 동일한 UID인 `0001.sav` 슬롯을 사용합니다. 각 클라이언트는 고유한 일반 저장을 얻습니다(예: `123xxx.sav`).
 
-**전제조건:**
-두 플레이어(이전 호스트와 새 호스트) 모두 일반 저장을 생성해야 합니다. 이는 호스트의 세계에 합류하고 새로운 캐릭터를 생성함으로써 발생합니다.
+**전제 조건:** 이전 호스트와 새 호스트 모두 캐릭터 가입 및 생성을 통해 생성된 일반 저장이 있어야 합니다.
 
 **단계:**
 
-1. **정기 저장이 있는지 확인**
-   - 플레이어 A(이전 호스트)는 일반 저장을 가지고 있어야 합니다(예: `123xxx.sav`).
-   - 플레이어 B(새 호스트)는 일반 저장을 가지고 있어야 합니다(예: `987xxx.sav`).
+1. **Fix Host Save**를 사용하여 기존 호스트의 `0001.sav` → 일반 저장(예: `123xxx.sav`)을 교체합니다. 그러면 진행 상황이 호스트 슬롯 밖으로 이동됩니다.
+2. **Fix Host Save**를 사용하여 새 호스트의 일반 저장(예: `987xxx.sav`) → `0001.sav`을 교체합니다. 그러면 진행 상황이 호스트 슬롯으로 이동됩니다.
 
-2. **이전 호스트의 호스트 저장을 일반 저장으로 교체**
-   - PalworldSaveTools **Fix Host Save**를 사용하여 교체합니다.
-   - 기존 호스트의 `0001.sav` → `123xxx.sav`
-   - (이전 호스트의 진행 상황이 호스트 슬롯에서 일반 플레이어 슬롯으로 이동됩니다.)
-
-3. **새 호스트의 일반 저장을 호스트 저장으로 전환**
-   - PalworldSaveTools **Fix Host Save**를 사용하여 교체합니다.
-   - 새로운 호스트의 `987xxx.sav` → `0001.sav`
-   - (이것은 새로운 호스트의 진행 상황을 호스트 슬롯으로 이동시킵니다)
-
-**결과:**
-- 플레이어 B는 이제 `0001.sav`에서 자신의 캐릭터와 pals을 가진 호스트입니다.
-- 플레이어 A는 `123xxx.sav`에서 원래 진행 상황으로 클라이언트가 됩니다.
+**결과:** 이제 새 호스트는 자신의 캐릭터와 Pals로 `0001.sav`을 차지합니다. 이전 호스트는 원래 진행 상황을 그대로 유지하면서 클라이언트가 됩니다.
 
 </details>
 
-### 기본 내보내기/가져오기
+### 캐릭터 이전(교차저장)
 
 <details>
-<summary>기본 내보내기/가져오기 가이드를 펼치려면 클릭하세요</summary>
+<summary>확대하려면 클릭하세요</summary>
 
-**베이스 내보내기:**
-1. PST에서 저장 내용을 로드합니다.
-2. 기지 탭으로 이동
-3. 베이스 우클릭 → 베이스 내보내기
-4. `.json` 파일로 저장
+캐릭터, Pals, 인벤토리 및 기술을 보존하면서 다른 세계나 서버 간에 캐릭터를 전송하세요.
 
-**베이스 가져오기:**
-1. 기지 탭 또는 기지 지도 뷰어로 이동합니다.
-2. 거점을 가져오려는 길드를 마우스 오른쪽 버튼으로 클릭하세요.
-3. 수입기지 선택
-4. 내보낸 `.json` 파일을 선택하세요.
-
-**베이스 복제:**
-1. 베이스 우클릭 → 베이스 복제
-2. 대상 길드 선택
-3. 베이스는 오프셋 위치 지정을 통해 복제됩니다.
-
-**베이스 반경 조정:**
-1. 베이스를 우클릭 → 반경 조정
-2. 새 반경을 입력합니다(50% - 1000%).
-3. 구조를 재할당하려면 게임 내 저장 파일을 저장하고 로드하세요.
+1. 도구 탭에서 **캐릭터 이전** 도구를 엽니다.
+2. 원본 저장과 대상 저장을 선택하세요.
+3. 단일 플레이어 또는 모든 플레이어를 이적합니다.
+4. 협동 서버와 전용 서버 간 마이그레이션에 유용합니다.
 
 </details>
 
+### 기본 내보내기/가져오기/복제
+
+<details>
+<summary>확대하려면 클릭하세요</summary>
+
+**베이스 내보내기:**
+1. **기지** 탭으로 이동합니다(또는 Map Viewer를 사용합니다).
+2. 베이스를 마우스 오른쪽 버튼으로 클릭 → **베이스 내보내기**.
+3. `.json` 청사진 파일로 저장합니다.
+
+**베이스 가져오기:**
+1. 대상 길드(거점 탭, 맵 뷰어, 길드 탭)를 마우스 오른쪽 버튼으로 클릭하세요.
+2. **베이스 가져오기**(단일 파일) 또는 **베이스 가져오기(다중 파일)**를 선택합니다.
+3. 내보낸 `.json` 파일을 선택합니다.
+
+**베이스 복제:**
+1. 베이스를 마우스 오른쪽 버튼으로 클릭 → **베이스 복제**.
+2. 대상 길드를 선택하세요.
+3. 오프셋 위치 지정을 통해 베이스가 복제됩니다.
+
+**베이스 반경 조정:**
+1. 베이스를 마우스 오른쪽 버튼으로 클릭 → **반경 조정**.
+2. 새 반경(50%~1000%)을 입력합니다.
+3. 구조를 재할당하려면 게임 내 저장 내용을 저장하고 다시 로드하세요.
+
+</details>
+
+
+
+
+
 ---
+
+
+
+
+<div align="center">
 
 ## 문제 해결
 
-### "VCRUNTIME140.dll을 찾을 수 없습니다"
+<img src="https://readme-typing-svg.demolab.com?lines=When+things+go+sideways;Don%27t+panic;We%27ve+seen+it+all&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
-**해결책:** [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version) 설치
+</div>
 
-### `struct.error` 저장을 구문 분석할 때
+### "VCRUNTIME140.dll을 찾을 수 없습니다."(Windows)
 
-**원인:** 오래된 저장 파일 형식
+[Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)(2015~2022)을 설치합니다.
 
-**해결책:**
-1. 게임에서 저장 파일을 로드합니다(Solo, Coop 또는 Dedicated Server 모드).
-2. 자동 구조 업데이트가 시작됩니다.
-3. 최신 게임 패치 이후에 저장 내용이 업데이트되었는지 확인하세요.
+### `struct.error` 저장 파일을 분석할 때
+
+저장 파일 형식이 오래되었습니다. 자동 구조 업데이트를 실행하려면 게임 내 저장 파일(솔로, 협동 또는 전용 서버)을 한 번 로드한 후 다시 시도하세요. 최신 게임 패치나 그 이후에 저장 내용이 업데이트되었는지 확인하세요.
 
 ### GamePass 변환기가 작동하지 않습니다
 
-**해결책:**
-1. Palworld의 GamePass 버전을 닫습니다.
-2. 몇 분 정도 기다리세요
-3. Steam → GamePass 변환기를 실행합니다.
+1. Palworld의 GamePass 버전을 완전히 닫습니다.
+2. 파일 핸들이 해제될 때까지 몇 분 정도 기다립니다.
+3. GamePass → Steam 변환기를 실행합니다.
 4. GamePass에서 Palworld를 실행하여 확인하세요.
+
+### Linux/macOS 바이너리가 실행되지 않습니다.
+
+- **Linux:** `chmod +x PalworldSaveTools-*-linux` 실행 가능으로 표시합니다.
+- **macOS:** Gatekeeper에 의해 차단된 경우 마우스 오른쪽 버튼을 클릭하고 → **열기**를 클릭하거나 `xattr -d com.apple.quarantine /path/to/app`을 실행하세요.
+
+
+
+
 
 ---
 
-## 독립형 실행 파일 빌드(Windows에만 해당)
 
-빌드 스크립트를 실행하여 독립 실행형 실행 파일을 만듭니다.
+
+
+<div align="center">
+
+## 소스에서 빌드
+
+<img src="https://readme-typing-svg.demolab.com?lines=Compile+it+yourself;Build+your+own;From+source+to+binary&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+PST는 두 가지 빌드 경로를 지원합니다. CI/CD 파이프라인은 크로스 플랫폼 릴리스 바이너리에 Nuitka를 사용합니다. cx_Freeze는 로컬 Windows 설치 프로그램에 사용됩니다.
+
+### Nuitka(교차 플랫폼 — CI/릴리스에서 사용)
+
+Python 3.11+ 및 `uv`이 필요합니다. Nuitka는 자동으로 설치됩니다.
 
 ```bash
-scripts\build.cmd
+# One-file build (Windows / Linux)
+uv run python build/nuitka/build_nuitka.py --onefile
+
+# One-directory build (macOS .app)
+uv run python build/nuitka/build_nuitka.py --onedir
+```
+
+출력은 `dist/`로 이동합니다.
+- 윈도우 → `dist/PalworldSaveTools-*.exe`
+- 리눅스 → `dist/PalworldSaveTools-*-linux`
+- macOS → `dist/PalworldSaveTools.app` → `.dmg`로 패키징됨
+
+### cx_Freeze(Windows 설치 프로그램)
+
+로컬 Windows `.7z` 패키지의 경우:
+
+```
+scripts\build_cx.cmd
 ```
 
 그러면 프로젝트 루트에 `PST_standalone_v{version}.7z`이 생성됩니다.
 
+### 인터랙티브 빌더
+
+빌드 모드를 선택하는 대화형 메뉴:
+
+```bash
+uv run python build/build_interactively.py
+```
+
+
+
+
+
 ---
+
+
+
+
+<div align="center">
 
 ## 기여
 
+<img src="https://readme-typing-svg.demolab.com?lines=Want+to+help%3F+Here%27s+how;Join+the+team;Every+contribution+counts&center=true&width=440&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
 기여를 환영합니다! 언제든지 Pull Request를 제출해 주세요.
 
-1. 저장소 포크
-2. 기능 브랜치 생성(`git checkout -b feature/AmazingFeature`)
-3. 변경 사항을 커밋합니다. (`git commit -m 'Add some AmazingFeature'`)
-4. 브랜치로 푸시(`git push origin feature/AmazingFeature`)
-5. 풀 리퀘스트 열기
+1. 저장소를 포크하십시오.
+2. 기능 분기(`git checkout -b feature/AmazingFeature`)를 만듭니다.
+3. 변경 사항을 커밋합니다(`git commit -m 'Add some AmazingFeature'`).
+4. 분기(`git push origin feature/AmazingFeature`)로 푸시합니다.
+5. 끌어오기 요청을 엽니다.
+
+
+
+
 
 ---
 
+
+
+
+<div align="center">
+
 ## 면책조항
 
+<img src="https://readme-typing-svg.demolab.com?lines=Read+this+before+you+break+something;You%27ve+been+warned;Backup+first%21;With+great+power...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
 **이 도구를 사용할 때 발생하는 위험은 사용자 본인의 책임입니다. 수정하기 전에 항상 저장 파일을 백업하십시오.**
 
 이 도구를 사용함으로써 발생할 수 있는 저장 데이터의 손실이나 문제에 대해 개발자는 책임을 지지 않습니다.
 
+
+
+
+
 ---
+
+
+
+
+<div align="center">
 
 ## 지원
 
+<img src="https://readme-typing-svg.demolab.com?lines=We%27ve+got+your+back;Need+help%3F;We%27re+here+for+you&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
 - **Discord:** [Join us for support, base builds, and more!](https://discord.gg/sYcZwcT4cT)
 - **GitHub 문제:** [Report a bug](https://github.com/deafdudecomputers/PalworldSaveTools/issues)
-- **문서:** [Wiki](https://github.com/deafdudecomputers/PalworldSaveTools/wiki) *(현재 개발 중)*
+- **Nexus 모드:** [Download & discuss](https://www.nexusmods.com/palworld/mods/3190)
+
+
+
+
 
 ---
+
+
+
+
+<div align="center">
 
 ## 라이센스
 
-이 프로젝트는 MIT 라이선스에 따라 라이선스가 부여됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+<img src="https://readme-typing-svg.demolab.com?lines=MIT+%E2%80%94+do+whatever+you+want;Free+as+in+beer;Open+source%2C+open+mind&center=true&width=430&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+이 프로젝트는 MIT 라이선스에 따라 라이선스가 부여됩니다. 자세한 내용은 [license](license) 파일을 참조하세요.
+
+
+
+
 
 ---
 
+
+
+
+<div align="center">
+
+## 팔월드 팀
+
+<img src="https://readme-typing-svg.demolab.com?lines=The+people+behind+the+magic;Meet+the+team;Built+with+passion&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+이 프로젝트는 뒤에 있는 사람들이 없었다면 존재하지 않았을 것입니다.
+
+**[Pylar](https://github.com/deafdudecomputers)** — 모든 것을 시작한 사람. 이 도구의 모든 라인은 저장 엔진, GUI 및 매일 사용하는 기능에 대한 그의 비전과 끊임없는 작업으로 거슬러 올라갑니다.
+
+**[cyrix](https://github.com/CyrixJD115)** — 리팩터러 및 하위 유지관리자. 코드 품질, 단순화 및 구조적 개선에 중점을 두고 프로젝트가 성장함에 따라 코드베이스를 깔끔하고 작게 유지하고 유지 관리하기 쉽게 만듭니다.
+
+**[dkoz](https://github.com/dkoz)** — ID 뒤에 있는 남자. 게임 데이터 ID, ID 코드에 대한 구조적 통찰력, 모든 게임 업데이트에서 도구의 정확성을 유지하기 위해 Palworld의 데이터가 어떻게 연결되어 있는지에 대한 깊은 지식을 제공합니다.
+
+**[oMaN-Rod](https://github.com/oMaN-Rod)** — 이 프로젝트가 분기된 원본 저장 파서를 제공했습니다. Palworld 저장 형식을 해독하는 그의 기초적인 작업이 없었다면 이 중 어떤 것도 존재하지 않았을 것입니다. 포크는 파서를 오늘날의 PST로 간소화하고 단순화했습니다.
+
+
+
+
+
+---
+
+
+
+
+<div align="center">
+
 ## 감사의 말씀
 
-- **Palworld**는 Pocketpair, Inc.에서 개발했습니다.
-- 이 도구를 개선하는 데 도움을 준 모든 기여자와 커뮤니티 구성원에게 감사드립니다.
+<img src="https://readme-typing-svg.demolab.com?lines=Where+credit+is+due;Thank+you+all;We+stand+on+shoulders&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+다음 분들께 큰 감사를 드립니다:
+
+- **Palworld**는 Pocketpair, Inc.에서 개발했습니다. — 우리 모두를 하나로 모으는 게임을 위해.
+- **버그 보고자** — 제출된 모든 문제, 발견된 모든 극단적인 사례, Discord에 붙여넣은 모든 로그. 각 보고서를 통해 이 도구를 더욱 강력하게 만들 수 있습니다.
+- **Palworld 모딩 커뮤니티** — 지식, 리버스 엔지니어링 형식을 공유하고 생태계를 발전시키는 동료 모더, 도구 개발자 및 땜장이입니다. 이 프로젝트는 그러한 공동 노력의 어깨 위에 서 있습니다.
+- **모든 기여자와 커뮤니티 회원** — PR을 제출했든, Discord의 질문에 답변했든, 아니면 단순히 친구에게 PST에 대해 이야기했든 — 감사합니다.
 
 ---
 
 <div align="center">
 
+![Divider](../assets/branding/PalworldSaveTools_readme_divider.png)
+
 **Palworld 커뮤니티를 위해 ❤️으로 제작**
 
-[⬆ Back to Top](#palworldsavetools)
+[⬆ Back to Top](#palworld-save-tools)
 
 </div>

@@ -1,6 +1,6 @@
 <div align="center">
 
-![PalworldSaveTools Logo](../assets/branding/PalworldSaveTools_Blue.png)
+![PalworldSaveTools Logo](../PalworldSaveTools_Blue.png)
 
 # PalworldSaveTools
 
@@ -20,228 +20,284 @@
 ---
 
 </div>
+<div align="center">
+
+## Descripción general
+
+<img src="https://readme-typing-svg.demolab.com?lines=What+exactly+is+this+thing%3F;Your+save%2C+your+way;One+tool+to+rule+them+all&center=true&width=490&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+Palworld Save Tools (PST) es una rápida aplicación de escritorio todo en uno para inspeccionar y editar archivos guardados de Palworld. Construido con Python y PySide6, lee y escribe el formato de guardado comprimido del juego directamente, sin necesidad de modificaciones del juego.
+
+Ya sea que necesite administrar un servidor dedicado, migrar entre servidores cooperativos y dedicados, limpiar datos abandonados o ajustar Pals individual, PST proporciona una única interfaz unificada para todo ello.
+
+### Destacados
+
+- **Multiplataforma**: archivos binarios prediseñados para **Windows**, **Linux** y **macOS**.
+- **Análisis nativo rápido**: uno de los lectores de archivos guardados más rápidos disponibles, impulsado por el motor [`palsav`](src/palsav).
+- **Mapa visual**: mapa mundial interactivo con marcadores de base/jugador, zonas de exclusión y calibración de coordenadas.
+- **Edición profunda de Pal**: control total sobre estadísticas, IVs, almas, habilidades, passives, idoneidades laborales, rango y banderas de apariencia.
+- **Herramientas de nivel de servidor**: eliminación, limpieza, conversión y transferencia de caracteres en masa diseñadas para administradores.
+- **Copias de seguridad automáticas**: cada operación de guardado crea una copia de seguridad antes de escribir.
+- **8 idiomas**: interfaz de usuario localizada, guías en la aplicación y documentación.
+
+
+
+
+
+---
+
+
+
+
 
 ## Índice
 
+- [Descripción general](#descripción-general)
 - [Características](#características)
 - [Instalación](#instalación)
 - [Inicio rápido](#inicio-rápido)
-- [Descripción general de las herramientas](#descripción-general-de-las-herramientas)
 - [Guías](#guías)
 - [Solución de problemas](#solución-de-problemas)
-- [Creación de ejecutable independiente (solo Windows)](#creación-de-ejecutable-independiente-solo-windows)
+- [Construyendo desde la fuente](#construyendo-desde-la-fuente)
 - [Contribuyendo](#contribuyendo)
 - [Licencia](#licencia)
+- [El equipo de Palworld](#el-equipo-de-palworld)
+- [Construyendo desde la fuente] (#construcción-desde-la-fuente)
+- [Contribuyendo](#contribuyendo)
+- [El equipo Palworld](#el-equipo-palworld)
+
+- [Soporte](#soporte)
+- [Licencia](#licencia)
+- [Agradecimientos](#agradecimientos)
+
+
+
+
 
 ---
+
+
+
+
+<div align="center">
 
 ## Características
 
-### Funcionalidad principal
+<img src="https://readme-typing-svg.demolab.com?lines=The+good+stuff;Check+it+out;Packed+with+tools&center=true&width=290&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
-| Característica | Descripción |
-|---------|-------------|
-| **Análisis de guardado rápido** | Uno de los lectores de archivos guardados más rápidos disponibles |
-| **Gestión de jugadores** | Ver, editar, cambiar nombre, cambiar nivel, desbloquear tecnologías y administrar jugadores |
-| **Gestión del gremio** | Crea, cambia el nombre, mueve jugadores, desbloquea investigaciones de laboratorio y gestiona gremios |
-| **Pal Editor** | Editor completo de estadísticas, habilidades, IVs, rango, almas, género, jefe/alternancia de suerte |
-| **Herramientas del campamento base** | Exportar, importar, clonar, ajustar radios y gestionar bases |
-| **Visor de mapas** | Mapa interactivo de base y jugadores con coordenadas y detalles |
-| **Transferencia de personaje** | Transferir personajes entre diferentes mundos/servidores (guardado cruzado) |
-| **Guardar conversión** | Convertir entre formatos Steam y GamePass |
-| **Configuración mundial** | Editar la configuración de WorldOption y LevelMeta |
-| **Herramientas de marca de tiempo** | Corregir marcas de tiempo negativas y restablecer los tiempos de los jugadores |
+</div>
 
-### Herramientas todo en uno
+### Gestión de jugadores
 
-El paquete **Herramientas todo en uno** proporciona una gestión integral de guardado:
+- Ver y buscar a todos los jugadores por nombre, nivel, recuento de pal, UID, gremio y hora de la última vez que fueron vistos.
+- Editar nombres de jugadores, niveles, estadísticas y puntos de tecnología.
+- **Operaciones masivas** entre varios jugadores: gestión de elementos, gestión de pal y desbloqueo de tecnología.
+- Eliminar jugadores inactivos por umbral de tiempo; eliminar duplicados.
 
-- **Herramientas de eliminación**
-  - Eliminar jugadores, bases o gremios
-  - Eliminar jugadores inactivos según los umbrales de tiempo.
-  - Elimina jugadores duplicados y gremios vacíos.
-  - Eliminar datos sin referencia/huérfanos
+### Pal Editor
 
-- **Herramientas de limpieza**
-  - Eliminar elementos no válidos/modificados
-  - Eliminar pals y passives no válidos
-  - Arreglar pals ilegal (límite máximo de estadísticas legales)
-  - Eliminar estructuras no válidas
-  - Restablecer torretas antiaéreas
-  - Desbloquear private chests
+Una interfaz de edición profunda para cualquier Pal propiedad de cualquier jugador. Pals están organizados por **Grupo** (equipo activo) y **Palbox** (almacenamiento).
 
-- **Herramientas del gremio**
-  - Reconstruir todos los gremios
-  - Mover jugadores entre gremios
-  - Convertir al líder del gremio de jugadores
-  - Cambiar el nombre de los gremios
-  - Nivel máximo de gremio
-  - Desbloquear todas las investigaciones de laboratorio
+- **Estadísticas y IVs**: HP, ataque, defensa (IV 0–100), nivel (1–80), rango de confianza (0–10).
+- **Almas**: HP, ataque, defensa, velocidad de artesanía (0–20).
+- **Habilidades** — Selector de habilidades activo; aprende todos los movimientos; Habilidades de sincronización masiva en Pals.
+- **Rasgos pasivos**: selector pasivo con datos completos del juego.
+- **Idoneidad para el trabajo**: establezca niveles individuales de idoneidad para el trabajo (0 a 10).
+- **Banderas de apariencia**: alterna entre Jefe/Alfa, Afortunado/Brillante, Despertado e Importado/ADN.
+- **Clasificación y bloqueo**: establece el rango y el nivel de bloqueo de favoritos (0–3).
+- Agregue un nuevo Pals o elimine rápidamente con doble clic.
 
-- **Herramientas del reproductor**
-  - Editar estadísticas y habilidades del jugador pal
-  - Desbloquear todas las tecnologías
-  - Desbloquear la jaula de visualización
-  - Subir o bajar de nivel a los jugadores.
-  - Cambiar el nombre de los jugadores
+### Gestión del gremio
 
-- **Guardar Utilidades**
-  - Restablecer misiones
-  - Restablecer mazmorras
-  - Corregir marcas de tiempo
-  - Recortar inventarios sobrellenados
-  - Generar comandos de PalDefender
+Vista de dos paneles: lista de gremio en la parte superior, lista de miembros debajo.
 
-### Herramientas adicionales
+- Cambiar el nombre de los gremios, cambiar líderes, establecer el nivel del gremio, el nivel máximo del gremio.
+- Desbloquear todas las investigaciones de laboratorio; reconstruir todos los gremios.
+- Mover jugadores entre gremios; eliminar gremios vacíos o inactivos.
 
-| Herramienta | Descripción |
-|------|-------------|
-| **Editar jugador Pals** | pal editor completo con estadísticas, habilidades, IVs, talentos, almas, rango y género |
-| **SteamConvertidor ID** | Convierta ID de Steam a UID de Palworld |
-| **Reparar el guardado del host** | Intercambiar UID entre dos jugadores (por ejemplo, para intercambio de host) |
-| **Inyector de ranura** | Aumentar espacios de palbox por jugador |
-| **Restaurar mapa** | Aplicar el progreso del mapa desbloqueado en todos los mundos/servidores |
-| **Cambiar nombre del mundo** | Cambiar el nombre del mundo en LevelMeta |
-| **Editor de opciones mundiales** | Editar configuración y configuración mundial |
-| **Editor LevelMeta** | Editar metadatos mundiales (nombre, host, nivel) |
+### Herramientas del campamento base
 
----
-
-## Instalación
-
-### Requisitos previos
-
-**Para independiente (Windows):**
--Windows 10/11
-- [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version) (2015-2022)
-
-**Para ejecutar desde el código fuente (todas las plataformas):**
-- Python 3.11 o superior
-
-### Independiente (Windows - Recomendado)
-
-1. Descargue la última versión de [GitHub Releases](https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest)
-2. Extraiga el archivo zip
-3. Ejecute `PalworldSaveTools.exe`
-
-### Desde la fuente (todas las plataformas)
-
-Los scripts de inicio crean automáticamente un entorno virtual e instalan todas las dependencias.
-
-**Usando uv:**
-```bash
-git clone https://github.com/deafdudecomputers/PalworldSaveTools.git
-cd PalworldSaveTools
-uv venv --python 3.12
-uv run start.py
-```
-
-**Windows:**
-```bash
-git clone https://github.com/deafdudecomputers/PalworldSaveTools.git
-cd PalworldSaveTools
-start_win.cmd
-```
-
-**Linux:**
-```bash
-git clone https://github.com/deafdudecomputers/PalworldSaveTools.git
-cd PalworldSaveTools
-chmod +x start_linux.sh
-./start_linux.sh
-```
-
-### Sucursales
-
-- **Estable** (recomendado): `git clone https://github.com/deafdudecomputers/PalworldSaveTools.git`
-- **Beta** (últimas funciones): `git clone -b beta https://github.com/deafdudecomputers/PalworldSaveTools.git`
-
----
-
-## Inicio rápido
-
-1. **Carga tu guardado**
-   - Haga clic en el botón de menú en el encabezado
-   - Seleccione **Cargar Guardar**
-   - Navega a tu carpeta de guardado de Palworld
-   - Seleccione `Level.sav`
-
-2. **Explora tus datos**
-   - Utilice las pestañas para ver jugadores, gremios, bases o el mapa.
-   - Buscar y filtrar para encontrar entradas específicas
-
-3. **Hacer cambios**
-   - Seleccionar elementos para editar, eliminar o modificar
-   - Haga clic derecho para acceder a menús contextuales con opciones adicionales
-
-4. **Guarde sus cambios**
-   - Haga clic en el botón de menú → **Guardar cambios**
-   - Las copias de seguridad se crean automáticamente
-
----
-
-## Descripción general de las herramientas
-
-### Herramientas todo en uno (AIO)
-
-La interfaz principal para una gestión integral de guardados con cinco pestañas:
-
-**Pestaña Inventario de jugadores**: vea y administre todos los inventarios de jugadores en el servidor
-- Editar estadísticas de jugadores, inventario y equipo equipado.
-- Posibilidad de editar la calidad, agregar y eliminar cualquier cosa del inventario y del equipo equipado.
-
-**Pestaña Inventario de base**: vea y administre los inventarios de todas las bases en el servidor.
-- Editar inventario base.
-- Posibilidad de borrar contenedores, editar la calidad, agregar y eliminar cualquier cosa de los inventarios base.
-- Filtrado incluido para cualquier posibilidad de trampa.
-
-**Pestaña Jugadores** - Ver y administrar todos los jugadores en el servidor
-- Editar nombres de jugadores, niveles y recuentos de pal
-- Eliminar jugadores inactivos
-- Ver gremios de jugadores y el último tiempo en línea
-
-**Pestaña Gremios** - Administrar gremios y sus bases
-- Cambiar el nombre de los gremios, cambiar los líderes
-- Ver ubicaciones y niveles de bases
-- Eliminar gremios vacíos o inactivos
-
-**Pestaña Bases** - Ver todos los campamentos base
-- Exportar/importar planos de base.
-- Clonar bases a otros gremios.
-- Ajustar el radio de la base
+- Ver todos los campamentos base con asociación de gremio.
+- **Exportar** planos base a `.json`; **importar** (archivo único o múltiple) a cualquier gremio.
+- **Clonar** bases para otros gremios con posicionamiento desplazado.
+- **Ajustar el radio base** (50%–1000%).
+- Eliminar bases inactivas y objetos de mapa que no sean bases.
 
 ### Visor de mapas
 
-Visualización interactiva de tu mundo:
-- Ver todas las ubicaciones de las bases y posiciones de los jugadores.
-- Filtrar por gremio o nombre de jugador
-- Haga clic en los marcadores para obtener información detallada.
-- Generar comandos `killnearestbase` para PalDefender
+Visualización interactiva de todo tu mundo.
 
-### Transferencia de personajes
+- Marcadores de base (icono de casa) y marcadores de jugador (icono de persona) con paneles de detalles.
+- Alternar superposiciones: bases, jugadores, anillos de radio, zonas de exclusión.
+- **Dibujo de zonas**: dibuja zonas de exclusión rectangulares o poligonales directamente en el mapa.
+- **Modo de calibración**: alinea con precisión el mapa con las coordenadas del juego.
+- Vistas del mapa mundial y del mapa de árboles; filtrar por gremio o nombre de jugador.
+- Zoom (1,0x–30,0x), panorámica, doble clic para volar hasta un marcador.
+- Marcadores de clic derecho y espacio vacío para acciones de gestión.
 
-Transferir personajes entre diferentes mundos/servidores (guardado cruzado):
-- Transferir uno o todos los jugadores.
-- Conserva personajes, pals, inventario y tecnología.
-- Útil para migrar entre servidores cooperativos y dedicados
+### Gestión de inventario
 
-### Reparar host Guardar
+**Inventario de jugadores** — Tres subpestañas:
+- *Inventario* — Todos los artículos y equipos en la bolsa principal; editar cantidad, agregar, eliminar.
+- *Objetos clave*: elementos de misión, efigies y tecnología; agregue en masa todas las efigies/elementos clave.
+- *Estadísticas*: nivel, HP, resistencia, ataque, defensa, velocidad de trabajo, peso.
+- Panel de equipo para ranuras para armas, accesorios, alimentos, armaduras, escudos, planeadores y módulos.
+- Desbloquea todos los mapas + puntos de viaje rápido con un solo clic.
 
-Intercambia UID entre dos jugadores:
-- Transferir el progreso de un jugador a otro.
-- Esencial para transferencias de host/cooperativo a servidor
-- Útil para intercambiar roles de anfitrión entre jugadores.
-- Útil para cambios de plataforma (Xbox ↔ Steam)
-- Resuelve problemas de asignación de UID de host/servidor.
-- **Nota:** El jugador afectado debe tener un personaje creado en el objetivo guardado primero.
+**Inventario base**: busque y administre artículos y trabaje Pals en todas las bases:
+- Ver/editar elementos en contenedores; contenedores transparentes; modificar las ranuras del contenedor.
+- Operaciones de elementos entre gremios (buscar/eliminar elementos en todos los gremios).
+- Eliminación de estructura entre gremios.
+- Subpestaña **Base Pals**: administra el Pals de trabajo asignado a cada base con menús contextuales completos del editor pal.
+
+### Exclusiones
+
+Listas de protección que protegen a los jugadores, gremios y bases de las operaciones de limpieza.
+
+- Tres paneles uno al lado del otro: UID de jugador, ID de gremio e ID de base excluidos.
+- Agregue entradas mediante menús contextuales al hacer clic derecho en las pestañas Jugadores, Gremios o Bases.
+- Guardar y cargar listas de exclusión de forma persistente.
+- Cree su lista **antes** de ejecutar la limpieza masiva.
+
+### Guardar herramientas
+
+Accesible desde la pestaña **Herramientas** como tarjetas en las que se puede hacer clic:
+
+| Herramienta | Descripción |
+|------|-------------|
+| **Convertir guardados** | Convertir entre formatos SAV y JSON |
+| **Convertir GamePass → Steam** | Convertir archivos guardados de Xbox/GamePass al formato Steam |
+| **Convertir SteamID** | Convierta ID de Steam a UID de Palworld |
+| **Restaurar mapa** | Aplicar el progreso del mapa completamente desbloqueado a todos los mundos/servidores |
+| **Inyector de ranura** | Aumentar espacios de palbox por jugador |
+| **Modificar Guardar** | Abrir y modificar datos guardados sin procesar |
+| **Transferencia de personaje** | Transferir personajes entre diferentes mundos/servidores (guardado cruzado) |
+| **Reparar el guardado del host** | Intercambiar UID entre dos jugadores (intercambio de host, migración de plataforma) |
+
+### Funciones de limpieza y utilidades
+
+Accesibles a través de **Menú → Funciones**, estas operaciones de nivel de servidor incluyen:
+
+- **Eliminación**: elimina gremios vacíos, bases/jugadores inactivos, jugadores duplicados y datos sin referencia.
+- **Limpieza**: elimina elementos no válidos/modificados, pals y passives no válidos, estructuras no válidas; arreglar pals ilegal (límite al máximo legal); restablecer las torretas antiaéreas; desbloquear private chests; reparar todas las estructuras.
+- **Restablecimientos**: reinicio de misiones, mazmorras, plataforma petrolera, invasor y entrega de suministros.
+- **Marcas de tiempo**: corrige marcas de tiempo negativas; restablecer los tiempos del jugador.
+- **PalDefender** — Genera comandos `killnearestbase`.
+
+
+
+
 
 ---
 
+
+
+
+<div align="center">
+
+## Instalación
+
+<img src="https://readme-typing-svg.demolab.com?lines=Get+it+running+in+minutes;Download+and+go;No+setup+required&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+### Compilaciones independientes (recomendadas)
+
+Los archivos binarios prediseñados están disponibles para las tres plataformas principales desde [GitHub Releases](https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest):
+
+| Plataforma | Descargar | Requisitos |
+|----------|----------|--------------|
+| **Windows** | `PalworldSaveTools-*.exe` | Windows 10/11, [VC++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (2015-2022) |
+| **Linux** | `PalworldSaveTools-*-linux` | Cualquier distribución moderna |
+| **macOS** | `PalworldSaveTools-*-macos.dmg` | macOS 12+ (Monterey o posterior) |
+
+También disponible en [Nexus Mods](https://www.nexusmods.com/palworld/mods/3190).
+
+1. Descargue la versión adecuada para su plataforma.
+2. Extraiga (si está archivado) y ejecute el ejecutable.
+3. Eso es todo: no se necesitan Python ni dependencias.
+
+> **Windows:** Si ve "No se encontró VCRUNTIME140.dll", instale [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
+
+> **Linux:** Es posible que necesites marcar el archivo como ejecutable: `chmod +x PalworldSaveTools-*-linux`
+
+> **macOS:** Si Gatekeeper bloquea la aplicación, haga clic derecho → **Abrir** la primera vez o ejecute `xattr -d com.apple.quarantine /path/to/app`.
+
+### Desde la fuente (todas las plataformas)
+
+PST usa [`uv`](https://docs.astral.sh/uv/) para la gestión de dependencias. El script de inicio crea automáticamente un entorno virtual e instala todo.
+
+**Requisitos previos:** [Python 3.11+](https://www.python.org/) y [uv](https://docs.astral.sh/uv/getting-started/installation/).
+
+```bash
+git clone https://github.com/deafdudecomputers/PalworldSaveTools.git
+cd PalworldSaveTools
+uv run start.py
+```
+
+**Windows** (lanzador de doble clic):
+```
+start.cmd
+```
+
+El iniciador crea un `.venv`, instala dependencias a través de `uv sync` e inicia la aplicación. Limpia el archivo de bloqueo al salir para que cada ejecución sea reproducible.
+
+
+
+
+
+---
+
+
+
+
+<div align="center">
+
+## Inicio rápido
+
+<img src="https://readme-typing-svg.demolab.com?lines=Load.+Edit.+Save.+That+simple.;Three+steps+to+glory;It%27s+that+easy&center=true&width=450&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+1. **Carga tu guardado**
+   - Haga clic en **Menú → Cargar Guardar**, o arrastre y suelte un archivo `.sav` en la ventana.
+   - Navegue hasta su carpeta de guardado de Palworld y seleccione `Level.sav`.
+
+2. **Explora tus datos**
+   - Usa las pestañas: **Mapa**, **Herramientas**, **Jugadores**, **Gremios**, **Bases**, **Inventario de jugadores**, **Inventario de base**, **Pal Editor**, **Exclusiones**, para explorar tu partida guardada.
+   - La barra de estadísticas muestra recuentos en vivo; Los iconos de navegación rápida saltan a cada sección.
+
+3. **Hacer cambios**
+   - Haga clic izquierdo para seleccionar; Haga clic derecho en casi cualquier cosa para realizar acciones contextuales.
+   - Haga doble clic para editar o eliminar rápidamente (consulte las guías en la aplicación para obtener más detalles).
+
+4. **Guarde sus cambios**
+   - Haga clic en **Menú → Guardar cambios**. Las copias de seguridad se crean automáticamente.
+
+> **Consejo:** Cada pestaña tiene una guía incorporada: haga clic en el ícono de ayuda en cualquier pestaña para ver exactamente qué puede hacer. Para obtener un conocimiento más profundo, **pase el cursor sobre cualquier botón, campo o control** para revelar información sobre herramientas detallada en el encabezado. El sistema de ayuda de información sobre herramientas en la aplicación es su mejor referencia para comprender exactamente qué hace cada función y cómo usarla.
+
+
+
+
+
+---
+
+
+
+
+<div align="center">
+
 ## Guías
+
+<img src="https://readme-typing-svg.demolab.com?lines=Step-by-step+walkthroughs;Follow+the+guide;We%27ll+show+you+how&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
 
 ### Guardar ubicaciones de archivos
 
-**Anfitrión/Cooperativo:**
+**Anfitrión/Cooperativo (Windows):**
 ```
 %localappdata%\Pal\Saved\SaveGames\YOURID\RANDOMID\
 ```
@@ -253,185 +309,321 @@ steamapps\common\Palworld\Pal\Saved\SaveGames\0\RANDOMSERVERID\
 
 ### Desbloqueo del mapa
 
-<details>
-<summary>Haga clic para ampliar las instrucciones de desbloqueo del mapa</summary>
+PST puede desbloquear el mapa completo (todos los puntos de viaje rápido) para guardar:
 
-1. Copiar `LocalData.sav` de `resources\`
-2. Encuentra tu servidor/carpeta de guardado mundial
-3. Reemplace el `LocalData.sav` existente con el archivo copiado.
-4. Inicie el juego con un mapa completamente desbloqueado.
-
-> **Nota:** Utilice la herramienta **Restaurar mapa** en la pestaña Herramientas para aplicar el mapa desbloqueado a TODOS sus mundos/servidores a la vez con copias de seguridad automáticas.
-
-</details>
+1. Cargue su archivo guardado en PST.
+2. Abre la pestaña **Inventario de jugadores** y haz clic en **Desbloquear todos los mapas + Viaje rápido** para un solo jugador, **o**
+3. Utilice la herramienta **Restaurar mapa** en la pestaña Herramientas para aplicar el progreso del mapa desbloqueado en **todos** sus mundos/servidores a la vez.
+4. Guarde los cambios. Se crean copias de seguridad automáticas.
 
 ### Host → Transferencia de servidor
 
 <details>
-<summary>Haga clic para expandir la guía de transferencia de host a servidor</summary>
+<summary>Haga clic para ampliar</summary>
 
-1. Copie las carpetas `Level.sav` y `Players` desde el guardado del host.
-2. Pegar en la carpeta de guardado del servidor dedicado.
-3. Inicie el servidor, cree un nuevo personaje.
-4. Espere a que se guarde automáticamente y luego cierre
-5. Utilice **Fix Host Save** para migrar GUID
-6. Copie los archivos y ejecútelos
-
-**Utilizando Fix Host Save:**
-- Seleccione el `Level.sav` de su carpeta temporal
-- Elige el **carácter antiguo** (del guardado original)
-- Elige el **nuevo personaje** (que acabas de crear)
-- Haga clic en **Migrar**
+1. Copie `Level.sav` y la carpeta `Players` desde el guardado de su host.
+2. Péguelos en la carpeta de guardado del servidor dedicado.
+3. Inicie el servidor, cree un nuevo personaje y espere a que se guarde automáticamente.
+4. Cierre el servidor.
+5. Utilice **Fix Host Save** en PST para migrar el GUID del personaje antiguo al nuevo.
+6. Copie los archivos e inicie el servidor.
 
 </details>
 
 ### Intercambio de host (cambio de host)
 
 <details>
-<summary>Haga clic para expandir la guía de intercambio de host</summary>
+<summary>Haga clic para ampliar</summary>
 
-**Antecedentes:**
-- El anfitrión siempre usa `0001.sav`: el mismo UID para quien sea el anfitrión
-- Cada cliente utiliza un guardado UID único y regular (por ejemplo, `123xxx.sav`, `987xxx.sav`)
+**Antecedentes:** El anfitrión siempre usa la ranura `0001.sav`: el mismo UID para quien sea el anfitrión. Cada cliente obtiene un guardado regular único (por ejemplo, `123xxx.sav`).
 
-**Requisitos previos:**
-Ambos jugadores (antiguo anfitrión y nuevo anfitrión) deben generar sus partidas guardadas habituales. Esto sucede al unirse al mundo del anfitrión y crear un nuevo personaje.
+**Requisito previo:** Tanto el anfitrión antiguo como el nuevo deben tener un guardado regular generado al unirse y crear un personaje.
 
 **Pasos:**
 
-1. **Asegúrese de que existan guardados regulares**
-   - El jugador A (antiguo anfitrión) debe tener una partida guardada regularmente (por ejemplo, `123xxx.sav`)
-   - El jugador B (nuevo anfitrión) debe tener una partida guardada regularmente (por ejemplo, `987xxx.sav`)
+1. Utilice **Reparar guardado de host** para intercambiar el `0001.sav` del host anterior → su guardado habitual (por ejemplo, `123xxx.sav`). Esto mueve su progreso fuera del espacio de host.
+2. Utilice **Reparar guardado de host** para cambiar el guardado normal del nuevo host (por ejemplo, `987xxx.sav`) → `0001.sav`. Esto mueve su progreso al puesto de anfitrión.
 
-2. **Cambie el guardado del host anterior al guardado normal**
-   - Utilice PalworldSaveTools **Fix Host Save** para intercambiar:
-   - `0001.sav` → `123xxx.sav` del antiguo anfitrión
-   - (Esto mueve el progreso del antiguo anfitrión del puesto de anfitrión al puesto de jugador habitual)
-
-3. **Cambiar el guardado normal del nuevo anfitrión por el guardado del anfitrión**
-   - Utilice PalworldSaveTools **Fix Host Save** para intercambiar:
-   - `987xxx.sav` → `0001.sav` del nuevo anfitrión
-   - (Esto mueve el progreso del nuevo anfitrión al espacio de anfitrión)
-
-**Resultado:**
-- El jugador B ahora es el anfitrión con su propio personaje y pals en `0001.sav`
-- El jugador A se convierte en cliente con su progreso original en `123xxx.sav`
+**Resultado:** El nuevo anfitrión ahora ocupa `0001.sav` con su propio personaje y Pals; el antiguo anfitrión se convierte en cliente con su progreso original intacto.
 
 </details>
 
-### Exportación/Importación básica
+### Transferencia de personajes (guardado cruzado)
 
 <details>
-<summary>Haga clic para expandir la guía básica de exportación/importación</summary>
+<summary>Haga clic para ampliar</summary>
 
-**Exportando una Base:**
-1. Cargue su guardado en PST
-2. Vaya a la pestaña Bases
-3. Haga clic derecho en una base → Exportar base
-4. Guardar como archivo `.json`
+Transfiera personajes entre diferentes mundos o servidores mientras conserva los personajes, Pals, el inventario y la tecnología:
 
-**Importando una base:**
-1. Vaya a la pestaña Bases o al Visor de mapas base.
-2. Haga clic derecho en el gremio al que desea importar la base.
-3. Seleccione Importar base
-4. Seleccione su archivo `.json` exportado
-
-**Clonación de una base:**
-1. Haga clic derecho en una base → Clonar base
-2. Seleccione el gremio objetivo
-3. La base se clonará con posicionamiento desplazado.
-
-**Ajuste del radio de la base:**
-1. Haga clic derecho en una base → Ajustar radio
-2. Ingrese un nuevo radio (50% - 1000%)
-3. Guarde y cargue el archivo guardado en el juego para las estructuras que desea reasignar.
+1. Abra la herramienta **Transferencia de personajes** desde la pestaña Herramientas.
+2. Seleccione el guardado de origen y el guardado de destino.
+3. Transferir un solo jugador o todos los jugadores.
+4. Útil para migrar entre servidores cooperativos y dedicados.
 
 </details>
 
+### Base Exportar / Importar / Clonar
+
+<details>
+<summary>Haga clic para ampliar</summary>
+
+**Exportando una Base:**
+1. Vaya a la pestaña **Bases** (o utilice el Visor de mapas).
+2. Haga clic derecho en una base → **Exportar base**.
+3. Guárdelo como un archivo de plano `.json`.
+
+**Importando una base:**
+1. Haga clic derecho en el gremio objetivo (en la pestaña Bases, Visor de mapas o pestaña Gremios).
+2. Seleccione **Importar base** (archivo único) o **Importar bases (varios archivos)**.
+3. Seleccione sus archivos `.json` exportados.
+
+**Clonación de una base:**
+1. Haga clic derecho en una base → **Clonar base**.
+2. Selecciona el gremio objetivo.
+3. La base se clona con posicionamiento desplazado.
+
+**Ajuste del radio de la base:**
+1. Haga clic derecho en una base → **Ajustar radio**.
+2. Ingrese un nuevo radio (50%–1000%).
+3. Guarde y vuelva a cargar el archivo guardado en el juego para las estructuras que desea reasignar.
+
+</details>
+
+
+
+
+
 ---
+
+
+
+
+<div align="center">
 
 ## Solución de problemas
 
-### "No se encontró VCRUNTIME140.dll"
+<img src="https://readme-typing-svg.demolab.com?lines=When+things+go+sideways;Don%27t+panic;We%27ve+seen+it+all&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
-**Solución:** Instalar [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version)
+</div>
 
-### `struct.error` al analizar guardar
+### "No se encontró VCRUNTIME140.dll" (Windows)
 
-**Causa:** Formato de archivo guardado desactualizado
+Instale el [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) (2015–2022).
 
-**Solución:**
-1. Cargue el archivo guardado en el juego (modo Solo, Cooperativo o Servidor Dedicado)
-2. Esto desencadena una actualización automática de la estructura.
-3. Asegúrese de que el guardado se haya actualizado a partir del último parche del juego.
+### `struct.error` al analizar un guardado
+
+El formato del archivo guardado está desactualizado. Cargue el guardado en el juego (Solo, Cooperativo o Servidor Dedicado) una vez para activar una actualización automática de la estructura, luego inténtelo nuevamente. Asegúrate de que el guardado se haya actualizado a partir del último parche del juego.
 
 ### El convertidor GamePass no funciona
 
-**Solución:**
-1. Cierra la versión GamePass de Palworld
-2. Espera unos minutos
-3. Ejecute el convertidor Steam → GamePass
-4. Inicie Palworld en GamePass para verificar
+1. Cierre completamente la versión GamePass de Palworld.
+2. Espere unos minutos hasta que se liberen los identificadores de archivos.
+3. Ejecute el convertidor GamePass → Steam.
+4. Inicie Palworld en GamePass para verificar.
+
+### El binario de Linux/macOS no se inicia
+
+- **Linux:** `chmod +x PalworldSaveTools-*-linux` para marcarlo como ejecutable.
+- **macOS:** Si Gatekeeper lo bloquea, haga clic derecho → **Abrir** o ejecute `xattr -d com.apple.quarantine /path/to/app`.
+
+
+
+
 
 ---
 
-## Creación de ejecutable independiente (solo Windows)
 
-Ejecute el script de compilación para crear un ejecutable independiente:
+
+
+<div align="center">
+
+## Construyendo desde la fuente
+
+<img src="https://readme-typing-svg.demolab.com?lines=Compile+it+yourself;Build+your+own;From+source+to+binary&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+PST admite dos rutas de compilación. La canalización de CI/CD utiliza Nuitka para archivos binarios de lanzamiento multiplataforma; cx_Freeze se utiliza para el instalador local de Windows.
+
+### Nuitka (multiplataforma: utilizado por CI/versiones)
+
+Requiere Python 3.11+ y `uv`. Nuitka se instala automáticamente.
 
 ```bash
-scripts\build.cmd
+# One-file build (Windows / Linux)
+uv run python build/nuitka/build_nuitka.py --onefile
+
+# One-directory build (macOS .app)
+uv run python build/nuitka/build_nuitka.py --onedir
+```
+
+Las salidas van a `dist/`:
+- Ventanas → `dist/PalworldSaveTools-*.exe`
+-Linux → `dist/PalworldSaveTools-*-linux`
+- macOS → `dist/PalworldSaveTools.app` → empaquetado como `.dmg`
+
+### cx_Freeze (instalador de Windows)
+
+Para un paquete local de Windows `.7z`:
+
+```
+scripts\build_cx.cmd
 ```
 
 Esto crea `PST_standalone_v{version}.7z` en la raíz del proyecto.
 
+### Constructor interactivo
+
+Un menú interactivo para elegir un modo de construcción:
+
+```bash
+uv run python build/build_interactively.py
+```
+
+
+
+
+
 ---
+
+
+
+
+<div align="center">
 
 ## Contribuyendo
 
+<img src="https://readme-typing-svg.demolab.com?lines=Want+to+help%3F+Here%27s+how;Join+the+team;Every+contribution+counts&center=true&width=440&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
 ¡Las contribuciones son bienvenidas! No dude en enviar una solicitud de extracción.
 
-1. Bifurcar el repositorio
-2. Crea tu rama de funciones (`git checkout -b feature/AmazingFeature`)
-3. Confirme sus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Empuje hacia la rama (`git push origin feature/AmazingFeature`)
-5. Abra una solicitud de extracción
+1. Bifurque el repositorio.
+2. Cree su rama de funciones (`git checkout -b feature/AmazingFeature`).
+3. Confirme sus cambios (`git commit -m 'Add some AmazingFeature'`).
+4. Empuje hacia la rama (`git push origin feature/AmazingFeature`).
+5. Abra una solicitud de extracción.
+
+
+
+
 
 ---
 
+
+
+
+<div align="center">
+
 ## Descargo de responsabilidad
 
+<img src="https://readme-typing-svg.demolab.com?lines=Read+this+before+you+break+something;You%27ve+been+warned;Backup+first%21;With+great+power...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
 **Utilice esta herramienta bajo su propia responsabilidad. Siempre haga una copia de seguridad de sus archivos guardados antes de realizar modificaciones.**
 
 Los desarrolladores no son responsables de ninguna pérdida de datos guardados o problemas que puedan surgir al utilizar esta herramienta.
 
+
+
+
+
 ---
+
+
+
+
+<div align="center">
 
 ## Soporte
 
+<img src="https://readme-typing-svg.demolab.com?lines=We%27ve+got+your+back;Need+help%3F;We%27re+here+for+you&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
 - **Discord:** [Join us for support, base builds, and more!](https://discord.gg/sYcZwcT4cT)
 - **GitHub Problemas:** [Report a bug](https://github.com/deafdudecomputers/PalworldSaveTools/issues)
-- **Documentación:** [Wiki](https://github.com/deafdudecomputers/PalworldSaveTools/wiki) *(Actualmente en desarrollo)*
+- **Modificaciones Nexus:** [Download & discuss](https://www.nexusmods.com/palworld/mods/3190)
+
+
+
+
 
 ---
+
+
+
+
+<div align="center">
 
 ## Licencia
 
-Este proyecto tiene la licencia MIT; consulte el archivo [LICENSE](LICENSE) para obtener más detalles.
+<img src="https://readme-typing-svg.demolab.com?lines=MIT+%E2%80%94+do+whatever+you+want;Free+as+in+beer;Open+source%2C+open+mind&center=true&width=430&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+Este proyecto tiene la licencia MIT; consulte el archivo [license](license) para obtener más detalles.
+
+
+
+
 
 ---
 
+
+
+
+<div align="center">
+
+## El equipo de Palworld
+
+<img src="https://readme-typing-svg.demolab.com?lines=The+people+behind+the+magic;Meet+the+team;Built+with+passion&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+Este proyecto no existiría sin las personas que lo respaldan.
+
+**[Pylar](https://github.com/deafdudecomputers)** — El hombre que empezó todo. Cada línea de esta herramienta se remonta a su visión y trabajo incansable en el motor de guardado, la GUI y las funciones que utiliza todos los días.
+
+**[cyrix](https://github.com/CyrixJD115)** — Refactorizador y submantenedor. Centrado en la calidad del código, la simplificación y las mejoras estructurales, manteniendo la base del código limpia, más pequeña y más fácil de mantener a medida que crece el proyecto.
+
+**[dkoz](https://github.com/dkoz)** — El hombre detrás de las identificaciones. Proporciona ID de datos del juego, información estructural sobre los códigos de ID y un conocimiento profundo de cómo se conectan los datos de Palworld que mantiene la herramienta precisa con cada actualización del juego.
+
+**[oMaN-Rod](https://github.com/oMaN-Rod)**: proporcionó el analizador de guardado original del que se bifurcó este proyecto. Sin su trabajo fundamental para descifrar el formato de guardado de Palworld, nada de esto existiría. La bifurcación simplificó y simplificó su analizador hasta convertirlo en lo que es PST hoy.
+
+
+
+
+
+---
+
+
+
+
+<div align="center">
+
 ## Agradecimientos
 
-- **Palworld** desarrollado por Pocketpair, Inc.
-- Gracias a todos los contribuyentes y miembros de la comunidad que han ayudado a mejorar esta herramienta.
+<img src="https://readme-typing-svg.demolab.com?lines=Where+credit+is+due;Thank+you+all;We+stand+on+shoulders&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+
+</div>
+
+Un enorme agradecimiento a:
+
+- **Palworld** desarrollado por Pocketpair, Inc. — para el juego que nos unió a todos.
+- **Los reporteros de errores**: cada problema presentado, cada caso extremo encontrado, cada registro pegado en Discord. Usted hace que esta herramienta sea más sólida con cada informe.
+- **La comunidad de modding de Palworld**: compañeros modders, desarrolladores de herramientas y expertos que comparten conocimientos, realizan ingeniería inversa en formatos e impulsan el ecosistema hacia adelante. Este proyecto se sustenta sobre los hombros de ese esfuerzo colectivo.
+- **Todos los contribuyentes y miembros de la comunidad**: ya sea que enviaron un PR, respondieron una pregunta en Discord o simplemente le contaron a un amigo sobre PST, gracias.
 
 ---
 
 <div align="center">
 
+![Divider](../assets/branding/PalworldSaveTools_readme_divider.png)
+
 **Hecho con ❤️ para la comunidad Palworld**
 
-[⬆ Back to Top](#palworldsavetools)
+[⬆ Back to Top](#palworld-save-tools)
 
 </div>
