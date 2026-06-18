@@ -457,28 +457,38 @@ class PalIcon(QFrame):
             raw = self._get_raw()
             if not raw:
                 return
-            menu, actions = build_pal_context_menu(self, raw)
-            action = menu.exec(event.globalPos())
-            if action == actions['boss']:
+            popup = build_pal_context_menu(self, raw)
+            key = popup.exec_(event.globalPos())
+            if key is None:
+                return
+            if key == 'boss':
                 self.rightClicked.emit(self.slot_index, 'boss_toggle')
-            elif action == actions['lucky']:
+            elif key == 'lucky':
                 self.rightClicked.emit(self.slot_index, 'lucky_toggle')
-            elif action == actions['awake']:
+            elif key == 'awake':
                 self.rightClicked.emit(self.slot_index, 'awake_toggle')
-            elif action == actions['dna']:
+            elif key == 'dna':
                 self.rightClicked.emit(self.slot_index, 'dna_toggle')
-            elif action in actions['fav'][1]:
-                idx = actions['fav'][1].index(action)
+            elif key.startswith('fav_'):
+                idx = int(key.split('_')[1])
                 self.rightClicked.emit(self.slot_index, f'fav_set_{idx}')
-            elif action == actions['max']:
+            elif key == 'max':
                 self.rightClicked.emit(self.slot_index, 'max_all_stats')
-            elif action == actions['learn']:
+            elif key == 'learn':
                 self.rightClicked.emit(self.slot_index, 'learn_all')
-            elif action == actions['learned']:
+            elif key == 'learned':
                 self.rightClicked.emit(self.slot_index, 'learnt_skills')
-            elif action == actions['bulk_sync_pal']:
+            elif key == 'bulk_sync_pal':
                 self.rightClicked.emit(self.slot_index, 'bulk_sync_pal')
-            elif action == actions['delete']:
+            elif key == 'clone':
+                self.rightClicked.emit(self.slot_index, 'clone')
+            elif key == 'bulk_rename':
+                self.rightClicked.emit(self.slot_index, 'bulk_rename')
+            elif key == 'bulk_feed':
+                self.rightClicked.emit(self.slot_index, 'bulk_feed')
+            elif key == 'bulk_heal':
+                self.rightClicked.emit(self.slot_index, 'bulk_heal')
+            elif key == 'delete':
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
             from PySide6.QtWidgets import QMenu
@@ -685,28 +695,38 @@ class PartySlotWidget(QFrame):
             raw = self._get_raw()
             if not raw:
                 return
-            menu, actions = build_pal_context_menu(self, raw)
-            action = menu.exec(event.globalPos())
-            if action == actions['boss']:
+            popup = build_pal_context_menu(self, raw)
+            key = popup.exec_(event.globalPos())
+            if key is None:
+                return
+            if key == 'boss':
                 self.rightClicked.emit(self.slot_index, 'boss_toggle')
-            elif action == actions['lucky']:
+            elif key == 'lucky':
                 self.rightClicked.emit(self.slot_index, 'lucky_toggle')
-            elif action == actions['awake']:
+            elif key == 'awake':
                 self.rightClicked.emit(self.slot_index, 'awake_toggle')
-            elif action == actions['dna']:
+            elif key == 'dna':
                 self.rightClicked.emit(self.slot_index, 'dna_toggle')
-            elif action in actions['fav'][1]:
-                idx = actions['fav'][1].index(action)
+            elif key.startswith('fav_'):
+                idx = int(key.split('_')[1])
                 self.rightClicked.emit(self.slot_index, f'fav_set_{idx}')
-            elif action == actions['max']:
+            elif key == 'max':
                 self.rightClicked.emit(self.slot_index, 'max_all_stats')
-            elif action == actions['learn']:
+            elif key == 'learn':
                 self.rightClicked.emit(self.slot_index, 'learn_all')
-            elif action == actions['learned']:
+            elif key == 'learned':
                 self.rightClicked.emit(self.slot_index, 'learnt_skills')
-            elif action == actions['bulk_sync_pal']:
+            elif key == 'bulk_sync_pal':
                 self.rightClicked.emit(self.slot_index, 'bulk_sync_pal')
-            elif action == actions['delete']:
+            elif key == 'clone':
+                self.rightClicked.emit(self.slot_index, 'clone')
+            elif key == 'bulk_rename':
+                self.rightClicked.emit(self.slot_index, 'bulk_rename')
+            elif key == 'bulk_feed':
+                self.rightClicked.emit(self.slot_index, 'bulk_feed')
+            elif key == 'bulk_heal':
+                self.rightClicked.emit(self.slot_index, 'bulk_heal')
+            elif key == 'delete':
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
             from PySide6.QtWidgets import QMenu
@@ -1012,28 +1032,38 @@ class PalboxSlotWidget(QFrame):
             raw = self._get_raw()
             if not raw:
                 return
-            menu, actions = build_pal_context_menu(self, raw)
-            action = menu.exec(event.globalPos())
-            if action == actions['boss']:
+            popup = build_pal_context_menu(self, raw)
+            key = popup.exec_(event.globalPos())
+            if key is None:
+                return
+            if key == 'boss':
                 self.rightClicked.emit(self.slot_index, 'boss_toggle')
-            elif action == actions['lucky']:
+            elif key == 'lucky':
                 self.rightClicked.emit(self.slot_index, 'lucky_toggle')
-            elif action == actions['awake']:
+            elif key == 'awake':
                 self.rightClicked.emit(self.slot_index, 'awake_toggle')
-            elif action == actions['dna']:
+            elif key == 'dna':
                 self.rightClicked.emit(self.slot_index, 'dna_toggle')
-            elif action in actions['fav'][1]:
-                idx = actions['fav'][1].index(action)
+            elif key.startswith('fav_'):
+                idx = int(key.split('_')[1])
                 self.rightClicked.emit(self.slot_index, f'fav_set_{idx}')
-            elif action == actions['max']:
+            elif key == 'max':
                 self.rightClicked.emit(self.slot_index, 'max_all_stats')
-            elif action == actions['learn']:
+            elif key == 'learn':
                 self.rightClicked.emit(self.slot_index, 'learn_all')
-            elif action == actions['learned']:
+            elif key == 'learned':
                 self.rightClicked.emit(self.slot_index, 'learnt_skills')
-            elif action == actions['bulk_sync_pal']:
+            elif key == 'bulk_sync_pal':
                 self.rightClicked.emit(self.slot_index, 'bulk_sync_pal')
-            elif action == actions['delete']:
+            elif key == 'clone':
+                self.rightClicked.emit(self.slot_index, 'clone')
+            elif key == 'bulk_rename':
+                self.rightClicked.emit(self.slot_index, 'bulk_rename')
+            elif key == 'bulk_feed':
+                self.rightClicked.emit(self.slot_index, 'bulk_feed')
+            elif key == 'bulk_heal':
+                self.rightClicked.emit(self.slot_index, 'bulk_heal')
+            elif key == 'delete':
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
             from PySide6.QtWidgets import QMenu
@@ -1058,8 +1088,6 @@ class PalboxSlotWidget(QFrame):
         self._children = []
         raw = self._get_raw()
         if not raw or not isinstance(raw, dict):
-            self.setStyleSheet(slot_full('QFrame#palboxSlot'))
-            self.setToolTip('')
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
@@ -1747,48 +1775,36 @@ def _register_pal_instance_to_guild(instance_id, group_id):
         except Exception:
             pass
 def build_pal_context_menu(parent, raw):
-    from PySide6.QtWidgets import QMenu
-    menu = QMenu(parent)
-    menu.setObjectName('editPalsContextMenu')
+    from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+    popup = ScrollableContextMenu(parent)
     cid = extract_value(raw, 'CharacterID', '') if raw else ''
     is_boss = cid.upper().startswith('BOSS_')
     is_lucky = extract_value(raw, 'IsRarePal', False) if raw else False
     is_awake = extract_value(raw, 'bIsAwakening', False) if raw else False
     is_dna = extract_value(raw, 'bImportedCharacter', False) if raw else False
     fav_idx = extract_value(raw, 'FavoriteIndex', 0) if raw else 0
-    boss_action = menu.addAction(t('edit_pals.ctx.boss_alpha'))
-    boss_action.setCheckable(True)
-    boss_action.setChecked(is_boss)
-    lucky_action = menu.addAction(t('edit_pals.ctx.lucky_shiny'))
-    lucky_action.setCheckable(True)
-    lucky_action.setChecked(is_lucky)
-    awake_action = menu.addAction(t('edit_pals.ctx.awakened'))
-    awake_action.setCheckable(True)
-    awake_action.setChecked(is_awake)
-    dna_action = menu.addAction(t('edit_pals.ctx.imported'))
-    dna_action.setCheckable(True)
-    dna_action.setChecked(is_dna)
-    menu.addSeparator()
-    fav_sub = QMenu(t('edit_pals.ctx.lock_level'), menu)
-    fav_sub.setObjectName('editPalsContextMenu')
-    lock_actions = []
+    popup.add_item('boss', t('edit_pals.ctx.boss_alpha'), True, is_boss)
+    popup.add_item('lucky', t('edit_pals.ctx.lucky_shiny'), True, is_lucky)
+    popup.add_item('awake', t('edit_pals.ctx.awakened'), True, is_awake)
+    popup.add_item('dna', t('edit_pals.ctx.imported'), True, is_dna)
+    popup.add_sep()
+    popup.add_label(t('edit_pals.ctx.lock_level'))
     for i in range(4):
-        sub_a = fav_sub.addAction(f"{t('edit_pals.ctx.lock_level')} {i}")
-        sub_a.setCheckable(True)
-        sub_a.setChecked(fav_idx == i)
-        lock_actions.append(sub_a)
-    fav_action = menu.addAction(t('edit_pals.ctx.favorited'))
-    fav_action.setMenu(fav_sub)
-    menu.addSeparator()
-    max_action = menu.addAction(t('edit_pals.ctx.max_all_stats'))
-    learn_action = menu.addAction(t('edit_pals.ctx.learn_all_moves'))
-    learned_action = menu.addAction(t('edit_pals.ctx.learnt_skills'))
-    menu.addSeparator()
-    bulk_sync_action = menu.addAction(t('edit_pals.ctx.bulk_sync_pal'))
-    menu.addSeparator()
-    delete_action = menu.addAction(t('edit_pals.delete'))
-    actions = {'boss': boss_action, 'lucky': lucky_action, 'awake': awake_action, 'dna': dna_action, 'fav': (fav_action, lock_actions), 'max': max_action, 'learn': learn_action, 'learned': learned_action, 'bulk_sync_pal': bulk_sync_action, 'delete': delete_action}
-    return (menu, actions)
+        popup.add_item(f'fav_{i}', f"  {t('edit_pals.ctx.lock_level')} {i}", True, fav_idx == i)
+    popup.add_sep()
+    popup.add_item('max', t('edit_pals.ctx.max_all_stats'))
+    popup.add_item('learn', t('edit_pals.ctx.learn_all_moves'))
+    popup.add_item('learned', t('edit_pals.ctx.learnt_skills'))
+    popup.add_sep()
+    popup.add_item('bulk_sync_pal', t('edit_pals.ctx.bulk_sync_pal'))
+    popup.add_sep()
+    popup.add_item('clone', t('edit_pals.ctx.clone'))
+    popup.add_item('bulk_rename', t('edit_pals.ctx.bulk_rename'))
+    popup.add_item('bulk_feed', t('edit_pals.ctx.bulk_feed'))
+    popup.add_item('bulk_heal', t('edit_pals.ctx.bulk_heal'))
+    popup.add_sep()
+    popup.add_item('delete', t('edit_pals.delete'))
+    return popup
 def _get_raw_from_item(pal_item):
     if not pal_item:
         return None
@@ -4439,6 +4455,19 @@ class PalEditorWidget(QWidget):
         self.box_label.setAlignment(Qt.AlignCenter)
         header_row.addWidget(self.box_label)
         header_row.addStretch()
+        self.restore_all_btn = QPushButton(t('edit_pals.restore_all'))
+        self.restore_all_btn.setFixedHeight(24)
+        self.restore_all_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.12); color: #4ADE80; border: 1px solid rgba(16,185,129,0.25); border-radius: 5px; padding: 4px 10px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(16,185,129,0.25); border-color: rgba(16,185,129,0.5); color: #FFFFFF; }')
+        self.restore_all_btn.setCursor(Qt.PointingHandCursor)
+        self.restore_all_btn.clicked.connect(self._restore_all_pals)
+        header_row.addWidget(self.restore_all_btn)
+        self.max_all_btn = QPushButton(t('edit_pals.max_all'))
+        self.max_all_btn.setFixedHeight(24)
+        self.max_all_btn.setStyleSheet('QPushButton { background: rgba(167,139,250,0.12); color: #A78BFA; border: 1px solid rgba(167,139,250,0.25); border-radius: 5px; padding: 4px 10px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(167,139,250,0.25); border-color: rgba(167,139,250,0.5); color: #FFFFFF; }')
+        self.max_all_btn.setCursor(Qt.PointingHandCursor)
+        self.max_all_btn.clicked.connect(self._max_all_pals)
+        header_row.addWidget(self.max_all_btn)
+        header_row.addSpacing(8)
         self.prev_box_btn = QPushButton('◀')
         self.prev_box_btn.setObjectName('navBtn')
         self.prev_box_btn.setFixedSize(32, 28)
@@ -4620,6 +4649,15 @@ class PalEditorWidget(QWidget):
         elif action == 'bulk_sync_pal':
             if raw:
                 self._bulk_sync_pal(raw)
+        elif action == 'clone':
+            if raw:
+                self._clone_pal(sender)
+        elif action == 'bulk_rename':
+            self._bulk_rename_pal(sender)
+        elif action == 'bulk_feed':
+            self._bulk_feed_pal(sender)
+        elif action == 'bulk_heal':
+            self._bulk_heal_pal(sender)
     def _bulk_sync_pal(self, raw):
         pal_item = None
         for pi in list(self.party_pals.values()):
@@ -4714,6 +4752,496 @@ class PalEditorWidget(QWidget):
                 self.pal_info._clear_display()
                 self._update_dashboard_stats()
                 self._decrement_pal_count()
+    def _clone_pal(self, sender):
+        if not hasattr(sender, 'pal_data') or sender.pal_data is None:
+            return
+        is_party = sender in self.party_slots
+        pal_item = sender.pal_data
+        source_raw = _get_raw_from_item(pal_item)
+        if not source_raw:
+            return
+        cid = extract_value(source_raw, 'CharacterID', '')
+        nick = extract_value(source_raw, 'NickName', '') or ''
+        abs_index = None
+        if is_party:
+            used = set(self.party_pals.keys())
+            for i in range(5):
+                if i not in used:
+                    abs_index = i
+                    break
+            if abs_index is None:
+                show_warning(self, 'Clone', 'Party is full.')
+                return
+            container_id = self.party_container
+        else:
+            start = (self.current_box_index - 1) * 30
+            used_page = set()
+            for k in self.palbox_pal_dict:
+                if start <= k < start + 30:
+                    used_page.add(k - start)
+            for i in range(30):
+                if i not in used_page:
+                    abs_index = start + i
+                    break
+            if abs_index is None:
+                show_warning(self, 'Clone', 'This box is full.')
+                return
+            container_id = self.palbox_container
+        if not container_id:
+            return
+        owner_uid = self.player_uid
+        group_id = None
+        wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+        if 'GroupSaveDataMap' in wsd:
+            owner_norm = owner_uid.replace('-', '').lower()
+            for g in wsd['GroupSaveDataMap']['value']:
+                try:
+                    for p in g['value']['RawData']['value'].get('players', []):
+                        if str(p.get('player_uid', '')).replace('-', '').lower() == owner_norm:
+                            group_id = g['value']['RawData']['value'].get('group_id')
+                            break
+                except Exception:
+                    pass
+                if group_id:
+                    break
+        new_pal = _generate_pal_save_param(cid, nick, owner_uid, container_id, abs_index, group_id)
+        instance_id = new_pal['key']['InstanceId']['value']
+        new_raw = _get_raw_from_item(new_pal)
+        if new_raw is None:
+            return
+        for field in source_raw:
+            if field == 'SlotId':
+                continue
+            if field == 'OwnerPlayerUId':
+                continue
+            new_raw[field] = copy.deepcopy(source_raw[field])
+        cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
+        cmap.append(new_pal)
+        char_containers = safe_nested_get(wsd, ['CharacterContainerSaveData', 'value'], [])
+        for cont in char_containers:
+            if safe_nested_get(cont, ['key', 'ID', 'value']) == container_id:
+                slots = safe_nested_get(cont, ['value', 'Slots', 'value', 'values'], [])
+                slots.append({'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': abs_index}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': instance_id, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}})
+                break
+        if group_id:
+            _register_pal_instance_to_guild(instance_id, group_id)
+        if is_party:
+            self.party_pals[abs_index] = new_pal
+            self._update_party_slots()
+        else:
+            self.palbox_pal_dict[abs_index] = new_pal
+            self._update_palbox_page()
+        self._clear_party_highlight()
+        self._clear_palbox_highlight()
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
+        self._update_dashboard_stats()
+        self._increment_pal_count()
+        show_information(self, 'Clone Pal', 'Pal cloned successfully.')
+    def _restore_all_pals(self):
+        reply = show_question(self, t('edit_pals.ctx.bulk_heal'), t('edit_pals.restore_all_confirm'))
+        if not reply:
+            return
+        count = 0
+        pals = list(self.party_pals.values())
+        start = (self.current_box_index - 1) * 30
+        for i in range(start, start + 30):
+            if i in self.palbox_pal_dict:
+                pals.append(self.palbox_pal_dict[i])
+        for pi in pals:
+            tr = _get_raw_from_item(pi)
+            if not tr:
+                continue
+            cid_i = extract_value(tr, 'CharacterID', '')
+            is_boss_i = cid_i.upper().startswith('BOSS_')
+            is_lucky_i = extract_value(tr, 'IsRarePal', False)
+            lv_i = extract_value(tr, 'Level', 1)
+            talent_hp_i = extract_value(tr, 'Talent_HP', 0)
+            rank_hp_i = extract_value(tr, 'Rank_HP', 0)
+            trust_i = extract_value(tr, 'FriendshipPoint', 0)
+            rank_i = extract_value(tr, 'Rank', 0)
+            is_awake_i = bool(extract_value(tr, 'bIsAwakening', False))
+            thr = _ensure_friendship_thresholds()
+            trust_rank_i = 0
+            for r in range(len(thr) - 1, 0, -1):
+                if trust_i >= thr[r]:
+                    trust_rank_i = r
+                    break
+            condenser_i = int(rank_i) if isinstance(rank_i, (int, float)) else 0
+            base = get_pal_base_data(cid_i)
+            max_hp = safe_nested_get(tr, ['MaxHP', 'value', 'Value', 'value'], 0)
+            if max_hp <= 0 and base:
+                max_hp = calculate_max_hp(base, lv_i, talent_hp_i, rank_hp_i, is_boss_i, is_lucky_i, trust_rank_i, condenser_i, is_awake_i)
+            if max_hp <= 0:
+                max_hp = 1
+            tr['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+            max_stomach = (base.get('stats', {}).get('max_full_stomach', 300) if base else 300)
+            tr['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+            tr['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+            tr.pop('WorkerSick', None)
+            tr.pop('PhysicalHealth', None)
+            tr.pop('HungerType', None)
+            tr.pop('FoodWithStatusEffect', None)
+            tr.pop('Tiemr_FoodWithStatusEffect', None)
+            tr.pop('FoodRegeneEffectInfo', None)
+            count += 1
+        self._clear_party_highlight()
+        self._clear_palbox_highlight()
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
+        self._update_party_slots()
+        self._update_palbox_page()
+        self._update_dashboard_stats()
+        show_information(self, t('edit_pals.ctx.bulk_heal'), t('edit_pals.restore_all_success', count=count))
+    def _max_all_pals(self):
+        reply = show_question(self, t('edit_pals.ctx.max_all_stats'), t('edit_pals.max_all_confirm'))
+        if not reply:
+            return
+        count = 0
+        pals = list(self.party_pals.values())
+        start = (self.current_box_index - 1) * 30
+        for i in range(start, start + 30):
+            if i in self.palbox_pal_dict:
+                pals.append(self.palbox_pal_dict[i])
+        for pi in pals:
+            tr = _get_raw_from_item(pi)
+            if not tr:
+                continue
+            tr['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+            tr['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+            tr['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+            tr['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+            tr['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+            tr['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+            tr['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+            tr['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+            tr['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
+            tr['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
+            cid_i = extract_value(tr, 'CharacterID', '')
+            base_i = get_pal_base_data(cid_i)
+            ws_base = base_i.get('work_suitabilities', {}) if base_i else {}
+            for k, v in ws_base.items():
+                if v > 0:
+                    _set_work_suitability(tr, k, 10)
+            current_level = extract_value(tr, 'Level', 1)
+            if current_level < 80:
+                tr['Level'] = {'id': None, 'type': 'IntProperty', 'value': 80}
+            count += 1
+        self._clear_party_highlight()
+        self._clear_palbox_highlight()
+        self.selected_pal_slot = None
+        self.pal_info.set_clicked_pal(None)
+        self._update_party_slots()
+        self._update_palbox_page()
+        self._update_dashboard_stats()
+        show_information(self, t('edit_pals.ctx.max_all_stats'), t('edit_pals.max_all_success', count=count))
+    def _gather_same_species_items(self, sender):
+        items = []
+        raw = _get_raw_from_item(sender.pal_data) if hasattr(sender, 'pal_data') else None
+        if not raw:
+            return items
+        cid = extract_value(raw, 'CharacterID', '')
+        base_id = cid.lower().replace('boss_', '')
+        seen = set()
+        for pi in list(self.party_pals.values()):
+            pr = _get_raw_from_item(pi)
+            if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
+                inst_id = str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+                if inst_id not in seen:
+                    seen.add(inst_id)
+                    items.append(pi)
+        for pi in self.palbox_pal_dict.values():
+            pr = _get_raw_from_item(pi)
+            if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
+                inst_id = str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+                if inst_id not in seen:
+                    seen.add(inst_id)
+                    items.append(pi)
+        return items
+    def _bulk_rename_pal(self, sender):
+        candidates = self._gather_same_species_items(sender)
+        if not candidates:
+            raw = _get_raw_from_item(sender.pal_data) if hasattr(sender, 'pal_data') else None
+            name = _strip_prefix_label(resolve_name(extract_value(raw, 'CharacterID', ''), PalFrame._NAMEMAP)) if raw else ''
+            show_information(self, t('edit_pals.ctx.bulk_rename'), f'No other {name} found.')
+            return
+        raw = _get_raw_from_item(candidates[0])
+        cid = extract_value(raw, 'CharacterID', '') if raw else ''
+        pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        dlg = FramelessDialog('edit_pals.ctx.bulk_rename', self)
+        dlg.set_title_text(f"{t('edit_pals.bulk_rename_title', name=pal_name)}")
+        dlg.setModal(True)
+        dlg.setMinimumSize(500, 450)
+        inner = QWidget()
+        il = QVBoxLayout(inner)
+        il.setContentsMargins(8, 4, 8, 8)
+        il.setSpacing(6)
+        rename_lbl = QLabel(t('edit_pals.bulk_rename_label'))
+        rename_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #7DD3FC; background: transparent; border: none;')
+        il.addWidget(rename_lbl)
+        rename_edit = QLineEdit()
+        rename_edit.setPlaceholderText(pal_name)
+        rename_edit.setStyleSheet('QLineEdit { background: rgba(0,0,0,0.4); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 10px; font-size: 12px; } QLineEdit:focus { border-color: #7DD3FC; }')
+        il.addWidget(rename_edit)
+        list_lbl = QLabel(t('edit_pals.select_pals_to_sync'))
+        list_lbl.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none; padding: 2px 0;')
+        il.addWidget(list_lbl)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); }')
+        inner_w = QWidget()
+        inner_w.setStyleSheet('background: transparent; border: none;')
+        chk_layout = QVBoxLayout(inner_w)
+        chk_layout.setContentsMargins(2, 2, 2, 2)
+        chk_layout.setSpacing(2)
+        checkboxes = []
+        for pi in candidates:
+            pr = _get_raw_from_item(pi)
+            nick = extract_value(pr, 'NickName', '') if pr else ''
+            lv = extract_value(pr, 'Level', 1) if pr else 1
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            cb = QCheckBox(display)
+            cb.setChecked(True)
+            cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
+            cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+            chk_layout.addWidget(cb)
+            checkboxes.append((cb, pi))
+        scroll.setWidget(inner_w)
+        il.addWidget(scroll, 1)
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        cancel_btn = QPushButton(t('edit_pals.bulk_sync_cancel'))
+        cancel_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 16px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
+        cancel_btn.clicked.connect(dlg.reject)
+        btn_row.addWidget(cancel_btn)
+        apply_btn = QPushButton(t('edit_pals.bulk_rename_apply'))
+        apply_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.15); color: #4ADE80; border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.25); color: #FFFFFF; }')
+        btn_row.addWidget(apply_btn)
+        il.addLayout(btn_row)
+        dlg.content_layout.addWidget(inner)
+        result = {'applied': False}
+        def on_apply():
+            text = rename_edit.text().strip()
+            if not text:
+                show_warning(dlg, t('edit_pals.ctx.bulk_rename'), 'Please enter a nickname.')
+                return
+            selected = [pi for cb, pi in checkboxes if cb.isChecked()]
+            if not selected:
+                show_warning(dlg, t('edit_pals.bulk_rename_title', name=pal_name), t('edit_pals.bulk_no_selection'))
+                return
+            count = 0
+            for pi in selected:
+                tr = _get_raw_from_item(pi)
+                if tr:
+                    tr['NickName'] = {'id': None, 'type': 'StrProperty', 'value': text}
+                    count += 1
+            self._update_party_slots()
+            self._update_palbox_page()
+            self.pal_info._refresh()
+            result['applied'] = True
+            show_information(dlg, t('edit_pals.ctx.bulk_rename'), t('edit_pals.bulk_rename_success', count=count, name=pal_name))
+            dlg.accept()
+        apply_btn.clicked.connect(on_apply)
+        dlg.exec()
+        return result['applied']
+    def _bulk_feed_pal(self, sender):
+        candidates = self._gather_same_species_items(sender)
+        raw_orig = _get_raw_from_item(sender.pal_data) if hasattr(sender, 'pal_data') else None
+        if not candidates or not raw_orig:
+            raw = raw_orig
+            cid = extract_value(raw, 'CharacterID', '') if raw else ''
+            name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP)) if cid else ''
+            show_information(self, t('edit_pals.ctx.bulk_feed'), f'No other {name} found.')
+            return
+        cid = extract_value(raw_orig, 'CharacterID', '')
+        pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        dlg = FramelessDialog('edit_pals.ctx.bulk_feed', self)
+        dlg.set_title_text(f"{t('edit_pals.bulk_feed_title', name=pal_name)}")
+        dlg.setModal(True)
+        dlg.setMinimumSize(500, 450)
+        inner = QWidget()
+        il = QVBoxLayout(inner)
+        il.setContentsMargins(8, 4, 8, 8)
+        il.setSpacing(6)
+        info_lbl = QLabel('FullStomach→max, Sanity→100, clears sickness/negative status.')
+        info_lbl.setStyleSheet('font-size: 11px; color: #94A3B8; background: transparent; border: none; padding: 4px 0;')
+        il.addWidget(info_lbl)
+        list_lbl = QLabel(t('edit_pals.select_pals_to_sync'))
+        list_lbl.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none; padding: 2px 0;')
+        il.addWidget(list_lbl)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); }')
+        inner_w = QWidget()
+        inner_w.setStyleSheet('background: transparent; border: none;')
+        chk_layout = QVBoxLayout(inner_w)
+        chk_layout.setContentsMargins(2, 2, 2, 2)
+        chk_layout.setSpacing(2)
+        checkboxes = []
+        for pi in candidates:
+            pr = _get_raw_from_item(pi)
+            nick = extract_value(pr, 'NickName', '') if pr else ''
+            lv = extract_value(pr, 'Level', 1) if pr else 1
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            cb = QCheckBox(display)
+            cb.setChecked(True)
+            cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
+            cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+            chk_layout.addWidget(cb)
+            checkboxes.append((cb, pi))
+        scroll.setWidget(inner_w)
+        il.addWidget(scroll, 1)
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        cancel_btn = QPushButton(t('edit_pals.bulk_sync_cancel'))
+        cancel_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 16px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
+        cancel_btn.clicked.connect(dlg.reject)
+        btn_row.addWidget(cancel_btn)
+        apply_btn = QPushButton(t('edit_pals.bulk_sync_apply'))
+        apply_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.15); color: #4ADE80; border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.25); color: #FFFFFF; }')
+        btn_row.addWidget(apply_btn)
+        il.addLayout(btn_row)
+        dlg.content_layout.addWidget(inner)
+        def on_apply():
+            selected = [pi for cb, pi in checkboxes if cb.isChecked()]
+            if not selected:
+                show_warning(dlg, t('edit_pals.bulk_feed_title', name=pal_name), t('edit_pals.bulk_no_selection'))
+                return
+            count = 0
+            for pi in selected:
+                tr = _get_raw_from_item(pi)
+                if not tr:
+                    continue
+                cid_i = extract_value(tr, 'CharacterID', '')
+                base = get_pal_base_data(cid_i)
+                max_stomach = (base.get('stats', {}).get('max_full_stomach', 300) if base else 300)
+                tr['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+                tr['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+                tr.pop('WorkerSick', None)
+                tr.pop('PhysicalHealth', None)
+                tr.pop('HungerType', None)
+                tr.pop('FoodWithStatusEffect', None)
+                tr.pop('Tiemr_FoodWithStatusEffect', None)
+                tr.pop('FoodRegeneEffectInfo', None)
+                count += 1
+            self._update_party_slots()
+            self._update_palbox_page()
+            self.pal_info._refresh()
+            show_information(dlg, t('edit_pals.ctx.bulk_feed'), t('edit_pals.bulk_feed_success', count=count, name=pal_name))
+            dlg.accept()
+        apply_btn.clicked.connect(on_apply)
+        dlg.exec()
+    def _bulk_heal_pal(self, sender):
+        candidates = self._gather_same_species_items(sender)
+        raw_orig = _get_raw_from_item(sender.pal_data) if hasattr(sender, 'pal_data') else None
+        if not candidates or not raw_orig:
+            raw = raw_orig
+            cid = extract_value(raw, 'CharacterID', '') if raw else ''
+            name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP)) if cid else ''
+            show_information(self, t('edit_pals.ctx.bulk_heal'), f'No other {name} found.')
+            return
+        cid = extract_value(raw_orig, 'CharacterID', '')
+        pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+        dlg = FramelessDialog('edit_pals.ctx.bulk_heal', self)
+        dlg.set_title_text(f"{t('edit_pals.bulk_heal_title', name=pal_name)}")
+        dlg.setModal(True)
+        dlg.setMinimumSize(500, 450)
+        inner = QWidget()
+        il = QVBoxLayout(inner)
+        il.setContentsMargins(8, 4, 8, 8)
+        il.setSpacing(6)
+        info_lbl = QLabel(t('edit_pals.bulk_heal_desc'))
+        info_lbl.setStyleSheet('font-size: 11px; color: #94A3B8; background: transparent; border: none; padding: 4px 0;')
+        il.addWidget(info_lbl)
+        list_lbl = QLabel(t('edit_pals.select_pals_to_sync'))
+        list_lbl.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none; padding: 2px 0;')
+        il.addWidget(list_lbl)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); }')
+        inner_w = QWidget()
+        inner_w.setStyleSheet('background: transparent; border: none;')
+        chk_layout = QVBoxLayout(inner_w)
+        chk_layout.setContentsMargins(2, 2, 2, 2)
+        chk_layout.setSpacing(2)
+        checkboxes = []
+        for pi in candidates:
+            pr = _get_raw_from_item(pi)
+            nick = extract_value(pr, 'NickName', '') if pr else ''
+            lv = extract_value(pr, 'Level', 1) if pr else 1
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
+            cb = QCheckBox(display)
+            cb.setChecked(True)
+            cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
+            cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+            chk_layout.addWidget(cb)
+            checkboxes.append((cb, pi))
+        scroll.setWidget(inner_w)
+        il.addWidget(scroll, 1)
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        cancel_btn = QPushButton(t('edit_pals.bulk_sync_cancel'))
+        cancel_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 16px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
+        cancel_btn.clicked.connect(dlg.reject)
+        btn_row.addWidget(cancel_btn)
+        apply_btn = QPushButton(t('edit_pals.bulk_sync_apply'))
+        apply_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.15); color: #4ADE80; border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.25); color: #FFFFFF; }')
+        btn_row.addWidget(apply_btn)
+        il.addLayout(btn_row)
+        dlg.content_layout.addWidget(inner)
+        def on_apply():
+            selected = [pi for cb, pi in checkboxes if cb.isChecked()]
+            if not selected:
+                show_warning(dlg, t('edit_pals.bulk_heal_title', name=pal_name), t('edit_pals.bulk_no_selection'))
+                return
+            count = 0
+            for pi in selected:
+                tr = _get_raw_from_item(pi)
+                if not tr:
+                    continue
+                cid_i = extract_value(tr, 'CharacterID', '')
+                is_boss_i = cid_i.upper().startswith('BOSS_')
+                is_lucky_i = extract_value(tr, 'IsRarePal', False)
+                lv_i = extract_value(tr, 'Level', 1)
+                talent_hp_i = extract_value(tr, 'Talent_HP', 0)
+                rank_hp_i = extract_value(tr, 'Rank_HP', 0)
+                trust_i = extract_value(tr, 'FriendshipPoint', 0)
+                rank_i = extract_value(tr, 'Rank', 0)
+                is_awake_i = bool(extract_value(tr, 'bIsAwakening', False))
+                thr = _ensure_friendship_thresholds()
+                trust_rank_i = 0
+                for r in range(len(thr) - 1, 0, -1):
+                    if trust_i >= thr[r]:
+                        trust_rank_i = r
+                        break
+                condenser_i = int(rank_i) if isinstance(rank_i, (int, float)) else 0
+                base = get_pal_base_data(cid_i)
+                max_hp = safe_nested_get(tr, ['MaxHP', 'value', 'Value', 'value'], 0)
+                if max_hp <= 0 and base:
+                    max_hp = calculate_max_hp(base, lv_i, talent_hp_i, rank_hp_i, is_boss_i, is_lucky_i, trust_rank_i, condenser_i, is_awake_i)
+                if max_hp <= 0:
+                    max_hp = 1
+                tr['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+                max_stomach = (base.get('stats', {}).get('max_full_stomach', 300) if base else 300)
+                tr['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+                tr['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+                tr.pop('WorkerSick', None)
+                tr.pop('PhysicalHealth', None)
+                tr.pop('HungerType', None)
+                tr.pop('FoodWithStatusEffect', None)
+                tr.pop('Tiemr_FoodWithStatusEffect', None)
+                tr.pop('FoodRegeneEffectInfo', None)
+                count += 1
+            self._update_party_slots()
+            self._update_palbox_page()
+            self.pal_info._refresh()
+            show_information(dlg, t('edit_pals.ctx.bulk_heal'), t('edit_pals.bulk_heal_success', count=count, name=pal_name))
+            dlg.accept()
+        apply_btn.clicked.connect(on_apply)
+        dlg.exec()
     def _add_new_pal_at_slot(self, slot_index):
         sender = self.sender()
         is_party = sender in self.party_slots
@@ -4852,6 +5380,10 @@ class PalEditorWidget(QWidget):
             self._party_header.setText(t('pal_editor.party') if t else 'PARTY')
         if hasattr(self, 'box_label'):
             self.box_label.setText(t('pal_editor.box', n=self.current_box_index) if t else f'Box {self.current_box_index}')
+        if hasattr(self, 'restore_all_btn'):
+            self.restore_all_btn.setText(t('edit_pals.restore_all'))
+        if hasattr(self, 'max_all_btn'):
+            self.max_all_btn.setText(t('edit_pals.max_all'))
         if hasattr(self, 'pal_info') and self.pal_info:
             self.pal_info.refresh_labels()
     def _load_pals(self):

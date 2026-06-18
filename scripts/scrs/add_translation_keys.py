@@ -17,6 +17,19 @@ NEW_TRANSLATIONS = {
     'base_inventory.booth_item_no_data': 'Booth: No container data',
     'base_inventory.booth_pal_title': 'Booth Pals: {count}',
     'base_inventory.booth_pal_no_data': 'Booth: No pals listed',
+    'edit_pals.bulk_heal_desc': 'Restores HP to max, cures sickness, resets physical health.',
+    'edit_pals.restore_all': 'Restore All',
+    'edit_pals.restore_all_confirm': 'Restore HP, SAN, and hunger for all pals in party & current box? Sickness will also be cured.',
+    'edit_pals.restore_all_success': 'Restored {count} pals.',
+    'edit_pals.max_all': 'Max All',
+    'edit_pals.max_all_confirm': 'Max all stats (talents, ranks, friendship, awakening, level 80, work suitabilities) for all pals in party & current box?',
+    'edit_pals.max_all_success': 'Maxed {count} pals.',
+    'base_inventory.restore_all': 'Restore All',
+    'base_inventory.restore_all_confirm': 'Restore HP, SAN, and hunger for all working pals in this base? Sickness will also be cured.',
+    'base_inventory.restore_all_success': 'Restored {count} pals.',
+    'base_inventory.max_all': 'Max All',
+    'base_inventory.max_all_confirm': 'Max all stats (talents, ranks, friendship, awakening, level 80, work suitabilities) for all working pals in this base?',
+    'base_inventory.max_all_success': 'Maxed {count} pals.',
 }
 OLD_KEYS = []
 def _clean_uv_locks():
