@@ -31,7 +31,7 @@ NEW_TRANSLATIONS = {
     'base_inventory.max_all_confirm': 'Max all stats (talents, ranks, friendship, awakening, level 80, work suitabilities) for all working pals in this base?',
     'base_inventory.max_all_success': 'Maxed {count} pals.',
 }
-OLD_KEYS = ['edit_pals.restore_all_confirm', 'edit_pals.max_all_confirm']
+OLD_KEYS = []
 def _clean_uv_locks():
     for p in [Path.cwd() / 'uv.lock', PROJECT_ROOT / 'uv.lock']:
         if p.exists():
