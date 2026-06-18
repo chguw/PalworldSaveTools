@@ -24,7 +24,7 @@
 
 ## 概述
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E4%BB%80%E4%B9%88%2B%E5%88%B0%E5%BA%95%2B%E6%98%AF%2B%E8%BF%99%E4%B8%AA%2B%E4%B8%9C%E8%A5%BF%EF%BC%9F%3B%E6%82%A8%E7%9A%84%2B%E4%BF%9D%E5%AD%98%EF%BC%8C%2B%E6%82%A8%E7%9A%84%2B%E6%96%B9%E5%BC%8F%3B%E4%B8%80%E4%B8%AA%2B%E5%B7%A5%E5%85%B7%2B%E7%BB%9F%E6%B2%BB%2B%E4%BB%96%E4%BB%AC%2B%E5%85%A8%E9%83%A8&center=true&width=490&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E4%BB%80%E4%B9%88+%E5%88%B0%E5%BA%95+%E6%98%AF+%E8%BF%99%E4%B8%AA+%E4%B8%9C%E8%A5%BF%EF%BC%9F;%E6%82%A8%E7%9A%84+%E4%BF%9D%E5%AD%98%EF%BC%8C+%E6%82%A8%E7%9A%84+%E6%96%B9%E5%BC%8F;%E4%B8%80%E4%B8%AA+%E5%B7%A5%E5%85%B7+%E7%BB%9F%E6%B2%BB+%E4%BB%96%E4%BB%AC+%E5%85%A8%E9%83%A8&center=true&width=490&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -82,7 +82,7 @@ Palworld Save Tools (PST) 是一款快速、一体化的桌面应用程序，用
 
 ## 特点
 
-<img src="https://readme-typing-svg.demolab.com?lines=%2B%E5%A5%BD%2B%E4%B8%9C%E8%A5%BF%3B%E6%A3%80%E6%9F%A5%2B%E5%AE%83%2B%E9%80%80%E5%87%BA%3B%E5%8C%85%E8%A3%85%2B%E5%B7%A5%E5%85%B7&center=true&width=290&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=+%E5%A5%BD+%E4%B8%9C%E8%A5%BF;%E6%A3%80%E6%9F%A5+%E5%AE%83+%E9%80%80%E5%87%BA;%E5%8C%85%E8%A3%85+%E5%B7%A5%E5%85%B7&center=true&width=290&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -196,7 +196,7 @@ Palworld Save Tools (PST) 是一款快速、一体化的桌面应用程序，用
 
 ## 安装
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E8%8E%B7%E5%8F%96%2B%E5%AE%83%2B%E8%BF%90%E8%A1%8C%2B%E5%9C%A8%2B%E5%88%86%E9%92%9F%E5%86%85%3B%E4%B8%8B%E8%BD%BD%2B%E7%84%B6%E5%90%8E%2B%E5%BC%80%E5%A7%8B%3B%E5%90%A6%2B%E8%AE%BE%E7%BD%AE%2B%E5%BF%85%E9%9C%80&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E8%8E%B7%E5%8F%96+%E5%AE%83+%E8%BF%90%E8%A1%8C+%E5%9C%A8+%E5%88%86%E9%92%9F%E5%86%85;%E4%B8%8B%E8%BD%BD+%E7%84%B6%E5%90%8E+%E5%BC%80%E5%A7%8B;%E5%90%A6+%E8%AE%BE%E7%BD%AE+%E5%BF%85%E9%9C%80&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -254,7 +254,7 @@ start.cmd
 
 ## 快速入门
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E5%8A%A0%E8%BD%BD%E3%80%82%2B%E7%BC%96%E8%BE%91%E3%80%82%2B%E4%BF%9D%E5%AD%98%E3%80%82%2B%E9%82%A3%E4%B8%AA%2B%E7%AE%80%E5%8D%95%E3%80%82%3B%E4%B8%89%E6%AD%A5%2B%E8%B5%B0%E5%90%91%2B%E8%8D%A3%E8%80%80%3B%E5%B0%B1%E8%BF%99%E4%B9%88%2B%E7%AE%80%E5%8D%95&center=true&width=450&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E5%8A%A0%E8%BD%BD%E3%80%82+%E7%BC%96%E8%BE%91%E3%80%82+%E4%BF%9D%E5%AD%98%E3%80%82+%E9%82%A3%E4%B8%AA+%E7%AE%80%E5%8D%95%E3%80%82;%E4%B8%89%E6%AD%A5+%E8%B5%B0%E5%90%91+%E8%8D%A3%E8%80%80;%E5%B0%B1%E8%BF%99%E4%B9%88+%E7%AE%80%E5%8D%95&center=true&width=450&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -288,7 +288,7 @@ start.cmd
 
 ## 指南
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E5%88%86%E6%AD%A5%2B%E6%BC%94%E7%BB%83%3B%E9%81%B5%E5%BE%AA%2B%E6%8C%87%E5%8D%97%3B%E6%88%91%E4%BB%AC%E5%B0%86%2B%E5%90%91%E6%82%A8%E5%B1%95%E7%A4%BA%2B%E5%A6%82%E4%BD%95&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E5%88%86%E6%AD%A5+%E6%BC%94%E7%BB%83;%E9%81%B5%E5%BE%AA+%E6%8C%87%E5%8D%97;%E6%88%91%E4%BB%AC%E5%B0%86+%E5%90%91%E6%82%A8%E5%B1%95%E7%A4%BA+%E5%A6%82%E4%BD%95&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -399,7 +399,7 @@ PST 可以解锁完整地图（所有快速旅行点）以供您保存：
 
 ## 故障排除
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E5%BD%93%2B%E4%BA%8B%E6%83%85%2B%E8%B5%B0%2B%E6%A8%AA%E5%90%91%3B%E4%B8%8D%E8%A6%81%2B%E6%81%90%E6%85%8C%3B%E6%88%91%E4%BB%AC%E5%B7%B2%E7%BB%8F%2B%E7%9C%8B%E5%88%B0%2B%E5%AE%83%2B%E5%85%A8%E9%83%A8&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E5%BD%93+%E4%BA%8B%E6%83%85+%E8%B5%B0+%E6%A8%AA%E5%90%91;%E4%B8%8D%E8%A6%81+%E6%81%90%E6%85%8C;%E6%88%91%E4%BB%AC%E5%B7%B2%E7%BB%8F+%E7%9C%8B%E5%88%B0+%E5%AE%83+%E5%85%A8%E9%83%A8&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -436,7 +436,7 @@ PST 可以解锁完整地图（所有快速旅行点）以供您保存：
 
 ## 从源代码构建
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E7%BC%96%E8%AF%91%2B%E5%AE%83%2B%E4%BD%A0%E8%87%AA%E5%B7%B1%3B%E6%9E%84%E5%BB%BA%2B%E4%BD%A0%E7%9A%84%2B%E8%87%AA%E5%B7%B1%E7%9A%84%3B%E4%BB%8E%2B%E6%BA%90%2B%E5%88%B0%2B%E4%BA%8C%E8%BF%9B%E5%88%B6&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E7%BC%96%E8%AF%91+%E5%AE%83+%E4%BD%A0%E8%87%AA%E5%B7%B1;%E6%9E%84%E5%BB%BA+%E4%BD%A0%E7%9A%84+%E8%87%AA%E5%B7%B1%E7%9A%84;%E4%BB%8E+%E6%BA%90+%E5%88%B0+%E4%BA%8C%E8%BF%9B%E5%88%B6&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -490,7 +490,7 @@ uv run python build/build_interactively.py
 
 ## 贡献
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E6%83%B3%E8%A6%81%2B%E5%B8%AE%E5%8A%A9%EF%BC%9F%2B%E8%BF%99%E9%87%8C%2B%E5%A6%82%E4%BD%95%3B%E5%8A%A0%E5%85%A5%2B%E5%9B%A2%E9%98%9F%2B%3B%E6%AF%8F%2B%E8%B4%A1%E7%8C%AE%2B%E8%AE%A1%E6%95%B0&center=true&width=440&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E6%83%B3%E8%A6%81+%E5%B8%AE%E5%8A%A9%EF%BC%9F+%E8%BF%99%E9%87%8C+%E5%A6%82%E4%BD%95;%E5%8A%A0%E5%85%A5+%E5%9B%A2%E9%98%9F+;%E6%AF%8F+%E8%B4%A1%E7%8C%AE+%E8%AE%A1%E6%95%B0&center=true&width=440&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -515,7 +515,7 @@ uv run python build/build_interactively.py
 
 ## 免责声明
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E8%AF%BB%2B%E8%BF%99%E4%B8%AA%2B%E4%B9%8B%E5%89%8D%2B%E4%BD%A0%2B%E6%89%93%E7%A0%B4%2B%E6%9F%90%E4%BA%8B%3B%E4%BD%A0%E5%B7%B2%E7%BB%8F%2B%E8%A2%AB%2B%E8%AD%A6%E5%91%8A%E8%BF%87%3B%E5%A4%87%E4%BB%BD%2B%E5%85%88%EF%BC%81%3B%E6%8B%A5%E6%9C%89%2B%E4%BC%9F%E5%A4%A7%2B%E5%8A%9B%E9%87%8F...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E8%AF%BB+%E8%BF%99%E4%B8%AA+%E4%B9%8B%E5%89%8D+%E4%BD%A0+%E6%89%93%E7%A0%B4+%E6%9F%90%E4%BA%8B;%E4%BD%A0%E5%B7%B2%E7%BB%8F+%E8%A2%AB+%E8%AD%A6%E5%91%8A%E8%BF%87;%E5%A4%87%E4%BB%BD+%E5%85%88%EF%BC%81;%E6%8B%A5%E6%9C%89+%E4%BC%9F%E5%A4%A7+%E5%8A%9B%E9%87%8F...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 **使用此工具的风险由您自行承担。在进行任何修改之前，请务必备份您的保存文件。**
@@ -535,7 +535,7 @@ uv run python build/build_interactively.py
 
 ## 支持
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E6%88%91%E4%BB%AC%2B%E5%BE%97%E5%88%B0%E4%BA%86%2B%E6%82%A8%2B%E7%9A%84%E6%94%AF%E6%8C%81%3B%E9%9C%80%E8%A6%81%2B%E5%B8%AE%E5%8A%A9%EF%BC%9F%3B%E6%88%91%E4%BB%AC%2B%E5%9C%A8%E8%BF%99%E9%87%8C%2B%E4%B8%BA%2B%E6%82%A8&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E6%88%91%E4%BB%AC+%E5%BE%97%E5%88%B0%E4%BA%86+%E6%82%A8+%E7%9A%84%E6%94%AF%E6%8C%81;%E9%9C%80%E8%A6%81+%E5%B8%AE%E5%8A%A9%EF%BC%9F;%E6%88%91%E4%BB%AC+%E5%9C%A8%E8%BF%99%E9%87%8C+%E4%B8%BA+%E6%82%A8&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -556,7 +556,7 @@ uv run python build/build_interactively.py
 
 ## 许可证
 
-<img src="https://readme-typing-svg.demolab.com?lines=MIT%2B%E2%80%94%2B%E5%81%9A%2B%E4%BB%BB%E4%BD%95%E4%BA%8B%2B%E4%BD%A0%2B%E6%83%B3%E8%A6%81%3B%E5%85%8D%E8%B4%B9%2Bas%2Bin%2B%E5%95%A4%E9%85%92%3B%E5%BC%80%E6%BA%90%2B%E6%BA%90%E4%BB%A3%E7%A0%81%2B%E5%BC%80%E6%94%BE%2B%E6%80%9D%E6%83%B3&center=true&width=430&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=MIT+%E2%80%94+%E5%81%9A+%E4%BB%BB%E4%BD%95%E4%BA%8B+%E4%BD%A0+%E6%83%B3%E8%A6%81;%E5%85%8D%E8%B4%B9+as+in+%E5%95%A4%E9%85%92;%E5%BC%80%E6%BA%90+%E6%BA%90%E4%BB%A3%E7%A0%81+%E5%BC%80%E6%94%BE+%E6%80%9D%E6%83%B3&center=true&width=430&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -575,7 +575,7 @@ uv run python build/build_interactively.py
 
 ## Palworld 团队
 
-<img src="https://readme-typing-svg.demolab.com?lines=%2B%E4%BA%BA%2B%E8%83%8C%E5%90%8E%2B%E9%AD%94%E6%B3%95%3B%E8%AE%A4%E8%AF%86%2B%E5%9B%A2%E9%98%9F%2B%3B%E5%BB%BA%E9%80%A0%2B%E7%94%A8%2B%E7%83%AD%E6%83%85&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=+%E4%BA%BA+%E8%83%8C%E5%90%8E+%E9%AD%94%E6%B3%95;%E8%AE%A4%E8%AF%86+%E5%9B%A2%E9%98%9F+;%E5%BB%BA%E9%80%A0+%E7%94%A8+%E7%83%AD%E6%83%85&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -613,7 +613,7 @@ uv run python build/build_interactively.py
 
 ## 致谢
 
-<img src="https://readme-typing-svg.demolab.com?lines=%E5%93%AA%E9%87%8C%2B%E4%BF%A1%E7%94%A8%2B%E6%98%AF%2B%E5%88%B0%E6%9C%9F%3B%E8%B0%A2%E8%B0%A2%2B%E4%BD%A0%E4%BB%AC%2B%E5%A4%A7%E5%AE%B6%3B%E6%88%91%E4%BB%AC%2B%E7%AB%99%E7%AB%8B%2B%E8%82%A9%E4%B8%8A&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=%E5%93%AA%E9%87%8C+%E4%BF%A1%E7%94%A8+%E6%98%AF+%E5%88%B0%E6%9C%9F;%E8%B0%A2%E8%B0%A2+%E4%BD%A0%E4%BB%AC+%E5%A4%A7%E5%AE%B6;%E6%88%91%E4%BB%AC+%E7%AB%99%E7%AB%8B+%E8%82%A9%E4%B8%8A&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 

@@ -211,7 +211,7 @@ def translate_typing_svgs(body: str, target_lang: str) -> str:
     )
     all_lines = set()
     for m in TYPING_SVG_RE.finditer(body):
-        decoded = urllib.parse.unquote(m.group(2))
+        decoded = urllib.parse.unquote_plus(m.group(2))
         for line in decoded.split(';'):
             all_lines.add(line.strip())
     if not all_lines:
@@ -227,10 +227,10 @@ def translate_typing_svgs(body: str, target_lang: str) -> str:
     def replace_svg(m):
         prefix = m.group(1)
         suffix = m.group(3)
-        decoded = urllib.parse.unquote(m.group(2))
+        decoded = urllib.parse.unquote_plus(m.group(2))
         lines = decoded.split(';')
         translated = [mapping.get(line.strip()) or line.strip() for line in lines]
-        new_param = urllib.parse.quote(';'.join(translated))
+        new_param = urllib.parse.quote_plus(';'.join(translated), safe=';/')
         return f'{prefix}{new_param}{suffix}'
     return TYPING_SVG_RE.sub(replace_svg, body)
 

@@ -24,7 +24,7 @@
 
 ## Übersicht
 
-<img src="https://readme-typing-svg.demolab.com?lines=Was%2Bgenau%2Bist%2Bdieses%2BDing%3F%3BIhr%2BSpeicher%2C%2BIhr%2BWeg%3BEin%2BWerkzeug%2C%2Bum%2Bsie%2Balle%2Bzu%2Bbeherrschen&center=true&width=490&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Was+genau+ist+dieses+Ding%3F;Ihr+Speicher%2C+Ihr+Weg;Ein+Werkzeug%2C+um+sie+alle+zu+beherrschen&center=true&width=490&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -82,7 +82,7 @@ Ganz gleich, ob Sie einen dedizierten Server verwalten, zwischen kooperativen un
 
 ## Funktionen
 
-<img src="https://readme-typing-svg.demolab.com?lines=Das%2Bgute%2BZeug%3BProbieren%20Sie%20es%20aus%3BVollgepackt%20mit%20Werkzeugen&center=true&width=290&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Das+gute+Zeug;Probieren+Sie+es+aus;Vollgepackt+mit+Werkzeugen&center=true&width=290&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -196,7 +196,7 @@ Diese Server-Vorgänge sind über **Menü → Funktionen** zugänglich und umfas
 
 ## Installation
 
-<img src="https://readme-typing-svg.demolab.com?lines=Bringen%20Sie%20es%20in%20wenigen%20Minuten%20zum%20Laufen%3BHerunterladen%20und%20loslegen%3BKeine%2BEinrichtung%2Berforderlich&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Bringen+Sie+es+in+wenigen+Minuten+zum+Laufen;Herunterladen+und+loslegen;Keine+Einrichtung+erforderlich&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -254,7 +254,7 @@ Der Launcher erstellt einen `.venv`, installiert Abhängigkeiten über `uv sync`
 
 ## Schnellstart
 
-<img src="https://readme-typing-svg.demolab.com?lines=Laden.%2BBearbeiten.%2BSpeichern.%2BDas%2Beinfach.%3BDrei%2BSchritte%2Bzum%2BRuhm%3BEs%20ist%2Bso%2Beinfach&center=true&width=450&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Laden.+Bearbeiten.+Speichern.+Das+einfach.;Drei+Schritte+zum+Ruhm;Es+ist+so+einfach&center=true&width=450&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -288,7 +288,7 @@ Der Launcher erstellt einen `.venv`, installiert Abhängigkeiten über `uv sync`
 
 ## Anleitungen
 
-<img src="https://readme-typing-svg.demolab.com?lines=Schritt-f%C3%BCr-Schritt-Anleitungen%3BFolgen%20Sie%20der%20Anleitung%3BWir%20zeigen%20Ihnen%2C%20wie&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Schritt-f%C3%BCr-Schritt-Anleitungen;Folgen+Sie+der+Anleitung;Wir+zeigen+Ihnen%2C+wie&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -399,7 +399,7 @@ PST kann die vollständige Karte (alle Schnellreisepunkte) für Ihren Speicherst
 
 ## Fehlerbehebung
 
-<img src="https://readme-typing-svg.demolab.com?lines=Wenn%2Bdie%2BDinge%2Bseitw%C3%A4rts%2Blaufen%3BKeine%20Panik%3BWir%20haben%20alles%20gesehen&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Wenn+die+Dinge+seitw%C3%A4rts+laufen;Keine+Panik;Wir+haben+alles+gesehen&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -436,7 +436,7 @@ Das Speicherdateiformat ist veraltet. Laden Sie den Speicherstand im Spiel (Solo
 
 ## Aufbau aus der Quelle
 
-<img src="https://readme-typing-svg.demolab.com?lines=Kompilieren%20Sie%20es%20selbst%3BBauen%20Sie%20Ihr%20eigenes%3BVon%2Bder%2BQuelle%2Bzur%2BBin%C3%A4rdatei&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Kompilieren+Sie+es+selbst;Bauen+Sie+Ihr+eigenes;Von+der+Quelle+zur+Bin%C3%A4rdatei&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -490,7 +490,7 @@ uv run python build/build_interactively.py
 
 ## Mitwirken
 
-<img src="https://readme-typing-svg.demolab.com?lines=M%C3%B6chten%2BSie%2Bhelfen%3F%2BHier%20erfahren%20Sie%2C%20wie%3BTreten%20Sie%20dem%20Team%20bei%3BJeder%2BBeitrag%2Bz%C3%A4hlt&center=true&width=440&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=M%C3%B6chten+Sie+helfen%3F+Hier+erfahren+Sie%2C+wie;Treten+Sie+dem+Team+bei;Jeder+Beitrag+z%C3%A4hlt&center=true&width=440&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -515,7 +515,7 @@ Beiträge sind willkommen! Bitte senden Sie gerne einen Pull Request.
 
 ## Haftungsausschluss
 
-<img src="https://readme-typing-svg.demolab.com?lines=Lesen%20Sie%20dies%2C%20bevor%20Sie%20etwas%20kaputt%20machen%3BSie%20wurden%20gewarnt%3BBackup%2Bzuerst%21%3BMit%2Bgro%C3%9Fer%2BKraft...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Lesen+Sie+dies%2C+bevor+Sie+etwas+kaputt+machen;Sie+wurden+gewarnt;Backup+zuerst%21;Mit+gro%C3%9Fer+Kraft...&center=true&width=520&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 **Die Verwendung dieses Tools erfolgt auf eigene Gefahr. Sichern Sie immer Ihre Sicherungsdateien, bevor Sie Änderungen vornehmen.**
@@ -535,7 +535,7 @@ Die Entwickler sind nicht verantwortlich für den Verlust gespeicherter Daten od
 
 ## Unterstützung
 
-<img src="https://readme-typing-svg.demolab.com?lines=Wir%20stehen%20hinter%20Ihnen%3BBrauchen%20Sie%20Hilfe%3F%3BWir%20sind%20f%C3%BCr%20Sie%20da&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Wir+stehen+hinter+Ihnen;Brauchen+Sie+Hilfe%3F;Wir+sind+f%C3%BCr+Sie+da&center=true&width=340&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -556,7 +556,7 @@ Die Entwickler sind nicht verantwortlich für den Verlust gespeicherter Daten od
 
 ## Lizenz
 
-<img src="https://readme-typing-svg.demolab.com?lines=MIT%2B%20%E2%80%93%20%2Btun%2Bwas%2BSie%2Bwollen%3BKostenloses%20Bier%3BOpen%2BSource%2C%2Boffener%2BGeist&center=true&width=430&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=MIT++%E2%80%93++tun+was+Sie+wollen;Kostenloses+Bier;Open+Source%2C+offener+Geist&center=true&width=430&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -575,7 +575,7 @@ Dieses Projekt ist unter der MIT-Lizenz lizenziert – Einzelheiten finden Sie i
 
 ## Das Palworld-Team
 
-<img src="https://readme-typing-svg.demolab.com?lines=Die%2BMenschen%2Bhinter%2Bder%2BMagie%3BLernen%20Sie%20das%20Team%20kennen%3BGebaut%2Bmit%2BLeidenschaft&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Die+Menschen+hinter+der+Magie;Lernen+Sie+das+Team+kennen;Gebaut+mit+Leidenschaft&center=true&width=420&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
@@ -613,7 +613,7 @@ Ohne die Menschen dahinter gäbe es dieses Projekt nicht.
 
 ## Danksagungen
 
-<img src="https://readme-typing-svg.demolab.com?lines=Wo%2BKredit%2Bf%C3%A4llig%20ist%3BVielen%20Dank%20an%20alle%3BWir%2Bstehen%2Bauf%2BSchultern&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
+<img src="https://readme-typing-svg.demolab.com?lines=Wo+Kredit+f%C3%A4llig+ist;Vielen+Dank+an+alle;Wir+stehen+auf+Schultern&center=true&width=390&height=28&font=monospace&size=22&color=7DD3FC&vCenter=true" alt="" />
 
 </div>
 
