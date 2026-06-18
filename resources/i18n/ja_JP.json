@@ -1619,14 +1619,14 @@
   "edit_pals.bulk_no_selection": "友達が選択されていません。",
   "edit_pals.bulk_heal_desc": "HPを最大まで回復し、病気を治し、体力をリセットします。",
   "edit_pals.restore_all": "すべて復元",
-  "edit_pals.restore_all_confirm": "パーティーと現在のボックス内のすべての仲間のHP、SAN、空腹を回復しますか？病気も治ります。",
   "edit_pals.restore_all_success": "{count} 人の仲間を回復しました。",
-  "edit_pals.max_all_confirm": "パーティーと現在のボックス内のすべての仲間のすべてのステータス（才能、ランク、友情、覚醒、レベル80、仕事の適性）を最大にしますか？",
   "edit_pals.max_all_success": "{count} 人の仲間が最大になりました。",
   "base_inventory.restore_all": "すべて復元",
   "base_inventory.restore_all_confirm": "この基地にいるすべての作業仲間の HP、SAN、空腹を回復しますか?病気も治ります。",
   "base_inventory.restore_all_success": "{count} 人の仲間を回復しました。",
   "base_inventory.max_all": "すべてをマックスにする",
   "base_inventory.max_all_confirm": "この基地内のすべての作業仲間のすべてのステータス (才能、ランク、友情、覚醒、レベル 80、仕事の適性) を最大にしますか?",
-  "base_inventory.max_all_success": "{count} 人の仲間が最大になりました。"
+  "base_inventory.max_all_success": "{count} 人の仲間が最大になりました。",
+  "edit_pals.restore_all_confirm": "パーティーとすべてのパルボックスページのすべてのパルのHP、SAN、空腹を回復しますか？病気も治ります。",
+  "edit_pals.max_all_confirm": "パーティーとすべてのパルボックスページのすべてのパルのすべてのステータス（才能、ランク、友情、覚醒、レベル80、仕事の適性）を最大にしますか？"
 }

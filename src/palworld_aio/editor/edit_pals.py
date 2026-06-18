@@ -4844,10 +4844,8 @@ class PalEditorWidget(QWidget):
             return
         count = 0
         pals = list(self.party_pals.values())
-        start = (self.current_box_index - 1) * 30
-        for i in range(start, start + 30):
-            if i in self.palbox_pal_dict:
-                pals.append(self.palbox_pal_dict[i])
+        for i in sorted(self.palbox_pal_dict.keys()):
+            pals.append(self.palbox_pal_dict[i])
         for pi in pals:
             tr = _get_raw_from_item(pi)
             if not tr:
@@ -4899,10 +4897,8 @@ class PalEditorWidget(QWidget):
             return
         count = 0
         pals = list(self.party_pals.values())
-        start = (self.current_box_index - 1) * 30
-        for i in range(start, start + 30):
-            if i in self.palbox_pal_dict:
-                pals.append(self.palbox_pal_dict[i])
+        for i in sorted(self.palbox_pal_dict.keys()):
+            pals.append(self.palbox_pal_dict[i])
         for pi in pals:
             tr = _get_raw_from_item(pi)
             if not tr:

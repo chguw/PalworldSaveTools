@@ -1618,14 +1618,14 @@
   "edit_pals.bulk_no_selection": "선택된 친구가 없습니다.",
   "edit_pals.bulk_heal_desc": "HP를 최대로 회복하고 질병을 치료하며 신체 건강을 재설정합니다.",
   "edit_pals.restore_all": "모두 복원",
-  "edit_pals.restore_all_confirm": "파티 및 현재 상자에 있는 모든 친구의 HP, SAN 및 배고픔을 복원하시겠습니까? 질병도 치료될 것입니다.",
   "edit_pals.restore_all_success": "{count}명의 친구를 복원했습니다.",
-  "edit_pals.max_all_confirm": "파티 및 현재 상자에 있는 모든 친구의 모든 통계(재능, 순위, 우정, 각성, 레벨 80, 작업 적합성)를 최대화하시겠습니까?",
   "edit_pals.max_all_success": "최대 {count}명의 친구가 있습니다.",
   "base_inventory.restore_all": "모두 복원",
   "base_inventory.restore_all_confirm": "이 기지에서 일하는 모든 동료의 HP, SAN 및 배고픔을 복원하시겠습니까? 질병도 치료될 것입니다.",
   "base_inventory.restore_all_success": "{count}명의 친구를 복원했습니다.",
   "base_inventory.max_all": "최대 모두",
   "base_inventory.max_all_confirm": "이 기지에 있는 모든 일하는 친구의 모든 능력치(재능, 순위, 우정, 각성, 레벨 80, 업무 적합성)를 최대화하시겠습니까?",
-  "base_inventory.max_all_success": "최대 {count}명의 친구가 있습니다."
+  "base_inventory.max_all_success": "최대 {count}명의 친구가 있습니다.",
+  "edit_pals.restore_all_confirm": "파티에 있는 모든 친구와 모든 팔박스 페이지에 대한 HP, SAN 및 배고픔을 복원하시겠습니까? 질병도 치료될 것입니다.",
+  "edit_pals.max_all_confirm": "파티의 모든 친구와 모든 팔박스 페이지의 모든 통계(재능, 순위, 우정, 각성, 레벨 80, 업무 적합성)를 최대화하시겠습니까?"
 }
