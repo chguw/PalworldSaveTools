@@ -611,6 +611,7 @@ Ein großes Dankeschön an:
 - **Palworld**, entwickelt von Pocketpair, Inc. – für das Spiel, das uns alle zusammengebracht hat.
 - **Die Fehlerreporter** – jedes eingereichte Problem, jeder gefundene Grenzfall, jedes in Discord eingefügte Protokoll. Mit jedem Bericht machen Sie dieses Tool robuster.
 - **Die Palworld-Modding-Community** – andere Modder, Tool-Entwickler und Tüftler, die Wissen teilen, Formate zurückentwickeln und das Ökosystem vorantreiben. Dieses Projekt steht auf den Schultern dieser gemeinsamen Anstrengung.
+- **[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
 - **Alle Mitwirkenden und Community-Mitglieder** – egal, ob Sie eine PR eingereicht, eine Frage in Discord beantwortet oder einfach einem Freund von PST erzählt haben – vielen Dank.
 
 ---

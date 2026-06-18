@@ -611,6 +611,7 @@ uv run python build/build_interactively.py
 - **Palworld**는 Pocketpair, Inc.에서 개발했습니다. — 우리 모두를 하나로 모으는 게임을 위해.
 - **버그 보고자** — 제출된 모든 문제, 발견된 모든 극단적인 사례, Discord에 붙여넣은 모든 로그. 각 보고서를 통해 이 도구를 더욱 강력하게 만들 수 있습니다.
 - **Palworld 모딩 커뮤니티** — 지식, 리버스 엔지니어링 형식을 공유하고 생태계를 발전시키는 동료 모더, 도구 개발자 및 땜장이입니다. 이 프로젝트는 그러한 공동 노력의 어깨 위에 서 있습니다.
+- **[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
 - **모든 기여자와 커뮤니티 회원** — PR을 제출했든, Discord의 질문에 답변했든, 아니면 단순히 친구에게 PST에 대해 이야기했든 — 감사합니다.
 
 ---

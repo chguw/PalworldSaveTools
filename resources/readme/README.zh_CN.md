@@ -611,6 +611,7 @@ uv run python build/build_interactively.py
 - **Palworld** 由 Pocketpair, Inc. 开发 - 这款游戏将我们所有人聚集在一起。
 - **错误报告者** - 提交的每个问题、发现的每个边缘案例、粘贴在 Discord 中的每条日志。您可以通过每个报告使该工具更加强大。
 - **Palworld 模组社区** — 模组作者、工具开发者和修补者，他们分享知识、逆向工程格式并推动生态系统向前发展。这个项目是建立在集体努力的基础上的。
+- **[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
 - **所有贡献者和社区成员** - 无论您是提交了 PR、在 Discord 中回答了问题，还是只是向朋友介绍了 PST - 谢谢。
 
 ---

@@ -611,6 +611,7 @@ Un immense merci à :
 - **Palworld** développé par Pocketpair, Inc. — pour le jeu qui nous a tous réunis.
 - **Les rapporteurs de bogues** — chaque problème déposé, chaque cas limite trouvé, chaque journal collé dans Discord. Vous rendez cet outil plus robuste à chaque rapport.
 - **La communauté de modding Palworld** : d'autres moddeurs, développeurs d'outils et bricoleurs qui partagent leurs connaissances, effectuent de l'ingénierie inverse des formats et font avancer l'écosystème. Ce projet repose sur les épaules de cet effort collectif.
+- **[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
 - **Tous les contributeurs et membres de la communauté** — que vous ayez soumis un PR, répondu à une question dans Discord ou simplement parlé de PST à un ami — merci.
 
 ---
