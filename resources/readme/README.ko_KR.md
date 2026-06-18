@@ -590,7 +590,7 @@ uv run python build/build_interactively.py
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — 이 프로젝트가 분기된 원본 저장 파서를 제공했습니다. Palworld 저장 형식을 해독하는 그의 기초적인 작업이 없었다면 이 중 어떤 것도 존재하지 않았을 것입니다. 포크는 파서를 오늘날의 PST로 간소화하고 단순화했습니다.
 
 
-**[Okaetsu](https://github.com/Okaetsu)** — The modding mind behind base import/export. His deep understanding of how Palworld structures base data from the modding side was instrumental in getting this feature right. Without his insights bridging the gap between modding and save editing, base import/export would not have been possible.
+**[Okaetsu](https://github.com/Okaetsu)** — Modding insights that made base import/export possible. His understanding of how Palworld structures base data from the modding side bridged the gap between modding and save editing, making this feature a reality.
 
 
 

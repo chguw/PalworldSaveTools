@@ -590,7 +590,7 @@ Ohne die Menschen dahinter gäbe es dieses Projekt nicht.
 **[oMaN-Rod](https://github.com/oMaN-Rod)** – Stellte den ursprünglichen Speicherparser bereit, von dem dieses Projekt geforkt wurde. Ohne seine grundlegende Arbeit zum Knacken des Palworld-Speicherformats gäbe es das alles nicht. Der Fork hat seinen Parser zu dem optimiert und vereinfacht, was PST heute ist.
 
 
-**[Okaetsu](https://github.com/Okaetsu)** — The modding mind behind base import/export. His deep understanding of how Palworld structures base data from the modding side was instrumental in getting this feature right. Without his insights bridging the gap between modding and save editing, base import/export would not have been possible.
+**[Okaetsu](https://github.com/Okaetsu)** — Modding insights that made base import/export possible. His understanding of how Palworld structures base data from the modding side bridged the gap between modding and save editing, making this feature a reality.
 
 
 
