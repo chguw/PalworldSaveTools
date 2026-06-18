@@ -590,7 +590,7 @@ uv run python build/build_interactively.py
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — このプロジェクトのフォーク元となったオリジナルの保存パーサーを提供しました。 Palworld 保存形式のクラックに関する彼の基礎的な作業がなければ、これは存在しませんでした。フォークにより、彼のパーサーは合理化され、簡素化され、現在の PST になりました。
 
 
-**[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
+**[Okaetsu](https://github.com/Okaetsu)** — The modding mind behind base import/export. His deep understanding of how Palworld structures base data from the modding side was instrumental in getting this feature right. Without his insights bridging the gap between modding and save editing, base import/export would not have been possible.
 
 
 

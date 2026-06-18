@@ -590,7 +590,7 @@ uv run python build/build_interactively.py
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — 提供了该项目派生的原始保存解析器。如果没有他在破解 Palworld 保存格式方面的基础工作，这一切都不会存在。该分支简化了他的解析器，成为今天的 PST。
 
 
-**[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
+**[Okaetsu](https://github.com/Okaetsu)** — The modding mind behind base import/export. His deep understanding of how Palworld structures base data from the modding side was instrumental in getting this feature right. Without his insights bridging the gap between modding and save editing, base import/export would not have been possible.
 
 
 
