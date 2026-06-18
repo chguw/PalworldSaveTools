@@ -17,6 +17,8 @@ NEW_TRANSLATIONS = {
     'base_inventory.booth_item_no_data': 'Booth: No container data',
     'base_inventory.booth_pal_title': 'Booth Pals: {count}',
     'base_inventory.booth_pal_no_data': 'Booth: No pals listed',
+    'edit_pals.ctx.bulk_heal': 'Bulk Restore',
+    'edit_pals.bulk_heal_title': 'Bulk Restore - {name}',
     'edit_pals.bulk_heal_desc': 'Restores HP to max, cures sickness, resets physical health.',
     'edit_pals.restore_all': 'Restore All',
     'edit_pals.restore_all_confirm': 'Restore HP, SAN, and hunger for all pals in party & all palbox pages? Sickness will also be cured.',

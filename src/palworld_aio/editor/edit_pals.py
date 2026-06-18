@@ -1088,6 +1088,8 @@ class PalboxSlotWidget(QFrame):
         self._children = []
         raw = self._get_raw()
         if not raw or not isinstance(raw, dict):
+            self.setStyleSheet(slot_full('QFrame#palboxSlot'))
+            self.setToolTip('')
             return
         cid = extract_value(raw, 'CharacterID', '')
         level = extract_value(raw, 'Level', 1)
