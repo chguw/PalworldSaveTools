@@ -2099,16 +2099,13 @@ class BasePalsContentWidget(QFrame):
         reply = show_question(self, t('edit_pals.ctx.max_all_stats'), t('base_inventory.max_all_confirm'))
         if not reply:
             return
+        pals = [p for p in self._pals if p is not None]
         count = 0
-        for pal_entry in self._pals:
-            if pal_entry is None:
-                continue
-            pi = pal_entry['character_entry']
-            tr = _get_raw_from_item(pi)
+        for pal_entry in pals:
+            tr = _get_raw_from_item(pal_entry['character_entry'])
             if not tr:
                 continue
-            cid_i = extract_value(tr, 'CharacterID', '')
-            base_i = get_pal_base_data(cid_i)
+            base_i = get_pal_base_data(extract_value(tr, 'CharacterID', ''))
             tr['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
             tr['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
             tr['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
@@ -2123,15 +2120,33 @@ class BasePalsContentWidget(QFrame):
             for k, v in ws_base.items():
                 if v > 0:
                     _set_work_suitability(tr, k, 10)
-            lv_i = extract_value(tr, 'Level', 1)
-            if lv_i < 80:
+            if extract_value(tr, 'Level', 1) < 80:
                 tr['Level'] = {'id': None, 'type': 'IntProperty', 'value': 80}
-            lv_i = 80
+            count += 1
+        for pal_entry in pals:
+            tr = _get_raw_from_item(pal_entry['character_entry'])
+            if not tr:
+                continue
+            cid_i = extract_value(tr, 'CharacterID', '')
             is_boss_i = cid_i.upper().startswith('BOSS_')
             is_lucky_i = extract_value(tr, 'IsRarePal', False)
+            lv_i = extract_value(tr, 'Level', 1)
+            talent_hp_i = extract_value(tr, 'Talent_HP', 0)
+            rank_hp_i = extract_value(tr, 'Rank_HP', 0)
+            trust_i = extract_value(tr, 'FriendshipPoint', 0)
+            rank_i = extract_value(tr, 'Rank', 0)
+            is_awake_i = bool(extract_value(tr, 'bIsAwakening', False))
+            thr = _ensure_friendship_thresholds()
+            trust_rank_i = 0
+            for r in range(len(thr) - 1, 0, -1):
+                if trust_i >= thr[r]:
+                    trust_rank_i = r
+                    break
+            condenser_i = int(rank_i) if isinstance(rank_i, (int, float)) else 0
+            base_i = get_pal_base_data(cid_i)
             max_hp = safe_nested_get(tr, ['MaxHP', 'value', 'Value', 'value'], 0)
             if max_hp <= 0 and base_i:
-                max_hp = calculate_max_hp(base_i, lv_i, 100, 20, is_boss_i, is_lucky_i, 4, 5, True)
+                max_hp = calculate_max_hp(base_i, lv_i, talent_hp_i, rank_hp_i, is_boss_i, is_lucky_i, trust_rank_i, condenser_i, is_awake_i)
             if max_hp <= 0:
                 max_hp = 1
             tr['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
@@ -2144,15 +2159,6 @@ class BasePalsContentWidget(QFrame):
             tr.pop('FoodWithStatusEffect', None)
             tr.pop('Tiemr_FoodWithStatusEffect', None)
             tr.pop('FoodRegeneEffectInfo', None)
-            tr['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
-            tr['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
-            ws_base = base_i.get('work_suitabilities', {}) if base_i else {}
-            for k, v in ws_base.items():
-                if v > 0:
-                    _set_work_suitability(tr, k, 10)
-            if lv_i < 80:
-                tr['Level'] = {'id': None, 'type': 'IntProperty', 'value': 80}
-            count += 1
         if self._selected_idx >= 0:
             prev = self.grid.itemAt(self._selected_idx)
             if prev and prev.widget():
