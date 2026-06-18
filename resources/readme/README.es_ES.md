@@ -593,6 +593,8 @@ Este proyecto no existiría sin las personas que lo respaldan.
 **[oMaN-Rod](https://github.com/oMaN-Rod)**: proporcionó el analizador de guardado original del que se bifurcó este proyecto. Sin su trabajo fundamental para descifrar el formato de guardado de Palworld, nada de esto existiría. La bifurcación simplificó y simplificó su analizador hasta convertirlo en lo que es PST hoy.
 
 
+**[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
+
 
 
 

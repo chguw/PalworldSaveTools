@@ -590,6 +590,8 @@ Ce projet n'existerait pas sans les personnes qui le soutiennent.
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — Fourni l'analyseur de sauvegarde d'origine à partir duquel ce projet est issu. Sans son travail fondamental sur le piratage du format de sauvegarde Palworld, rien de tout cela n’existerait. Le fork a rationalisé et simplifié son analyseur pour en faire ce qu'est PST aujourd'hui.
 
 
+**[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
+
 
 
 

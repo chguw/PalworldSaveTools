@@ -588,6 +588,8 @@ This project wouldn't exist without the people behind it.
 
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — Provided the original save parser that this project forked from. Without his foundational work on cracking the Palworld save format, none of this would exist. The fork streamlined and simplified his parser into what PST is today.
 
+**[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
+
 
 
 

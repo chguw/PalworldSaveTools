@@ -590,6 +590,8 @@ Ohne die Menschen dahinter gäbe es dieses Projekt nicht.
 **[oMaN-Rod](https://github.com/oMaN-Rod)** – Stellte den ursprünglichen Speicherparser bereit, von dem dieses Projekt geforkt wurde. Ohne seine grundlegende Arbeit zum Knacken des Palworld-Speicherformats gäbe es das alles nicht. Der Fork hat seinen Parser zu dem optimiert und vereinfacht, was PST heute ist.
 
 
+**[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
+
 
 
 

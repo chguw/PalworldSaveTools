@@ -590,6 +590,8 @@ uv run python build/build_interactively.py
 **[oMaN-Rod](https://github.com/oMaN-Rod)** — предоставлен исходный анализатор сохранений, от которого произошел этот проект. Без его фундаментальной работы по взлому формата сохранений Palworld ничего из этого не существовало бы. Форк упростил его парсер и превратил его в то, что представляет собой PST сегодня.
 
 
+**[Okaetsu](https://github.com/Okaetsu)** — Base import/export would not have been possible without their modding insights.
+
 
 
 
