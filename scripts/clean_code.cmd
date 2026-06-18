@@ -11,7 +11,7 @@ if exist .venv\Scripts\python.exe (
 )
 uv venv .venv
 uv pip install --no-cache -r requirements.txt
-".venv\Scripts\python.exe" scripts\scripts\clean_code.py %*
+".venv\Scripts\python.exe" build\clean_code.py %*
 if exist uv.lock del uv.lock
 pause
 exit /b %errorlevel%

@@ -1593,7 +1593,18 @@
   "inventory.clear_btn": "清除",
   "inventory.equip_clear_btn": "清除",
   "inventory.clear_confirm_title": "清库存",
-  "inventory.clear_confirm_msg": "从库存和关键物品中删除所有物品？",
+  "inventory.clear_confirm_msg": "从库存中移除所有物品？ （关键物品、装备和解锁将被保留）",
   "inventory.equip_clear_title": "清除装备",
-  "inventory.equip_clear_msg": "移除武器、盔甲和食物槽中的所有装备？"
+  "inventory.equip_clear_msg": "移除武器、盔甲和食物槽中的所有装备？",
+  "inventory.clear_key_btn": "清除",
+  "inventory.clear_key_confirm_msg": "删除所有关键项目？",
+  "inventory.clear_key_confirm_title": "清除",
+  "character_transfer.no_players_folder": "在 Level.sav 旁边找不到 Players 文件夹。无法加载保存。",
+  "edit_pals.show_standard": "标准",
+  "edit_pals.show_boss": "老板",
+  "edit_pals.create": "创造",
+  "base_inventory.booth_item_title": "展位物品：{count}",
+  "base_inventory.booth_item_no_data": "展位：无集装箱数据",
+  "base_inventory.booth_pal_title": "展位伙伴：{count}",
+  "base_inventory.booth_pal_no_data": "摊位：没有列出好友"
 }

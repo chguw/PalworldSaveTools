@@ -1,7 +1,8 @@
 from import_libs import *
 from loading_manager import show_warning, show_critical
-from palworld_aio.ui.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager
 import nerdfont as nf
+from palworld_aio import constants
 def get_steam_id_from_local():
     local_app_data_path = os.path.expandvars('%localappdata%\\Pal\\Saved\\SaveGames')
     if os.path.exists(local_app_data_path):
@@ -44,17 +45,17 @@ def convert_steam_id():
     main_layout.addWidget(glass_frame)
     glass_layout.addStretch(1)
     tip_label = QLabel(t('steamid.tip'))
-    tip_label.setFont(QFont('Segoe UI', 10))
+    tip_label.setFont(QFont(constants.FONT_FAMILY, 10))
     tip_label.setAlignment(Qt.AlignCenter)
     glass_layout.addWidget(tip_label)
     hint_label = QLabel(t('steamid.local_hint'))
-    hint_label.setFont(QFont('Segoe UI', 10))
+    hint_label.setFont(QFont(constants.FONT_FAMILY, 10))
     hint_label.setAlignment(Qt.AlignCenter)
     glass_layout.addWidget(hint_label)
     entry_layout = QHBoxLayout()
     entry_layout.addStretch()
     steam_entry = QLineEdit()
-    steam_entry.setFont(QFont('Segoe UI', 10))
+    steam_entry.setFont(QFont(constants.FONT_FAMILY, 10))
     steam_entry.setFixedWidth(300)
     entry_layout.addWidget(steam_entry)
     entry_layout.addStretch()
@@ -68,14 +69,14 @@ def convert_steam_id():
     button_layout.addStretch()
     glass_layout.addLayout(button_layout)
     result_label = QLabel()
-    result_label.setFont(QFont('Segoe UI', 10))
+    result_label.setFont(QFont(constants.FONT_FAMILY, 10))
     result_label.setWordWrap(True)
     result_label.setAlignment(Qt.AlignCenter)
     glass_layout.addWidget(result_label)
     copy_layout = QHBoxLayout()
     copy_layout.addStretch()
     copy_button = NerdBtn(f"{nf.icons['nf-cod-copy']}")
-    copy_button.setFont(QFont('Hack Nerd Font', 13))
+    copy_button.setFont(QFont(constants.FONT_FAMILY_NERD, 13))
     copy_button.setFixedSize(40, 40)
     copy_button.setStyleSheet('QPushButton { padding: 0px; border-radius: 6px; }')
     copy_layout.addWidget(copy_button)

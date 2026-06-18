@@ -3,6 +3,16 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QFont, QColor
 from i18n import t
 from palworld_aio import constants
+_SORT_ROLE = Qt.UserRole + 1
+class _SortableTreeWidgetItem(QTreeWidgetItem):
+    def __lt__(self, other):
+        tree = self.treeWidget()
+        col = tree.sortColumn() if tree is not None else 0
+        a = self.data(col, _SORT_ROLE)
+        b = other.data(col, _SORT_ROLE)
+        if a is not None and b is not None:
+            return a < b
+        return self.text(col) < other.text(col)
 class SearchPanel(QWidget):
     item_selected = Signal(object)
     item_double_clicked = Signal(object)
@@ -70,10 +80,13 @@ class SearchPanel(QWidget):
     def clear(self):
         self.tree.clear()
         self._all_items = []
-    def add_item(self, values, data=None):
-        item = QTreeWidgetItem([str(v) for v in values])
+    def add_item(self, values, data=None, sort_keys=None):
+        item = _SortableTreeWidgetItem([str(v) for v in values])
         if data:
             item.setData(0, Qt.UserRole, data)
+        if sort_keys:
+            for col, key in sort_keys.items():
+                item.setData(col, _SORT_ROLE, key)
         self.tree.addTopLevelItem(item)
         self._all_items.append(item)
         return item

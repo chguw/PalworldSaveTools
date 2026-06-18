@@ -1590,7 +1590,18 @@
   "inventory.clear_btn": "분명한",
   "inventory.equip_clear_btn": "분명한",
   "inventory.clear_confirm_title": "인벤토리 지우기",
-  "inventory.clear_confirm_msg": "인벤토리 및 주요 항목에서 모든 항목을 제거하시겠습니까?",
+  "inventory.clear_confirm_msg": "인벤토리에서 모든 항목을 제거하시겠습니까? (주요 아이템, 장비, 잠금 해제는 그대로 유지됩니다)",
   "inventory.equip_clear_title": "장비 지우기",
-  "inventory.equip_clear_msg": "무기, 방어구, 음식 슬롯에서 모든 장비를 제거하시겠습니까?"
+  "inventory.equip_clear_msg": "무기, 방어구, 음식 슬롯에서 모든 장비를 제거하시겠습니까?",
+  "inventory.clear_key_btn": "분명한",
+  "inventory.clear_key_confirm_msg": "모든 주요 항목을 삭제하시겠습니까?",
+  "inventory.clear_key_confirm_title": "분명한",
+  "character_transfer.no_players_folder": "Level.sav 옆에 플레이어 폴더가 없습니다. 저장을 로드할 수 없습니다.",
+  "edit_pals.show_standard": "기준",
+  "edit_pals.show_boss": "사장",
+  "edit_pals.create": "만들다",
+  "base_inventory.booth_item_title": "부스 품목: {count}",
+  "base_inventory.booth_item_no_data": "부스: 컨테이너 데이터 없음",
+  "base_inventory.booth_pal_title": "부스 친구: {count}",
+  "base_inventory.booth_pal_no_data": "부스: 등록된 친구가 없습니다."
 }

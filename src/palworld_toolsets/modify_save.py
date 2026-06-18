@@ -2,7 +2,9 @@ from import_libs import *
 from PySide6.QtWidgets import QSizePolicy, QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QMainWindow, QWidget, QComboBox, QLineEdit, QFileDialog, QApplication, QFrame, QProgressBar, QMessageBox
 from PySide6.QtGui import QIcon, QPixmap, QFont
 from PySide6.QtCore import Qt, QTimer
-from palworld_aio.ui.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio import constants
+from resource_resolver import resource_path, get_base_dir, get_resources_dir
 import ssl
 def _get_user_ca_path():
     if sys.platform == 'win32':
@@ -46,7 +48,7 @@ def _try_ca(cafile, label):
         print(f'[SSL] {label} CA not found: {cafile}')
     return None
 def _get_ssl_context():
-    bundled = os.path.join(get_resources_directory(), 'cert', 'cacert.pem')
+    bundled = resource_path(get_base_dir(), 'cert', 'cacert.pem')
     user_ca = _get_user_ca_path()
     ctx = _try_ca(bundled, 'bundled')
     if ctx:
@@ -304,7 +306,7 @@ def _build_selector_window():
     win.setModal(True)
     win.setFixedSize(520, 250)
     try:
-        ico_path = os.path.join(get_base_directory(), 'resources', 'icon.ico')
+        ico_path = resource_path(get_base_dir(), 'icon.ico')
         if os.path.exists(ico_path):
             win.setWindowIcon(QIcon(ico_path))
     except Exception as e:
@@ -317,11 +319,11 @@ def _build_selector_window():
     glass_layout = QVBoxLayout(glass)
     glass_layout.setSpacing(10)
     label1 = QLabel(t('modify.dialog.choose_editor'))
-    label1.setFont(QFont('Segoe UI', 12, QFont.Bold))
+    label1.setFont(QFont(constants.FONT_FAMILY, 12, QFont.Bold))
     label1.setAlignment(Qt.AlignmentFlag.AlignCenter)
     glass_layout.addWidget(label1)
     label2 = QLabel(t('modify.dialog.note_backup'))
-    label2.setFont(QFont('Segoe UI', 10))
+    label2.setFont(QFont(constants.FONT_FAMILY, 10))
     label2.setStyleSheet('color: #ff5555; font-weight: bold; font-style: italic;')
     label2.setAlignment(Qt.AlignmentFlag.AlignCenter)
     glass_layout.addWidget(label2)
@@ -451,7 +453,7 @@ class MenuGUI(QMainWindow):
     def __init__(self):
         super().__init__()
         try:
-            ico_path = os.path.join(get_base_directory(), 'resources', 'icon.ico')
+            ico_path = resource_path(get_base_dir(), 'icon.ico')
             if os.path.exists(ico_path):
                 self.setWindowIcon(QIcon(ico_path))
         except Exception:
@@ -493,7 +495,7 @@ class MenuGUI(QMainWindow):
         topbar_layout.addWidget(self.lang_combo)
         topbar_layout.addStretch()
         container_layout.addLayout(topbar_layout)
-        logo_path = os.path.join(get_base_directory(), 'resources', 'PalworldSaveTools.png')
+        logo_path = resource_path(get_base_dir(), 'PalworldSaveTools.png')
         if os.path.exists(logo_path):
             pixmap = QPixmap(logo_path)
             if not pixmap.isNull():
@@ -502,7 +504,7 @@ class MenuGUI(QMainWindow):
                 logo_label.setPixmap(scaled_pixmap)
                 logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 container_layout.addWidget(logo_label)
-        info_items = [('app.subtitle', {}, '#6f9', QFont('Consolas', 10)), ('notice.backup', {}, '#f44', QFont('Consolas', 9, QFont.Weight.Bold)), ('notice.patch', {}, '#f44', QFont('Consolas', 9, QFont.Weight.Bold)), ('notice.errors', {}, '#f44', QFont('Consolas', 9, QFont.Weight.Bold))]
+        info_items = [('app.subtitle', {}, '#6f9', QFont(constants.FONT_FAMILY_MONO, 10)), ('notice.backup', {}, '#f44', QFont(constants.FONT_FAMILY_MONO, 9, QFont.Weight.Bold)), ('notice.patch', {}, '#f44', QFont(constants.FONT_FAMILY_MONO, 9, QFont.Weight.Bold)), ('notice.errors', {}, '#f44', QFont(constants.FONT_FAMILY_MONO, 9, QFont.Weight.Bold))]
         for key, fmt, color, font in info_items:
             label = QLabel(t(key, **fmt))
             label.setFont(font)
@@ -510,7 +512,7 @@ class MenuGUI(QMainWindow):
             container_layout.addWidget(label)
             self.info_labels.append((label, key, fmt))
         separator = QLabel('=' * 86)
-        separator.setFont(QFont('Consolas', 11))
+        separator.setFont(QFont(constants.FONT_FAMILY_MONO, 11))
         separator.setAlignment(Qt.AlignmentFlag.AlignCenter)
         container_layout.addWidget(separator)
         tools_widget = QWidget()

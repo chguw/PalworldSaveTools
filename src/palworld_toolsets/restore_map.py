@@ -1,13 +1,14 @@
 from import_libs import *
-from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
+from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 from loading_manager import show_critical
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
-from palworld_aio.ui.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio import constants
 import os, time, shutil
 savegames_path = os.path.join(os.environ['LOCALAPPDATA'], 'Pal', 'Saved', 'SaveGames')
-restore_map_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'Backups', 'Restore Map')
+restore_map_path = os.path.join('.', 'Backups', 'Restore Map')
 os.makedirs(restore_map_path, exist_ok=True)
 def backup_local_data(subfolder_path):
     timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')
@@ -91,12 +92,12 @@ def restore_map():
             glass_layout.setContentsMargins(14, 14, 14, 14)
             glass_layout.setSpacing(12)
             tip_label = QLabel(t('Warning: This will perform the following actions:'))
-            tip_label.setFont(QFont('Segoe UI', 12, QFont.Bold))
+            tip_label.setFont(QFont(constants.FONT_FAMILY, 12, QFont.Bold))
             tip_label.setAlignment(Qt.AlignCenter)
             tip_label.setStyleSheet('color: #FF6347;')
             glass_layout.addWidget(tip_label)
             steps_layout = QVBoxLayout()
-            step_font = QFont('Segoe UI', 10)
+            step_font = QFont(constants.FONT_FAMILY, 10)
             step1_label = QLabel(t('1.Clear fog from each existing LocalData.sav'))
             step1_label.setFont(step_font)
             step1_label.setAlignment(Qt.AlignCenter)
@@ -112,18 +113,18 @@ def restore_map():
             glass_layout.addLayout(steps_layout)
             self.result_label = QLabel('')
             self.result_label.setAlignment(Qt.AlignCenter)
-            self.result_label.setFont(QFont('Segoe UI', 10, QFont.Bold))
+            self.result_label.setFont(QFont(constants.FONT_FAMILY, 10, QFont.Bold))
             self.result_label.setStyleSheet('color: #7FFF00;')
             glass_layout.addWidget(self.result_label)
             button_layout = QHBoxLayout()
             button_layout.addStretch()
             self.yes_button = QPushButton(t('Yes'))
-            self.yes_button.setFont(QFont('Segoe UI', 12))
+            self.yes_button.setFont(QFont(constants.FONT_FAMILY, 12))
             self.yes_button.setMinimumSize(120, 40)
             self.yes_button.clicked.connect(self.on_yes)
             button_layout.addWidget(self.yes_button)
             self.no_button = QPushButton(t('No'))
-            self.no_button.setFont(QFont('Segoe UI', 12))
+            self.no_button.setFont(QFont(constants.FONT_FAMILY, 12))
             self.no_button.setMinimumSize(120, 40)
             self.no_button.clicked.connect(self.on_no)
             button_layout.addWidget(self.no_button)

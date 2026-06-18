@@ -2,12 +2,13 @@ from import_libs import *
 from palworld_aio.utils import sav_to_json, json_to_sav, extract_value
 from palworld_toolsets.fix_host_save import ask_string_with_icon
 from common import get_base_directory
-from palworld_aio.ui.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager
 from loading_manager import run_with_loading, show_information, show_critical
 import nerdfont as nf
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QFrame, QMessageBox, QFileDialog, QStyleFactory, QApplication, QLabel
 from PySide6.QtCore import Qt, Signal, QObject, QTimer, QMetaObject, Q_ARG
 from PySide6.QtGui import QIcon, QFont
+from palworld_aio import constants
 saves = []
 save_info_map = {}
 save_extractor_done = threading.Event()
@@ -43,16 +44,16 @@ class GamePassSaveFixWidget(QWidget):
         glass_layout = QVBoxLayout(glass_frame)
         glass_layout.setContentsMargins(12, 12, 12, 12)
         title_label = QLabel(t('xgp.title.converter'))
-        title_label.setFont(QFont('Segoe UI', 16, QFont.Bold))
+        title_label.setFont(QFont(constants.FONT_FAMILY, 16, QFont.Bold))
         title_label.setAlignment(Qt.AlignCenter)
         glass_layout.addWidget(title_label)
         desc_label = QLabel(t('xgp.ui.description'))
-        desc_label.setFont(QFont('Segoe UI', 12))
+        desc_label.setFont(QFont(constants.FONT_FAMILY, 12))
         desc_label.setAlignment(Qt.AlignCenter)
         desc_label.setWordWrap(True)
         glass_layout.addWidget(desc_label)
         warning_label = QLabel(t('warning.world_id'))
-        warning_label.setFont(QFont('Segoe UI', 9))
+        warning_label.setFont(QFont(constants.FONT_FAMILY, 9))
         warning_label.setStyleSheet('color: #ffaa00;')
         warning_label.setAlignment(Qt.AlignCenter)
         warning_label.setWordWrap(True)
@@ -64,11 +65,11 @@ class GamePassSaveFixWidget(QWidget):
         left_layout = QVBoxLayout(left_frame)
         left_layout.setContentsMargins(10, 10, 10, 10)
         left_header = QLabel(t('xgp.ui.section_xgp_to_steam'))
-        left_header.setFont(QFont('Segoe UI', 14, QFont.Bold))
+        left_header.setFont(QFont(constants.FONT_FAMILY, 14, QFont.Bold))
         left_header.setAlignment(Qt.AlignCenter)
         left_layout.addWidget(left_header)
         self.xgp_browse_btn = QPushButton(f"{nf.icons['nf-fa-xbox']}  {t('xgp.ui.btn_xgp_folder')}")
-        self.xgp_browse_btn.setFont(QFont('Segoe UI', 12))
+        self.xgp_browse_btn.setFont(QFont(constants.FONT_FAMILY, 12))
         left_layout.addWidget(self.xgp_browse_btn, alignment=Qt.AlignCenter)
         self.xgp_save_frame = QFrame()
         self.xgp_save_frame.setStyleSheet('QFrame { background-color: transparent; }')
@@ -83,14 +84,14 @@ class GamePassSaveFixWidget(QWidget):
         right_layout = QVBoxLayout(right_frame)
         right_layout.setContentsMargins(10, 10, 10, 10)
         right_header = QLabel(t('xgp.ui.section_steam_to_xgp'))
-        right_header.setFont(QFont('Segoe UI', 14, QFont.Bold))
+        right_header.setFont(QFont(constants.FONT_FAMILY, 14, QFont.Bold))
         right_header.setAlignment(Qt.AlignCenter)
         right_layout.addWidget(right_header)
         self.steam_browse_btn = QPushButton(f"{nf.icons['nf-fa-steam']}  {t('xgp.ui.btn_steam_folder')}")
-        self.steam_browse_btn.setFont(QFont('Segoe UI', 12))
+        self.steam_browse_btn.setFont(QFont(constants.FONT_FAMILY, 12))
         right_layout.addWidget(self.steam_browse_btn, alignment=Qt.AlignCenter)
         self.steam_status_label = QLabel('')
-        self.steam_status_label.setFont(QFont('Segoe UI', 10))
+        self.steam_status_label.setFont(QFont(constants.FONT_FAMILY, 10))
         self.steam_status_label.setAlignment(Qt.AlignCenter)
         self.steam_status_label.setWordWrap(True)
         right_layout.addWidget(self.steam_status_label)
@@ -519,14 +520,14 @@ class GamePassSaveFixWidget(QWidget):
             label_layout = QHBoxLayout()
             label_layout.addStretch()
             label = QLabel(t('xgp.ui.available_saves'))
-            label.setFont(QFont('Segoe UI', 10))
+            label.setFont(QFont(constants.FONT_FAMILY, 10))
             label_layout.addWidget(label)
             label_layout.addStretch()
             layout.addLayout(label_layout)
             combo_layout = QHBoxLayout()
             combo_layout.addStretch()
             combobox = QComboBox()
-            combobox.setFont(QFont('Segoe UI', 10))
+            combobox.setFont(QFont(constants.FONT_FAMILY, 10))
             combobox.setMinimumWidth(350)
             combobox.setPlaceholderText(t('xgp.ui.select_save_placeholder'))
             for s in saves:
@@ -538,7 +539,7 @@ class GamePassSaveFixWidget(QWidget):
             button_layout = QHBoxLayout()
             button_layout.addStretch()
             button = QPushButton(t('xgp.ui.convert'))
-            button.setFont(QFont('Segoe UI', 10))
+            button.setFont(QFont(constants.FONT_FAMILY, 10))
             button.setFixedWidth(250)
             button.setEnabled(combobox.currentIndex() >= 0)
             button.clicked.connect(lambda: self.convert_JSON_sav(combobox.currentData()))

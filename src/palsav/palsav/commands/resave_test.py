@@ -2,7 +2,7 @@ import sys
 import logging
 logger = logging.getLogger(__name__)
 from palsav.commands.convert import convert_json_to_sav, convert_sav_to_json
-from palsav.palsav import decompress_sav_to_gvas
+from palsav.core import decompress_sav_to_gvas
 from palsav.paltypes import DISABLED_PROPERTIES, PALWORLD_CUSTOM_PROPERTIES
 def main():
     if len(sys.argv) != 2:

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // === SKILLS (on-demand) ===
+  // Skills live in .opencode/skills/<name>/SKILL.md
+  // They are NOT auto-loaded. Agents see them listed, then call
+  //   skill({ name: "pst-ui-tabs" })
+  // to load the full content.
+  // Permission "*": "allow" means agents can load without asking.
+  "permission": {
+    "skill": {
+      "pst-*": "allow"
+    }
+  },
+
+  // === INSTRUCTIONS (auto-loaded) ===
+  // Files listed here are injected into every session's agent context
+  // automatically. This is the right place for persistent "memory" —
+  // project overview, conventions, rules, etc.
+  // Add or remove paths/globs as needed.
+  "instructions": [".opencode/instructions/memory.md"]
+}

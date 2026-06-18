@@ -16,7 +16,7 @@ if "%~1"=="" (
     pause
     exit /b 1
 )
-".venv\Scripts\python.exe" scripts\scripts\clear_fog.py %*
+".venv\Scripts\python.exe" scripts\scrs\clear_fog.py %*
 if exist uv.lock del uv.lock
 pause
 exit /b %errorlevel%

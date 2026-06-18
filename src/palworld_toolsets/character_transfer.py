@@ -4,15 +4,16 @@ from PySide6.QtWidgets import QHeaderView, QWidget, QTreeWidget, QTreeWidgetItem
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QIcon, QFont
 import os
-from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
+from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 from palsav.paltypes import PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PROPERTIES
 from palsav.gvas import GvasFile
-from palworld_aio.ui.styles import ThemeManager
-from palworld_aio.container_ownership import ContainerOwnership
-from palworld_aio.inventory_manager import PlayerInventory
-from palworld_aio.edit_pals import _generate_pal_save_param
+from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio.inventory.container_ownership import ContainerOwnership
+from palworld_aio.inventory.inventory_manager import PlayerInventory
+from palworld_aio.editor.edit_pals import _generate_pal_save_param
 from palworld_aio import constants
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
+from palsav.archive import UUID as PalUUID
 _TRANSFER_STEPS = {'character': True, 'tech_data': True, 'inventory': True, 'guild': True, 'pals': True, 'dynamics': True, 'timestamps': True}
 player_list_cache = []
 def _load_sav(path):
@@ -122,6 +123,7 @@ def as_uuid(val):
 def are_equal_uuids(a, b):
     return as_uuid(a) == as_uuid(b)
 def fast_deepcopy(obj):
+    import pickle
     return pickle.loads(pickle.dumps(obj, -1))
 def _is_post_v1_save(wsd):
     try:
@@ -267,7 +269,7 @@ class CharacterTransferWindow(QWidget):
         source_panel_layout.setContentsMargins(6, 6, 6, 6)
         source_panel_layout.setSpacing(8)
         source_title = QLabel(t('character_transfer.source_players'))
-        source_title.setFont(QFont('Segoe UI', 11, QFont.Bold))
+        source_title.setFont(QFont(constants.FONT_FAMILY, 11, QFont.Bold))
         source_title.setAlignment(Qt.AlignCenter)
         source_panel_layout.addWidget(source_title)
         self.source_search_entry = QLineEdit()
@@ -293,7 +295,7 @@ class CharacterTransferWindow(QWidget):
         target_panel_layout.setContentsMargins(6, 6, 6, 6)
         target_panel_layout.setSpacing(8)
         target_title = QLabel(t('character_transfer.target_players'))
-        target_title.setFont(QFont('Segoe UI', 11, QFont.Bold))
+        target_title.setFont(QFont(constants.FONT_FAMILY, 11, QFont.Bold))
         target_title.setAlignment(Qt.AlignCenter)
         target_panel_layout.addWidget(target_title)
         self.target_search_entry = QLineEdit()
@@ -335,10 +337,10 @@ class CharacterTransferWindow(QWidget):
         glass_layout.addLayout(actions_row)
         tip_label = QLabel(t('character_transfer.tip'))
         tip_label.setAlignment(Qt.AlignCenter)
-        tip_label.setFont(QFont('Segoe UI', 9))
+        tip_label.setFont(QFont(constants.FONT_FAMILY, 9))
         glass_layout.addWidget(tip_label)
         warning_label = QLabel(t('warning.world_id'))
-        warning_label.setFont(QFont('Segoe UI', 9))
+        warning_label.setFont(QFont(constants.FONT_FAMILY, 9))
         warning_label.setStyleSheet('color: #ffaa00;')
         warning_label.setAlignment(Qt.AlignCenter)
         warning_label.setWordWrap(True)
@@ -534,12 +536,16 @@ def migrate_pal_via_api(pal_data, target_uid, targ_lvl, target_player_json, targ
         v = str(s).lower()
         t = str.maketrans('0123456789abcdef', '123456789abcdef0')
         bumped = v.translate(t)
+        max_iterations = 1000
+        iterations = 0
         while bumped in used_ids:
             bumped = bumped.translate(t)
+            iterations += 1
+            if iterations >= max_iterations:
+                raise RuntimeError(f'GUID exhaustion: could not find unused GUID after {max_iterations} attempts')
         used_ids.add(bumped)
         return bumped
     new_inst_str = bump_guid_str(instance_id)
-    from palsav.archive import UUID as PalUUID
     new_instance = PalUUID.from_str(new_inst_str)
     skeleton['key']['InstanceId']['value'] = new_instance
     sp = skeleton['value']['RawData']['value']['object']['SaveParameter']['value']
@@ -651,9 +657,7 @@ def transfer_all_characters():
         source_player_list.clearSelection()
         target_player_list.clearSelection()
         show_information(None, t('Transfer Successful'), t('All players transferred!'))
-    thread = threading.Thread(target=worker)
-    thread.start()
-    thread.join()
+    worker()
     on_bulk_finished()
 def main(skip_msgbox=False, skip_gui=False):
     global host_guid, targ_uid, exported_map, selected_source_player, selected_target_player
@@ -688,10 +692,10 @@ def main(skip_msgbox=False, skip_gui=False):
         targ_uid = UUID.from_str(selected_target_player)
     except Exception as e:
         print(f'UUID Error: Invalid UUID format: {e}')
-        return
+        return False
     if not load_json_files():
         print('Load Error: Failed to load JSON files.')
-        return
+        return False
     source_player_level = get_player_level_from_cspm(level_json, selected_source_player)
     if source_player_level < 2:
         print(f'Error: Source player must be at least level 2. Current level: {source_player_level}')
@@ -771,6 +775,7 @@ def main(skip_msgbox=False, skip_gui=False):
         target_player_list.clearSelection()
     if not skip_msgbox:
         show_information(None, t('Transfer Successful'), t("Transfer successful in memory! Hit 'Save Changes' to save."))
+    return True
 def _normalize_lid(lid):
     if hasattr(lid, 'raw_bytes'):
         s = str(lid).lower()
@@ -786,14 +791,10 @@ def _normalize_lid(lid):
     if isinstance(lid, str):
         stripped = lid.replace('-', '').lower()
         return '' if stripped == '00000000000000000000000000000000' else lid.lower()
+    from uuid import UUID as UUIDType
+    if isinstance(lid, UUIDType):
+        return '' if lid.hex == '00000000000000000000000000000000' else str(lid).lower()
     return ''
-def _bump_guid_str(s, used):
-    t = str.maketrans('0123456789abcdef', '123456789abcdef0')
-    bumped = s.translate(t)
-    while bumped in used:
-        bumped = bumped.translate(t)
-    used.add(bumped)
-    return bumped
 def sync_player_timestamps(targ_uid, target_lvl):
     global target_world_tick
     try:
@@ -841,14 +842,14 @@ def gather_and_update_dynamic_containers():
         except:
             continue
     targ_lvl['DynamicItemSaveData']['value']['values'] = list(tgt_by_id.values())
-from palsav.archive import UUID as PalUUID
-from palsav.archive import FArchiveWriter
+
 def _new_guid():
     return PalUUID(os.urandom(16))
 def _set_player_groupid(targ_json, group_id):
     sd = targ_json['SaveData']['value']
     sd['GroupId'] = {'id': None, 'value': group_id, 'type': 'StructProperty', 'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000'}
-def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, target_world_tick=None):
+def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict):
+    global target_world_tick
     try:
         if 'GroupSaveDataMap' not in targ_lvl or targ_lvl['GroupSaveDataMap'].get('value') is None:
             targ_lvl['GroupSaveDataMap'] = {'value': []}
@@ -866,7 +867,7 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, 
         for g in source_guild_dict.values():
             raw = g.get('value', {}).get('RawData', {}).get('value', {})
             for p in raw.get('players', []):
-                if p.get('player_uid') == host_guid:
+                if str(p.get('player_uid')) == str(host_guid):
                     source_player = fast_deepcopy(p)
                     source_entry = g
                     break
@@ -877,7 +878,7 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, 
         if source_player:
             source_player['player_uid'] = targ_uid
             if 'player_info' in source_player:
-                source_player['player_info']['last_online_real_time'] = target_world_tick or 0
+                source_player['player_info']['last_online_real_time'] = target_world_tick
         if target_guild:
             target_raw = target_guild['value']['RawData']['value']
             target_raw['players'] = [p for p in target_raw.get('players', []) if str(p.get('player_uid')) != str(targ_uid)]
@@ -893,7 +894,7 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict, 
         raw['group_id'] = _new_guid()
         raw['group_name'] = 'Transferred Guild'
         raw['guild_name'] = 'Transferred Guild'
-        raw['players'] = [source_player] if source_player else [{'player_uid': targ_uid, 'player_info': {'last_online_real_time': target_world_tick or 0, 'player_name': 'Player'}}]
+        raw['players'] = [source_player] if source_player else [{'player_uid': targ_uid, 'player_info': {'last_online_real_time': target_world_tick, 'player_name': 'Player'}}]
         raw['admin_player_uid'] = targ_uid
         player_inst_id = targ_json['SaveData']['value']['IndividualId']['value']['InstanceId']['value']
         raw['individual_character_handle_ids'] = [{'guid': PalUUID.from_str('00000000-0000-0000-0000-000000000000'), 'instance_id': player_inst_id}]
@@ -935,7 +936,7 @@ def transfer_character_only(host_guid, targ_uid):
         try:
             uid = character_save_param['key']['PlayerUId']['value']
             inst = character_save_param['key']['InstanceId']['value']
-            if uid == host_guid and inst == host_instance_id:
+            if str(uid) == str(host_guid) and str(inst) == str(host_instance_id):
                 exported_map = character_save_param
                 break
         except:
@@ -948,7 +949,7 @@ def transfer_character_only(host_guid, targ_uid):
     updated = False
     for c in char_list:
         key = c.get('key', {})
-        if key.get('PlayerUId', {}).get('value') == targ_uid:
+        if str(key.get('PlayerUId', {}).get('value', '')) == str(targ_uid):
             try:
                 spv = c['value']['RawData']['value']['object']['SaveParameter']['value']
                 if not spv.get('IsPlayer', {}).get('value', False):
@@ -1036,7 +1037,6 @@ def transfer_pals_only():
         targ_uid = UUID.from_str(selected_target_player or selected_source_player)
     except:
         return False
-    from palsav.archive import UUID as PalUUID
     zero = PalUUID.from_str('00000000-0000-0000-0000-000000000000')
     target_guild_id = zero
     for entry in targ_lvl.get('GroupSaveDataMap', {}).get('value', []):
@@ -1059,6 +1059,11 @@ def transfer_pals_only():
     targ_sd = targ_json['SaveData']['value']
     t_pal_id = targ_sd['PalStorageContainerId']['value']['ID']['value']
     t_oto_id = targ_sd['OtomoCharacterContainerId']['value']['ID']['value']
+    source_pals = scan_source_pals(host_guid, level_json, host_json)
+    for pal_data in source_pals:
+        if not migrate_pal_via_api(pal_data, targ_uid, targ_lvl, targ_json, target_guild_id):
+            print(f"[FAIL] Pal migration failed for instance {pal_data['instance_id']}")
+            return False
     for cont in targ_lvl.get('CharacterContainerSaveData', {}).get('value', []):
         cid = cont.get('key', {}).get('ID', {}).get('value')
         if cid in (t_pal_id, t_oto_id):
@@ -1072,11 +1077,6 @@ def transfer_pals_only():
             if handles:
                 handles[:] = [h for h in handles if str(h.get('instance_id', '')) not in removed_instances]
             break
-    source_pals = scan_source_pals(host_guid, level_json, host_json)
-    for pal_data in source_pals:
-        if not migrate_pal_via_api(pal_data, targ_uid, targ_lvl, targ_json, target_guild_id):
-            print(f"[FAIL] Pal migration failed for instance {pal_data['instance_id']}")
-            return False
     return True
 def get_val_safe(p):
     try:
@@ -1103,12 +1103,8 @@ def finalize_save_task():
     return True
 def select_file():
     return QFileDialog.getOpenFileName(None, 'Select Palworld Save File', '', 'Palworld Saves(*.sav *.json);;All Files(*)')[0]
-def load_player_file(level_sav_path, player_uid, use_source_folder=False):
-    base_folder = os.path.dirname(level_sav_path)
-    if use_source_folder:
-        base_folder = os.path.join(base_folder, 'Players')
-    else:
-        base_folder = os.path.join(base_folder, 'Players')
+def load_player_file(level_sav_path, player_uid):
+    base_folder = os.path.join(os.path.dirname(level_sav_path), 'Players')
     player_file_path = os.path.join(base_folder, f'{player_uid.upper()}.sav')
     if not os.path.exists(player_file_path):
         player_file_path = os.path.join(os.path.dirname(level_sav_path), '../Players', f'{player_uid.upper()}.sav')
@@ -1118,9 +1114,6 @@ def load_player_file(level_sav_path, player_uid, use_source_folder=False):
     if not os.path.exists(player_file_path):
         print(f'Error! Player file {player_file_path} not present.')
         return None
-    if not os.path.exists(player_file_path):
-        print(f'Error! Invalid file {player_file_path}')
-        return
     return _load_sav(player_file_path)
 def load_players(save_json, is_source):
     guild_dict = source_guild_dict if is_source else target_guild_dict
@@ -1155,7 +1148,11 @@ def source_level_file():
     if not tmp:
         return
     if not tmp.endswith('Level.sav'):
-        show_warning(None, t('Error!'), t('This is NOT Level.sav.Please select Level.sav file.'))
+        show_warning(None, t('error.title'), t('This is NOT Level.sav.Please select Level.sav file.'))
+        return
+    players_dir = os.path.join(os.path.dirname(tmp), 'Players')
+    if not os.path.isdir(players_dir):
+        show_warning(None, t('error.title'), t('character_transfer.no_players_folder'))
         return
     level_json = None
     import gc
@@ -1194,7 +1191,11 @@ def target_level_file():
     if not tmp:
         return
     if not tmp.endswith('Level.sav'):
-        show_warning(None, t('Error!'), t('This is NOT Level.sav.Please select Level.sav file.'))
+        show_warning(None, t('error.title'), t('This is NOT Level.sav.Please select Level.sav file.'))
+        return
+    players_dir = os.path.join(os.path.dirname(tmp), 'Players')
+    if not os.path.isdir(players_dir):
+        show_warning(None, t('error.title'), t('character_transfer.no_players_folder'))
         return
     targ_lvl = None
     target_gvas_file = None
@@ -1243,30 +1244,6 @@ def on_selection_of_target_player():
     if selections:
         selected_target_player = selections[0].text(1)
         current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
-def sort_treeview_column(treeview, col_index, reverse):
-    data = [(treeview.set(child, col_index), child) for child in treeview.get_children('')]
-    data.sort(reverse=reverse, key=lambda x: x[0])
-    for index, (_, item) in enumerate(data):
-        treeview.move(item, '', index)
-    treeview.heading(col_index, command=lambda: sort_treeview_column(treeview, col_index, not reverse))
-def filter_treeview(tree, query, is_source):
-    query = query.lower()
-    if is_source:
-        if not hasattr(filter_treeview, 'source_original_rows'):
-            filter_treeview.source_original_rows = [row for row in tree.get_children()]
-        original_rows = filter_treeview.source_original_rows
-    else:
-        if not hasattr(filter_treeview, 'target_original_rows'):
-            filter_treeview.target_original_rows = [row for row in tree.get_children()]
-        original_rows = filter_treeview.target_original_rows
-    for row in original_rows:
-        tree.reattach(row, '', 'end')
-    for row in tree.get_children():
-        values = tree.item(row, 'values')
-        if any((query in str(value).lower() for value in values)):
-            tree.reattach(row, '', 'end')
-        else:
-            tree.detach(row)
 def finalize_save(window):
     try:
         def on_finished(success):

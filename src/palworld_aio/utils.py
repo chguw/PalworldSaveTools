@@ -9,11 +9,12 @@ import math
 import urllib.request
 from palsav.archive import UUID
 from palsav.gvas import GvasFile
-from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
+from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 from palsav.paltypes import PALWORLD_TYPE_HINTS
 from common import get_versions, get_base_directory
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palworld_aio import constants
+from resource_resolver import resource_path
 def resolve_name(character_id: str, name_map: dict) -> str | None:
     if not character_id:
         return None
@@ -191,7 +192,7 @@ def get_pal_data(character_key):
     global _pal_data_cache
     if _pal_data_cache is None:
         try:
-            paldata_path = os.path.join(get_base_directory(), 'resources', 'game_data', 'characters.json')
+            paldata_path = resource_path(get_base_directory(), 'game_data', 'characters.json')
             if os.path.exists(paldata_path):
                 data = json_tools.load(paldata_path)
                 pals_list = data.get('pals', [])

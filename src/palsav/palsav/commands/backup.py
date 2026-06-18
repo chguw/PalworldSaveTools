@@ -35,7 +35,7 @@ def main():
         exit(1)
     compressed = not args.__dict__.get('no_compress', False)
     if args.command == 'export-player':
-        from palworld_aio.backup_manager import export_player_backup
+        from palworld_aio.managers.backup_manager import export_player_backup
         if os.path.exists(args.output) and (not args.force):
             logger.error(f'Output file {args.output} already exists. Use -f to overwrite.')
             exit(1)
@@ -46,7 +46,7 @@ def main():
             logger.error(f'Failed to export player: {e}')
             exit(1)
     elif args.command == 'export-base':
-        from palworld_aio.backup_manager import export_base_backup
+        from palworld_aio.managers.backup_manager import export_base_backup
         if os.path.exists(args.output) and (not args.force):
             logger.error(f'Output file {args.output} already exists. Use -f to overwrite.')
             exit(1)
@@ -57,7 +57,7 @@ def main():
             logger.error(f'Failed to export base: {e}')
             exit(1)
     elif args.command == 'import-player':
-        from palworld_aio.backup_manager import import_player_backup
+        from palworld_aio.managers.backup_manager import import_player_backup
         try:
             import_player_backup(args.backup, args.level_sav, args.players_folder, compressed=compressed)
             logger.info(f'Player backup imported to {args.level_sav}')
@@ -65,7 +65,7 @@ def main():
             logger.error(f'Failed to import player: {e}')
             exit(1)
     elif args.command == 'import-base':
-        from palworld_aio.backup_manager import import_base_backup
+        from palworld_aio.managers.backup_manager import import_base_backup
         offset = tuple(args.offset)
         try:
             import_base_backup(args.backup, args.level_sav, args.guild_id, compressed=compressed, offset=offset)

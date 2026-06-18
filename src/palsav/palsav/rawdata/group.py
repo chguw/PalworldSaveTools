@@ -1,6 +1,12 @@
 from typing import Sequence, Any
 from palsav.archive import *
-V1_MARKER = b'\x02\x00\x00\x00\x02\x03\x00\x00\x00\x00'
+def player_info_writer(writer: FArchiveWriter, p: dict[str, Any]) -> None:
+    if 'player_uid' in p:
+        writer.guid(p['player_uid'])
+        writer.i64(p['player_info']['last_online_real_time'])
+        writer.fstring(p['player_info']['player_name'])
+        if '_u8_flag' in p:
+            writer.byte(p['_u8_flag'])
 def decode(reader: FArchiveReader, type_name: str, size: int, path: str) -> dict[str, Any]:
     if type_name != 'MapProperty':
         raise Exception(f'Expected MapProperty, got {type_name}')
@@ -31,6 +37,9 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
         if not reader.eof():
             group_data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
         return group_data
+    if group_type not in ('EPalGroupType::Guild', 'EPalGroupType::Organization', 'EPalGroupType::IndependentGuild'):
+        import sys as _sys
+        print(f'group.py: unknown group_type {group_type}', file=_sys.stderr)
     if group_type == 'EPalGroupType::Guild':
         group_data['leading_bytes'] = [int(b) for b in reader.byte_list(4)]
         group_data['base_ids'] = reader.tarray(uuid_reader)
@@ -40,60 +49,33 @@ def decode_bytes(parent_reader: FArchiveReader, group_bytes: Sequence[int], grou
         group_data['guild_name'] = reader.fstring()
         group_data['last_guild_name_modifier_player_uid'] = reader.guid()
         group_data['unknown_2'] = [int(b) for b in reader.byte_list(4)]
-        remaining = reader.read_to_end()
-        v1_offset = remaining.find(V1_MARKER)
-        if v1_offset >= 0:
-            if v1_offset > 0:
-                group_data['_pre_v1_bytes'] = [int(b) for b in remaining[:v1_offset]]
-            group_data['_v1_header'] = [int(b) for b in V1_MARKER]
-            post_v1 = remaining[v1_offset + len(V1_MARKER):]
-            use_u8 = v1_offset > 0
-        else:
-            post_v1 = remaining
-            use_u8 = False
-        if post_v1:
-            sub = parent_reader.internal_copy(bytes(post_v1), debug=False)
-            try:
-                admin_player_uid = sub.guid()
-                player_count = sub.i32()
-                players = []
-                for _ in range(player_count):
-                    player_uid = sub.guid()
-                    last_online_real_time = sub.i64()
-                    player_name = sub.fstring()
-                    player_entry = {'player_uid': str(player_uid), 'player_info': {'last_online_real_time': last_online_real_time, 'player_name': player_name}}
-                    if use_u8 and (not sub.eof()):
-                        player_entry['_u8_flag'] = sub.byte()
-                    players.append(player_entry)
-                group_data['admin_player_uid'] = admin_player_uid
-                group_data['players'] = players
-                trailing_bytes = sub.read_to_end()
-                if trailing_bytes:
-                    group_data['_trailing_bytes'] = [int(b) for b in trailing_bytes]
-            except Exception:
-                try:
-                    alt_u8 = not use_u8
-                    sub2 = parent_reader.internal_copy(bytes(post_v1), debug=False)
-                    admin_player_uid = sub2.guid()
-                    player_count = sub2.i32()
-                    players = []
-                    for _ in range(player_count):
-                        player_uid = sub2.guid()
-                        last_online_real_time = sub2.i64()
-                        player_name = sub2.fstring()
-                        player_entry = {'player_uid': str(player_uid), 'player_info': {'last_online_real_time': last_online_real_time, 'player_name': player_name}}
-                        if alt_u8 and (not sub2.eof()):
-                            player_entry['_u8_flag'] = sub2.byte()
-                        players.append(player_entry)
-                    group_data['admin_player_uid'] = admin_player_uid
-                    group_data['players'] = players
-                    trailing_bytes = sub2.read_to_end()
-                    if trailing_bytes:
-                        group_data['_trailing_bytes'] = [int(b) for b in trailing_bytes]
-                except Exception:
-                    group_data['_raw_tail'] = post_v1
-        elif not group_data.get('players'):
-            group_data['players'] = []
+        post_unk2 = reader.read_to_end()
+        V1_MARKER = b'\x02\x00\x00\x00\x02\x03\x00\x00\x00\x00'
+        if post_unk2[:10] == V1_MARKER:
+            group_data['_has_v1_marker'] = True
+            post_unk2 = post_unk2[10:]
+        try:
+            sub = parent_reader.internal_copy(bytes(post_unk2), debug=False)
+            admin_player_uid = sub.guid()
+            player_count = sub.i32()
+            players = []
+            for _ in range(player_count):
+                puid = sub.guid()
+                lt = sub.i64()
+                nm = sub.fstring()
+                if not sub.eof():
+                    flag = sub.byte()
+                    players.append({'player_uid': str(puid), 'player_info': {'last_online_real_time': lt, 'player_name': nm}, '_u8_flag': flag})
+                else:
+                    players.append({'player_uid': str(puid), 'player_info': {'last_online_real_time': lt, 'player_name': nm}})
+            group_data['admin_player_uid'] = admin_player_uid
+            group_data['players'] = players
+            trailing_bytes = sub.read_to_end()
+            if trailing_bytes:
+                group_data['_trailing_bytes'] = [int(b) for b in trailing_bytes]
+        except Exception:
+            group_data['_raw_tail'] = post_unk2
+        group_data.setdefault('players', [])
     if not reader.eof():
         group_data['unknown_bytes'] = [int(b) for b in reader.read_to_end()]
     return group_data
@@ -103,10 +85,10 @@ def encode(writer: FArchiveWriter, property_type: str, properties: dict[str, Any
     del properties['custom_type']
     group_map = properties['value']
     for group in group_map:
-        if 'values' in group['value']['RawData']['value']:
+        raw_val = group['value'].get('RawData', {}).get('value')
+        if not raw_val or 'values' in raw_val:
             continue
-        p = group['value']['RawData']['value']
-        encoded_bytes = encode_bytes(p)
+        encoded_bytes = encode_bytes(raw_val)
         group['value']['RawData']['value'] = {'values': [b for b in encoded_bytes]}
     return writer.property_inner(property_type, properties)
 def encode_bytes(p: dict[str, Any]) -> bytes:
@@ -135,19 +117,10 @@ def encode_bytes(p: dict[str, Any]) -> bytes:
         if '_raw_tail' in p:
             writer.write(bytes(p['_raw_tail']))
         elif 'admin_player_uid' in p:
-            if '_pre_v1_bytes' in p:
-                writer.write(bytes(p['_pre_v1_bytes']))
-            if '_v1_header' in p:
-                writer.write(bytes(p['_v1_header']))
+            if p.get('_has_v1_marker'):
+                writer.write(b'\x02\x00\x00\x00\x02\x03\x00\x00\x00\x00')
             writer.guid(p['admin_player_uid'])
-            writer.i32(len(p.get('players', [])))
-            for pl in p.get('players', []):
-                if 'player_uid' in pl:
-                    writer.guid(pl['player_uid'])
-                    writer.i64(pl['player_info']['last_online_real_time'])
-                    writer.fstring(pl['player_info']['player_name'])
-                    if '_u8_flag' in pl:
-                        writer.byte(pl['_u8_flag'])
+            writer.tarray(player_info_writer, p.get('players', []))
             if '_trailing_bytes' in p:
                 writer.write(bytes(p['_trailing_bytes']))
             elif 'trailing_bytes' in p:

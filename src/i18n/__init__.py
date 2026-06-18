@@ -3,26 +3,17 @@ import os
 import sys
 from typing import Dict, Any
 from palsav import json_tools
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-if getattr(sys, 'frozen', False):
-    base_dir = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
-    if not os.path.isdir(os.path.join(base_dir, 'resources')):
-        src_dir = os.path.join(base_dir, 'src')
-        if os.path.isdir(os.path.join(src_dir, 'resources')):
-            base_dir = src_dir
-    if not os.path.isdir(base_dir):
-        main_py_dir = os.path.dirname(os.path.abspath(__file__))
-        if os.path.isdir(main_py_dir):
-            base_dir = main_py_dir
-else:
-    _base_dir = os.path.dirname(_current_dir)
-    base_dir = os.path.dirname(_base_dir)
+from resource_resolver import get_base_dir, get_resources_dir
+base_dir = get_base_dir()
 _CFG: str = os.path.join(base_dir, 'src', 'data', 'configs', 'config.json')
-_RESOURCES_BASE: str = os.path.join(base_dir, 'resources')
+_RESOURCES_BASE: str = get_resources_dir()
 if _RESOURCES_BASE not in sys.path:
     sys.path.insert(0, _RESOURCES_BASE)
 _SUPPORTED_LANGS = ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']
-_LANG: str = 'zh_CN'
+try:
+    _LANG: str = json_tools.load(_CFG).get('lang', 'en_US') if os.path.exists(_CFG) else 'en_US'
+except Exception:
+    _LANG: str = 'en_US'
 _RES: Dict[str, Dict[str, str]] = {}
 def _load_json(path: str) -> Dict[str, Any]:
     try:
@@ -40,7 +31,9 @@ def get_language() -> str:
 def set_language(lang: str) -> None:
     global _LANG
     if lang not in _SUPPORTED_LANGS:
-        lang = 'zh_CN'
+        return
+    if lang == _LANG:
+        return
     _LANG = lang
     try:
         cfg = _load_json(_CFG) if os.path.exists(_CFG) else {}
@@ -60,7 +53,7 @@ def init_language(default_lang: str='zh_CN') -> None:
         cfg = _load_json(_CFG)
         lang = cfg.get('lang', default_lang)
     load_resources(lang)
-    set_language(lang)
+    _LANG = lang
 _DEF = object()
 def t(key: str, default: str | object=_DEF, **fmt) -> str:
     src = _RES.get(_LANG, {})

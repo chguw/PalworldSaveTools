@@ -1585,7 +1585,18 @@
   "inventory.clear_btn": "Claro",
   "inventory.equip_clear_btn": "Claro",
   "inventory.clear_confirm_title": "Limpiar inventario",
-  "inventory.clear_confirm_msg": "¿Eliminar todos los artículos del inventario y los artículos clave?",
+  "inventory.clear_confirm_msg": "¿Eliminar todos los artículos del inventario? (Se conservarán los elementos clave, el equipo y los desbloqueos)",
   "inventory.equip_clear_title": "Borrar equipo",
-  "inventory.equip_clear_msg": "¿Quitar todo el equipo de las ranuras para armas, armaduras y comida?"
+  "inventory.equip_clear_msg": "¿Quitar todo el equipo de las ranuras para armas, armaduras y comida?",
+  "inventory.clear_key_btn": "Claro",
+  "inventory.clear_key_confirm_msg": "¿Eliminar todos los elementos clave?",
+  "inventory.clear_key_confirm_title": "Claro",
+  "character_transfer.no_players_folder": "No se encontró ninguna carpeta de jugadores junto a Level.sav. No se puede cargar guardar.",
+  "edit_pals.show_standard": "Estándar",
+  "edit_pals.show_boss": "Jefe",
+  "edit_pals.create": "Crear",
+  "base_inventory.booth_item_title": "Artículos del stand: {count}",
+  "base_inventory.booth_item_no_data": "Stand: Sin datos del contenedor",
+  "base_inventory.booth_pal_title": "Amigos del stand: {count}",
+  "base_inventory.booth_pal_no_data": "Stand: No hay amigos en la lista"
 }

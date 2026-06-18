@@ -20,6 +20,9 @@ dependencies = [
     "cbor2",
     "msgpack",
     "zstandard",
+    "orjson",
+    "py7zr",
+    "nuitka>=4.1.2",
 ]
 
 [tool.uv.sources]
@@ -36,4 +39,5 @@ include = ["src*"]
 [dependency-groups]
 dev = [
     "cx-freeze>=8.6.0",
+    "pytest",
 ]

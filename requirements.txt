@@ -10,4 +10,5 @@ cbor2
 msgpack
 zstandard
 
+pytest
 ./src/palsav

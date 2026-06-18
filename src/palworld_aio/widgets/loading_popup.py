@@ -1,8 +1,5 @@
-import os
-import sys
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
-from PySide6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve
-from PySide6.QtGui import QPixmap, QMovie
+from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve
 class LoadingPopup(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent, Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
@@ -14,38 +11,13 @@ class LoadingPopup(QWidget):
     def _setup_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        self.gif_label = QLabel(self)
-        self.gif_label.setAlignment(Qt.AlignCenter)
-        gif_path = self._get_gif_path()
-        if os.path.exists(gif_path):
-            self.movie = QMovie(gif_path)
-            if self.movie.isValid():
-                self.gif_label.setMovie(self.movie)
-                self.movie.start()
-                self.movie.jumpToFrame(0)
-                first_frame = self.movie.currentPixmap()
-                if not first_frame.isNull():
-                    scaled_size = first_frame.size()
-                    self.setFixedSize(scaled_size)
-                else:
-                    self.setFixedSize(300, 300)
-            else:
-                self._show_fallback()
-        else:
-            self._show_fallback()
-        layout.addWidget(self.gif_label)
-    def _get_gif_path(self):
-        if getattr(sys, 'frozen', False):
-            base_dir = os.path.dirname(sys.executable)
-            src_dir = os.path.join(base_dir, 'src')
-        else:
-            current_file = os.path.abspath(__file__)
-            src_dir = os.path.dirname(os.path.dirname(os.path.dirname(current_file)))
-        gif_path = os.path.join(src_dir, 'data', 'gui', 'chillet-loading.gif')
-        return gif_path
+        self.label = QLabel(self)
+        self.label.setAlignment(Qt.AlignCenter)
+        self._show_fallback()
+        layout.addWidget(self.label)
     def _show_fallback(self):
-        self.gif_label.setText('Loading...')
-        self.gif_label.setStyleSheet("\n            QLabel {\n                color: #7DD3FC;\n                font-size: 24px;\n                font-weight: bold;\n                font-family: 'Segoe UI',Arial;\n                background: rgba(18,20,24,0.95);\n                border-radius: 12px;\n                padding: 40px;\n            }\n        ")
+        self.label.setText('Loading...')
+        self.label.setStyleSheet("\n            QLabel {\n                color: #7DD3FC;\n                font-size: 24px;\n                font-weight: bold;\n                font-family: 'Segoe UI',Arial;\n                background: rgba(18,20,24,0.95);\n                border-radius: 12px;\n                padding: 40px;\n            }\n        ")
         self.setFixedSize(200, 120)
     def show_with_fade(self):
         if self._is_visible:
@@ -92,6 +64,4 @@ class LoadingPopup(QWidget):
             y = (screen.height() - size.height()) // 2
             self.move(x, y)
     def closeEvent(self, event):
-        if hasattr(self, 'movie') and self.movie:
-            self.movie.stop()
         super().closeEvent(event)

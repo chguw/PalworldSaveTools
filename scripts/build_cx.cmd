@@ -11,7 +11,7 @@ if exist .venv\Scripts\python.exe (
 )
 uv venv .venv
 uv pip install --no-cache -r requirements.txt
-.venv\Scripts\python.exe scripts\scripts\build_cx.py --use-venv %*
+.venv\Scripts\python.exe build\cx_freeze\build_cx.py --use-venv %*
 rmdir /s /q .venv
 if exist uv.lock del uv.lock
 pause

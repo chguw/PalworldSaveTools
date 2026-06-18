@@ -61,6 +61,9 @@ src/palsav/pyooz/build/
 # Test saves
 pal-save/
 
+# Hermes plans
+.hermes/plans/
+
 # External assets
 Exports/
 Backups/

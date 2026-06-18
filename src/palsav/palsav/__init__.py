@@ -23,4 +23,4 @@ def setup_logging(level=logging.INFO, debug=False, debug_log=False, quiet=False)
         fh.setFormatter(TimeFormatter(_DEBUG_FORMAT))
         root.addHandler(fh)
     _LOGGED = True
-from . import commands, compressor, archive, gvas, json_tools, palsav, paltypes, rawdata, _cityhash
+from . import commands, compressor, archive, gvas, json_tools, core, paltypes, rawdata, _cityhash

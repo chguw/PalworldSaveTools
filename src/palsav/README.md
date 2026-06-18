@@ -55,7 +55,7 @@ uv run palsav Level.sav.json --from-json --library zlib --output Level_resaved.s
 ## Library
 
 ```python
-from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
+from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 from palsav.gvas import GvasFile
 from palsav.paltypes import PALWORLD_CUSTOM_PROPERTIES, PALWORLD_TYPE_HINTS
 

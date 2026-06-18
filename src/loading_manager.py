@@ -3,18 +3,16 @@ from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, Q
 from PySide6.QtCore import Qt, QTimer, QThread, Signal, QPropertyAnimation, QPoint, QSize
 from PySide6.QtGui import QPixmap, QFont, QCursor
 from import_libs import *
+from resource_resolver import get_base_dir, get_resources_dir, resource_path
 _result_data = {'status': 'idle', 'data': None}
 def get_base_directory():
-    if getattr(sys, 'frozen', False):
-        return os.path.dirname(sys.executable)
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return get_base_dir()
 def get_src_directory():
-    base_dir = get_base_directory()
-    return os.path.join(base_dir, 'src')
+    return os.path.join(get_base_dir(), 'src')
 def get_resources_directory():
-    return os.path.join(get_base_directory(), 'resources')
+    return get_resources_dir()
 def get_path(filename):
-    return os.path.normpath(os.path.join(get_resources_directory(), filename))
+    return os.path.normpath(resource_path(get_base_dir(), filename))
 def _spawn_process(args):
     try:
         exe = sys.executable
@@ -125,7 +123,7 @@ if '--spawn-loader' in sys.argv:
             return True
         def _load_theme(self):
             try:
-                from palworld_aio.ui.styles import ThemeManager
+                from palworld_aio.ui.chrome.styles import ThemeManager
                 ThemeManager.apply_to_widget(self)
             except Exception:
                 self.setStyleSheet('\nQDialog { background: rgba(12,14,18,0.97); color: #e2e8f0; }\n#mainContainer { background: rgba(18,20,24,0.95); border-radius: 16px; border: 1px solid rgba(125,211,252,0.12); }\n')
@@ -256,6 +254,7 @@ if '--spawn-loader' in sys.argv:
                 except:
                     pass
         def switch_to_error(self, data):
+            from palworld_aio import constants
             if hasattr(self, 'tick_timer'):
                 self.tick_timer.stop()
             if hasattr(self, 'phrase_timer'):
@@ -295,7 +294,7 @@ if '--spawn-loader' in sys.argv:
             txt_edit.setStyleSheet(f"background: {glass_bg}; color: {txt_color}; font-family: 'Consolas'; font-size: 13px; padding: 15px; border: 1px solid {glass_border}; border-radius: 6px;")
             self.inner.addWidget(txt_edit)
             btns = QHBoxLayout()
-            btn_style = f"QPushButton {{ background: {btn_bg}; color: {accent_color}; border: 1px solid {btn_border}; border-radius: 8px; padding: 10px 16px; font-weight: bold; min-width: 120px; font-size: 13px; font-family: 'Segoe UI'; }} QPushButton:hover {{ background: {btn_hover_bg}; border-color: {glass_border}; }}"
+            btn_style = f"QPushButton {{ background: {btn_bg}; color: {accent_color}; border: 1px solid {btn_border}; border-radius: 8px; padding: 10px 16px; font-weight: bold; min-width: 120px; font-size: 13px; font-family: '{constants.FONT_FAMILY}'; }} QPushButton:hover {{ background: {btn_hover_bg}; border-color: {glass_border}; }}"
             c_btn = QPushButton(data.get('copy', 'COPY'))
             c_btn.setStyleSheet(btn_style)
             c_btn.clicked.connect(lambda: self.copy_to_clipboard(data.get('text', ''), c_btn))
@@ -461,11 +460,12 @@ class ErrorDialog(QDialog):
         return True
     def _load_theme(self):
         try:
-            from palworld_aio.ui.styles import ThemeManager
+            from palworld_aio.ui.chrome.styles import ThemeManager
             ThemeManager.apply_to_widget(self)
         except Exception:
             self.setStyleSheet('QWidget{background:rgba(12,14,18,0.98);color:#e2e8f0}QLabel{color:#7DD3FC}')
     def setup_error_ui(self):
+        from palworld_aio import constants
         self.container = QFrame()
         self.container.setObjectName('mainContainer')
         glass_bg = 'rgba(18,20,24,0.95)'
@@ -509,7 +509,7 @@ class ErrorDialog(QDialog):
         txt_edit.setStyleSheet(f"background: {glass_bg}; color: {txt_color}; font-family: 'Consolas'; font-size: 13px; padding: 15px; border: 1px solid {glass_border}; border-radius: 6px;")
         self.inner.addWidget(txt_edit)
         btns = QHBoxLayout()
-        btn_style = f"QPushButton {{ background: {btn_bg}; color: {accent_color}; border: 1px solid {btn_border}; border-radius: 8px; padding: 10px 16px; font-weight: bold; min-width: 120px; font-size: 13px; font-family: 'Segoe UI'; }} QPushButton:hover {{ background: {btn_hover_bg}; border-color: {glass_border}; }}"
+        btn_style = f"QPushButton {{ background: {btn_bg}; color: {accent_color}; border: 1px solid {btn_border}; border-radius: 8px; padding: 10px 16px; font-weight: bold; min-width: 120px; font-size: 13px; font-family: '{constants.FONT_FAMILY}'; }} QPushButton:hover {{ background: {btn_hover_bg}; border-color: {glass_border}; }}"
         c_btn = QPushButton(trans['copy'])
         c_btn.setStyleSheet(btn_style)
         c_btn.clicked.connect(lambda: self.copy_to_clipboard(self.error_text, c_btn))

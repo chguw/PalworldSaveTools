@@ -1,5 +1,5 @@
 from import_libs import *
-from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
+from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 from palsav.gvas import GvasFile, GvasHeader
 from palsav.archive import FArchiveReader, FArchiveWriter
 from palsav.paltypes import PALWORLD_TYPE_HINTS
@@ -8,8 +8,9 @@ from loading_manager import show_information, show_warning
 from PySide6.QtWidgets import QHeaderView, QMainWindow, QWidget, QLineEdit, QTreeWidget, QTreeWidgetItem, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
-from palworld_aio.ui.styles import ThemeManager
-from palworld_aio.container_ownership import ContainerOwnership
+from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio.inventory.container_ownership import ContainerOwnership
+from palworld_aio import constants
 import struct
 import io
 player_list_cache = []
@@ -391,6 +392,10 @@ def choose_level_file(window, level_sav_entry, old_tree, new_tree):
     path, _ = QFileDialog.getOpenFileName(window, t('Select Level.sav file'), '', 'SAV Files(*.sav)')
     if not path:
         return
+    players_dir = os.path.join(os.path.dirname(path), 'Players')
+    if not os.path.isdir(players_dir):
+        show_warning(window, t('error.title'), t('character_transfer.no_players_folder'))
+        return
     def task():
         return background_load_task(path)
     def on_task_complete(result):
@@ -460,7 +465,7 @@ class FixHostSaveWindow(QWidget):
         glass_layout.setSpacing(12)
         file_row = QHBoxLayout()
         file_label = QLabel(t('Select Level.sav file:'))
-        file_label.setFont(QFont('Segoe UI', 10, QFont.Bold))
+        file_label.setFont(QFont(constants.FONT_FAMILY, 10, QFont.Bold))
         file_row.addWidget(file_label)
         self.level_sav_entry = QLineEdit()
         self.level_sav_entry.setPlaceholderText(t('fix_host_save.path_to_level_sav'))
@@ -482,7 +487,7 @@ class FixHostSaveWindow(QWidget):
         old_panel_layout.setContentsMargins(8, 8, 8, 8)
         old_panel_layout.setSpacing(8)
         old_header = QLabel(t('fix_host_save.source_player'))
-        old_header.setFont(QFont('Segoe UI', 11, QFont.Bold))
+        old_header.setFont(QFont(constants.FONT_FAMILY, 11, QFont.Bold))
         old_header.setAlignment(Qt.AlignCenter)
         old_panel_layout.addWidget(old_header)
         old_search_row = QHBoxLayout()
@@ -507,7 +512,7 @@ class FixHostSaveWindow(QWidget):
         new_panel_layout.setContentsMargins(8, 8, 8, 8)
         new_panel_layout.setSpacing(8)
         new_header = QLabel(t('fix_host_save.target_player'))
-        new_header.setFont(QFont('Segoe UI', 11, QFont.Bold))
+        new_header.setFont(QFont(constants.FONT_FAMILY, 11, QFont.Bold))
         new_header.setAlignment(Qt.AlignCenter)
         new_panel_layout.addWidget(new_header)
         new_search_row = QHBoxLayout()
@@ -528,10 +533,10 @@ class FixHostSaveWindow(QWidget):
         glass_layout.addLayout(trees_layout)
         bottom_label = QLabel(t('fix_host_save.tip'))
         bottom_label.setAlignment(Qt.AlignCenter)
-        bottom_label.setFont(QFont('Segoe UI', 9))
+        bottom_label.setFont(QFont(constants.FONT_FAMILY, 9))
         glass_layout.addWidget(bottom_label)
         warning_label = QLabel(t('warning.world_id'))
-        warning_label.setFont(QFont('Segoe UI', 9))
+        warning_label.setFont(QFont(constants.FONT_FAMILY, 9))
         warning_label.setStyleSheet('color: #ffaa00;')
         warning_label.setAlignment(Qt.AlignCenter)
         warning_label.setWordWrap(True)

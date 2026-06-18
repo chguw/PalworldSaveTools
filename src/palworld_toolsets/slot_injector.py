@@ -3,13 +3,14 @@ from palsav.gvas import GvasFile
 from palsav.paltypes import PALWORLD_TYPE_HINTS
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from loading_manager import show_information, show_critical, run_with_loading
-from palsav.palsav import decompress_sav_to_gvas, compress_gvas_to_sav
+from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QFileDialog, QApplication, QFrame, QGridLayout, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QAbstractItemView, QMessageBox, QSpinBox, QGroupBox, QWidget, QScrollArea, QProgressBar
 from PySide6.QtGui import QIcon, QFont, QPixmap, QColor, QPalette
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from concurrent.futures import ThreadPoolExecutor
 import os
-from palworld_aio.ui.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio import constants
 def sav_to_gvasfile(filepath):
     with open(filepath, 'rb') as f:
         data = f.read()
@@ -188,7 +189,7 @@ class SlotNumUpdaterApp(QDialog):
         header_layout.setContentsMargins(16, 12, 16, 12)
         header_layout.setSpacing(12)
         title_label = QLabel(t('slotinjector.table_title'))
-        title_label.setFont(QFont('Segoe UI', 14, QFont.Bold))
+        title_label.setFont(QFont(constants.FONT_FAMILY, 14, QFont.Bold))
         description_label = QLabel(t('slotinjector.description'))
         description_label.setStyleSheet('color: #888888; font-size: 12px;')
         header_layout.addWidget(title_label)
@@ -212,7 +213,7 @@ class SlotNumUpdaterApp(QDialog):
         controls_layout.setSpacing(16)
         slots_layout = QVBoxLayout()
         slots_label = QLabel(t('slotinjector.new_slots_label'))
-        slots_label.setFont(QFont('Segoe UI', 10, QFont.Bold))
+        slots_label.setFont(QFont(constants.FONT_FAMILY, 10, QFont.Bold))
         self.new_slots_entry = QSpinBox()
         self.new_slots_entry.setRange(1, 99999)
         self.new_slots_entry.setValue(960)
@@ -243,7 +244,7 @@ class SlotNumUpdaterApp(QDialog):
         search_layout.setContentsMargins(12, 8, 12, 8)
         search_layout.setSpacing(12)
         search_icon_label = QLabel('🔍')
-        search_icon_label.setFont(QFont('Segoe UI', 14))
+        search_icon_label.setFont(QFont(constants.FONT_FAMILY, 14))
         self.search_entry = QLineEdit()
         self.search_entry.setPlaceholderText(t('slotinjector.search_placeholder'))
         self.search_entry.textChanged.connect(self.filter_table)

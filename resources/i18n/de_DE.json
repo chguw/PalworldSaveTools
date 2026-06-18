@@ -1615,7 +1615,18 @@
   "inventory.clear_btn": "Klar",
   "inventory.equip_clear_btn": "Klar",
   "inventory.clear_confirm_title": "Inventar löschen",
-  "inventory.clear_confirm_msg": "Alle Artikel aus dem Inventar und Schlüsselartikel entfernen?",
+  "inventory.clear_confirm_msg": "Alle Artikel aus dem Inventar entfernen? (Schlüsselgegenstände, Ausrüstung und Freischaltungen bleiben erhalten)",
   "inventory.equip_clear_title": "Klare Ausrüstung",
-  "inventory.equip_clear_msg": "Sämtliche Ausrüstung aus den Waffen-, Rüstungs- und Nahrungsplätzen entfernen?"
+  "inventory.equip_clear_msg": "Sämtliche Ausrüstung aus den Waffen-, Rüstungs- und Nahrungsplätzen entfernen?",
+  "inventory.clear_key_btn": "Klar",
+  "inventory.clear_key_confirm_msg": "Alle wichtigen Elemente entfernen?",
+  "inventory.clear_key_confirm_title": "Klar",
+  "character_transfer.no_players_folder": "Neben Level.sav wurde kein Players-Ordner gefunden. Speichern kann nicht geladen werden.",
+  "edit_pals.show_standard": "Standard",
+  "edit_pals.show_boss": "Chef",
+  "edit_pals.create": "Erstellen",
+  "base_inventory.booth_item_title": "Standartikel: {count}",
+  "base_inventory.booth_item_no_data": "Stand: Keine Containerdaten",
+  "base_inventory.booth_pal_title": "Standfreunde: {count}",
+  "base_inventory.booth_pal_no_data": "Booth: Keine Freunde aufgeführt"
 }

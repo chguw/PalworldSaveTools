@@ -42,7 +42,7 @@ def backup_whole_directory(source_folder, backup_folder):
         return dt.datetime.now().strftime('%Y%m%d_%H%M%S')
     source_folder = os.path.abspath(source_folder)
     if not os.path.isabs(backup_folder):
-        base_path = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else get_base_directory()
+        base_path = '.'
         backup_folder = os.path.abspath(os.path.join(base_path, backup_folder))
     else:
         backup_folder = os.path.abspath(backup_folder)

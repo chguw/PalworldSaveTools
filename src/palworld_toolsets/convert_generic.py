@@ -1,7 +1,7 @@
 import sys, os, gc, threading, time
 from import_libs import *
 from loading_manager import run_with_loading, show_information
-from palworld_aio.ui.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager
 from PySide6.QtCore import QEventLoop
 from PySide6.QtWidgets import QApplication, QFileDialog
 from palsav.commands.convert import main as convert_main

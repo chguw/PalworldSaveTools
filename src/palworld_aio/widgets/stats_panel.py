@@ -4,7 +4,7 @@ from PySide6.QtGui import QFont, QPainter, QFontMetrics
 from i18n import t
 from loading_manager import show_information, show_warning
 from palworld_aio import constants
-from palworld_aio.ui.sidebar_widget import NerdBtn
+from palworld_aio.ui.chrome.sidebar_widget import NerdBtn
 class StatsPanel(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)

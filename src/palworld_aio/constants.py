@@ -1,5 +1,6 @@
 import os
 import sys
+from resource_resolver import get_base_dir, get_src_dir, resource_path
 BG = '#0A0B0E'
 GLASS = '#121418'
 ACCENT = '#3B8ED0'
@@ -16,6 +17,8 @@ BUTTON_HOVER = '#2A2D3A'
 BUTTON_PRIMARY = ACCENT
 BUTTON_SECONDARY = GLASS
 FONT_FAMILY = 'Segoe UI'
+FONT_FAMILY_NERD = 'Hack Nerd Font'
+FONT_FAMILY_MONO = 'Consolas'
 FONT_SIZE = 10
 FONT_SIZE_BOLD = 10
 FONT_SIZE_LARGE = 12
@@ -35,15 +38,11 @@ BETA_VERSION_URL = 'https://raw.githubusercontent.com/deafdudecomputers/Palworld
 RELEASE_DOWNLOAD_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/download/v{version}/PST_standalone_v{version}.7z'
 RELEASES_PAGE_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 def get_base_path():
-    if getattr(sys, 'frozen', False):
-        return os.path.dirname(sys.executable)
-    return os.getcwd()
+    return get_base_dir()
 def get_src_path():
-    if getattr(sys, 'frozen', False):
-        return os.path.join(os.path.dirname(sys.executable), 'src')
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return get_src_dir()
 def get_icon_path():
-    return os.path.join(get_base_path(), 'resources', 'icon.ico')
+    return resource_path(get_base_dir(), 'icon.ico')
 ICON_PATH = get_icon_path()
 EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'deletion_exclusions.json')
 ZONE_EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'zone_exclusions.json')

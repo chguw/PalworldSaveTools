@@ -11,7 +11,7 @@ if exist .venv\Scripts\python.exe (
 )
 uv venv .venv
 uv pip install --no-cache -r requirements.txt
-".venv\Scripts\python.exe" scripts\scripts\add_translation_keys.py %*
+".venv\Scripts\python.exe" scripts\scrs\add_translation_keys.py %*
 if exist uv.lock del uv.lock
 pause
 exit /b %errorlevel%

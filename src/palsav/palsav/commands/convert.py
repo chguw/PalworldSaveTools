@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 from palsav import setup_logging
 from palsav.gvas import GvasFile
 from palsav import json_tools
-from palsav.palsav import compress_gvas_to_sav, decompress_sav_to_gvas
+from palsav.core import compress_gvas_to_sav, decompress_sav_to_gvas
 from palsav.paltypes import DISABLED_PROPERTIES, PALWORLD_CUSTOM_PROPERTIES, PALWORLD_TYPE_HINTS
 @contextlib.contextmanager
 def _gc_paused():

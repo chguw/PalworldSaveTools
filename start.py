@@ -41,7 +41,7 @@ def ensure_venv():
         log('Failed to create venv', RED)
         return False
     log('Installing dependencies...', CYAN)
-    result = subprocess.run(['uv', 'pip', 'install', '--no-cache', '-r', str(PROJECT_DIR / 'requirements.txt')])
+    result = subprocess.run(['uv', 'sync'])
     uv_lock = PROJECT_DIR / 'uv.lock'
     if uv_lock.exists():
         uv_lock.unlink()

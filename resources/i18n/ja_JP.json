@@ -1591,7 +1591,18 @@
   "inventory.clear_btn": "クリア",
   "inventory.equip_clear_btn": "クリア",
   "inventory.clear_confirm_title": "在庫のクリア",
-  "inventory.clear_confirm_msg": "インベントリとキーアイテムからすべてのアイテムを削除しますか?",
+  "inventory.clear_confirm_msg": "在庫からすべてのアイテムを削除しますか? (キーアイテム、装備、ロック解除は保持されます)",
   "inventory.equip_clear_title": "クリア装備",
-  "inventory.equip_clear_msg": "武器、防具、食料スロットからすべての装備を削除しますか?"
+  "inventory.equip_clear_msg": "武器、防具、食料スロットからすべての装備を削除しますか?",
+  "inventory.clear_key_btn": "クリア",
+  "inventory.clear_key_confirm_msg": "重要なアイテムをすべて削除しますか?",
+  "inventory.clear_key_confirm_title": "クリア",
+  "character_transfer.no_players_folder": "Level.sav の隣に Players フォルダーが見つかりません。セーブをロードできません。",
+  "edit_pals.show_standard": "標準",
+  "edit_pals.show_boss": "ボス",
+  "edit_pals.create": "作成する",
+  "base_inventory.booth_item_title": "ブースアイテム: {count}",
+  "base_inventory.booth_item_no_data": "ブース: コンテナデータなし",
+  "base_inventory.booth_pal_title": "ブース仲間: {count}",
+  "base_inventory.booth_pal_no_data": "ブース: 友達のリストはありません"
 }

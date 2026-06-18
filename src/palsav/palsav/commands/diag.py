@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def _load_sav(path):
-    from palsav.palsav import decompress_sav_to_gvas
+    from palsav.core import decompress_sav_to_gvas
     from palsav.gvas import GvasFile
     from palsav.paltypes import PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PROPERTIES
 

@@ -1573,7 +1573,18 @@
   "inventory.clear_btn": "Clair",
   "inventory.equip_clear_btn": "Clair",
   "inventory.clear_confirm_title": "Effacer l'inventaire",
-  "inventory.clear_confirm_msg": "Supprimer tous les articles de l'inventaire et les articles clés ?",
+  "inventory.clear_confirm_msg": "Supprimer tous les articles de l'inventaire ? (Les éléments clés, l'équipement et les déverrouillages seront conservés)",
   "inventory.equip_clear_title": "Effacer l'équipement",
-  "inventory.equip_clear_msg": "Supprimer tout l'équipement des emplacements d'armes, d'armures et de nourriture ?"
+  "inventory.equip_clear_msg": "Supprimer tout l'équipement des emplacements d'armes, d'armures et de nourriture ?",
+  "inventory.clear_key_btn": "Clair",
+  "inventory.clear_key_confirm_msg": "Supprimer tous les éléments clés ?",
+  "inventory.clear_key_confirm_title": "Clair",
+  "character_transfer.no_players_folder": "Aucun dossier Players trouvé à côté de Level.sav. Impossible de charger la sauvegarde.",
+  "edit_pals.show_standard": "Standard",
+  "edit_pals.show_boss": "Chef",
+  "edit_pals.create": "Créer",
+  "base_inventory.booth_item_title": "Articles du stand : {count}",
+  "base_inventory.booth_item_no_data": "Booth : aucune donnée de conteneur",
+  "base_inventory.booth_pal_title": "Amis du stand : {count}",
+  "base_inventory.booth_pal_no_data": "Booth : Aucun ami répertorié"
 }

@@ -353,7 +353,7 @@
         {
             "name": "Campfire",
             "asset": "Campfire",
-            "icon": "/icons/structures/T_icon_buildObject_CampFire.webp"
+            "icon": "/icons/structures/Campfire.webp"
         },
         {
             "name": "Majestic Candlestick",
@@ -3203,7 +3203,7 @@
         {
             "name": "Glass Pillar",
             "asset": "Glass_Pillars",
-            "icon": "/icons/structures/T_icon_buildObject_Glass_pillar.webp"
+            "icon": "/icons/structures/Glass_Pillars.webp"
         },
         {
             "name": "Glass Pyramid Roof",
@@ -3778,7 +3778,7 @@
         {
             "name": "Metal Pillar",
             "asset": "Metal_Pillars",
-            "icon": "/icons/structures/T_icon_buildObject_Metal_pillar.webp"
+            "icon": "/icons/structures/Metal_Pillars.webp"
         },
         {
             "name": "Metal_Roof",
@@ -3813,7 +3813,7 @@
         {
             "name": "Metal Foundation",
             "asset": "Metal_foundation",
-            "icon": "/icons/structures/T_icon_buildObject_Metal_Foundation.webp"
+            "icon": "/icons/structures/Metal_foundation.webp"
         },
         {
             "name": "Metal_pillars",
@@ -3823,12 +3823,12 @@
         {
             "name": "Metal Roof",
             "asset": "Metal_roof",
-            "icon": "/icons/structures/T_icon_buildObject_Metal_Roof.webp"
+            "icon": "/icons/structures/Metal_roof.webp"
         },
         {
             "name": "Metal Stairs",
             "asset": "Metal_stair",
-            "icon": "/icons/structures/T_icon_buildObject_Metal_Stair.webp"
+            "icon": "/icons/structures/Metal_stair.webp"
         },
         {
             "name": "Metal Wall",
@@ -4668,7 +4668,7 @@
         {
             "name": "Stone Pillar",
             "asset": "Stone_Pillar",
-            "icon": "/icons/structures/T_icon_buildObject_Stone_pillar.webp"
+            "icon": "/icons/structures/Stone_Pillar.webp"
         },
         {
             "name": "Stone Pyramid Roof",
@@ -4743,7 +4743,7 @@
         {
             "name": "Stone Foundation",
             "asset": "Stone_foundation",
-            "icon": "/icons/structures/T_icon_buildObject_Stone_Foundation.webp"
+            "icon": "/icons/structures/Stone_foundation.webp"
         },
         {
             "name": "Stone_pillar",
@@ -4753,12 +4753,12 @@
         {
             "name": "Stone Roof",
             "asset": "Stone_roof",
-            "icon": "/icons/structures/T_icon_buildObject_Stone_Roof.webp"
+            "icon": "/icons/structures/Stone_roof.webp"
         },
         {
             "name": "Stone Stairs",
             "asset": "Stone_stair",
-            "icon": "/icons/structures/T_icon_buildObject_Stone_Stair.webp"
+            "icon": "/icons/structures/Stone_stair.webp"
         },
         {
             "name": "Stone Wall",
@@ -5293,7 +5293,7 @@
         {
             "name": "Wooden Pillar",
             "asset": "Wooden_Pillar",
-            "icon": "/icons/structures/T_icon_buildObject_Wooden_pillar.webp"
+            "icon": "/icons/structures/Wooden_Pillar.webp"
         },
         {
             "name": "Wooden Pyramid Roof",
@@ -5676,7 +5676,7 @@
             "asset": "Arrow_Fire",
             "icon": "/icons/technologies/T_itemicon_Ammo_Arrow_Fire.webp",
             "type": "standard",
-            "description": "Arrows for shooting with Fire Bow and Fire Arrow Crossbow.\r\nDeals  damage.\r\nRequires Primitive Workbench to craft."
+            "description": "Arrows for shooting with Fire Bow and Fire Arrow Crossbow.\r\nDeals Fire damage.\r\nRequires Primitive Workbench to craft."
         },
         {
             "name": "Poison Arrow",
@@ -5921,21 +5921,21 @@
             "asset": "Battle_Defense_BowGun",
             "icon": "/icons/technologies/T_icon_buildObject_efenseBulletLauncher_BowGun.webp",
             "type": "standard",
-            "description": "Assign a Pal with  suitability and it will protect a base using the crossbow."
+            "description": "Assign a Pal with Handcraft suitability and it will protect a base using the crossbow."
         },
         {
             "name": "Mounted Machine Gun",
             "asset": "Battle_Defense_MachineGun",
             "icon": "/icons/technologies/T_icon_buildObject_DefenseMachinegun.webp",
             "type": "standard",
-            "description": "Assign a Pal with  suitability and it will protect a base using the machine gun."
+            "description": "Assign a Pal with Handcraft suitability and it will protect a base using the machine gun."
         },
         {
             "name": "Mounted Missile Launcher",
             "asset": "Battle_Defense_Missile",
             "icon": "/icons/technologies/T_icon_buildObject_efenseBulletLauncher_Missile.webp",
             "type": "standard",
-            "description": "Assign a Pal with  suitability and it will protect a base using the missile launcher."
+            "description": "Assign a Pal with Handcraft suitability and it will protect a base using the missile launcher."
         },
         {
             "name": "Normal Parachute",
@@ -6306,7 +6306,7 @@
             "asset": "Cauldron",
             "icon": "/icons/technologies/T_icon_buildObject_Cauldron.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Productmedicine efficiency of Pals."
         },
         {
             "name": "Ceiling Lamp",
@@ -6670,14 +6670,14 @@
             "asset": "FlowerBed",
             "icon": "/icons/technologies/T_icon_buildObject_FlowerBed.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Collection efficiency of Pals."
         },
         {
             "name": "Water Fountain",
             "asset": "Fountain",
             "icon": "/icons/technologies/T_icon_buildObject_Fountain.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Watering efficiency of Pals."
         },
         {
             "name": "Frag Grenade",
@@ -7061,7 +7061,7 @@
             "name": "Global Palbox",
             "asset": "GlobalPalStorage",
             "icon": "/icons/technologies/T_icon_buildObject_GlobalPalStorage.webp",
-            "type": "boss",
+            "type": "standard",
             "description": ""
         },
         {
@@ -7202,21 +7202,21 @@
             "asset": "Infra_ItemChest_Grade_01",
             "icon": "/icons/technologies/T_icon_buildObject_ItemChest.webp",
             "type": "standard",
-            "description": "Used to store items. Place at a base and Pals with\r\n suitability will automatically carry items to it."
+            "description": "Used to store items. Place at a base and Pals with\r\nTransport suitability will automatically carry items to it."
         },
         {
             "name": "Metal Chest",
             "asset": "Infra_ItemChest_Grade_02",
             "icon": "/icons/technologies/T_icon_buildObject_ItemChest_02.webp",
             "type": "standard",
-            "description": "Can be used to store more items. Pals with\r\n suitability will automatically carry items to it."
+            "description": "Can be used to store more items. Pals with\r\nTransport suitability will automatically carry items to it."
         },
         {
             "name": "Refined Metal Chest",
             "asset": "Infra_ItemChest_Grade_03",
             "icon": "/icons/technologies/T_icon_buildObject_ItemChest_03.webp",
             "type": "standard",
-            "description": "Can be used to store even more items. Pals with\r\n suitability will automatically carry items to it."
+            "description": "Can be used to store even more items. Pals with\r\nTransport suitability will automatically carry items to it."
         },
         {
             "name": "Nail",
@@ -7459,7 +7459,7 @@
         {
             "name": "Metal Structure Set",
             "asset": "Metal_houseset",
-            "icon": "/icons/technologies/T_icon_buildObject_Metal_Foundation.webp",
+            "icon": "/icons/technologies/T_icon_buildObject_Metal_Wall_V2.webp",
             "type": "standard",
             "description": "Set for building bases using metal.\r\nAllows building of metal foundations, walls, ceilings, stairs and other things necessary for shelters."
         },
@@ -7468,7 +7468,7 @@
             "asset": "MiningTool",
             "icon": "/icons/technologies/T_icon_buildObject_MiningTool.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Mining efficiency of Pals."
         },
         {
             "name": "Missile Ammo",
@@ -7552,7 +7552,7 @@
             "asset": "OlympicCauldron",
             "icon": "/icons/technologies/T_icon_buildObject_OlympicCauldron.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Emitflame efficiency of Pals."
         },
         {
             "name": "Pal Surgery Table",
@@ -7741,7 +7741,7 @@
             "asset": "Product_Cooking_Grade_03",
             "icon": "/icons/technologies/T_icon_buildObject_ElectricKitchen.webp",
             "type": "standard",
-            "description": "Needs electricity but can prepare high-quality food more efficiently.\r\nRequires Pal with  suitability."
+            "description": "Needs electricity but can prepare high-quality food more efficiently.\r\nRequires Pal with Emitflame suitability."
         },
         {
             "name": "Ore Mining Site",
@@ -7762,28 +7762,28 @@
             "asset": "Product_Factory_Hard_Grade_01",
             "icon": "/icons/technologies/T_icon_buildObject_Factory_Hard_01.webp",
             "type": "standard",
-            "description": "Produces faster than Primitive Workbench.\r\nRequires Pal with  trait."
+            "description": "Produces faster than Primitive Workbench.\r\nRequires Pal with Handcraft trait."
         },
         {
             "name": "Production Assembly Line",
             "asset": "Product_Factory_Hard_Grade_02",
             "icon": "/icons/technologies/T_icon_buildObject_Factory_Hard_02.webp",
             "type": "standard",
-            "description": "Needs electricity but produces items at a faster pace.\r\nRequires Pal with  trait."
+            "description": "Needs electricity but produces items at a faster pace.\r\nRequires Pal with Handcraft trait."
         },
         {
             "name": "Production Assembly Line II",
             "asset": "Product_Factory_Hard_Grade_03",
             "icon": "/icons/technologies/T_icon_buildObject_Factory_Hard_03.webp",
             "type": "standard",
-            "description": "Needs electricity but produces items at an even faster pace.\r\nRequires Pal with  trait."
+            "description": "Needs electricity but produces items at an even faster pace.\r\nRequires Pal with Handcraft trait."
         },
         {
             "name": "Berry Plantation",
             "asset": "Product_Farm_Berries",
             "icon": "/icons/technologies/T_icon_buildObject_FarmBlockV2_Berries.webp",
             "type": "standard",
-            "description": "Can produce berries at a base. Requires Pal with\r\n, , and  suitabilities."
+            "description": "Can produce berries at a base. Requires Pal with\r\nSeeding, Watering, and Collectresourcepickable suitabilities."
         },
         {
             "name": "Carrot Plantation",
@@ -7797,7 +7797,7 @@
             "asset": "Product_Farm_Lettuce",
             "icon": "/icons/technologies/T_icon_buildObject_FarmBlockV2_Lettuce.webp",
             "type": "standard",
-            "description": "Farm for producing lettuce.\r\nRequires Pal with , , and  suitabilities."
+            "description": "Farm for producing lettuce.\r\nRequires Pal with Seeding, Watering, and Collectresourcepickable suitabilities."
         },
         {
             "name": "Onion Plantation",
@@ -7818,14 +7818,14 @@
             "asset": "Product_Farm_tomato",
             "icon": "/icons/technologies/T_icon_buildObject_FarmBlockV2_tomato.webp",
             "type": "standard",
-            "description": "Farm for producing tomatoes.\r\nRequires Pal with , , and  suitabilities."
+            "description": "Farm for producing tomatoes.\r\nRequires Pal with Seeding, Watering, and Collectresourcepickable suitabilities."
         },
         {
             "name": "Wheat Plantation",
             "asset": "Product_Farm_wheat",
             "icon": "/icons/technologies/T_icon_buildObject_FarmBlockV2_wheet.webp",
             "type": "standard",
-            "description": "Use it to grow ingredients for Bread.\r\nRequires Pal with , , and  suitabilities."
+            "description": "Use it to grow ingredients for Bread.\r\nRequires Pal with Seeding, Watering, and Collectresourcepickable suitabilities."
         },
         {
             "name": "Primitive Furnace",
@@ -7853,14 +7853,14 @@
             "asset": "Product_Medicine_Grade_01",
             "icon": "/icons/technologies/T_icon_buildObject_MedicineFacility_01.webp",
             "type": "standard",
-            "description": "Can produce simple medicine.\r\nRequires Pal with  trait."
+            "description": "Can produce simple medicine.\r\nRequires Pal with Productmedicine trait."
         },
         {
             "name": "Electric Medicine Workbench",
             "asset": "Product_Medicine_Grade_02",
             "icon": "/icons/technologies/T_icon_buildObject_MedicineFacility_02.webp",
             "type": "standard",
-            "description": "Needs electricity but can produce higher-quality medicine.\r\nRequires Pal with  trait."
+            "description": "Needs electricity but can produce higher-quality medicine.\r\nRequires Pal with Productmedicine trait."
         },
         {
             "name": "Stone Pickaxe",
@@ -7895,7 +7895,7 @@
             "asset": "Product_StationDeforest",
             "icon": "/icons/technologies/T_icon_buildObject_StationDeforest2.webp",
             "type": "standard",
-            "description": "Can produce wood at a base.\r\nRequires Pal with  suitability."
+            "description": "Can produce wood at a base.\r\nRequires Pal with Deforest suitability."
         },
         {
             "name": "High Quality Wood Logging Site",
@@ -7909,7 +7909,7 @@
             "asset": "Product_StonePit",
             "icon": "/icons/technologies/T_icon_buildObject_StonePit.webp",
             "type": "standard",
-            "description": "Can produce stone at a base.\r\nRequires Pal with  suitability."
+            "description": "Can produce stone at a base.\r\nRequires Pal with Mining suitability."
         },
         {
             "name": "Sulfur Mine",
@@ -7923,21 +7923,21 @@
             "asset": "Product_WeaponFactory_Dirty_Grade_01",
             "icon": "/icons/technologies/T_icon_buildObject_WeaponFactory_Dirty_01.webp",
             "type": "standard",
-            "description": "Produces simple mechanical weapons.\r\nRequires Pal with  suitability."
+            "description": "Produces simple mechanical weapons.\r\nRequires Pal with Handcraft suitability."
         },
         {
             "name": "Weapon Assembly Line",
             "asset": "Product_WeaponFactory_Dirty_Grade_02",
             "icon": "/icons/technologies/T_icon_buildObject_WeaponFactory_Dirty_02.webp",
             "type": "standard",
-            "description": "Needs electricity but produces weapons and ammunition at a faster pace.\r\nRequires Pal with  trait."
+            "description": "Needs electricity but produces weapons and ammunition at a faster pace.\r\nRequires Pal with Handcraft trait."
         },
         {
             "name": "Weapon Assembly Line II",
             "asset": "Product_WeaponFactory_Dirty_Grade_03",
             "icon": "/icons/technologies/T_icon_buildObject_WeaponFactory_Dirty_03.webp",
             "type": "standard",
-            "description": "Needs electricity but produces weapons and ammunition at an even faster pace.\r\nRequires Pal with  trait."
+            "description": "Needs electricity but produces weapons and ammunition at an even faster pace.\r\nRequires Pal with Handcraft trait."
         },
         {
             "name": "Pal Gear Workbench",
@@ -8094,7 +8094,7 @@
             "description": "Strange shield made with Paldium technology.\r\nAs a result of further experiments, ultimate quality has been achieved.\r\nCan be made at Production Assembly Line II."
         },
         {
-            "name": "Shield_07",
+            "name": "Ancient Shield",
             "asset": "Shield_07",
             "icon": "/icons/technologies/T_itemicon_Armor_Shield_07.webp",
             "type": "standard",
@@ -8126,7 +8126,7 @@
             "asset": "Silo",
             "icon": "/icons/technologies/T_icon_buildObject_Silo.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Seeding efficiency of Pals."
         },
         {
             "name": "Melpaca Saddle",
@@ -8246,6 +8246,20 @@
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Gloves.webp",
             "type": "standard",
             "description": "The Tocotoco's Gloves becomes craftable at the Pal Gear Workbench."
+        },
+        {
+            "name": "Pharapace Saddle",
+            "asset": "SkillUnlock_CubeTurtle",
+            "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
+            "type": "standard",
+            "description": ""
+        },
+        {
+            "name": "Pharapace Primo Saddle",
+            "asset": "SkillUnlock_CubeTurtle_Neutral",
+            "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
+            "type": "standard",
+            "description": ""
         },
         {
             "name": "Xenolord Saddle",
@@ -8752,20 +8766,6 @@
             "description": ""
         },
         {
-            "name": "Pharapace Saddle",
-            "asset": "SkillUnlock_PyramidTurtle",
-            "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
-            "type": "standard",
-            "description": ""
-        },
-        {
-            "name": "Pharapace Primo Saddle",
-            "asset": "SkillUnlock_PyramidTurtle_Neutral",
-            "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
-            "type": "standard",
-            "description": ""
-        },
-        {
             "name": "Ragnahawk Saddle",
             "asset": "SkillUnlock_RedArmorBird",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
@@ -9106,7 +9106,7 @@
             "asset": "Snowman",
             "icon": "/icons/technologies/T_icon_buildObject_Snowman.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Cool efficiency of Pals."
         },
         {
             "name": "Hot Spring",
@@ -9239,21 +9239,21 @@
             "asset": "Special_SphereFactory_Black_Grade_01",
             "icon": "/icons/technologies/T_icon_buildObject_SphereFactory_Black_01.webp",
             "type": "standard",
-            "description": "Produces Spheres for capturing Pals.\r\nRequires Pal with  suitability."
+            "description": "Produces Spheres for capturing Pals.\r\nRequires Pal with Handcraft suitability."
         },
         {
             "name": "Sphere Assembly Line",
             "asset": "Special_SphereFactory_Black_Grade_02",
             "icon": "/icons/technologies/T_icon_buildObject_SphereFactory_Black_02.webp",
             "type": "standard",
-            "description": "Creates Pal Spheres at a faster pace.\r\nRequires Pal with  suitability."
+            "description": "Creates Pal Spheres at a faster pace.\r\nRequires Pal with Handcraft suitability."
         },
         {
             "name": "Sphere Assembly Line II",
             "asset": "Special_SphereFactory_Black_Grade_03",
             "icon": "/icons/technologies/T_icon_buildObject_SphereFactory_Black_03.webp",
             "type": "standard",
-            "description": "Creates Pal Spheres at an even faster pace.\r\nRequires Pal with  suitability."
+            "description": "Creates Pal Spheres at an even faster pace.\r\nRequires Pal with Handcraft suitability."
         },
         {
             "name": "Advanced Sphere Assembly Line",
@@ -9321,7 +9321,7 @@
         {
             "name": "Stone Structure Set",
             "asset": "Stone_houseset",
-            "icon": "/icons/technologies/T_icon_buildObject_Stone_Foundation.webp",
+            "icon": "/icons/technologies/T_icon_buildObject_Stone_Wall_V2.webp",
             "type": "standard",
             "description": "Set for building bases using stone.\r\nAllows building of stone foundations, walls, ceilings, stairs and other things necessary for shelters."
         },
@@ -9330,7 +9330,7 @@
             "asset": "Stump",
             "icon": "/icons/technologies/T_icon_buildObject_Stump.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Deforest efficiency of Pals."
         },
         {
             "name": "Nutrient Tonic",
@@ -9365,7 +9365,7 @@
             "asset": "ToolBoxV1",
             "icon": "/icons/technologies/T_icon_buildObject_ToolBoxV1.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Convertitem efficiency of Pals."
         },
         {
             "name": "Mounted Torch",
@@ -9379,7 +9379,7 @@
             "asset": "TransmissionTower",
             "icon": "/icons/technologies/T_icon_buildObject_TransmissionTower.webp",
             "type": "standard",
-            "description": "Place in a base to improve the  efficiency of Pals."
+            "description": "Place in a base to improve the Generateelectricity efficiency of Pals."
         },
         {
             "name": "Bear Trap (Small)",
@@ -9547,10 +9547,10 @@
             "asset": "Workbench",
             "icon": "/icons/technologies/T_icon_buildObject_WorkBench.webp",
             "type": "standard",
-            "description": "Primitive Workbench for producing simple items.\r\nPals with  suitability help\r\nspeed up production."
+            "description": "Primitive Workbench for producing simple items.\r\nPals with Handcraft suitability help\r\nspeed up production."
         },
         {
-            "name": "[WIP] Ancient Ingot 2",
+            "name": "Palicite Ingot",
             "asset": "WorldTreeIngot",
             "icon": "/icons/technologies/T_itemicon_Material_WorldTreeIngot.webp",
             "type": "standard",

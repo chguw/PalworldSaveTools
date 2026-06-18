@@ -1,8 +1,30 @@
 import sys
 import os
+
+_found_root = None
+if os.path.isfile(sys.executable):
+    _exe_dir = os.path.dirname(os.path.realpath(sys.executable))
+    if os.path.isdir(os.path.join(_exe_dir, 'resources')):
+        _found_root = _exe_dir
+    else:
+        _parent = os.path.dirname(_exe_dir)
+        if os.path.isdir(os.path.join(_parent, 'resources')):
+            _found_root = _parent
+if not _found_root:
+    _probe = os.path.dirname(os.path.abspath(__file__))
+    for _ in range(5):
+        if os.path.isdir(os.path.join(_probe, 'resources')):
+            _found_root = _probe
+            break
+        _probe = os.path.dirname(_probe)
+    if not _found_root:
+        _found_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys._PST_BINARY_ROOT = _found_root
+
 import traceback
 import multiprocessing
-if getattr(sys, 'frozen', False):
+_is_frozen = getattr(sys, 'frozen', False)
+if _is_frozen:
     import subprocess
     multiprocessing.set_executable(sys.executable)
     _original_popen = subprocess.Popen
@@ -16,7 +38,7 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()
 os.environ['QT_LOGGING_RULES'] = '*=false'
 os.environ['QT_DEBUG_PLUGINS'] = '0'
-if getattr(sys, 'frozen', False):
+if _is_frozen:
     import io
     class MockStdin:
         def read(self, size=-1):
@@ -33,11 +55,11 @@ if getattr(sys, 'frozen', False):
         sys.stdin = MockStdin()
     sys.stdout = io.StringIO()
     sys.stderr = io.StringIO()
-if getattr(sys, 'frozen', False):
-    base_dir = os.path.dirname(sys.executable)
+if _is_frozen:
+    base_dir = sys._PST_BINARY_ROOT
 else:
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if getattr(sys, 'frozen', False):
+if _is_frozen:
     src_dir = os.path.join(base_dir, 'src')
 else:
     src_dir = base_dir if os.path.basename(base_dir) == 'src' else os.path.join(base_dir, 'src')
@@ -63,8 +85,8 @@ try:
         from import_libs import center_window
         from palworld_aio import constants
         from palworld_aio.ui import MainWindow
-        from palworld_aio.save_manager import save_manager
-        from palworld_aio.func_manager import remove_invalid_items_from_save, remove_invalid_pals_from_save, remove_invalid_passives_from_save, delete_invalid_structure_map_objects, delete_unreferenced_data, delete_non_base_map_objects, fix_illegal_pals_in_save
+        from palworld_aio.managers.save_manager import save_manager
+        from palworld_aio.managers.func_manager import remove_invalid_items_from_save, remove_invalid_pals_from_save, remove_invalid_passives_from_save, delete_invalid_structure_map_objects, delete_unreferenced_data, delete_non_base_map_objects, fix_illegal_pals_in_save
         from loading_manager import show_error_screen
 except Exception:
     from PySide6.QtWidgets import QApplication
@@ -74,8 +96,8 @@ except Exception:
     from import_libs import center_window
     from palworld_aio import constants
     from palworld_aio.ui import MainWindow
-    from palworld_aio.save_manager import save_manager
-    from palworld_aio.func_manager import remove_invalid_items_from_save, remove_invalid_pals_from_save, remove_invalid_passives_from_save, delete_invalid_structure_map_objects, delete_unreferenced_data, delete_non_base_map_objects, fix_illegal_pals_in_save
+    from palworld_aio.managers.save_manager import save_manager
+    from palworld_aio.managers.func_manager import remove_invalid_items_from_save, remove_invalid_pals_from_save, remove_invalid_passives_from_save, delete_invalid_structure_map_objects, delete_unreferenced_data, delete_non_base_map_objects, fix_illegal_pals_in_save
     from loading_manager import show_error_screen
 def qt_message_handler(mode, context, message):
     if 'QThreadStorage' in str(message) and 'destroyed before end of thread' in str(message):
@@ -151,7 +173,7 @@ def run_aio():
         constants.loaded_level_json = sav_to_gvas_wrapper(p)
         t1 = time.perf_counter()
         print(f'Save loaded in {t1 - t0:.2f} seconds')
-        from palworld_aio.func_manager import scan_and_protect_death_bags
+        from palworld_aio.managers.func_manager import scan_and_protect_death_bags
         scan_and_protect_death_bags()
         save_manager._build_player_levels()
         if not constants.loaded_level_json:
@@ -178,7 +200,7 @@ def run_aio():
                     constants.base_guild_lookup[str(base_id_uuid)] = {'GuildName': guild_name, 'GuildID': gid}
         print('Loading done')
         if options['logs']:
-            base_path = constants.get_base_path()
+            base_path = '.'
             log_folder = os.path.join(base_path, 'Logs', 'Scan Save Logger')
             import shutil
             if os.path.exists(log_folder):
