@@ -5,7 +5,7 @@ from palworld_aio import constants
 from palworld_aio.utils import are_equal_uuids, as_uuid, fast_deepcopy, extract_value, sav_to_gvasfile, gvasfile_to_sav
 from palworld_aio.managers.data_manager import delete_base_camp
 from palworld_aio.inventory.container_ownership import ContainerOwnership
-from palworld_aio.editor.edit_pals import _generate_pal_save_param
+from palworld_aio.editor.edit_pals import _generate_pal_save_param, get_pal_base_data
 def move_player_to_guild(player_uid, target_guild_id):
     if not constants.current_save_path or not constants.loaded_level_json:
         return False
@@ -555,7 +555,6 @@ def rebuild_all_guilds():
                 group_id_str = str(group_id) if not isinstance(group_id, str) else group_id
                 skeleton['value']['RawData']['value']['group_id'] = group_id_str
                 new_sp.pop('MapObjectConcreteInstanceIdAssignedToExpedition', None)
-                new_sp.pop('SanityValue', None)
                 new_sp.pop('HungerType', None)
                 new_sp.pop('PhysicalHealth', None)
                 new_sp.pop('WorkerSick', None)
@@ -565,6 +564,11 @@ def rebuild_all_guilds():
                 new_sp.pop('FoodRegeneEffectInfo', None)
                 new_sp.pop('ArenaRestoreParameter', None)
                 new_sp.pop('WorkSuitabilityOptionInfo', None)
+                base_data = get_pal_base_data(cid)
+                if base_data:
+                    max_stomach = base_data.get('stats', {}).get('max_full_stomach', 300)
+                    new_sp['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+                new_sp['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
                 sp_cleaned = _uuid_to_str(new_sp)
                 for k in list(new_sp.keys()):
                     new_sp[k] = sp_cleaned[k]
@@ -573,6 +577,28 @@ def rebuild_all_guilds():
                     new_sp['OwnerPlayerUId']['value'] = _ArchUUID.from_str(str(new_sp['OwnerPlayerUId']['value']))
                 new_sp['SlotId']['value']['ContainerId']['value']['ID']['value'] = _ArchUUID.from_str(str(new_sp['SlotId']['value']['ContainerId']['value']['ID']['value']))
                 skeleton['value']['RawData']['value']['group_id'] = _ArchUUID.from_str(str(skeleton['value']['RawData']['value']['group_id']))
+                from palworld_aio.utils import safe_nested_get, calculate_max_hp
+                from palworld_aio.editor.edit_pals import _ensure_friendship_thresholds
+                max_hp = safe_nested_get(new_sp, ['MaxHP', 'value', 'Value', 'value'], 0)
+                if max_hp <= 0 and base_data:
+                    is_boss = cid.upper().startswith('BOSS_')
+                    is_lucky = extract_value(new_sp, 'IsRarePal', False)
+                    lv = extract_value(new_sp, 'Level', 1)
+                    talent_hp = extract_value(new_sp, 'Talent_HP', 0)
+                    rank_hp = extract_value(new_sp, 'Rank_HP', 0)
+                    trust = extract_value(new_sp, 'FriendshipPoint', 0)
+                    rank = extract_value(new_sp, 'Rank', 0)
+                    is_awake = bool(extract_value(new_sp, 'bIsAwakening', False))
+                    thr = _ensure_friendship_thresholds()
+                    trust_rank = 0
+                    for r in range(len(thr) - 1, 0, -1):
+                        if trust >= thr[r]:
+                            trust_rank = r
+                            break
+                    condenser = int(rank) if isinstance(rank, (int, float)) else 0
+                    max_hp = calculate_max_hp(base_data, lv, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser, is_awake)
+                if max_hp > 0:
+                    new_sp['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
                 new_entries.append(skeleton)
                 slot_entry = {'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': slot_idx}, 'RawData': {'array_type': 'ByteProperty', 'id': None, 'value': {'player_uid': '00000000-0000-0000-0000-000000000000', 'instance_id': new_inst, 'permission_tribe_id': 0}, 'custom_type': '.worldSaveData.CharacterContainerSaveData.Value.Slots.Slots.RawData', 'type': 'ArrayProperty'}}
                 new_container_slots.append((nu(target_cid), slot_entry))

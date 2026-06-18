@@ -10,7 +10,8 @@ from palsav.gvas import GvasFile
 from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio.inventory.container_ownership import ContainerOwnership
 from palworld_aio.inventory.inventory_manager import PlayerInventory
-from palworld_aio.editor.edit_pals import _generate_pal_save_param
+from palworld_aio.editor.edit_pals import _generate_pal_save_param, get_pal_base_data, _ensure_friendship_thresholds
+from palworld_aio.utils import calculate_max_hp, safe_nested_get
 from palworld_aio import constants
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palsav.archive import UUID as PalUUID
@@ -556,8 +557,33 @@ def migrate_pal_via_api(pal_data, target_uid, targ_lvl, target_player_json, targ
     sp['OwnerPlayerUId'] = {'struct_type': 'Guid', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': target_uid, 'type': 'StructProperty'}
     sp['SlotId']['value']['SlotIndex']['value'] = slot_idx
     sp['SlotId']['value']['ContainerId']['value']['ID']['value'] = container_id
-    for k in ['OldOwnerPlayerUIds', 'MapObjectConcreteInstanceIdAssignedToExpedition', 'SanityValue', 'HungerType', 'PhysicalHealth', 'WorkerSick', 'CurrentWorkSuitability', 'FoodWithStatusEffect', 'Tiemr_FoodWithStatusEffect', 'FoodRegeneEffectInfo', 'ArenaRestoreParameter', 'WorkSuitabilityOptionInfo']:
+    for k in ['OldOwnerPlayerUIds', 'MapObjectConcreteInstanceIdAssignedToExpedition', 'HungerType', 'PhysicalHealth', 'WorkerSick', 'CurrentWorkSuitability', 'FoodWithStatusEffect', 'Tiemr_FoodWithStatusEffect', 'FoodRegeneEffectInfo', 'ArenaRestoreParameter', 'WorkSuitabilityOptionInfo']:
         sp.pop(k, None)
+    base_data = get_pal_base_data(cid)
+    if base_data:
+        max_stomach = base_data.get('stats', {}).get('max_full_stomach', 300)
+        sp['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+    sp['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+    max_hp = safe_nested_get(sp, ['MaxHP', 'value', 'Value', 'value'], 0)
+    if max_hp <= 0 and base_data:
+        is_boss = cid.upper().startswith('BOSS_')
+        is_lucky = extract_value(sp, 'IsRarePal', False)
+        lv = extract_value(sp, 'Level', 1)
+        talent_hp = extract_value(sp, 'Talent_HP', 0)
+        rank_hp = extract_value(sp, 'Rank_HP', 0)
+        trust = extract_value(sp, 'FriendshipPoint', 0)
+        rank = extract_value(sp, 'Rank', 0)
+        is_awake = bool(extract_value(sp, 'bIsAwakening', False))
+        thr = _ensure_friendship_thresholds()
+        trust_rank = 0
+        for r in range(len(thr) - 1, 0, -1):
+            if trust >= thr[r]:
+                trust_rank = r
+                break
+        condenser = int(rank) if isinstance(rank, (int, float)) else 0
+        max_hp = calculate_max_hp(base_data, lv, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser, is_awake)
+    if max_hp > 0:
+        sp['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
     cmap = targ_lvl.setdefault('CharacterSaveParameterMap', {}).setdefault('value', [])
     cmap.append(skeleton)
     char_containers = targ_lvl.setdefault('CharacterContainerSaveData', {}).setdefault('value', [])
