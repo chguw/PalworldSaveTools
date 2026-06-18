@@ -63,6 +63,19 @@ class ScrollableContextMenu(QWidget):
         lbl = QLabel(text)
         lbl.setStyleSheet('color: #94A3B8; font-size: 10px; font-weight: 600; padding: 4px 16px 2px 16px; background: transparent; border: none;')
         self.layout.addWidget(lbl)
+    def add_action(self, action):
+        btn = QPushButton(action.text())
+        btn.setFlat(True)
+        btn.setCursor(Qt.PointingHandCursor)
+        btn.setMinimumHeight(34)
+        btn.setStyleSheet(_BTN_STYLE)
+        btn.clicked.connect(action.trigger)
+        self.layout.addWidget(btn)
+        return btn
+    def addSeparator(self):
+        self.add_sep()
+    def exec(self, pos):
+        return self.exec_(pos)
     def _select(self, key):
         self._result = key
         self.close()
