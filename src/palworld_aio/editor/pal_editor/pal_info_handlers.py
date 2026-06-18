@@ -102,9 +102,9 @@ class PalInfoHandlerMixin:
             self._star_shine_timer = None
 
     def _tick_star_shine(self):
-        import random
-        idx = random.randint(0, len(self.star_labels) - 1)
-        self.star_labels[idx].flash()
+        self._star_shine_phase = (self._star_shine_phase + 0.0032) % 1.0
+        for sl in self.star_labels:
+            sl.set_phase(self._star_shine_phase)
 
     def _on_level_click(self):
         if not self._raw:
@@ -231,60 +231,104 @@ class PalInfoHandlerMixin:
         dlg.setLabelText(f'{key} (0-20):')
         dlg.setInputMode(QInputDialog.IntInput)
         dlg.setIntRange(lo, hi)
+        dlg.setIntValue(cur)
+        dlg.setStyleSheet(INPUT_DIALOG_STYLE)
+        if dlg.exec() == QDialog.Accepted:
+            self._raw[key] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': dlg.intValue()}}
+            self._recalc_hp()
 
     def _on_active_skill_click(self, slot_idx, pos=None):
-        _ensure_skill_data()
-        self._show_skill_picker(t('edit_pals.select_skill'), _data._SKILL_DATA, slot_idx, True, pos)
+        self._show_skill_picker(t('edit_pals.select_skill'), PalFrame._SKILLMAP, slot_idx, True, pos)
 
     def _on_passive_click(self, slot_idx, pos=None):
-        _ensure_passive_data()
-        self._show_skill_picker(t('edit_pals.select_passive'), _data._PASSIVE_DATA, slot_idx, False, pos)
+        self._show_skill_picker(t('edit_pals.select_passive'), PalFrame._PASSMAP, slot_idx, False, pos)
 
     def _show_skill_picker(self, title, skill_map, slot_idx, is_active, pos=None):
-        from palworld_aio.ui.dialogs.skill_picker import SkillPicker
-        picker = SkillPicker(self, title, skill_map, pos)
-        if picker.exec() == QDialog.Accepted:
-            asset = picker.selected_asset
-            if asset:
-                if is_active:
-                    self._set_active_skill(slot_idx, asset)
+        picker = SkillPicker(self)
+        try:
+            cur_data = self._raw.get('EquipWaza' if is_active else 'PassiveSkillList', {})
+            cur_list = cur_data.get('value', {}).get('values', []) if isinstance(cur_data, dict) else cur_data if isinstance(cur_data, list) else []
+            cur_val = cur_list[slot_idx] if slot_idx < len(cur_list) else ''
+            if isinstance(cur_val, dict):
+                cur_val = cur_val.get('value', '')
+        except Exception:
+            cur_val = ''
+        skip_items = set()
+        try:
+            if is_active:
+                ew = self._raw.get('EquipWaza', {})
+                ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
+                for v in ew_list:
+                    if v:
+                        key = v.split('::')[-1].lower() if '::' in v else v.lower()
+                        skip_items.add(key)
+            else:
+                ps = self._raw.get('PassiveSkillList', {})
+                ps_list = ps.get('value', {}).get('values', []) if isinstance(ps, dict) else ps if isinstance(ps, list) else []
+                for v in ps_list:
+                    clean = v['value'] if isinstance(v, dict) else v
+                    if clean:
+                        skip_items.add(clean.lower())
+        except Exception:
+            pass
+        result = picker.pick(skill_map, is_active, pos=pos, current_value=cur_val if isinstance(cur_val, str) else '', skip_items=skip_items)
+        if result is None:
+            return
+        if result == '':
+            asset = ''
+        else:
+            asset = None
+            for a, n in skill_map.items():
+                if n == result:
+                    asset = a
+                    break
+            if not asset:
+                asset_lower = result.lower()
+                if asset_lower in skill_map:
+                    asset = result
                 else:
-                    self._set_passive_skill(slot_idx, asset)
-                self._refresh()
+                    return
+        QTimer.singleShot(0, lambda a=asset, s=slot_idx, ia=is_active: self._set_active_skill(s, a) if ia else self._set_passive_skill(s, a))
 
     def _set_active_skill(self, slot_idx, asset):
         if not self._raw:
             return
-        equip = self._raw.get('EquipWaza', {})
-        if isinstance(equip, dict):
-            e_list = equip.get('value', {}).get('values', [])
-        else:
-            e_list = []
-        while len(e_list) <= slot_idx:
-            e_list.append({'id': None, 'value': ''})
-        e_list[slot_idx] = {'id': None, 'value': asset}
-        self._raw['EquipWaza'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': e_list}, 'type': 'ArrayProperty'}
+        ew_data = self._raw.get('EquipWaza', {})
+        cur = ew_data.get('value', {}).get('values', []) if isinstance(ew_data, dict) else ew_data if isinstance(ew_data, list) else []
+        if not isinstance(cur, list):
+            cur = []
+        while len(cur) <= slot_idx:
+            cur.append('')
+        if asset and '::' not in asset:
+            asset = f'EPalWazaID::{asset}'
+        cur[slot_idx] = asset
+        cur = [s for s in cur if s]
+        self._raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': cur[:3]}, 'type': 'ArrayProperty'}
+        self._refresh()
 
     def _set_passive_skill(self, slot_idx, asset):
         if not self._raw:
             return
-        p_skills = self._raw.get('PassiveSkillList', {})
-        if isinstance(p_skills, dict):
-            p_list = p_skills.get('value', {}).get('values', [])
-        else:
-            p_list = []
-        while len(p_list) <= slot_idx:
-            p_list.append({'id': None, 'value': ''})
-        p_list[slot_idx] = {'id': None, 'value': asset}
-        self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': p_list[:4]}, 'type': 'ArrayProperty'}
+        ps_data = self._raw.get('PassiveSkillList', {})
+        cur = ps_data.get('value', {}).get('values', []) if isinstance(ps_data, dict) else ps_data if isinstance(ps_data, list) else []
+        if not isinstance(cur, list):
+            cur = []
+        while len(cur) <= slot_idx:
+            cur.append('')
+        cur[slot_idx] = asset
+        self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': cur[:4]}, 'type': 'ArrayProperty'}
+        self._refresh()
 
     def _get_current_passive_list(self):
         if not self._raw:
             return []
-        p_skills = self._raw.get('PassiveSkillList', {})
-        if isinstance(p_skills, dict):
-            return p_skills.get('value', {}).get('values', [])
-        return []
+        ps = self._raw.get('PassiveSkillList', {})
+        cur = ps.get('value', {}).get('values', []) if isinstance(ps, dict) else ps if isinstance(ps, list) else []
+        result = []
+        for v in cur:
+            clean = v['value'] if isinstance(v, dict) else v
+            result.append(clean if isinstance(clean, str) else '')
+        return result
 
     def _on_passive_loadout(self):
         base_dir = constants.get_src_path()
