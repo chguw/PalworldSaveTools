@@ -82,5 +82,17 @@
     "cooltimereduction_up_1",
     "deffence_up3",
     "mutationpal_immortal"
+  ],
+  "Max Work Speed Dark": [
+    "worldtree_craftspeed",
+    "craftspeed_up3",
+    "craftspeed_up2",
+    "pal_corporateslave"
+  ],
+  "Max Work Speed Vamp": [
+    "worldtree_craftspeed",
+    "craftspeed_up3",
+    "craftspeed_up2",
+    "vampire"
   ]
 }
