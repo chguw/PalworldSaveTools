@@ -1,7 +1,7 @@
 import os
 import math
 import re
-from functools import partial
+
 from PySide6.QtWidgets import QApplication, QDialog, QFrame, QGraphicsOpacityEffect, QGridLayout, QHBoxLayout, QInputDialog, QLabel, QListWidget, QListWidgetItem, QProgressBar, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QVBoxLayout, QWidget
 from PySide6.QtCore import Qt, QEvent, QObject, QPoint, QSize, QTimer, Signal
 from PySide6.QtGui import QFontMetrics, QIcon, QShortcut, QKeySequence
@@ -328,36 +328,35 @@ class PalInfoWidget(PalInfoDisplayMixin, PalInfoHandlerMixin, QFrame):
     def _on_portrait_context_menu(self, pos):
         if not self._raw:
             return
-        menu, actions = build_pal_context_menu(self, self._raw)
-        fav_action, lock_actions = actions['fav']
-        for i, sub_a in enumerate(lock_actions):
-            sub_a.triggered.connect(partial(self._on_fav_set, i))
-        action = menu.exec(self.bracket_wrapper.mapToGlobal(pos))
-        if action == actions['boss']:
+        menu = build_pal_context_menu(self, self._raw)
+        key = menu.exec_(self.bracket_wrapper.mapToGlobal(pos))
+        if key is None:
+            return
+        if key == 'boss':
             self._on_boss_toggle()
-        elif action == actions['lucky']:
+        elif key == 'lucky':
             self._on_lucky_toggle()
-        elif action == actions['awake']:
+        elif key == 'awake':
             self._on_awake_toggle()
-        elif action == actions['dna']:
+        elif key == 'dna':
             self._on_dna_toggle()
-        elif action == actions['max']:
+        elif key == 'max':
             self._on_max_click()
-        elif action == actions['learn']:
+        elif key == 'learn':
             try:
                 self._learn_all_skills()
                 show_information(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_success'))
             except Exception:
                 show_warning(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_fail'))
-        elif action == actions['learned']:
+        elif key == 'learned':
             if self._raw:
                 from .create_dialogs import _show_learned_moves_dialog as _do_show
                 _do_show(self._raw, self)
-        elif action == actions['bulk_sync_pal']:
+        elif key == 'bulk_sync_pal':
             if self._raw:
                 self._on_bulk_sync_pal()
-        elif action == actions['delete']:
-            pass
+        elif key and key.startswith('fav_'):
+            self._on_fav_set(int(key.split('_')[1]))
     def _on_bulk_sync_pal(self):
         if not self._raw:
             return
