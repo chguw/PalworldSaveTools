@@ -138,6 +138,7 @@ def run_aio():
             constants.files_to_delete = set()
             constants.PLAYER_PAL_COUNTS = {}
             constants.player_levels = {}
+            constants.player_character_cache = {}
             constants.PLAYER_DETAILS_CACHE = {}
             constants.PLAYER_REMAPS = {}
             constants.exclusions = {}

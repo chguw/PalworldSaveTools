@@ -52,6 +52,7 @@ original_loaded_level_json = None
 backup_save_path = None
 srcGuildMapping = None
 player_levels = {}
+player_character_cache = {}
 base_guild_lookup = {}
 container_lookup = {}
 files_to_delete = set()

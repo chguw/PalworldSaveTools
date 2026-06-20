@@ -58,6 +58,7 @@ class SaveManager(QObject):
             constants.files_to_delete = set()
             constants.PLAYER_PAL_COUNTS = {}
             constants.player_levels = {}
+            constants.player_character_cache = {}
             constants.PLAYER_DETAILS_CACHE = {}
             constants.PLAYER_REMAPS = {}
             constants.exclusions = {}
@@ -193,6 +194,7 @@ class SaveManager(QObject):
     def _build_player_levels(self):
         char_map = constants.loaded_level_json['properties']['worldSaveData']['value'].get('CharacterSaveParameterMap', {}).get('value', [])
         uid_level_map = defaultdict(lambda: '?')
+        uid_entry_map = {}
         for entry in char_map:
             try:
                 sp = entry['value']['RawData']['value']['object']['SaveParameter']
@@ -206,10 +208,13 @@ class SaveManager(QObject):
                 uid = str(uid_obj.get('value', '') if isinstance(uid_obj, dict) else uid_obj)
                 level = extract_value(sp_val, 'Level', '?')
                 if uid:
-                    uid_level_map[uid.replace('-', '')] = level
+                    clean = uid.replace('-', '')
+                    uid_level_map[clean] = level
+                    uid_entry_map[clean] = entry
             except Exception:
                 continue
         constants.player_levels = dict(uid_level_map)
+        constants.player_character_cache = uid_entry_map
     def _count_pals_found(self, data, player_pals_count, log_folder, current_save_path, guild_name_map, illegal_pals_by_owner=None):
         base_dir = '.'
         if illegal_pals_by_owner is None:

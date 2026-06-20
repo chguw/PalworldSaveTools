@@ -6,8 +6,6 @@ from palworld_aio import constants
 from resource_resolver import resource_path
 from palworld_aio.utils import are_equal_uuids, as_uuid, sav_to_gvasfile, gvasfile_to_sav
 from palworld_aio.managers.data_manager import delete_player
-from palsav.core import compress_gvas_to_sav
-from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 def _load_exp_data():
     base_dir = constants.get_base_path()
     exp_file = resource_path(base_dir, 'game_data', 'pal_exp_table.json')
@@ -225,68 +223,31 @@ def _load_relic_data():
         return (cumax, maxrank)
     except Exception:
         return ({}, {})
-RELIC_CUMULATIVE_MAX, RELIC_MAX_RANK = _load_relic_data()
+_, RELIC_MAX_RANK = _load_relic_data()
 RELIC_TO_STATUS_NAME = {'EPalRelicType::CapturePower': '捕獲率', 'EPalRelicType::HungerReduction': '空腹率低減', 'EPalRelicType::SwimSpeed': '泳ぎ速度', 'EPalRelicType::FoodDecayReduction': '食料腐敗低減', 'EPalRelicType::JumpPower': 'ジャンプ力', 'EPalRelicType::GliderSpeed': '滑空速度', 'EPalRelicType::ClimbSpeed': '崖登り速度', 'EPalRelicType::StatusAilmentResist': '状態異常耐性', 'EPalRelicType::ExpBonus': '経験値ボーナス', 'EPalRelicType::RainbowPassiveRate': '虹パッシブ率', 'EPalRelicType::MoveSpeed': '移動速度アップ', 'EPalRelicType::SphereHoming': 'パルスフィアホーミング', 'EPalRelicType::StaminaReduction': 'スタミナ消費軽減'}
 def max_all_abilities(player_uids):
     if not constants.loaded_level_json:
         return False
     if not constants.current_save_path:
         return False
-    from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
-    from palworld_aio.inventory.inventory_manager import PlayerInventory
     level_changed = False
     for uid in player_uids:
-        uid_clean = str(uid).replace('-', '').upper()
-        players_dir = os.path.join(constants.current_save_path, 'Players')
-        if not os.path.isdir(players_dir):
+        uid_clean = str(uid).replace('-', '').lower()
+        entry = constants.player_character_cache.get(uid_clean)
+        if not entry:
             continue
-        inv = PlayerInventory(uid_clean)
-        inv.load()
-        gvas = inv.player_gvas
-        rd = gvas.properties['SaveData']['value']['RecordData']['value']
-        if 'RelicPossessNumMap' not in rd:
-            rd['RelicPossessNumMap'] = {'key_type': 'EnumProperty', 'value_type': 'IntProperty', 'key_struct_type': None, 'value_struct_type': None, 'id': None, 'value': [], 'type': 'MapProperty'}
-        rmap = rd['RelicPossessNumMap']
-        rmap['value'] = [{'key': rk, 'value': max_val} for rk, max_val in RELIC_CUMULATIVE_MAX.items()]
-        if 'RelicPossessNum' not in rd:
-            rd['RelicPossessNum'] = {'id': None, 'value': 0, 'type': 'IntProperty'}
-        rd['RelicPossessNum']['value'] = sum((e.get('value', 0) for e in rmap['value']))
-        if rd.get('RelicBonusExpTableIndex', {}).get('value', 0) < 9999:
-            rd['RelicBonusExpTableIndex'] = {'id': None, 'value': 9999, 'type': 'IntProperty'}
-        sav_path = os.path.join(players_dir, f'{uid_clean}.sav')
-        gvasfile_to_sav(gvas, sav_path)
-        wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
-        cmap = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
-        for entry in cmap:
-            raw = entry.get('value', {}).get('RawData', {}).get('value', {})
-            sp = raw.get('object', {}).get('SaveParameter', {})
-            if sp.get('struct_type') != 'PalIndividualCharacterSaveParameter':
-                continue
-            sv = sp.get('value', {})
-            if not sv.get('IsPlayer', {}).get('value'):
-                continue
-            uo = entry.get('key', {}).get('PlayerUId', {})
-            eu = str(uo.get('value', '')).replace('-', '').lower() if isinstance(uo, dict) else ''
-            if eu == uid_clean:
-                sl = sv.setdefault('GotStatusPointList', {}).setdefault('value', {}).setdefault('values', [])
-                seen_names = {s.get('StatusName', {}).get('value', ''): s for s in sl}
-                for rk, stat_name in RELIC_TO_STATUS_NAME.items():
-                    max_val = RELIC_MAX_RANK.get(rk, 99)
-                    if stat_name in seen_names:
-                        if seen_names[stat_name]['StatusPoint']['value'] != max_val:
-                            seen_names[stat_name]['StatusPoint']['value'] = max_val
-                            level_changed = True
-                    else:
-                        sl.append({'StatusName': {'id': None, 'value': stat_name, 'type': 'NameProperty'}, 'StatusPoint': {'id': None, 'value': max_val, 'type': 'IntProperty'}})
-                        level_changed = True
-                break
-    if level_changed:
-        constants.dirty = True
-        g = constants.loaded_level_json.gvas_file
-        t = 50 if 'Pal.PalworldSaveGame' in g.header.save_game_class_name else 49
-        data = compress_gvas_to_sav(g.write(SKP_PALWORLD_CUSTOM_PROPERTIES), t)
-        with open(os.path.join(constants.current_save_path, 'Level.sav'), 'wb') as f:
-            f.write(data)
+        sv = entry['value']['RawData']['value']['object']['SaveParameter']['value']
+        sl = sv.setdefault('GotStatusPointList', {}).setdefault('value', {}).setdefault('values', [])
+        seen_names = {s.get('StatusName', {}).get('value', ''): s for s in sl}
+        for rk, stat_name in RELIC_TO_STATUS_NAME.items():
+            max_val = RELIC_MAX_RANK.get(rk, 99)
+            if stat_name in seen_names:
+                if seen_names[stat_name]['StatusPoint']['value'] != max_val:
+                    seen_names[stat_name]['StatusPoint']['value'] = max_val
+                    level_changed = True
+            else:
+                sl.append({'StatusName': {'id': None, 'value': stat_name, 'type': 'NameProperty'}, 'StatusPoint': {'id': None, 'value': max_val, 'type': 'IntProperty'}})
+                level_changed = True
     constants.dirty = True
     return True
 def adjust_player_level(player_uid, target_level):
