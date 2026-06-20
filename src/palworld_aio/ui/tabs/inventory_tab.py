@@ -731,6 +731,7 @@ class ItemPickerDialog(QDialog):
             list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
             list_item.setData(Qt.UserRole + 3, type_a)
             list_item.setData(Qt.UserRole + 4, item.get('description', ''))
+            list_item.setData(Qt.UserRole + 5, item.get('type_b', ''))
             icon_path = item.get('icon', '')
             if icon_path:
                 pixmap = ItemData.get_item_icon(icon_path, QSize(48, 48))
@@ -763,8 +764,9 @@ class ItemPickerDialog(QDialog):
     def _on_item_clicked(self, item: QListWidgetItem):
         self.selected_item = item.data(Qt.UserRole)
         type_a = item.data(Qt.UserRole + 3) or ''
+        type_b = item.data(Qt.UserRole + 5) or ''
         item_desc = item.data(Qt.UserRole + 4) or ''
-        is_singleton = type_a in SINGLETON_TYPE_A
+        is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
         if not self._hide_quantity:
             self.qty_label.setVisible(not is_singleton)
             self.qty_spin.setVisible(not is_singleton)

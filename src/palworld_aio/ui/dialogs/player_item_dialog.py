@@ -195,6 +195,7 @@ class PlayerItemActionDialog(QDialog):
                 list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
                 list_item.setData(Qt.UserRole + 3, type_a)
                 list_item.setData(Qt.UserRole + 4, item.get('description', ''))
+                list_item.setData(Qt.UserRole + 5, item.get('type_b', ''))
                 desc = item.get('description', '')
                 tip = f'<b>{name}</b><br>({asset})'
                 if desc:
@@ -220,6 +221,7 @@ class PlayerItemActionDialog(QDialog):
         self.selected_item_id = item.data(Qt.UserRole)
         self.selected_item_name = item.text()
         type_a = item.data(Qt.UserRole + 3) or ''
+        type_b = item.data(Qt.UserRole + 5) or ''
         item_desc = item.data(Qt.UserRole + 4) or ''
         self.item_info_label.setText(f'{self.selected_item_name}: {self.selected_item_id}')
         self.item_info_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
@@ -228,7 +230,7 @@ class PlayerItemActionDialog(QDialog):
             self.item_desc_label.setVisible(True)
         else:
             self.item_desc_label.setVisible(False)
-        if type_a in SINGLETON_TYPE_A:
+        if type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject':
             self.qty_spin.setValue(1)
             self.qty_spin.setVisible(False)
         else:
