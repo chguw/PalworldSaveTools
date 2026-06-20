@@ -178,13 +178,13 @@ class PlayerItemActionDialog(QDialog):
                 if not is_essential:
                     if asset.startswith('PalEgg_') or asset.startswith('YakushimaParts'):
                         continue
+                desc = item.get('description', '').strip()
+                if not desc or desc.lower() in ('', 'en text', 'en_text', 'none', '-', '---'):
+                    continue
                 if is_essential:
                     if 'Effigy' in name:
                         continue
                     if asset in unlock_assets:
-                        continue
-                    desc = item.get('description', '').strip()
-                    if desc in ('', '-'):
                         continue
                     if name == asset:
                         continue
