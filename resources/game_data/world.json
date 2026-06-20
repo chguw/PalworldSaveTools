@@ -3,7 +3,7 @@
         {
             "name": "---",
             "asset": "---",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -15,7 +15,7 @@
         {
             "name": "Altar_RaidBossArea",
             "asset": "Altar_RaidBossArea",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -207,25 +207,25 @@
         {
             "name": "AntiAirCamp",
             "asset": "AntiAirCamp",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "AntiAirMissileLauncher",
             "asset": "AntiAirMissileLauncher",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "AntiAircraft_LaserTower",
             "asset": "AntiAircraft_LaserTower",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "AntiAircraft_MachineGun",
             "asset": "AntiAircraft_MachineGun",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -237,7 +237,7 @@
         {
             "name": "Banyan_Big",
             "asset": "Banyan_Big",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -351,8 +351,8 @@
         {
             "name": "BlastFurnace5",
             "asset": "BlastFurnace5",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "BlastFurnace_2",
@@ -513,13 +513,13 @@
         {
             "name": "CommonDropItem3D",
             "asset": "CommonDropItem3D",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "CommonDropItem3D_SK",
             "asset": "CommonDropItem3D_SK",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -621,169 +621,169 @@
         {
             "name": "Ancient Remains",
             "asset": "DamagableBone0001",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0001",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Copper Ore",
             "asset": "DamagableRock0002",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pure Quartz",
             "asset": "DamagableRock0003",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Coal",
             "asset": "DamagableRock0004",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Paldium Ore",
             "asset": "DamagableRock0005",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Sulfur",
             "asset": "DamagableRock0006",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0007",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0008",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0009",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0010",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0011",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0012",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "SandStone",
             "asset": "DamagableRock0013",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0014",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0015",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Rock",
             "asset": "DamagableRock0016",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DamagableRock0017",
             "asset": "DamagableRock0017",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DamagableRock0018",
             "asset": "DamagableRock0018",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Hexolite Quartz",
             "asset": "DamagableRock0019",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Soralite",
             "asset": "DamagableRock0020",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DamagableRock0021",
             "asset": "DamagableRock0021",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Ancient Lava",
             "asset": "DamagableRock0022",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DamagableRock_PV",
             "asset": "DamagableRock_PV",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DamagableTree_Yakushima001",
             "asset": "DamagableTree_Yakushima001",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DamagableTree_Yakushima002",
             "asset": "DamagableTree_Yakushima002",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DamagableTree_Yakushima003",
             "asset": "DamagableTree_Yakushima003",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DamagableWood0001",
             "asset": "DamagableWood0001",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -795,7 +795,7 @@
         {
             "name": "DamagedScarecrow_Test",
             "asset": "DamagedScarecrow_Test",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -813,14 +813,14 @@
         {
             "name": "Death Chest",
             "asset": "DeathPenaltyChest",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Tuppanyan sticker",
             "asset": "Decal_PalSticker_PinkCat",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "Mounted Crossbow",
@@ -849,8 +849,8 @@
         {
             "name": "DefenseMinigun",
             "asset": "DefenseMinigun",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "Mounted Missile Launcher",
@@ -897,19 +897,19 @@
         {
             "name": "DestroyableWall_Rock01",
             "asset": "DestroyableWall_Rock01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "DestroyableWall_Rock02",
             "asset": "DestroyableWall_Rock02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Dev_ItemChest",
             "asset": "Dev_ItemChest",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -933,13 +933,13 @@
         {
             "name": "DroppedCharacter",
             "asset": "DroppedCharacter",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Tree",
             "asset": "DummyFoliage",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -958,13 +958,13 @@
             "name": "ElectricGenerator2",
             "asset": "ElectricGenerator2",
             "icon": "/icons/structures/T_icon_buildObject_ElectricGenerator.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "ElectricGenerator3",
             "asset": "ElectricGenerator3",
             "icon": "/icons/structures/T_icon_buildObject_ElectricGenerator.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Large Power Generator",
@@ -975,8 +975,8 @@
         {
             "name": "ElectricGenerator_Slave",
             "asset": "ElectricGenerator_Slave",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "Electric Egg Incubator",
@@ -999,2413 +999,2413 @@
         {
             "name": "EnemyCamp_Altar",
             "asset": "EnemyCamp_Altar",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Andon",
             "asset": "EnemyCamp_Andon",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Banyan_Big",
             "asset": "EnemyCamp_Banyan_Big",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Barrel01_Iron",
             "asset": "EnemyCamp_Barrel01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Barrel02_Iron",
             "asset": "EnemyCamp_Barrel02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Barrel03_Iron",
             "asset": "EnemyCamp_Barrel03_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Barrel_Wood",
             "asset": "EnemyCamp_Barrel_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BaseCampBattleDirector",
             "asset": "EnemyCamp_BaseCampBattleDirector",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BaseCampItemDispenser",
             "asset": "EnemyCamp_BaseCampItemDispenser",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BaseCampWorkHard",
             "asset": "EnemyCamp_BaseCampWorkHard",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BathTub_Stone",
             "asset": "EnemyCamp_BathTub_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Believer_Banner",
             "asset": "EnemyCamp_Believer_Banner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Believer_Flag",
             "asset": "EnemyCamp_Believer_Flag",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Bench_Wood",
             "asset": "EnemyCamp_Bench_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BlastFurnace",
             "asset": "EnemyCamp_BlastFurnace",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BlastFurnace2",
             "asset": "EnemyCamp_BlastFurnace2",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BlastFurnace3",
             "asset": "EnemyCamp_BlastFurnace3",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BlastFurnace4",
             "asset": "EnemyCamp_BlastFurnace4",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Bonsai",
             "asset": "EnemyCamp_Bonsai",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Box01_Iron",
             "asset": "EnemyCamp_Box01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Box01_Stone",
             "asset": "EnemyCamp_Box01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Box02_Iron",
             "asset": "EnemyCamp_Box02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Box_Wood",
             "asset": "EnemyCamp_Box_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BreedFarm",
             "asset": "EnemyCamp_BreedFarm",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_BuildableGoddessStatue",
             "asset": "EnemyCamp_BuildableGoddessStatue",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Byobu",
             "asset": "EnemyCamp_Byobu",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CableCoil01_Iron",
             "asset": "EnemyCamp_CableCoil01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CampFire",
             "asset": "EnemyCamp_CampFire",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CandleStand",
             "asset": "EnemyCamp_CandleStand",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Cauldron",
             "asset": "EnemyCamp_Cauldron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CeilingLamp",
             "asset": "EnemyCamp_CeilingLamp",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Chair01_Iron",
             "asset": "EnemyCamp_Chair01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Chair01_Pal",
             "asset": "EnemyCamp_Chair01_Pal",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Chair01_Stone",
             "asset": "EnemyCamp_Chair01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Chair01_Wood",
             "asset": "EnemyCamp_Chair01_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Chair02_Iron",
             "asset": "EnemyCamp_Chair02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Chair02_Stone",
             "asset": "EnemyCamp_Chair02_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CharacterRankUp",
             "asset": "EnemyCamp_CharacterRankUp",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Clock01_Stone",
             "asset": "EnemyCamp_Clock01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Clock01_Wall_Iron",
             "asset": "EnemyCamp_Clock01_Wall_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CompositeDesk",
             "asset": "EnemyCamp_CompositeDesk",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ConservationGroupBannerA",
             "asset": "EnemyCamp_ConservationGroupBannerA",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ConservationGroupBannerB",
             "asset": "EnemyCamp_ConservationGroupBannerB",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Container01_Iron",
             "asset": "EnemyCamp_Container01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CookingStove",
             "asset": "EnemyCamp_CookingStove",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Cooler",
             "asset": "EnemyCamp_Cooler",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CoolerBox",
             "asset": "EnemyCamp_CoolerBox",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CoolerPalFoodBox",
             "asset": "EnemyCamp_CoolerPalFoodBox",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CopperPit",
             "asset": "EnemyCamp_CopperPit",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_CopperPit_2",
             "asset": "EnemyCamp_CopperPit_2",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Counter_Wood",
             "asset": "EnemyCamp_Counter_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Crusher",
             "asset": "EnemyCamp_Crusher",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Curtain01_Wall_Stone",
             "asset": "EnemyCamp_Curtain01_Wall_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DamagedScarecrow",
             "asset": "EnemyCamp_DamagedScarecrow",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DefenseBowGun",
             "asset": "EnemyCamp_DefenseBowGun",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DefenseMachinegun",
             "asset": "EnemyCamp_DefenseMachinegun",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DefenseMissile",
             "asset": "EnemyCamp_DefenseMissile",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DefenseWait",
             "asset": "EnemyCamp_DefenseWait",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DefenseWall",
             "asset": "EnemyCamp_DefenseWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DefenseWall_Metal",
             "asset": "EnemyCamp_DefenseWall_Metal",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DefenseWall_Wood",
             "asset": "EnemyCamp_DefenseWall_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Desk01_Iron",
             "asset": "EnemyCamp_Desk01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Desk01_Stone",
             "asset": "EnemyCamp_Desk01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DimensionPalStorage",
             "asset": "EnemyCamp_DimensionPalStorage",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DismantlingConveyor",
             "asset": "EnemyCamp_DismantlingConveyor",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_DisplayCharacter",
             "asset": "EnemyCamp_DisplayCharacter",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ElectricCooler",
             "asset": "EnemyCamp_ElectricCooler",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ElectricGenerator",
             "asset": "EnemyCamp_ElectricGenerator",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ElectricGenerator_Large",
             "asset": "EnemyCamp_ElectricGenerator_Large",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ElectricHatchingPalEgg",
             "asset": "EnemyCamp_ElectricHatchingPalEgg",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ElectricHeater",
             "asset": "EnemyCamp_ElectricHeater",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ElectricKitchen",
             "asset": "EnemyCamp_ElectricKitchen",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_EnergyStorage_Electric",
             "asset": "EnemyCamp_EnergyStorage_Electric",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Factory_Hard_01",
             "asset": "EnemyCamp_Factory_Hard_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Factory_Hard_02",
             "asset": "EnemyCamp_Factory_Hard_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Factory_Hard_03",
             "asset": "EnemyCamp_Factory_Hard_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Factory_Money",
             "asset": "EnemyCamp_Factory_Money",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FarmBlockV2_Berries",
             "asset": "EnemyCamp_FarmBlockV2_Berries",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FarmBlockV2_Carrot",
             "asset": "EnemyCamp_FarmBlockV2_Carrot",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FarmBlockV2_Lettuce",
             "asset": "EnemyCamp_FarmBlockV2_Lettuce",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FarmBlockV2_Onion",
             "asset": "EnemyCamp_FarmBlockV2_Onion",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FarmBlockV2_Potato",
             "asset": "EnemyCamp_FarmBlockV2_Potato",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FarmBlockV2_tomato",
             "asset": "EnemyCamp_FarmBlockV2_tomato",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FarmBlockV2_wheet",
             "asset": "EnemyCamp_FarmBlockV2_wheet",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FireCult_Banner",
             "asset": "EnemyCamp_FireCult_Banner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FireCult_Flag",
             "asset": "EnemyCamp_FireCult_Flag",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FireStand",
             "asset": "EnemyCamp_FireStand",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FlourMill",
             "asset": "EnemyCamp_FlourMill",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_FlowerBed",
             "asset": "EnemyCamp_FlowerBed",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Fountain",
             "asset": "EnemyCamp_Fountain",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Fudukue",
             "asset": "EnemyCamp_Fudukue",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_GarbageBag_Iron",
             "asset": "EnemyCamp_GarbageBag_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_DiagonalWall",
             "asset": "EnemyCamp_Glass_DiagonalWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_DoorWall",
             "asset": "EnemyCamp_Glass_DoorWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_Fence",
             "asset": "EnemyCamp_Glass_Fence",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_Pillars",
             "asset": "EnemyCamp_Glass_Pillars",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_PyramidRoof",
             "asset": "EnemyCamp_Glass_PyramidRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_SlantedRoof",
             "asset": "EnemyCamp_Glass_SlantedRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_SlopedRoofCorner",
             "asset": "EnemyCamp_Glass_SlopedRoofCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_TriangleFoundation",
             "asset": "EnemyCamp_Glass_TriangleFoundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_TriangleRoof",
             "asset": "EnemyCamp_Glass_TriangleRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_TriangleStairsCorner",
             "asset": "EnemyCamp_Glass_TriangleStairsCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_TriangleWall",
             "asset": "EnemyCamp_Glass_TriangleWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_TriangleWallReverse",
             "asset": "EnemyCamp_Glass_TriangleWallReverse",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_WallGate",
             "asset": "EnemyCamp_Glass_WallGate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_WindowWall",
             "asset": "EnemyCamp_Glass_WindowWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_foundation",
             "asset": "EnemyCamp_Glass_foundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_roof",
             "asset": "EnemyCamp_Glass_roof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_stair",
             "asset": "EnemyCamp_Glass_stair",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_wall",
             "asset": "EnemyCamp_Glass_wall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Glass_wall_Destructable",
             "asset": "EnemyCamp_Glass_wall_Destructable",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_GlobalPalStorage",
             "asset": "EnemyCamp_GlobalPalStorage",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Globe01_Stone",
             "asset": "EnemyCamp_Globe01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_GoalSoccer_Iron",
             "asset": "EnemyCamp_GoalSoccer_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_GuardianDogStatue",
             "asset": "EnemyCamp_GuardianDogStatue",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_GuildChest",
             "asset": "EnemyCamp_GuildChest",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_HatchingPalEgg",
             "asset": "EnemyCamp_HatchingPalEgg",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Headstone",
             "asset": "EnemyCamp_Headstone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Heater",
             "asset": "EnemyCamp_Heater",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_HugeKitchen",
             "asset": "EnemyCamp_HugeKitchen",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Hunter_Banner",
             "asset": "EnemyCamp_Hunter_Banner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Hunter_Flag",
             "asset": "EnemyCamp_Hunter_Flag",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Hunter_GangFlag",
             "asset": "EnemyCamp_Hunter_GangFlag",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_IceCrusher",
             "asset": "EnemyCamp_IceCrusher",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_DiagonalWall",
             "asset": "EnemyCamp_Iron_DiagonalWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_Fence",
             "asset": "EnemyCamp_Iron_Fence",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_PyramidRoof",
             "asset": "EnemyCamp_Iron_PyramidRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_SlopedRoofCorner",
             "asset": "EnemyCamp_Iron_SlopedRoofCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_TriangleFoundation",
             "asset": "EnemyCamp_Iron_TriangleFoundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_TriangleRoof",
             "asset": "EnemyCamp_Iron_TriangleRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_TriangleStairsCorner",
             "asset": "EnemyCamp_Iron_TriangleStairsCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_TriangleWallReverse",
             "asset": "EnemyCamp_Iron_TriangleWallReverse",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Iron_WallGate",
             "asset": "EnemyCamp_Iron_WallGate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Irori",
             "asset": "EnemyCamp_Irori",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ItemBooth",
             "asset": "EnemyCamp_ItemBooth",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ItemChest",
             "asset": "EnemyCamp_ItemChest",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ItemChest_02",
             "asset": "EnemyCamp_ItemChest_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ItemChest_03",
             "asset": "EnemyCamp_ItemChest_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ItemChest_04",
             "asset": "EnemyCamp_ItemChest_04",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Ivy01",
             "asset": "EnemyCamp_Ivy01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Ivy02",
             "asset": "EnemyCamp_Ivy02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Ivy03",
             "asset": "EnemyCamp_Ivy03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_DiagonalWall",
             "asset": "EnemyCamp_JapaneseStyle_DiagonalWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_DoorWall_01",
             "asset": "EnemyCamp_JapaneseStyle_DoorWall_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_DoorWall_02",
             "asset": "EnemyCamp_JapaneseStyle_DoorWall_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_DoorWall_03",
             "asset": "EnemyCamp_JapaneseStyle_DoorWall_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_DoorWall_03_OneSide",
             "asset": "EnemyCamp_JapaneseStyle_DoorWall_03_OneSide",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_Fence",
             "asset": "EnemyCamp_JapaneseStyle_Fence",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_Pillar",
             "asset": "EnemyCamp_JapaneseStyle_Pillar",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_PyramidRoof",
             "asset": "EnemyCamp_JapaneseStyle_PyramidRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_SlantedRoof",
             "asset": "EnemyCamp_JapaneseStyle_SlantedRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_SlopedRoofCorner",
             "asset": "EnemyCamp_JapaneseStyle_SlopedRoofCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_SlopedRoofCornerReverse",
             "asset": "EnemyCamp_JapaneseStyle_SlopedRoofCornerReverse",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_TriangleFoundation",
             "asset": "EnemyCamp_JapaneseStyle_TriangleFoundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_TriangleRoof_01",
             "asset": "EnemyCamp_JapaneseStyle_TriangleRoof_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_TriangleRoof_02",
             "asset": "EnemyCamp_JapaneseStyle_TriangleRoof_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_TriangleStairsCorner_01",
             "asset": "EnemyCamp_JapaneseStyle_TriangleStairsCorner_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_TriangleWall",
             "asset": "EnemyCamp_JapaneseStyle_TriangleWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_TriangleWallReverse",
             "asset": "EnemyCamp_JapaneseStyle_TriangleWallReverse",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_WallGate",
             "asset": "EnemyCamp_JapaneseStyle_WallGate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_WindowWall",
             "asset": "EnemyCamp_JapaneseStyle_WindowWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_foundation",
             "asset": "EnemyCamp_JapaneseStyle_foundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_roof_01",
             "asset": "EnemyCamp_JapaneseStyle_roof_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_roof_02",
             "asset": "EnemyCamp_JapaneseStyle_roof_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_stair",
             "asset": "EnemyCamp_JapaneseStyle_stair",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_wall_01",
             "asset": "EnemyCamp_JapaneseStyle_wall_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_JapaneseStyle_wall_01_Destructable",
             "asset": "EnemyCamp_JapaneseStyle_wall_01_Destructable",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Kakejiku",
             "asset": "EnemyCamp_Kakejiku",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Koro",
             "asset": "EnemyCamp_Koro",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Lab",
             "asset": "EnemyCamp_Lab",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Lamp",
             "asset": "EnemyCamp_Lamp",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_LanternTop",
             "asset": "EnemyCamp_LanternTop",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_LargeCeilingLamp",
             "asset": "EnemyCamp_LargeCeilingLamp",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_LargeLamp",
             "asset": "EnemyCamp_LargeLamp",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_CandleSticks_Top",
             "asset": "EnemyCamp_Light_CandleSticks_Top",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_CandleSticks_Wall",
             "asset": "EnemyCamp_Light_CandleSticks_Wall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_FirePlace01",
             "asset": "EnemyCamp_Light_FirePlace01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_FirePlace02",
             "asset": "EnemyCamp_Light_FirePlace02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_FloorLamp01",
             "asset": "EnemyCamp_Light_FloorLamp01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_FloorLamp02",
             "asset": "EnemyCamp_Light_FloorLamp02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_LightPole01",
             "asset": "EnemyCamp_Light_LightPole01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_LightPole02",
             "asset": "EnemyCamp_Light_LightPole02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_LightPole03",
             "asset": "EnemyCamp_Light_LightPole03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Light_LightPole04",
             "asset": "EnemyCamp_Light_LightPole04",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_LilyQueenStatue",
             "asset": "EnemyCamp_LilyQueenStatue",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MachineGame01_Iron",
             "asset": "EnemyCamp_MachineGame01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MachineVending01_Iron",
             "asset": "EnemyCamp_MachineVending01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ManualElectricGenerator",
             "asset": "EnemyCamp_ManualElectricGenerator",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MedicalPalBed_02",
             "asset": "EnemyCamp_MedicalPalBed_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MedicalPalBed_03",
             "asset": "EnemyCamp_MedicalPalBed_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MedicalPalBed_04",
             "asset": "EnemyCamp_MedicalPalBed_04",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MedicalPalBed_05",
             "asset": "EnemyCamp_MedicalPalBed_05",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MedicineFacility_01",
             "asset": "EnemyCamp_MedicineFacility_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MedicineFacility_02",
             "asset": "EnemyCamp_MedicineFacility_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MedicineFacility_03",
             "asset": "EnemyCamp_MedicineFacility_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_DoorWall",
             "asset": "EnemyCamp_Metal_DoorWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_Gate",
             "asset": "EnemyCamp_Metal_Gate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_Pillars",
             "asset": "EnemyCamp_Metal_Pillars",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_SlantedRoof",
             "asset": "EnemyCamp_Metal_SlantedRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_TriangleWall",
             "asset": "EnemyCamp_Metal_TriangleWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_WindowWall",
             "asset": "EnemyCamp_Metal_WindowWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_foundation",
             "asset": "EnemyCamp_Metal_foundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_roof",
             "asset": "EnemyCamp_Metal_roof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_stair",
             "asset": "EnemyCamp_Metal_stair",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_wall",
             "asset": "EnemyCamp_Metal_wall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Metal_wall_Destructable",
             "asset": "EnemyCamp_Metal_wall_Destructable",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MiningTool",
             "asset": "EnemyCamp_MiningTool",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Mirror01_Stone",
             "asset": "EnemyCamp_Mirror01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Mirror01_Wall_Stone",
             "asset": "EnemyCamp_Mirror01_Wall_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Mirror02_Stone",
             "asset": "EnemyCamp_Mirror02_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MonsterFarm",
             "asset": "EnemyCamp_MonsterFarm",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_MultiElectricHatchingPalEgg",
             "asset": "EnemyCamp_MultiElectricHatchingPalEgg",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Ninja_Banner",
             "asset": "EnemyCamp_Ninja_Banner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Ninja_Flag",
             "asset": "EnemyCamp_Ninja_Flag",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_OilPump",
             "asset": "EnemyCamp_OilPump",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_OlympicCauldron",
             "asset": "EnemyCamp_OlympicCauldron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_OperatingTable",
             "asset": "EnemyCamp_OperatingTable",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_PalBooth",
             "asset": "EnemyCamp_PalBooth",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_PalCage",
             "asset": "EnemyCamp_PalCage",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_PalFoodBox",
             "asset": "EnemyCamp_PalFoodBox",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_PalMedicineBox",
             "asset": "EnemyCamp_PalMedicineBox",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Partition_Stone",
             "asset": "EnemyCamp_Partition_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Piano01_Stone",
             "asset": "EnemyCamp_Piano01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Piano02_Stone",
             "asset": "EnemyCamp_Piano02_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_PipeClay01_Iron",
             "asset": "EnemyCamp_PipeClay01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Plant01_Plant",
             "asset": "EnemyCamp_Plant01_Plant",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Plant02_Plant",
             "asset": "EnemyCamp_Plant02_Plant",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Plant03_Plant",
             "asset": "EnemyCamp_Plant03_Plant",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Plant04_Plant",
             "asset": "EnemyCamp_Plant04_Plant",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_PlayerBed_02",
             "asset": "EnemyCamp_PlayerBed_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_PlayerBed_03",
             "asset": "EnemyCamp_PlayerBed_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Police_Banner",
             "asset": "EnemyCamp_Police_Banner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Police_Flag",
             "asset": "EnemyCamp_Police_Flag",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Refrigerator",
             "asset": "EnemyCamp_Refrigerator",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_RepairBench",
             "asset": "EnemyCamp_RepairBench",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Rug01_Stone",
             "asset": "EnemyCamp_Rug01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Rug02_Stone",
             "asset": "EnemyCamp_Rug02_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Rug03_Stone",
             "asset": "EnemyCamp_Rug03_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Rug04_Stone",
             "asset": "EnemyCamp_Rug04_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_Chair",
             "asset": "EnemyCamp_SF_Chair",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_Desk",
             "asset": "EnemyCamp_SF_Desk",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_DiagonalWall",
             "asset": "EnemyCamp_SF_DiagonalWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_DoorWall",
             "asset": "EnemyCamp_SF_DoorWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_Fence",
             "asset": "EnemyCamp_SF_Fence",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_Pillars",
             "asset": "EnemyCamp_SF_Pillars",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_PyramidRoof",
             "asset": "EnemyCamp_SF_PyramidRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_SlantedRoof",
             "asset": "EnemyCamp_SF_SlantedRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_SlopedRoofCorner",
             "asset": "EnemyCamp_SF_SlopedRoofCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_TriangleFoundation",
             "asset": "EnemyCamp_SF_TriangleFoundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_TriangleRoof",
             "asset": "EnemyCamp_SF_TriangleRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_TriangleStairsCorner",
             "asset": "EnemyCamp_SF_TriangleStairsCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_TriangleWall",
             "asset": "EnemyCamp_SF_TriangleWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_TriangleWallReverse",
             "asset": "EnemyCamp_SF_TriangleWallReverse",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_WallGate",
             "asset": "EnemyCamp_SF_WallGate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_Wall_Destructable",
             "asset": "EnemyCamp_SF_Wall_Destructable",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_WindowWall",
             "asset": "EnemyCamp_SF_WindowWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_foundation",
             "asset": "EnemyCamp_SF_foundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_roof",
             "asset": "EnemyCamp_SF_roof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_stair",
             "asset": "EnemyCamp_SF_stair",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SF_wall",
             "asset": "EnemyCamp_SF_wall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SanityDecrease1",
             "asset": "EnemyCamp_SanityDecrease1",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Scientist_Banner",
             "asset": "EnemyCamp_Scientist_Banner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Scientist_Flag",
             "asset": "EnemyCamp_Scientist_Flag",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Seika",
             "asset": "EnemyCamp_Seika",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf01_Iron",
             "asset": "EnemyCamp_Shelf01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf01_Stone",
             "asset": "EnemyCamp_Shelf01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf01_Wall_Iron",
             "asset": "EnemyCamp_Shelf01_Wall_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf01_Wall_Stone",
             "asset": "EnemyCamp_Shelf01_Wall_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf02_Iron",
             "asset": "EnemyCamp_Shelf02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf02_Stone",
             "asset": "EnemyCamp_Shelf02_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf03_Iron",
             "asset": "EnemyCamp_Shelf03_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf03_Stone",
             "asset": "EnemyCamp_Shelf03_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf04_Iron",
             "asset": "EnemyCamp_Shelf04_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf04_Stone",
             "asset": "EnemyCamp_Shelf04_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf05_Stone",
             "asset": "EnemyCamp_Shelf05_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf06_Stone",
             "asset": "EnemyCamp_Shelf06_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf07_Stone",
             "asset": "EnemyCamp_Shelf07_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf_Cask_Wood",
             "asset": "EnemyCamp_Shelf_Cask_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf_Hang01_Wood",
             "asset": "EnemyCamp_Shelf_Hang01_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf_Hang02_Wood",
             "asset": "EnemyCamp_Shelf_Hang02_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shelf_Wood",
             "asset": "EnemyCamp_Shelf_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shishiodoshi",
             "asset": "EnemyCamp_Shishiodoshi",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Shrine_Lantern",
             "asset": "EnemyCamp_Shrine_Lantern",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SignExit_Ceiling_Iron",
             "asset": "EnemyCamp_SignExit_Ceiling_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SignExit_Wall_Iron",
             "asset": "EnemyCamp_SignExit_Wall_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Silo",
             "asset": "EnemyCamp_Silo",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SkinChange",
             "asset": "EnemyCamp_SkinChange",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Snowman",
             "asset": "EnemyCamp_Snowman",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Sofa01_Iron",
             "asset": "EnemyCamp_Sofa01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Sofa01_Stone",
             "asset": "EnemyCamp_Sofa01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Sofa02_Iron",
             "asset": "EnemyCamp_Sofa02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Sofa02_Stone",
             "asset": "EnemyCamp_Sofa02_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Sofa03_Stone",
             "asset": "EnemyCamp_Sofa03_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Spa",
             "asset": "EnemyCamp_Spa",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Spa2",
             "asset": "EnemyCamp_Spa2",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SphereFactory_Black_01",
             "asset": "EnemyCamp_SphereFactory_Black_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SphereFactory_Black_02",
             "asset": "EnemyCamp_SphereFactory_Black_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SphereFactory_Black_03",
             "asset": "EnemyCamp_SphereFactory_Black_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_SphereFactory_Black_04",
             "asset": "EnemyCamp_SphereFactory_Black_04",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_StationDeforest2",
             "asset": "EnemyCamp_StationDeforest2",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_StonePit",
             "asset": "EnemyCamp_StonePit",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_DiagonalWall",
             "asset": "EnemyCamp_Stone_DiagonalWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_DoorWall",
             "asset": "EnemyCamp_Stone_DoorWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_Fence",
             "asset": "EnemyCamp_Stone_Fence",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_Gate",
             "asset": "EnemyCamp_Stone_Gate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_Pillar",
             "asset": "EnemyCamp_Stone_Pillar",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_PyramidRoof",
             "asset": "EnemyCamp_Stone_PyramidRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_SlantedRoof",
             "asset": "EnemyCamp_Stone_SlantedRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_SlopedRoofCorner",
             "asset": "EnemyCamp_Stone_SlopedRoofCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_TriangleFoundation",
             "asset": "EnemyCamp_Stone_TriangleFoundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_TriangleRoof",
             "asset": "EnemyCamp_Stone_TriangleRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_TriangleStairsCorner",
             "asset": "EnemyCamp_Stone_TriangleStairsCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_TriangleWall",
             "asset": "EnemyCamp_Stone_TriangleWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_TriangleWallReverse",
             "asset": "EnemyCamp_Stone_TriangleWallReverse",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_WallGate",
             "asset": "EnemyCamp_Stone_WallGate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_WindowWall",
             "asset": "EnemyCamp_Stone_WindowWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_foundation",
             "asset": "EnemyCamp_Stone_foundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_roof",
             "asset": "EnemyCamp_Stone_roof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_stair",
             "asset": "EnemyCamp_Stone_stair",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_wall",
             "asset": "EnemyCamp_Stone_wall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stone_wall_Destructable",
             "asset": "EnemyCamp_Stone_wall_Destructable",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stool01_Iron",
             "asset": "EnemyCamp_Stool01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stool01_Stone",
             "asset": "EnemyCamp_Stool01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stool_High_Wood",
             "asset": "EnemyCamp_Stool_High_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stool_Wood",
             "asset": "EnemyCamp_Stool_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stove01_Stone",
             "asset": "EnemyCamp_Stove01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Stump",
             "asset": "EnemyCamp_Stump",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableCircular01_Iron",
             "asset": "EnemyCamp_TableCircular01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableCircular01_Stone",
             "asset": "EnemyCamp_TableCircular01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableCircular_Wood",
             "asset": "EnemyCamp_TableCircular_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableDresser01_Stone",
             "asset": "EnemyCamp_TableDresser01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableSide01_Iron",
             "asset": "EnemyCamp_TableSide01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableSink01_Stone",
             "asset": "EnemyCamp_TableSink01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableSquare01_Iron",
             "asset": "EnemyCamp_TableSquare01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableSquare02_Iron",
             "asset": "EnemyCamp_TableSquare02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TableSquare_Wood",
             "asset": "EnemyCamp_TableSquare_Wood",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Tansu",
             "asset": "EnemyCamp_Tansu",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Television01_Iron",
             "asset": "EnemyCamp_Television01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Tire01_Iron",
             "asset": "EnemyCamp_Tire01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Toilet01_Stone",
             "asset": "EnemyCamp_Toilet01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ToiletHolder01_Stone",
             "asset": "EnemyCamp_ToiletHolder01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_ToolBoxV1",
             "asset": "EnemyCamp_ToolBoxV1",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Torch",
             "asset": "EnemyCamp_Torch",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Toro",
             "asset": "EnemyCamp_Toro",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TowlRack01_Stone",
             "asset": "EnemyCamp_TowlRack01_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficBarricade01_Iron",
             "asset": "EnemyCamp_TrafficBarricade01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficBarricade02_Iron",
             "asset": "EnemyCamp_TrafficBarricade02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficBarricade03_Iron",
             "asset": "EnemyCamp_TrafficBarricade03_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficBarricade04_Iron",
             "asset": "EnemyCamp_TrafficBarricade04_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficBarricade05_Iron",
             "asset": "EnemyCamp_TrafficBarricade05_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficCone01_Iron",
             "asset": "EnemyCamp_TrafficCone01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficCone02_Iron",
             "asset": "EnemyCamp_TrafficCone02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficCone03_Iron",
             "asset": "EnemyCamp_TrafficCone03_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficSign01_Iron",
             "asset": "EnemyCamp_TrafficSign01_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficSign02_Iron",
             "asset": "EnemyCamp_TrafficSign02_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficSign03_Iron",
             "asset": "EnemyCamp_TrafficSign03_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TrafficSign04_Iron",
             "asset": "EnemyCamp_TrafficSign04_Iron",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_TransmissionTower",
             "asset": "EnemyCamp_TransmissionTower",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Trap_Noose",
             "asset": "EnemyCamp_Trap_Noose",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No101",
             "asset": "EnemyCamp_WallSignboard_No101",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No102",
             "asset": "EnemyCamp_WallSignboard_No102",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No103",
             "asset": "EnemyCamp_WallSignboard_No103",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No104",
             "asset": "EnemyCamp_WallSignboard_No104",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No105",
             "asset": "EnemyCamp_WallSignboard_No105",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No106",
             "asset": "EnemyCamp_WallSignboard_No106",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No107",
             "asset": "EnemyCamp_WallSignboard_No107",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No108",
             "asset": "EnemyCamp_WallSignboard_No108",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No109",
             "asset": "EnemyCamp_WallSignboard_No109",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallSignboard_No110",
             "asset": "EnemyCamp_WallSignboard_No110",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallTorch",
             "asset": "EnemyCamp_WallTorch",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WallTorch02",
             "asset": "EnemyCamp_WallTorch02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WeaponFactory_Dirty_01",
             "asset": "EnemyCamp_WeaponFactory_Dirty_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WeaponFactory_Dirty_02",
             "asset": "EnemyCamp_WeaponFactory_Dirty_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WeaponFactory_Dirty_03",
             "asset": "EnemyCamp_WeaponFactory_Dirty_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wire_Fence",
             "asset": "EnemyCamp_Wire_Fence",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wood_Fence",
             "asset": "EnemyCamp_Wood_Fence",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wood_Gate",
             "asset": "EnemyCamp_Wood_Gate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wood_SlantedRoof",
             "asset": "EnemyCamp_Wood_SlantedRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wood_TriangleWall",
             "asset": "EnemyCamp_Wood_TriangleWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wood_TriangleWallReverse",
             "asset": "EnemyCamp_Wood_TriangleWallReverse",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wood_WindowWall",
             "asset": "EnemyCamp_Wood_WindowWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WoodenBarricade",
             "asset": "EnemyCamp_WoodenBarricade",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_DiagonalWall",
             "asset": "EnemyCamp_Wooden_DiagonalWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_DoorWall",
             "asset": "EnemyCamp_Wooden_DoorWall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_Pillar",
             "asset": "EnemyCamp_Wooden_Pillar",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_PyramidRoof",
             "asset": "EnemyCamp_Wooden_PyramidRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_SlopedRoofCorner",
             "asset": "EnemyCamp_Wooden_SlopedRoofCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_TriangleFoundation",
             "asset": "EnemyCamp_Wooden_TriangleFoundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_TriangleRoof",
             "asset": "EnemyCamp_Wooden_TriangleRoof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_TriangleStairsCorner",
             "asset": "EnemyCamp_Wooden_TriangleStairsCorner",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_WallGate",
             "asset": "EnemyCamp_Wooden_WallGate",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_foundation",
             "asset": "EnemyCamp_Wooden_foundation",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_ladder",
             "asset": "EnemyCamp_Wooden_ladder",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_roof",
             "asset": "EnemyCamp_Wooden_roof",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_stair",
             "asset": "EnemyCamp_Wooden_stair",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_wall",
             "asset": "EnemyCamp_Wooden_wall",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Wooden_wall_Destructable",
             "asset": "EnemyCamp_Wooden_wall_Destructable",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WorkBench",
             "asset": "EnemyCamp_WorkBench",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WorkBench_SkillUnlock",
             "asset": "EnemyCamp_WorkBench_SkillUnlock",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_WorkSpeedIncrease1",
             "asset": "EnemyCamp_WorkSpeedIncrease1",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Zabuton",
             "asset": "EnemyCamp_Zabuton",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "EnemyCamp_Zaisu",
             "asset": "EnemyCamp_Zaisu",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -3436,13 +3436,13 @@
             "name": "Factory_Comfortable_01",
             "asset": "Factory_Comfortable_01",
             "icon": "/icons/structures/T_icon_buildObject_Factory_Comfortable_01.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Factory_Comfortable_02",
             "asset": "Factory_Comfortable_02",
             "icon": "/icons/structures/T_icon_buildObject_Factory_Comfortable_02.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "High-Quality Workbench",
@@ -3478,7 +3478,7 @@
             "name": "Plantation",
             "asset": "FarmBlock",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlock.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "FarmBlockV2",
@@ -3501,20 +3501,20 @@
         {
             "name": "Plantation",
             "asset": "FarmBlockV2_Grade01",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "Plantation",
             "asset": "FarmBlockV2_Grade02",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "Plantation",
             "asset": "FarmBlockV2_Grade03",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "Lettuce Plantation",
@@ -3592,19 +3592,19 @@
             "name": "Floor",
             "asset": "Floor",
             "icon": "/icons/structures/T_icon_buildObject_Floor.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Floor",
             "asset": "Floor_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Floor_Stone.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Floor",
             "asset": "Floor_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Floor_Wood.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Mill",
@@ -4000,7 +4000,7 @@
             "name": "HighTechKitchen",
             "asset": "HighTechKitchen",
             "icon": "/icons/structures/T_icon_buildObject_HighTechKitchen.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "House_1",
@@ -4246,7 +4246,7 @@
             "name": "JapaneseStyle_TriangleStairsCorner_02",
             "asset": "JapaneseStyle_TriangleStairsCorner_02",
             "icon": "/icons/structures/T_icon_buildObject_JapaneseStyle_TriangleStairsCorner.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Japanese-Style Triangular Wall",
@@ -4443,7 +4443,7 @@
         {
             "name": "LockGimmickDestructionTarget_Test",
             "asset": "LockGimmickDestructionTarget_Test",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -4468,7 +4468,7 @@
             "name": "MedicalPalBed",
             "asset": "MedicalPalBed",
             "icon": "/icons/structures/T_icon_buildObject_MedicalPalBed.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Straw Pal Bed",
@@ -4605,13 +4605,13 @@
         {
             "name": "Meteorite",
             "asset": "MeteorDrop_Damagable",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Meteorite",
             "asset": "MeteorDrop_pickup",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -4684,12 +4684,12 @@
             "name": "OilPump02",
             "asset": "OilPump02",
             "icon": "/icons/structures/T_icon_buildObject_OilPump02.webp",
-            "description": ""
+            "description": "-"
         },
         {
             "name": "OilRig",
             "asset": "OilRig",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -4725,7 +4725,7 @@
         {
             "name": "PalBox_RaidBossArea",
             "asset": "PalBox_RaidBossArea",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -4737,67 +4737,67 @@
         {
             "name": "Pal Egg",
             "asset": "PalEgg",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pal Egg",
             "asset": "PalEgg_Dark",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pal Egg",
             "asset": "PalEgg_Dragon",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pal Egg",
             "asset": "PalEgg_Earth",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pal Egg",
             "asset": "PalEgg_Electricity",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pal Egg",
             "asset": "PalEgg_Fire",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pal Egg",
             "asset": "PalEgg_Ice",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pal Egg",
             "asset": "PalEgg_Leaf",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "PalEgg_MutationPal",
             "asset": "PalEgg_MutationPal",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Pal Egg",
             "asset": "PalEgg_Water",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "PalEgg_WorldTree",
             "asset": "PalEgg_WorldTree",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -4821,7 +4821,7 @@
         {
             "name": "PalStorage_Terminal",
             "asset": "PalStorage_Terminal",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -4845,151 +4845,151 @@
         {
             "name": "PickupItem_AffectionFruit",
             "asset": "PickupItem_AffectionFruit",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Grotto Mushroom",
             "asset": "PickupItem_CaveMushroom",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Dog Coin",
             "asset": "PickupItem_DogCoin",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Flint Stone",
             "asset": "PickupItem_Flint",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "PickupItem_IciclePiece",
             "asset": "PickupItem_IciclePiece",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Lumber",
             "asset": "PickupItem_Log",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Power Lotus (Small)",
             "asset": "PickupItem_Lotus_Attack_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Power Lotus (Large)",
             "asset": "PickupItem_Lotus_Attack_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Life Lotus (Small)",
             "asset": "PickupItem_Lotus_HP_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Life Lotus (Large)",
             "asset": "PickupItem_Lotus_HP_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Stamina Lotus (Small)",
             "asset": "PickupItem_Lotus_Stamina_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Stamina Lotus (Large)",
             "asset": "PickupItem_Lotus_Stamina_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Carry Lotus (Small)",
             "asset": "PickupItem_Lotus_Weight_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Carry Lotus (Large)",
             "asset": "PickupItem_Lotus_Weight_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Speed Lotus (Small)",
             "asset": "PickupItem_Lotus_Workspeed_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Speed Lotus (Large)",
             "asset": "PickupItem_Lotus_Workspeed_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Mushroom",
             "asset": "PickupItem_Mushroom",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Nightstar Sand",
             "asset": "PickupItem_NightStone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Beautiful Flower",
             "asset": "PickupItem_Poppy",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Potato",
             "asset": "PickupItem_Potato",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Red Berry",
             "asset": "PickupItem_RedBerry",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Small Rock",
             "asset": "PickupItem_Stone",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "PickupItem_YakushimaMushroom_01",
             "asset": "PickupItem_YakushimaMushroom_01",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "PickupItem_YakushimaMushroom_02",
             "asset": "PickupItem_YakushimaMushroom_02",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "PickupItem_YakushimaMushroom_03",
             "asset": "PickupItem_YakushimaMushroom_03",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -5026,7 +5026,7 @@
             "name": "Human Bed",
             "asset": "PlayerBed",
             "icon": "/icons/structures/T_icon_buildObject_PlayerBed.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Shoddy Bed",
@@ -5104,7 +5104,7 @@
             "name": "Fur rug",
             "asset": "Rug_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Rug_Wood.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Laboratory Chair",
@@ -5362,7 +5362,7 @@
             "name": "Shipping Box",
             "asset": "ShippingItemBox",
             "icon": "/icons/structures/T_icon_buildObject_ShippingItemBox.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Deer Scare",
@@ -5403,7 +5403,7 @@
         {
             "name": "SkillFruit_Test",
             "asset": "SkillFruit_Test",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -5530,25 +5530,25 @@
             "name": "Superior Sphere Factory Ⅰ",
             "asset": "SphereFactory_White_01",
             "icon": "/icons/structures/T_icon_buildObject_SphereFactory_White_01.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Superior Sphere Factory Ⅱ",
             "asset": "SphereFactory_White_02",
             "icon": "/icons/structures/T_icon_buildObject_SphereFactory_White_02.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Superior Sphere Factory Ⅲ",
             "asset": "SphereFactory_White_03",
             "icon": "/icons/structures/T_icon_buildObject_SphereFactory_White_03.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Stone Pit",
             "asset": "StationDeforest",
             "icon": "/icons/structures/T_icon_buildObject_StationDeforest.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Logging Site",
@@ -5722,7 +5722,7 @@
             "name": "Stonehouse1",
             "asset": "Stonehouse1",
             "icon": "/icons/structures/T_icon_buildObject_Stonehouse1.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Iron Stool",
@@ -5763,8 +5763,8 @@
         {
             "name": "Strawhouse1",
             "asset": "Strawhouse1",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "Stump and Axe",
@@ -5781,13 +5781,13 @@
         {
             "name": "Supplies",
             "asset": "SupplyDrop",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Table1",
             "asset": "Table1",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -6045,7 +6045,7 @@
         {
             "name": "Moving panels",
             "asset": "Trap_MovingPanel",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": "A description of the moving panel"
         },
         {
@@ -6057,86 +6057,86 @@
         {
             "name": "TreasureBox",
             "asset": "TreasureBox",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Elemental Treasure Chest (Electric)",
             "asset": "TreasureBox_Electric",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "TreasureBox_EnemyCamp",
             "asset": "TreasureBox_EnemyCamp",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "TreasureBox_EnemyCampGoal",
             "asset": "TreasureBox_EnemyCampGoal",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Elemental Treasure Chest (Fire)",
             "asset": "TreasureBox_Fire",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "TreasureBox_FishingJunk_RequiredLongHold",
             "asset": "TreasureBox_FishingJunk_RequiredLongHold",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "TreasureBox_FishingJunk_RequiredLongHold2",
             "asset": "TreasureBox_FishingJunk_RequiredLongHold2",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "TreasureBox_Oilrig",
             "asset": "TreasureBox_Oilrig",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Junk (Hold to collect)",
             "asset": "TreasureBox_RequiredLongHold",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "TreasureBox_VisibleContent",
             "asset": "TreasureBox_VisibleContent",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "TreasureBox_VisibleContent_SkillFruits",
             "asset": "TreasureBox_VisibleContent_SkillFruits",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Elemental Treasure Chest (Water)",
             "asset": "TreasureBox_Water",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "TreasureBox_Yakushima",
             "asset": "TreasureBox_Yakushima",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Wall",
             "asset": "Wall",
             "icon": "/icons/structures/T_icon_buildObject_Wall.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Wall-Mounted Sign",
@@ -6160,19 +6160,19 @@
             "name": "Wall",
             "asset": "Wall_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Wall_Stone.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Wall",
             "asset": "Wall_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Wall_Wood.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Weapon Chest",
             "asset": "WeaponChest",
             "icon": "/icons/structures/T_icon_buildObject_WeaponChest.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "WeaponFactoryBase",
@@ -6183,26 +6183,26 @@
         {
             "name": "WeaponFactory_Base",
             "asset": "WeaponFactory_Base",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "WeaponFactory_Clean_01",
             "asset": "WeaponFactory_Clean_01",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactory_Clean_01.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "WeaponFactory_Clean_02",
             "asset": "WeaponFactory_Clean_02",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactory_Clean_02.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "WeaponFactory_Clean_03",
             "asset": "WeaponFactory_Clean_03",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactory_Clean_03.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Weapon Workbench",
@@ -6232,13 +6232,13 @@
             "name": "Weapon Factory",
             "asset": "WeaponFactry",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactry.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Water Well",
             "asset": "Well",
             "icon": "/icons/structures/T_icon_buildObject_Well.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Wire Fence",
@@ -6249,13 +6249,13 @@
         {
             "name": "WoodCreator",
             "asset": "WoodCreator",
-            "icon": "",
-            "description": ""
+            "icon": "/icons/structures/T_icon_unknown.webp",
+            "description": "en Text"
         },
         {
             "name": "Wood dismantling tables",
             "asset": "WoodCrusher",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": "Facility that can saw Wood to extract Fiber."
         },
         {
@@ -6436,7 +6436,7 @@
             "name": "Woodhouse1",
             "asset": "Woodhouse1",
             "icon": "/icons/structures/T_icon_buildObject_WoodHouse.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Primitive Workbench",
@@ -6448,7 +6448,7 @@
             "name": "WorkBench_SkillCard",
             "asset": "WorkBench_SkillCard",
             "icon": "/icons/structures/T_icon_buildObject_WorkBench.webp",
-            "description": ""
+            "description": "en Text"
         },
         {
             "name": "Pal Gear Workbench",
@@ -6471,19 +6471,19 @@
         {
             "name": "Yakushima_Crystal",
             "asset": "Yakushima_Crystal",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Yakushima_HealHeart",
             "asset": "Yakushima_HealHeart",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
             "name": "Yakushima_Pot",
             "asset": "Yakushima_Pot",
-            "icon": "",
+            "icon": "/icons/structures/T_icon_unknown.webp",
             "description": ""
         },
         {
@@ -8634,7 +8634,7 @@
             "asset": "OilPump02",
             "icon": "/icons/technologies/T_icon_buildObject_OilPump02.webp",
             "type": "boss",
-            "description": ""
+            "description": "-"
         },
         {
             "name": "Flame Cauldron",

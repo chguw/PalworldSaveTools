@@ -893,7 +893,7 @@ def update_structure_data():
     def resolve_struct_desc(struct_id: str) -> str:
         key = f'BUILDOBJECT_DESC_{struct_id}'
         desc = struct_desc_l10n.get(key, '') or struct_desc_l10n_ci.get(key.lower(), '')
-        if desc and desc.lower() not in ('en text', 'en_text', 'none', '-', ''):
+        if desc:
             return resolve_rich_text(desc)
         return ''
     updated_structures = []
@@ -921,7 +921,13 @@ def update_structure_data():
             final_icon = copied_icon
         else:
             fallback = f'/icons/structures/{struct_id}.webp'
-            final_icon = fallback if (ICONS_DIR / 'structures' / f'{struct_id}.webp').exists() else ''
+            if (ICONS_DIR / 'structures' / f'{struct_id}.webp').exists():
+                final_icon = fallback
+            elif (ICONS_DIR / 'T_icon_unknown.webp').exists():
+                shutil.copy2(str(ICONS_DIR / 'T_icon_unknown.webp'), str(ICONS_DIR / 'structures' / 'T_icon_unknown.webp'))
+                final_icon = '/icons/structures/T_icon_unknown.webp'
+            else:
+                final_icon = ''
         struct_entry = {'name': display_name, 'asset': struct_id, 'icon': final_icon, 'description': desc}
         updated_structures.append(struct_entry)
     result = {'structures': updated_structures}
@@ -1202,7 +1208,7 @@ def update_technology_data():
             else:
                 desc_key = f'DESC_RECIPE_{tech_id}'
             desc_text = tech_desc_l10n.get(desc_key, '') or tech_desc_l10n_ci.get(desc_key.lower(), '')
-        if not desc_text or desc_text.strip().lower() in ('', 'en_text', 'en text', 'none', 'ex text', '-', '---'):
+        if not desc_text or desc_text.strip() == '':
             desc_text = ''
         else:
             desc_text = _resolve_rich_text(desc_text)
