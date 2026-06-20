@@ -1112,6 +1112,9 @@ def update_technology_data():
     tech_desc_l10n = load_l10n_table('DT_TechnologyDescText_Common.json')
     build_desc_l10n = load_l10n_table('DT_BuildObjectDescText_Common.json')
     item_desc_l10n = load_l10n_table('DT_ItemDescriptionText_Common.json')
+    tech_desc_l10n_ci = {k.lower(): v for k, v in tech_desc_l10n.items()}
+    build_desc_l10n_ci = {k.lower(): v for k, v in build_desc_l10n.items()}
+    item_desc_l10n_ci = {k.lower(): v for k, v in item_desc_l10n.items()}
     all_rows = {}
     for data in [tech_data, tech_data_common]:
         if data:
@@ -1181,14 +1184,14 @@ def update_technology_data():
                     break
         desc_field = row_data.get('Description', '')
         if desc_field and desc_field != 'None':
-            desc_text = (tech_desc_l10n.get(desc_field, '') or build_desc_l10n.get(desc_field, '') or item_desc_l10n.get(desc_field, ''))
+            desc_text = (tech_desc_l10n.get(desc_field, '') or tech_desc_l10n_ci.get(desc_field.lower(), '') or build_desc_l10n.get(desc_field, '') or build_desc_l10n_ci.get(desc_field.lower(), '') or item_desc_l10n.get(desc_field, '') or item_desc_l10n_ci.get(desc_field.lower(), ''))
         else:
             if recipe_name and recipe_name != 'None':
                 desc_key = recipe_name.replace('NAME_', 'DESC_')
             else:
                 desc_key = f'DESC_RECIPE_{tech_id}'
-            desc_text = tech_desc_l10n.get(desc_key, '')
-        if not desc_text or desc_text.strip().lower() in ('', 'en_text', 'en text', 'none', 'ex text'):
+            desc_text = tech_desc_l10n.get(desc_key, '') or tech_desc_l10n_ci.get(desc_key.lower(), '')
+        if not desc_text or desc_text.strip().lower() in ('', 'en_text', 'en text', 'none', 'ex text', '-', '---'):
             desc_text = ''
         else:
             desc_text = _resolve_rich_text(desc_text)

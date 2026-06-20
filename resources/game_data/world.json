@@ -7115,7 +7115,7 @@
             "asset": "Battle_MeleeWeapon_Bat2",
             "icon": "/icons/technologies/T_itemicon_Weapon_Spear_Bat2.webp",
             "type": "standard",
-            "description": ""
+            "description": "Baseball bat for close-range combat.\r\nMight be tough to get a home run with a Pal."
         },
         {
             "name": "Pal Metal Pickaxe",
@@ -7171,7 +7171,7 @@
             "asset": "Battle_RangeWeapon_FlameThrower",
             "icon": "/icons/technologies/T_itemicon_Weapon_FlameThrower_Default.webp",
             "type": "standard",
-            "description": ""
+            "description": "FlameThrower that fires long-range flames. \r\nCan set the enemy on fire.\r\nCan be crafted at Weapon Assembly Line II."
         },
         {
             "name": "Gatling Gun",
@@ -7437,7 +7437,7 @@
             "asset": "Cloth2",
             "icon": "/icons/technologies/T_itemicon_Material_Cloth.webp",
             "type": "standard",
-            "description": ""
+            "description": "Woven from large amounts of Wool.\r\nRequired to create high quality armor.\r\nCan be made at High-Quality Workbench."
         },
         {
             "name": "Drafting Table",
@@ -8347,7 +8347,7 @@
             "asset": "ItemBooth",
             "icon": "/icons/technologies/T_icon_buildObject_ItemBooth.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility for selling items.\r\nBy setting products in the sales list, you can sell items to other players.\r\nAssign an Ice Pal to it and the food inside will be less likely to spoil."
         },
         {
             "name": "Advanced Chest",
@@ -8634,7 +8634,7 @@
             "asset": "OilPump02",
             "icon": "/icons/technologies/T_icon_buildObject_OilPump02.webp",
             "type": "boss",
-            "description": "-"
+            "description": ""
         },
         {
             "name": "Flame Cauldron",

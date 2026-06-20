@@ -719,16 +719,13 @@ class ItemPickerDialog(QDialog):
             if type_a != 'EPalItemTypeA::Essential':
                 if item['asset'].startswith('PalEgg_') or item['asset'].startswith('YakushimaParts'):
                     continue
-            if type_a == 'EPalItemTypeA::Essential':
-                if 'Effigy' in item.get('name', ''):
-                    continue
-                desc = item.get('description', '').strip()
-                if desc in ('', '-'):
-                    continue
-                if item.get('name', '') == item.get('asset', ''):
-                    continue
-                if 'en_text' in item.get('name', '').lower():
-                    continue
+            desc = item.get('description', '').strip()
+            if not desc or desc.lower() in ('', 'en_text', 'none', '-', '---'):
+                continue
+            if item.get('name', '') == item.get('asset', ''):
+                continue
+            if 'en_text' in item.get('name', '').lower():
+                continue
             list_item = QListWidgetItem(item.get('name', 'Unknown'))
             list_item.setData(Qt.UserRole, item.get('asset', ''))
             list_item.setData(Qt.UserRole + 2, item.get('rarity', 0))
