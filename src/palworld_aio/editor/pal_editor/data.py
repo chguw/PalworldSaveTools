@@ -55,6 +55,11 @@ def _load_pal_base_data():
             if not a:
                 continue
             _PAL_BASE_DATA_CACHE[a] = p
+        for n in data.get('npcs', []):
+            a = n.get('asset', '').lower()
+            if not a or a in _PAL_BASE_DATA_CACHE:
+                continue
+            _PAL_BASE_DATA_CACHE[a] = n
         for a, p in list(_PAL_BASE_DATA_CACHE.items()):
             if p.get('elements') or 'boss_' in a:
                 continue

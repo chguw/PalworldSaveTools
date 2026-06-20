@@ -647,6 +647,23 @@ def update_npc_data():
     if not all_rows:
         print('  No NPC rows found. Skipping.')
         return
+    human_param = load_export_json('Character/DT_PalHumanParameter.json')
+    human_param_common = load_export_json('Character/DT_PalHumanParameter_Common.json')
+    human_rows = {}
+    for d in [human_param, human_param_common]:
+        if d:
+            if isinstance(d, list):
+                for table in d:
+                    if isinstance(table, dict):
+                        rows = table.get('Rows', {})
+                        if rows:
+                            human_rows.update(rows)
+            elif isinstance(d, dict):
+                rows = d.get('Rows', {})
+                if rows:
+                    human_rows.update(rows)
+    _human_rows_ci = {k.lower(): v for k, v in human_rows.items()}
+    _WS_FIELDS = ['EmitFlame', 'Watering', 'Seeding', 'GenerateElectricity', 'Handcraft', 'Collection', 'Deforest', 'Mining', 'OilExtraction', 'ProductMedicine', 'Cool', 'Transport', 'MonsterFarm']
     npc_icon_subdirs = [EXPORT_TEXTURES_DIR / 'PalIcon' / 'NPC', EXPORT_TEXTURES_DIR / 'PalIcon' / 'Normal']
     updated_npcs = []
     for npc_id, row_data in sorted(all_rows.items()):
@@ -659,6 +676,17 @@ def update_npc_data():
             copied_icon = find_and_copy_icon(icon_filename, 'npcs', npc_icon_subdirs)
         l10n_name = _resolve_npc_name(npc_id)
         npc_entry = {'name': l10n_name or npc_id, 'asset': npc_id, 'icon': copied_icon or f'/icons/npcs/{npc_id}_icon_normal.webp'}
+        hrow = human_rows.get(npc_id) or _human_rows_ci.get(npc_id_lower)
+        if hrow and isinstance(hrow, dict):
+            ws = {}
+            for w in _WS_FIELDS:
+                key = f'WorkSuitability_{w}'
+                val = hrow.get(key, 0)
+                if isinstance(val, dict):
+                    val = val.get('value', 0)
+                ws[w] = int(val) if val else 0
+            npc_entry['stats'] = {'hp': hrow.get('Hp', 100), 'melee_attack': hrow.get('MeleeAttack', 100), 'shot_attack': hrow.get('ShotAttack', 100), 'defense': hrow.get('Defense', 100), 'support': hrow.get('Support', 100), 'craft_speed': hrow.get('CraftSpeed', 100), 'max_full_stomach': hrow.get('MaxFullStomach', 300), 'food_amount': hrow.get('FoodAmount', 5), 'run_speed': hrow.get('RunSpeed', 400), 'ride_sprint_speed': hrow.get('RideSprintSpeed', 700)}
+            npc_entry['work_suitabilities'] = ws
         updated_npcs.append(npc_entry)
     result = {'npcs': updated_npcs}
     save_resource_json('npcdata.json', result)
@@ -1685,6 +1713,48 @@ def update_pal_descriptions():
         save_resource_json('reference_unlock_data.json', ref_data)
     else:
         save_resource_json('reference_unlock_data.json', {'append_text': append_text})
+    human_param = load_export_json('Character/DT_PalHumanParameter.json')
+    human_param_common = load_export_json('Character/DT_PalHumanParameter_Common.json')
+    human_rows = {}
+    for d in [human_param, human_param_common]:
+        if d:
+            if isinstance(d, list):
+                for table in d:
+                    if isinstance(table, dict):
+                        rows = table.get('Rows', {})
+                        if rows:
+                            human_rows.update(rows)
+            elif isinstance(d, dict):
+                rows = d.get('Rows', {})
+                if rows:
+                    human_rows.update(rows)
+    _human_rows_ci = {k.lower(): v for k, v in human_rows.items()}
+    _WS_FIELDS = ['EmitFlame', 'Watering', 'Seeding', 'GenerateElectricity', 'Handcraft', 'Collection', 'Deforest', 'Mining', 'OilExtraction', 'ProductMedicine', 'Cool', 'Transport', 'MonsterFarm']
+    human_merged = 0
+    for pal_entry in existing['pals']:
+        if not isinstance(pal_entry, dict):
+            continue
+        if pal_entry.get('elements'):
+            continue
+        asset = pal_entry.get('asset', '')
+        if not asset:
+            continue
+        hrow = human_rows.get(asset) or _human_rows_ci.get(asset.lower())
+        if not hrow or not isinstance(hrow, dict):
+            continue
+        ws = {}
+        for w in _WS_FIELDS:
+            key = f'WorkSuitability_{w}'
+            val = hrow.get(key, 0)
+            if isinstance(val, dict):
+                val = val.get('value', 0)
+            ws[w] = int(val) if val else 0
+        if 'stats' not in pal_entry or not pal_entry['stats']:
+            pal_entry['stats'] = {'hp': hrow.get('Hp', 100), 'melee_attack': hrow.get('MeleeAttack', 100), 'shot_attack': hrow.get('ShotAttack', 100), 'defense': hrow.get('Defense', 100), 'support': hrow.get('Support', 100), 'craft_speed': hrow.get('CraftSpeed', 100), 'max_full_stomach': hrow.get('MaxFullStomach', 300), 'food_amount': hrow.get('FoodAmount', 5), 'run_speed': hrow.get('RunSpeed', 400), 'ride_sprint_speed': hrow.get('RideSprintSpeed', 700)}
+        pal_entry['work_suitabilities'] = ws
+        human_merged += 1
+    if human_merged:
+        print(f'  Merged human params for {human_merged} human pal entries')
     print(f'  Updated {updated} pals with descriptions and partner skills')
     save_resource_json('paldata.json', existing)
 def update_items_dynamic():
