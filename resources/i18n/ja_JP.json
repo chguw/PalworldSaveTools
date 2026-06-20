@@ -1597,5 +1597,7 @@
   "inventory.max_all_abilities": "すべての能力を最大化する",
   "inventory.max_all_abilities_confirm.title": "すべての能力を最大化する",
   "inventory.max_all_abilities_confirm.msg": "このプレイヤーのすべてのレリック能力を最大にしますか?",
-  "inventory.max_all_abilities_done": "能力は最大ランクまで最大化されます。"
+  "inventory.max_all_abilities_done": "能力は最大ランクまで最大化されます。",
+  "inventory.add_all_key_items_success.title": "すべてのキーアイテムを追加",
+  "inventory.add_all_key_items_success.msg": "{count} 個の不足している主要アイテムを追加しました。"
 }

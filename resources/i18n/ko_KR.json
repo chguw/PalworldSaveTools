@@ -1596,5 +1596,7 @@
   "inventory.max_all_abilities": "모든 능력 최대화",
   "inventory.max_all_abilities_confirm.title": "모든 능력 최대화",
   "inventory.max_all_abilities_confirm.msg": "이 플레이어의 모든 유물 능력을 최대화하시겠습니까?",
-  "inventory.max_all_abilities_done": "능력치가 최대 랭크까지 올라갔습니다."
+  "inventory.max_all_abilities_done": "능력치가 최대 랭크까지 올라갔습니다.",
+  "inventory.add_all_key_items_success.title": "모든 주요 항목 추가",
+  "inventory.add_all_key_items_success.msg": "누락된 핵심 항목 {count}개를 추가했습니다."
 }

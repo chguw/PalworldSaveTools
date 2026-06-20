@@ -1621,5 +1621,7 @@
   "inventory.max_all_abilities": "Maximieren Sie alle Fähigkeiten",
   "inventory.max_all_abilities_confirm.title": "Maximieren Sie alle Fähigkeiten",
   "inventory.max_all_abilities_confirm.msg": "Alle Reliktfähigkeiten für diesen Spieler maximieren?",
-  "inventory.max_all_abilities_done": "Fähigkeiten auf maximalen Rang maximiert."
+  "inventory.max_all_abilities_done": "Fähigkeiten auf maximalen Rang maximiert.",
+  "inventory.add_all_key_items_success.title": "Fügen Sie alle wichtigen Elemente hinzu",
+  "inventory.add_all_key_items_success.msg": "{count} fehlende Schlüsselelemente hinzugefügt."
 }

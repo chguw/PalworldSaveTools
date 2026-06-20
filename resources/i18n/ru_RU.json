@@ -1595,5 +1595,7 @@
   "inventory.max_all_abilities": "Максимум всех способностей",
   "inventory.max_all_abilities_confirm.title": "Максимум всех способностей",
   "inventory.max_all_abilities_confirm.msg": "Максимально использовать все способности реликвий для этого игрока?",
-  "inventory.max_all_abilities_done": "Способности увеличены до максимального ранга."
+  "inventory.max_all_abilities_done": "Способности увеличены до максимального ранга.",
+  "inventory.add_all_key_items_success.title": "Добавить все ключевые элементы",
+  "inventory.add_all_key_items_success.msg": "Добавлено недостающих ключевых элементов: {count}."
 }

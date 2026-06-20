@@ -1599,5 +1599,7 @@
   "inventory.max_all_abilities": "最大所有能力",
   "inventory.max_all_abilities_confirm.title": "最大所有能力",
   "inventory.max_all_abilities_confirm.msg": "最大化该玩家的所有遗物能力？",
-  "inventory.max_all_abilities_done": "能力达到最高等级。"
+  "inventory.max_all_abilities_done": "能力达到最高等级。",
+  "inventory.add_all_key_items_success.title": "添加所有关键项目",
+  "inventory.add_all_key_items_success.msg": "添加了 {count} 个缺失的关键项。"
 }

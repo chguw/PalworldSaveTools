@@ -36,6 +36,10 @@ NEW_TRANSLATIONS = {
     'inventory.max_all_abilities_confirm.title': 'Max All Abilities',
     'inventory.max_all_abilities_confirm.msg': 'Max all relic abilities for this player?',
     'inventory.max_all_abilities_done': 'Abilities maxed to maximum rank.',
+    'inventory.add_all_key_items_confirm.title': 'Add All Key Items',
+    'inventory.add_all_key_items_confirm.msg': 'Add all missing key items? ({count} items)',
+    'inventory.add_all_key_items_success.title': 'Add All Key Items',
+    'inventory.add_all_key_items_success.msg': 'Added {count} missing key items.',
 }
 OLD_KEYS = [
     'inventory.add_all_effigies',

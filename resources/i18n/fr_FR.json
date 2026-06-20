@@ -1579,5 +1579,7 @@
   "inventory.max_all_abilities": "Maximiser toutes les capacités",
   "inventory.max_all_abilities_confirm.title": "Maximiser toutes les capacités",
   "inventory.max_all_abilities_confirm.msg": "Maximiser toutes les capacités des reliques pour ce joueur ?",
-  "inventory.max_all_abilities_done": "Capacités maximisées jusqu'au rang maximum."
+  "inventory.max_all_abilities_done": "Capacités maximisées jusqu'au rang maximum.",
+  "inventory.add_all_key_items_success.title": "Ajouter tous les éléments clés",
+  "inventory.add_all_key_items_success.msg": "Ajout de {count} éléments clés manquants."
 }

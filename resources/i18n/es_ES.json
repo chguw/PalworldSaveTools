@@ -1591,5 +1591,7 @@
   "inventory.max_all_abilities": "Max todas las habilidades",
   "inventory.max_all_abilities_confirm.title": "Max todas las habilidades",
   "inventory.max_all_abilities_confirm.msg": "¿Maximizar todas las habilidades de reliquia para este jugador?",
-  "inventory.max_all_abilities_done": "Habilidades maximizadas al rango máximo."
+  "inventory.max_all_abilities_done": "Habilidades maximizadas al rango máximo.",
+  "inventory.add_all_key_items_success.title": "Agregar todos los elementos clave",
+  "inventory.add_all_key_items_success.msg": "Se agregaron {count} elementos clave faltantes."
 }

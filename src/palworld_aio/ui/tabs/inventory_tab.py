@@ -1137,46 +1137,52 @@ class PlayerInventoryTab(QWidget):
         self._refresh_display()
         self._themed_message_box(QMessageBox.Information, t('Done') if t else 'Done', t('inventory.max_all_abilities_done', default='Abilities maxed to maximum rank.'))
     def _on_add_all_key_items(self):
+        if not self.current_player_uid:
+            QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
+            return
         if not self.inventory:
             return
-        all_items = ItemData.get_all_items()
-        unlock_assets = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
-        key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower())]
-        existing_ids = {s.get('item_id') for s in self.inventory.get_container('key').slots}
-        to_add = [i for i in key_candidates if i['asset'] not in existing_ids]
-        missing_unlocks = []
-        for item_id in FOOD_POUCH_ITEMS:
-            if item_id not in existing_ids:
-                missing_unlocks.append(item_id)
-        for item_id in ACCESSORY_UNLOCK_ITEMS:
-            if item_id not in existing_ids:
-                missing_unlocks.append(item_id)
-        for item_id in WEAPON_UNLOCK_ITEMS:
-            if item_id not in existing_ids:
-                missing_unlocks.append(item_id)
-        total = len(to_add) + len(missing_unlocks)
-        if not total:
-            self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items', default='Add All Key Items'), t('inventory.no_new_items', default='All key items already present.'))
-            return
-        reply = self._themed_message_box(QMessageBox.Question, t('inventory.add_all_key_items_confirm.title', default='Add All Key Items'), t('inventory.add_all_key_items_confirm.msg', count=total, default=f'Add all missing key items? ({total} items)'), QMessageBox.Yes | QMessageBox.No)
-        if reply != QMessageBox.Yes:
-            return
-        key_container = self.inventory.get_container('key')
-        if key_container:
+        try:
+            all_items = ItemData.get_all_items()
+            unlock_assets = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
+            key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower())]
+            key_container = self.inventory.get_container('key')
+            if not key_container:
+                return
+            existing_ids = {s.get('item_id') for s in key_container.slots}
+            to_add = [i for i in key_candidates if i['asset'] not in existing_ids]
+            missing_unlocks = []
+            for item_id in FOOD_POUCH_ITEMS:
+                if item_id not in existing_ids:
+                    missing_unlocks.append(item_id)
+            for item_id in ACCESSORY_UNLOCK_ITEMS:
+                if item_id not in existing_ids:
+                    missing_unlocks.append(item_id)
+            for item_id in WEAPON_UNLOCK_ITEMS:
+                if item_id not in existing_ids:
+                    missing_unlocks.append(item_id)
+            total = len(to_add) + len(missing_unlocks)
+            if not total:
+                self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items', default='Add All Key Items'), t('inventory.no_new_items', default='All key items already present.'))
+                return
+            reply = self._themed_message_box(QMessageBox.Question, t('inventory.add_all_key_items_confirm.title', default='Add All Key Items'), t('inventory.add_all_key_items_confirm.msg', count=total, default=f'Add all missing key items? ({total} items)'), QMessageBox.Yes | QMessageBox.No)
+            if reply != QMessageBox.Yes:
+                return
             std_container = key_container._standardized_container
             slots_needed = len(key_container.slots) + total
             if slots_needed > std_container.max_slots:
                 new_max = slots_needed + 50
                 std_container.expand_capacity(new_max)
                 std_container.container_data['value']['SlotNum']['value'] = new_max
-        for item_id in missing_unlocks:
-            self.inventory.add_item('key', item_id, 1)
-        for item in to_add:
-            self.inventory.add_item('key', item['asset'], 1)
-        key_container = self.inventory.get_container('key')
-        if key_container:
+            for item_id in missing_unlocks:
+                self.inventory.add_item('key', item_id, 1)
+            for item in to_add:
+                self.inventory.add_item('key', item['asset'], 1)
             self._update_raw_save_data('key', key_container)
-        self._refresh_display()
+            self._refresh_display()
+            self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items_success.title', default='Add All Key Items'), t('inventory.add_all_key_items_success.msg', count=total, default=f'Added {total} missing key items.'))
+        except Exception as e:
+            print(f'Error in _on_add_all_key_items: {e}')
     def _refresh_display(self):
         if not self.inventory:
             return
