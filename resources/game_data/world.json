@@ -244,19 +244,19 @@
             "name": "Red Metal Barrel",
             "asset": "Barrel01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Barrel01_Iron.webp",
-            "description": "Decorative red metal barrel.\r\n"
+            "description": "Decorative red metal barrel."
         },
         {
             "name": "Blue Metal Barrel",
             "asset": "Barrel02_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Barrel02_Iron.webp",
-            "description": "Decorative blue metal barrel.\r\n"
+            "description": "Decorative blue metal barrel."
         },
         {
             "name": "Green Metal Barrel",
             "asset": "Barrel03_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Barrel03_Iron.webp",
-            "description": "Decorative green metal barrel.\r\n"
+            "description": "Decorative green metal barrel."
         },
         {
             "name": "Wooden Barrel",
@@ -304,7 +304,7 @@
             "name": "Antique Bathtub",
             "asset": "BathTub_Stone",
             "icon": "/icons/structures/T_icon_buildObject_BathTub_Stone.webp",
-            "description": "Decorative antique bathtub.\r\n"
+            "description": "Decorative antique bathtub."
         },
         {
             "name": "Free Pal Alliance Vertical Banner",
@@ -322,31 +322,31 @@
             "name": "Wooden Bench",
             "asset": "Bench_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Bench_Wood.webp",
-            "description": "Decorative wooden bench.\r\n"
+            "description": "Decorative wooden bench."
         },
         {
             "name": "Primitive Furnace",
             "asset": "BlastFurnace",
             "icon": "/icons/structures/T_icon_buildObject_BlastFurnace.webp",
-            "description": "Allows refinement of <itemName id=|CopperIngot|/>.\r\nThe quality leaves much to desire, and processing is slow.\r\nRequires a Fire Pal to light a flame."
+            "description": "Allows refinement of Ingot.\r\nThe quality leaves much to desire, and processing is slow.\r\nRequires a Fire Pal to light a flame."
         },
         {
             "name": "Improved Furnace",
             "asset": "BlastFurnace2",
             "icon": "/icons/structures/T_icon_buildObject_BlastFurnace_2.webp",
-            "description": "Allows refinement of <itemName id=|IronIngot|/>.\r\nThe quality has improved, but the processing speed is still unsatisfactory.\r\nRequires a Fire Pal to light a flame."
+            "description": "Allows refinement of Refined Ingot.\r\nThe quality has improved, but the processing speed is still unsatisfactory.\r\nRequires a Fire Pal to light a flame."
         },
         {
             "name": "Electric Furnace",
             "asset": "BlastFurnace3",
             "icon": "/icons/structures/T_icon_buildObject_BlastFurnace3.webp",
-            "description": "Allows refinement of <itemName id=|StealIngot|/>.\r\nIt requires electricity to use, but is quicker to process.\r\nRequires a Fire Pal to light a flame."
+            "description": "Allows refinement of Pal Metal Ingot.\r\nIt requires electricity to use, but is quicker to process.\r\nRequires a Fire Pal to light a flame."
         },
         {
             "name": "Gigantic Furnace",
             "asset": "BlastFurnace4",
             "icon": "/icons/structures/T_icon_buildObject_BlastFurnace4.webp",
-            "description": "Allows refinement of <itemName id=|StainlessSteel|/>.\r\nBy growing in size, multiple Pals can collaborate to perform smelting.\r\nRequires a Fire Pal to light a flame."
+            "description": "Allows refinement of Hexolite.\r\nBy growing in size, multiple Pals can collaborate to perform smelting.\r\nRequires a Fire Pal to light a flame."
         },
         {
             "name": "BlastFurnace5",
@@ -376,7 +376,7 @@
             "name": "Antique Braided Basket",
             "asset": "Box01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Box01_Stone.webp",
-            "description": "Decorative antique braided basket.\r\n"
+            "description": "Decorative antique braided basket."
         },
         {
             "name": "Cloth Covered Container",
@@ -394,13 +394,13 @@
             "name": "Breeding Farm",
             "asset": "BreedFarm",
             "icon": "/icons/structures/T_icon_buildObject_BreedFarm.webp",
-            "description": "Assign one male and one female Pal to produce eggs.\r\nPlacing <itemName id=|Cake|/> in the facility is required for production."
+            "description": "Assign one male and one female Pal to produce eggs.\r\nPlacing Cake in the facility is required for production."
         },
         {
             "name": "Statue of Power",
             "asset": "BuildableGoddessStatue",
             "icon": "/icons/structures/T_icon_buildObject_BuildableGoddessStatue.webp",
-            "description": "Stone statue spoken of in legends on Palpagos Island.\r\nOffer up <itemName id=|Relic|/> to receive strange powers."
+            "description": "Stone statue spoken of in legends on Palpagos Island.\r\nOffer up Lifmunk Effigy to receive strange powers."
         },
         {
             "name": "Folding Screen",
@@ -412,7 +412,7 @@
             "name": "Cable Reel",
             "asset": "CableCoil01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_CableCoil01_Iron.webp",
-            "description": "Decorative cable reel.\r\n"
+            "description": "Decorative cable reel."
         },
         {
             "name": "Campfire",
@@ -448,7 +448,7 @@
             "name": "Leather Chair",
             "asset": "Chair01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Chair01_Iron.webp",
-            "description": "Decorative leather chair.\r\n"
+            "description": "Decorative leather chair."
         },
         {
             "name": "Frog Chair",
@@ -460,25 +460,25 @@
             "name": "Antique Wooden Chair",
             "asset": "Chair01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Chair01_Stone.webp",
-            "description": "Decorative antique wooden chair.\r\n"
+            "description": "Decorative antique wooden chair."
         },
         {
             "name": "Wooden Chair",
             "asset": "Chair01_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Chair01_Wood.webp",
-            "description": "Decorative wooden chair.\r\n"
+            "description": "Decorative wooden chair."
         },
         {
             "name": "Iron Chair",
             "asset": "Chair02_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Chair02_Iron.webp",
-            "description": "Decorative wooden chair.\r\n"
+            "description": "Decorative wooden chair."
         },
         {
             "name": "Antique Green Wooden Chair",
             "asset": "Chair02_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Chair02_Stone.webp",
-            "description": "Decorative antique green wooden chair.\r\n"
+            "description": "Decorative antique green wooden chair."
         },
         {
             "name": "Pal Essence Condenser",
@@ -508,7 +508,7 @@
             "name": "Coal Mine",
             "asset": "CoalPit",
             "icon": "/icons/structures/T_icon_buildObject_CoalPit.webp",
-            "description": "Facility for producing <itemName id=|Coal|/>.\r\nDigging <itemName id=|Coal|/> is grueling physical work.\r\nLeave it to a Pal that is good at mining."
+            "description": "Facility for producing Coal.\r\nDigging Coal is grueling physical work.\r\nLeave it to a Pal that is good at mining."
         },
         {
             "name": "CommonDropItem3D",
@@ -586,37 +586,37 @@
             "name": "Ore Mining Site",
             "asset": "CopperPit",
             "icon": "/icons/structures/T_icon_buildObject_CopperPit.webp",
-            "description": "Facility for producing <itemName id=|CopperOre|/>.\r\nMining <itemName id=|CopperOre|/> is hard work that requires physical endurance.\r\nLeave it to Pals skilled at mining."
+            "description": "Facility for producing Ore.\r\nMining Ore is hard work that requires physical endurance.\r\nLeave it to Pals skilled at mining."
         },
         {
             "name": "Ore Mining Site II",
             "asset": "CopperPit_2",
             "icon": "/icons/structures/T_icon_buildObject_CopperPit_2.webp",
-            "description": "Facility for producing large quantities of <itemName id=|CopperOre|/>.\r\nMining <itemName id=|CopperOre|/> is hard work that requires physical endurance.\r\nLeave it to Pals skilled at mining."
+            "description": "Facility for producing large quantities of Ore.\r\nMining Ore is hard work that requires physical endurance.\r\nLeave it to Pals skilled at mining."
         },
         {
             "name": "Wooden Counter",
             "asset": "Counter_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Counter_Wood.webp",
-            "description": "Decorative wooden counter.\r\n"
+            "description": "Decorative wooden counter."
         },
         {
             "name": "Crusher",
             "asset": "Crusher",
             "icon": "/icons/structures/T_icon_buildObject_Crusher.webp",
-            "description": "Facility for breaking down <itemName id=|Stone|/> and <itemName id=|Wood|/> to exchange them for other materials.\r\nRequires Pal with the Watering trait to spin the water turbine."
+            "description": "Facility for breaking down Stone and Wood to exchange them for other materials.\r\nRequires Pal with the Watering trait to spin the water turbine."
         },
         {
             "name": "Hexolite Quartz Mine",
             "asset": "CrystalPit",
             "icon": "/icons/structures/T_icon_buildObject_CrystalPit.webp",
-            "description": "Facility for producing <itemName id=|RainbowCrystal|/>s. \r\nDigging <itemName id=|RainbowCrystal|/>s is grueling physical work. \r\nLeave it to a Pal that is good at mining."
+            "description": "Facility for producing Hexolite Quartzs. \r\nDigging Hexolite Quartzs is grueling physical work. \r\nLeave it to a Pal that is good at mining."
         },
         {
             "name": "Antique Curtain",
             "asset": "Curtain01_Wall_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Curtain01_Wall_Stone.webp",
-            "description": "Decorative antique curtain.\r\nCan be placed on walls.\r\n"
+            "description": "Decorative antique curtain.\r\nCan be placed on walls."
         },
         {
             "name": "Ancient Remains",
@@ -790,7 +790,7 @@
             "name": "Training Dummy",
             "asset": "DamagedScarecrow",
             "icon": "/icons/structures/T_icon_buildObject_DamagedScarecrow.webp",
-            "description": "Training dummy shaped like a <characterName id=|Penguin|/>.\r\nCan only be placed in wide open areas."
+            "description": "Training dummy shaped like a Pengullet.\r\nCan only be placed in wide open areas."
         },
         {
             "name": "DamagedScarecrow_Test",
@@ -886,13 +886,13 @@
             "name": "Iron Desk",
             "asset": "Desk01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Desk01_Iron.webp",
-            "description": "Decorative iron desk.\r\n"
+            "description": "Decorative iron desk."
         },
         {
             "name": "Antique Desk",
             "asset": "Desk01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Desk01_Stone.webp",
-            "description": "Decorative antique desk.\r\n"
+            "description": "Decorative antique desk."
         },
         {
             "name": "DestroyableWall_Rock01",
@@ -3424,7 +3424,7 @@
             "name": "Accumulator",
             "asset": "EnergyStorage_Electric",
             "icon": "/icons/structures/T_icon_buildObject_EnergyStorage_Electric.webp",
-            "description": "A facility for storing excess electricity generated by the <mapObjectName id=|ElectricGenerator|/>."
+            "description": "A facility for storing excess electricity generated by the Power Generator."
         },
         {
             "name": "Pal Expedition Station",
@@ -3472,7 +3472,7 @@
             "name": "Gold Coin Assembly Line",
             "asset": "Factory_Money",
             "icon": "/icons/structures/T_icon_buildObject_Factory_Money.webp",
-            "description": "An Assembly Line that manufactures <itemName id=|Money|/>.\r\nThe work puts a strain on the mind, causing a decrease in Pal's SAN value. \r\nRequires Pals that can work with their hands.\r\nWarning: building this structure may result in a considerable increase in PIDF scrutiny."
+            "description": "An Assembly Line that manufactures Gold Coin.\r\nThe work puts a strain on the mind, causing a decrease in Pal's SAN value. \r\nRequires Pals that can work with their hands.\r\nWarning: building this structure may result in a considerable increase in PIDF scrutiny."
         },
         {
             "name": "Plantation",
@@ -3490,13 +3490,13 @@
             "name": "Berry Plantation",
             "asset": "FarmBlockV2_Berries",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlockV2_Berries.webp",
-            "description": "A farm that can grow <itemName id=|Berries|/>.\r\nHarvest time is quick, but eating them doesn't provide much sustenance.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
+            "description": "A farm that can grow Red Berries.\r\nHarvest time is quick, but eating them doesn't provide much sustenance.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Carrot Plantation",
             "asset": "FarmBlockV2_Carrot",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlockV2_Carrot.webp",
-            "description": "A farm where you can grow <itemName id=|Carrot|/>.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
+            "description": "A farm where you can grow Carrot.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Plantation",
@@ -3520,31 +3520,31 @@
             "name": "Lettuce Plantation",
             "asset": "FarmBlockV2_Lettuce",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlockV2_Lettuce.webp",
-            "description": "A farm that can grow <itemName id=|Lettuce|/>.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
+            "description": "A farm that can grow Lettuce.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Onion Plantation",
             "asset": "FarmBlockV2_Onion",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlockV2_Onion.webp",
-            "description": "A farm where you can grow <itemName id=|Onion|/>.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
+            "description": "A farm where you can grow Onion.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Potato Plantation",
             "asset": "FarmBlockV2_Potato",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlockV2_Potato.webp",
-            "description": "A farm where you can grow <itemName id=|Potato|/>.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
+            "description": "A farm where you can grow Potato.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Tomato Plantation",
             "asset": "FarmBlockV2_tomato",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlockV2_tomato.webp",
-            "description": "A farm that can grow <itemName id=|Tomato|/>.\r\nThey take time to harvest, but increase the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
+            "description": "A farm that can grow Tomato.\r\nThey take time to harvest, but increase the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Wheat Plantation",
             "asset": "FarmBlockV2_wheet",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlockV2_wheet.webp",
-            "description": "A farm that can grow <itemName id=|Wheat|/>.\r\nIt requires an average amount of time to harvest.\r\nRequires a few Pals to plant seeds, water, and harvest crops."
+            "description": "A farm that can grow Wheat.\r\nIt requires an average amount of time to harvest.\r\nRequires a few Pals to plant seeds, water, and harvest crops."
         },
         {
             "name": "Skillfruit Orchard",
@@ -3556,7 +3556,7 @@
             "name": "Great Eagle Statue",
             "asset": "FastTravelPoint",
             "icon": "/icons/structures/T_icon_buildObject_FastTravelPoint.webp",
-            "description": "A stone monument in the shape of a <characterName id=|ChickenPal|/>.\r\nAllows fast travel to the location where it is placed."
+            "description": "A stone monument in the shape of a Chikipi.\r\nAllows fast travel to the location where it is placed."
         },
         {
             "name": "Brothers of the Eternal Pyre Vertical Banner",
@@ -3610,7 +3610,7 @@
             "name": "Mill",
             "asset": "FlourMill",
             "icon": "/icons/structures/T_icon_buildObject_FlourMill.webp",
-            "description": "Facility for milling <itemName id=|Wheat|/> to produce <itemName id=|Flour|/>.\r\nRequires Pal with the Watering trait to spin the water turbine."
+            "description": "Facility for milling Wheat to produce Flour.\r\nRequires Pal with the Watering trait to spin the water turbine."
         },
         {
             "name": "Flower Bed",
@@ -3820,7 +3820,7 @@
             "name": "Garbage Bag",
             "asset": "GarbageBag_Iron",
             "icon": "/icons/structures/T_icon_buildObject_GarbageBag_Iron.webp",
-            "description": "Decorative garbage bag.\r\n"
+            "description": "Decorative garbage bag."
         },
         {
             "name": "Glass Diagonal Wall",
@@ -3952,13 +3952,13 @@
             "name": "Antique Globe",
             "asset": "Globe01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Globe01_Stone.webp",
-            "description": "Decorative antique globe.\r\n"
+            "description": "Decorative antique globe."
         },
         {
             "name": "Soccer Goal",
             "asset": "GoalSoccer_Iron",
             "icon": "/icons/structures/T_icon_buildObject_GoalSoccer_Iron.webp",
-            "description": "Decorative soccer goal.\r\nKicking a <characterName id=|SheepBall|/> into it will get you no points."
+            "description": "Decorative soccer goal.\r\nKicking a Lamball into it will get you no points."
         },
         {
             "name": "Yakumo Statue",
@@ -4036,7 +4036,7 @@
             "name": "Refrigerated Crusher",
             "asset": "IceCrusher",
             "icon": "/icons/structures/T_icon_buildObject_IceCrusher.webp",
-            "description": "Facility that crushes <itemName id=|CopperOre|/> and\r\nconverts it into other materials.\r\nRequires a power supply and a Pal with Cooling suitability, but it's very efficient."
+            "description": "Facility that crushes Ore and\r\nconverts it into other materials.\r\nRequires a power supply and a Pal with Cooling suitability, but it's very efficient."
         },
         {
             "name": "Frostallion Statue",
@@ -4144,19 +4144,19 @@
             "name": "Big Wall Ivy",
             "asset": "Ivy01",
             "icon": "/icons/structures/T_icon_buildObject_Ivy01.webp",
-            "description": "Decorative large ivy.\r\nCan be placed on a wall.\r\n"
+            "description": "Decorative large ivy.\r\nCan be placed on a wall."
         },
         {
             "name": "Small Wall Ivy",
             "asset": "Ivy02",
             "icon": "/icons/structures/T_icon_buildObject_Ivy02.webp",
-            "description": "Decorative small ivy.\r\nCan be placed on a wall.\r\n"
+            "description": "Decorative small ivy.\r\nCan be placed on a wall."
         },
         {
             "name": "Horizontal Wall Ivy",
             "asset": "Ivy03",
             "icon": "/icons/structures/T_icon_buildObject_Ivy03.webp",
-            "description": "Decorative horizontal ivy.\r\nCan be placed on a wall.\r\n"
+            "description": "Decorative horizontal ivy.\r\nCan be placed on a wall."
         },
         {
             "name": "Japanese-Style Diagonal Wall",
@@ -4624,19 +4624,19 @@
             "name": "Antique Oval Mirror",
             "asset": "Mirror01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Mirror01_Stone.webp",
-            "description": "Decorative antique oval mirror.\r\n"
+            "description": "Decorative antique oval mirror."
         },
         {
             "name": "Antique Wall Mirror",
             "asset": "Mirror01_Wall_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Mirror01_Wall_Stone.webp",
-            "description": "Decorative antique wall mirror.\r\nCan be placed on walls.\r\n"
+            "description": "Decorative antique wall mirror.\r\nCan be placed on walls."
         },
         {
             "name": "Antique Mirror",
             "asset": "Mirror02_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Mirror02_Stone.webp",
-            "description": "Decorative antique mirror.\r\n"
+            "description": "Decorative antique mirror."
         },
         {
             "name": "Ranch",
@@ -4678,7 +4678,7 @@
             "name": "Crude Oil Extractor",
             "asset": "OilPump",
             "icon": "/icons/structures/T_icon_buildObject_OilPump.webp",
-            "description": "Equipment required to extract <itemName id=|CrudeOil|/> from oil fields.\r\nRequires a power supply to operate."
+            "description": "Equipment required to extract Crude Oil from oil fields.\r\nRequires a power supply to operate."
         },
         {
             "name": "OilPump02",
@@ -4828,7 +4828,7 @@
             "name": "Antique Partition",
             "asset": "Partition_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Partition_Stone.webp",
-            "description": "Decorative antique partition.\r\n"
+            "description": "Decorative antique partition."
         },
         {
             "name": "Grand Piano",
@@ -4996,31 +4996,31 @@
             "name": "Earthen Pipe",
             "asset": "PipeClay01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_PipeClay01_Iron.webp",
-            "description": "Decorative earthen pipe.\r\n"
+            "description": "Decorative earthen pipe."
         },
         {
             "name": "Houseplant",
             "asset": "Plant01_Plant",
             "icon": "/icons/structures/T_icon_buildObject_Plant01_Plant.webp",
-            "description": "Decorative houseplant.\r\n"
+            "description": "Decorative houseplant."
         },
         {
             "name": "Houseplant and Chair",
             "asset": "Plant02_Plant",
             "icon": "/icons/structures/T_icon_buildObject_Plant02_Plant.webp",
-            "description": "Decorative houseplant and chair.\r\n"
+            "description": "Decorative houseplant and chair."
         },
         {
             "name": "Tabletop Houseplant",
             "asset": "Plant03_Plant",
             "icon": "/icons/structures/T_icon_buildObject_Plant03_Plant.webp",
-            "description": "Decorative tabletop houseplant.\r\n"
+            "description": "Decorative tabletop houseplant."
         },
         {
             "name": "Potted Houseplant",
             "asset": "Plant04_Plant",
             "icon": "/icons/structures/T_icon_buildObject_Plant04_Plant.webp",
-            "description": "Decorative potted houseplant.\r\n"
+            "description": "Decorative potted houseplant."
         },
         {
             "name": "Human Bed",
@@ -5056,7 +5056,7 @@
             "name": "Pure Quartz Mine",
             "asset": "QuartzPit",
             "icon": "/icons/structures/T_icon_buildObject_QuartzPit.webp",
-            "description": "A facility for producing <itemName id=|Quartz|/>. \r\nMining <itemName id=|Quartz|/> is grueling physical work.\r\nLeave it to Pals skilled at mining."
+            "description": "A facility for producing Pure Quartz. \r\nMining Pure Quartz is grueling physical work.\r\nLeave it to Pals skilled at mining."
         },
         {
             "name": "RecoverOtomo",
@@ -5080,25 +5080,25 @@
             "name": "Antique Carpet",
             "asset": "Rug01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Rug01_Stone.webp",
-            "description": "Decorative antique carpet.\r\n"
+            "description": "Decorative antique carpet."
         },
         {
             "name": "Antique Red Carpet",
             "asset": "Rug02_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Rug02_Stone.webp",
-            "description": "Decorative antique red carpet.\r\n"
+            "description": "Decorative antique red carpet."
         },
         {
             "name": "Antique Green Carpet",
             "asset": "Rug03_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Rug03_Stone.webp",
-            "description": "Decorative antique green carpet.\r\n"
+            "description": "Decorative antique green carpet."
         },
         {
             "name": "Antique Long Carpet",
             "asset": "Rug04_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Rug04_Stone.webp",
-            "description": "Decorative antique long carpet.\r\n"
+            "description": "Decorative antique long carpet."
         },
         {
             "name": "Fur rug",
@@ -5380,13 +5380,13 @@
             "name": "Emergency Exit Ceiling Sign",
             "asset": "SignExit_Ceiling_Iron",
             "icon": "/icons/structures/T_icon_buildObject_SignExit_Ceiling_Iron.webp",
-            "description": "Decorative emergency exit sign.\r\nCan be placed on ceilings.\r\n"
+            "description": "Decorative emergency exit sign.\r\nCan be placed on ceilings."
         },
         {
             "name": "Emergency Exit Wall Sign",
             "asset": "SignExit_Wall_Iron",
             "icon": "/icons/structures/T_icon_buildObject_SignExit_Wall_Iron.webp",
-            "description": "Decorative emergency exit sign.\r\nCan be placed on walls.\r\n"
+            "description": "Decorative emergency exit sign.\r\nCan be placed on walls."
         },
         {
             "name": "Sign",
@@ -5416,7 +5416,7 @@
             "name": "Soralite Mine",
             "asset": "SkyIslandOrePit",
             "icon": "/icons/structures/T_icon_buildObject_SkyIslandOrePit.webp",
-            "description": "Facility for producing <itemName id=|SkyIslandOre|/>s. Digging s is grueling physical work. Leave it to a Pal that is good at mining."
+            "description": "Facility for producing Soralites. Digging s is grueling physical work. Leave it to a Pal that is good at mining."
         },
         {
             "name": "Azure Oath Banner",
@@ -5440,31 +5440,31 @@
             "name": "Leather Armchair",
             "asset": "Sofa01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Sofa01_Iron.webp",
-            "description": "Decorative leather armchair.\r\n"
+            "description": "Decorative leather armchair."
         },
         {
             "name": "Antique Armchair",
             "asset": "Sofa01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Sofa01_Stone.webp",
-            "description": "Decorative antique armchair.\r\n"
+            "description": "Decorative antique armchair."
         },
         {
             "name": "Leather Couch",
             "asset": "Sofa02_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Sofa02_Iron.webp",
-            "description": "Decorative leather couch.\r\n"
+            "description": "Decorative leather couch."
         },
         {
             "name": "Antique Couch",
             "asset": "Sofa02_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Sofa02_Stone.webp",
-            "description": "Decorative antique couch.\r\n"
+            "description": "Decorative antique couch."
         },
         {
             "name": "Antique Ottoman",
             "asset": "Sofa03_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Sofa03_Stone.webp",
-            "description": "Decorative antique ottoman.\r\n"
+            "description": "Decorative antique ottoman."
         },
         {
             "name": "Hot Spring",
@@ -5500,7 +5500,7 @@
             "name": "Sphere Workbench",
             "asset": "SphereFactory_Black_01",
             "icon": "/icons/structures/T_icon_buildObject_SphereFactory_Black_01.webp",
-            "description": "A <mapObjectName id=|WorkBench|/> for producing spheres used for capturing Pals.\r\nA small workspace keeps the production speed slow.\r\nRequires Pals that can work with their hands."
+            "description": "A Primitive Workbench for producing spheres used for capturing Pals.\r\nA small workspace keeps the production speed slow.\r\nRequires Pals that can work with their hands."
         },
         {
             "name": "Sphere Assembly Line",
@@ -5554,19 +5554,19 @@
             "name": "Logging Site",
             "asset": "StationDeforest2",
             "icon": "/icons/structures/T_icon_buildObject_StationDeforest2.webp",
-            "description": "A facility for producing <itemName id=|Wood|/>.\r\nCutting wood is hard work that requires much physical endurance.\r\nLeave it to Pals skilled in logging."
+            "description": "A facility for producing Wood.\r\nCutting wood is hard work that requires much physical endurance.\r\nLeave it to Pals skilled in logging."
         },
         {
             "name": "Logging Site II",
             "asset": "StationDeforest3",
             "icon": "/icons/structures/T_icon_buildObject_StationDeforest3.webp",
-            "description": "Facility for producing <itemName id=|Wood_Fine|/>. \r\nCutting wood is hard work that requires much physical endurance. \r\nLeave it to Pals skilled in logging."
+            "description": "Facility for producing Hardwood. \r\nCutting wood is hard work that requires much physical endurance. \r\nLeave it to Pals skilled in logging."
         },
         {
             "name": "Stone Pit",
             "asset": "StonePit",
             "icon": "/icons/structures/T_icon_buildObject_StonePit.webp",
-            "description": "A facility for producing <itemName id=|Stone|/>.\r\nMining <itemName id=|Stone|/> is hard work that requires much physical endurance.\r\nLeave it to Pals skilled at mining."
+            "description": "A facility for producing Stone.\r\nMining Stone is hard work that requires much physical endurance.\r\nLeave it to Pals skilled at mining."
         },
         {
             "name": "Stone Diagonal Wall",
@@ -5728,31 +5728,31 @@
             "name": "Iron Stool",
             "asset": "Stool01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Stool01_Iron.webp",
-            "description": "Decorative iron stool.\r\n"
+            "description": "Decorative iron stool."
         },
         {
             "name": "Antique Stool",
             "asset": "Stool01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Stool01_Stone.webp",
-            "description": "Decorative antique stool.\r\n"
+            "description": "Decorative antique stool."
         },
         {
             "name": "Wooden Bar Stool",
             "asset": "Stool_High_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Stool_High_Wood.webp",
-            "description": "Decorative bar stool.\r\n"
+            "description": "Decorative bar stool."
         },
         {
             "name": "Wooden Stool",
             "asset": "Stool_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Stool_Wood.webp",
-            "description": "Decorative wooden stool.\r\n"
+            "description": "Decorative wooden stool."
         },
         {
             "name": "Antique Stove",
             "asset": "Stove01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Stove01_Stone.webp",
-            "description": "Decorative antique stove.\r\n"
+            "description": "Decorative antique stove."
         },
         {
             "name": "StrawHouse",
@@ -5776,7 +5776,7 @@
             "name": "Sulfur Mine",
             "asset": "SulfurPit",
             "icon": "/icons/structures/T_icon_buildObject_SulfurPit.webp",
-            "description": "Facility for producing <itemName id=|Sulfur|/>.\r\nDigging <itemName id=|Sulfur|/> is grueling physical work.\r\nLeave it to a Pal that is good at mining."
+            "description": "Facility for producing Sulfur.\r\nDigging Sulfur is grueling physical work.\r\nLeave it to a Pal that is good at mining."
         },
         {
             "name": "Supplies",
@@ -5794,19 +5794,19 @@
             "name": "Round Iron Table",
             "asset": "TableCircular01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TableCircular01_Iron.webp",
-            "description": "Decorative round iron table.\r\n"
+            "description": "Decorative round iron table."
         },
         {
             "name": "Antique Round Table",
             "asset": "TableCircular01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_TableCircular01_Stone.webp",
-            "description": "Decorative antique round table.\r\n"
+            "description": "Decorative antique round table."
         },
         {
             "name": "Round Table",
             "asset": "TableCircular_Wood",
             "icon": "/icons/structures/T_icon_buildObject_TableCircular_Wood.webp",
-            "description": "Decorative round table.\r\n"
+            "description": "Decorative round table."
         },
         {
             "name": "Tidy Round Table",
@@ -5824,31 +5824,31 @@
             "name": "Ironwood Side Table",
             "asset": "TableSide01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TableSide01_Iron.webp",
-            "description": "Decorative ironwood side table.\r\n"
+            "description": "Decorative ironwood side table."
         },
         {
             "name": "Antique Washstand",
             "asset": "TableSink01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_TableSink01_Stone.webp",
-            "description": "Decorative antique washstand.\r\n"
+            "description": "Decorative antique washstand."
         },
         {
             "name": "Ironwood Table",
             "asset": "TableSquare01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TableSquare01_Iron.webp",
-            "description": "Decorative ironwood table.\r\n"
+            "description": "Decorative ironwood table."
         },
         {
             "name": "Ironwood Low Table",
             "asset": "TableSquare02_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TableSquare02_Iron.webp",
-            "description": "Decorative ironwood low table.\r\n"
+            "description": "Decorative ironwood low table."
         },
         {
             "name": "Square Table",
             "asset": "TableSquare_Wood",
             "icon": "/icons/structures/T_icon_buildObject_TableSquare_Wood.webp",
-            "description": "Decorative square table.\r\n"
+            "description": "Decorative square table."
         },
         {
             "name": "Tidy Square Table",
@@ -5872,7 +5872,7 @@
             "name": "Tire",
             "asset": "Tire01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_Tire01_Iron.webp",
-            "description": "Decorative tire.\r\n"
+            "description": "Decorative tire."
         },
         {
             "name": "Antique Toilet",
@@ -5884,7 +5884,7 @@
             "name": "Antique Toilet Paper Holder",
             "asset": "ToiletHolder01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_ToiletHolder01_Stone.webp",
-            "description": "Decorative antique toilet paper holder.\r\n"
+            "description": "Decorative antique toilet paper holder."
         },
         {
             "name": "Large Toolbox",
@@ -5926,61 +5926,61 @@
             "name": "Antique Towel Rack",
             "asset": "TowlRack01_Stone",
             "icon": "/icons/structures/T_icon_buildObject_TowlRack01_Stone.webp",
-            "description": "Decorative antique towel rack.\r\n"
+            "description": "Decorative antique towel rack."
         },
         {
             "name": "Barricade",
             "asset": "TrafficBarricade01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficBarricade01_Iron.webp",
-            "description": "Decorative barricade.\r\n"
+            "description": "Decorative barricade."
         },
         {
             "name": "Orange Barricade",
             "asset": "TrafficBarricade02_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficBarricade02_Iron.webp",
-            "description": "Decorative orange barricade.\r\n"
+            "description": "Decorative orange barricade."
         },
         {
             "name": "Red Iron Barricade",
             "asset": "TrafficBarricade03_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficBarricade03_Iron.webp",
-            "description": "Decorative red barricade.\r\n"
+            "description": "Decorative red barricade."
         },
         {
             "name": "White Iron Barricade",
             "asset": "TrafficBarricade04_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficBarricade04_Iron.webp",
-            "description": "Decorative white barricade.\r\n"
+            "description": "Decorative white barricade."
         },
         {
             "name": "Iron Fence",
             "asset": "TrafficBarricade05_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficBarricade05_Iron.webp",
-            "description": "Decorative iron fence.\r\n"
+            "description": "Decorative iron fence."
         },
         {
             "name": "Traffic Cone",
             "asset": "TrafficCone01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficCone01_Iron.webp",
-            "description": "Decorative traffic cone.\r\n"
+            "description": "Decorative traffic cone."
         },
         {
             "name": "Fat Traffic Cone",
             "asset": "TrafficCone02_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficCone02_Iron.webp",
-            "description": "Decorative fat traffic cone.\r\n"
+            "description": "Decorative fat traffic cone."
         },
         {
             "name": "Skinny Traffic Cone",
             "asset": "TrafficCone03_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficCone03_Iron.webp",
-            "description": "Decorative skinny traffic cone.\r\n"
+            "description": "Decorative skinny traffic cone."
         },
         {
             "name": "Traffic Light",
             "asset": "TrafficLight01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_TrafficLight01_Iron.webp",
-            "description": "Decorative traffic light.\r\n"
+            "description": "Decorative traffic light."
         },
         {
             "name": "No Pals Beyond Sign",
@@ -6208,7 +6208,7 @@
             "name": "Weapon Workbench",
             "asset": "WeaponFactory_Dirty_01",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactory_Dirty_01.webp",
-            "description": "A <mapObjectName id=|WorkBench|/> for producing weapons and ammunition.\r\nA small workspace prevents the production of high quality weapons.\r\nRequires Pals that can work with their hands."
+            "description": "A Primitive Workbench for producing weapons and ammunition.\r\nA small workspace prevents the production of high quality weapons.\r\nRequires Pals that can work with their hands."
         },
         {
             "name": "Weapon Assembly Line",
@@ -6256,7 +6256,7 @@
             "name": "Wood dismantling tables",
             "asset": "WoodCrusher",
             "icon": "",
-            "description": "Facility that can saw <itemName id=|Wood|/> to extract <itemName id=|Fiber|/>."
+            "description": "Facility that can saw Wood to extract Fiber."
         },
         {
             "name": "WoodHouse",
@@ -6442,7 +6442,7 @@
             "name": "Primitive Workbench",
             "asset": "WorkBench",
             "icon": "/icons/structures/T_icon_buildObject_WorkBench.webp",
-            "description": "A <mapObjectName id=|WorkBench|/> for producing simple items.\r\nRequires a Pal that can work with their hands."
+            "description": "A Primitive Workbench for producing simple items.\r\nRequires a Pal that can work with their hands."
         },
         {
             "name": "WorkBench_SkillCard",
@@ -6454,7 +6454,7 @@
             "name": "Pal Gear Workbench",
             "asset": "WorkBench_SkillUnlock",
             "icon": "/icons/structures/T_icon_buildObject_WorkBench_SkillUnlock.webp",
-            "description": "A <mapObjectName id=|WorkBench|/> for producing Pal tools.\r\nMake a saddle to ride Pals, or make a gun for Pals to use."
+            "description": "A Primitive Workbench for producing Pal tools.\r\nMake a saddle to ride Pals, or make a gun for Pals to use."
         },
         {
             "name": "Beta Wave Generator",

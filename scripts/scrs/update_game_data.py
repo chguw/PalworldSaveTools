@@ -894,7 +894,7 @@ def update_structure_data():
         key = f'BUILDOBJECT_DESC_{struct_id}'
         desc = struct_desc_l10n.get(key, '') or struct_desc_l10n_ci.get(key.lower(), '')
         if desc and desc.lower() not in ('en text', 'en_text', 'none', '-', ''):
-            return desc
+            return resolve_rich_text(desc)
         return ''
     updated_structures = []
     for struct_id in sorted(all_struct_ids):
