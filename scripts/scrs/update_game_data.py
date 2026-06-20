@@ -1100,6 +1100,8 @@ def update_technology_data():
                 struct_icon_map[s['asset'].lower()] = s['icon']
     tech_l10n = load_l10n_table('DT_TechnologyNameText_Common.json')
     tech_desc_l10n = load_l10n_table('DT_TechnologyDescText_Common.json')
+    build_desc_l10n = load_l10n_table('DT_BuildObjectDescText_Common.json')
+    item_desc_l10n = load_l10n_table('DT_ItemDescriptionText_Common.json')
     all_rows = {}
     for data in [tech_data, tech_data_common]:
         if data:
@@ -1167,11 +1169,15 @@ def update_technology_data():
                 copied_icon = find_and_copy_icon(try_fn, 'technologies', tech_icon_subdirs)
                 if copied_icon:
                     break
-        if recipe_name and recipe_name != 'None':
-            desc_key = recipe_name.replace('NAME_', 'DESC_')
+        desc_field = row_data.get('Description', '')
+        if desc_field and desc_field != 'None':
+            desc_text = (tech_desc_l10n.get(desc_field, '') or build_desc_l10n.get(desc_field, '') or item_desc_l10n.get(desc_field, ''))
         else:
-            desc_key = f'DESC_RECIPE_{tech_id}'
-        desc_text = tech_desc_l10n.get(desc_key, '')
+            if recipe_name and recipe_name != 'None':
+                desc_key = recipe_name.replace('NAME_', 'DESC_')
+            else:
+                desc_key = f'DESC_RECIPE_{tech_id}'
+            desc_text = tech_desc_l10n.get(desc_key, '')
         if not desc_text or desc_text.strip().lower() in ('', 'en_text', 'en text', 'none', 'ex text'):
             desc_text = ''
         else:

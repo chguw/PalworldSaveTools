@@ -5452,105 +5452,105 @@
             "asset": "AIcore",
             "icon": "/icons/technologies/T_itemicon_Material_AIcore.webp",
             "type": "standard",
-            "description": ""
+            "description": "Capable of making complex judgments and autonomous management, this pivotal part is integral to any state-of-the-art devices.\r\nCan be crafted at Advanced Workshop."
         },
         {
             "name": "Air Dash Boots",
             "asset": "Accessory_AirDash1",
             "icon": "/icons/technologies/T_itemicon_Accessory_AirDash.webp",
             "type": "boss",
-            "description": ""
+            "description": "An accessory that allows the player to dash in mid-air when equipped."
         },
         {
             "name": "Double Air Dash Boots",
             "asset": "Accessory_AirDash2",
             "icon": "/icons/technologies/T_itemicon_Accessory_AirDash.webp",
             "type": "boss",
-            "description": ""
+            "description": "An accessory that allows the player to perform double dashes in mid-air when equipped."
         },
         {
             "name": "Triple Air Dash Boots",
             "asset": "Accessory_AirDash3",
             "icon": "/icons/technologies/T_itemicon_Accessory_AirDash.webp",
             "type": "boss",
-            "description": ""
+            "description": "An accessory that allows the player to perform triple dashes in mid-air when equipped."
         },
         {
             "name": "Explosion-Resistant Undershirt",
             "asset": "Accessory_ExplosionResist",
             "icon": "/icons/technologies/T_itemicon_Accessory_ExplosionResist.webp",
             "type": "standard",
-            "description": ""
+            "description": "A lightweight yet durable undergarment crafted from unique fibers. \r\nNullifies damage taken from explosions."
         },
         {
             "name": "Double Jump Boots",
             "asset": "Accessory_JumpCount_Increase1",
             "icon": "/icons/technologies/T_itemicon_Accessory_JumpCount_Increase.webp",
             "type": "boss",
-            "description": ""
+            "description": "An accessory that allows the player to jump in mid-air when equipped."
         },
         {
             "name": "Triple Jump Boots",
             "asset": "Accessory_JumpCount_Increase2",
             "icon": "/icons/technologies/T_itemicon_Accessory_JumpCount_Increase.webp",
             "type": "boss",
-            "description": ""
+            "description": "An accessory that allows the player to perform double jumps in mid-air when equipped."
         },
         {
             "name": "Anti-Gravity Belt",
             "asset": "Accessory_JumpPower_Increase",
             "icon": "/icons/technologies/T_itemicon_Accessory_JumpPower_Increase.webp",
             "type": "boss",
-            "description": ""
+            "description": "An accessory that increases the player's jump power when equipped."
         },
         {
             "name": "Ring of Mercy",
             "asset": "Accessory_Nonkilling",
             "icon": "/icons/technologies/T_itemicon_Accessory_Nonkilling.webp",
             "type": "boss",
-            "description": ""
+            "description": "Pacifist's ring.\r\nThe wearer's attacks will not reduce the target's Health below 1."
         },
         {
             "name": "Ability Glasses",
             "asset": "Accessory_TalentChecker",
             "icon": "/icons/technologies/T_itemicon_Accessory_TalentChecker.webp",
             "type": "boss",
-            "description": ""
+            "description": "Glasses used to discern hidden Pal abilities.\r\nDisplays Health, Attack and Defense stats on a scale of 0 to 100."
         },
         {
             "name": "Small Pouch",
             "asset": "AdditionalInventory_001",
             "icon": "/icons/technologies/T_itemicon_Essential_AdditionalInventory_001.webp",
             "type": "standard",
-            "description": ""
+            "description": "A small pouch that allows you to carry additional items. \r\nHolding it increases your inventory slots.\r\nCarrying one is enough."
         },
         {
             "name": "Medium Pouch",
             "asset": "AdditionalInventory_002",
             "icon": "/icons/technologies/T_itemicon_Essential_AdditionalInventory_002.webp",
             "type": "standard",
-            "description": ""
+            "description": "A modest pouch that allows you to carry additional items. \r\nHolding it increases your inventory slots.\r\nCarrying one is enough."
         },
         {
             "name": "Large Pouch",
             "asset": "AdditionalInventory_003",
             "icon": "/icons/technologies/T_itemicon_Essential_AdditionalInventory_003.webp",
             "type": "standard",
-            "description": ""
+            "description": "A large pouch that allows you to carry additional items. \r\nHolding it increases your inventory slots.\r\nCarrying one is enough."
         },
         {
             "name": "Giant Pouch",
             "asset": "AdditionalInventory_004",
             "icon": "/icons/technologies/T_itemicon_Essential_AdditionalInventory_004.webp",
             "type": "standard",
-            "description": ""
+            "description": "A massive pouch that allows you to carry additional items. \r\nHolding it increases your inventory slots.\r\nCarrying one is enough."
         },
         {
             "name": "Summoning Altar",
             "asset": "Altar",
             "icon": "/icons/technologies/T_icon_buildObject_Altar.webp",
             "type": "boss",
-            "description": ""
+            "description": "Offer a Slab depicting a Pal\r\nto summon a powerful Pal to your base.\r\nAdequate caution and battle readiness is paramount."
         },
         {
             "name": "Ancient Armor",
@@ -5641,7 +5641,7 @@
             "asset": "Ancient_Clinic",
             "icon": "/icons/technologies/T_icon_buildObject_Ancient_Clinic.webp",
             "type": "standard",
-            "description": ""
+            "description": "The reemergence of ancient technology has resulted in a boost to medical services, culminating in this top-tier clinic. Larger than a general clinic, it can protect against even more ailments. By assigning a Pal with pharmaceutical skills to it, even bases with grueling labor standards can be kept to the highest levels of cleanliness."
         },
         {
             "name": "Ancient Structure Set",
@@ -5662,7 +5662,7 @@
             "asset": "Ancient_Spa",
             "icon": "/icons/technologies/T_icon_buildObject_Ancient_Spa.webp",
             "type": "standard",
-            "description": ""
+            "description": "Made with ancient technology, this bath's warm water is infused with mineral Paldium. \r\nThe same size as a regular hot spring, not only does it boast higher SAN restoring powers than any other bath available, it replenishes physical endurance. \r\nInjured Pals can rest and recuperate without a care in the world."
         },
         {
             "name": "Arrow",
@@ -5697,35 +5697,35 @@
             "asset": "AutoMealPouch_Tier1",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier1.webp",
             "type": "standard",
-            "description": ""
+            "description": "A small pouch for holding food. Unlocks a food slot in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough."
         },
         {
             "name": "Average Feed Bag",
             "asset": "AutoMealPouch_Tier2",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier2.webp",
             "type": "standard",
-            "description": ""
+            "description": "A decently sized pouch for holding food. Unlocks 2 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough."
         },
         {
             "name": "Large Feed Bag",
             "asset": "AutoMealPouch_Tier3",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier3.webp",
             "type": "standard",
-            "description": ""
+            "description": "A large pouch for holding food. Unlocks 3 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough."
         },
         {
             "name": "Huge Feed Bag",
             "asset": "AutoMealPouch_Tier4",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier4.webp",
             "type": "standard",
-            "description": ""
+            "description": "A large pouch for holding food. Unlocks 4 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough."
         },
         {
             "name": "Giant Feed Bag",
             "asset": "AutoMealPouch_Tier5",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier5.webp",
             "type": "standard",
-            "description": ""
+            "description": "An extraordinarily large sack for storing food. Unlocks 5 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough."
         },
         {
             "name": "Alarm Bell",
@@ -5739,14 +5739,14 @@
             "asset": "BaseCampItemDispenser",
             "icon": "/icons/technologies/T_icon_buildObject_BaseCampItemDispenser.webp",
             "type": "standard",
-            "description": ""
+            "description": "A device that lets you freely access items from all chests in the base."
         },
         {
             "name": "Monitoring Stand",
             "asset": "BaseCampWorkHard",
             "icon": "/icons/technologies/T_icon_buildObject_BaseCampWorkHard.webp",
             "type": "standard",
-            "description": "You can command your Pals to work on various things inside a base.\r\nTry not to overwork them!"
+            "description": "Command your Pals to work on various things inside a base.\r\nYou can allow or prohibit individual kinds of work."
         },
         {
             "name": "High Quality Monitoring Stand",
@@ -5767,7 +5767,7 @@
             "asset": "BaseCampWorkerExtraStation",
             "icon": "/icons/technologies/T_icon_buildObject_BaseCampWorkerExtraStation.webp",
             "type": "standard",
-            "description": ""
+            "description": "A remote-access terminal for the Palbox. \r\nSet it up wherever you'd like and build a base of your own design."
         },
         {
             "name": "Metal Bat",
@@ -5914,7 +5914,7 @@
             "asset": "Battle_Cloth",
             "icon": "/icons/technologies/T_itemicon_Material_Cloth.webp",
             "type": "standard",
-            "description": "Cloth woven from Wool.\r\nRequired to create armor."
+            "description": "Cloth woven from Wool. \r\nRequired to create armor.\r\nCan be crafted at Primitive Workbench."
         },
         {
             "name": "Mounted Crossbow",
@@ -6012,7 +6012,7 @@
             "asset": "Battle_MeleeWeapon_Axe_Steal",
             "icon": "/icons/technologies/T_itemicon_Weapon_Axe_Tier_03.webp",
             "type": "standard",
-            "description": ""
+            "description": "An axe for chopping wood. \r\nIt has achieved extraordinary sharpness thanks to Pal Metal. \r\nIt can slice through high-grade trees from the harshest regions without trouble."
         },
         {
             "name": "Wooden Club",
@@ -6033,7 +6033,7 @@
             "asset": "Battle_MeleeWeapon_Pickaxe_Steal",
             "icon": "/icons/technologies/T_itemicon_Weapon_Pickaxe_Tier_03.webp",
             "type": "standard",
-            "description": ""
+            "description": "A pickaxe for mining. It has achieved extraordinary efficiency thanks to Pal Metal."
         },
         {
             "name": "Sword",
@@ -6075,7 +6075,7 @@
             "asset": "Battle_RangeWeapon_CompoundBow",
             "icon": "/icons/technologies/T_itemicon_Weapon_CompoundBow.webp",
             "type": "standard",
-            "description": ""
+            "description": "A modernized bow. \r\nCapable of firing more powerful arrows."
         },
         {
             "name": "FlameThrower",
@@ -6131,7 +6131,7 @@
             "asset": "Battle_RangeWeapon_OldRevolver",
             "icon": "/icons/technologies/T_itemicon_Weapon_OldRevolver.webp",
             "type": "standard",
-            "description": ""
+            "description": "A slightly outdated revolving handgun. \r\nCompared to Handgun, it excels in single-shot power."
         },
         {
             "name": "Single-Shot Rifle",
@@ -6152,14 +6152,14 @@
             "asset": "Battle_RangeWeapon_SemiAutoRifle",
             "icon": "/icons/technologies/T_itemicon_Weapon_SemiAutoRifle.webp",
             "type": "standard",
-            "description": ""
+            "description": "A rifle that allows for a certain degree of rapid fire. \r\nIt’s easy to aim and has high firepower, making it effective for mid-range combat."
         },
         {
             "name": "Semi-Auto Shotgun",
             "asset": "Battle_RangeWeapon_SemiAutoShotgun",
             "icon": "/icons/technologies/T_itemicon_Weapon_SemiAutoShotgun.webp",
             "type": "standard",
-            "description": ""
+            "description": "A rapid-fire shotgun with immense power. \r\nIts close-range damage output is top-notch."
         },
         {
             "name": "Double-Barreled Shotgun",
@@ -6194,7 +6194,7 @@
             "asset": "Battle_RangeWeapon_SubmachineGun",
             "icon": "/icons/technologies/T_itemicon_Weapon_SubmachineGun.webp",
             "type": "standard",
-            "description": ""
+            "description": "A submachine gun with exceptional rate of fire. \r\nIt’s easy to handle and effective in close-range combat."
         },
         {
             "name": "Beam Launcher",
@@ -6215,7 +6215,7 @@
             "asset": "BeamSword",
             "icon": "/icons/technologies/T_itemicon_Weapon_BeamSword.webp",
             "type": "standard",
-            "description": ""
+            "description": "Beam Sword for close-range combat.\r\nSlices through opponents, burning them with a high-output laser."
         },
         {
             "name": "Free Pal Alliance Flag Set",
@@ -6229,21 +6229,21 @@
             "asset": "Bio_Battery",
             "icon": "/icons/technologies/T_itemicon_Material_Bio_Battery.webp",
             "type": "standard",
-            "description": ""
+            "description": "A device that stores bioenergy for use as electrical power. \r\nIts high density ensures a long run life.\r\nCan be crafted at Production Assembly Line II."
         },
         {
             "name": "Bio Coolant EX",
             "asset": "Bio_Coolant",
             "icon": "/icons/technologies/T_itemicon_Material_Bio_Coolant.webp",
             "type": "standard",
-            "description": ""
+            "description": "A highly efficient cooling medium made from certain Pal-based extractions. \r\nAble to keep even extremely hot environments reliably chilly.\r\nCan be crafted at Production Assembly Line."
         },
         {
             "name": "Gigantic Furnace",
             "asset": "BlastFurnace4",
             "icon": "/icons/technologies/T_icon_buildObject_BlastFurnace4.webp",
             "type": "standard",
-            "description": ""
+            "description": "Allows refinement of Hexolite.\r\nBy growing in size, multiple Pals can collaborate to perform smelting.\r\nRequires a Fire Pal to light a flame."
         },
         {
             "name": "Breeding Farm",
@@ -6271,42 +6271,42 @@
             "asset": "Cake02",
             "icon": "/icons/technologies/T_itemicon_food_Cake02.webp",
             "type": "standard",
-            "description": ""
+            "description": "When this dish is placed in a Breeding Farm chest, the Pal that consumes it will lay a particularly healthy egg. The Pal born from that egg will have stats that improve slightly faster than normal."
         },
         {
             "name": "Vegetable Cake",
             "asset": "Cake03",
             "icon": "/icons/technologies/T_itemicon_food_Cake03.webp",
             "type": "standard",
-            "description": ""
+            "description": "When this dish is placed in a Breeding Farm chest, the Pal that consumes it will lay two particularly healthy eggs at the same time, instead of one."
         },
         {
             "name": "Extravagant Vegetable Cake",
             "asset": "Cake04",
             "icon": "/icons/technologies/T_itemicon_food_Cake04.webp",
             "type": "standard",
-            "description": ""
+            "description": "When this dish is placed in a Breeding Farm chest, the Pal that consumes it will lay a particularly healthy egg. The Pal born from that egg will be more prone to mutations and have stats that improve faster than normal."
         },
         {
             "name": "Special Cake",
             "asset": "Cake05",
             "icon": "/icons/technologies/T_itemicon_food_Cake05.webp",
             "type": "standard",
-            "description": ""
+            "description": "When this dish is placed in a Breeding Farm chest, the Pal that consumes it will lay a particularly healthy egg. \r\nThe Pal born from that egg may inherit more of their best traits."
         },
         {
             "name": "Carbon Fiber",
             "asset": "CarbonFiber",
             "icon": "/icons/technologies/T_itemicon_Material_CarbonFiber.webp",
             "type": "standard",
-            "description": ""
+            "description": "A lightweight yet sturdy material. \r\nUsed to create armor and other equipment.\r\nCan be crafted at Production Assembly Line."
         },
         {
             "name": "Witch Cauldron",
             "asset": "Cauldron",
             "icon": "/icons/technologies/T_icon_buildObject_Cauldron.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Productmedicine efficiency of Pals."
+            "description": "Place in base to improve medicine manufacturing speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Ceiling Lamp",
@@ -6320,28 +6320,28 @@
             "asset": "Cement",
             "icon": "/icons/technologies/T_itemicon_Material_Cement.webp",
             "type": "standard",
-            "description": ""
+            "description": "Cement used for creating structures and more.\r\nCan be produced in a High-Quality Workbench."
         },
         {
             "name": "Charge Rifle",
             "asset": "ChargeLaserRifle",
             "icon": "/icons/technologies/T_itemicon_Weapon_ChargeLaserRifle.webp",
             "type": "standard",
-            "description": ""
+            "description": "A beam rifle crafted with advanced technology.\r\nCharges energy to deliver one powerful shot."
         },
         {
             "name": "Charge Rifle Ammo",
             "asset": "ChargeLaserRifleBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_ChargeLaserRifleBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Charge Rifle and similar weapons.\r\nCan be crafted at Advanced Weapon Assembly Line."
         },
         {
             "name": "Clinic",
             "asset": "Clinic",
             "icon": "/icons/technologies/T_icon_buildObject_Clinic.webp",
             "type": "standard",
-            "description": ""
+            "description": "A basic medical facility, for managing the health of any Pals working on base. By assigning a Pal with pharmaceutical skills to it, SAN values are reduced, and illnesses and injuries are made more manageable. While it would be impossible to expect a pristine base at all times, sanitation management is truly pivotal in the early establishment stages."
         },
         {
             "name": "Cloth2",
@@ -6355,14 +6355,14 @@
             "asset": "CompositeDesk",
             "icon": "/icons/technologies/T_icon_buildObject_CompositeDesk.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility that lets you combine multiple schematics to create more advanced ones."
         },
         {
             "name": "Computer",
             "asset": "Computer",
             "icon": "/icons/technologies/T_itemicon_Material_Computer.webp",
             "type": "standard",
-            "description": ""
+            "description": "Used to control automated equipment and precision machinery, \r\nit's a key component of modern technology.\r\nCan be crafted at Production Assembly Line II."
         },
         {
             "name": "Cooler",
@@ -6376,21 +6376,21 @@
             "asset": "CoolerBox",
             "icon": "/icons/technologies/T_icon_buildObject_CoolerBox.webp",
             "type": "standard",
-            "description": "A small food storage.\r\nWhen you assign an Ice Pal to it, the food inside becomes less likely to spoil."
+            "description": "Small food vault.\r\nAssign an Ice Pal to help prevent\r\nfood stored inside from spoiling."
         },
         {
             "name": "Cold Food Box",
             "asset": "CoolerPalFoodBox",
             "icon": "/icons/technologies/T_icon_buildObject_CoolerPalFoodBox.webp",
             "type": "standard",
-            "description": ""
+            "description": "A feeding box that can be kept cold.\r\nAssign an Ice Pal to it and\r\nthe food inside will be less likely to spoil."
         },
         {
             "name": "Corrosive Solvent",
             "asset": "Corrosive_Solvent",
             "icon": "/icons/technologies/T_itemicon_Material_Corrosive_Solvent.webp",
             "type": "standard",
-            "description": ""
+            "description": "This dangerously potent solvent is an important component in precision manufacturing and special processing methods.\r\nCan be crafted at Production Assembly Line."
         },
         {
             "name": "Crusher",
@@ -6404,7 +6404,7 @@
             "asset": "CrystalPit",
             "icon": "/icons/technologies/T_icon_buildObject_CrystalPit.webp",
             "type": "boss",
-            "description": ""
+            "description": "Facility for producing Hexolite Quartzs. \r\nDigging Hexolite Quartzs is grueling physical work. \r\nLeave it to a Pal that is good at mining."
         },
         {
             "name": "Training Dummy",
@@ -6460,14 +6460,14 @@
             "asset": "DimensionPalStorage",
             "icon": "/icons/technologies/T_icon_buildObject_DimensionPalStorage.webp",
             "type": "boss",
-            "description": ""
+            "description": "A facility for storing a large number of captured Pals. \r\nAny guild member can deposit or withdraw Pals.\r\nIf you set it to private, it can serve as your personal Pal storage."
         },
         {
             "name": "Pal Disassembly Conveyor",
             "asset": "DismantlingConveyor",
             "icon": "/icons/technologies/T_icon_buildObject_DismantlingConveyor.webp",
             "type": "standard",
-            "description": ""
+            "description": "A dream-like facility that automatically butchers any Pal that is placed inside."
         },
         {
             "name": "Viewing Cage",
@@ -6516,7 +6516,7 @@
             "asset": "ElectricGenerator_Large",
             "icon": "/icons/technologies/T_icon_buildObject_ElectricGenerator_Large.webp",
             "type": "boss",
-            "description": ""
+            "description": "A power generator fueled by Electric Pals.\r\nLarger and with improved power generation efficiency."
         },
         {
             "name": "Electric Heater",
@@ -6530,63 +6530,63 @@
             "asset": "EnergyLauncherBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_EnergyLauncherBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Plasma Cannon and similar weapons.\r\nCan be crafted at Weapon Assembly Line II."
         },
         {
             "name": "Plasma Cannon",
             "asset": "EnergyRocketLauncher",
             "icon": "/icons/technologies/T_itemicon_Weapon_EnergyRocketLauncher.webp",
             "type": "standard",
-            "description": ""
+            "description": "Fires high-output energy projectiles. \r\nCauses an energy explosion upon impact."
         },
         {
             "name": "Energy Shotgun",
             "asset": "EnergyShotgun",
             "icon": "/icons/technologies/T_itemicon_Weapon_EnergyShotgun.webp",
             "type": "standard",
-            "description": ""
+            "description": "A shotgun that fires energy rounds.\r\nExcelling in rapid fire, its close-range firepower is truly otherworldly."
         },
         {
             "name": "Energy Shotgun Ammo",
             "asset": "EnergyShotgunBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_EnergyShotgunBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Energy Shotgun and similar weapons.\r\nCan be crafted at Advanced Weapon Assembly Line."
         },
         {
             "name": "Accumulator",
             "asset": "EnergyStorage_Electric",
             "icon": "/icons/technologies/T_icon_buildObject_EnergyStorage_Electric.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility for storing excess electricity generated by the Power Generator."
         },
         {
             "name": "Pal Expedition Station",
             "asset": "Expedition",
             "icon": "/icons/technologies/T_icon_buildObject_Expedition.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility that allows Pals to be sent on expeditions to places like dungeons. \r\nThe dispatched Pals engage in battles and gather items, bringing back resources to the base."
         },
         {
             "name": "Advanced Workshop",
             "asset": "Factory_Hard_04",
             "icon": "/icons/technologies/T_icon_buildObject_Factory_Hard_04.webp",
             "type": "standard",
-            "description": ""
+            "description": "An Assembly Line for producing items and gear.\r\nAdvanced machinery has been introduced, enabling high-speed production.\r\nRequires Pals that can work with their hands."
         },
         {
             "name": "Gold Coin Assembly Line",
             "asset": "Factory_Money",
             "icon": "/icons/technologies/T_icon_buildObject_Factory_Money.webp",
             "type": "standard",
-            "description": ""
+            "description": "An Assembly Line that manufactures Gold Coin.\r\nThe work puts a strain on the mind, causing a decrease in Pal's SAN value. \r\nRequires Pals that can work with their hands.\r\nWarning: building this structure may result in a considerable increase in PIDF scrutiny."
         },
         {
             "name": "Skillfruit Orchard",
             "asset": "Farm_SkillFruits",
             "icon": "/icons/technologies/T_icon_buildObject_Farm_SkillFruits.webp",
             "type": "standard",
-            "description": ""
+            "description": "A farm where Skillfruits can be cultivated.\r\nBy planting the original fruit in the ground,\r\nmultiple fruits of the same type can be harvested."
         },
         {
             "name": "Brothers of the Eternal Pyre Flag Set",
@@ -6600,49 +6600,49 @@
             "asset": "FishingBait_2",
             "icon": "/icons/technologies/T_itemicon_Consume_FishingBait_2.webp",
             "type": "standard",
-            "description": ""
+            "description": "Bait that lures in Pals. \r\nImproved from Simple Bait to increase the chances of Pals biting the bait."
         },
         {
             "name": "Deluxe Bait",
             "asset": "FishingBait_3",
             "icon": "/icons/technologies/T_itemicon_Consume_FishingBait_3.webp",
             "type": "standard",
-            "description": ""
+            "description": "Bait that lures in Pals. \r\nImproved to slightly enlarge the size of the bar in the fishing minigame."
         },
         {
             "name": "Alluring Bait",
             "asset": "FishingBait_3_A",
             "icon": "/icons/technologies/T_itemicon_Consume_FishingBait_3_A.webp",
             "type": "standard",
-            "description": ""
+            "description": "Bait that lures in Pals. \r\nImproved to enlarge the size of the bar in the fishing minigame and increase the number of items obtained from fishing."
         },
         {
             "name": "Fishing Pond",
             "asset": "FishingPond1",
             "icon": "/icons/technologies/T_icon_buildObject_FishingPond1.webp",
             "type": "standard",
-            "description": ""
+            "description": "A ready-to-use fishing pond. \r\nAssign a Pal to fish here at their own leisure. \r\nRequires Pals that can work with their hands."
         },
         {
             "name": "Large Fishing Pond",
             "asset": "FishingPond2",
             "icon": "/icons/technologies/T_icon_buildObject_FishingPond2.webp",
             "type": "standard",
-            "description": ""
+            "description": "A ready-to-use large fishing pond. \r\nThe expanded body of water makes it possible to catch even larger Pals. \r\nRequires Pals that can work with their hands."
         },
         {
             "name": "Intermediate Fishing Rod (Cattiva)",
             "asset": "FishingRod_02_1",
             "icon": "/icons/technologies/T_itemicon_Weapon_FishingRod_3.webp",
             "type": "standard",
-            "description": ""
+            "description": "A fishing rod designed for catching Pals. \r\nUse it with bait near water where shadows are visible to start fishing. \r\nIt boasts improved performance, making catches a bit easier."
         },
         {
             "name": "Advanced Fishing Rod (Pengullet)",
             "asset": "FishingRod_03_1",
             "icon": "/icons/technologies/T_itemicon_Weapon_FishingRod_5.webp",
             "type": "standard",
-            "description": ""
+            "description": "A fishing rod designed for catching Pals. \r\nUse it with bait near water where shadows are visible to start fishing. \r\nIt boasts improved performance, making catches vastly easier."
         },
         {
             "name": "Beginner Fishing Set",
@@ -6656,7 +6656,7 @@
             "asset": "FlamethrowerBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_FlamethrowerBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the FlameThrower and similar weapons.\r\nCan be crafted at Weapon Assembly Line II."
         },
         {
             "name": "Mill",
@@ -6670,84 +6670,84 @@
             "asset": "FlowerBed",
             "icon": "/icons/technologies/T_icon_buildObject_FlowerBed.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Collection efficiency of Pals."
+            "description": "Place in base to improve gathering speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Water Fountain",
             "asset": "Fountain",
             "icon": "/icons/technologies/T_icon_buildObject_Fountain.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Watering efficiency of Pals."
+            "description": "Place in base to improve watering speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Frag Grenade",
             "asset": "FragGrenade",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Frag Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, dealing damage to enemies."
         },
         {
             "name": "Dark Grenade",
             "asset": "FragGrenade_Dark",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Dark.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Dark Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, dealing Dark damage to enemies."
         },
         {
             "name": "Dragon Grenade",
             "asset": "FragGrenade_Dragon",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Dragon.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Dragon Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, dealing Dragon damage to enemies."
         },
         {
             "name": "Shock Grenade",
             "asset": "FragGrenade_Elec",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Elec.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Shock Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, electrocuting everything in the blast radius."
         },
         {
             "name": "Incendiary Grenade",
             "asset": "FragGrenade_Fire",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Fire.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Incendiary Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, setting the surrounding area on fire."
         },
         {
             "name": "Ground Grenade",
             "asset": "FragGrenade_Ground",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Ground.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Ground Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, dealing Earth damage to enemies."
         },
         {
             "name": "Ice Grenade",
             "asset": "FragGrenade_Ice",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Ice.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Ice Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, freezing the surrounding area."
         },
         {
             "name": "Grass Grenade",
             "asset": "FragGrenade_Leaf",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Leaf.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Grass Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, dealing Leaf damage to enemies."
         },
         {
             "name": "Frag Grenade Mk2",
             "asset": "FragGrenade_Super",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Super.webp",
             "type": "standard",
-            "description": ""
+            "description": "An improved frag grenade.\r\nIt explodes a few seconds after being thrown, dealing massive damage to enemies."
         },
         {
             "name": "Water Grenade",
             "asset": "FragGrenade_Water",
             "icon": "/icons/technologies/T_itemicon_Weapon_FragGrenade_Water.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Water Grenade useful for mid-range combat.\r\nIt detonates a few seconds after being thrown, dealing Water damage to enemies."
         },
         {
             "name": "Wooden Living Room Furniture Set",
@@ -7041,14 +7041,14 @@
             "asset": "GasMask",
             "icon": "/icons/technologies/T_itemicon_Accessory_GasMask.webp",
             "type": "standard",
-            "description": ""
+            "description": "A mask with a special filtration system. \r\nNegates damage taken from corrosive mist."
         },
         {
             "name": "Gatling Gun Ammo",
             "asset": "GatlingBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_GatlingBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Gatling Gun and similar weapons.\r\nCan be crafted at Weapon Assembly Line II."
         },
         {
             "name": "Glass Structure Set",
@@ -7062,56 +7062,56 @@
             "asset": "GlobalPalStorage",
             "icon": "/icons/technologies/T_icon_buildObject_GlobalPalStorage.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility that can store the genetic data of Pals\r\nand allows you to reconstruct them from this data. \r\nThe stored genetic data can also be transferred to other worlds."
         },
         {
             "name": "Grappling Gun",
             "asset": "GrapplingGun",
             "icon": "/icons/technologies/T_itemicon_Weapon_GrapplingGun.webp",
             "type": "boss",
-            "description": ""
+            "description": "It fires a hook that latches on to distant targets, pulling the user's body towards the target.\r\nIt allows for easy movement between places with varying elevation."
         },
         {
             "name": "Mega Grappling Gun",
             "asset": "GrapplingGun2",
             "icon": "/icons/technologies/T_itemicon_Weapon_GrapplingGun.webp",
             "type": "boss",
-            "description": ""
+            "description": "It fires a hook that latches on to distant targets, pulling the user's body towards the target.\r\nSince it's upgraded, it now has greater range."
         },
         {
             "name": "Giga Grappling Gun",
             "asset": "GrapplingGun3",
             "icon": "/icons/technologies/T_itemicon_Weapon_GrapplingGun.webp",
             "type": "boss",
-            "description": ""
+            "description": "It fires a hook that latches on to distant targets, pulling the user's body towards the target.\r\nUsing data from prototype versions, its capabilities have been further increased."
         },
         {
             "name": "Hyper Grappling Gun",
             "asset": "GrapplingGun4",
             "icon": "/icons/technologies/T_itemicon_Weapon_GrapplingGun.webp",
             "type": "boss",
-            "description": ""
+            "description": "It fires a hook that latches on to distant targets, pulling the user's body towards the target.\r\nAs a result of research, it has achieved overwhelming mobility."
         },
         {
             "name": "Ultra Grappling Gun",
             "asset": "GrapplingGun5",
             "icon": "/icons/technologies/T_itemicon_Weapon_GrapplingGun.webp",
             "type": "boss",
-            "description": ""
+            "description": "It fires a hook that latches on to distant targets, pulling the user's body towards the target. \r\nWith new materials, cooldown time has been significantly reduced."
         },
         {
             "name": "Grenade Ammo",
             "asset": "GrenadeBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_GrenadeBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Grenade Launcher and similar weapons.\r\nCan be crafted at Weapon Assembly Line II."
         },
         {
             "name": "Guild Chest",
             "asset": "GuildChest",
             "icon": "/icons/technologies/T_icon_buildObject_GuildChest.webp",
             "type": "boss",
-            "description": ""
+            "description": "A chest that can instantly send and receive items through subspace. \r\nThe items inside are shared across all bases where it is placed."
         },
         {
             "name": "Hand-Held Torch",
@@ -7132,7 +7132,7 @@
             "asset": "Headstone",
             "icon": "/icons/technologies/T_icon_buildObject_Headstone.webp",
             "type": "standard",
-            "description": ""
+            "description": "A gravestone that can be inscribed with text. \r\nUse it for recording purposes."
         },
         {
             "name": "Heater",
@@ -7146,21 +7146,21 @@
             "asset": "HighGrade_Processed_Wood",
             "icon": "/icons/technologies/T_itemicon_Material_HighGrade_Processed_Wood.webp",
             "type": "standard",
-            "description": ""
+            "description": "Hardwood that has been cut into high-quality planks. \r\nThe elegant wood grain has been preserved, giving anything made from it an air of luxury.\r\nCan be crafted at Production Assembly Line II."
         },
         {
             "name": "Homeward Thundercloud",
             "asset": "Homeward",
             "icon": "/icons/technologies/T_itemicon_Consume_Homeward.webp",
             "type": "boss",
-            "description": ""
+            "description": "Transports you to the nearest base.\r\nCannot be used in dungeons and other similar locations."
         },
         {
             "name": "Large-Scale Stone Oven",
             "asset": "HugeKitchen",
             "icon": "/icons/technologies/T_icon_buildObject_HugeKitchen.webp",
             "type": "standard",
-            "description": ""
+            "description": "Needed for cooking food.\r\nBy becoming larger, multiple Pals can cooperate to cook together.\r\nRequires a Fire Pal to light a flame."
         },
         {
             "name": "Rayne Syndicate Flag Set",
@@ -7174,14 +7174,14 @@
             "asset": "IceCrusher",
             "icon": "/icons/technologies/T_icon_buildObject_IceCrusher.webp",
             "type": "standard",
-            "description": ""
+            "description": "Facility that crushes Ore and\r\nconverts it into other materials.\r\nRequires a power supply and a Pal with Cooling suitability, but it's very efficient."
         },
         {
             "name": "Frostallion Statue",
             "asset": "IceHorseStatue",
             "icon": "/icons/technologies/T_icon_buildObject_IceHorseStatue.webp",
             "type": "standard",
-            "description": ""
+            "description": "A decorative Frostallion figure."
         },
         {
             "name": "Power Generator",
@@ -7223,7 +7223,7 @@
             "asset": "Infra_MachineParts",
             "icon": "/icons/technologies/T_itemicon_Material_MachineParts.webp",
             "type": "standard",
-            "description": ""
+            "description": "Necessary for building various facilities.\r\nCan be made with a Primitive Workbench."
         },
         {
             "name": "Straw Pal Bed",
@@ -7265,7 +7265,7 @@
             "asset": "ItemChest_04",
             "icon": "/icons/technologies/T_icon_buildObject_ItemChest_04.webp",
             "type": "standard",
-            "description": ""
+            "description": "Stores items.\r\nQuite sturdy, with plenty of storage space.\r\nIt is useful as a large, secure storage box."
         },
         {
             "name": "Japanese-Style Structure Set",
@@ -7279,21 +7279,21 @@
             "asset": "JetDragonStatue",
             "icon": "/icons/technologies/T_icon_buildObject_JetDragonStatue.webp",
             "type": "standard",
-            "description": ""
+            "description": "A decorative Jetragon figure."
         },
         {
             "name": "Katana",
             "asset": "Katana",
             "icon": "/icons/technologies/T_itemicon_Weapon_Katana.webp",
             "type": "standard",
-            "description": ""
+            "description": "Katana for close-range combat.\r\nSlices through with razor-sharp precision, cutting cleanly in one strike."
         },
         {
             "name": "Pal Labor Research Laboratory",
             "asset": "Lab",
             "icon": "/icons/technologies/T_icon_buildObject_Lab.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility for conducting research on the various tasks of Pals. \r\nBy assigning tasks to Pals in this facility, research progresses, granting various benefits."
         },
         {
             "name": "Lamp",
@@ -7307,14 +7307,14 @@
             "asset": "Lantern",
             "icon": "/icons/technologies/T_itemicon_Essential_Lantern.webp",
             "type": "boss",
-            "description": ""
+            "description": "A lantern that can be attached to the hip.\r\nIt lights up automatically at night.\r\nYou can also switch its lighting mode to keep it on at all times.\r\nJust one is enough to find your way in the dark."
         },
         {
             "name": "Enhanced Hip Lantern",
             "asset": "Lantern_High",
             "icon": "/icons/technologies/T_itemicon_Essential_Lantern.webp",
             "type": "boss",
-            "description": ""
+            "description": "A lantern that can be attached to the hip.\r\nIt lights up automatically at night.\r\nYou can also switch its lighting mode to keep it on at all times.\r\nJust one is enough to find your way in the dark."
         },
         {
             "name": "Large Ceiling Lamp",
@@ -7335,21 +7335,21 @@
             "asset": "LaserBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_LaserBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Laser Rifle and similar weapons.\r\nCan be crafted at Weapon Assembly Line II."
         },
         {
             "name": "Laser Gatling Cartridge",
             "asset": "LaserGatlingBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_LaserGatlingBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Laser Gatling Gun and similar weapons.\r\nCan be crafted at Weapon Assembly Line II."
         },
         {
             "name": "Laser Gatling Gun",
             "asset": "LaserGatlingGun",
             "icon": "/icons/technologies/T_itemicon_Weapon_LaserGatlingGun.webp",
             "type": "standard",
-            "description": ""
+            "description": "Fires beam-like energy blasts at high speed. \r\nIts overwhelming firepower can take down multiple enemies at once."
         },
         {
             "name": "Plasma Multicutter",
@@ -7377,7 +7377,7 @@
             "asset": "MakeshiftAssaultRifle",
             "icon": "/icons/technologies/T_itemicon_Weapon_MakeshiftAssaultRifle.webp",
             "type": "standard",
-            "description": ""
+            "description": "An assault rifle handmade from scraps. \r\nIt excels in rate of fire and long range, but its single-shot power is low."
         },
         {
             "name": "Makeshift Handgun",
@@ -7391,28 +7391,28 @@
             "asset": "MakeshiftShotgun",
             "icon": "/icons/technologies/T_itemicon_Weapon_MakeshiftShotgun.webp",
             "type": "standard",
-            "description": ""
+            "description": "A shotgun handmade from scraps. \r\nIt has a short range but excels in close-range combat"
         },
         {
             "name": "Makeshift SMG",
             "asset": "MakeshiftSubmachineGun",
             "icon": "/icons/technologies/T_itemicon_Weapon_MakeshiftSubmachineGun.webp",
             "type": "standard",
-            "description": ""
+            "description": "A submachine gun handmade from scraps. \r\nIt excels in rate of fire, but its single-shot power is low."
         },
         {
             "name": "Coralum Ingot",
             "asset": "ManganeseIngot",
             "icon": "/icons/technologies/T_itemicon_Material_ManganeseIngot.webp",
             "type": "standard",
-            "description": ""
+            "description": "An alloy made from Coralum Ore found on the ocean floor. \r\nHighly resistant to energy, making it ideal for crafting weapons.\r\nCan be refined at Gigantic Furnace."
         },
         {
             "name": "Human-Powered Generator",
             "asset": "ManualElectricGenerator",
             "icon": "/icons/technologies/T_icon_buildObject_ManualElectricGenerator.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility that converts rotational motion into electrical energy.\r\nThe efficiency is low, and the Pals working here will experience a decrease in SAN value, but they will gain experience points."
         },
         {
             "name": "Meat Cleaver",
@@ -7426,28 +7426,28 @@
             "asset": "MedicalPalBed_04",
             "icon": "/icons/technologies/T_icon_buildObject_MedicalPalBed_04.webp",
             "type": "standard",
-            "description": ""
+            "description": "A fluffy bed that Pals can get a good rest on.\r\nPals can rest on it when injured, or to sleep at night.\r\nEven large Pals can sleep soundly on a bed like this."
         },
         {
             "name": "Pal Pod",
             "asset": "MedicalPalBed_05",
             "icon": "/icons/technologies/T_icon_buildObject_MedicalPalBed_05.webp",
             "type": "standard",
-            "description": ""
+            "description": "A healing pod for Pals.\r\nUsed when Pals are injured or to rest at night.\r\nThanks to technological advancements, the healing amount has increased."
         },
         {
             "name": "Advanced Medicine Workbench",
             "asset": "MedicineFacility_03",
             "icon": "/icons/technologies/T_icon_buildObject_MedicineFacility_03.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility for making medicine to cure Pals' illnesses. \r\nWith advanced technology, it can also create unknown medicines. \r\nAssign the task to a Pal capable of pharmacy work."
         },
         {
             "name": "Metal Detector",
             "asset": "MetalDetector",
             "icon": "/icons/technologies/T_itemicon_Essential_MetalDetector.webp",
             "type": "standard",
-            "description": ""
+            "description": "Using this reveals hidden Chromite deposits in dungeons, marking them for easier mining. \r\nHowever, the mark disappears if you move too far away."
         },
         {
             "name": "Iron Gate",
@@ -7468,14 +7468,14 @@
             "asset": "MiningTool",
             "icon": "/icons/technologies/T_icon_buildObject_MiningTool.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Mining efficiency of Pals."
+            "description": "Place in base to improve mining speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Missile Ammo",
             "asset": "MissileBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_MissileBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Guided Missile Launcher and similar weapons.\r\nCan be crafted at Weapon Assembly Line II."
         },
         {
             "name": "Ranch",
@@ -7489,7 +7489,7 @@
             "asset": "MultiElectricHatchingPalEgg",
             "icon": "/icons/technologies/T_icon_buildObject_MultiElectricHatchingPalEgg.webp",
             "type": "boss",
-            "description": ""
+            "description": "Device for incubating Pal eggs.\r\nWhile power supply is required, it allows multiple eggs to be incubated simultaneously at the optimal temperature."
         },
         {
             "name": "Ancient Hatchery",
@@ -7503,7 +7503,7 @@
             "asset": "MultiHatchingPalEgg",
             "icon": "/icons/technologies/T_icon_buildObject_MultiHatchingPalEgg.webp",
             "type": "boss",
-            "description": ""
+            "description": "Device for incubating Pal eggs. \r\nIt automatically maintains a suitable temperature and can hatch multiple eggs at once."
         },
         {
             "name": "Musket",
@@ -7538,7 +7538,7 @@
             "asset": "OilPump",
             "icon": "/icons/technologies/T_icon_buildObject_OilPump.webp",
             "type": "standard",
-            "description": ""
+            "description": "Equipment required to extract Crude Oil from oil fields.\r\nRequires a power supply to operate."
         },
         {
             "name": "OilPump02",
@@ -7552,28 +7552,28 @@
             "asset": "OlympicCauldron",
             "icon": "/icons/technologies/T_icon_buildObject_OlympicCauldron.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Emitflame efficiency of Pals."
+            "description": "Place in base to improve fire-making speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Pal Surgery Table",
             "asset": "OperatingTable",
             "icon": "/icons/technologies/T_icon_buildObject_OperatingTable.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility where surgery can be performed on Pals to change their gender or passive skills."
         },
         {
             "name": "Overheat Rifle",
             "asset": "OverheatRifle",
             "icon": "/icons/technologies/T_itemicon_Weapon_OverheatRifle.webp",
             "type": "standard",
-            "description": ""
+            "description": "An assault rifle capable of firing endlessly without reloading.\r\nProlonged bursts cause overheating, leaving you exposed.\r\nUse with caution."
         },
         {
             "name": "Overheat Rifle Ammo",
             "asset": "OverheatRifleBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_OverheatRifleBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Overheat Rifle and similar weapons.\r\nCan be crafted at Advanced Weapon Assembly Line."
         },
         {
             "name": "Palbox",
@@ -7587,28 +7587,28 @@
             "asset": "PalBooth",
             "icon": "/icons/technologies/T_icon_buildObject_PalBooth.webp",
             "type": "standard",
-            "description": ""
+            "description": "A facility for selling Pals.\r\nBy setting Pals in the sales list, you can sell them to other players.\r\nAssign an Ice Pal to it and the food inside will be less likely to spoil."
         },
         {
             "name": "Boost Gun",
             "asset": "PalDopingShot",
             "icon": "/icons/technologies/T_itemicon_Weapon_PalDopingShot.webp",
             "type": "standard",
-            "description": ""
+            "description": "Firing this at a Pal in your team temporarily boosts that Pal's attack and defense. \r\nFiring it at an enemy deals damage instead."
         },
         {
             "name": "Boost Gun Ammo",
             "asset": "PalDopingShotBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_PalDopingShotBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Boost Gun and similar weapons.\r\nCan be crafted at Weapon Workbench."
         },
         {
             "name": "Megaboost Gun",
             "asset": "PalDopingShot_2",
             "icon": "/icons/technologies/T_itemicon_Weapon_PalDopingShot_2.webp",
             "type": "standard",
-            "description": ""
+            "description": "Firing it at an allied Pal boosts their attack and defense, while hitting an enemy deals damage. \r\nThanks to improvements, the boost is stronger and lasts longer, and it deals more damage to enemies."
         },
         {
             "name": "Feed Box",
@@ -7622,21 +7622,21 @@
             "asset": "PalHealingGrenade",
             "icon": "/icons/technologies/T_itemicon_Weapon_PalHealingGrenade.webp",
             "type": "standard",
-            "description": ""
+            "description": "A Frag Grenade with healing effects.\r\nIt bursts on impact, restoring HP to allied Pals."
         },
         {
             "name": "Medicine Rack",
             "asset": "PalMedicineBox",
             "icon": "/icons/technologies/T_icon_buildObject_PalMedicineBox.webp",
             "type": "standard",
-            "description": ""
+            "description": "A shelf for storing medicine. Sick Pals will come here to take their medicine. Be sure to keep the medicine stocked."
         },
         {
             "name": "Revival Potion",
             "asset": "PalRevive",
             "icon": "/icons/technologies/T_itemicon_Consume_PalRevive.webp",
             "type": "standard",
-            "description": ""
+            "description": "A potion that revives a Pal that has been injured and is unable to move."
         },
         {
             "name": "[WIP] Anceint Sphere 1",
@@ -7657,14 +7657,14 @@
             "asset": "PalSphere_Exotic",
             "icon": "/icons/technologies/T_itemicon_PalSphere_Exotic.webp",
             "type": "standard",
-            "description": ""
+            "description": "An item that captures Pals when thrown.\r\nBoasting incredible performance, it can capture Pals that fall outside regular standards."
         },
         {
             "name": "Plasteel",
             "asset": "Plastic",
             "icon": "/icons/technologies/T_itemicon_Material_Plastic.webp",
             "type": "standard",
-            "description": ""
+            "description": "Plasteel created by processing Crude Oil and metal.\r\nCan be produced in a Electric Furnace."
         },
         {
             "name": "PIDF Flag Set",
@@ -7678,21 +7678,21 @@
             "asset": "Polymer",
             "icon": "/icons/technologies/T_itemicon_Material_Polymer.webp",
             "type": "standard",
-            "description": ""
+            "description": "Polymer made from refined oil. \r\nRequired for producing various advanced items such as rifles.\r\nCan be crafted at Production Assembly Line."
         },
         {
             "name": "Advanced Recovery Meds",
             "asset": "Potion_Extreme",
             "icon": "/icons/technologies/T_itemicon_Food_Potion_Extreme.webp",
             "type": "standard",
-            "description": ""
+            "description": "Medicine that heals wounds over time.\r\nExtremely high quality, it rapidly restores HP before your eyes."
         },
         {
             "name": "Wooden Board",
             "asset": "Processed_Wood",
             "icon": "/icons/technologies/T_itemicon_Material_Processed_Wood.webp",
             "type": "standard",
-            "description": ""
+            "description": "Wood that has been cut into easy-to-use planks. \r\nMore versatile than unprocessed logs, the construction possibilities are almost limitless.\r\nCan be crafted at Primitive Workbench."
         },
         {
             "name": "Stone Axe",
@@ -7720,7 +7720,7 @@
             "asset": "Product_CoalPit",
             "icon": "/icons/technologies/T_icon_buildObject_CoalPit.webp",
             "type": "boss",
-            "description": ""
+            "description": "Facility for producing Coal.\r\nDigging Coal is grueling physical work.\r\nLeave it to a Pal that is good at mining."
         },
         {
             "name": "Campfire",
@@ -7748,14 +7748,14 @@
             "asset": "Product_CopperPit",
             "icon": "/icons/technologies/T_icon_buildObject_CopperPit.webp",
             "type": "boss",
-            "description": ""
+            "description": "Facility for producing Ore.\r\nMining Ore is hard work that requires physical endurance.\r\nLeave it to Pals skilled at mining."
         },
         {
             "name": "Ore Mining Site II",
             "asset": "Product_CopperPit_2",
             "icon": "/icons/technologies/T_icon_buildObject_CopperPit_2.webp",
             "type": "boss",
-            "description": ""
+            "description": "Facility for producing large quantities of Ore.\r\nMining Ore is hard work that requires physical endurance.\r\nLeave it to Pals skilled at mining."
         },
         {
             "name": "High-Quality Workbench",
@@ -7790,7 +7790,7 @@
             "asset": "Product_Farm_Carrot",
             "icon": "/icons/technologies/T_icon_buildObject_FarmBlockV2_Carrot.webp",
             "type": "standard",
-            "description": ""
+            "description": "A farm where you can grow Carrot.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Lettuce Plantation",
@@ -7804,14 +7804,14 @@
             "asset": "Product_Farm_Onion",
             "icon": "/icons/technologies/T_icon_buildObject_FarmBlockV2_Onion.webp",
             "type": "standard",
-            "description": ""
+            "description": "A farm where you can grow Onion.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Potato Plantation",
             "asset": "Product_Farm_Potato",
             "icon": "/icons/technologies/T_icon_buildObject_FarmBlockV2_Potato.webp",
             "type": "standard",
-            "description": ""
+            "description": "A farm where you can grow Potato.\r\nIt takes time to harvest, but increases the variety of meals you can prepare.\r\nRequires a few Pals to plant seeds, water, and harvest the crops."
         },
         {
             "name": "Tomato Plantation",
@@ -7888,7 +7888,7 @@
             "asset": "Product_QuartzPit",
             "icon": "/icons/technologies/T_icon_buildObject_QuartzPit.webp",
             "type": "boss",
-            "description": ""
+            "description": "A facility for producing Pure Quartz. \r\nMining Pure Quartz is grueling physical work.\r\nLeave it to Pals skilled at mining."
         },
         {
             "name": "Logging Site",
@@ -7902,7 +7902,7 @@
             "asset": "Product_StationDeforest2",
             "icon": "/icons/technologies/T_icon_buildObject_StationDeforest3.webp",
             "type": "boss",
-            "description": ""
+            "description": "Facility for producing Hardwood. \r\nCutting wood is hard work that requires much physical endurance. \r\nLeave it to Pals skilled in logging."
         },
         {
             "name": "Stone Pit",
@@ -7916,7 +7916,7 @@
             "asset": "Product_SulfurPit",
             "icon": "/icons/technologies/T_icon_buildObject_SulfurPit.webp",
             "type": "boss",
-            "description": ""
+            "description": "Facility for producing Sulfur.\r\nDigging Sulfur is grueling physical work.\r\nLeave it to a Pal that is good at mining."
         },
         {
             "name": "Weapon Workbench",
@@ -7951,14 +7951,14 @@
             "asset": "Refrigerator",
             "icon": "/icons/technologies/T_icon_buildObject_Refrigerator.webp",
             "type": "standard",
-            "description": "A large food storage.\r\nWhen you assign an Ice Pal to it, the food inside becomes less likely to spoil."
+            "description": "Large food vault.\r\nAssign an Ice Pal to help prevent\r\nfood stored inside from spoiling."
         },
         {
             "name": "Reinforced Arrow",
             "asset": "ReinforcedArrow",
             "icon": "/icons/technologies/T_itemicon_Ammo_ReinforcedArrow.webp",
             "type": "standard",
-            "description": ""
+            "description": "Enhanced arrows for shooting with Compound Bow.\r\nCan be crafted at Primitive Workbench."
         },
         {
             "name": "Repair Bench",
@@ -7986,49 +7986,49 @@
             "asset": "SFArmor",
             "icon": "/icons/technologies/T_itemicon_Armor_SFArmor.webp",
             "type": "standard",
-            "description": ""
+            "description": "Armor made of Hexolite.\r\nPossesses overwhelming durability and defense."
         },
         {
             "name": "Cold Resistant Hexolite Armor",
             "asset": "SFArmorCold",
             "icon": "/icons/technologies/T_itemicon_Armor_SFArmorCold.webp",
             "type": "standard",
-            "description": ""
+            "description": "Improved Hexolite Armor.\r\nUseful for surviving in cold climates."
         },
         {
             "name": "Heat Resistant Hexolite Armor",
             "asset": "SFArmorHeat",
             "icon": "/icons/technologies/T_itemicon_Armor_SFArmorHeat.webp",
             "type": "standard",
-            "description": ""
+            "description": "Improved Hexolite Armor.\r\nBoasts high heat resistance."
         },
         {
             "name": "Lightweight Hexolite Armor",
             "asset": "SFArmorWeight",
             "icon": "/icons/technologies/T_itemicon_Armor_SFArmorWeight.webp",
             "type": "standard",
-            "description": ""
+            "description": "Improved Hexolite Armor.\r\nIncreases carrying capacity."
         },
         {
             "name": "Advanced Arrow",
             "asset": "SFArrow",
             "icon": "/icons/technologies/T_itemicon_Ammo_SFArrow.webp",
             "type": "standard",
-            "description": ""
+            "description": "Enhanced arrows for shooting with Advanced Bow.\r\nCan be crafted at Primitive Workbench."
         },
         {
             "name": "Advanced Bow",
             "asset": "SFBow",
             "icon": "/icons/technologies/T_itemicon_Weapon_SFBow.webp",
             "type": "standard",
-            "description": ""
+            "description": "A bow reconstructed with advanced technology. \r\nCapable of firing extremely powerful arrows."
         },
         {
             "name": "Hexolite Helmet",
             "asset": "SFHelmet",
             "icon": "/icons/technologies/T_itemicon_Armor_SFHelmet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Helmet made of Hexolite.\r\nCombines incredible strength and lightness."
         },
         {
             "name": "Futuristic Structure Set",
@@ -8042,14 +8042,14 @@
             "asset": "Salvage_TreasureBoxKey02",
             "icon": "/icons/technologies/T_itemicon_Salvage_TreasureBoxKey02.webp",
             "type": "standard",
-            "description": ""
+            "description": "A high-powered magnet used in advanced salvage operations. \r\nIts strong magnetic pull can retrieve resources and supplies from the ocean floor."
         },
         {
             "name": "Alpha Wave Generator",
             "asset": "SanityDecrease1",
             "icon": "/icons/technologies/T_icon_buildObject_SanityDecrease1.webp",
             "type": "standard",
-            "description": ""
+            "description": "A device that emits alpha waves to help Pals relax.\r\nSlows the rate at which the SAN value of Base Pals decreases.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "PAL Genetic Research Unit Flag Set",
@@ -8105,7 +8105,7 @@
             "asset": "Shield_SF",
             "icon": "/icons/technologies/T_itemicon_Armor_Shield_06.webp",
             "type": "standard",
-            "description": ""
+            "description": "Strange shield made with advanced technology.\r\nIt automatically repairs itself after not taking damage for a while."
         },
         {
             "name": "Shotgun Shell",
@@ -8126,882 +8126,882 @@
             "asset": "Silo",
             "icon": "/icons/technologies/T_icon_buildObject_Silo.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Seeding efficiency of Pals."
+            "description": "Place in base to improve planting speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Melpaca Saddle",
             "asset": "SkillUnlock_Alpaca",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Melpaca Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Melpaca."
         },
         {
             "name": "Kitsun Saddle",
             "asset": "SkillUnlock_AmaterasuWolf",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Kitsun Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Kitsun."
         },
         {
             "name": "Kitsun Noct Saddle",
             "asset": "SkillUnlock_AmaterasuWolf_Dark",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Kitsun Noct."
         },
         {
             "name": "Nyafia's Shotgun",
             "asset": "SkillUnlock_BadCatgirl",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Shotgun.webp",
             "type": "standard",
-            "description": ""
+            "description": "A shotgun for Nyafia to hold.\r\nActivate its Partner Skill, and Nyafia will unleash a barrage of shotgun blasts at nearby enemies."
         },
         {
             "name": "Vanwyrm Saddle",
             "asset": "SkillUnlock_BirdDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Vanwyrm Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Vanwyrm."
         },
         {
             "name": "Vanwyrm Cryst Saddle",
             "asset": "SkillUnlock_BirdDragon_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Vanwyrm Cryst."
         },
         {
             "name": "Necromus Saddle",
             "asset": "SkillUnlock_BlackCentaur",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Necromus Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Necromus."
         },
         {
             "name": "Shadowbeak Saddle",
             "asset": "SkillUnlock_BlackGriffon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Shadowbeak Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Shadowbeak."
         },
         {
             "name": "Astegon Saddle",
             "asset": "SkillUnlock_BlackMetalDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Astegon Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Astegon."
         },
         {
             "name": "Smokie's Harness",
             "asset": "SkillUnlock_BlackPuppy",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Harness.webp",
             "type": "standard",
-            "description": ""
+            "description": "Harness for Smokie.\r\nActivate its Partner Skill to detect the location of nearby Chromite."
         },
         {
             "name": "Azurobe Saddle",
             "asset": "SkillUnlock_BlueDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Azurobe Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Azurobe."
         },
         {
             "name": "Azurobe Cryst Saddle",
             "asset": "SkillUnlock_BlueDragon_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Azurobe Cryst."
         },
         {
             "name": "Shaolong Saddle",
             "asset": "SkillUnlock_BlueSkyDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Shaolong."
         },
         {
             "name": "Azurmane Saddle",
             "asset": "SkillUnlock_BlueThunderHorse",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Azurmane."
         },
         {
             "name": "Rushoar Saddle",
             "asset": "SkillUnlock_Boar",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Rushoar Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Rushoar."
         },
         {
             "name": "Lifmunk's Submachine Gun",
             "asset": "SkillUnlock_Carbunclo",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_SMG.webp",
             "type": "standard",
-            "description": "The Lifmunk's Submachine Gun becomes craftable at the Pal Gear Workbench."
+            "description": "Submachine gun made specifically for Lifmunk.\r\nActivate its Partner Skill, and Lifmunk\r\nwill ride on your head and fire at enemies."
         },
         {
             "name": "Tocotoco's Gloves",
             "asset": "SkillUnlock_ColorfulBird",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Gloves.webp",
             "type": "standard",
-            "description": "The Tocotoco's Gloves becomes craftable at the Pal Gear Workbench."
+            "description": "Gloves for gently holding Tocotoco.\r\nActivate its Partner Skill to hold Tocotoco\r\nand use it to fire explosive eggs."
         },
         {
             "name": "Pharapace Saddle",
             "asset": "SkillUnlock_CubeTurtle",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Tetroise."
         },
         {
             "name": "Pharapace Primo Saddle",
             "asset": "SkillUnlock_CubeTurtle_Neutral",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Tetroise Primo."
         },
         {
             "name": "Xenolord Saddle",
             "asset": "SkillUnlock_DarkMechaDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Xenolord."
         },
         {
             "name": "Eikthyrdeer Saddle",
             "asset": "SkillUnlock_Deer",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Eikthyrdeer Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Eikthyrdeer."
         },
         {
             "name": "Eikthyrdeer Terra Saddle",
             "asset": "SkillUnlock_Deer_Ground",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Hangyu's Gloves becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Eikthyrdeer Terra."
         },
         {
             "name": "Aegidron Saddle",
             "asset": "SkillUnlock_DomeArmorDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Aegidron."
         },
         {
             "name": "Grizzbolt's Minigun",
             "asset": "SkillUnlock_ElecPanda",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Minigun.webp",
             "type": "standard",
-            "description": "The Grizzbolt's Minigun becomes craftable at the Pal Gear Workbench."
+            "description": "Makes Grizzbolt fire a minigun\r\nwhen ridden."
         },
         {
             "name": "Elphidran Saddle",
             "asset": "SkillUnlock_FairyDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Elphidran Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Elphidran."
         },
         {
             "name": "Elphidran Aqua Saddle",
             "asset": "SkillUnlock_FairyDragon_Water",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Elphidran Aqua."
         },
         {
             "name": "Dazemu Saddle",
             "asset": "SkillUnlock_FeatherOstrich",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Dazemu."
         },
         {
             "name": "Fenglope Saddle",
             "asset": "SkillUnlock_FengyunDeeper",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Fenglope Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Fenglope."
         },
         {
             "name": "Fenglope Lux Saddle",
             "asset": "SkillUnlock_FengyunDeeper_Electric",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Fenglope Lux."
         },
         {
             "name": "Pyrin Saddle",
             "asset": "SkillUnlock_FireKirin",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Pyrin Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Pyrin."
         },
         {
             "name": "Pyrin Noct Saddle",
             "asset": "SkillUnlock_FireKirin_Dark",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Pyrin Noct."
         },
         {
             "name": "Arsox Saddle",
             "asset": "SkillUnlock_FlameBuffalo",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Arsox Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Arsox."
         },
         {
             "name": "Dinossom Saddle",
             "asset": "SkillUnlock_FlowerDinosaur",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Dinossom Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Dinossom."
         },
         {
             "name": "Dinossom Lux Saddle",
             "asset": "SkillUnlock_FlowerDinosaur_Electric",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Dinossom Lux."
         },
         {
             "name": "Direhowl's Saddled Harness",
             "asset": "SkillUnlock_Garm",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Direhowl's Saddled Harness becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Direhowl."
         },
         {
             "name": "Ghangler Saddle",
             "asset": "SkillUnlock_GhostAnglerfish",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Ghangler."
         },
         {
             "name": "Ghangler Ignis Saddle",
             "asset": "SkillUnlock_GhostAnglerfish_Fire",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Ghangler Ignis."
         },
         {
             "name": "Maraith Saddle",
             "asset": "SkillUnlock_GhostBeast",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Maraith Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Maraith."
         },
         {
             "name": "Eidrolon Saddle",
             "asset": "SkillUnlock_GhostDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Eidrolon."
         },
         {
             "name": "Eidrolon Ignis Saddle",
             "asset": "SkillUnlock_GhostDragon_Fire",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Eidrolon Ignis."
         },
         {
             "name": "Gildane Saddle",
             "asset": "SkillUnlock_GoldenHorse",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Gildane."
         },
         {
             "name": "Dualith Saddle",
             "asset": "SkillUnlock_GrassGolem",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Dualith. Grants the ability to fire a powerful Grass laser while on the go."
         },
         {
             "name": "Dualith Noct Saddle",
             "asset": "SkillUnlock_GrassGolem_Dark",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Dualith Noct. Grants the ability to fire a powerful Dark laser while on the go."
         },
         {
             "name": "Mammorest Saddle",
             "asset": "SkillUnlock_GrassMammoth",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Mammorest Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Mammorest."
         },
         {
             "name": "Mammorest Cryst Saddle",
             "asset": "SkillUnlock_GrassMammoth_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Mammorest Cryst."
         },
         {
             "name": "Mossanda's Grenade Launcher",
             "asset": "SkillUnlock_GrassPanda",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Grenadelauncher.webp",
             "type": "standard",
-            "description": "The Mossanda's Grenade Launcher becomes craftable at the Pal Gear Workbench."
+            "description": "Makes Mossanda fire a grenade launcher\r\nwhen ridden."
         },
         {
             "name": "Mossanda Lux's Grenade Launcher",
             "asset": "SkillUnlock_GrassPanda_Electric",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Grenadelauncher.webp",
             "type": "standard",
-            "description": ""
+            "description": "Makes Mossanda Lux fire a grenade launcher\r\nwhen ridden."
         },
         {
             "name": "Yakumo Saddle",
             "asset": "SkillUnlock_GuardianDog",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Yakumo."
         },
         {
             "name": "Helzephyr Saddle",
             "asset": "SkillUnlock_HadesBird",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Helzephyr Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Helzephyr."
         },
         {
             "name": "Helzephyr Lux Saddle",
             "asset": "SkillUnlock_HadesBird_Electric",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Helzephyr Lux."
         },
         {
             "name": "Nitewing Saddle",
             "asset": "SkillUnlock_HawkBird",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Nitewing Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Nitewing."
         },
         {
             "name": "Faleris Saddle",
             "asset": "SkillUnlock_Horus",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Faleris Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Faleris."
         },
         {
             "name": "Faleris Aqua Saddle",
             "asset": "SkillUnlock_Horus_Water",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Faleris Aqua."
         },
         {
             "name": "Reindrix Saddle",
             "asset": "SkillUnlock_IceDeer",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Reindrix Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Reindrix."
         },
         {
             "name": "Frostallion Saddle",
             "asset": "SkillUnlock_IceHorse",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Frostallion Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Frostallion."
         },
         {
             "name": "Frostallion Noct Saddle",
             "asset": "SkillUnlock_IceHorse_Dark",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Frostallion Noct."
         },
         {
             "name": "Whalaska Saddle",
             "asset": "SkillUnlock_IceNarwhal",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Whalaska."
         },
         {
             "name": "Whalaska Ignis Saddle",
             "asset": "SkillUnlock_IceNarwhal_Fire",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Whalaska Ignis."
         },
         {
             "name": "Polapup Saddle",
             "asset": "SkillUnlock_IceSeal",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Polapup."
         },
         {
             "name": "Polapup Terra Saddle",
             "asset": "SkillUnlock_IceSeal_Ground",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Polapup Terra."
         },
         {
             "name": "Jetragon's Missile Launcher",
             "asset": "SkillUnlock_JetDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_MultiMissile.webp",
             "type": "standard",
-            "description": "The Jetragon's Missile Launcher becomes craftable at the Pal Gear Workbench."
+            "description": "Makes Jetragon fire missiles\r\nwhen ridden."
         },
         {
             "name": "Kingpaca Saddle",
             "asset": "SkillUnlock_KingAlpaca",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Kingpaca Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Kingpaca."
         },
         {
             "name": "Kingpaca Cryst Saddle",
             "asset": "SkillUnlock_KingAlpaca_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Kingpaca Cryst."
         },
         {
             "name": "Blazamut Saddle",
             "asset": "SkillUnlock_KingBahamut",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Blazamut Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Blazamut."
         },
         {
             "name": "Blazamut Ryu Saddle",
             "asset": "SkillUnlock_KingBahamut_Dragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Blazamut Ryu."
         },
         {
             "name": "Solmora Saddle",
             "asset": "SkillUnlock_KingSunfish",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Solmora."
         },
         {
             "name": "Solmora Lux Saddle",
             "asset": "SkillUnlock_KingSunfish_Thunder",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Solmora Lux."
         },
         {
             "name": "Univolt Saddle",
             "asset": "SkillUnlock_Kirin",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Univolt Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Univolt."
         },
         {
             "name": "Univolt Cryst Saddle",
             "asset": "SkillUnlock_Kirin_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Univolt Cryst."
         },
         {
             "name": "Foxparks' Harness",
             "asset": "SkillUnlock_Kitsunebi",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Harness.webp",
             "type": "standard",
-            "description": "The Foxparks' Harness becomes craftable at the Pal Gear Workbench."
+            "description": "Harness for holding Foxparks.\r\nActivate its Partner Skill to hold Foxparks\r\nand attack using it as a flamethrower."
         },
         {
             "name": "Foxparks Cryst's Harness",
             "asset": "SkillUnlock_Kitsunebi_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Harness.webp",
             "type": "standard",
-            "description": ""
+            "description": "Harness for holding Foxparks Cryst.\r\nActivate its Partner Skill to hold Foxparks Cryst\r\nand release freezing air to attack."
         },
         {
             "name": "Relaxaurus' Missile Launcher",
             "asset": "SkillUnlock_LazyDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_MultiMissile.webp",
             "type": "standard",
-            "description": "The Relaxaurus' Missile Launcher becomes craftable at the Pal Gear Workbench."
+            "description": "Makes Relaxaurus fire a missile launcher\r\nwhen ridden."
         },
         {
             "name": "Relaxaurus Lux's Missile Launcher",
             "asset": "SkillUnlock_LazyDragon_Electric",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_MultiMissile.webp",
             "type": "standard",
-            "description": ""
+            "description": "Makes Relaxaurus Lux fire a missile launcher\r\nwhen ridden."
         },
         {
             "name": "Hartalis Saddle",
             "asset": "SkillUnlock_LegendDeer",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Hartalis.\r\nGrants the ability to generate a barrier that blocks incoming attacks."
         },
         {
             "name": "Ophydia Saddle",
             "asset": "SkillUnlock_LotusDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Ophydia."
         },
         {
             "name": "Blazehowl Saddle",
             "asset": "SkillUnlock_Manticore",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Blazehowl Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Blazehowl."
         },
         {
             "name": "Blazehowl Noct Saddle",
             "asset": "SkillUnlock_Manticore_Dark",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Blazehowl Noct."
         },
         {
             "name": "Tanzee's Assault Rifle",
             "asset": "SkillUnlock_Monkey",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_AssaultRifle.webp",
             "type": "standard",
-            "description": "The Tanzee's Assault Rifle becomes craftable at the Pal Gear Workbench."
+            "description": "Assault rifle made specifically for Tanzee.\r\nActivate its Partner Skill, and Tanzee will enter gunner mode\r\nand begin shooting at nearby enemies."
         },
         {
             "name": "Tanzee Ignis's Assault Rifle",
             "asset": "SkillUnlock_Monkey_Fire",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_AssaultRifle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Assault rifle made specifically for Tanzee Ignis.\r\nActivate its Partner Skill, and Tanzee Ignis will enter gunner mode\r\nand begin shooting at nearby enemies."
         },
         {
             "name": "Selyne Saddle",
             "asset": "SkillUnlock_MoonQueen",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Selyne."
         },
         {
             "name": "Sweepa Saddle",
             "asset": "SkillUnlock_MopKing",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Sweepa Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Sweepa."
         },
         {
             "name": "Shroomer Saddle",
             "asset": "SkillUnlock_MushroomDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Shroomer."
         },
         {
             "name": "Shroomer Noct Saddle",
             "asset": "SkillUnlock_MushroomDragon_Dark",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Shroomer Noct."
         },
         {
             "name": "Grintale Saddle",
             "asset": "SkillUnlock_NaughtyCat",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Grintale Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Grintale."
         },
         {
             "name": "Starryon Saddle",
             "asset": "SkillUnlock_NightBlueHorse",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Starryon."
         },
         {
             "name": "Starryon Primo Saddle",
             "asset": "SkillUnlock_NightBlueHorse_Neutral",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Starryon Primo."
         },
         {
             "name": "Pengullet Rocket Launcher",
             "asset": "SkillUnlock_Penguin",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Launcher.webp",
             "type": "standard",
-            "description": "The Pengullet Rocket Launcher becomes craftable at the Pal Gear Workbench."
+            "description": "Rocket launcher for launching Pengullet.\r\nActivate its Partner Skill to fire Pengullet and damage enemies. \r\nAfter firing, Pengullet will become incapacitated."
         },
         {
             "name": "Pengullet Lux's Rocket Launcher",
             "asset": "SkillUnlock_Penguin_Electric",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Launcher.webp",
             "type": "standard",
-            "description": ""
+            "description": "Rocket launcher for launching Pengullet Lux. \r\nActivate its Partner Skill to fire Pengullet Lux and damage enemies. \r\nAfter firing, Pengullet Lux will become incapacitated."
         },
         {
             "name": "Braloha Saddle",
             "asset": "SkillUnlock_Plesiosaur",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Braloha."
         },
         {
             "name": "Neptilius Saddle",
             "asset": "SkillUnlock_PoseidonOrca",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Neptilius."
         },
         {
             "name": "Tarantriss Saddle",
             "asset": "SkillUnlock_PurpleSpider",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Tarantriss."
         },
         {
             "name": "Ragnahawk Saddle",
             "asset": "SkillUnlock_RedArmorBird",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Ragnahawk Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Ragnahawk."
         },
         {
             "name": "Paladius Saddle",
             "asset": "SkillUnlock_SaintCentaur",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Paladius Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Paladius."
         },
         {
             "name": "Broncherry Saddle",
             "asset": "SkillUnlock_SakuraSaurus",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Broncherry Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Broncherry."
         },
         {
             "name": "Broncherry Aqua Saddle",
             "asset": "SkillUnlock_SakuraSaurus_Water",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Broncherry Aqua."
         },
         {
             "name": "Surfent Saddle",
             "asset": "SkillUnlock_Serpent",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Surfent Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Surfent."
         },
         {
             "name": "Surfent Terra Saddle",
             "asset": "SkillUnlock_Serpent_Ground",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Surfent Terra."
         },
         {
             "name": "Quivern Saddle",
             "asset": "SkillUnlock_SkyDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Quivern Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Quivern."
         },
         {
             "name": "Quivern Botan Saddle",
             "asset": "SkillUnlock_SkyDragon_Grass",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Quivern Botan."
         },
         {
             "name": "Bastigor's Hammer",
             "asset": "SkillUnlock_SnowTigerBeastman",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Hammer.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Bastigor."
         },
         {
             "name": "Bulldosu Saddle",
             "asset": "SkillUnlock_SumoDog",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Bulldosu."
         },
         {
             "name": "Suzaku Saddle",
             "asset": "SkillUnlock_Suzaku",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Suzaku Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Suzaku."
         },
         {
             "name": "Suzaku Aqua Saddle",
             "asset": "SkillUnlock_Suzaku_Water",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Suzaku Aqua."
         },
         {
             "name": "Roujay Saddle",
             "asset": "SkillUnlock_ThiefBird",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Roujay."
         },
         {
             "name": "Beakon Saddle",
             "asset": "SkillUnlock_ThunderBird",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Beakon Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Beakon."
         },
         {
             "name": "Beakon Cryst Saddle",
             "asset": "SkillUnlock_ThunderBird_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Beakon Cryst."
         },
         {
             "name": "Rayhound Saddle",
             "asset": "SkillUnlock_ThunderDog",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Rayhound Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Rayhound."
         },
         {
             "name": "Dynamoff Saddle",
             "asset": "SkillUnlock_ThunderFluffyBird",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Dynamoff."
         },
         {
             "name": "Rayhound Cryst Saddle",
             "asset": "SkillUnlock_Thunderdog_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Rayhound Cryst."
         },
         {
             "name": "Palumba Saddle",
             "asset": "SkillUnlock_TropicalOstrich",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Palumba."
         },
         {
             "name": "Jormuntide Saddle",
             "asset": "SkillUnlock_Umihebi",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Jormuntide Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Jormuntide."
         },
         {
             "name": "Jormuntide Ignis Saddle",
             "asset": "SkillUnlock_Umihebi_Fire",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Hangyu's Gloves becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Jormuntide Ignis."
         },
         {
             "name": "Reptyro Saddle",
             "asset": "SkillUnlock_VolcanicMonster",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Reptyro Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Reptyro."
         },
         {
             "name": "Reptyro Cryst Saddle",
             "asset": "SkillUnlock_VolcanicMonster_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Reptyro Cryst."
         },
         {
             "name": "Moldron Saddle",
             "asset": "SkillUnlock_VolcanoDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Moldron."
         },
         {
             "name": "Moldron Cryst Saddle",
             "asset": "SkillUnlock_VolcanoDragon_Ice",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Moldron Cryst."
         },
         {
             "name": "Chillet Saddle",
             "asset": "SkillUnlock_WeaselDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Chillet Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Chillet."
         },
         {
             "name": "Chillet Ignis Saddle",
             "asset": "SkillUnlock_WeaselDragon_Fire",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Chillet Ignis."
         },
         {
             "name": "Xenogard Saddle",
             "asset": "SkillUnlock_WhiteAlienDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Xenogard."
         },
         {
             "name": "Celesdir Saddle",
             "asset": "SkillUnlock_WhiteDeer",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Celesdir."
         },
         {
             "name": "Celesdir Noct Saddle",
             "asset": "SkillUnlock_WhiteDeer_Dark",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Celesdir Noct."
         },
         {
             "name": "Silvegis Saddle",
             "asset": "SkillUnlock_WhiteShieldDragon",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Silvegis."
         },
         {
             "name": "Wumpo Saddle",
             "asset": "SkillUnlock_Yeti",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "The Wumpo Saddle becomes craftable at the Pal Gear Workbench."
+            "description": "Saddle for safely riding Wumpo."
         },
         {
             "name": "Wumpo Botan Saddle",
             "asset": "SkillUnlock_Yeti_Grass",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": ""
+            "description": "Saddle for safely riding Wumpo Botan."
         },
         {
             "name": "Pal Dressing Facility",
             "asset": "SkinChange",
             "icon": "/icons/technologies/T_icon_buildObject_SkinChange.webp",
             "type": "standard",
-            "description": ""
+            "description": "Pal Dressing Facility.\r\nGive your Pals a new look!\r\nSkins obtained inside and outside the game can be applied here!"
         },
         {
             "name": "Heavy Assault Rifle",
@@ -9015,7 +9015,7 @@
             "asset": "SkyAssaultRifleBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_SkyAssaultRifleBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Heavy Assault Rifle.\r\nCan be crafted at Ancient Workbench."
         },
         {
             "name": "Laser Sword",
@@ -9036,7 +9036,7 @@
             "asset": "SkyBowArrow",
             "icon": "/icons/technologies/T_itemicon_Ammo_SkyBowArrow.webp",
             "type": "standard",
-            "description": ""
+            "description": "Enhanced arrows for shooting with Mechanical Bow.\r\nCan be crafted at Ancient Workbench."
         },
         {
             "name": "Tactical Grenade Launcher",
@@ -9050,7 +9050,7 @@
             "asset": "SkyGrenadeLauncherBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_SkyGrenadeLauncherBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Tactical Grenade Launcher.\r\nCan be crafted at Ancient Workbench."
         },
         {
             "name": "Azure Oath Flag Set",
@@ -9064,7 +9064,7 @@
             "asset": "SkyIslandOrePit",
             "icon": "/icons/technologies/T_icon_buildObject_SkyIslandOrePit.webp",
             "type": "boss",
-            "description": "Facility for producing Soralite. \r\nDigging is grueling physical work. \r\nLeave it to a Pal that is good at mining."
+            "description": "Facility for producing Soralites. Digging s is grueling physical work. Leave it to a Pal that is good at mining."
         },
         {
             "name": "Prototype Shotgun",
@@ -9078,7 +9078,7 @@
             "asset": "SkyShotgunBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_SkyShotgunBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Prototype Shotgun.\r\nCan be crafted at Ancient Workbench."
         },
         {
             "name": "Combat SMG",
@@ -9092,7 +9092,7 @@
             "asset": "SkySubmachineGunBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_SkySubmachineGunBullet.webp",
             "type": "standard",
-            "description": ""
+            "description": "Ammo for the Combat SMG.\r\nCan be crafted at Ancient Workbench."
         },
         {
             "name": "Soralite Ingot",
@@ -9106,7 +9106,7 @@
             "asset": "Snowman",
             "icon": "/icons/technologies/T_icon_buildObject_Snowman.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Cool efficiency of Pals."
+            "description": "Place in base to improve cooling speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Hot Spring",
@@ -9127,7 +9127,7 @@
             "asset": "Spa3",
             "icon": "/icons/technologies/T_icon_buildObject_Spa3.webp",
             "type": "standard",
-            "description": ""
+            "description": "Facility where Pals on base can rest. \r\nIts calming, traditional Japanese design offers an extra boost to SAN recovery."
         },
         {
             "name": "Stone Spear",
@@ -9155,7 +9155,7 @@
             "asset": "Spear_ForestBoss",
             "icon": "/icons/technologies/T_itemicon_Weapon_Spear_ForestBoss.webp",
             "type": "standard",
-            "description": ""
+            "description": "The spear cherished by Lily.\r\nPunishes those who neglect their Pals."
         },
         {
             "name": "Lily's Spear (Enhanced)",
@@ -9169,7 +9169,7 @@
             "asset": "Special_ElectricHatchingPalEgg",
             "icon": "/icons/technologies/T_icon_buildObject_ElectricHatchingPalEgg.webp",
             "type": "boss",
-            "description": ""
+            "description": "Device for incubating Pal eggs.\r\nRequires electricity, but automatically keeps the\r\ninside of the incubator at appropriate temperatures."
         },
         {
             "name": "Egg Incubator",
@@ -9260,56 +9260,56 @@
             "asset": "SphereFactory_Black_04",
             "icon": "/icons/technologies/T_icon_buildObject_SphereFactory_Black_04.webp",
             "type": "standard",
-            "description": ""
+            "description": "An Assembly Line for producing spheres used for capturing Pals.\r\nAdvanced machinery has been introduced, allowing for the production of spheres at high speed.\r\nRequires Pals that can work with their hands."
         },
         {
             "name": "Curve Module",
             "asset": "SphereModule_Curve",
             "icon": "/icons/technologies/T_itemicon_SphereModule_Curve.webp",
             "type": "standard",
-            "description": ""
+            "description": "Equipping it causes the sphere to spin with a curved trajectory. \r\nIt becomes easier to catch Pals off guard, and increases capture power."
         },
         {
             "name": "Slider Module",
             "asset": "SphereModule_Curve2",
             "icon": "/icons/technologies/T_itemicon_SphereModule_Curve2.webp",
             "type": "standard",
-            "description": ""
+            "description": "Equipping it adds a slider spin to the sphere. \r\nThe sphere curves at a sharp angle, making it easier to catch Pals off guard and increasing capture power."
         },
         {
             "name": "Heavy Weight Module",
             "asset": "SphereModule_Heavy",
             "icon": "/icons/technologies/T_itemicon_SphereModule_Heavy.webp",
             "type": "standard",
-            "description": ""
+            "description": "Equipping it makes the sphere heavier, reducing its range but increasing its capture power."
         },
         {
             "name": "Homing Module",
             "asset": "SphereModule_Homing",
             "icon": "/icons/technologies/T_itemicon_SphereModule_Homing.webp",
             "type": "standard",
-            "description": ""
+            "description": "Equipping it makes the sphere home in on Pals, further increasing capture power."
         },
         {
             "name": "Sniper Module",
             "asset": "SphereModule_Sniper",
             "icon": "/icons/technologies/T_itemicon_SphereModule_Spiper.webp",
             "type": "standard",
-            "description": ""
+            "description": "Equipping it increases the sphere's range, allowing it to sharply capture Pals and enhancing capture power."
         },
         {
             "name": "Sniper Module Ⅱ",
             "asset": "SphereModule_Sniper2",
             "icon": "/icons/technologies/T_itemicon_SphereModule_Sniper2.webp",
             "type": "standard",
-            "description": ""
+            "description": "Equipping it significantly increases the sphere's range, allowing it to sharply capture Pals and enhancing capture power."
         },
         {
             "name": "Hexolite",
             "asset": "StainlessSteel",
             "icon": "/icons/technologies/T_itemicon_Material_StainlessSteel.webp",
             "type": "standard",
-            "description": ""
+            "description": "An alloy of Chromite and Hexolite Quartz. \r\nUsed for building advanced equipment and structures.\r\nCan be refined at Gigantic Furnace."
         },
         {
             "name": "Stone Gate",
@@ -9330,14 +9330,14 @@
             "asset": "Stump",
             "icon": "/icons/technologies/T_icon_buildObject_Stump.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Deforest efficiency of Pals."
+            "description": "Place in base to improve logging speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Nutrient Tonic",
             "asset": "Supplement",
             "icon": "/icons/technologies/T_itemicon_food_Supplement.webp",
             "type": "standard",
-            "description": "A nutrient-rich Nutrient Tonic that prevents hunger for a limited time. \r\nA concentrated, flavorful blend of nutrients ideal for long journeys."
+            "description": "A nutrient-rich Nutrient Tonic that prevents hunger for a period of time. \r\nA concentrated, flavorful blend of nutrients ideal for long journeys."
         },
         {
             "name": "Tidy Table Set",
@@ -9351,21 +9351,21 @@
             "asset": "TableDresser01_Stone",
             "icon": "/icons/technologies/T_icon_buildObject_TableDresser01_Stone.webp",
             "type": "boss",
-            "description": ""
+            "description": "Dresser useful for giving yourself a remake.\r\nAllows players to edit their appearance."
         },
         {
             "name": "Thermal Core",
             "asset": "Thermal_Core",
             "icon": "/icons/technologies/T_itemicon_Material_Thermal_Core.webp",
             "type": "standard",
-            "description": ""
+            "description": "This core houses an intense thermal reaction that radiates a massive amount of energy. \r\nIdeal for powering advanced pieces of equipment.\r\nCan be crafted at Production Assembly Line II."
         },
         {
             "name": "Large Toolbox",
             "asset": "ToolBoxV1",
             "icon": "/icons/technologies/T_icon_buildObject_ToolBoxV1.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Convertitem efficiency of Pals."
+            "description": "Place in base to improve handiwork speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Mounted Torch",
@@ -9379,7 +9379,7 @@
             "asset": "TransmissionTower",
             "icon": "/icons/technologies/T_icon_buildObject_TransmissionTower.webp",
             "type": "standard",
-            "description": "Place in a base to improve the Generateelectricity efficiency of Pals."
+            "description": "Place in base to improve electricity generating speed.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Bear Trap (Small)",
@@ -9428,42 +9428,42 @@
             "asset": "UnlockEquipmentSlot_Weapon_01",
             "icon": "/icons/technologies/T_itemicon_Accessory_UnlockEquipmentSlot_Weapon_01.webp",
             "type": "boss",
-            "description": ""
+            "description": "This holster allows the wearer to equip an additional weapon. \r\nUnlocks an extra weapon slot when equipped.\r\nCarrying one is enough."
         },
         {
             "name": "Extra Weapon Holster 2",
             "asset": "UnlockEquipmentSlot_Weapon_02",
             "icon": "/icons/technologies/T_itemicon_Accessory_UnlockEquipmentSlot_Weapon_02.webp",
             "type": "boss",
-            "description": ""
+            "description": "This holster allows the wearer to equip yet another additional weapon. \r\nUnlocks an extra weapon slot when equipped.\r\nCarrying one is enough."
         },
         {
             "name": "Lockpicking Tool v1",
             "asset": "Unlock_Picking_Tier1",
             "icon": "/icons/technologies/T_itemicon_Essential_Unlock_Picking.webp",
             "type": "boss",
-            "description": ""
+            "description": "No key? No problem! These tools will allow you to try and pry open any treasure chest that would normally require a Copper Key."
         },
         {
             "name": "Lockpicking Tool v2",
             "asset": "Unlock_Picking_Tier2",
             "icon": "/icons/technologies/T_itemicon_Essential_Unlock_Picking_Tier2.webp",
             "type": "boss",
-            "description": ""
+            "description": "No key? No problem! These tools will allow you to try and pry open any treasure chest that would normally require a Silver Key."
         },
         {
             "name": "Lockpicking Tool v3",
             "asset": "Unlock_Picking_Tier3",
             "icon": "/icons/technologies/T_itemicon_Essential_Unlock_Picking_Tier3.webp",
             "type": "boss",
-            "description": ""
+            "description": "No key? No problem! These tools will allow you to try and pry open any treasure chest that would normally require a Gold Key."
         },
         {
             "name": "WallSignboard",
             "asset": "WallSignboard",
             "icon": "/icons/technologies/T_icon_buildObject_WallSignboard.webp",
             "type": "standard",
-            "description": ""
+            "description": "A signboard to write on.\r\nCan be hung on walls."
         },
         {
             "name": "Wall Torch",
@@ -9484,7 +9484,7 @@
             "asset": "WeaponFactory_Dirty_04",
             "icon": "/icons/technologies/T_icon_buildObject_WeaponFactory_Dirty_04.webp",
             "type": "standard",
-            "description": ""
+            "description": "An Assembly Line for producing weapons and ammunition.\r\nAdvanced machinery has been introduced, enabling high-speed weapon production.\r\nRequires Pals that can work with their hands."
         },
         {
             "name": "Beam Scatter",
@@ -9533,14 +9533,14 @@
             "asset": "Wooden_ladder",
             "icon": "/icons/technologies/T_icon_buildObject_Wooden_Ladder.webp",
             "type": "standard",
-            "description": ""
+            "description": "A ladder that allows you to climb to a slightly higher place."
         },
         {
             "name": "Beta Wave Generator",
             "asset": "WorkSpeedIncrease1",
             "icon": "/icons/technologies/T_icon_buildObject_WorkSpeedIncrease1.webp",
             "type": "standard",
-            "description": ""
+            "description": "A device that emits beta waves to energize Pals.\r\nIncreases the work speed of Base Pals.\r\nPlacing more than one has no additional effect."
         },
         {
             "name": "Primitive Workbench",
@@ -9561,7 +9561,7 @@
             "asset": "YakushimaBlade",
             "icon": "/icons/technologies/T_itemicon_Weapon_YakushimaBlade.webp",
             "type": "boss",
-            "description": ""
+            "description": "[Tides of Terraria]\r\nAccording to the legend, this sword was brought back from a distant land by Croajiro.\r\nWhy? We have no idea...\r\nFires a bouncing cat projectile with each swing to attack enemies."
         }
     ],
     "lab_research": {
