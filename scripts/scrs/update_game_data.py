@@ -887,13 +887,13 @@ def update_structure_data():
     def resolve_struct_name(struct_id: str) -> str:
         key = f'MAPOBJECT_NAME_{struct_id}'
         name = struct_name_l10n.get(key, '')
-        if name and name.lower() not in ('en_text', 'none', '-', ''):
+        if name and name.lower() not in ('en text', 'en_text', 'none', '-', ''):
             return name
         return struct_id
     def resolve_struct_desc(struct_id: str) -> str:
         key = f'BUILDOBJECT_DESC_{struct_id}'
         desc = struct_desc_l10n.get(key, '') or struct_desc_l10n_ci.get(key.lower(), '')
-        if desc and desc.lower() not in ('en_text', 'none', '-', ''):
+        if desc and desc.lower() not in ('en text', 'en_text', 'none', '-', ''):
             return desc
         return ''
     updated_structures = []

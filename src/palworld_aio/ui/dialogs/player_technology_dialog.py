@@ -108,7 +108,7 @@ class PlayerTechnologyActionDialog(QDialog):
             name = tech.get('name', 'Unknown')
             asset = tech.get('asset', '')
             desc = tech.get('description', '')
-            if not desc or desc.lower() in ('en_text', 'none', '-', '---'):
+            if not desc or desc.lower() in ('en text', 'en_text', 'none', '-', '---'):
                 continue
             item = QListWidgetItem(name)
             item.setData(Qt.UserRole, asset)
