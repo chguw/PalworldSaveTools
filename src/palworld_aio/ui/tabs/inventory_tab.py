@@ -1569,7 +1569,7 @@ class PlayerInventoryTab(QWidget):
         menu.setStyleSheet(MENU_STYLE)
         if current_item:
             slot_type = self._get_equip_slot_type(slot_name)
-            if slot_type == 'food':
+            if slot_type in ('food', 'weapon'):
                 menu.addAction(t('inventory.edit_qty', default='Edit Quantity')).triggered.connect(lambda: self._edit_equip_item(slot_name, current_item))
             menu.addAction(t('inventory.clear_slot', default='Clear Slot')).triggered.connect(lambda: self._clear_equip_slot(slot_name, slot_widget))
         else:
@@ -1605,7 +1605,7 @@ class PlayerInventoryTab(QWidget):
                 for s in armor.slots:
                     if s.get('slot_index') in accessory_indices:
                         exclude_assets.add(s.get('item_id', ''))
-        dialog = ItemPickerDialog(self, filter_type_a=slot_filter.get('type_a'), filter_type_b=slot_filter.get('type_b'), hide_quantity=slot_type != 'food', exclude_assets=exclude_assets)
+        dialog = ItemPickerDialog(self, filter_type_a=slot_filter.get('type_a'), filter_type_b=slot_filter.get('type_b'), hide_quantity=slot_type not in ('food', 'weapon'), exclude_assets=exclude_assets)
         dialog.item_selected.connect(lambda item_id, qty: self._do_add_to_equip_slot(slot_name, container_type, item_id, qty))
         dialog.exec()
     def _do_add_to_equip_slot(self, slot_name: str, container_type: str, item_id: str, quantity: int):
