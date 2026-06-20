@@ -2967,7 +2967,12 @@ class BaseInventoryTab(QWidget):
             return
         menu = QMenu(self)
         menu.setStyleSheet(MENU_STYLE)
-        menu.addAction(t('base_inventory.edit_quantity') if t else 'Edit Quantity', lambda: self._edit_item_quantity(slot_data))
+        item_id = slot_data.get('item_id', '')
+        type_a = ItemData.get_item_type_a(item_id)
+        type_b = ItemData.get_item_type_b(item_id)
+        is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
+        if not is_singleton:
+            menu.addAction(t('base_inventory.edit_quantity') if t else 'Edit Quantity', lambda: self._edit_item_quantity(slot_data))
         menu.addAction(t('base_inventory.remove_item') if t else 'Remove Item', lambda: self._remove_item_from_slot(slot_data))
         menu.addSeparator()
         menu.addAction(t('base_inventory.clear_container') if t else 'Clear Container', self._clear_container)

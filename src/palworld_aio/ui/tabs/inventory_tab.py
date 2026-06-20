@@ -1500,7 +1500,12 @@ class PlayerInventoryTab(QWidget):
             return
         menu = QMenu(self)
         menu.setStyleSheet(MENU_STYLE)
-        menu.addAction(t('inventory.edit_qty', default='Edit Quantity')).triggered.connect(lambda: self._edit_quantity_for(slot_data))
+        item_id = slot_data.get('item_id', '')
+        type_a = ItemData.get_item_type_a(item_id)
+        type_b = ItemData.get_item_type_b(item_id)
+        is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
+        if not is_singleton:
+            menu.addAction(t('inventory.edit_qty', default='Edit Quantity')).triggered.connect(lambda: self._edit_quantity_for(slot_data))
         menu.addAction(t('inventory.delete_item', default='Delete')).triggered.connect(lambda: self._delete_item(slot_data))
         menu.addSeparator()
         menu.addAction(t('inventory.add_item', default='Add Item')).triggered.connect(self._show_add_item_dialog)
@@ -1568,8 +1573,11 @@ class PlayerInventoryTab(QWidget):
         menu = QMenu(self)
         menu.setStyleSheet(MENU_STYLE)
         if current_item:
-            slot_type = self._get_equip_slot_type(slot_name)
-            if slot_type in ('food', 'weapon'):
+            item_id = current_item.get('item_id', '')
+            type_a = ItemData.get_item_type_a(item_id)
+            type_b = ItemData.get_item_type_b(item_id)
+            is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
+            if not is_singleton:
                 menu.addAction(t('inventory.edit_qty', default='Edit Quantity')).triggered.connect(lambda: self._edit_equip_item(slot_name, current_item))
             menu.addAction(t('inventory.clear_slot', default='Clear Slot')).triggered.connect(lambda: self._clear_equip_slot(slot_name, slot_widget))
         else:
