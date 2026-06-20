@@ -893,7 +893,7 @@ def update_structure_data():
     def resolve_struct_desc(struct_id: str) -> str:
         key = f'BUILDOBJECT_DESC_{struct_id}'
         desc = struct_desc_l10n.get(key, '') or struct_desc_l10n_ci.get(key.lower(), '')
-        if desc:
+        if desc and desc.lower() not in ('en text', 'en_text', 'none', '-', ''):
             return resolve_rich_text(desc)
         return ''
     updated_structures = []
@@ -1208,7 +1208,7 @@ def update_technology_data():
             else:
                 desc_key = f'DESC_RECIPE_{tech_id}'
             desc_text = tech_desc_l10n.get(desc_key, '') or tech_desc_l10n_ci.get(desc_key.lower(), '')
-        if not desc_text or desc_text.strip() == '':
+        if not desc_text or desc_text.strip().lower() in ('', 'en_text', 'en text', 'none', 'ex text', '-', '---'):
             desc_text = ''
         else:
             desc_text = _resolve_rich_text(desc_text)

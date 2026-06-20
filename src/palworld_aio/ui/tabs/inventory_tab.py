@@ -720,7 +720,7 @@ class ItemPickerDialog(QDialog):
                 if item['asset'].startswith('PalEgg_'):
                     continue
             desc = item.get('description', '').strip()
-            if not desc:
+            if not desc or desc.lower() in ('', 'en text', 'en_text', 'none', '-', '---'):
                 continue
             if item.get('name', '') == item.get('asset', ''):
                 continue

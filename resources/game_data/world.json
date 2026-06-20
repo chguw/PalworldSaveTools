@@ -352,7 +352,7 @@
             "name": "BlastFurnace5",
             "asset": "BlastFurnace5",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "BlastFurnace_2",
@@ -820,7 +820,7 @@
             "name": "Tuppanyan sticker",
             "asset": "Decal_PalSticker_PinkCat",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Mounted Crossbow",
@@ -850,7 +850,7 @@
             "name": "DefenseMinigun",
             "asset": "DefenseMinigun",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Mounted Missile Launcher",
@@ -958,13 +958,13 @@
             "name": "ElectricGenerator2",
             "asset": "ElectricGenerator2",
             "icon": "/icons/structures/T_icon_buildObject_ElectricGenerator.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "ElectricGenerator3",
             "asset": "ElectricGenerator3",
             "icon": "/icons/structures/T_icon_buildObject_ElectricGenerator.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Large Power Generator",
@@ -976,7 +976,7 @@
             "name": "ElectricGenerator_Slave",
             "asset": "ElectricGenerator_Slave",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Electric Egg Incubator",
@@ -3436,13 +3436,13 @@
             "name": "Factory_Comfortable_01",
             "asset": "Factory_Comfortable_01",
             "icon": "/icons/structures/T_icon_buildObject_Factory_Comfortable_01.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Factory_Comfortable_02",
             "asset": "Factory_Comfortable_02",
             "icon": "/icons/structures/T_icon_buildObject_Factory_Comfortable_02.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "High-Quality Workbench",
@@ -3478,7 +3478,7 @@
             "name": "Plantation",
             "asset": "FarmBlock",
             "icon": "/icons/structures/T_icon_buildObject_FarmBlock.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "FarmBlockV2",
@@ -3502,19 +3502,19 @@
             "name": "Plantation",
             "asset": "FarmBlockV2_Grade01",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Plantation",
             "asset": "FarmBlockV2_Grade02",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Plantation",
             "asset": "FarmBlockV2_Grade03",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Lettuce Plantation",
@@ -3592,19 +3592,19 @@
             "name": "Floor",
             "asset": "Floor",
             "icon": "/icons/structures/T_icon_buildObject_Floor.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Floor",
             "asset": "Floor_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Floor_Stone.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Floor",
             "asset": "Floor_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Floor_Wood.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Mill",
@@ -4000,7 +4000,7 @@
             "name": "HighTechKitchen",
             "asset": "HighTechKitchen",
             "icon": "/icons/structures/T_icon_buildObject_HighTechKitchen.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "House_1",
@@ -4246,7 +4246,7 @@
             "name": "JapaneseStyle_TriangleStairsCorner_02",
             "asset": "JapaneseStyle_TriangleStairsCorner_02",
             "icon": "/icons/structures/T_icon_buildObject_JapaneseStyle_TriangleStairsCorner.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Japanese-Style Triangular Wall",
@@ -4468,7 +4468,7 @@
             "name": "MedicalPalBed",
             "asset": "MedicalPalBed",
             "icon": "/icons/structures/T_icon_buildObject_MedicalPalBed.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Straw Pal Bed",
@@ -4684,7 +4684,7 @@
             "name": "OilPump02",
             "asset": "OilPump02",
             "icon": "/icons/structures/T_icon_buildObject_OilPump02.webp",
-            "description": "-"
+            "description": ""
         },
         {
             "name": "OilRig",
@@ -5026,7 +5026,7 @@
             "name": "Human Bed",
             "asset": "PlayerBed",
             "icon": "/icons/structures/T_icon_buildObject_PlayerBed.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Shoddy Bed",
@@ -5104,7 +5104,7 @@
             "name": "Fur rug",
             "asset": "Rug_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Rug_Wood.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Laboratory Chair",
@@ -5362,7 +5362,7 @@
             "name": "Shipping Box",
             "asset": "ShippingItemBox",
             "icon": "/icons/structures/T_icon_buildObject_ShippingItemBox.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Deer Scare",
@@ -5530,25 +5530,25 @@
             "name": "Superior Sphere Factory Ⅰ",
             "asset": "SphereFactory_White_01",
             "icon": "/icons/structures/T_icon_buildObject_SphereFactory_White_01.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Superior Sphere Factory Ⅱ",
             "asset": "SphereFactory_White_02",
             "icon": "/icons/structures/T_icon_buildObject_SphereFactory_White_02.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Superior Sphere Factory Ⅲ",
             "asset": "SphereFactory_White_03",
             "icon": "/icons/structures/T_icon_buildObject_SphereFactory_White_03.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Stone Pit",
             "asset": "StationDeforest",
             "icon": "/icons/structures/T_icon_buildObject_StationDeforest.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Logging Site",
@@ -5722,7 +5722,7 @@
             "name": "Stonehouse1",
             "asset": "Stonehouse1",
             "icon": "/icons/structures/T_icon_buildObject_Stonehouse1.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Iron Stool",
@@ -5764,7 +5764,7 @@
             "name": "Strawhouse1",
             "asset": "Strawhouse1",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Stump and Axe",
@@ -6136,7 +6136,7 @@
             "name": "Wall",
             "asset": "Wall",
             "icon": "/icons/structures/T_icon_buildObject_Wall.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Wall-Mounted Sign",
@@ -6160,19 +6160,19 @@
             "name": "Wall",
             "asset": "Wall_Stone",
             "icon": "/icons/structures/T_icon_buildObject_Wall_Stone.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Wall",
             "asset": "Wall_Wood",
             "icon": "/icons/structures/T_icon_buildObject_Wall_Wood.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Weapon Chest",
             "asset": "WeaponChest",
             "icon": "/icons/structures/T_icon_buildObject_WeaponChest.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "WeaponFactoryBase",
@@ -6190,19 +6190,19 @@
             "name": "WeaponFactory_Clean_01",
             "asset": "WeaponFactory_Clean_01",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactory_Clean_01.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "WeaponFactory_Clean_02",
             "asset": "WeaponFactory_Clean_02",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactory_Clean_02.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "WeaponFactory_Clean_03",
             "asset": "WeaponFactory_Clean_03",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactory_Clean_03.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Weapon Workbench",
@@ -6232,13 +6232,13 @@
             "name": "Weapon Factory",
             "asset": "WeaponFactry",
             "icon": "/icons/structures/T_icon_buildObject_WeaponFactry.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Water Well",
             "asset": "Well",
             "icon": "/icons/structures/T_icon_buildObject_Well.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Wire Fence",
@@ -6250,7 +6250,7 @@
             "name": "WoodCreator",
             "asset": "WoodCreator",
             "icon": "/icons/structures/T_icon_unknown.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Wood dismantling tables",
@@ -6436,7 +6436,7 @@
             "name": "Woodhouse1",
             "asset": "Woodhouse1",
             "icon": "/icons/structures/T_icon_buildObject_WoodHouse.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Primitive Workbench",
@@ -6448,7 +6448,7 @@
             "name": "WorkBench_SkillCard",
             "asset": "WorkBench_SkillCard",
             "icon": "/icons/structures/T_icon_buildObject_WorkBench.webp",
-            "description": "en Text"
+            "description": ""
         },
         {
             "name": "Pal Gear Workbench",
@@ -8634,7 +8634,7 @@
             "asset": "OilPump02",
             "icon": "/icons/technologies/T_icon_buildObject_OilPump02.webp",
             "type": "boss",
-            "description": "-"
+            "description": ""
         },
         {
             "name": "Flame Cauldron",
