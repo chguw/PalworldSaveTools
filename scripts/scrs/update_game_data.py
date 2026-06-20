@@ -903,6 +903,13 @@ def update_structure_data():
         desc = resolve_struct_desc(struct_id)
         copied_icon = None
         icon_row = icon_rows.get(struct_id, {}) or icon_rows_ci.get(struct_id_lower, {})
+        if not icon_row:
+            for suffix in ('_AutoTurret', '_NPC', '_Otomo', '_V2', '_Old', '_2', '_3', '_4', '_5', '_6', '_7'):
+                if struct_id.endswith(suffix):
+                    base = struct_id[:-len(suffix)]
+                    icon_row = icon_rows.get(base, {}) or icon_rows_ci.get(base.lower(), {})
+                    if icon_row:
+                        break
         if icon_row:
             soft_icon = icon_row.get('SoftIcon', {})
             if isinstance(soft_icon, dict):
@@ -910,7 +917,11 @@ def update_structure_data():
                 if icon_path and icon_path != 'None':
                     icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
                     copied_icon = find_and_copy_icon(icon_filename, 'structures', structure_icon_subdirs)
-        final_icon = copied_icon or f'/icons/structures/{struct_id}.webp'
+        if copied_icon:
+            final_icon = copied_icon
+        else:
+            fallback = f'/icons/structures/{struct_id}.webp'
+            final_icon = fallback if (ICONS_DIR / 'structures' / f'{struct_id}.webp').exists() else ''
         struct_entry = {'name': display_name, 'asset': struct_id, 'icon': final_icon, 'description': desc}
         updated_structures.append(struct_entry)
     result = {'structures': updated_structures}
