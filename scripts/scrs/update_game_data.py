@@ -864,6 +864,7 @@ def update_structure_data():
     icon_table_common = load_export_json('MapObject/Building/DT_BuildObjectIconDataTable_Common.json')
     struct_name_l10n = load_l10n_table('DT_MapObjectNameText_Common.json')
     struct_desc_l10n = load_l10n_table('DT_BuildObjectDescText_Common.json')
+    struct_desc_l10n_ci = {k.lower(): v for k, v in struct_desc_l10n.items()}
     master_rows = {}
     for d in [master_data, master_common, master_enemy]:
         master_rows.update(load_single_table(d))
@@ -891,7 +892,7 @@ def update_structure_data():
         return struct_id
     def resolve_struct_desc(struct_id: str) -> str:
         key = f'BUILDOBJECT_DESC_{struct_id}'
-        desc = struct_desc_l10n.get(key, '')
+        desc = struct_desc_l10n.get(key, '') or struct_desc_l10n_ci.get(key.lower(), '')
         if desc and desc.lower() not in ('en_text', 'none', '-', ''):
             return desc
         return ''

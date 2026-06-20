@@ -424,7 +424,7 @@
             "name": "Campfire",
             "asset": "Campfire",
             "icon": "/icons/structures/T_icon_buildObject_CampFire.webp",
-            "description": ""
+            "description": "Needed for cooking food.\r\nIt can only be used to grill simple ingredients.\r\nRequires a Fire Pal to light a flame."
         },
         {
             "name": "Majestic Candlestick",
@@ -3922,7 +3922,7 @@
             "name": "Glass_pillars",
             "asset": "Glass_pillars",
             "icon": "/icons/structures/T_icon_buildObject_Glass_pillar.webp",
-            "description": ""
+            "description": "Column for structural support.\r\nMade of industrial-strength glass, it's quite sturdy."
         },
         {
             "name": "Glass Roof",
@@ -4522,7 +4522,7 @@
             "name": "Metal_Foundation",
             "asset": "Metal_Foundation",
             "icon": "/icons/structures/T_icon_buildObject_Metal_Foundation.webp",
-            "description": ""
+            "description": "A foundation for building walls or facilities on.\r\nMade from metal, it is extremely durable."
         },
         {
             "name": "Iron Gate",
@@ -4540,7 +4540,7 @@
             "name": "Metal_Roof",
             "asset": "Metal_Roof",
             "icon": "/icons/structures/T_icon_buildObject_Metal_Roof.webp",
-            "description": ""
+            "description": "A roof built on top of walls to keep out the rain and wind.\r\nMade from metal, it is extremely durable."
         },
         {
             "name": "Metal Slanted Roof",
@@ -4552,7 +4552,7 @@
             "name": "Metal_Stair",
             "asset": "Metal_Stair",
             "icon": "/icons/structures/T_icon_buildObject_Metal_Stair.webp",
-            "description": ""
+            "description": "Stairs placed below a foundation or roof for climbing up.\r\nMade from metal, it is extremely durable."
         },
         {
             "name": "Metal Triangular Wall",
@@ -4582,7 +4582,7 @@
             "name": "Metal_pillars",
             "asset": "Metal_pillars",
             "icon": "/icons/structures/T_icon_buildObject_Metal_pillar.webp",
-            "description": ""
+            "description": "Column for structural support.\r\nMade from metal, it is extremely durable."
         },
         {
             "name": "Metal Roof",
@@ -5590,7 +5590,7 @@
             "name": "Stone_Foundation",
             "asset": "Stone_Foundation",
             "icon": "/icons/structures/T_icon_buildObject_Stone_Foundation.webp",
-            "description": ""
+            "description": "A foundation for building walls or facilities on.\r\nMade from stone, it is reasonably sturdy."
         },
         {
             "name": "Stone Gate",
@@ -5614,7 +5614,7 @@
             "name": "Stone_Roof",
             "asset": "Stone_Roof",
             "icon": "/icons/structures/T_icon_buildObject_Stone_Roof.webp",
-            "description": ""
+            "description": "A roof built on top of walls to keep out the rain and wind.\r\nMade from stone, it is reasonably sturdy."
         },
         {
             "name": "Stone Slanted Roof",
@@ -5638,7 +5638,7 @@
             "name": "Stone_Stair",
             "asset": "Stone_Stair",
             "icon": "/icons/structures/T_icon_buildObject_Stone_Stair.webp",
-            "description": ""
+            "description": "Stairs placed below a foundation or roof for climbing up.\r\nMade from stone, it is reasonably sturdy."
         },
         {
             "name": "Stone Triangular Foundation",
@@ -5698,7 +5698,7 @@
             "name": "Stone_pillar",
             "asset": "Stone_pillar",
             "icon": "/icons/structures/T_icon_buildObject_Stone_pillar.webp",
-            "description": ""
+            "description": "Column for structural support.\r\nMade from stone, it is reasonably sturdy."
         },
         {
             "name": "Stone Roof",
@@ -6412,7 +6412,7 @@
             "name": "Wooden_pillar",
             "asset": "Wooden_pillar",
             "icon": "/icons/structures/T_icon_buildObject_Wooden_pillar.webp",
-            "description": ""
+            "description": "Column for structural support.\r\nMade from wood, it breaks easily."
         },
         {
             "name": "Wooden Roof",
