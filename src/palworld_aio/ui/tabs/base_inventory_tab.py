@@ -474,7 +474,10 @@ class GuildStructurePickerDialog(QDialog):
         for s in structures:
             name = s.get('name', '')
             asset = s.get('asset', '')
+            desc = s.get('description', '')
             if name == '---' or not asset or name == 'en Text':
+                continue
+            if not desc or desc.lower() in ('en_text', 'none', '-', '---'):
                 continue
             asset_lower = asset.lower()
             name_lower = name.lower()
