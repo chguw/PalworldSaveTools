@@ -155,6 +155,10 @@ All were flagged as admin even though only Pylar was `admin_player_uid`.
 - Only set `found['_u8_flag'] = 1` if the player is explicitly elected admin via the empty-admin fallback (`admin_player_uid not in target player set`).
 - Values inferred from save data: `1` = guild master/admin, `3` = regular member. Value `2` never observed.
 
+### `make_member_leader` Fix (commit `36522918`)
+- Previously only set `admin_player_uid`, leaving stale `_u8_flag` on all player entries. Promoted player kept old flag (usually 3), others might still have 1 from old admin role.
+- Now iterates all guild players: sets `_u8_flag=1` on new leader, `_u8_flag=3` on everyone else.
+
 ## Conventions
 - PascalCase for tabs/dialogs, snake_case for modules/utilities
 - `t('key', default=...)` for i18n; all UI widgets implement `refresh_labels()`
