@@ -645,10 +645,14 @@ def make_member_leader(guild_id, player_uid):
         return False
     wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
     group_data_list = wsd['GroupSaveDataMap']['value']
+    pu_norm = str(player_uid).replace('-', '').lower()
     for g in group_data_list:
         if are_equal_uuids(g['key'], guild_id):
             raw = g['value']['RawData']['value']
             raw['admin_player_uid'] = player_uid
+            for p in raw.get('players', []):
+                pp_norm = str(p.get('player_uid', '')).replace('-', '').lower()
+                p['_u8_flag'] = 1 if pp_norm == pu_norm else 3
             return True
     return False
 def rename_guild(guild_id, new_name):
