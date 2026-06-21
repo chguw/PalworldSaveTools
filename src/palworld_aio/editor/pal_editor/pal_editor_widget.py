@@ -569,8 +569,9 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             for k, v in ws_base.items():
                 if v > 0:
                     _set_work_suitability(tr, k, 10)
-            if extract_value(tr, 'Level', 1) < 80:
-                tr['Level'] = {'id': None, 'type': 'IntProperty', 'value': 80}
+            tr['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 80}}
+            exp_val = _data.PAL_EXP_TABLE.get('80', {}).get('PalTotalEXP', 0)
+            tr['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp_val}
             count += 1
         for pi in pals:
             tr = _get_raw_from_item(pi)
@@ -593,9 +594,10 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                     break
             condenser_i = int(rank_i) if isinstance(rank_i, (int, float)) else 0
             base_i = _data.get_pal_base_data(cid_i)
-            max_hp = safe_nested_get(tr, ['MaxHP', 'value', 'Value', 'value'], 0)
-            if max_hp <= 0 and base_i:
+            if base_i:
                 max_hp = calculate_max_hp(base_i, lv_i, talent_hp_i, rank_hp_i, is_boss_i, is_lucky_i, trust_rank_i, condenser_i, is_awake_i)
+            else:
+                max_hp = safe_nested_get(tr, ['MaxHP', 'value', 'Value', 'value'], 1)
             if max_hp <= 0:
                 max_hp = 1
             tr['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
