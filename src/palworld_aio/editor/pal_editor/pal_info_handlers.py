@@ -43,7 +43,7 @@ class PalInfoHandlerMixin:
                 self._on_soul_click(obj)
                 return True
             if hasattr(obj, '_skill_slot_idx'):
-                self._on_active_skill_click(obj._skill_slot_idx, obj.mapToGlobal(QPoint(0, obj.height())), obj.width())
+                self._on_active_skill_click(obj._skill_slot_idx, obj.mapToGlobal(QPoint(0, obj.height())))
                 return True
             if hasattr(obj, '_ws_key') and obj._ws_key:
                 self._on_work_skill_click(obj._ws_key, obj)
@@ -237,13 +237,13 @@ class PalInfoHandlerMixin:
             self._raw[key] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': dlg.intValue()}}
             self._recalc_hp()
 
-    def _on_active_skill_click(self, slot_idx, pos=None, slot_width=None):
-        self._show_skill_picker(t('edit_pals.select_skill'), PalFrame._SKILLMAP, slot_idx, True, pos, slot_width)
+    def _on_active_skill_click(self, slot_idx, pos=None):
+        self._show_skill_picker(t('edit_pals.select_skill'), PalFrame._SKILLMAP, slot_idx, True, pos)
 
-    def _on_passive_click(self, slot_idx, pos=None, slot_width=None):
-        self._show_skill_picker(t('edit_pals.select_passive'), PalFrame._PASSMAP, slot_idx, False, pos, slot_width)
+    def _on_passive_click(self, slot_idx, pos=None):
+        self._show_skill_picker(t('edit_pals.select_passive'), PalFrame._PASSMAP, slot_idx, False, pos)
 
-    def _show_skill_picker(self, title, skill_map, slot_idx, is_active, pos=None, slot_width=None):
+    def _show_skill_picker(self, title, skill_map, slot_idx, is_active, pos=None):
         picker = SkillPicker(self)
         try:
             cur_data = self._raw.get('EquipWaza' if is_active else 'PassiveSkillList', {})
@@ -271,7 +271,7 @@ class PalInfoHandlerMixin:
                         skip_items.add(clean.lower())
         except Exception:
             pass
-        result = picker.pick(skill_map, is_active, pos=pos, current_value=cur_val if isinstance(cur_val, str) else '', skip_items=skip_items, max_width=slot_width)
+        result = picker.pick(skill_map, is_active, pos=pos, current_value=cur_val if isinstance(cur_val, str) else '', skip_items=skip_items)
         if result is None:
             return
         if result == '':

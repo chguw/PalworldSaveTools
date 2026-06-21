@@ -841,7 +841,7 @@ class PalInfoWidget(PalInfoDisplayMixin, PalInfoHandlerMixin, QFrame):
             btn.setStyleSheet('QPushButton { background: transparent; border: none; }')
             btn.setCursor(Qt.PointingHandCursor)
             btn.setGeometry(0, 0, 100, 100)
-            btn.clicked.connect(lambda checked=None, idx=i, c=card: self._on_passive_click(idx, c.mapToGlobal(QPoint(0, c.height())), c.width()))
+            btn.clicked.connect(lambda checked=None, idx=i, c=card: self._on_passive_click(idx, c.mapToGlobal(QPoint(0, c.height()))))
             row, col = (i // 2, i % 2)
             pg_layout.addWidget(card, row, col)
             self.passive_slots.append(plbl)

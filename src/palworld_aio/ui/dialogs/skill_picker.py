@@ -69,16 +69,13 @@ class _PassiveSkillDelegate(QStyledItemDelegate):
         text_rect = QRectF(rect.x() + 8, rect.y(), rect.width() - (8 + icon_right), rect.height())
         display_text = index.data(Qt.DisplayRole)
         tf = painter.font()
-        tf.setPointSize(8)
-        painter.setFont(tf)
         if QFontMetrics(tf).horizontalAdvance(display_text) > text_rect.width():
-            for sz in range(7, 5, -1):
+            for sz in range(tf.pointSize() - 1, 5, -1):
                 tf.setPointSize(sz)
                 if QFontMetrics(tf).horizontalAdvance(display_text) <= text_rect.width():
                     painter.setFont(tf)
                     break
             else:
-                painter.setFont(tf)
                 display_text = QFontMetrics(tf).elidedText(display_text, Qt.ElideRight, int(text_rect.width()))
         painter.drawText(text_rect, Qt.AlignVCenter | Qt.AlignLeft, display_text)
         painter.restore()
@@ -139,24 +136,14 @@ class _ActiveSkillDelegate(QStyledItemDelegate):
         pwr = index.data(Qt.UserRole + 2) or ''
         name = index.data(Qt.DisplayRole) or ''
         tf = painter.font()
-        tf.setPointSize(8)
+        tf.setPointSize(10)
         painter.setFont(tf)
         fm = QFontMetrics(tf)
         pw_x = rect.right() - 48
         icon_x = pw_x - 24
         name_w = icon_x - rect.x() - 16
-        display_name = name
-        if fm.horizontalAdvance(display_name) > name_w:
-            for sz in range(7, 5, -1):
-                tf.setPointSize(sz)
-                if QFontMetrics(tf).horizontalAdvance(display_name) <= name_w:
-                    painter.setFont(tf)
-                    break
-            else:
-                painter.setFont(tf)
-                display_name = QFontMetrics(tf).elidedText(display_name, Qt.ElideRight, max(int(name_w), 1))
         painter.setPen(QColor('#E2E8F0'))
-        painter.drawText(QRectF(rect.x() + 8, rect.y(), max(name_w, 0), rect.height()), Qt.AlignVCenter, display_name)
+        painter.drawText(QRectF(rect.x() + 8, rect.y(), max(name_w, 0), rect.height()), Qt.AlignVCenter, name)
         if elem:
             epix = _get_element_pixmap(elem, 'small', 16)
             if epix:
@@ -206,14 +193,10 @@ class SkillPicker(QWidget):
             chosen_name = sel.data(Qt.UserRole) or sel.text()
             self._result = chosen_name
         self.hide()
-    def pick(self, skill_map, is_active, pos=None, current_value='', use_exclusions=True, skip_items=None, max_width=None):
+    def pick(self, skill_map, is_active, pos=None, current_value='', use_exclusions=True, skip_items=None):
         self._result = None
         self._search.clear()
         self._list.clear()
-        self._list.setMaximumWidth(16777215)
-        self._list.setMinimumWidth(160)
-        self.setMinimumWidth(0)
-        self.setMaximumWidth(16777215)
         clear_item = QListWidgetItem(t('common.clear') if t else '-- clear --')
         self._list.addItem(clear_item)
         names = sorted(skill_map.values())
@@ -308,11 +291,6 @@ class SkillPicker(QWidget):
         move_pos = pos if pos else QCursor.pos()
         self.move(move_pos)
         self.show()
-        if max_width is not None:
-            self._list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-            self.setFixedWidth(max_width + 8)
-            self._list.setFixedWidth(max_width)
-            self._list.doItemsLayout()
         self._search.setFocus()
         while self.isVisible():
             QApplication.processEvents()
