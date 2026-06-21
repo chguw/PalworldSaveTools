@@ -136,6 +136,25 @@ Newer Palworld versions (post-Feybreak?) prepend ~480 bytes of data **before** t
 ### Debug Pattern
 To inspect guild binary tail: search for `V1_MARKER` in `_raw_tail` bytes. If found at offset > 0, guild format was extended. If `_raw_tail` is set and V1_MARKER absent, there's a different format mismatch.
 
+## Guild Manager — `_u8_flag` Guild Move Bug (Jun 21 session)
+### Location: `src/palworld_aio/managers/guild_manager.py` — `move_player_to_guild()`
+### Problem
+When a guild admin is moved to another guild via `move_player_to_guild()`, their player entry carries the old `_u8_flag=1` (guild master rank byte). After the move, the target guild ends up with multiple players all having `_u8_flag=1`, making the game treat them all as guild masters. Players can't leave the guild or perform guild actions.
+
+### Evidence (PylarOld save)
+| Guild | Players | `_u8_flag` |
+|-------|---------|-----------|
+| PutaNation | Pylar | 1 (admin) |
+| Unnamed Guild | Roxx | 1 (admin) |
+| Unnamed Guild | DefNotPylar | 1 (admin) |
+
+All were flagged as admin even though only Pylar was `admin_player_uid`.
+
+### Fix (commit `343d5abb`)
+- Reset `found['_u8_flag'] = 3` after appending the moved player to the target guild.
+- Only set `found['_u8_flag'] = 1` if the player is explicitly elected admin via the empty-admin fallback (`admin_player_uid not in target player set`).
+- Values inferred from save data: `1` = guild master/admin, `3` = regular member. Value `2` never observed.
+
 ## Conventions
 - PascalCase for tabs/dialogs, snake_case for modules/utilities
 - `t('key', default=...)` for i18n; all UI widgets implement `refresh_labels()`
