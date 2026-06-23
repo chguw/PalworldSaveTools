@@ -197,20 +197,21 @@ class ItemData:
         cls.load_item_data()
         return cls._item_data
 class InventoryContainer:
-    def __init__(self, container_id: str, container_data: dict, max_slots: Optional[int]=None):
+    def __init__(self, container_id: str, container_data: dict, max_slots: Optional[int]=None, container_type: str='main'):
         if hasattr(container_id, 'UUID'):
             self.container_id = container_id.UUID()
         elif isinstance(container_id, uuid.UUID):
             self.container_id = container_id
         else:
             self.container_id = as_uuid(container_id)
+        self._container_type = container_type
         self._standardized_container = StandardizedContainer(container_id=self.container_id, container_data=container_data, max_slots=max_slots)
     def get_slot_at(self, index: int) -> Optional[Dict[str, Any]]:
         slot = self._standardized_container.get_slot(index)
         if not slot:
             return None
         item_info = ItemData.get_item_by_asset(slot.item_id)
-        return {'slot_index': slot.slot_index, 'item_id': slot.item_id, 'item_name': item_info.get('name', slot.item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': slot.count, 'category': ItemData.get_item_category(slot.item_id), 'rarity': ItemData.get_item_rarity(slot.item_id), 'description': item_info.get('description', ''), 'raw_data': slot.raw_data}
+        return {'slot_index': slot.slot_index, 'item_id': slot.item_id, 'item_name': item_info.get('name', slot.item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': slot.count, 'category': ItemData.get_item_category(slot.item_id), 'rarity': ItemData.get_item_rarity(slot.item_id), 'description': item_info.get('description', ''), 'raw_data': slot.raw_data, 'container_type': self._container_type}
     def get_max_slots(self) -> int:
         return self._standardized_container.max_slots
     @property
@@ -242,7 +243,7 @@ class InventoryContainer:
         for slot in self._standardized_container.slots:
             if slot.item_id and slot.item_id != '':
                 item_info = ItemData.get_item_by_asset(slot.item_id)
-                items.append({'slot_index': slot.slot_index, 'item_id': slot.item_id, 'item_name': item_info.get('name', slot.item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': slot.count, 'category': ItemData.get_item_category(slot.item_id), 'rarity': ItemData.get_item_rarity(slot.item_id), 'description': item_info.get('description', ''), 'raw_data': slot.raw_data})
+                items.append({'slot_index': slot.slot_index, 'item_id': slot.item_id, 'item_name': item_info.get('name', slot.item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': slot.count, 'category': ItemData.get_item_category(slot.item_id), 'rarity': ItemData.get_item_rarity(slot.item_id), 'description': item_info.get('description', ''), 'raw_data': slot.raw_data, 'container_type': self._container_type})
         return items
     def add_item(self, item_id: str, count: int, slot_index: Optional[int]=None, dynamic_item_id: Optional[uuid.UUID]=None) -> bool:
         return self._standardized_container.add_item(item_id, count, slot_index, dynamic_item_id)
@@ -323,7 +324,7 @@ class PlayerInventory:
                     container_lookup[cid] = container
             for container_type, container_id in container_ids.items():
                 if container_id and container_id in container_lookup:
-                    self.containers[container_type] = InventoryContainer(container_id, container_lookup[container_id])
+                    self.containers[container_type] = InventoryContainer(container_id, container_lookup[container_id], container_type=container_type)
             self._load_bounty_tokens()
             self._calculate_max_slots()
             self.is_loaded = True

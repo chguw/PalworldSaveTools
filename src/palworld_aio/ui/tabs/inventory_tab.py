@@ -1567,6 +1567,14 @@ class PlayerInventoryTab(QWidget):
     def _delete_item_direct(self, slot_data: dict):
         if not self.inventory or not slot_data:
             return
+        is_bounty = slot_data.get('is_bounty', False)
+        item_id = slot_data.get('item_id', '')
+        if is_bounty and item_id:
+            self.inventory.remove_bounty_item(item_id)
+            self.inventory.save()
+            self.selected_item = None
+            self._refresh_display()
+            return
         container_type = slot_data.get('container_type', 'main')
         slot_index = slot_data.get('slot_index', 0)
         container = self.inventory.get_container(container_type)

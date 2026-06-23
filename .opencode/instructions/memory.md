@@ -108,6 +108,36 @@ Desktop GUI + CLI toolkit for editing, repairing, transferring, and converting P
 - **Lookup fix**: `data.py` `_load_pal_base_data()` now also caches `npcs[]` array entries as fallback (not overwriting `pals[]`).
 - **Result**: Human NPCs (Soldiers, Hunters, Believers, Traders, etc.) now display work suitabilities in pal editor and base inventory.
 
+## Key Items — Double-Click Delete Fix (Jun 23 session)
+### Problem
+`InventoryContainer.get_items()` / `get_slot_at()` omitted `container_type` from returned dicts. `_delete_item_direct` fell back to `'main'` for all items → key items double-click tried to delete from wrong container (silent no-op). Bounty tokens (synthetic `is_bounty=True`) were also not handled by `_delete_item_direct` (context menu `_delete_item` had the check, double-click didn't).
+
+### Fix
+- `InventoryContainer.__init__` accepts `container_type` param, stored as `self._container_type`
+- `get_items()` and `get_slot_at()` include `'container_type': self._container_type` in returned dicts
+- `PlayerInventory.load()` passes `container_type=` when creating containers
+- `_delete_item_direct` now checks `is_bounty` first → calls `remove_bounty_item()` for synthetic tokens, else removes from container with correct `container_type`
+
+Files: `inventory/inventory_manager.py:200,207,214,246,327`, `ui/tabs/inventory_tab.py:1567`
+
+## Level.sav Debug — Orphaned BossReward Containers (Jun 23 session)
+### CLI Usage
+```
+uv run python -m palsav.cli convert --to-json --output out.json in.sav
+```
+
+### ViperGeek save analysis (`OfficialWorld` save)
+- **UID**: `00000000-0000-0000-0000-000000000001` (placeholder admin UID, all zeros+1)
+- **All 6 player containers** (main/key/weapons/armor/foodbag/drop): zero `BossDefeatReward_*` items
+- **23 NormalBossDefeatFlag entries**: NONE match any `boss_mapping.json` spawner key → `_bounty_tokens` dict empty → PST shows no synthetic tokens
+- **Game shows items anyway**: game generates them from flag keys PST's mapping doesn't cover (e.g. `81_1_grass_FBOSS_11` not in mapping, but `81_1_grass_FBOSS_14` for Anubis is)
+
+### Legacy Container `419aef792ddd`
+- World container (GroupId=0, no guild/player owner), 200 slots
+- Holds 4 old bugged `BossDefeatReward_*` items from v1.1.88 era (when items were stored in containers, not flags)
+- Not accessible from any Player Inventory tab → only shows in Base Inventory tab
+- Other 8 user-reported tokens (Azurobe, Jetragon, Menasting Terra, Bushi, Dazzi Noct, Faleris Aqua, Gildane, Nyafia) don't exist as items anywhere in Level.sav
+
 ## Bounty Tokens & Boss Defeat Flags (Jun 22 session)
 ### Storage (player `.sav` only)
 Bounty tokens (`BossDefeatReward_*`) are **not** stored as items in Level.sav containers. They're tracked purely via the player `.sav`:
