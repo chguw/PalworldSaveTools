@@ -6,7 +6,11 @@ import argparse
 def main():
     if os.environ.get('PYTHONHASHSEED', 'random') != '0':
         os.environ['PYTHONHASHSEED'] = '0'
-        os.execv(sys.argv[0], sys.argv)
+        if os.name != 'nt' and hasattr(os, 'execv'):
+            os.execv(sys.argv[0], sys.argv)
+        else:
+            import subprocess
+            sys.exit(subprocess.run([sys.executable, *sys.argv], env=os.environ).returncode)
 
     commands = {
         "convert": ("palsav.commands.convert", "Convert save files between .sav and .json"),

@@ -283,10 +283,11 @@ class PlayerInventory:
         exist_keys = {e.get('key', '') for e in flags}
         seen = set()
         for boss_key in exist_keys:
-            item_id = rev.get(boss_key)
-            if item_id and item_id not in seen:
-                seen.add(item_id)
-                self._bounty_tokens[item_id] = self._bounty_tokens.get(item_id, 0) + 1
+            item_ids = rev.get(boss_key, [])
+            for item_id in item_ids:
+                if item_id not in seen:
+                    seen.add(item_id)
+                    self._bounty_tokens[item_id] = self._bounty_tokens.get(item_id, 0) + 1
     def get_bounty_token_items(self, existing_slot_count: int=0) -> list:
         items = []
         for i, (item_id, count) in enumerate(sorted(self._bounty_tokens.items())):
@@ -419,7 +420,7 @@ class PlayerInventory:
         return base_slots + unlock_count
     _BOSS_MAP_CACHE = None
     _BOSS_REVERSE_CACHE = None
-    def _build_reverse_boss_map(self) -> dict[str, str]:
+    def _build_reverse_boss_map(self) -> dict[str, list[str]]:
         if PlayerInventory._BOSS_REVERSE_CACHE is not None:
             return PlayerInventory._BOSS_REVERSE_CACHE
         fwd = self._build_boss_key_map()
@@ -428,7 +429,7 @@ class PlayerInventory:
             if isinstance(keys, str):
                 keys = [keys]
             for k in keys:
-                rev[k] = item_id
+                rev.setdefault(k, []).append(item_id)
         PlayerInventory._BOSS_REVERSE_CACHE = rev
         return rev
     def _build_boss_key_map(self) -> dict[str, str]:
@@ -473,11 +474,14 @@ class PlayerInventory:
             boss_keys = boss_key_map.get(item_id, [])
             if isinstance(boss_keys, str):
                 boss_keys = [boss_keys]
+            any_new = False
             for boss_key in boss_keys:
                 if boss_key not in existing_keys:
                     nbdf['value'].append({'key': boss_key, 'value': True})
                     existing_keys.add(boss_key)
-                    added += 1
+                    any_new = True
+            if any_new:
+                added += 1
         if added == 0:
             return
         bdeti = record_data.setdefault('BossDefeatExpBonusTableIndex', {'id': None, 'value': 0, 'type': 'IntProperty'})

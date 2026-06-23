@@ -1145,11 +1145,13 @@ class PlayerInventoryTab(QWidget):
         try:
             all_items = ItemData.get_all_items()
             unlock_assets = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
-            key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower())]
+            boss_map = self.inventory._build_boss_key_map()
+            key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
             key_container = self.inventory.get_container('key')
             if not key_container:
                 return
             existing_ids = {s.get('item_id') for s in key_container.slots}
+            existing_ids.update(self.inventory._bounty_tokens.keys())
             to_add = [i for i in key_candidates if i['asset'] not in existing_ids]
             missing_unlocks = []
             for item_id in FOOD_POUCH_ITEMS:
@@ -1165,6 +1167,7 @@ class PlayerInventoryTab(QWidget):
             if not total:
                 self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items', default='Add All Key Items'), t('inventory.no_new_items', default='All key items already present.'))
                 return
+
             reply = self._themed_message_box(QMessageBox.Question, t('inventory.add_all_key_items_confirm.title', default='Add All Key Items'), t('inventory.add_all_key_items_confirm.msg', count=total, default=f'Add all missing key items? ({total} items)'), QMessageBox.Yes | QMessageBox.No)
             if reply != QMessageBox.Yes:
                 return

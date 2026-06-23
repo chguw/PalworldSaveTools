@@ -861,10 +861,16 @@ class MainWindow(QMainWindow):
         from palworld_aio.inventory.inventory_manager import ItemData, PlayerInventory, FOOD_POUCH_ITEMS, ACCESSORY_UNLOCK_ITEMS, WEAPON_UNLOCK_ITEMS
         from palworld_aio.utils import gvasfile_to_sav
         from palworld_aio.inventory.dynamic_item import sync_dynamic_items_with_registry
-        import os
+        from resource_resolver import resource_path
+        import os, json
         all_items = ItemData.get_all_items()
         unlock_assets = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
-        candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower())]
+        boss_map_path = resource_path(constants.get_base_path(), 'game_data', 'boss_mapping.json')
+        try:
+            boss_map = json.load(open(boss_map_path, encoding='utf-8')).get('boss_defeat_flag_map', {})
+        except:
+            boss_map = {}
+        candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
         per_player_missing = {}
         for uid in player_uids:
             try:
