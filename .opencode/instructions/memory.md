@@ -216,6 +216,17 @@ All were flagged as admin even though only Pylar was `admin_player_uid`.
 - No DnD in pal editor (pal transfer = delete + create)
 - Structural audit runs every pytest session (checks file pairing, import graph, resource paths)
 
+## Cross-Tab Player Selection Sync (Jun 22 session)
+- **Problem**: Selecting a player in Pal Editor or Player Inventory tab only affected that tab.
+- **Solution**: `select_player(uid, name, display)` / `clear_player()` on both `PalEditorTab` and `PlayerInventoryTab`. Each calls the other's method via `self.parent_window.<other_tab>.<method>()`.
+- **Guard**: `_syncing` bool on each tab prevents re-entrant cross-calls → no infinite loops.
+- **Refresh preservation**: Both `refresh()` methods now save `prev_uid` before rebuilding player list, then re-select if player still exists. Level edits no longer drop the selection.
+- **Entry points wired**:
+  - `_open_player_popup()` (both tabs) — user clicks "Select Player..."
+  - `load_player()` (inventory) — called from Players tab right-click → "Edit Player Inventory"
+  - `refresh()` (both) — called during `refresh_all()`; preserves selection across rebuilds
+- **Files**: `ui/tabs/pal_editor_tab.py:59-72` (select_player/clear_player), `ui/tabs/inventory_tab.py:1049-1065` (select_player/clear_player), `151-163` (refresh preservation)
+
 ## README Translation (`scripts/scrs/translate_readme.py`)
 After editing `README.md` (esp. adding/renaming sections), **re-run** the script to regenerate all 7 translated files:
 ```

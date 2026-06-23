@@ -796,6 +796,7 @@ class PlayerInventoryTab(QWidget):
         self.current_player_uid = None
         self.current_player_name = None
         self._player_list = []
+        self._syncing = False
         self.equip_headers = {}
         self._context_container_type = 'main'
         self._context_slot_index = 0
@@ -1045,6 +1046,23 @@ class PlayerInventoryTab(QWidget):
             for uid, name, gid, lastseen, level, *_ in players:
                 display_name = f'{name} (Lv.{level})'
                 self._player_list.append({'uid': uid, 'name': name, 'level': level, 'display': display_name})
+    def select_player(self, uid, name, display):
+        if self._syncing:
+            return
+        self.current_player_uid = uid
+        self.current_player_name = name
+        self.player_select_btn.setText(display)
+        self.modified = False
+        self._show_inventory()
+        self.inventory = get_player_inventory(self.current_player_uid)
+        self._refresh_display()
+    def clear_player(self):
+        if self._syncing:
+            return
+        self.current_player_uid = None
+        self.current_player_name = None
+        self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
+        self._clear_display()
     def _open_player_popup(self):
         if not self._player_list:
             self.refresh_players()
@@ -1101,6 +1119,10 @@ class PlayerInventoryTab(QWidget):
             self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
             self.current_player_uid = None
             self.current_player_name = None
+            if hasattr(self.parent_window, 'pal_editor_tab'):
+                self._syncing = True
+                self.parent_window.pal_editor_tab.clear_player()
+                self._syncing = False
         elif chosen:
             self.current_player_uid = chosen['uid']
             self.current_player_name = chosen['name']
@@ -1109,6 +1131,10 @@ class PlayerInventoryTab(QWidget):
             self._show_inventory()
             self.inventory = get_player_inventory(self.current_player_uid)
             self._refresh_display()
+            if hasattr(self.parent_window, 'pal_editor_tab'):
+                self._syncing = True
+                self.parent_window.pal_editor_tab.select_player(chosen['uid'], chosen['name'], chosen['display'])
+                self._syncing = False
     def _show_inventory(self):
         self.placeholder_label.hide()
         self.inv_tabs.show()
@@ -1925,14 +1951,20 @@ class PlayerInventoryTab(QWidget):
         self.refresh_players()
         self.current_player_uid = uid
         self.current_player_name = name or uid
+        display = None
         for player in self._player_list:
             if player['uid'] == uid:
-                self.player_select_btn.setText(player['display'])
+                display = player['display']
+                self.player_select_btn.setText(display)
                 break
         self._show_inventory()
         self.modified = False
         self.inventory = get_player_inventory(self.current_player_uid)
         self._refresh_display()
+        if hasattr(self.parent_window, 'pal_editor_tab') and display:
+            self._syncing = True
+            self.parent_window.pal_editor_tab.select_player(uid, name or uid, display)
+            self._syncing = False
     def refresh_labels(self):
         self.title_label.setText(t('inventory.title', default='Player Inventory'))
         self.stats_panel.refresh_labels()
@@ -1961,8 +1993,15 @@ class PlayerInventoryTab(QWidget):
         if hasattr(self, 'placeholder_label'):
             self.placeholder_label.setText(t('inventory.select_player_hint', default='Select a player to edit their inventory'))
     def refresh(self):
+        prev_uid = self.current_player_uid
+        prev_name = self.current_player_name
         self._clear_display()
         self.refresh_players()
+        if prev_uid:
+            for p in self._player_list:
+                if p['uid'] == prev_uid:
+                    self.select_player(prev_uid, prev_name or p['name'], p['display'])
+                    break
 class QuantityDialog(QDialog):
     def __init__(self, current_qty: int=1, parent=None):
         super().__init__(parent)

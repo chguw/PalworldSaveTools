@@ -12,6 +12,7 @@ class PalEditorTab(QWidget):
         self.current_player_uid = None
         self.current_player_name = None
         self._player_list = []
+        self._syncing = False
         self._setup_ui()
     def _setup_ui(self):
         main_layout = QVBoxLayout(self)
@@ -55,6 +56,20 @@ class PalEditorTab(QWidget):
         self.pal_editor_widget.hide()
         layout.addWidget(self.pal_editor_widget)
         return frame
+    def select_player(self, uid, name, display):
+        if self._syncing:
+            return
+        self.current_player_uid = uid
+        self.current_player_name = name
+        self.player_select_btn.setText(display)
+        self._show_editor()
+    def clear_player(self):
+        if self._syncing:
+            return
+        self._clear_editor()
+        self.current_player_uid = None
+        self.current_player_name = None
+        self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
     def _open_player_popup(self):
         if not self._player_list:
             self._load_players()
@@ -109,11 +124,21 @@ class PalEditorTab(QWidget):
         if chosen == '__clear__':
             self._clear_editor()
             self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
+            if hasattr(self.parent_window, 'inventory_tab'):
+                self._syncing = True
+                self.parent_window.inventory_tab.clear_player()
+                self._syncing = False
+            self.current_player_uid = None
+            self.current_player_name = None
         elif chosen:
             self.current_player_uid = chosen['uid']
             self.current_player_name = chosen['name']
             self.player_select_btn.setText(chosen['display'])
             self._show_editor()
+            if hasattr(self.parent_window, 'inventory_tab'):
+                self._syncing = True
+                self.parent_window.inventory_tab.select_player(chosen['uid'], chosen['name'], chosen['display'])
+                self._syncing = False
     def _show_editor(self):
         if self.current_player_uid:
             self.placeholder_label.hide()
@@ -124,7 +149,14 @@ class PalEditorTab(QWidget):
         self.pal_editor_widget.clear()
         self.placeholder_label.show()
     def refresh(self):
+        prev_uid = self.current_player_uid
+        prev_name = self.current_player_name
         self._load_players()
+        if prev_uid:
+            for p in self._player_list:
+                if p['uid'] == prev_uid:
+                    self.select_player(prev_uid, prev_name or p['name'], p['display'])
+                    break
     def _load_players(self):
         self._player_list = []
         self._clear_editor()
