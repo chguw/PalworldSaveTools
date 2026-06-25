@@ -344,7 +344,7 @@ def stat_breakdown_tooltip(label_key, bd, show_awake=True):
     label = t(f'stat_tooltip.{label_key.lower()}', default=label_key)
     desc = t(f'stat_tooltip.{label_key.lower()}_desc', default='')
     lines = [
-        f'{label}  ({base_eff} &gt;&gt; {final})',
+        f'{label}  ({base_eff} \u2192 {final})',
         '\u2500' * 12,
     ]
     if desc:
