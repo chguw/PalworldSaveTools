@@ -3050,11 +3050,12 @@ class BaseInventoryTab(QWidget):
                                 pal_entry = next((e for e in cmap if str(e.get('key', {}).get('InstanceId', {}).get('value', '')).replace('-', '').lower() == inst_id), None)
                                 if pal_entry and pal_entry in cmap:
                                     cmap.remove(pal_entry)
-                                owner_uid = str(raw_val.get('player_uid', '')).replace('-', '').lower()
-                                if owner_uid and owner_uid != '00000000000000000000000000000000':
-                                    cur = constants.PLAYER_PAL_COUNTS.get(owner_uid, 0)
+                                owner_raw = safe_nested_get(pal_entry, ['value', 'RawData', 'value', 'object', 'SaveParameter', 'value', 'OwnerPlayerUId', 'value'])
+                                if owner_raw:
+                                    key = str(owner_raw).replace('-', '').lower()
+                                    cur = constants.PLAYER_PAL_COUNTS.get(key, 0)
                                     if cur > 0:
-                                        constants.PLAYER_PAL_COUNTS[owner_uid] = cur - 1
+                                        constants.PLAYER_PAL_COUNTS[key] = cur - 1
                     cc['value']['Slots']['value']['values'] = []
                     cc['value']['SlotNum']['value'] = 0
                     break
@@ -3400,6 +3401,13 @@ class BaseInventoryTab(QWidget):
                     msg += f" ({(t('base_inventory.structures_affected').format(count=containers) if t else f'{containers} containers affected')})"
                 self._show_info(msg)
                 self._trigger_auto_save()
+                from PySide6.QtWidgets import QApplication
+                app = QApplication.instance()
+                if app:
+                    for w in app.topLevelWidgets():
+                        if hasattr(w, '_refresh_players'):
+                            w._refresh_players()
+                            break
             else:
                 self._show_warning(t('base_inventory.no_structures_removed') if t else 'No structures found to remove')
     def _filter_guilds_and_bases_by_structure(self, structure_asset):

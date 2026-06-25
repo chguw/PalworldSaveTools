@@ -1575,11 +1575,12 @@ def remove_structure_from_guilds(structure_asset, guild_ids=None):
                                                 pal_entry = next((e for e in cmap if str(e.get('key', {}).get('InstanceId', {}).get('value', '')).replace('-', '').lower() == inst_id), None)
                                                 if pal_entry and pal_entry in cmap:
                                                     cmap.remove(pal_entry)
-                                                owner_uid = str(raw_val.get('player_uid', '')).replace('-', '').lower()
-                                                if owner_uid and owner_uid != '00000000000000000000000000000000':
-                                                    cur = constants.PLAYER_PAL_COUNTS.get(owner_uid, 0)
+                                                owner_raw = pal_entry.get('value', {}).get('RawData', {}).get('value', {}).get('object', {}).get('SaveParameter', {}).get('value', {}).get('OwnerPlayerUId', {}).get('value') if pal_entry else None
+                                                if owner_raw:
+                                                    key = str(owner_raw).replace('-', '').lower()
+                                                    cur = constants.PLAYER_PAL_COUNTS.get(key, 0)
                                                     if cur > 0:
-                                                        constants.PLAYER_PAL_COUNTS[owner_uid] = cur - 1
+                                                        constants.PLAYER_PAL_COUNTS[key] = cur - 1
                                     cc['value']['Slots']['value']['values'] = []
                                     cc['value']['SlotNum']['value'] = 0
                                     if cc in char_containers:
