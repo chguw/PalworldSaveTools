@@ -748,6 +748,7 @@ class ContainerListWidget(QTreeWidget):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self._show_context_menu)
         self.itemSelectionChanged.connect(self._on_selection_changed)
+        self.itemClicked.connect(self._on_item_clicked)
         self.setStyleSheet(f'\n            QTreeWidget {{\n                background: transparent;\n                border: 1px solid rgba(125,211,252,0.15);\n                border-radius: 10px;\n                color: #e0e0e0;\n                outline: none;\n            }}\n            QTreeWidget::item {{\n                padding: 6px;\n                margin: 1px 2px;\n                border: 1px solid rgba(255,255,255,0.08);\n                border-radius: 8px;\n                background: rgba(255,255,255,0.03);\n            }}\n            QTreeWidget::item:selected {{\n                background: rgba(125,211,252,0.1);\n                border: 2px solid #7DD3FC;\n            }}\n            QTreeWidget::item:hover {{\n                background: rgba(125,211,252,0.06);\n                border-color: rgba(125,211,252,0.2);\n            }}\n            QTreeWidget::item:selected:hover {{\n                background: rgba(125,211,252,0.1);\n            }}\n            QTreeWidget::branch {{\n                background-color: transparent;\n            }}\n        ')
     def clear(self):
         super().clear()
@@ -860,6 +861,10 @@ class ContainerListWidget(QTreeWidget):
         selected_items = self.selectedItems()
         if selected_items:
             container_id = selected_items[0].data(0, Qt.UserRole)
+            self.container_selected.emit(container_id)
+    def _on_item_clicked(self, item):
+        container_id = item.data(0, Qt.UserRole)
+        if container_id:
             self.container_selected.emit(container_id)
     def _show_context_menu(self, position):
         item = self.itemAt(position)
@@ -1322,6 +1327,10 @@ class _BasePalIcon(QFrame):
                 el_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
                 _ht = _partner_desc_to_html(_res, el_colors, tooltip=True)
                 tip += f'<br><br>{_ht}'
+        cost_name = getattr(self, '_booth_cost_name', '')
+        cost_count = getattr(self, '_booth_cost_count', 0)
+        if cost_name and cost_count > 0:
+            tip += f'<br><br><span style="color:#fbbf24;font-weight:bold">&#xf0ec;</span> <b>{cost_name}</b> x{cost_count}'
         self.setToolTip(tip)
         self.setStyleSheet(slot_full('QFrame#basePalSlot'))
         if was_selected:
@@ -1486,8 +1495,14 @@ class BasePalsContentWidget(QFrame):
             pal_idx = start + i
             if pal_idx < len(self._pals) and self._pals[pal_idx] is not None:
                 slot.pal_data = self._pals[pal_idx]['character_entry']
+                slot._booth_cost_name = self._pals[pal_idx].get('cost_name', '')
+                slot._booth_cost_count = self._pals[pal_idx].get('cost_count', 0)
+                slot._booth_cost_item_id = self._pals[pal_idx].get('cost_item_id', '')
             else:
                 slot.pal_data = None
+                slot._booth_cost_name = ''
+                slot._booth_cost_count = 0
+                slot._booth_cost_item_id = ''
             slot.slot_index = i
             slot.update_display()
         page_text = t('base_inventory.page') if t else None
@@ -2752,8 +2767,6 @@ class BaseInventoryTab(QWidget):
             self._load_containers_for_base_filtered(base_id)
         else:
             self._load_containers_for_base(base_id)
-        pals = get_base_worker_pals(base_id)
-        self.base_pals_widget.set_pals(pals, base_id)
     def _load_containers_for_base(self, base_id):
         self.container_list.clear()
         guild_id = self._current_guild_id
@@ -2813,7 +2826,15 @@ class BaseInventoryTab(QWidget):
         base_data = self._structure_locations[guild_id_key]
         instance_ids = base_data.get(base_id_key, [])
         all_containers = self.manager.load_containers_for_base(base_id)
-        matching_containers = [c for c in all_containers if c.get('map_object_id', '').lower() == structure_asset.lower()]
+        sa_lower = structure_asset.lower()
+        matching_containers = []
+        for c in all_containers:
+            if c.get('map_object_id', '').lower() == sa_lower:
+                matching_containers.append(c)
+            elif c.get('booth_type'):
+                bt = c['booth_type'].lower()
+                if ('palbooth' in sa_lower and 'palbooth' in bt) or ('itembooth' in sa_lower and 'itembooth' in bt):
+                    matching_containers.append(c)
         if matching_containers:
             for c in matching_containers:
                 self.container_list.add_container(c)
@@ -2877,9 +2898,6 @@ class BaseInventoryTab(QWidget):
                 inventory_container = self.manager.select_container(container_id)
                 if inventory_container:
                     items = inventory_container.get_items()
-                    for bi in booth_items:
-                        bi['item_id'] = bi.get('cost_item_id', bi['item_id'])
-                        bi['stack_count'] = bi.get('cost_count', bi['stack_count'])
                     max_slots = container_info['slot_count']
                     combined = booth_items + items
                     self.inventory_grid.load_items(combined, max_slots=max_slots)
@@ -2890,12 +2908,29 @@ class BaseInventoryTab(QWidget):
             elif booth_type == 'PalMapObjectPalBoothModel':
                 from palworld_aio.inventory.base_inventory_manager import get_booth_pal_contents
                 booth_pals, payment_items = get_booth_pal_contents(container_info)
-                if booth_pals:
+                trade_infos = container_info.get('booth_trade_infos', [])
+                pal_entries = []
+                booth_cost_items = []
+                for i, bp in enumerate(booth_pals):
+                    entry = bp.get('character_entry')
+                    cost_name = ''
+                    cost_count = 0
+                    cost_item_id = ''
+                    if i < len(trade_infos):
+                        cost = trade_infos[i].get('cost', {})
+                        cost_item_id = cost.get('static_id', '')
+                        cost_count = cost.get('num', 0)
+                        if cost_item_id:
+                            cinfo = ItemData.get_item_by_asset(cost_item_id) or {}
+                            cost_name = cinfo.get('name', cost_item_id)
+                    pal_entries.append({'character_entry': entry, 'cost_name': cost_name, 'cost_count': cost_count, 'cost_item_id': cost_item_id, 'is_booth_pal': True})
+                    if cost_item_id and cost_count > 0:
+                        cinfo = ItemData.get_item_by_asset(cost_item_id) or {}
+                        cicon = cinfo.get('icon', '')
+                        cname = cinfo.get('name', cost_item_id)
+                        booth_cost_items.append({'item_id': cost_item_id, 'item_name': cname, 'icon_path': cicon, 'stack_count': cost_count, 'slot_index': len(booth_cost_items), 'is_booth_asking': True})
+                if pal_entries:
                     self._switch_tab(1)
-                    pal_entries = []
-                    for bp in booth_pals:
-                        entry = bp.get('character_entry')
-                        pal_entries.append({'character_entry': entry})
                     self.base_pals_widget.set_pals(pal_entries, container_info.get('base_id'))
                     self.base_pals_widget.stats_label.setText(t('base_inventory.booth_pal_title', default='Booth Pals: {count}').format(count=len(pal_entries)))
                 else:
@@ -2907,6 +2942,11 @@ class BaseInventoryTab(QWidget):
                     items = inventory_container.get_items()
                     if not payment_items:
                         payment_items = items
+                    max_slots = container_info['slot_count']
+                    combined = booth_cost_items + payment_items
+                    self.inventory_grid.load_items(combined, max_slots=max_slots)
+                    if booth_cost_items:
+                        self.inventory_grid.tab_label.setText(t('base_inventory.booth_asking_title', default='Asking Items: {count}').format(count=len(booth_cost_items)))
                 self._update_container_stats()
             else:
                 self.inventory_grid.refresh_labels()

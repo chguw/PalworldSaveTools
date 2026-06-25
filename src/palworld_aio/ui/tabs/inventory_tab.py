@@ -96,7 +96,18 @@ class ItemSlotWidget(QFrame):
             qty = self.slot_data.get('stack_count', 1)
             item_id = self.slot_data.get('item_id', '')
             item_desc = self.slot_data.get('description', '')
-            tooltip = f'<b>{item_name}</b><br>Qty: {qty}<br><i>{item_id}</i>'
+            is_booth = self.slot_data.get('is_booth_product', False)
+            is_booth_ask = self.slot_data.get('is_booth_asking', False)
+            if is_booth:
+                cost_name = self.slot_data.get('cost_name', 'Unknown')
+                cost_count = self.slot_data.get('cost_count', 0)
+                tooltip = f'<b>{item_name}</b><br><i>{item_id}</i>'
+                tooltip += f'<br><br><span style="color:#fbbf24;font-weight:bold">&#xf0ec;</span> <b>{cost_name}</b> x{cost_count}'
+            elif is_booth_ask:
+                tooltip = f'<b>{item_name}</b><br>Qty: {qty}<br><i>{item_id}</i>'
+                tooltip += f'<br><br><span style="color:#fbbf24;font-weight:bold">&#xf0ec; Asking Price</span>'
+            else:
+                tooltip = f'<b>{item_name}</b><br>Qty: {qty}<br><i>{item_id}</i>'
             if item_desc:
                 cleaned = _clean_desc_for_tooltip(item_desc)
                 tooltip += f'<br><br><span style="color:#94a3b8;font-size:11px">{wrap_tooltip_text(cleaned)}</span>'
