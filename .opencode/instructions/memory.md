@@ -309,24 +309,25 @@ Game confirms: `final = floor((base_wc + trust + awake) × (1+souls) × (1+passi
 | Stat | AD(K) | base | trust | awake |
 |------|-------|------|-------|-------|
 | **HP** | `500+5L`(0.5) | `floor(AD + hs×0.5×L×(1+IV))` | `int(L×FR×fh×0.65×(1+cb)+0.5)` | `floor(hs×L×0.065×(1+cb))` |
-| **ATK** | `1.5L`(0.075) | `floor(AD + shot×0.075×L×(1+IV)×(1+cb))` | `floor(L×FR×f_shot÷10.2×(1+cb))` | `floor(base×0.09)` |
-| **DEF** | `0.75L`(0.075) | `floor(AD + def×0.075×L×(1+IV)×(1+cb))` | `floor(L×FR×f_def÷10.2×(1+cb))` | `floor(base×0.094)` |
+| **ATK** | `1.5L`(0.075) | `floor(AD + shot×0.075×L×(1+IV)×(1+cb))` | `floor(L×FR×f_shot÷10.2) + floor(L×FR×f_shot×cb÷10.2)` | `floor(shot×L×(1+IV)×0.009)` |
+| **DEF** | `0.75L`(0.075) | `floor(AD + def×0.075×L×(1+IV)×(1+cb))` | `floor(L×FR×f_def÷10.2×(1+cb))` | `floor(def×L×(1+IV)×0.009)` |
 | **WS** | — | `70+floor(cs×cb×L÷57)` if cond>1 else 70 | — | — |
 
-### What Changed:
-- **HP trust**: `int(800×(130/82.3−2.5×0.0181))` → `int(800×2.5×0.65+0.5) = 1300` (matches all 4 test cases)
-- **HP awake**: `floor(base_wc×0.089)` → `floor(hs×L×0.065×(1+cb))` (confirmed: 676/811/811/973)
-- **HP base**: removed `lucky_alpha` — boss multiplier is already in BOSS_ data's hs (156 vs 130)
-- **ATK trust**: divisor 8.6→10.2, now scaled by `(1+cb)`
+### What Changed (Jun 26 session):
+- **HP trust**: `int(800×(130/82.3−2.5×0.0181))` → `int(800×2.5×0.65+0.5) = 1300`
+- **HP awake**: `floor(base_wc×0.089)` → `floor(hs×L×0.065×(1+cb))`
+- **HP base**: removed `lucky_alpha` — boss multiplier already in BOSS_ data's hs
+- **ATK trust**: divisor 8.6→10.2, now split `floor(x)+floor(x×cb)` to avoid float boundary
 - **DEF trust**: divisor 8.5→10.2, now scaled by `(1+cb)`
-- **ATK awake**: ratio 0.092→0.09
-- **WS**: added `70+floor(cs×condenser_bonus×L÷57)` (was always `cs×L//280`, ignoring condenser)
-- **Display**: always recalc from formula, ignore stale stored MaxHP/Attack/Defense
+- **ATK awake**: `floor(base×0.09)` → `floor(shot×L×(1+IV)×0.009)` (scaling-based, not base-based)
+- **DEF awake**: `floor(base×0.094)` → `floor(def×L×(1+IV)×0.009)` (scaling-based)
+- **WS**: added `70+floor(cs×condenser_bonus×L÷57)` (was always `cs×L//280`)
+- **Display**: always recalc from formula; `int()`→`round()` for soul/passive pct display
 
-### Remaining Issues:
-- ATK base at cond=0: 1056(PST) vs 1036(game), off by 20. Cond=5: perfect.
-- DEF base at cond=0: 918(PST) vs 908(game), off by 10. Cond=5: perfect.
-- Possibly IV×condenser interaction not understood. Need more data points.
+### Known ±1-2 Tolerance:
+- Trust formula: ±1 boundary cases at some `friendship_*`/level/condenser combos
+- Awake formula: DEF Jetragon gives 112 (game 111) — boundary float issue
+- Anubis ATK: 2524 (game 2526) — pre-existing, not caused by formula changes
 
 ### Tooltip Feature (new):
 - Custom QLabel popup (`Qt.Tool | Qt.FramelessWindowHint`) on HP/ATK/DEF/WS hover

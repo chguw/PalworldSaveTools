@@ -286,9 +286,10 @@ def _atk_breakdown(pal_data, level, talent_shot=0, rank_attack=0, friendship_ran
     base = math.floor(additive_const + shot_scaling * 0.075 * level * (1 + attack_iv) * (1 + condenser_bonus))
     if trust_bonus is None:
         f_atk = float(pal_data.get('friendship_shotattack', 0) or 0) if pal_data else 0
-        trust_bonus = math.floor(level * friendship_rank * f_atk / 10.2 * (1 + condenser_bonus))
+        base_trust = level * friendship_rank * f_atk / 10.2
+        trust_bonus = math.floor(base_trust) + math.floor(base_trust * condenser_bonus)
     if awake_bonus is None:
-        awake_bonus = math.floor(base * 0.09) if is_awake else 0
+        awake_bonus = math.floor(shot_scaling * level * (1 + attack_iv) * 0.009) if is_awake else 0
     subtotal = base + trust_bonus + awake_bonus
     return {
         'base': base, 'cond_mult': 1 + condenser_bonus, 'base_wc': base,
@@ -311,7 +312,7 @@ def _def_breakdown(pal_data, level, talent_defense=0, rank_defense=0, friendship
         f_def = float(pal_data.get('friendship_defense', 0) or 0) if pal_data else 0
         trust_bonus = math.floor(level * friendship_rank * f_def / 10.2 * (1 + condenser_bonus))
     if awake_bonus is None:
-        awake_bonus = math.floor(base * 0.094) if is_awake else 0
+        awake_bonus = math.floor(defense_scaling * level * (1 + defense_iv) * 0.009) if is_awake else 0
     subtotal = base + trust_bonus + awake_bonus
     return {
         'base': base, 'cond_mult': 1 + condenser_bonus, 'base_wc': base,
@@ -360,14 +361,14 @@ def stat_breakdown_tooltip(label_key, bd, show_awake=True):
             lines.append('\u2500' * 12)
             sep_added = True
         lines.append(t('stat_tooltip.bonus_awakening', value=awake))
-    pct = int((sm - 1) * 100)
+    pct = round((sm - 1) * 100)
     if pct:
         if not sep_added:
             lines.append('\u2500' * 12)
             sep_added = True
         lines.append(t('stat_tooltip.enhance_souls', percent=pct))
     if pm != 1.0:
-        pct_p = int((pm - 1) * 100)
+        pct_p = round((pm - 1) * 100)
         lines.append(f'Passive Skills +{pct_p}%')
     return '\n'.join(lines)
 
