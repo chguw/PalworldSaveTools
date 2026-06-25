@@ -224,13 +224,14 @@ def calculate_max_hp(pal_data, level, talent_hp=0, rank_hp=0, is_boss=False, is_
     hp_iv = talent_hp * 0.3 / 100
     soul_bonus = rank_hp * 0.03
     condenser_bonus = max(0, condenser_rank - 1) * 0.05
-    base = math.floor(500 + 5 * level + hp_scaling * 0.5 * level * (1 + hp_iv))
+    lucky_alpha = 1.2 if (is_lucky and not is_boss) else 1.0
+    base = math.floor(500 + 5 * level + hp_scaling * 0.5 * level * (1 + hp_iv) * lucky_alpha)
     base_wc = math.floor(base * (1 + condenser_bonus))
     if trust_bonus is None:
         f_hp = float(pal_data.get('friendship_hp', 0) or 0)
-        trust_bonus = math.floor(base_wc * friendship_rank * f_hp / 155)
+        trust_bonus = int(level * friendship_rank * (hp_scaling / 82.3 - f_hp * 0.0181) + 0.5)
     if awake_bonus is None:
-        awake_bonus = _auto_awake_approx(base_wc, is_awake, 0.0887)
+        awake_bonus = _auto_awake_approx(base_wc, is_awake, 0.089)
     subtotal = base_wc + trust_bonus + awake_bonus
     return math.floor(subtotal * (1 + soul_bonus) * (1 + passive_bonus)) * 1000
 
