@@ -139,6 +139,8 @@ class PalInfoWidget(PalInfoDisplayMixin, PalInfoHandlerMixin, QFrame):
         self.awake_overlay.hide()
         self.portrait_ring.set_awakened(False)
         self._update_stack_state()
+        if hasattr(self, '_stat_tip'):
+            self._stat_tip.hide()
     def _set_passive_overlay(self, index, mode):
         if index >= len(self.passive_cards) or index >= len(self.passive_overlays):
             return
@@ -177,6 +179,12 @@ class PalInfoWidget(PalInfoDisplayMixin, PalInfoHandlerMixin, QFrame):
         self._showing_active_skills = True
         self._l_shortcut = QShortcut(QKeySequence(Qt.Key_L), self)
         self._l_shortcut.activated.connect(lambda: self.last_clicked_data is not None and self._on_passive_loadout())
+        self._stat_tip = QLabel(None, Qt.Tool | Qt.FramelessWindowHint)
+        self._stat_tip.setVisible(False)
+        self._stat_tip.setWordWrap(False)
+        self._stat_tip.setStyleSheet('background: rgba(18,20,24,0.98); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.25); border-radius: 6px; padding: 6px 10px; font-size: 11px;')
+        self._stat_tip.setAttribute(Qt.WA_ShowWithoutActivating)
+        self._stat_tip.setAttribute(Qt.WA_TransparentForMouseEvents)
     def resizeEvent(self, event):
         super().resizeEvent(event)
         if hasattr(self, '_no_data_overlay'):

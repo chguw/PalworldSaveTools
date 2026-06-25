@@ -219,7 +219,41 @@ def calculate_max_hp(pal_data, level, talent_hp=0, rank_hp=0, is_boss=False, is_
                      trust_bonus=None, awake_bonus=None, passive_bonus=0):
     if not pal_data:
         return 0
-    stats = pal_data.get('scaling', None) or pal_data.get('stats', {})
+    bd = _hp_breakdown(pal_data, level, talent_hp, rank_hp, is_boss, is_lucky,
+                       friendship_rank, condenser_rank, is_awake,
+                       trust_bonus, awake_bonus, passive_bonus)
+    return bd['final'] * 1000
+
+def calculate_shot_attack(pal_data, level, talent_shot=0, rank_attack=0, friendship_rank=0,
+                          condenser_rank=1, trust_bonus=None, awake_bonus=None, passive_bonus=0,
+                          is_awake=False):
+    if not pal_data:
+        return 0
+    bd = _atk_breakdown(pal_data, level, talent_shot, rank_attack, friendship_rank,
+                        condenser_rank, trust_bonus, awake_bonus, passive_bonus, is_awake)
+    return bd['final']
+
+def calculate_attack(pal_data, level, talent_shot=0, rank_attack=0,
+                     trust_bonus=None, awake_bonus=None, passive_bonus=0,
+                     is_awake=False):
+    if not pal_data:
+        return 0
+    return calculate_shot_attack(pal_data, level, talent_shot, rank_attack, 0,
+                                 1, trust_bonus, awake_bonus, passive_bonus, is_awake)
+
+def calculate_defense(pal_data, level, talent_defense=0, rank_defense=0, friendship_rank=0,
+                      condenser_rank=1, trust_bonus=None, awake_bonus=None, passive_bonus=0,
+                      is_awake=False):
+    if not pal_data:
+        return 0
+    bd = _def_breakdown(pal_data, level, talent_defense, rank_defense, friendship_rank,
+                        condenser_rank, trust_bonus, awake_bonus, passive_bonus, is_awake)
+    return bd['final']
+
+def _hp_breakdown(pal_data, level, talent_hp=0, rank_hp=0, is_boss=False, is_lucky=False,
+                  friendship_rank=0, condenser_rank=1, is_awake=False,
+                  trust_bonus=None, awake_bonus=None, passive_bonus=0):
+    stats = (pal_data.get('scaling', None) or pal_data.get('stats', {})) if pal_data else {}
     hp_scaling = stats.get('hp', 0) if stats else 0
     hp_iv = talent_hp * 0.3 / 100
     soul_bonus = rank_hp * 0.03
@@ -228,19 +262,22 @@ def calculate_max_hp(pal_data, level, talent_hp=0, rank_hp=0, is_boss=False, is_
     base = math.floor(500 + 5 * level + hp_scaling * 0.5 * level * (1 + hp_iv) * lucky_alpha)
     base_wc = math.floor(base * (1 + condenser_bonus))
     if trust_bonus is None:
-        f_hp = float(pal_data.get('friendship_hp', 0) or 0)
-        trust_bonus = int(level * friendship_rank * (hp_scaling / 82.3 - f_hp * 0.0181) + 0.5)
+        f_hp = float(pal_data.get('friendship_hp', 0) or 0) if pal_data else 0
+        trust_bonus = int(level * friendship_rank * (hp_scaling / 82.3 - f_hp * 0.0181) + 0.5) if hp_scaling else 0
     if awake_bonus is None:
         awake_bonus = _auto_awake_approx(base_wc, is_awake, 0.089)
     subtotal = base_wc + trust_bonus + awake_bonus
-    return math.floor(subtotal * (1 + soul_bonus) * (1 + passive_bonus)) * 1000
+    return {
+        'base': base, 'cond_mult': 1 + condenser_bonus, 'base_wc': base_wc,
+        'trust': trust_bonus, 'awake': awake_bonus, 'subtotal': subtotal,
+        'soul_mult': 1 + soul_bonus, 'passive_mult': 1 + passive_bonus,
+        'final': math.floor(subtotal * (1 + soul_bonus) * (1 + passive_bonus))
+    }
 
-def calculate_shot_attack(pal_data, level, talent_shot=0, rank_attack=0, friendship_rank=0,
-                          condenser_rank=1, trust_bonus=None, awake_bonus=None, passive_bonus=0,
-                          is_awake=False):
-    if not pal_data:
-        return 0
-    stats = pal_data.get('stats', pal_data.get('scaling', {}))
+def _atk_breakdown(pal_data, level, talent_shot=0, rank_attack=0, friendship_rank=0,
+                   condenser_rank=1, trust_bonus=None, awake_bonus=None, passive_bonus=0,
+                   is_awake=False):
+    stats = (pal_data.get('stats', pal_data.get('scaling', {}))) if pal_data else {}
     shot_scaling = stats.get('shot_attack', 0) if stats else 0
     attack_iv = talent_shot * 0.3 / 100
     soul_bonus = rank_attack * 0.03
@@ -248,38 +285,22 @@ def calculate_shot_attack(pal_data, level, talent_shot=0, rank_attack=0, friends
     additive_const = math.floor(1.5 * level)
     base = math.floor(additive_const + shot_scaling * 0.075 * level * (1 + attack_iv) * (1 + condenser_bonus))
     if trust_bonus is None:
-        f_atk = float(pal_data.get('friendship_shotattack', 0) or 0)
+        f_atk = float(pal_data.get('friendship_shotattack', 0) or 0) if pal_data else 0
         trust_bonus = math.floor(level * friendship_rank * f_atk / 8.6)
     if awake_bonus is None:
         awake_bonus = _auto_awake_approx(base, is_awake)
     subtotal = base + trust_bonus + awake_bonus
-    return math.floor(subtotal * (1 + soul_bonus) * (1 + passive_bonus))
+    return {
+        'base': base, 'cond_mult': 1 + condenser_bonus, 'base_wc': base,
+        'trust': trust_bonus, 'awake': awake_bonus, 'subtotal': subtotal,
+        'soul_mult': 1 + soul_bonus, 'passive_mult': 1 + passive_bonus,
+        'final': math.floor(subtotal * (1 + soul_bonus) * (1 + passive_bonus))
+    }
 
-def calculate_attack(pal_data, level, talent_shot=0, rank_attack=0,
-                     trust_bonus=None, awake_bonus=None, passive_bonus=0,
-                     is_awake=False):
-    if not pal_data:
-        return 0
-    stats = pal_data.get('stats', pal_data.get('scaling', {}))
-    attack_scaling = stats.get('melee_attack', 0) if stats else 0
-    attack_iv = talent_shot * 0.3 / 100
-    soul_bonus = rank_attack * 0.03
-    condenser_bonus = max(0, rank_attack) * 0.05
-    additive_const = math.floor(1.5 * level)
-    base = math.floor(additive_const + attack_scaling * 0.075 * level * (1 + attack_iv) * (1 + condenser_bonus))
-    if trust_bonus is None:
-        trust_bonus = 0
-    if awake_bonus is None:
-        awake_bonus = _auto_awake_approx(base, is_awake)
-    subtotal = base + trust_bonus + awake_bonus
-    return math.floor(subtotal * (1 + soul_bonus) * (1 + passive_bonus))
-
-def calculate_defense(pal_data, level, talent_defense=0, rank_defense=0, friendship_rank=0,
-                      condenser_rank=1, trust_bonus=None, awake_bonus=None, passive_bonus=0,
-                      is_awake=False):
-    if not pal_data:
-        return 0
-    stats = pal_data.get('scaling', None) or pal_data.get('stats', {})
+def _def_breakdown(pal_data, level, talent_defense=0, rank_defense=0, friendship_rank=0,
+                   condenser_rank=1, trust_bonus=None, awake_bonus=None, passive_bonus=0,
+                   is_awake=False):
+    stats = (pal_data.get('scaling', None) or pal_data.get('stats', {})) if pal_data else {}
     defense_scaling = stats.get('defense', 0) if stats else 0
     defense_iv = talent_defense * 0.3 / 100
     soul_bonus = rank_defense * 0.03
@@ -287,22 +308,65 @@ def calculate_defense(pal_data, level, talent_defense=0, rank_defense=0, friends
     additive_const = math.floor(0.75 * level)
     base = math.floor(additive_const + defense_scaling * 0.075 * level * (1 + defense_iv) * (1 + condenser_bonus))
     if trust_bonus is None:
-        f_def = float(pal_data.get('friendship_defense', 0) or 0)
+        f_def = float(pal_data.get('friendship_defense', 0) or 0) if pal_data else 0
         trust_bonus = math.floor(level * friendship_rank * f_def / 8.5)
     if awake_bonus is None:
         awake_bonus = _auto_awake_approx(base, is_awake, 0.094)
     subtotal = base + trust_bonus + awake_bonus
-    return math.floor(subtotal * (1 + soul_bonus) * (1 + passive_bonus))
+    return {
+        'base': base, 'cond_mult': 1 + condenser_bonus, 'base_wc': base,
+        'trust': trust_bonus, 'awake': awake_bonus, 'subtotal': subtotal,
+        'soul_mult': 1 + soul_bonus, 'passive_mult': 1 + passive_bonus,
+        'final': math.floor(subtotal * (1 + soul_bonus) * (1 + passive_bonus))
+    }
 
-def calculate_work_speed(pal_data=None, level=1, rank_craftspeed=0, passive_bonus=0):
+def _ws_breakdown(pal_data, level, rank_craftspeed=0, passive_bonus=0):
     craft_speed = 100
     if pal_data:
         stats = pal_data.get('stats', pal_data.get('scaling', {}))
         craft_speed = stats.get('craft_speed', 100) if stats else 100
     soul_bonus = rank_craftspeed * 0.03
     ws_base = 70 + craft_speed * level // 280
-    subtotal = ws_base * (1 + soul_bonus) * (1 + passive_bonus)
-    return int(subtotal + 0.5)
+    return {
+        'base': ws_base, 'cond_mult': 1.0, 'base_wc': ws_base,
+        'trust': 0, 'awake': 0, 'subtotal': ws_base,
+        'soul_mult': 1 + soul_bonus, 'passive_mult': 1 + passive_bonus,
+        'final': int(ws_base * (1 + soul_bonus) * (1 + passive_bonus) + 0.5)
+    }
+
+def stat_breakdown_tooltip(label, bd, show_awake=True):
+    base = bd['base']; base_wc = bd['base_wc']; trust = bd['trust']; awake = bd['awake']
+    subtotal = bd['subtotal']; sm = bd['soul_mult']; pm = bd['passive_mult']
+    final = bd['final'] * 1000 if label == 'HP' else bd['final']
+    cm = bd['cond_mult']
+    lines = [f'<b>{label}</b>']
+    if cm != 1.0 and base_wc != base:
+        lines.append(f'{base}(base) → ×{cm:.2f}(cond) → {base_wc}')
+    elif cm != 1.0:
+        lines.append(f'Base: {base} (cond ×{cm:.2f})')
+    else:
+        lines.append(f'Base: {base}')
+    if trust:
+        lines.append(f'+{trust} trust')
+    if awake and show_awake:
+        lines.append(f'+{awake} awaken')
+    if subtotal != base_wc:
+        lines.append(f'= {subtotal}')
+    mults = []
+    if sm != 1.0:
+        mults.append(f'×{sm:.2f} souls')
+    if pm != 1.0:
+        mults.append(f'×{pm:.2f} passives')
+    if mults:
+        lines.append(' '.join(mults))
+    lines.append(f'<b>= {final}</b>')
+    return '<br>'.join(lines)
+
+def calculate_work_speed(pal_data=None, level=1, rank_craftspeed=0, passive_bonus=0):
+    if not pal_data:
+        return 0
+    bd = _ws_breakdown(pal_data, level, rank_craftspeed, passive_bonus)
+    return bd['final']
 def format_character_key(character_id: str) -> str:
     character_id_lower = character_id.lower()
     if character_id_lower.startswith('boss_'):

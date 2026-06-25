@@ -48,6 +48,19 @@ class PalInfoHandlerMixin:
             if hasattr(obj, '_ws_key') and obj._ws_key:
                 self._on_work_skill_click(obj._ws_key, obj)
                 return True
+        if event.type() == QEvent.Type.Enter and hasattr(obj, '_stat_tip_text') and hasattr(self, '_stat_tip'):
+            self._stat_tip.setText(obj._stat_tip_text)
+            self._stat_tip.adjustSize()
+            g = obj.mapToGlobal(QPoint(obj.width() + 4, 0))
+            screen = QApplication.primaryScreen().availableGeometry()
+            if g.x() + self._stat_tip.width() > screen.right() - 4:
+                g.setX(obj.mapToGlobal(QPoint(-self._stat_tip.width() - 4, 0)).x())
+            self._stat_tip.move(g)
+            self._stat_tip.show()
+            return True
+        if event.type() == QEvent.Type.Leave:
+            if hasattr(self, '_stat_tip') and self._stat_tip.isVisible():
+                self._stat_tip.hide()
         return super().eventFilter(obj, event)
 
     def _on_name_click(self):

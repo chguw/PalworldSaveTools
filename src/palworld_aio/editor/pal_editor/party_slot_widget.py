@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QMenu, QProgressBar, 
 from PySide6.QtCore import Qt, Signal
 from i18n import t
 from palworld_aio.ui.chrome.styles import slot_full, slot_selected
-from palworld_aio.utils import calculate_max_hp, extract_value, resolve_name, safe_nested_get
+from palworld_aio.utils import calculate_max_hp, extract_value, resolve_name, safe_nested_get, _hp_breakdown, stat_breakdown_tooltip
 
 from .data import _ensure_friendship_thresholds, get_pal_base_data
 from .icons import (
@@ -356,12 +356,22 @@ class PartySlotWidget(QFrame):
             base = get_pal_base_data(cid)
 
             if base:
-
                 max_hp = calculate_max_hp(base, level, talent_hp, rank_hp, is_boss, is_lucky, friendship_rank, condenser_rank, is_awake)
 
         if max_hp <= 0:
-
             max_hp = hp_val if hp_val > 0 else 1
+
+        bd_hp = None
+        if base and max_hp > 0:
+            thp = extract_value(raw, 'Talent_HP', 0)
+            rhp = extract_value(raw, 'Rank_HP', 0)
+            fp = extract_value(raw, 'FriendshipPoint', 0)
+            fr = 0
+            thr = _ensure_friendship_thresholds()
+            for r in range(len(thr) - 1, 0, -1):
+                if fp >= thr[r]: fr = r; break
+            cr = int(extract_value(raw, 'Rank', 0)) if isinstance(extract_value(raw, 'Rank', 0), (int, float)) else 0
+            bd_hp = _hp_breakdown(base, level, thp, rhp, is_boss, is_lucky, fr, cr, is_awake)
 
         layout = QHBoxLayout(self)
 
@@ -435,7 +445,9 @@ class PartySlotWidget(QFrame):
 
         self.hp_bar.setFormat(f'{int(hp_val) // 1000} / {int(max_hp) // 1000}')
 
-        self.hp_bar.setStyleSheet('QProgressBar { background: rgba(55,65,81,0.5); border: 1px solid rgba(16,185,129,0.15); border-radius: 3px; text-align: center; font-size: 6px; font-weight: 700; color: #FFFFFF; } QProgressBar::chunk { background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #10B981,stop:1 #34D399); border-radius: 2px; }')
+        self.hp_bar.setStyleSheet('QProgressBar { background: rgba(55,65,81,0.5); border: 1px solid rgba(16,185,129,0.15); border-radius: 3px; text-align: center; font-size: 6px; font-weight: 700; color: #FFFFFF; } QProgressBar::chunk { background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #10B981,stop:1 #34D399); border-radius: 2px; } QToolTip { background: rgba(18,20,24,0.98); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.25); border-radius: 6px; padding: 6px 10px; font-size: 11px; }')
+        if bd_hp:
+            self.hp_bar.setToolTip(stat_breakdown_tooltip('HP', bd_hp))
 
         info.addWidget(self.hp_bar)
 

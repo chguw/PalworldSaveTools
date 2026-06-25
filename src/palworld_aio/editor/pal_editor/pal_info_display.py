@@ -10,7 +10,7 @@ import nerdfont as nf
 from loading_manager import show_information, show_warning, show_question
 from palworld_aio import constants
 from resource_resolver import resource_path
-from palworld_aio.utils import extract_value, safe_nested_get, calculate_max_hp, calculate_shot_attack, calculate_defense, calculate_work_speed, resolve_name
+from palworld_aio.utils import extract_value, safe_nested_get, calculate_max_hp, calculate_shot_attack, calculate_defense, calculate_work_speed, resolve_name, _hp_breakdown, _atk_breakdown, _def_breakdown, _ws_breakdown, stat_breakdown_tooltip
 from palworld_aio.ui.chrome.styles import slot_full, slot_selected, TOOLTIP_STYLE
 from palworld_aio.ui.chrome.sidebar_widget import NerdBtn
 from palworld_aio.ui.dialogs.skill_picker import SkillPicker
@@ -28,6 +28,8 @@ class PalInfoDisplayMixin:
     _ELEMENT_COLORS = {'Normal': '#9CA3AF', 'Fire': '#EF4444', 'Water': '#3B82F6', 'Leaf': '#4ADE80', 'Grass': '#4ADE80', 'Electricity': '#FBBF24', 'Electric': '#FBBF24', 'Ice': '#67E8F9', 'Earth': '#A78BFA', 'Ground': '#A78BFA', 'Dark': '#6B21A8', 'Dragon': '#818CF8', 'None': '#6B7280'}
 
     def _update_display(self, pal_data):
+        if hasattr(self, '_stat_tip'):
+            self._stat_tip.hide()
         try:
             if 'data' in pal_data:
                 raw = pal_data['data']
@@ -216,6 +218,14 @@ class PalInfoDisplayMixin:
             self.atk_lbl.setText(str(int(atk_val)))
             self.def_lbl.setText(str(int(def_val)))
             self.wspd_lbl.setText(str(int(wspd_val)))
+            bd_hp = _hp_breakdown(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake)
+            bd_atk = _atk_breakdown(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank, condenser_atk_tmp, passive_bonus=passive_shot_bonus / 100, is_awake=is_awake_tmp)
+            bd_def = _def_breakdown(base, level, extract_value(raw, 'Talent_Defense', 0), extract_value(raw, 'Rank_Defence', 0), trust_rank, condenser_atk_tmp, passive_bonus=passive_def_bonus / 100, is_awake=is_awake_tmp)
+            bd_ws = _ws_breakdown(base, level, extract_value(raw, 'Rank_CraftSpeed', 0), passive_craft_bonus / 100)
+            texts = {self.hp_bar: ('HP', bd_hp), self.atk_lbl: ('ATK', bd_atk), self.def_lbl: ('DEF', bd_def), self.wspd_lbl: ('WS', bd_ws)}
+            for w, (lbl, bd) in texts.items():
+                w._stat_tip_text = stat_breakdown_tooltip(lbl, bd)
+                w.installEventFilter(self)
             talent_hp_val = extract_value(raw, 'Talent_HP', 0)
             talent_shot_val = extract_value(raw, 'Talent_Shot', 0)
             talent_def_val = extract_value(raw, 'Talent_Defense', 0)

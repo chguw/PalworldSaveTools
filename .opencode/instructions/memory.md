@@ -290,6 +290,49 @@ All were flagged as admin even though only Pylar was `admin_player_uid`.
   - `refresh()` (both) — called during `refresh_all()`; preserves selection across rebuilds
 - **Files**: `ui/tabs/pal_editor_tab.py:59-72` (select_player/clear_player), `ui/tabs/inventory_tab.py:1049-1065` (select_player/clear_player), `151-163` (refresh preservation)
 
+## Stat Formula — Game-Verified (Jun 25 session)
+### Location: `src/palworld_aio/utils.py` (5 calculate_* functions)
+### Formula Structure (from in-game breakdowns on 3 maxed pals):
+```
+base        = additive_const + floor(scaling × K × level × (1+IV) × (1+condenser))
+subtotal    = base + trust_bonus + awakening_bonus     # additive
+final       = floor(subtotal × (1+soul) × (1+passive)) # multiplicative
+```
+
+### Per-Stat Constants:
+| Stat | Additive | K constant | Scaling source | Condenser |
+|------|----------|------------|----------------|-----------|
+| HP | `500 + 5×level` | 0.5 | `stats.hp` | `×1.cond` after base |
+| ATK | `1.5×level` | 0.075 | `stats.shot_attack` | `×(1+cond)` in base |
+| DEF | `0.75×level` | 0.075 | `scaling.defense` | `×(1+cond)` in base |
+| WS | `70 + craft_speed×level//280` | — | `stats.craft_speed` | — |
+
+### Condenser bonus: `(rank-1) × 0.05` for ALL stats (ATK/DEF was flat 5% bug)
+### No alpha scaling for boss/lucky (multiplier is in monster's Hp stat — ratio 1.2×)
+### Lucky non-boss pals: alpha=1.2 applied to hp_scaling (e.g. Anubis lucky: 120×1.2=144)
+
+### Trust/Awake auto-formulas (approximate, need more data):
+- **HP trust**: `int(level × rank × (hp_scaling/82.3 - f_hp×0.0181) + 0.5)`
+- **ATK trust**: `level × rank × f_atk / 8.6`
+- **DEF trust**: `level × rank × f_def / 8.5`
+- **Awake (all)**: `base × 0.092` (ATK 0.092, DEF 0.094, HP 0.089)
+
+### Passive Skill Parsing (`pal_info_display.py`):
+- Only counts effects with target `ToSelf` or `ToSelfAndTrainer` (skips `ToTrainer`-only like Vanguard/Stronghold Strategist)
+- `efftype1..4` now extracted correctly in ETL (previously missing `efftype4`)
+- Condenser DOES NOT amplify passives (the +16% was from Dogen Emblem acc)
+
+### Verified against game values:
+| Pal | HP | ATK | DEF | WS |
+|-----|-----|-----|-----|-----|
+| Jetragon (lucky boss) | 18982 vs 18979 (+3) | 3175 ✅ | 2791 ✅ | 157 ✅ |
+| Anubis (lucky) | 19332 vs 19337 (-5) | 2524 vs 2526 (-2) | 2118 vs 2116 (+2) | 494 ✅ |
+| Solenne (lucky boss) | 18228 vs 18619 (-391) | 2726 vs 2722 (+4) | 2840 vs 2839 (+1) | ~157 |
+
+### ETL Bug Fixed (`scripts/scrs/update_game_data.py`):
+- `update_passive_data()` was missing `EffectType4` read → `efftype4` never written to output (caused MutationPal_Mutant's Defense+25% to be invisible)
+- `TargetType1-4` fields now extracted and written to skills.json for target filtering
+
 ## README Translation (`scripts/scrs/translate_readme.py`)
 After editing `README.md` (esp. adding/renaming sections), **re-run** the script to regenerate all 7 translated files:
 ```
