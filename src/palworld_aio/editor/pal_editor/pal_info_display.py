@@ -164,9 +164,7 @@ class PalInfoDisplayMixin:
             rank_atk_tmp = extract_value(raw, 'Rank_Attack', 0)
             condenser_atk_tmp = int(extract_value(raw, 'Rank', 0))
             is_awake_tmp = bool(extract_value(raw, 'bIsAwakening', False))
-            condenser_amp = 1 + max(0, condenser_atk_tmp - 1) * 0.20
-            effective_shot_bonus = passive_shot_bonus * condenser_amp
-            atk_val = calculate_shot_attack(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank, condenser_atk_tmp, passive_bonus=effective_shot_bonus / 100, is_awake=is_awake_tmp) if base else atk_val
+            atk_val = calculate_shot_attack(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank, condenser_atk_tmp, passive_bonus=passive_shot_bonus / 100, is_awake=is_awake_tmp) if base else atk_val
             if def_val == 0:
                 def_val = calculate_defense(base, level, extract_value(raw, 'Talent_Defense', 0), extract_value(raw, 'Rank_Defence', 0), trust_rank, condenser_atk_tmp, passive_bonus=passive_def_bonus / 100, is_awake=is_awake_tmp)
             else:
