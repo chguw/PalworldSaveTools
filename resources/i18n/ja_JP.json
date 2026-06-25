@@ -1609,5 +1609,16 @@
   "base_inventory.replace_target_label": "と：",
   "base_inventory.replace_confirm": "{count} {old_name} を {new_name} に置き換えますか?",
   "base_inventory.replace_success": "{count} 個の構造を置き換えました。",
-  "base_inventory.replace_skip_current": "同じ要素"
+  "base_inventory.replace_skip_current": "同じ要素",
+  "stat_tooltip.hp": "HP",
+  "stat_tooltip.hp_desc": "パルさんのHPです。\nHPが増加するほど生存時間が長くなります。",
+  "stat_tooltip.atk": "攻撃",
+  "stat_tooltip.atk_desc": "パルの攻撃。\n攻撃力が上がると与えるダメージも増加します。",
+  "stat_tooltip.def": "防衛",
+  "stat_tooltip.def_desc": "パルの守備。\n防御力が上がると受けるダメージが減少します。",
+  "stat_tooltip.ws": "作業スピード",
+  "stat_tooltip.ws_desc": "パルの仕事のスピード。\n拠点でのさまざまなタスクの作業効率に影響します。",
+  "stat_tooltip.bonus_trust": "信頼からのボーナス+{value}",
+  "stat_tooltip.bonus_awakening": "覚醒によるボーナス +{value}",
+  "stat_tooltip.enhance_souls": "ソウルを強化 +{percent}%"
 }

@@ -15,6 +15,7 @@ from common import get_versions, get_base_directory
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palworld_aio import constants
 from resource_resolver import resource_path
+from i18n import t
 def resolve_name(character_id: str, name_map: dict) -> str | None:
     if not character_id:
         return None
@@ -336,33 +337,39 @@ def _ws_breakdown(pal_data, level, rank_craftspeed=0, passive_bonus=0, condenser
         'final': int(ws_base * (1 + soul_bonus) * (1 + passive_bonus) + 0.5)
     }
 
-def stat_breakdown_tooltip(label, bd, show_awake=True):
-    base = bd['base']; base_wc = bd['base_wc']; trust = bd['trust']; awake = bd['awake']
-    subtotal = bd['subtotal']; sm = bd['soul_mult']; pm = bd['passive_mult']
-    final = bd['final'] * 1000 if label == 'HP' else bd['final']
-    cm = bd['cond_mult']
-    lines = [f'<b>{label}</b>']
-    if cm != 1.0 and base_wc != base:
-        lines.append(f'{base}(base) → ×{cm:.2f}(cond) → {base_wc}')
-    elif cm != 1.0:
-        lines.append(f'Base: {base} (cond ×{cm:.2f})')
-    else:
-        lines.append(f'Base: {base}')
+def stat_breakdown_tooltip(label_key, bd, show_awake=True):
+    base_eff = bd['base_wc']; trust = bd['trust']; awake = bd['awake']
+    sm = bd['soul_mult']; pm = bd['passive_mult']
+    final = bd['final']
+    label = t(f'stat_tooltip.{label_key.lower()}', default=label_key)
+    desc = t(f'stat_tooltip.{label_key.lower()}_desc', default='')
+    lines = [
+        f'{label}  ({base_eff} &gt;&gt; {final})',
+        '\u2500' * 12,
+    ]
+    if desc:
+        lines.append(desc)
+    sep_added = False
     if trust:
-        lines.append(f'+{trust} trust')
+        if not sep_added:
+            lines.append('\u2500' * 12)
+            sep_added = True
+        lines.append(t('stat_tooltip.bonus_trust', value=trust))
     if awake and show_awake:
-        lines.append(f'+{awake} awaken')
-    if subtotal != base_wc:
-        lines.append(f'= {subtotal}')
-    mults = []
-    if sm != 1.0:
-        mults.append(f'×{sm:.2f} souls')
+        if not sep_added:
+            lines.append('\u2500' * 12)
+            sep_added = True
+        lines.append(t('stat_tooltip.bonus_awakening', value=awake))
+    pct = int((sm - 1) * 100)
+    if pct:
+        if not sep_added:
+            lines.append('\u2500' * 12)
+            sep_added = True
+        lines.append(t('stat_tooltip.enhance_souls', percent=pct))
     if pm != 1.0:
-        mults.append(f'×{pm:.2f} passives')
-    if mults:
-        lines.append(' '.join(mults))
-    lines.append(f'<b>= {final}</b>')
-    return '<br>'.join(lines)
+        pct_p = int((pm - 1) * 100)
+        lines.append(f'Passive Skills +{pct_p}%')
+    return '\n'.join(lines)
 
 def calculate_work_speed(pal_data=None, level=1, rank_craftspeed=0, passive_bonus=0, condenser_rank=1):
     if not pal_data:

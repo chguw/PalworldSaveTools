@@ -1572,7 +1572,7 @@
   "base_inventory.restore_all_success": "{count} amis restaurés.",
   "base_inventory.max_all": "Max Tout",
   "base_inventory.max_all_confirm": "Maximiser toutes les statistiques (talents, rangs, amitié, éveil, niveau 80, aptitudes professionnelles) pour tous les collègues de travail de cette base ?",
-  "base_inventory.max_all_success": "Nombre maximal d'amis : {count}.",
+  "base_inventory.max_all_success": "Un maximum de {count} copains.",
   "edit_pals.restore_all_confirm": "Restaurer HP, SAN et la faim pour tous les amis du groupe et toutes les pages Palbox ? La maladie sera également guérie.",
   "edit_pals.max_all_confirm": "Maximiser toutes les statistiques (talents, rangs, amitié, éveil, niveau 80, aptitudes professionnelles) pour tous les amis du groupe et toutes les pages palbox ?",
   "inventory.max_all_abilities": "Maximiser toutes les capacités",
@@ -1591,5 +1591,16 @@
   "base_inventory.replace_target_label": "Avec:",
   "base_inventory.replace_confirm": "Remplacer {count} {old_name} par {new_name} ?",
   "base_inventory.replace_success": "Remplacement de {count} structures.",
-  "base_inventory.replace_skip_current": "Même élément"
+  "base_inventory.replace_skip_current": "Même élément",
+  "stat_tooltip.hp": "HP",
+  "stat_tooltip.hp_desc": "Les HP de mon pote.\nSurvit plus longtemps à mesure que les HP augmentent.",
+  "stat_tooltip.atk": "Attaque",
+  "stat_tooltip.atk_desc": "L'attaque de mon copain.\nLes dégâts infligés augmentent à mesure que l'attaque augmente.",
+  "stat_tooltip.def": "Défense",
+  "stat_tooltip.def_desc": "La défense de mon copain.\nLes dégâts subis diminuent à mesure que la défense augmente.",
+  "stat_tooltip.ws": "Vitesse de travail",
+  "stat_tooltip.ws_desc": "Vitesse de travail de Pal.\nAffecte l'efficacité du travail sur diverses tâches à la base.",
+  "stat_tooltip.bonus_trust": "Bonus de confiance + {valeur}",
+  "stat_tooltip.bonus_awakening": "Bonus d'éveil + {valeur}",
+  "stat_tooltip.enhance_souls": "Améliorer les âmes + {percent} %"
 }

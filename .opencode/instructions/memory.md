@@ -299,39 +299,40 @@ subtotal    = base + trust_bonus + awakening_bonus     # additive
 final       = floor(subtotal × (1+soul) × (1+passive)) # multiplicative
 ```
 
-### Per-Stat Constants:
-| Stat | Additive | K constant | Scaling source | Condenser |
-|------|----------|------------|----------------|-----------|
-| HP | `500 + 5×level` | 0.5 | `stats.hp` | `×1.cond` after base |
-| ATK | `1.5×level` | 0.075 | `stats.shot_attack` | `×(1+cond)` in base |
-| DEF | `0.75×level` | 0.075 | `scaling.defense` | `×(1+cond)` in base |
-| WS | `70 + craft_speed×level//280` | — | `stats.craft_speed` | — |
+## Stat Formula Correction (Jun 26 session)
 
-### Condenser bonus: `(rank-1) × 0.05` for ALL stats (ATK/DEF was flat 5% bug)
-### No alpha scaling for boss/lucky (multiplier is in monster's Hp stat — ratio 1.2×)
-### Lucky non-boss pals: alpha=1.2 applied to hp_scaling (e.g. Anubis lucky: 120×1.2=144)
+### Verified against 6 test Azurmanes with in-game breakdowns
+Game confirms: `final = floor((base_wc + trust + awake) × (1+souls) × (1+passive))` for all stats. HP/WS now match game at all condenser levels. ATK/DEF base off by small amounts at cond=0 only.
 
-### Trust/Awake auto-formulas (approximate, need more data):
-- **HP trust**: `int(level × rank × (hp_scaling/82.3 - f_hp×0.0181) + 0.5)`
-- **ATK trust**: `level × rank × f_atk / 8.6`
-- **DEF trust**: `level × rank × f_def / 8.5`
-- **Awake (all)**: `base × 0.092` (ATK 0.092, DEF 0.094, HP 0.089)
+### Per-Stat Formulas (current in `utils.py`):
 
-### Passive Skill Parsing (`pal_info_display.py`):
-- Only counts effects with target `ToSelf` or `ToSelfAndTrainer` (skips `ToTrainer`-only like Vanguard/Stronghold Strategist)
-- `efftype1..4` now extracted correctly in ETL (previously missing `efftype4`)
-- Condenser DOES NOT amplify passives (the +16% was from Dogen Emblem acc)
+| Stat | AD(K) | base | trust | awake |
+|------|-------|------|-------|-------|
+| **HP** | `500+5L`(0.5) | `floor(AD + hs×0.5×L×(1+IV))` | `int(L×FR×fh×0.65×(1+cb)+0.5)` | `floor(hs×L×0.065×(1+cb))` |
+| **ATK** | `1.5L`(0.075) | `floor(AD + shot×0.075×L×(1+IV)×(1+cb))` | `floor(L×FR×f_shot÷10.2×(1+cb))` | `floor(base×0.09)` |
+| **DEF** | `0.75L`(0.075) | `floor(AD + def×0.075×L×(1+IV)×(1+cb))` | `floor(L×FR×f_def÷10.2×(1+cb))` | `floor(base×0.094)` |
+| **WS** | — | `70+floor(cs×cb×L÷57)` if cond>1 else 70 | — | — |
 
-### Verified against game values:
-| Pal | HP | ATK | DEF | WS |
-|-----|-----|-----|-----|-----|
-| Jetragon (lucky boss) | 18982 vs 18979 (+3) | 3175 ✅ | 2791 ✅ | 157 ✅ |
-| Anubis (lucky) | 19332 vs 19337 (-5) | 2524 vs 2526 (-2) | 2118 vs 2116 (+2) | 494 ✅ |
-| Solenne (lucky boss) | 18228 vs 18619 (-391) | 2726 vs 2722 (+4) | 2840 vs 2839 (+1) | ~157 |
+### What Changed:
+- **HP trust**: `int(800×(130/82.3−2.5×0.0181))` → `int(800×2.5×0.65+0.5) = 1300` (matches all 4 test cases)
+- **HP awake**: `floor(base_wc×0.089)` → `floor(hs×L×0.065×(1+cb))` (confirmed: 676/811/811/973)
+- **HP base**: removed `lucky_alpha` — boss multiplier is already in BOSS_ data's hs (156 vs 130)
+- **ATK trust**: divisor 8.6→10.2, now scaled by `(1+cb)`
+- **DEF trust**: divisor 8.5→10.2, now scaled by `(1+cb)`
+- **ATK awake**: ratio 0.092→0.09
+- **WS**: added `70+floor(cs×condenser_bonus×L÷57)` (was always `cs×L//280`, ignoring condenser)
+- **Display**: always recalc from formula, ignore stale stored MaxHP/Attack/Defense
 
-### ETL Bug Fixed (`scripts/scrs/update_game_data.py`):
-- `update_passive_data()` was missing `EffectType4` read → `efftype4` never written to output (caused MutationPal_Mutant's Defense+25% to be invisible)
-- `TargetType1-4` fields now extracted and written to skills.json for target filtering
+### Remaining Issues:
+- ATK base at cond=0: 1056(PST) vs 1036(game), off by 20. Cond=5: perfect.
+- DEF base at cond=0: 918(PST) vs 908(game), off by 10. Cond=5: perfect.
+- Possibly IV×condenser interaction not understood. Need more data points.
+
+### Tooltip Feature (new):
+- Custom QLabel popup (`Qt.Tool | Qt.FramelessWindowHint`) on HP/ATK/DEF/WS hover
+- Shows full stat breakdown: base, condenser, trust, awake, subtotal, souls, passives, final
+- Themed to match app (dark bg `rgba(18,20,24,0.98)`, blue border, rounded)
+- Avoids QToolTip stylesheet inheritance issues on Windows
 
 ## README Translation (`scripts/scrs/translate_readme.py`)
 After editing `README.md` (esp. adding/renaming sections), **re-run** the script to regenerate all 7 translated files:

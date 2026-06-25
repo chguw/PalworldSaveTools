@@ -1607,5 +1607,16 @@
   "base_inventory.replace_target_label": "С:",
   "base_inventory.replace_confirm": "Заменить {count} {old_name} на {new_name}?",
   "base_inventory.replace_success": "Заменено структур: {count}.",
-  "base_inventory.replace_skip_current": "Тот же элемент"
+  "base_inventory.replace_skip_current": "Тот же элемент",
+  "stat_tooltip.hp": "HP",
+  "stat_tooltip.hp_desc": "ХП Пала.\nВыживает дольше по мере увеличения HP.",
+  "stat_tooltip.atk": "Атака",
+  "stat_tooltip.atk_desc": "Атака Пала.\nНаносимый урон увеличивается по мере увеличения атаки.",
+  "stat_tooltip.def": "Оборона",
+  "stat_tooltip.def_desc": "Защита Пала.\nПолучаемый урон уменьшается по мере увеличения защиты.",
+  "stat_tooltip.ws": "Скорость работы",
+  "stat_tooltip.ws_desc": "Скорость работы Пала.\nВлияет на эффективность работы над различными задачами на базе.",
+  "stat_tooltip.bonus_trust": "Бонус от доверия +{value}",
+  "stat_tooltip.bonus_awakening": "Бонус от пробуждения +{value}",
+  "stat_tooltip.enhance_souls": "Улучшить души +{percent}%"
 }

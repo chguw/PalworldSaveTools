@@ -1633,5 +1633,16 @@
   "base_inventory.replace_target_label": "Mit:",
   "base_inventory.replace_confirm": "{count} {old_name} durch {new_name} ersetzen?",
   "base_inventory.replace_success": "{count} Strukturen ersetzt.",
-  "base_inventory.replace_skip_current": "Gleiches Element"
+  "base_inventory.replace_skip_current": "Gleiches Element",
+  "stat_tooltip.hp": "PS",
+  "stat_tooltip.hp_desc": "Kumpels HP.\nÜberlebt länger, wenn die HP steigen.",
+  "stat_tooltip.atk": "Angriff",
+  "stat_tooltip.atk_desc": "Pals Angriff.\nDer verursachte Schaden steigt mit zunehmendem Angriff.",
+  "stat_tooltip.def": "Verteidigung",
+  "stat_tooltip.def_desc": "Kumpels Verteidigung.\nDer erlittene Schaden nimmt mit zunehmender Verteidigung ab.",
+  "stat_tooltip.ws": "Arbeitsgeschwindigkeit",
+  "stat_tooltip.ws_desc": "Kumpels Arbeitsgeschwindigkeit.\nBeeinflusst die Effizienz der Arbeit an verschiedenen Aufgaben an der Basis.",
+  "stat_tooltip.bonus_trust": "Bonus von Trust +{value}",
+  "stat_tooltip.bonus_awakening": "Bonus durch Erwachen +{value}",
+  "stat_tooltip.enhance_souls": "Verbessere Seelen +{percent}%"
 }

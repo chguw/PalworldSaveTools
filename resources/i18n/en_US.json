@@ -1897,5 +1897,16 @@
   "base_inventory.replace_target_label": "With:",
   "base_inventory.replace_confirm": "Replace {count} {old_name} with {new_name}?",
   "base_inventory.replace_success": "Replaced {count} structures.",
-  "base_inventory.replace_skip_current": "Same element"
+  "base_inventory.replace_skip_current": "Same element",
+  "stat_tooltip.hp": "HP",
+  "stat_tooltip.hp_desc": "Pal's HP.\nSurvives longer as HP increases.",
+  "stat_tooltip.atk": "Attack",
+  "stat_tooltip.atk_desc": "Pal's Attack.\nDamage dealt increases as Attack increases.",
+  "stat_tooltip.def": "Defense",
+  "stat_tooltip.def_desc": "Pal's Defense.\nDamage taken decreases as Defense increases.",
+  "stat_tooltip.ws": "Work Speed",
+  "stat_tooltip.ws_desc": "Pal's Work Speed.\nAffects the efficiency of working on various tasks at base.",
+  "stat_tooltip.bonus_trust": "Bonus from Trust +{value}",
+  "stat_tooltip.bonus_awakening": "Bonus from Awakening +{value}",
+  "stat_tooltip.enhance_souls": "Enhance Souls +{percent}%"
 }

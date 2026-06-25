@@ -1608,5 +1608,16 @@
   "base_inventory.replace_target_label": "와 함께:",
   "base_inventory.replace_confirm": "{count} {old_name}을(를) {new_name}(으)로 바꾸시겠습니까?",
   "base_inventory.replace_success": "{count}개의 구조를 대체했습니다.",
-  "base_inventory.replace_skip_current": "동일한 요소"
+  "base_inventory.replace_skip_current": "동일한 요소",
+  "stat_tooltip.hp": "HP",
+  "stat_tooltip.hp_desc": "Pal의 HP.\nHP가 증가할수록 더 오래 생존합니다.",
+  "stat_tooltip.atk": "공격",
+  "stat_tooltip.atk_desc": "팔의 공격.\n공격력이 증가할수록 주는 피해도 증가합니다.",
+  "stat_tooltip.def": "방어",
+  "stat_tooltip.def_desc": "팔의 방어.\n방어력이 증가할수록 받는 데미지는 감소합니다.",
+  "stat_tooltip.ws": "작업속도",
+  "stat_tooltip.ws_desc": "Pal의 작업 속도.\n기지에서 다양한 작업을 수행하는 효율성에 영향을 미칩니다.",
+  "stat_tooltip.bonus_trust": "신뢰 보너스 +{value}",
+  "stat_tooltip.bonus_awakening": "각성 보너스 +{value}",
+  "stat_tooltip.enhance_souls": "영혼 강화 +{percent}%"
 }
