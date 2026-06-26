@@ -5,7 +5,7 @@ APP_NAME = 'PalworldSaveTools'
 APP_VERSION = '2.0.0'
 APP_BETA_VERSION = '2.0.1'
 BETA_SUBVERSION = '1'
-GAME_VERSION = '1.0'
+GAME_VERSION = '1.0.0'
 BRANCH_VERSION = 'main'
 def get_base_directory():
     return get_base_dir()
