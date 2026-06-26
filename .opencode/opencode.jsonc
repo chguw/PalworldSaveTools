@@ -23,7 +23,11 @@
   "instructions": [
     ".opencode/instructions/memory.md"
   ],
-  "plugins": [
-    "./plugins/diff-logger.ts"
-  ]
+  // ─────────────────────────────────────────────
+  //  PLUGINS
+  //  Local plugins in .opencode/plugins/ are auto-discovered.
+  //  Config key is for npm packages only.
+  //  See https://opencode.ai/docs/plugins/
+  // ─────────────────────────────────────────────
+  "lsp": true
 }
