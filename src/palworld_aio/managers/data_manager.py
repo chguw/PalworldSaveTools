@@ -306,7 +306,7 @@ def delete_guild(guild_id):
                 for h in handle_ids:
                     if isinstance(h, dict):
                         guid = normalize_uid(h.get('guid', ''))
-                        if guid not in deleted_uids_normalized:
+                        if guid not in deleted_uids:
                             cleaned_handles.append(h)
                     else:
                         cleaned_handles.append(h)

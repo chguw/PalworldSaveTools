@@ -117,6 +117,8 @@ class SaveManager(QObject):
             illegal_pals_by_owner, owner_nicknames = self._count_pals_found(data_source, player_pals_count, log_folder, constants.current_save_path, guild_name_map)
             constants.PLAYER_PAL_COUNTS = player_pals_count
             self._process_scan_log(data_source, playerdir, log_folder, guild_name_map, base_path, illegal_pals_by_owner, owner_nicknames)
+            from palworld_aio.validation.engine import snapshot
+            snapshot()
             self.load_finished.emit(True)
             return True
         run_with_loading(lambda _: None, load_task)
@@ -162,6 +164,8 @@ class SaveManager(QObject):
         constants.PLAYER_PAL_COUNTS = player_pals_count
         playerdir = os.path.join(constants.current_save_path, 'Players')
         self._process_scan_log(data_source, playerdir, log_folder, guild_name_map, base_path, illegal_pals_by_owner, owner_nicknames)
+        from palworld_aio.validation.engine import snapshot
+        snapshot()
         return True
     def save_changes(self, parent=None):
         if not constants.current_save_path or not constants.loaded_level_json:
@@ -170,6 +174,12 @@ class SaveManager(QObject):
         level_sav_path = os.path.join(constants.current_save_path, 'Level.sav')
         def save_task():
             t0 = time.perf_counter()
+            from palworld_aio.validation.engine import validate
+            ok, errors = validate(constants.loaded_level_json, 'relation')
+            if not ok:
+                from palworld_aio.validation.engine import rollback, ValidationError
+                rollback()
+                raise ValidationError(errors)
             wrapper_to_sav(constants.loaded_level_json, level_sav_path)
             t1 = time.perf_counter()
             players_folder = os.path.join(constants.current_save_path, 'Players')

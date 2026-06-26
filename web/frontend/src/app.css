@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2D3A4E #0A0E1A;
+  }
+  *::-webkit-scrollbar { width: 8px; height: 8px; }
+  *::-webkit-scrollbar-track { background: #0A0E1A; }
+  *::-webkit-scrollbar-thumb { background: #2D3A4E; border-radius: 4px; }
+  *::-webkit-scrollbar-thumb:hover { background: #3B8ED0; }
+
+  html, body {
+    @apply bg-bg-base text-ink-primary font-sans antialiased;
+    min-height: 100vh;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse at 50% 0%, rgba(59, 142, 208, 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 100%, rgba(0, 188, 212, 0.04) 0%, transparent 55%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: rgba(59, 142, 208, 0.3);
+    color: #ffffff;
+  }
+
+  h1, h2, h3, h4 {
+    @apply text-ink-emphasis font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  /* transition shorthands (duration scale defined in tailwind.config.js) */
+  .transition-fast  { @apply transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-[150ms] ease-out; }
+  .transition-normal { @apply transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-[250ms] ease-out; }
+  .transition-slow  { @apply transition-[color,background-color,border-color,box-shadow,opacity,transform] duration-[350ms] ease-out; }
+
+  .card {
+    @apply bg-bg-card border border-line/60 rounded-8 p-5
+           shadow-card backdrop-blur-sm transition-normal;
+  }
+  .card-hover {
+    @apply hover:border-accent/40 hover:shadow-glow;
+  }
+
+  .card-header {
+    @apply text-sm font-semibold text-ink-secondary uppercase tracking-wider
+           mb-3 pb-2 border-b border-line/40;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           font-sans font-medium text-sm rounded-6
+           transition-fast cursor-pointer select-none
+           disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-accent hover:bg-accent-light text-white
+           shadow-glow border border-accent-light/30;
+  }
+  .btn-secondary {
+    @apply btn bg-bg-elevated hover:bg-bg-hover text-ink-primary
+           border border-line;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent hover:bg-bg-hover text-ink-secondary
+           border border-transparent;
+  }
+  .btn-danger {
+    @apply btn bg-status-error/90 hover:bg-status-error text-white
+           border border-status-error/50;
+  }
+
+  .input {
+    @apply w-full bg-bg-deep border border-line/70 rounded-6 px-3 py-2
+           text-sm text-ink-primary placeholder:text-ink-dim
+           focus:outline-none focus:border-accent focus:shadow-glow
+           transition-fast;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-4
+           text-xs font-medium border;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
+           text-xs font-medium bg-bg-elevated border border-line/60 text-ink-secondary;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-3 px-3 py-2 rounded-6 text-sm font-medium
+           transition-fast cursor-pointer border border-transparent;
+  }
+  .nav-link-inactive {
+    @apply text-ink-muted hover:text-ink-primary hover:bg-bg-hover;
+  }
+  .nav-link-active {
+    @apply text-accent-light bg-accent/10 border-accent/30 shadow-glow;
+  }
+}
