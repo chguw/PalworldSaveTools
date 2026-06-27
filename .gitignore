@@ -72,15 +72,3 @@ Backups/
 *.savc
 *.7z
 .pytest_cache/
-
-# Web Ref
-web/.web_ref
-
-# WebUI frontend
-web/frontend/node_modules/
-web/frontend/build/
-web/frontend/.svelte-kit/
-web/frontend/package-lock.json
-
-# WebUI backend
-web/backend/__pycache__/

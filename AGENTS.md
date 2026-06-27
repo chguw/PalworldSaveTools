@@ -83,20 +83,7 @@ src/
   bootup.py             # Entry after start.py (splash + dep check)
   boot_paths.py         # Path constants
   import_libs.py        # Star-import re-export hub
-web/
-  frontend/             # Svelte 5 + Tailwind SPA (:16920)
-  backend/              # FastAPI thin bridge (:16921)
-  .web_ref/             # scraped Reflex app — VISUAL REFERENCE ONLY (do not copy logic)
 ```
-
-## WebUI build contract
-
-The web layer is **strictly decoupled**: Svelte 5 + Tailwind frontend, a *lightweight* FastAPI backend that only bridges to the core project. Rules (full detail: `pst-webui-build` skill; existing inventory: `pst-webui` skill):
-
-- **Wrap, don't rewrite** — all real logic comes from `src/palsav`, `src/palworld_aio`, `src/palworld_toolsets`. Backend endpoints = validate → call core → serialize; no domain math in `web/backend/`.
-- **`.web_ref` is visual-only** — match its layout/theme/components, but NEVER copy its Reflex/Python logic or `pstmain/states` (port to Svelte idiomatically, or call `src/`).
-- **REST + WebSocket boundary** — frontend only talks via `/api` and `/ws`; Pydantic schemas (`web/backend/schemas.py`) mirror TS types (`web/frontend/src/types`) — change both together.
-- Launcher: `start.py --web`. New capability → add to `src/` first, then expose via one thin endpoint.
 
 ## Repo exclusions
 
