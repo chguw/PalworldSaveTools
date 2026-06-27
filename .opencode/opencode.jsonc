@@ -1,34 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
-
-  // ─────────────────────────────────────────────
-  //  SKILLS (on-demand deep dives)
-  //  Live in .opencode/skills/<name>/SKILL.md
-  //  Agents see them listed, then call:
-  //    skill({ name: "pst-stat-formula" })
-  //  Permission "allow" means agents can load without asking.
-  // ─────────────────────────────────────────────
   "permission": {
     "skill": {
       "pst-*": "allow"
     }
   },
-
-  // ─────────────────────────────────────────────
-  //  INSTRUCTIONS (auto-loaded every session)
-  //  These files are injected into agent context automatically.
-  //  Keep this list SHORT — each file costs context tokens.
-  //  Deep-dive details belong in skills/, not here.
-  // ─────────────────────────────────────────────
   "instructions": [
-    "AGENTS.md",
-    ".opencode/instructions/memory.md"
+    "AGENTS.md"
   ],
-  // ─────────────────────────────────────────────
-  //  PLUGINS
-  //  Local plugins in .opencode/plugins/ are auto-discovered.
-  //  Config key is for npm packages only.
-  //  See https://opencode.ai/docs/plugins/
-  // ─────────────────────────────────────────────
   "lsp": true
 }
