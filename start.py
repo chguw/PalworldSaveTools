@@ -125,7 +125,15 @@ def main():
         log(f'  Backend  → http://127.0.0.1:16921', GREEN)
         log(f'  Press Ctrl+C to stop', DIM)
 
-        webbrowser.open('http://127.0.0.1:16920')
+        import urllib.request
+        for _ in range(60):
+            try:
+                urllib.request.urlopen('http://127.0.0.1:16920', timeout=1)
+                webbrowser.open('http://127.0.0.1:16920')
+                break
+            except Exception:
+                import time
+                time.sleep(1)
 
         def cleanup():
             for p in (frontend_proc, backend_proc):
