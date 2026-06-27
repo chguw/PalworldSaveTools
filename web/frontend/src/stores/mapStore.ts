@@ -7,7 +7,7 @@ import type { MapType } from '$lib/map/types';
 
 // Layer visibility toggles (match the PySide6 overlay buttons)
 export const showBases = writable(true);
-export const showPlayers = writable(false);
+export const showPlayers = writable(true);
 export const showRings = writable(true);
 export const showZones = writable(false);
 export const mapType = writable<MapType>('world');

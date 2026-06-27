@@ -42,8 +42,8 @@
   }
 </script>
 
-<!-- Top-right toggle bar -->
-<div class="absolute top-3 right-3 z-20 flex items-center gap-1.5">
+<!-- Top-left toggle bar -->
+<div class="absolute top-3 left-3 z-20 flex items-center gap-1.5">
   <button
     class={btnClass}
     title="Zoom In"
