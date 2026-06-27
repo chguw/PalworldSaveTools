@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import Icon from '@iconify/svelte';
 
   let { open = false, onCancel }: { open: boolean; onCancel?: () => void } = $props();
@@ -29,33 +30,9 @@
   let phraseIdx = $state(0);
   let seconds = $state(0);
   let fading = $state(false);
-  let success = $state(false);
-  let prevOpen = $state(false);
 
   let tick: ReturnType<typeof setInterval> | undefined;
   let cycle: ReturnType<typeof setInterval> | undefined;
-
-  function startTimers() {
-    seconds = 0;
-    phraseIdx = Math.floor(Math.random() * phrases.length);
-    success = false;
-    ticking();
-    cycling();
-  }
-
-  function ticking() {
-    tick = setInterval(() => seconds++, 1000);
-  }
-
-  function cycling() {
-    cycle = setInterval(() => {
-      fading = true;
-      setTimeout(() => {
-        phraseIdx = (phraseIdx + 1) % phrases.length;
-        fading = false;
-      }, 350);
-    }, 3000);
-  }
 
   function stop() {
     if (tick !== undefined) { clearInterval(tick); tick = undefined; }
@@ -63,13 +40,23 @@
   }
 
   $effect(() => {
-    if (open && !prevOpen) {
-      startTimers();
-    } else if (!open && prevOpen) {
+    if (open) {
+      untrack(() => {
+        seconds = 0;
+        phraseIdx = Math.floor(Math.random() * phrases.length);
+        tick = setInterval(() => seconds++, 1000);
+        cycle = setInterval(() => {
+          fading = true;
+          setTimeout(() => {
+            phraseIdx = (phraseIdx + 1) % phrases.length;
+            fading = false;
+          }, 350);
+        }, 3000);
+      });
+    } else {
       stop();
     }
-    prevOpen = open;
-    return () => { stop(); };
+    return stop;
   });
 
   function fmtTime(s: number): string {

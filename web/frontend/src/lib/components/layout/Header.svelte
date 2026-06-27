@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { health, saveLoaded, saveSummary, saveCounts, isHealthy } from '$stores/index';
+  import { health, saveLoaded, isHealthy } from '$stores/index';
   import Icon from '@iconify/svelte';
   import AboutModal from './AboutModal.svelte';
   import WarningModal from './WarningModal.svelte';
@@ -7,14 +7,6 @@
   let aboutOpen = $state(false);
   let warnOpen = $state(false);
 
-  function fmtBytes(n: number): string {
-    if (!n) return '0 B';
-    const u = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(n) / Math.log(1024));
-    return `${(n / Math.pow(1024, i)).toFixed(i ? 1 : 0)} ${u[i]}`;
-  }
-
-  const counts = $derived($saveCounts);
   const h = $derived($health);
 </script>
 
@@ -52,23 +44,7 @@
     {:else}
       <span class="badge bg-bg-elevated border-line text-ink-muted">No save loaded</span>
     {/if}
-    <div class="hidden md:flex items-center gap-3 text-xs text-ink-muted min-w-0">
-      {#if $saveLoaded}
-        <span class="truncate max-w-[200px] text-ink-secondary font-medium">
-          {$saveSummary?.filename}
-        </span>
-        <span class="text-line-hover">|</span>
-        <span>{fmtBytes($saveSummary?.file_size ?? 0)}</span>
-      {/if}
-      {#if counts}
-        <span class="text-line-hover">|</span>
-        <span>{counts.guilds} guilds</span>
-        <span class="text-line-hover">|</span>
-        <span>{counts.players} players</span>
-        <span class="text-line-hover">|</span>
-        <span>{counts.bases} bases</span>
-      {/if}
-    </div>
+
   </div>
 
   <div class="flex-1"></div>
