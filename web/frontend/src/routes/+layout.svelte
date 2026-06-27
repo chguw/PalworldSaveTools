@@ -1,6 +1,7 @@
 <script lang="ts">
   import '../app.css';
   import { onMount } from 'svelte';
+  import { page } from '$app/stores';
   import type { Snippet } from 'svelte';
   import Sidebar from '$components/layout/Sidebar.svelte';
   import Header from '$components/layout/Header.svelte';
@@ -64,7 +65,7 @@
   <Sidebar />
   <div class="flex-1 flex flex-col overflow-hidden">
     <Header />
-    <main class="flex-1 overflow-y-auto opacity-[0.90]">
+    <main class="flex-1 overflow-y-auto {$page.url.pathname === '/map' ? '' : 'opacity-[0.90]'}">
       {@render children()}
     </main>
   </div>
