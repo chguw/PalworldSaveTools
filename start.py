@@ -69,11 +69,13 @@ def main():
         frontend_dir = PROJECT_DIR / 'web' / 'frontend'
         backend_py = PROJECT_DIR / 'web' / 'backend' / 'main.py'
 
+        _shell = os.name == 'nt'
+
         # Check for node_modules — install if missing
         nm = frontend_dir / 'node_modules'
         if not nm.exists() or not any(nm.iterdir()):
             log('Installing frontend dependencies...', CYAN)
-            r = subprocess.run(['npm', 'install'], cwd=str(frontend_dir))
+            r = subprocess.run(['npm', 'install'], cwd=str(frontend_dir), shell=_shell)
             if r.returncode != 0:
                 log('Failed to install frontend dependencies', RED)
                 sys.exit(1)
@@ -81,7 +83,7 @@ def main():
         # Start frontend dev server
         frontend_proc = subprocess.Popen(
             ['npm', 'run', 'dev', '--', '--host', '127.0.0.1', '--port', '16920'],
-            cwd=str(frontend_dir),
+            cwd=str(frontend_dir), shell=_shell,
             env={**os.environ, 'PST_BACKEND_URL': 'http://127.0.0.1:16921'},
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -89,12 +91,16 @@ def main():
             bufsize=0,
         )
 
+        frontend_ready = threading.Event()
+
         def log_frontend():
             try:
                 for line in iter(frontend_proc.stdout.readline, ''):
                     stripped = line.rstrip()
                     if stripped:
                         print(f'{DIM}[frontend] {stripped}{RESET}')
+                    if 'Local:' in stripped and '16920' in stripped:
+                        frontend_ready.set()
             except Exception:
                 pass
         t = threading.Thread(target=log_frontend, daemon=True)
@@ -125,15 +131,8 @@ def main():
         log(f'  Backend  → http://127.0.0.1:16921', GREEN)
         log(f'  Press Ctrl+C to stop', DIM)
 
-        import urllib.request
-        for _ in range(60):
-            try:
-                urllib.request.urlopen('http://127.0.0.1:16920', timeout=1)
-                webbrowser.open('http://127.0.0.1:16920')
-                break
-            except Exception:
-                import time
-                time.sleep(1)
+        if frontend_ready.wait(timeout=60):
+            webbrowser.open('http://127.0.0.1:16920')
 
         def cleanup():
             for p in (frontend_proc, backend_proc):
