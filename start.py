@@ -69,26 +69,30 @@ def main():
         frontend_dir = PROJECT_DIR / 'web' / 'frontend'
         backend_py = PROJECT_DIR / 'web' / 'backend' / 'main.py'
 
-        _shell = os.name == 'nt'
+        _npm = shutil.which('npm')
+        if not _npm:
+            log('npm not found — install Node.js from https://nodejs.org', RED)
+            sys.exit(1)
 
         # Check for node_modules — install if missing
         nm = frontend_dir / 'node_modules'
         if not nm.exists() or not any(nm.iterdir()):
             log('Installing frontend dependencies...', CYAN)
-            r = subprocess.run(['npm', 'install'], cwd=str(frontend_dir), shell=_shell)
+            r = subprocess.run([_npm, 'install'], cwd=str(frontend_dir))
             if r.returncode != 0:
                 log('Failed to install frontend dependencies', RED)
                 sys.exit(1)
 
         # Start frontend dev server
         frontend_proc = subprocess.Popen(
-            ['npm', 'run', 'dev', '--', '--host', '127.0.0.1', '--port', '16920'],
-            cwd=str(frontend_dir), shell=_shell,
+            [_npm, 'run', 'dev', '--', '--host', '127.0.0.1', '--port', '16920'],
+            cwd=str(frontend_dir),
             env={**os.environ, 'PST_BACKEND_URL': 'http://127.0.0.1:16921'},
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
-            bufsize=0,
+            encoding='utf-8',
+            bufsize=1,
         )
 
         frontend_ready = threading.Event()
@@ -132,7 +136,13 @@ def main():
         log(f'  Press Ctrl+C to stop', DIM)
 
         if frontend_ready.wait(timeout=60):
-            webbrowser.open('http://127.0.0.1:16920')
+            opened = webbrowser.open('http://127.0.0.1:16920')
+            if not opened:
+                log('  Unable to open browser automatically', YELLOW)
+                log(f'  Open {CYAN}http://127.0.0.1:16920{RESET}{YELLOW} manually{RESET}', YELLOW)
+        else:
+            log(f'  Frontend server did not start within 60s', YELLOW)
+            log(f'  Try opening {CYAN}http://127.0.0.1:16920{RESET}{YELLOW} manually{RESET}', YELLOW)
 
         def cleanup():
             for p in (frontend_proc, backend_proc):
