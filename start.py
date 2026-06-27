@@ -1,5 +1,5 @@
 from __future__ import annotations
-import os, sys, subprocess, shutil, pathlib, argparse, threading
+import os, sys, subprocess, shutil, pathlib, argparse, threading, webbrowser
 PROJECT_DIR = pathlib.Path(__file__).resolve().parent
 uv_lock = PROJECT_DIR / 'uv.lock'
 if uv_lock.exists():
@@ -80,8 +80,9 @@ def main():
 
         # Start frontend dev server
         frontend_proc = subprocess.Popen(
-            ['npm', 'run', 'dev', '--', '--host', '127.0.0.1'],
+            ['npm', 'run', 'dev', '--', '--host', '127.0.0.1', '--port', '16920'],
             cwd=str(frontend_dir),
+            env={**os.environ, 'PST_BACKEND_URL': 'http://127.0.0.1:16921'},
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -120,9 +121,11 @@ def main():
         t2 = threading.Thread(target=log_backend, daemon=True)
         t2.start()
 
-        log(f'  Frontend → http://127.0.0.1:5173', GREEN)
-        log(f'  Backend  → http://127.0.0.1:8000', GREEN)
+        log(f'  Frontend → http://127.0.0.1:16920', GREEN)
+        log(f'  Backend  → http://127.0.0.1:16921', GREEN)
         log(f'  Press Ctrl+C to stop', DIM)
+
+        webbrowser.open('http://127.0.0.1:16920')
 
         def cleanup():
             for p in (frontend_proc, backend_proc):

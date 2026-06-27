@@ -23,7 +23,7 @@ def _env_bool(name: str, default: bool) -> bool:
 class Settings:
     # Networking
     host: str = os.environ.get("PST_WEB_HOST", "127.0.0.1")
-    port: int = int(os.environ.get("PST_WEB_PORT", "8000"))
+    port: int = int(os.environ.get("PST_WEB_PORT", "16921"))
 
     # When False the SPA static mount is skipped (dev mode uses Vite directly).
     serve_frontend: bool = _env_bool("PST_WEB_SERVE_FRONTEND", True)
