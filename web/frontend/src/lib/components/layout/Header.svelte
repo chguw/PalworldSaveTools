@@ -133,8 +133,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 4px;
     border: 2px solid transparent;
     background: transparent;
@@ -176,8 +176,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 4px;
     border: 2px solid rgba(88, 101, 242, 0.4);
     color: #8B9CF7;
