@@ -72,6 +72,7 @@ EXPORT_TEXTURES_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Pal' / 'Textur
 EXPORT_L10N_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'L10N' / 'en' / 'Pal' / 'DataTable' / 'Text'
 EXPORT_TEXTURES_DIR_FAST = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Pal' / 'Texture'
 OTHER_ICON_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Others'
+BLUEPRINT_SKILL_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Pal' / 'Blueprint' / 'Skill'
 _ELEMENT_DEFS = [{'name': 'Normal', 'display': 'Neutral', 'index': 0, 'color': '#9CA3AF'}, {'name': 'Fire', 'display': 'Fire', 'index': 1, 'color': '#EF4444'}, {'name': 'Water', 'display': 'Water', 'index': 2, 'color': '#3B82F6'}, {'name': 'Electricity', 'display': 'Electric', 'index': 3, 'color': '#FBBF24'}, {'name': 'Leaf', 'display': 'Grass', 'index': 4, 'color': '#4ADE80'}, {'name': 'Dark', 'display': 'Dark', 'index': 5, 'color': '#6B21A8'}, {'name': 'Dragon', 'display': 'Dragon', 'index': 6, 'color': '#818CF8'}, {'name': 'Earth', 'display': 'Earth', 'index': 7, 'color': '#A78BFA'}, {'name': 'Ice', 'display': 'Ice', 'index': 8, 'color': '#67E8F9'}]
 def _build_icon_lookup():
     icon_name_to_path = {}
@@ -1445,6 +1446,44 @@ def _build_character_name_map():
     except Exception:
         pass
     return char_map
+def _extract_blueprint_hit_props():
+    result = {}
+    if not BLUEPRINT_SKILL_DIR.exists():
+        print(f'  WARNING: Blueprint dir not found: {BLUEPRINT_SKILL_DIR}')
+        return result
+    for root, _dirs, files in os.walk(str(BLUEPRINT_SKILL_DIR)):
+        for fn in files:
+            if not fn.endswith('.json'):
+                continue
+            fp = os.path.join(root, fn)
+            try:
+                with open(fp, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            except Exception:
+                continue
+            if not isinstance(data, list):
+                continue
+            for item in data:
+                if not isinstance(item, dict):
+                    continue
+                props = item.get('Properties', {})
+                if not isinstance(props, dict):
+                    continue
+                waza = props.get('Waza', '')
+                if not isinstance(waza, str) or not waza.startswith('EPalWazaID::'):
+                    continue
+                skill = waza.replace('EPalWazaID::', '')
+                overrides = {}
+                for k in ('WazaPowerRate', 'MaxHitNum', 'HitInterval'):
+                    v = props.get(k)
+                    if v is not None:
+                        overrides[k] = v
+                if overrides:
+                    existing = result.get(skill, {})
+                    existing.update(overrides)
+                    result[skill] = existing
+    return result
+
 def update_skill_data():
     print('\n=== Updating Skill Data ===')
     all_rows = get_all_rows_for_tables(['Waza/DT_WazaDataTable.json'])
@@ -1496,6 +1535,14 @@ def update_skill_data():
         if skill_lower in skill_map:
             continue
         skill_map[skill_lower] = {'name': skill_asset, 'asset': skill_asset, 'element': element, 'power': power if isinstance(power, (int, float)) else 0, 'cooldown': cooldown if isinstance(cooldown, (int, float)) else 0, 'row_data': row_data if isinstance(row_data, dict) else {}}
+    bp_hit = _extract_blueprint_hit_props()
+    if bp_hit:
+        print(f'  Blueprint hit props loaded for {len(bp_hit)} skills')
+        for skill_lower, entry in skill_map.items():
+            asset = entry['asset']
+            overrides = bp_hit.get(asset)
+            if overrides:
+                entry.update(overrides)
     updated_skills = []
     for skill_asset in sorted(skill_map.keys()):
         entry = skill_map[skill_asset]
@@ -1532,11 +1579,55 @@ def update_skill_data():
             'is_explosion_damage': bool(rd.get('bIsExplosionDamage', False)),
             'camera_shake': rd.get('CameraShake', ''),
             'description': skill_desc_l10n.get(entry['asset'], ''),
+            'WazaPowerRate': entry.get('WazaPowerRate'),
+            'MaxHitNum': entry.get('MaxHitNum'),
+            'HitInterval': entry.get('HitInterval'),
         }
         updated_skills.append(skill_entry)
     result = {'skills': updated_skills}
     save_resource_json('skilldata.json', result)
     print(f'  Total skills: {len(updated_skills)}')
+
+_SKILL_ASSET_CACHE = None
+def _skill_name_from_waza(waza_id):
+    global _SKILL_ASSET_CACHE
+    if _SKILL_ASSET_CACHE is None:
+        _SKILL_ASSET_CACHE = {}
+        sd = load_resource_json('skilldata.json')
+        for s in sd.get('skills', []):
+            _SKILL_ASSET_CACHE[s.get('asset', '').lower()] = s.get('name', s.get('asset', ''))
+    nid = waza_id.replace('EPalWazaID::', '')
+    return _SKILL_ASSET_CACHE.get(nid.lower(), nid)
+
+def update_learnset_data():
+    print('\n=== Updating Pal Learnset Data ===')
+    lvl_rows = get_all_rows_for_tables(['Waza/DT_WazaMasterLevel.json', 'Waza/DT_WazaMasterLevel_Common.json'])
+    egg_rows = get_all_rows_for_tables(['Waza/DT_WazaMasterTamago.json'])
+    if not lvl_rows and not egg_rows:
+        print('  No learnset rows found. Skipping.')
+        return
+    learnset = {}
+    for rows, source in [(lvl_rows, 'levelup'), (egg_rows, 'egg')]:
+        if not rows:
+            continue
+        for row_key, row_data in rows.items():
+            if not isinstance(row_data, dict):
+                continue
+            pal_id = row_data.get('PalId', '')
+            waza = row_data.get('WazaID', '')
+            if not pal_id or not waza:
+                continue
+            if pal_id not in learnset:
+                learnset[pal_id] = []
+            entry = {'WazaID': waza, 'source': source}
+            if source == 'levelup':
+                entry['level'] = int(row_data.get('Level', 0))
+            learnset[pal_id].append(entry)
+    result = {'learnset': learnset}
+    save_resource_json('pals_learnset.json', result)
+    total_entries = sum(len(v) for v in learnset.values())
+    print(f'  Learnset entries: {total_entries} for {len(learnset)} pals')
+
 def update_pal_exp_table():
     print('\n=== Updating Pal EXP Table ===')
     exp_data = load_export_json('Exp/DT_PalExpTable.json')
@@ -2667,6 +2758,7 @@ def main():
     _run_step('Updating passive data...', update_passive_data)
     _run_step('Updating technology data...', update_technology_data)
     _run_step('Updating skill data...', update_skill_data)
+    _run_step('Updating pal learnset data...', update_learnset_data)
     _run_step('Updating pal EXP table...', update_pal_exp_table)
     _run_step('Updating friendship data...', update_friendship_data)
     _run_step('Updating items dynamic...', update_items_dynamic)

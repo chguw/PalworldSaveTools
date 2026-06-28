@@ -43,22 +43,116 @@ def _load_json(filename, key):
     return data.get(key, [])
 
 def _icon(icon_path, size=_LIST_ICON):
-    if not icon_path:
-        return None
-    base_dir = constants.get_base_path()
-    fp = resource_path(base_dir, 'game_data', icon_path.lstrip('/')) if icon_path.startswith('/icons/') else resource_path(base_dir, 'game_data', 'icons', icon_path)
-    if os.path.exists(fp):
-        px = QPixmap(fp)
-        if not px.isNull():
-            return px.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-    base = fp.rsplit('.', 1)[0]
-    for ext in ('.webp', '.png'):
-        p = base + ext
-        if os.path.exists(p):
-            px = QPixmap(p)
+    if icon_path:
+        base_dir = constants.get_base_path()
+        fp = resource_path(base_dir, 'game_data', icon_path.lstrip('/')) if icon_path.startswith('/icons/') else resource_path(base_dir, 'game_data', 'icons', icon_path)
+        if os.path.exists(fp):
+            px = QPixmap(fp)
             if not px.isNull():
                 return px.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        base = fp.rsplit('.', 1)[0]
+        for ext in ('.webp', '.png'):
+            p = base + ext
+            if os.path.exists(p):
+                px = QPixmap(p)
+                if not px.isNull():
+                    return px.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+    base_dir = constants.get_base_path()
+    unknown = resource_path(base_dir, 'game_data', 'icons', 'T_icon_unknown.webp')
+    if os.path.exists(unknown):
+        px = QPixmap(unknown)
+        if not px.isNull():
+            return px.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
     return None
+
+_item_names = None
+
+def _resolve_item(id):
+    global _item_names
+    if _item_names is None:
+        items = _load_json('items.json', 'items')
+        _item_names = {i['asset']: i['name'] for i in items}
+    return _item_names.get(id, id)
+
+_pals_cache = None
+
+def _pals():
+    global _pals_cache
+    if _pals_cache is None:
+        _pals_cache = _load_json('characters.json', 'pals')
+    return _pals_cache
+
+def _pals_by_element(name):
+    return [p for p in _pals() if name in p.get('elements', {})]
+
+def _pals_by_work(wid):
+    return [(p, p.get('work_suitabilities', {}).get(wid, 0)) for p in _pals() if p.get('work_suitabilities', {}).get(wid, 0) > 0]
+
+_WORK_ICON_REMAP = {
+    'ProductMedicine': '/icons/ui/T_icon_palwork_08.webp',
+    'Cool': '/icons/ui/T_icon_palwork_10.webp',
+    'Transport': '/icons/ui/T_icon_palwork_11.webp',
+    'MonsterFarm': '/icons/ui/T_icon_palwork_12.webp',
+    'OilExtraction': '/icons/ui/T_icon_palwork_09.webp',
+}
+
+def _work_icon(wid):
+    return _WORK_ICON_REMAP.get(wid)
+
+_work_paths = None
+
+def _work_icon_path(wid):
+    global _work_paths
+    if _work_paths is None:
+        types = _load_json('work_suitability.json', 'work_types')
+        _work_paths = {}
+        for t in types:
+            rid = t.get('id', '')
+            remapped = _work_icon(rid)
+            _work_paths[rid] = remapped if remapped else t.get('icon', '')
+    return _work_paths.get(wid, '')
+
+import re
+
+def _enum_name(raw):
+    if not raw or '::' not in str(raw):
+        return str(raw) if raw else ''
+    name = str(raw).split('::')[-1]
+    return re.sub(r'(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])', ' ', name).strip()
+
+_learnset_cache = None
+_learnset_ci = None
+
+def _learnset_for_pal(asset):
+    global _learnset_cache, _learnset_ci
+    if _learnset_cache is None:
+        ls = _load_json('pals_learnset.json', 'learnset')
+        _learnset_cache = ls if isinstance(ls, dict) else {}
+        _learnset_ci = {k.lower(): v for k, v in _learnset_cache.items()}
+    direct = _learnset_cache.get(asset)
+    if direct is not None:
+        return direct
+    return _learnset_ci.get(asset.lower(), [])
+
+_skill_names = None
+
+def _skill_name(waza_id):
+    global _skill_names
+    if _skill_names is None:
+        sk = _load_json('skills.json', 'skills')
+        _skill_names = {s.get('asset', '').lower(): s.get('name', s.get('asset', '')) for s in sk}
+    nid = waza_id.replace('EPalWazaID::', '')
+    return _skill_names.get(nid.lower(), nid)
+
+_skill_elem = None
+
+def _skill_elem_cache(waza_id):
+    global _skill_elem
+    if _skill_elem is None:
+        sk = _load_json('skills.json', 'skills')
+        _skill_elem = {s.get('asset', '').lower(): s.get('element', '') for s in sk}
+    nid = waza_id.replace('EPalWazaID::', '')
+    return _skill_elem.get(nid.lower(), '')
 
 def _get(data, path):
     for p in path.split('.'):
@@ -111,8 +205,9 @@ class WikiDetailPanel(QScrollArea):
         self.setWidget(self._c)
 
     def _clr(self):
-        for i in reversed(range(self._l.count())):
-            w = self._l.itemAt(i).widget()
+        while self._l.count():
+            item = self._l.takeAt(0)
+            w = item.widget()
             if w:
                 w.deleteLater()
 
@@ -166,94 +261,222 @@ class WikiDetailPanel(QScrollArea):
         f.setStyleSheet('color:rgba(125,211,252,0.15);')
         return f
 
+    def _pal_grid(self, pals, show_level=False):
+        if not pals:
+            return
+        cols = 2
+        gw = QWidget()
+        gl = QGridLayout(gw)
+        gl.setContentsMargins(0, 0, 0, 0)
+        gl.setSpacing(4)
+        for i, (pal, level) in enumerate(pals):
+            r, c = divmod(i, cols)
+            card = QFrame()
+            card.setStyleSheet('background:rgba(255,255,255,0.04);border:1px solid rgba(125,211,252,0.1);border-radius:6px;')
+            clo = QHBoxLayout(card)
+            clo.setContentsMargins(6, 4, 6, 4)
+            clo.setSpacing(6)
+            ip = _icon(pal.get('icon', ''), 24)
+            if ip:
+                il = QLabel()
+                il.setPixmap(ip)
+                il.setFixedSize(24, 24)
+                clo.addWidget(il)
+            nl = QLabel(pal.get('name', '?'))
+            nl.setStyleSheet('font-size:11px;color:#e2e8f0;')
+            clo.addWidget(nl)
+            if show_level and level:
+                ll = QLabel(f'Lv.{int(level)}')
+                ll.setStyleSheet('font-size:10px;color:#7DD3FC;font-weight:600;')
+                clo.addWidget(ll)
+            clo.addStretch()
+            gl.addWidget(card, r, c)
+        gl.setRowStretch(gl.rowCount(), 1)
+        self._l.addWidget(self._hl(f'Pals ({len(pals)})', 12, True, '#94a3b8'))
+        self._l.addWidget(gw)
+
     def _render_pal(self, d):
+        from palworld_aio.editor.pal_editor.pal_info_widget import PalInfoWidget
         name = _get(d, 'name') or ''
         code = _get(d, 'asset') or ''
-        desc = _get(d, 'description') or ''
         elements = _get(d, 'elements')
         work = _get(d, 'work_suitabilities')
         partner = _get(d, 'partner_skill') or ''
+        partner_raw = _get(d, 'description') or ''
         stats = _get(d, 'stats') or {}
         zukan = _get(d, 'stats.zukan_index')
 
-        # header
         h = QWidget()
         hl = QHBoxLayout(h)
         hl.setContentsMargins(0, 0, 0, 0)
         hl.setSpacing(12)
-        ip = _icon(_get(d, 'icon'), 64)
-        if ip:
-            il = QLabel()
-            il.setPixmap(ip)
-            il.setFixedSize(64, 64)
-            hl.addWidget(il)
         nw = QWidget()
         nl = QVBoxLayout(nw)
         nl.setContentsMargins(0, 0, 0, 0)
         nl.setSpacing(2)
-        nrow = QHBoxLayout()
-        nrow.setSpacing(8)
-        nrow.addWidget(self._hl(name, 18))
+        nr = QHBoxLayout()
+        nr.setSpacing(8)
+        nlb = self._hl(name, 22)
+        nlb.setWordWrap(False)
+        nr.addWidget(nlb)
         if isinstance(elements, dict):
             for ename in elements:
-                px = _get_element_pixmap(ename.lower(), 'small', 20)
+                px = _get_element_pixmap(ename.lower(), 'small', 24)
                 if px:
                     el = QLabel()
                     el.setPixmap(px)
-                    el.setFixedSize(20, 20)
-                    nrow.addWidget(el)
+                    el.setFixedSize(24, 24)
+                    nr.addWidget(el)
         if zukan:
-            nrow.addWidget(self._hl(f'#{zukan}', 12, False, '#6b7280'))
-        nl.addLayout(nrow)
+            nr.addWidget(self._hl(f'#{zukan}', 13, False, '#6b7280'))
+        nr.addStretch()
+        nl.addLayout(nr)
         if code:
             nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{code}</span>'))
         hl.addWidget(nw, 1)
         self._l.addWidget(h)
 
-        if desc:
-            dl = QLabel(desc)
-            dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
-            dl.setWordWrap(True)
-            self._l.addWidget(dl)
-
         self._l.addWidget(self._sep())
 
-        # stat cards
-        stat_defs = [
-            ('HP', stats.get('hp', ''), None),
-            ('Melee Atk', stats.get('meal_attack', ''), None),
-            ('Shot Atk', stats.get('shot_attack', ''), None),
-            ('Defense', stats.get('defense', ''), None),
-            ('Rarity', stats.get('rarity', ''), None),
-        ]
-        sw = QWidget()
-        sl = QHBoxLayout(sw)
-        sl.setContentsMargins(0, 0, 0, 0)
-        sl.setSpacing(8)
-        for lbl, val, _ in stat_defs:
-            sl.addWidget(self._card(lbl, val if val is not None else ''))
-        self._l.addWidget(sw)
+        body = QWidget()
+        blo = QHBoxLayout(body)
+        blo.setContentsMargins(0, 0, 0, 0)
+        blo.setSpacing(16)
 
-        # work suitability
+        ip = _icon(_get(d, 'icon'), 120)
+        if ip:
+            ibox = QWidget()
+            iblo = QHBoxLayout(ibox)
+            iblo.setContentsMargins(0, 0, 0, 0)
+            ilb = QLabel()
+            ilb.setPixmap(ip)
+            ilb.setFixedSize(120, 120)
+            iblo.addWidget(ilb)
+            blo.addWidget(ibox)
+
+        right = QWidget()
+        rl = QVBoxLayout(right)
+        rl.setContentsMargins(0, 0, 0, 0)
+        rl.setSpacing(8)
+
+        cr = QWidget()
+        cl = QHBoxLayout(cr)
+        cl.setContentsMargins(0, 0, 0, 0)
+        cl.setSpacing(8)
+        for lbl, key in [('HP', 'hp'), ('Melee Atk', 'meal_attack'), ('Shot Atk', 'shot_attack'), ('Defense', 'defense')]:
+            val = stats.get(key, '')
+            if val != '':
+                cl.addWidget(self._card(lbl, val))
+        cl.addStretch()
+        rl.addWidget(cr)
+
+        extra = [
+            ('Rarity', stats.get('rarity', '')),
+            ('Food', stats.get('food_amount', '')),
+            ('Size', str(stats.get('size', '')).split('::')[-1] if stats.get('size') else ''),
+            ('Run Speed', stats.get('run_speed', '')),
+            ('Ride Sprint', stats.get('ride_sprint_speed', '')),
+        ]
+        extra = [(l, v) for l, v in extra if v != '']
+        if extra:
+            ew = QWidget()
+            elo = QHBoxLayout(ew)
+            elo.setContentsMargins(0, 0, 0, 0)
+            elo.setSpacing(8)
+            for lbl, val in extra:
+                elo.addWidget(self._card(lbl, val))
+            elo.addStretch()
+            rl.addWidget(ew)
+
+        blo.addWidget(right, 1)
+        self._l.addWidget(body)
+
         if isinstance(work, dict):
             active = {k: v for k, v in work.items() if isinstance(v, (int, float)) and v > 0}
             if active:
-                from palworld_aio.editor.pal_editor.pal_info_widget import PalInfoWidget
                 ws_map = PalInfoWidget._WORK_SUITABILITY_DISPLAY
+                self._l.addWidget(self._hl('Work Suitability', 12, True, '#94a3b8'))
                 ww = QWidget()
                 wl = QHBoxLayout(ww)
                 wl.setContentsMargins(0, 0, 0, 0)
                 wl.setSpacing(6)
-                wl.addWidget(QLabel('Work:'))
-                wl.addWidget(self._hl('Work Suitability', 11, True, '#94a3b8'))
                 for k, v in active.items():
                     dname = ws_map.get(k, k)
-                    wl.addWidget(self._badge(f'{dname} Lv.{int(v)}'))
+                    wip = _icon(_work_icon_path(k), 18)
+                    card = QFrame()
+                    card.setStyleSheet('background:rgba(255,255,255,0.04);border:1px solid rgba(125,211,252,0.1);border-radius:6px;')
+                    clo = QHBoxLayout(card)
+                    clo.setContentsMargins(8, 4, 8, 4)
+                    clo.setSpacing(6)
+                    if wip:
+                        il = QLabel()
+                        il.setPixmap(wip)
+                        il.setFixedSize(18, 18)
+                        clo.addWidget(il)
+                    clo.addWidget(QLabel(dname))
+                    lvl = QLabel(f'Lv.{int(v)}')
+                    lvl.setStyleSheet('font-size:10px;color:#7DD3FC;font-weight:600;')
+                    clo.addWidget(lvl)
+                    wl.addWidget(card)
                 wl.addStretch()
                 self._l.addWidget(ww)
 
-        if partner:
-            self._l.addWidget(self._kv('Partner Skill', partner))
+        if code and partner:
+            self._l.addWidget(self._hl(partner, 12, True, '#7DD3FC'))
+            from palworld_aio.editor.pal_editor.data import get_pal_base_data
+            from palworld_aio.editor.pal_editor.icons import _resolve_partner_desc, _partner_desc_to_html
+            base = get_pal_base_data(code) or {}
+            p_desc = base.get('description', '') or partner_raw
+            p_list = base.get('passives', [])
+            ref_list = base.get('reference_passives', [])
+            resolved = _resolve_partner_desc(p_desc, p_list, 0, base.get('active_skill_main_value'), base.get('active_skill_overwrite_effect'), p_list, ref_list)
+            html = _partner_desc_to_html(resolved, PalInfoWidget._ELEMENT_COLORS, tooltip=True)
+            dl = QLabel(html)
+            dl.setTextFormat(Qt.RichText)
+            dl.setWordWrap(True)
+            dl.setStyleSheet('font-size:12px;color:#94a3b8;line-height:1.5;padding:2px 0;')
+            self._l.addWidget(dl)
+
+        if code:
+            moves = _learnset_for_pal(code)
+            if moves:
+                self._l.addWidget(self._sep())
+                self._l.addWidget(self._hl('Skill Set', 12, True, '#94a3b8'))
+                mw = QWidget()
+                ml = QGridLayout(mw)
+                ml.setContentsMargins(0, 0, 0, 0)
+                ml.setSpacing(4)
+                cols = 3
+                for i, m in enumerate(moves):
+                    r, c = divmod(i, cols)
+                    wid = m.get('WazaID', '')
+                    lvl = m.get('level', '')
+                    src = m.get('source', '')
+                    sname = _skill_name(wid)
+                    card = QFrame()
+                    card.setStyleSheet('background:rgba(255,255,255,0.04);border:1px solid rgba(125,211,252,0.1);border-radius:6px;')
+                    clo = QHBoxLayout(card)
+                    clo.setContentsMargins(8, 4, 8, 4)
+                    clo.setSpacing(6)
+                    elem = _skill_elem_cache(wid)
+                    spx = _get_element_pixmap(elem.lower(), 'small', 18) if elem else None
+                    if spx:
+                        sl = QLabel()
+                        sl.setPixmap(spx)
+                        sl.setFixedSize(18, 18)
+                        clo.addWidget(sl)
+                    clo.addWidget(QLabel(sname))
+                    if lvl:
+                        ll = QLabel(f'Lv.{lvl}')
+                        ll.setStyleSheet('font-size:10px;color:#7DD3FC;font-weight:600;')
+                        clo.addWidget(ll)
+                    elif src == 'egg':
+                        ll = QLabel('Egg')
+                        ll.setStyleSheet('font-size:10px;color:#FBBF24;font-weight:600;')
+                        clo.addWidget(ll)
+                    clo.addStretch()
+                    ml.addWidget(card, r, c)
+                self._l.addWidget(mw)
 
     def _render_item(self, d):
         name = _get(d, 'name') or ''
@@ -385,7 +608,7 @@ class WikiDetailPanel(QScrollArea):
             for m in materials:
                 mid = m.get('id', '?')
                 cnt = m.get('count', 0)
-                ml.addWidget(self._badge(f'{mid} x{cnt}', '#e2e8f0'))
+                ml.addWidget(self._badge(f'{_resolve_item(mid)} x{cnt}', '#e2e8f0'))
             ml.addStretch()
             self._l.addWidget(mw)
 
@@ -399,13 +622,16 @@ class WikiDetailPanel(QScrollArea):
         hl.setContentsMargins(0, 0, 0, 0)
         hl.setSpacing(12)
         if isinstance(icons, dict):
-            first_icon = None
+            main_icon = None
+            found = 0
             for v in icons.values():
                 if isinstance(v, str):
-                    first_icon = v
-                    break
-            if first_icon:
-                ip = _icon(first_icon, 48)
+                    if found == 1:
+                        main_icon = v
+                        break
+                    found += 1
+            if main_icon:
+                ip = _icon(main_icon, 48)
                 if ip:
                     il = QLabel()
                     il.setPixmap(ip)
@@ -417,32 +643,31 @@ class WikiDetailPanel(QScrollArea):
         nrow = QHBoxLayout()
         nrow.setSpacing(8)
         nrow.addWidget(self._hl(display, 18))
-        if color:
-            cf = QFrame()
-            cf.setFixedSize(16, 16)
-            cf.setStyleSheet(f'background:{color};border-radius:3px;')
-            nrow.addWidget(cf)
         nl.addLayout(nrow)
         if name:
             nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{name}</span>'))
         hl.addWidget(nw, 1)
-        self._l.addWidget(h)
         if isinstance(icons, dict):
-            self._l.addWidget(self._hl('Icons', 12, True, '#94a3b8'))
-            iw = QWidget()
-            il = QHBoxLayout(iw)
-            il.setContentsMargins(0, 0, 0, 0)
-            il.setSpacing(8)
+            ig = QWidget()
+            ibl = QHBoxLayout(ig)
+            ibl.setContentsMargins(0, 0, 0, 0)
+            ibl.setSpacing(6)
             for iname, ipath in icons.items():
-                px = _icon(ipath, 32)
+                px = _icon(ipath, 28)
                 if px:
                     lbl = QLabel()
                     lbl.setPixmap(px)
-                    lbl.setFixedSize(32, 32)
+                    lbl.setFixedSize(28, 28)
                     lbl.setToolTip(iname)
-                    il.addWidget(lbl)
-            il.addStretch()
-            self._l.addWidget(iw)
+                    ibl.addWidget(lbl)
+            ibl.addStretch()
+            hl.addWidget(ig)
+        self._l.addWidget(h)
+
+        pals = [(p, None) for p in _pals_by_element(name)]
+        if pals:
+            self._l.addWidget(self._sep())
+            self._pal_grid(pals)
 
     def _render_work(self, d):
         name = _get(d, 'display_name') or _get(d, 'id') or ''
@@ -465,6 +690,234 @@ class WikiDetailPanel(QScrollArea):
             dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
             dl.setWordWrap(True)
             self._l.addWidget(dl)
+
+        wids = _get(d, 'id')
+        pals = _pals_by_work(wids) if wids else []
+        if pals:
+            self._l.addWidget(self._sep())
+            self._pal_grid(pals, show_level=True)
+
+    def _render_active_skill(self, d):
+        name = _get(d, 'name') or ''
+        code = _get(d, 'asset') or ''
+        elem = _get(d, 'element') or ''
+        desc = _get(d, 'description') or ''
+        power = _get(d, 'power')
+        ct = _get(d, 'cooldown')
+        cat = _get(d, 'category') or ''
+
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(12)
+        if elem:
+            px = _get_element_pixmap(elem.lower(), 'small', 36)
+            if px:
+                el = QLabel()
+                el.setPixmap(px)
+                el.setFixedSize(36, 36)
+                hl.addWidget(el)
+        nw = QWidget()
+        nl = QVBoxLayout(nw)
+        nl.setContentsMargins(0, 0, 0, 0)
+        nl.setSpacing(2)
+        nr = QHBoxLayout()
+        nr.setSpacing(8)
+        nlb = self._hl(name, 18)
+        nlb.setWordWrap(False)
+        nr.addWidget(nlb)
+        nr.addStretch()
+        nl.addLayout(nr)
+        if code:
+            nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{code}</span>'))
+        hl.addWidget(nw, 1)
+        self._l.addWidget(h)
+
+        sw = QWidget()
+        sl = QHBoxLayout(sw)
+        sl.setContentsMargins(0, 0, 0, 0)
+        sl.setSpacing(8)
+        if power is not None:
+            sl.addWidget(self._card('Power', power))
+        if ct is not None:
+            sl.addWidget(self._card('CT', f'{ct}s'))
+        wpr = _get(d, 'WazaPowerRate')
+        if wpr is not None:
+            sl.addWidget(self._card('Hit Power Rate', wpr))
+        mhn = _get(d, 'MaxHitNum')
+        if mhn is not None:
+            sl.addWidget(self._card('Max Hits', mhn))
+        hi = _get(d, 'HitInterval')
+        if hi is not None:
+            sl.addWidget(self._card('Hit Interval', f'{hi}s'))
+        sl.addStretch()
+        self._l.addWidget(sw)
+
+        if desc:
+            dl = QLabel(desc)
+            dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
+            dl.setWordWrap(True)
+            self._l.addWidget(dl)
+
+    def _render_passive_skill(self, d):
+        name = _get(d, 'name') or ''
+        code = _get(d, 'asset') or ''
+        desc = _get(d, 'description') or ''
+        rank = _get(d, 'rank')
+
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(12)
+        if rank:
+            rp = _icon(_get(d, 'icon'), 36)
+            if rp:
+                rl = QLabel()
+                rl.setPixmap(rp)
+                rl.setFixedSize(36, 36)
+                rl.setToolTip(f'Rank {rank}')
+                hl.addWidget(rl)
+        nw = QWidget()
+        nl = QVBoxLayout(nw)
+        nl.setContentsMargins(0, 0, 0, 0)
+        nl.setSpacing(2)
+        nr = QHBoxLayout()
+        nr.setSpacing(8)
+        nlb = self._hl(name, 18)
+        nlb.setWordWrap(False)
+        nr.addWidget(nlb)
+        nr.addStretch()
+        nl.addLayout(nr)
+        if code:
+            nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{code}</span>'))
+        hl.addWidget(nw, 1)
+        self._l.addWidget(h)
+
+        if desc:
+            dl = QLabel(desc)
+            dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
+            dl.setWordWrap(True)
+            self._l.addWidget(dl)
+
+        effects = []
+        for i in ('1', '2', '3', '4'):
+            val = _get(d, f'effect{i}')
+            etype = _get(d, f'efftype{i}')
+            if val is not None and etype and 'no' not in str(etype).lower():
+                v = float(val)
+                if v != 0:
+                    effects.append((_enum_name(etype), v))
+        if effects:
+            self._l.addWidget(self._hl('Effects', 12, True, '#94a3b8'))
+            ew = QWidget()
+            el = QHBoxLayout(ew)
+            el.setContentsMargins(0, 0, 0, 0)
+            el.setSpacing(6)
+            for etype, ev in effects:
+                color = '#4ADE80' if ev > 0 else '#F87171'
+                sign = '+' if ev > 0 else ''
+                tag = QFrame()
+                tag.setStyleSheet(f'background:rgba(255,255,255,0.04);border:1px solid rgba(125,211,252,0.1);border-radius:6px;')
+                tl = QHBoxLayout(tag)
+                tl.setContentsMargins(8, 4, 8, 4)
+                tl.setSpacing(4)
+                tl.addWidget(QLabel(etype))
+                vl = QLabel(f'{sign}{int(ev) if ev == int(ev) else ev}%')
+                vl.setStyleSheet(f'font-weight:600;color:{color};')
+                tl.addWidget(vl)
+                el.addWidget(tag)
+            el.addStretch()
+            self._l.addWidget(ew)
+
+    def _render_technology(self, d):
+        name = _get(d, 'name') or ''
+        code = _get(d, 'asset') or ''
+        desc = _get(d, 'description') or ''
+        cost = _get(d, 'cost')
+        lvl = _get(d, 'level_cap')
+        tier = _get(d, 'tier')
+        btype = _get(d, 'type') or ''
+
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(10)
+        ip = _icon(_get(d, 'icon'), 40)
+        if ip:
+            il = QLabel()
+            il.setPixmap(ip)
+            il.setFixedSize(40, 40)
+            hl.addWidget(il)
+        nw = QWidget()
+        nl = QVBoxLayout(nw)
+        nl.setContentsMargins(0, 0, 0, 0)
+        nl.setSpacing(2)
+        nr = QHBoxLayout()
+        nr.setSpacing(6)
+        nlb = self._hl(name, 18)
+        nlb.setWordWrap(False)
+        nr.addWidget(nlb)
+        if btype == 'boss':
+            nr.addWidget(self._badge('Ancient', '#FBBF24'))
+        nr.addStretch()
+        nl.addLayout(nr)
+        if code:
+            nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{code}</span>'))
+        hl.addWidget(nw, 1)
+        self._l.addWidget(h)
+
+        if desc:
+            dl = QLabel(desc)
+            dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
+            dl.setWordWrap(True)
+            self._l.addWidget(dl)
+
+        stat_pairs = []
+        if cost is not None:
+            stat_pairs.append(('Cost', cost))
+        if lvl is not None:
+            stat_pairs.append(('Level Cap', lvl))
+        if stat_pairs:
+            sw = QWidget()
+            sl = QHBoxLayout(sw)
+            sl.setContentsMargins(0, 0, 0, 0)
+            sl.setSpacing(8)
+            for lbl, val in stat_pairs:
+                sl.addWidget(self._card(lbl, val))
+            sl.addStretch()
+            self._l.addWidget(sw)
+
+        unlock_b = d.get('unlock_build_objects', [])
+        unlock_i = d.get('unlock_item_recipes', [])
+        if isinstance(unlock_b, str):
+            unlock_b = json.loads(unlock_b) if unlock_b else []
+        if isinstance(unlock_i, str):
+            unlock_i = json.loads(unlock_i) if unlock_i else []
+
+        def _grid_badges(items, cols=3):
+            if not items:
+                return None
+            gw = QWidget()
+            gl = QGridLayout(gw)
+            gl.setContentsMargins(0, 0, 0, 0)
+            gl.setSpacing(4)
+            for idx, name in enumerate(items):
+                r, c = divmod(idx, cols)
+                gl.addWidget(self._badge(name), r, c)
+            return gw
+
+        unlocks_b = [_resolve_item(b) for b in unlock_b]
+        unlocks_i = [_resolve_item(i) for i in unlock_i]
+        if unlocks_b:
+            self._l.addWidget(self._hl('Unlocks Buildings', 12, True, '#94a3b8'))
+            gw = _grid_badges(unlocks_b)
+            if gw:
+                self._l.addWidget(gw)
+        if unlocks_i:
+            self._l.addWidget(self._hl('Unlocks Items', 12, True, '#94a3b8'))
+            gw = _grid_badges(unlocks_i)
+            if gw:
+                self._l.addWidget(gw)
 
     def _render_generic(self, d):
         name = d.get('name', d.get('display_name', d.get('id', 'Select an item')))
@@ -506,6 +959,12 @@ class WikiDetailPanel(QScrollArea):
             self._render_element(data)
         elif self._cat == 'work_suitability':
             self._render_work(data)
+        elif self._cat == 'active_skills':
+            self._render_active_skill(data)
+        elif self._cat == 'passive_skills':
+            self._render_passive_skill(data)
+        elif self._cat == 'technologies':
+            self._render_technology(data)
         else:
             self._render_generic(data)
         self._l.addStretch(1)
@@ -557,17 +1016,52 @@ class WikiCategoryPage(QWidget):
         idx = [c[0] for c in _CATEGORIES].index(self._cat)
         _, _, fname, data_key = _CATEGORIES[idx]
         items = _load_json(fname, data_key)
+        if self._cat == 'work_suitability':
+            for item in items:
+                fixed = _work_icon(item.get('id', ''))
+                if fixed:
+                    item['icon'] = fixed
         self._all_data = items
         self._loaded = True
         self._list.clear()
         for i, item in enumerate(items):
             name = item.get('name', item.get('display_name', item.get('id', '?')))
-            li = QListWidgetItem(name)
-            li.setData(Qt.UserRole, i)
-            ip = _icon(item.get('icon', ''))
-            if ip:
-                li.setIcon(QIcon(ip))
-            self._list.addItem(li)
+            icon_path = item.get('icon', '')
+            if not icon_path and self._cat == 'elements':
+                icons = item.get('icons', {})
+                found = 0
+                for v in icons.values():
+                    if isinstance(v, str):
+                        if found == 1:
+                            icon_path = v
+                            break
+                        found += 1
+            if self._cat == 'pals':
+                deck = item.get('stats', {}).get('zukan_index', 0)
+                display = f'#{deck}  {name}' if deck else name
+                li = QListWidgetItem(display)
+                li.setData(Qt.UserRole, i)
+                ip = _icon(icon_path)
+                if ip:
+                    li.setIcon(QIcon(ip))
+                self._list.addItem(li)
+            elif self._cat == 'active_skills':
+                display = f'{name}'
+                li = QListWidgetItem(display)
+                li.setData(Qt.UserRole, i)
+                elem = item.get('element', '')
+                if elem:
+                    ep = _get_element_pixmap(elem.lower(), 'small', 20)
+                    if ep:
+                        li.setIcon(QIcon(ep))
+                self._list.addItem(li)
+            else:
+                li = QListWidgetItem(name)
+                li.setData(Qt.UserRole, i)
+                ip = _icon(icon_path)
+                if ip:
+                    li.setIcon(QIcon(ip))
+                self._list.addItem(li)
 
     def _filter(self, q):
         q = q.lower()
