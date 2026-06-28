@@ -3,13 +3,12 @@ import json
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QSplitter, QPushButton, QLabel,
     QListWidget, QListWidgetItem, QStackedWidget, QLineEdit, QScrollArea,
-    QFrame, QGridLayout, QAbstractItemView, QStyleOptionButton, QStylePainter, QStyle
+    QFrame, QGridLayout, QAbstractItemView, QStyleOptionButton, QStylePainter, QStyle,
 )
-from PySide6.QtCore import Qt, QSize, QThread, Signal, QObject
-from PySide6.QtGui import QPixmap, QIcon, QCursor, QFont, QPainter, QColor, QBrush
+from PySide6.QtCore import Qt, QSize
+from PySide6.QtGui import QPixmap, QIcon, QCursor, QPainter, QColor, QBrush
 from i18n import t
 from palworld_aio import constants
-from palworld_aio.inventory.inventory_manager import ItemData
 from palworld_aio.editor.pal_editor.icons import _get_element_pixmap
 from resource_resolver import resource_path
 
@@ -24,38 +23,55 @@ _CATEGORIES = [
     ('work_suitability', 'docs.wiki.work_suitability', 'work_suitability.json', 'work_types'),
 ]
 
-_CAT_BTN_STYLE = (
-    "QPushButton { background: transparent; color: #94a3b8; border: none; "
-    "border-radius: 4px; font-size: 11px; }"
-    "QPushButton:hover { background: rgba(125,211,252,0.06); color: #e2e8f0; }"
-    "QPushButton[active=true] { background: rgba(125,211,252,0.08); color: #7DD3FC; font-weight: 600; }"
-)
+_BASE = "QPushButton { background: transparent; color: #94a3b8; border: none; border-radius: 4px; font-size: 11px; }"
+_BASE += "QPushButton:hover { background: rgba(125,211,252,0.06); color: #e2e8f0; }"
+_BASE += "QPushButton[active=true] { background: rgba(125,211,252,0.08); color: #7DD3FC; font-weight: 600; }"
+_SEARCH_S = "QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; padding: 4px 8px; font-size: 11px; } QLineEdit:focus { border-color: rgba(125,211,252,0.4); }"
+_LIST_S = "QListWidget { background: transparent; border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; color: #e2e8f0; font-size: 11px; } QListWidget::item { padding: 4px 6px; border-radius: 3px; } QListWidget::item:selected { background: rgba(125,211,252,0.12); color: #7DD3FC; } QListWidget::item:hover { background: rgba(125,211,252,0.06); }"
+_DETAIL_S = "QScrollArea { border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; background: rgba(0,0,0,0.1); }"
+_CARD_S = "background: rgba(255,255,255,0.04); border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; padding: 8px;"
 
-_SEARCH_STYLE = (
-    "QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid "
-    "rgba(125,211,252,0.2); border-radius: 6px; padding: 4px 8px; font-size: 11px; }"
-    "QLineEdit:focus { border-color: rgba(125,211,252,0.4); }"
-)
+_LIST_ICON = 28
 
-_LIST_STYLE = (
-    "QListWidget { background: transparent; border: 1px solid rgba(125,211,252,0.1); "
-    "border-radius: 6px; color: #e2e8f0; font-size: 11px; }"
-    "QListWidget::item { padding: 4px 6px; border-radius: 3px; }"
-    "QListWidget::item:selected { background: rgba(125,211,252,0.12); color: #7DD3FC; }"
-    "QListWidget::item:hover { background: rgba(125,211,252,0.06); }"
-)
+def _load_json(filename, key):
+    base_dir = constants.get_base_path()
+    fp = resource_path(base_dir, 'game_data', filename)
+    if not os.path.exists(fp):
+        return []
+    with open(fp, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    return data.get(key, [])
 
-_DETAIL_STYLE = (
-    "QLabel#detailTitle { font-size: 14px; font-weight: bold; color: #e2e8f0; padding: 4px 0; }"
-    "QLabel#detailAsset { font-size: 10px; font-family: monospace; color: #6b7280; }"
-    "QLabel#detailLabel { font-size: 10px; color: #6b7280; font-weight: 600; }"
-    "QLabel#detailValue { font-size: 11px; color: #e2e8f0; }"
-    "QLabel#detailDesc { font-size: 11px; color: #94a3b8; padding: 6px; }"
-)
+def _icon(icon_path, size=_LIST_ICON):
+    if not icon_path:
+        return None
+    base_dir = constants.get_base_path()
+    fp = resource_path(base_dir, 'game_data', icon_path.lstrip('/')) if icon_path.startswith('/icons/') else resource_path(base_dir, 'game_data', 'icons', icon_path)
+    if os.path.exists(fp):
+        px = QPixmap(fp)
+        if not px.isNull():
+            return px.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+    base = fp.rsplit('.', 1)[0]
+    for ext in ('.webp', '.png'):
+        p = base + ext
+        if os.path.exists(p):
+            px = QPixmap(p)
+            if not px.isNull():
+                return px.scaled(size, size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+    return None
 
-_ICON_SIZE = 36
-_LIST_ICON_SIZE = 28
+def _get(data, path):
+    for p in path.split('.'):
+        if isinstance(data, dict):
+            data = data.get(p)
+        else:
+            return None
+    return data
 
+def _v(text):
+    if text is None or text == 'None':
+        return None
+    return str(text)
 
 class CatBtn(QPushButton):
     def paintEvent(self, event):
@@ -69,439 +85,513 @@ class CatBtn(QPushButton):
         p.setRenderHint(QPainter.TextAntialiasing | QPainter.Antialiasing)
         p.setFont(self.font())
         fm = p.fontMetrics()
-        text_r = fm.boundingRect(self.text())
-        tx = 14
-        ty = (self.height() - text_r.height()) // 2 - text_r.y()
+        tr = fm.boundingRect(self.text())
+        tx, ty = 14, (self.height() - tr.height()) // 2 - tr.y()
         p.setPen(self.palette().color(self.foregroundRole()))
         p.drawText(tx, ty, self.text())
         if self.property('active'):
-            pw, ph = (3, 16)
-            px, py = (0, (self.height() - ph) // 2)
+            pw, ph = 3, 16
+            px, py = 0, (self.height() - ph) // 2
             p.setPen(Qt.NoPen)
             p.setBrush(QBrush(QColor('#7DD3FC')))
             p.drawRoundedRect(px, py, pw, ph, pw / 2, pw / 2)
         p.end()
 
 
-def _load_json(filename, key):
-    base_dir = constants.get_base_path()
-    fp = resource_path(base_dir, 'game_data', filename)
-    if not os.path.exists(fp):
-        return []
-    with open(fp, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    return data.get(key, [])
-
-
-_FIELD_DEFS = {
-    'pals': [
-        ('name', 'Name', 'text'),
-        ('asset', 'Code', 'mono'),
-        ('icon', 'Icon', 'icon'),
-        ('elements', 'Elements', 'elements'),
-        ('stats.hp', 'HP', 'int'),
-        ('stats.meal_attack', 'Melee Atk', 'int'),
-        ('stats.shot_attack', 'Shot Atk', 'int'),
-        ('stats.defense', 'Defense', 'int'),
-        ('stats.rarity', 'Rarity', 'int'),
-        ('stats.zukan_index', 'Paldeck #', 'int'),
-        ('work_suitabilities', 'Work', 'works'),
-        ('partner_skill', 'Partner Skill', 'text'),
-        ('description', 'Description', 'desc'),
-    ],
-    'items': [
-        ('name', 'Name', 'text'),
-        ('asset', 'Code', 'mono'),
-        ('icon', 'Icon', 'icon'),
-        ('type_a_display', 'Category', 'text'),
-        ('type_b_display', 'Subcategory', 'text'),
-        ('rarity', 'Rarity', 'int'),
-        ('price', 'Price', 'int'),
-        ('weight', 'Weight', 'float'),
-        ('max_stack', 'Max Stack', 'int'),
-        ('rank', 'Rank', 'int'),
-        ('restore_satiety', 'Satiety', 'int'),
-        ('restore_sanity', 'Sanity', 'int'),
-        ('durability', 'Durability', 'int'),
-        ('description', 'Description', 'desc'),
-    ],
-    'buildings': [
-        ('name', 'Name', 'text'),
-        ('asset', 'Code', 'mono'),
-        ('icon', 'Icon', 'icon'),
-        ('type_a_display', 'Category', 'text'),
-        ('required_work_amount', 'Work Required', 'int'),
-        ('rank', 'Rank', 'int'),
-        ('hp', 'HP', 'int'),
-        ('defense', 'Defense', 'int'),
-        ('belongs_to_base', 'Base Required', 'bool'),
-        ('install_max_per_base', 'Max per Base', 'int'),
-        ('is_paintable', 'Paintable', 'bool'),
-        ('materials', 'Materials', 'materials'),
-        ('description', 'Description', 'desc'),
-    ],
-    'active_skills': [
-        ('name', 'Name', 'text'),
-        ('asset', 'Code', 'mono'),
-        ('element', 'Element', 'text'),
-        ('power', 'Power', 'int'),
-        ('display_power', 'Display Power', 'int'),
-        ('cooldown', 'Cooldown', 'float'),
-        ('category', 'Type', 'text'),
-        ('min_range', 'Min Range', 'int'),
-        ('max_range', 'Max Range', 'int'),
-        ('effect_type_1', 'Effect 1', 'text'),
-        ('effect_value_1', 'Effect Value 1', 'int'),
-        ('strength', 'Strength', 'text'),
-        ('description', 'Description', 'desc'),
-    ],
-    'passive_skills': [
-        ('name', 'Name', 'text'),
-        ('asset', 'Code', 'mono'),
-        ('rank', 'Rank', 'int'),
-        ('description', 'Effect', 'desc'),
-        ('effect1', 'Value 1', 'float'),
-        ('efftype1', 'Type 1', 'text'),
-        ('effect2', 'Value 2', 'float'),
-        ('efftype2', 'Type 2', 'text'),
-    ],
-    'technologies': [
-        ('name', 'Name', 'text'),
-        ('asset', 'Code', 'mono'),
-        ('icon', 'Icon', 'icon'),
-        ('type', 'Type', 'text'),
-        ('level_cap', 'Level Required', 'int'),
-        ('tier', 'Tier', 'int'),
-        ('cost', 'Cost', 'int'),
-        ('is_boss_tech', 'Boss Tech', 'bool'),
-        ('unlock_item_recipes', 'Unlocks Items', 'list'),
-        ('unlock_build_objects', 'Unlocks Buildings', 'list'),
-        ('description', 'Description', 'desc'),
-    ],
-    'elements': [
-        ('name', 'Name', 'text'),
-        ('display', 'Display Name', 'text'),
-        ('index', 'Index', 'int'),
-        ('color', 'Color', 'color'),
-        ('icons', 'Icons', 'icon_paths'),
-    ],
-    'work_suitability': [
-        ('id', 'ID', 'text'),
-        ('display_name', 'Name', 'text'),
-        ('icon', 'Icon', 'icon'),
-        ('index', 'Index', 'int'),
-    ],
-}
-
-
 class WikiDetailPanel(QScrollArea):
     def __init__(self, category_id, parent=None):
         super().__init__(parent)
         self.setWidgetResizable(True)
-        self.setStyleSheet(
-            "QScrollArea { border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; background: rgba(0,0,0,0.1); }"
-        )
-        self._category_id = category_id
-        self._container = QWidget()
-        self._layout = QGridLayout(self._container)
-        self._layout.setContentsMargins(10, 10, 10, 10)
-        self._layout.setSpacing(4)
-        self.setWidget(self._container)
+        self.setStyleSheet(_DETAIL_S)
+        self._cat = category_id
+        self._c = QWidget()
+        self._l = QVBoxLayout(self._c)
+        self._l.setContentsMargins(16, 16, 16, 16)
+        self._l.setSpacing(8)
+        self.setWidget(self._c)
 
-        self._icon_label = QLabel()
-        self._icon_label.setFixedSize(64, 64)
-        self._icon_label.setAlignment(Qt.AlignCenter)
-
-        self._title_label = QLabel()
-        self._title_label.setObjectName('detailTitle')
-
-        self._asset_label = QLabel()
-        self._asset_label.setObjectName('detailAsset')
-        self._asset_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
-
-        self._field_labels = {}
-        self._value_labels = {}
-
-        self._clear()
-
-    def _clear(self):
-        for i in reversed(range(self._layout.count())):
-            w = self._layout.itemAt(i).widget()
+    def _clr(self):
+        for i in reversed(range(self._l.count())):
+            w = self._l.itemAt(i).widget()
             if w:
                 w.deleteLater()
-        self._field_labels.clear()
-        self._value_labels.clear()
 
-    def show_item(self, item_data):
-        self._clear()
-        fields = _FIELD_DEFS.get(self._category_id, [])
+    def _hl(self, text, size=16, bold=True, color='#e2e8f0'):
+        lbl = QLabel(text)
+        lbl.setStyleSheet(f'font-size:{size}px;font-weight:{"bold" if bold else "normal"};color:{color};')
+        lbl.setWordWrap(True)
+        return lbl
 
-        row = 0
-        icon_path = None
-        name = ''
+    def _kv(self, k, v):
+        w = QWidget()
+        lo = QHBoxLayout(w)
+        lo.setContentsMargins(0, 0, 0, 0)
+        lo.setSpacing(8)
+        kl = QLabel(k)
+        kl.setStyleSheet('font-size:10px;color:#6b7280;font-weight:600;')
+        vl = QLabel(_v(v) or '')
+        vl.setStyleSheet('font-size:11px;color:#e2e8f0;')
+        vl.setWordWrap(True)
+        lo.addWidget(kl)
+        lo.addWidget(vl, 1)
+        return w
 
-        for field_key, label, ftype in fields:
-            val = self._get_nested(item_data, field_key)
-            if val is None or val == '' or val == 'None':
+    def _card(self, label, value, icon_px=None):
+        f = QFrame()
+        f.setStyleSheet(_CARD_S)
+        lo = QVBoxLayout(f)
+        lo.setContentsMargins(10, 8, 10, 8)
+        lo.setSpacing(2)
+        if icon_px:
+            il = QLabel()
+            il.setPixmap(icon_px)
+            il.setFixedSize(20, 20)
+            lo.addWidget(il, 0, Qt.AlignLeft)
+        ll = QLabel(label)
+        ll.setStyleSheet('font-size:10px;color:#6b7280;')
+        lo.addWidget(ll)
+        vl = QLabel(str(value))
+        vl.setStyleSheet('font-size:18px;font-weight:600;color:#e2e8f0;')
+        lo.addWidget(vl)
+        return f
+
+    def _badge(self, text, color='#7DD3FC'):
+        l = QLabel(text)
+        l.setStyleSheet(f'background:rgba(125,211,252,0.08);color:{color};border-radius:4px;padding:2px 8px;font-size:11px;')
+        return l
+
+    def _sep(self):
+        f = QFrame()
+        f.setFrameShape(QFrame.HLine)
+        f.setStyleSheet('color:rgba(125,211,252,0.15);')
+        return f
+
+    def _render_pal(self, d):
+        name = _get(d, 'name') or ''
+        code = _get(d, 'asset') or ''
+        desc = _get(d, 'description') or ''
+        elements = _get(d, 'elements')
+        work = _get(d, 'work_suitabilities')
+        partner = _get(d, 'partner_skill') or ''
+        stats = _get(d, 'stats') or {}
+        zukan = _get(d, 'stats.zukan_index')
+
+        # header
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(12)
+        ip = _icon(_get(d, 'icon'), 64)
+        if ip:
+            il = QLabel()
+            il.setPixmap(ip)
+            il.setFixedSize(64, 64)
+            hl.addWidget(il)
+        nw = QWidget()
+        nl = QVBoxLayout(nw)
+        nl.setContentsMargins(0, 0, 0, 0)
+        nl.setSpacing(2)
+        nrow = QHBoxLayout()
+        nrow.setSpacing(8)
+        nrow.addWidget(self._hl(name, 18))
+        if isinstance(elements, dict):
+            for ename in elements:
+                px = _get_element_pixmap(ename.lower(), 'small', 20)
+                if px:
+                    el = QLabel()
+                    el.setPixmap(px)
+                    el.setFixedSize(20, 20)
+                    nrow.addWidget(el)
+        if zukan:
+            nrow.addWidget(self._hl(f'#{zukan}', 12, False, '#6b7280'))
+        nl.addLayout(nrow)
+        if code:
+            nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{code}</span>'))
+        hl.addWidget(nw, 1)
+        self._l.addWidget(h)
+
+        if desc:
+            dl = QLabel(desc)
+            dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
+            dl.setWordWrap(True)
+            self._l.addWidget(dl)
+
+        self._l.addWidget(self._sep())
+
+        # stat cards
+        stat_defs = [
+            ('HP', stats.get('hp', ''), None),
+            ('Melee Atk', stats.get('meal_attack', ''), None),
+            ('Shot Atk', stats.get('shot_attack', ''), None),
+            ('Defense', stats.get('defense', ''), None),
+            ('Rarity', stats.get('rarity', ''), None),
+        ]
+        sw = QWidget()
+        sl = QHBoxLayout(sw)
+        sl.setContentsMargins(0, 0, 0, 0)
+        sl.setSpacing(8)
+        for lbl, val, _ in stat_defs:
+            sl.addWidget(self._card(lbl, val if val is not None else ''))
+        self._l.addWidget(sw)
+
+        # work suitability
+        if isinstance(work, dict):
+            active = {k: v for k, v in work.items() if isinstance(v, (int, float)) and v > 0}
+            if active:
+                from palworld_aio.editor.pal_editor.pal_info_widget import PalInfoWidget
+                ws_map = PalInfoWidget._WORK_SUITABILITY_DISPLAY
+                ww = QWidget()
+                wl = QHBoxLayout(ww)
+                wl.setContentsMargins(0, 0, 0, 0)
+                wl.setSpacing(6)
+                wl.addWidget(QLabel('Work:'))
+                wl.addWidget(self._hl('Work Suitability', 11, True, '#94a3b8'))
+                for k, v in active.items():
+                    dname = ws_map.get(k, k)
+                    wl.addWidget(self._badge(f'{dname} Lv.{int(v)}'))
+                wl.addStretch()
+                self._l.addWidget(ww)
+
+        if partner:
+            self._l.addWidget(self._kv('Partner Skill', partner))
+
+    def _render_item(self, d):
+        name = _get(d, 'name') or ''
+        code = _get(d, 'asset') or ''
+        desc = _get(d, 'description') or ''
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(12)
+        ip = _icon(_get(d, 'icon'), 48)
+        if ip:
+            il = QLabel()
+            il.setPixmap(ip)
+            il.setFixedSize(48, 48)
+            hl.addWidget(il)
+        nw = QWidget()
+        nl = QVBoxLayout(nw)
+        nl.setContentsMargins(0, 0, 0, 0)
+        nl.addWidget(self._hl(name, 18))
+        if code:
+            nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{code}</span>'))
+        hl.addWidget(nw, 1)
+        self._l.addWidget(h)
+        stat_pairs = [
+            ('Category', _get(d, 'type_a_display')),
+            ('Subcategory', _get(d, 'type_b_display')),
+            ('Rarity', _get(d, 'rarity')),
+            ('Price', _get(d, 'price')),
+        ]
+        gw = QWidget()
+        gl = QHBoxLayout(gw)
+        gl.setContentsMargins(0, 0, 0, 0)
+        gl.setSpacing(8)
+        for lbl, val in stat_pairs:
+            gl.addWidget(self._card(lbl, val if val is not None else ''))
+        self._l.addWidget(gw)
+        extra_pairs = [
+            ('Weight', _get(d, 'weight')),
+            ('Max Stack', _get(d, 'max_stack')),
+            ('Rank', _get(d, 'rank')),
+            ('Satiety', _get(d, 'restore_satiety')),
+            ('Sanity', _get(d, 'restore_sanity')),
+            ('Durability', _get(d, 'durability')),
+        ]
+        ew = QWidget()
+        el = QHBoxLayout(ew)
+        el.setContentsMargins(0, 0, 0, 0)
+        el.setSpacing(8)
+        for lbl, val in extra_pairs:
+            if val is not None:
+                el.addWidget(self._card(lbl, val))
+        if el.count() > 0:
+            el.addStretch()
+            self._l.addWidget(ew)
+        if desc:
+            dl = QLabel(desc)
+            dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
+            dl.setWordWrap(True)
+            self._l.addWidget(dl)
+
+    def _render_building(self, d):
+        name = _get(d, 'name') or ''
+        code = _get(d, 'asset') or ''
+        desc = _get(d, 'description') or ''
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(12)
+        ip = _icon(_get(d, 'icon'), 48)
+        if ip:
+            il = QLabel()
+            il.setPixmap(ip)
+            il.setFixedSize(48, 48)
+            hl.addWidget(il)
+        nw = QWidget()
+        nl = QVBoxLayout(nw)
+        nl.setContentsMargins(0, 0, 0, 0)
+        nl.addWidget(self._hl(name, 18))
+        sub = _get(d, 'type_a_display')
+        if sub or code:
+            txt = f'{sub} / {code}' if sub and code else (sub or code)
+            nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;">{txt}</span>'))
+        hl.addWidget(nw, 1)
+        self._l.addWidget(h)
+        if desc:
+            dl = QLabel(desc)
+            dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
+            dl.setWordWrap(True)
+            self._l.addWidget(dl)
+        stat_pairs = [
+            ('Rank', _get(d, 'rank')),
+            ('HP', _get(d, 'hp')),
+            ('Defense', _get(d, 'defense')),
+            ('Work Required', _get(d, 'required_work_amount')),
+        ]
+        sw = QWidget()
+        sl = QHBoxLayout(sw)
+        sl.setContentsMargins(0, 0, 0, 0)
+        sl.setSpacing(8)
+        for lbl, val in stat_pairs:
+            if val is not None:
+                sl.addWidget(self._card(lbl, val))
+        if sl.count() > 0:
+            sl.addStretch()
+            self._l.addWidget(sw)
+        extra = []
+        if _get(d, 'belongs_to_base') is not None:
+            extra.append(('Base Required', 'Yes' if _get(d, 'belongs_to_base') else 'No'))
+        if _get(d, 'install_max_per_base') is not None:
+            extra.append(('Max per Base', _get(d, 'install_max_per_base')))
+        if _get(d, 'is_paintable') is not None:
+            extra.append(('Paintable', 'Yes' if _get(d, 'is_paintable') else 'No'))
+        if extra:
+            ew = QWidget()
+            el = QHBoxLayout(ew)
+            el.setContentsMargins(0, 0, 0, 0)
+            el.setSpacing(8)
+            for lbl, val in extra:
+                el.addWidget(self._card(lbl, val))
+            el.addStretch()
+            self._l.addWidget(ew)
+        materials = _get(d, 'materials')
+        if isinstance(materials, list) and materials:
+            self._l.addWidget(self._hl('Materials', 12, True, '#94a3b8'))
+            mw = QWidget()
+            ml = QHBoxLayout(mw)
+            ml.setContentsMargins(0, 0, 0, 0)
+            ml.setSpacing(6)
+            for m in materials:
+                mid = m.get('id', '?')
+                cnt = m.get('count', 0)
+                ml.addWidget(self._badge(f'{mid} x{cnt}', '#e2e8f0'))
+            ml.addStretch()
+            self._l.addWidget(mw)
+
+    def _render_element(self, d):
+        name = _get(d, 'name') or ''
+        display = _get(d, 'display') or name
+        color = _get(d, 'color') or ''
+        icons = _get(d, 'icons')
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(12)
+        if isinstance(icons, dict):
+            first_icon = None
+            for v in icons.values():
+                if isinstance(v, str):
+                    first_icon = v
+                    break
+            if first_icon:
+                ip = _icon(first_icon, 48)
+                if ip:
+                    il = QLabel()
+                    il.setPixmap(ip)
+                    il.setFixedSize(48, 48)
+                    hl.addWidget(il)
+        nw = QWidget()
+        nl = QVBoxLayout(nw)
+        nl.setContentsMargins(0, 0, 0, 0)
+        nrow = QHBoxLayout()
+        nrow.setSpacing(8)
+        nrow.addWidget(self._hl(display, 18))
+        if color:
+            cf = QFrame()
+            cf.setFixedSize(16, 16)
+            cf.setStyleSheet(f'background:{color};border-radius:3px;')
+            nrow.addWidget(cf)
+        nl.addLayout(nrow)
+        if name:
+            nl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{name}</span>'))
+        hl.addWidget(nw, 1)
+        self._l.addWidget(h)
+        if isinstance(icons, dict):
+            self._l.addWidget(self._hl('Icons', 12, True, '#94a3b8'))
+            iw = QWidget()
+            il = QHBoxLayout(iw)
+            il.setContentsMargins(0, 0, 0, 0)
+            il.setSpacing(8)
+            for iname, ipath in icons.items():
+                px = _icon(ipath, 32)
+                if px:
+                    lbl = QLabel()
+                    lbl.setPixmap(px)
+                    lbl.setFixedSize(32, 32)
+                    lbl.setToolTip(iname)
+                    il.addWidget(lbl)
+            il.addStretch()
+            self._l.addWidget(iw)
+
+    def _render_work(self, d):
+        name = _get(d, 'display_name') or _get(d, 'id') or ''
+        desc = _get(d, 'description') or ''
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(12)
+        ip = _icon(_get(d, 'icon'), 48)
+        if ip:
+            il = QLabel()
+            il.setPixmap(ip)
+            il.setFixedSize(48, 48)
+            hl.addWidget(il)
+        hl.addWidget(self._hl(name, 18))
+        hl.addStretch()
+        self._l.addWidget(h)
+        if desc:
+            dl = QLabel(desc)
+            dl.setStyleSheet('font-size:11px;color:#94a3b8;padding:4px 0;')
+            dl.setWordWrap(True)
+            self._l.addWidget(dl)
+
+    def _render_generic(self, d):
+        name = d.get('name', d.get('display_name', d.get('id', 'Select an item')))
+        h = QWidget()
+        hl = QHBoxLayout(h)
+        hl.setContentsMargins(0, 0, 0, 0)
+        hl.setSpacing(12)
+        ip = _icon(d.get('icon', ''), 48)
+        if ip:
+            il = QLabel()
+            il.setPixmap(ip)
+            il.setFixedSize(48, 48)
+            hl.addWidget(il)
+        hl.addWidget(self._hl(name, 18))
+        code = d.get('asset', '')
+        if code:
+            hl.addWidget(QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{code}</span>'))
+        hl.addStretch()
+        self._l.addWidget(h)
+        for k, v in d.items():
+            if k in ('name', 'asset', 'icon'):
                 continue
+            if isinstance(v, (str, int, float, bool)):
+                self._l.addWidget(self._kv(k.replace('_', ' ').title(), v))
+            elif isinstance(v, list) and v and all(isinstance(x, str) for x in v):
+                self._l.addWidget(self._kv(k.replace('_', ' ').title(), ', '.join(v)))
 
-            if ftype == 'icon':
-                icon_path = val if isinstance(val, str) and val else None
-            elif ftype == 'text' and field_key == 'name':
-                name = str(val)
-                title = QLabel(str(val))
-                title.setObjectName('detailTitle')
-                self._layout.addWidget(title, row, 0, 1, 2)
-                row += 1
-            elif ftype == 'mono':
-                lbl = QLabel(f'<span style="color:#6b7280;font-size:10px;font-family:monospace">{val}</span>')
-                lbl.setTextFormat(Qt.RichText)
-                self._layout.addWidget(lbl, row, 0, 1, 2)
-                row += 1
-            elif ftype == 'desc':
-                desc = QLabel(str(val))
-                desc.setObjectName('detailDesc')
-                desc.setWordWrap(True)
-                self._layout.addWidget(desc, row, 0, 1, 2)
-                row += 1
-            elif ftype == 'elements':
-                if isinstance(val, dict):
-                    ew = QWidget()
-                    el = QHBoxLayout(ew)
-                    el.setContentsMargins(0, 0, 0, 0)
-                    el.setSpacing(4)
-                    for ename in val:
-                        px = _get_element_pixmap(ename.lower(), 'small', 20)
-                        if px:
-                            il = QLabel()
-                            il.setPixmap(px)
-                            el.addWidget(il)
-                        dl = val[ename].get('name', ename) if isinstance(val[ename], dict) else ename
-                        el.addWidget(QLabel(dl))
-                    el.addStretch()
-                    self._layout.addWidget(QLabel('Elements:'), row, 0)
-                    self._layout.addWidget(ew, row, 1)
-                    row += 1
-            elif ftype == 'works':
-                if isinstance(val, dict):
-                    active = {k: v for k, v in val.items() if isinstance(v, (int, float)) and v > 0}
-                    if active:
-                        from palworld_aio.editor.pal_editor.pal_info_widget import PalInfoWidget
-                        _ws_map = PalInfoWidget._WORK_SUITABILITY_DISPLAY
-                        parts = []
-                        for k, v in active.items():
-                            dname = _ws_map.get(k, k)
-                            parts.append(f'{dname} Lv.{int(v)}')
-                        wlbl = QLabel(', '.join(parts))
-                        wlbl.setObjectName('detailValue')
-                        wlbl.setWordWrap(True)
-                        self._layout.addWidget(QLabel('Work Suitability:'), row, 0)
-                        self._layout.addWidget(wlbl, row, 1)
-                        row += 1
-            elif ftype == 'materials':
-                if isinstance(val, list) and val:
-                    parts = [f'{m.get("id","?")} x{m.get("count",0)}' for m in val if m.get('id')]
-                    mlbl = QLabel(', '.join(parts))
-                    mlbl.setObjectName('detailValue')
-                    mlbl.setWordWrap(True)
-                    self._layout.addWidget(QLabel('Materials:'), row, 0)
-                    self._layout.addWidget(mlbl, row, 1)
-                    row += 1
-            elif ftype == 'bool':
-                blbl = QLabel('Yes' if val else 'No')
-                blbl.setObjectName('detailValue')
-                self._layout.addWidget(QLabel(f'{label}:'), row, 0)
-                self._layout.addWidget(blbl, row, 1)
-                row += 1
-            elif ftype == 'color':
-                color_frame = QFrame()
-                color_frame.setFixedSize(20, 20)
-                color_frame.setStyleSheet(f'background: {val}; border-radius: 3px; border: 1px solid rgba(255,255,255,0.1);')
-                hlbl = QLabel(str(val))
-                hlbl.setObjectName('detailValue')
-                hlbl.setStyleSheet('font-family: monospace; font-size: 10px;')
-                hlbl.setFixedHeight(20)
-                cw = QWidget()
-                cl = QHBoxLayout(cw)
-                cl.setContentsMargins(0, 0, 0, 0)
-                cl.setSpacing(4)
-                cl.addWidget(color_frame)
-                cl.addWidget(hlbl)
-                cl.addStretch()
-                self._layout.addWidget(QLabel('Color:'), row, 0)
-                self._layout.addWidget(cw, row, 1)
-                row += 1
-            elif ftype == 'icon_paths':
-                if isinstance(val, dict):
-                    iw = QWidget()
-                    il = QHBoxLayout(iw)
-                    il.setContentsMargins(0, 0, 0, 0)
-                    il.setSpacing(6)
-                    for iname, ipath in val.items():
-                        if isinstance(ipath, str) and ipath.startswith('/icons/'):
-                            base_dir = constants.get_base_path()
-                            fp = resource_path(base_dir, 'game_data', ipath.lstrip('/'))
-                            base_fp = fp.rsplit('.', 1)[0]
-                            px = None
-                            for try_fp in (fp, base_fp + '.webp', base_fp + '.png'):
-                                if os.path.exists(try_fp):
-                                    px = QPixmap(try_fp)
-                                    break
-                            if px and not px.isNull():
-                                lbl = QLabel()
-                                lbl.setPixmap(px.scaled(32, 32, Qt.KeepAspectRatio, Qt.SmoothTransformation))
-                                lbl.setToolTip(iname)
-                                il.addWidget(lbl)
-                    il.addStretch()
-                    self._layout.addWidget(QLabel('Icons:'), row, 0)
-                    self._layout.addWidget(iw, row, 1)
-                    row += 1
-            elif ftype == 'list':
-                if isinstance(val, list) and val:
-                    llbl = QLabel(', '.join(str(x) for x in val))
-                    llbl.setObjectName('detailValue')
-                    llbl.setWordWrap(True)
-                    self._layout.addWidget(QLabel(f'{label}:'), row, 0)
-                    self._layout.addWidget(llbl, row, 1)
-                    row += 1
-            elif ftype == 'int':
-                vlbl = QLabel(str(val))
-                vlbl.setObjectName('detailValue')
-                self._layout.addWidget(QLabel(f'{label}:'), row, 0)
-                self._layout.addWidget(vlbl, row, 1)
-                row += 1
-            elif ftype == 'float':
-                vlbl = QLabel(f'{val:.1f}')
-                vlbl.setObjectName('detailValue')
-                self._layout.addWidget(QLabel(f'{label}:'), row, 0)
-                self._layout.addWidget(vlbl, row, 1)
-                row += 1
-            elif ftype == 'text':
-                vlbl = QLabel(str(val))
-                vlbl.setObjectName('detailValue')
-                vlbl.setWordWrap(True)
-                self._layout.addWidget(QLabel(f'{label}:'), row, 0)
-                self._layout.addWidget(vlbl, row, 1)
-                row += 1
-
-        self._layout.setRowStretch(row, 1)
-
-    def _get_nested(self, data, path):
-        parts = path.split('.')
-        cur = data
-        for p in parts:
-            if isinstance(cur, dict):
-                cur = cur.get(p)
-            else:
-                return None
-        return cur
+    def show_item(self, data):
+        self._clr()
+        if data is None or not isinstance(data, dict):
+            return
+        if self._cat == 'pals':
+            self._render_pal(data)
+        elif self._cat == 'items':
+            self._render_item(data)
+        elif self._cat == 'buildings':
+            self._render_building(data)
+        elif self._cat == 'elements':
+            self._render_element(data)
+        elif self._cat == 'work_suitability':
+            self._render_work(data)
+        else:
+            self._render_generic(data)
+        self._l.addStretch(1)
 
 
 class WikiCategoryPage(QWidget):
     def __init__(self, category_id, parent=None):
         super().__init__(parent)
-        self._category_id = category_id
+        self._cat = category_id
         self._all_data = []
+        self._loaded = False
         self._setup_ui()
 
     def _setup_ui(self):
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(8, 8, 8, 8)
-        layout.setSpacing(4)
+        lo = QVBoxLayout(self)
+        lo.setContentsMargins(0, 0, 0, 0)
+        lo.setSpacing(0)
+
+        sp = QSplitter(Qt.Horizontal)
+
+        lp = QWidget()
+        ll = QVBoxLayout(lp)
+        ll.setContentsMargins(6, 6, 4, 6)
+        ll.setSpacing(4)
 
         self._search = QLineEdit()
         self._search.setPlaceholderText(t('docs.wiki.search') if t else 'Search...')
-        self._search.setStyleSheet(_SEARCH_STYLE)
+        self._search.setStyleSheet(_SEARCH_S)
         self._search.textChanged.connect(self._filter)
-        layout.addWidget(self._search)
+        ll.addWidget(self._search)
 
         self._list = QListWidget()
-        self._list.setStyleSheet(_LIST_STYLE)
+        self._list.setStyleSheet(_LIST_S)
         self._list.setSelectionMode(QAbstractItemView.SingleSelection)
+        self._list.currentItemChanged.connect(self._on_sel)
         self._list.setSpacing(0)
-        self._list.currentItemChanged.connect(self._on_selection_changed)
-        layout.addWidget(self._list, 1)
+        ll.addWidget(self._list, 1)
 
-        self._detail = WikiDetailPanel(self._category_id)
-        self._detail.setMinimumHeight(120)
-        layout.addWidget(self._detail, 1)
+        lp.setMinimumWidth(180)
+        sp.addWidget(lp)
 
-    def load_data(self, items):
+        self._detail = WikiDetailPanel(self._cat)
+        sp.addWidget(self._detail)
+
+        sp.setSizes([260, 500])
+        lo.addWidget(sp, 1)
+
+    def load(self):
+        idx = [c[0] for c in _CATEGORIES].index(self._cat)
+        _, _, fname, data_key = _CATEGORIES[idx]
+        items = _load_json(fname, data_key)
         self._all_data = items
+        self._loaded = True
         self._list.clear()
-        self._detail.show_item({'name': t('docs.wiki.select_hint') if t else 'Select an item to view details'})
-        for item in items:
+        for i, item in enumerate(items):
             name = item.get('name', item.get('display_name', item.get('id', '?')))
-            list_item = QListWidgetItem(name)
-            list_item.setData(Qt.UserRole, items.index(item))
-            icon_path = item.get('icon', '')
-            if icon_path:
-                pixmap = self._load_icon(icon_path)
-                if pixmap and not pixmap.isNull():
-                    list_item.setIcon(QIcon(pixmap.scaled(_LIST_ICON_SIZE, _LIST_ICON_SIZE, Qt.KeepAspectRatio, Qt.SmoothTransformation)))
-            self._list.addItem(list_item)
+            li = QListWidgetItem(name)
+            li.setData(Qt.UserRole, i)
+            ip = _icon(item.get('icon', ''))
+            if ip:
+                li.setIcon(QIcon(ip))
+            self._list.addItem(li)
 
-    def _load_icon(self, icon_path):
-        if not icon_path:
-            return None
-        if icon_path.startswith('/icons/'):
-            base_dir = constants.get_base_path()
-            fp = resource_path(base_dir, 'game_data', icon_path.lstrip('/'))
-            if os.path.exists(fp):
-                return QPixmap(fp)
-            fp_webp = fp.rsplit('.', 1)[0] + '.webp'
-            if os.path.exists(fp_webp):
-                return QPixmap(fp_webp)
-            fp_png = fp.rsplit('.', 1)[0] + '.png'
-            if os.path.exists(fp_png):
-                return QPixmap(fp_png)
-        return None
-
-    def _filter(self, query):
-        q = query.lower()
+    def _filter(self, q):
+        q = q.lower()
         for i in range(self._list.count()):
-            item = self._list.item(i)
-            idx = item.data(Qt.UserRole)
+            it = self._list.item(i)
+            idx = it.data(Qt.UserRole)
             if idx is not None and idx < len(self._all_data):
-                data = self._all_data[idx]
-                name = data.get('name', data.get('display_name', data.get('id', '')))
-                asset = data.get('asset', '')
-                visible = not q or q in name.lower() or q in asset.lower()
-                item.setHidden(not visible)
+                d = self._all_data[idx]
+                name = d.get('name', d.get('display_name', d.get('id', '')))
+                asset = d.get('asset', '')
+                it.setHidden(bool(q) and q not in name.lower() and q not in asset.lower())
             else:
-                item.setHidden(True)
+                it.setHidden(True)
 
-    def _on_selection_changed(self, current, previous):
-        if not current:
-            self._detail.show_item({'name': t('docs.wiki.select_hint') if t else 'Select an item to view details'})
+    def _on_sel(self, cur, prev):
+        if not cur:
             return
-        idx = current.data(Qt.UserRole)
+        idx = cur.data(Qt.UserRole)
         if idx is not None and idx < len(self._all_data):
             self._detail.show_item(self._all_data[idx])
 
     def refresh_labels(self):
         self._search.setPlaceholderText(t('docs.wiki.search') if t else 'Search...')
-        if not self._list.currentItem():
-            self._detail.show_item({'name': t('docs.wiki.select_hint') if t else 'Select an item to view details'})
-
-
-class WikiDataLoader(QObject):
-    dataReady = Signal(dict)
-    error = Signal(str)
-
-    def __init__(self, categories):
-        super().__init__()
-        self._categories = categories
-
-    def run(self):
-        try:
-            result = {}
-            for cat_id, i18n_key, fname, data_key in self._categories:
-                items = _load_json(fname, data_key)
-                result[cat_id] = items
-            self.dataReady.emit(result)
-        except Exception as e:
-            self.error.emit(str(e))
+        self._detail.show_item({})
 
 
 class WikiTab(QWidget):
@@ -509,89 +599,63 @@ class WikiTab(QWidget):
         super().__init__(parent)
         self.parent_window = parent
         self._pages = {}
-        self._loaded = False
         self._setup_ui()
-        self._start_loading()
-
-    def _start_loading(self):
-        self._thread = QThread()
-        self._worker = WikiDataLoader(_CATEGORIES)
-        self._worker.moveToThread(self._thread)
-        self._thread.started.connect(self._worker.run)
-        self._worker.dataReady.connect(self._on_data_loaded)
-        self._worker.dataReady.connect(self._thread.quit)
-        self._worker.dataReady.connect(self._worker.deleteLater)
-        self._thread.finished.connect(self._thread.deleteLater)
-        self._worker.error.connect(self._on_load_error)
-        self._thread.start()
-
-    def _on_data_loaded(self, data):
-        for cat_id, items in data.items():
-            if cat_id in self._pages:
-                self._pages[cat_id].load_data(items)
-        self._loaded = True
-
-    def _on_load_error(self, msg):
-        self._loaded = True
+        if _CATEGORIES:
+            self._switch_category(_CATEGORIES[0][0])
 
     def _setup_ui(self):
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        lo = QVBoxLayout(self)
+        lo.setContentsMargins(0, 0, 0, 0)
+        lo.setSpacing(0)
 
-        splitter = QSplitter(Qt.Horizontal)
+        sp = QSplitter(Qt.Horizontal)
 
-        left_panel = QWidget()
-        left_layout = QVBoxLayout(left_panel)
-        left_layout.setContentsMargins(6, 6, 4, 6)
-        left_layout.setSpacing(2)
+        lp = QWidget()
+        ll = QVBoxLayout(lp)
+        ll.setContentsMargins(6, 6, 4, 6)
+        ll.setSpacing(2)
 
         self._cat_btns = {}
-        for cat_id, i18n_key, fname, data_key in _CATEGORIES:
+        for cat_id, i18n_key, *_ in _CATEGORIES:
             btn = CatBtn(t(i18n_key) if t else i18n_key)
             btn.setProperty('active', False)
-            btn.setStyleSheet(_CAT_BTN_STYLE)
+            btn.setStyleSheet(_BASE)
             btn.setCursor(QCursor(Qt.PointingHandCursor))
             btn.setFixedHeight(28)
             btn.clicked.connect(lambda checked, c=cat_id: self._switch_category(c))
             self._cat_btns[cat_id] = btn
-            left_layout.addWidget(btn)
+            ll.addWidget(btn)
 
-        left_layout.addStretch()
-        left_panel.setFixedWidth(160)
-        splitter.addWidget(left_panel)
+        ll.addStretch()
+        lp.setFixedWidth(160)
+        sp.addWidget(lp)
 
-        right_panel = QWidget()
-        right_layout = QVBoxLayout(right_panel)
-        right_layout.setContentsMargins(4, 6, 6, 6)
-        right_layout.setSpacing(0)
+        rp = QWidget()
+        rl = QVBoxLayout(rp)
+        rl.setContentsMargins(4, 6, 6, 6)
+        rl.setSpacing(0)
 
         self._cat_stack = QStackedWidget()
-        for cat_id, i18n_key, fname, data_key in _CATEGORIES:
-            page = WikiCategoryPage(cat_id)
-            self._pages[cat_id] = page
-            self._cat_stack.addWidget(page)
+        for cat_id, *_ in _CATEGORIES:
+            pg = WikiCategoryPage(cat_id)
+            self._pages[cat_id] = pg
+            self._cat_stack.addWidget(pg)
 
-        right_layout.addWidget(self._cat_stack, 1)
-        splitter.addWidget(right_panel)
+        rl.addWidget(self._cat_stack, 1)
+        sp.addWidget(rp)
 
-        splitter.setStretchFactor(0, 0)
-        splitter.setStretchFactor(1, 1)
-        splitter.setSizes([160, 600])
-        layout.addWidget(splitter, 1)
-
-        if _CATEGORIES:
-            self._switch_category(_CATEGORIES[0][0])
-
-    def _load_all_data(self):
-        for cat_id, i18n_key, fname, data_key in _CATEGORIES:
-            items = _load_json(fname, data_key)
-            self._pages[cat_id].load_data(items)
+        sp.setStretchFactor(0, 0)
+        sp.setStretchFactor(1, 1)
+        sp.setSizes([160, 600])
+        lo.addWidget(sp, 1)
 
     def _switch_category(self, cat_id):
         if cat_id in self._pages:
             idx = [c[0] for c in _CATEGORIES].index(cat_id)
             self._cat_stack.setCurrentIndex(idx)
+            pg = self._pages[cat_id]
+            if not pg._loaded:
+                pg.load()
         for cid, btn in self._cat_btns.items():
             active = cid == cat_id
             btn.setProperty('active', active)
@@ -602,15 +666,8 @@ class WikiTab(QWidget):
         pass
 
     def refresh_labels(self):
-        for cat_id, i18n_key, fname, data_key in _CATEGORIES:
+        for cat_id, i18n_key, *_ in _CATEGORIES:
             if cat_id in self._cat_btns:
                 self._cat_btns[cat_id].setText(t(i18n_key) if t else i18n_key)
             if cat_id in self._pages:
                 self._pages[cat_id].refresh_labels()
-
-
-
-
-
-
-
