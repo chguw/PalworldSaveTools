@@ -174,12 +174,6 @@ class SaveManager(QObject):
         level_sav_path = os.path.join(constants.current_save_path, 'Level.sav')
         def save_task():
             t0 = time.perf_counter()
-            from palworld_aio.validation.engine import validate
-            ok, errors = validate(constants.loaded_level_json, 'relation')
-            if not ok:
-                from palworld_aio.validation.engine import rollback, ValidationError
-                rollback()
-                raise ValidationError(errors)
             wrapper_to_sav(constants.loaded_level_json, level_sav_path)
             t1 = time.perf_counter()
             players_folder = os.path.join(constants.current_save_path, 'Players')
