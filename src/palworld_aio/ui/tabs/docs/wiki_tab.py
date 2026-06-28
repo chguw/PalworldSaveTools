@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QListWidget, QListWidgetItem, QStackedWidget, QLineEdit, QScrollArea,
     QFrame, QGridLayout, QAbstractItemView, QStyleOptionButton, QStylePainter, QStyle
 )
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QThread, Signal, QObject
 from PySide6.QtGui import QPixmap, QIcon, QCursor, QFont, QPainter, QColor, QBrush
 from i18n import t
 from palworld_aio import constants
@@ -485,13 +485,54 @@ class WikiCategoryPage(QWidget):
             self._detail.show_item({'name': t('docs.wiki.select_hint') if t else 'Select an item to view details'})
 
 
+class WikiDataLoader(QObject):
+    dataReady = Signal(dict)
+    error = Signal(str)
+
+    def __init__(self, categories):
+        super().__init__()
+        self._categories = categories
+
+    def run(self):
+        try:
+            result = {}
+            for cat_id, i18n_key, fname, data_key in self._categories:
+                items = _load_json(fname, data_key)
+                result[cat_id] = items
+            self.dataReady.emit(result)
+        except Exception as e:
+            self.error.emit(str(e))
+
+
 class WikiTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent_window = parent
         self._pages = {}
+        self._loaded = False
         self._setup_ui()
-        self._load_all_data()
+        self._start_loading()
+
+    def _start_loading(self):
+        self._thread = QThread()
+        self._worker = WikiDataLoader(_CATEGORIES)
+        self._worker.moveToThread(self._thread)
+        self._thread.started.connect(self._worker.run)
+        self._worker.dataReady.connect(self._on_data_loaded)
+        self._worker.dataReady.connect(self._thread.quit)
+        self._worker.dataReady.connect(self._worker.deleteLater)
+        self._thread.finished.connect(self._thread.deleteLater)
+        self._worker.error.connect(self._on_load_error)
+        self._thread.start()
+
+    def _on_data_loaded(self, data):
+        for cat_id, items in data.items():
+            if cat_id in self._pages:
+                self._pages[cat_id].load_data(items)
+        self._loaded = True
+
+    def _on_load_error(self, msg):
+        self._loaded = True
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -558,7 +599,7 @@ class WikiTab(QWidget):
             btn.style().polish(btn)
 
     def refresh(self):
-        self._load_all_data()
+        pass
 
     def refresh_labels(self):
         for cat_id, i18n_key, fname, data_key in _CATEGORIES:
