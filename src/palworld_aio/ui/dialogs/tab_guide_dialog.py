@@ -34,6 +34,7 @@ SECTION_KEYS = [
     ('guilds', 'tab_guide.section.guilds'),
     ('bases', 'tab_guide.section.bases'),
     ('exclusions', 'tab_guide.section.exclusions'),
+    ('docs', 'tab_guide.section.docs'),
 ]
 
 FMT = dict(
