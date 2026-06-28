@@ -85,14 +85,7 @@ def sav_to_gvasfile(path):
         raw_gvas, _ = decompress_sav_to_gvas(data)
     g = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
     return g
-def gvasfile_to_sav(gvas_file, path, validate=False):
-    if validate:
-        from palworld_aio.validation.engine import validate
-        ok, errors = validate(level='relation')
-        if not ok:
-            from palworld_aio.validation.engine import rollback, ValidationError
-            rollback()
-            raise ValidationError(errors)
+def gvasfile_to_sav(gvas_file, path):
     data = gvas_file.write(SKP_PALWORLD_CUSTOM_PROPERTIES)
     t = 50 if 'Pal.PalworldSaveGame' in gvas_file.header.save_game_class_name else 49
     compressed = compress_gvas_to_sav(data, t)
@@ -144,8 +137,8 @@ def sav_to_gvas_wrapper(path):
         raw_gvas, _ = decompress_sav_to_gvas(data)
     g = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
     return GvasFileWrapper(g)
-def wrapper_to_sav(wrapper, path, validate=False):
-    gvasfile_to_sav(wrapper.gvas_file, path, validate=validate)
+def wrapper_to_sav(wrapper, path):
+    gvasfile_to_sav(wrapper.gvas_file, path)
 def extract_value(data, key, default_value=''):
     value = data.get(key, default_value)
     if isinstance(value, dict):

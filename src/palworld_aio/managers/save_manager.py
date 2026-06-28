@@ -117,8 +117,7 @@ class SaveManager(QObject):
             illegal_pals_by_owner, owner_nicknames = self._count_pals_found(data_source, player_pals_count, log_folder, constants.current_save_path, guild_name_map)
             constants.PLAYER_PAL_COUNTS = player_pals_count
             self._process_scan_log(data_source, playerdir, log_folder, guild_name_map, base_path, illegal_pals_by_owner, owner_nicknames)
-            from palworld_aio.validation.engine import snapshot
-            snapshot()
+            pass
             self.load_finished.emit(True)
             return True
         run_with_loading(lambda _: None, load_task)
