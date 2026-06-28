@@ -343,6 +343,9 @@ def delete_player(uid, delete_files=True):
             admin = str(raw.get('admin_player_uid', '')).replace('-', '').lower()
             if admin == uid_clean:
                 raw['admin_player_uid'] = new_players[0]['player_uid']
+                nu = str(raw['admin_player_uid']).replace('-', '').lower()
+                for p in new_players:
+                    p['_u8_flag'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
     cleanup_player_references(wsd, [uid_clean])
     if delete_files:
         constants.files_to_delete.add(uid_clean)

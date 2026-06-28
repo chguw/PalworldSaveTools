@@ -256,6 +256,9 @@ def delete_inactive_players(days_threshold, parent=None):
                 group_data_list.remove(group)
             elif admin_uid not in keep_uids:
                 raw['admin_player_uid'] = keep_players[0]['player_uid']
+                nu = str(raw['admin_player_uid']).replace('-', '').lower()
+                for p in keep_players:
+                    p['_u8_flag'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
     if to_delete_uids:
         constants.files_to_delete.update(to_delete_uids)
         removed_pals = delete_player_pals(wsd, to_delete_uids)
@@ -350,6 +353,18 @@ def delete_duplicated_players(parent=None):
         delete_player_pals(wsd, deleted_uids)
     valid_uids = {str(p.get('player_uid', '')).replace('-', '') for g in wsd['GroupSaveDataMap']['value'] if g['value']['GroupType']['value']['value'] == 'EPalGroupType::Guild' for p in g['value']['RawData']['value'].get('players', [])}
     clean_character_save_parameter_map(wsd, valid_uids)
+    for g in group_data_list:
+        if g['value']['GroupType']['value']['value'] != 'EPalGroupType::Guild':
+            continue
+        raw = g['value']['RawData']['value']
+        players = raw.get('players', [])
+        admin = str(raw.get('admin_player_uid', '')).replace('-', '').lower()
+        if admin and admin not in {str(p.get('player_uid', '')).replace('-', '').lower() for p in players}:
+            if players:
+                raw['admin_player_uid'] = players[0]['player_uid']
+                nu = str(raw['admin_player_uid']).replace('-', '').lower()
+                for p in players:
+                    p['_u8_flag'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
     return len(deleted_players)
 def delete_unreferenced_data(parent=None):
     if not constants.loaded_level_json:
@@ -425,6 +440,9 @@ def delete_unreferenced_data(parent=None):
         keep_uids = {normalize_uid(p.get('player_uid')) for p in valid_players}
         if admin_uid not in keep_uids:
             raw['admin_player_uid'] = valid_players[0]['player_uid']
+            nu = str(raw['admin_player_uid']).replace('-', '').lower()
+            for p in valid_players:
+                p['_u8_flag'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
     orphaned_pals = []
     for entry in char_map[:]:
         try:
