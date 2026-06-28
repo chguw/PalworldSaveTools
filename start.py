@@ -1,5 +1,5 @@
 from __future__ import annotations
-import os, sys, subprocess, shutil, pathlib, argparse
+import os, sys, subprocess, shutil, pathlib
 PROJECT_DIR = pathlib.Path(__file__).resolve().parent
 uv_lock = PROJECT_DIR / 'uv.lock'
 if uv_lock.exists():
@@ -22,7 +22,7 @@ YELLOW = ansi('\x1b[33m')
 RED = ansi('\x1b[31m')
 CYAN = ansi('\x1b[36m')
 DIM = ansi('\x1b[2m')
-LOGO = "\n  ___      _                _    _ ___              _____         _    \n | _ \\__ _| |_ __ _____ _ _| |__| / __| __ ___ ____|_   _|__  ___| |___\n |  _/ _` | \\ V  V / _ \\ '_| / _` \\__ \\/ _` \\ V / -_)| |/ _ \\/ _ \\(_-<\n |_| \\__,_|_|\\_/\\_/\\___/_| |_\\__,_|___/\\__,_|\\_/\\___||_|\\___/\\___/_/__/\n"
+LOGO = "\n  ___      _                _    _ ___              _____         _    \n | _ \\__ _| |_ __ _____ _ _| |__| / __| __ ___ ____|_   _|__  ___| |___\n |  _/ _` | \\ V  V / _ \\ '_| / _` \\__ \\/ _` \\ V / -_)| |/ _ \\/ _ \\(_-<\n |_| \\__,_|_|\\_/\\_/\\___/_| |_|\\__,_|___/\\__,_|\\_/\\___||_|\\___/\\___/_/__/\n"
 def log(msg: str, color: str=''):
     print(f'{color}{msg}{RESET}')
 def venv_python() -> pathlib.Path:
@@ -54,15 +54,11 @@ def ensure_venv():
             shutil.rmtree(VENV_DIR, ignore_errors=True)
         return False
 def main():
-    parser = argparse.ArgumentParser(description='PalworldSaveTools')
-    args = parser.parse_args()
-
     print(f'{BOLD}{LOGO}{RESET}')
     if not ensure_venv():
         log('Setup failed', RED)
         input('Press Enter to exit...')
         sys.exit(1)
-
     vpy = venv_python()
     bootup_py = PROJECT_DIR / 'src' / 'bootup.py'
     log('Starting PalworldSaveTools...', GREEN)

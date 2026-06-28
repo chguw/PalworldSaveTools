@@ -23,6 +23,7 @@ dependencies = [
     "orjson",
     "py7zr",
     "nuitka>=4.1.2",
+
 ]
 
 [tool.uv.sources]
