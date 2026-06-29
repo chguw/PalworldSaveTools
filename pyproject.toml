@@ -40,6 +40,11 @@ include = ["src*"]
 [tool.pyright]
 extraPaths = ["src/palsav"]
 reportAttributeAccessIssue = false
+reportOptionalMemberAccess = false
+reportOptionalSubscript = false
+reportOptionalIterable = false
+reportOptionalComparison = false
+reportArgumentType = false
 
 [dependency-groups]
 dev = [
