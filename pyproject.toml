@@ -45,6 +45,7 @@ reportOptionalSubscript = false
 reportOptionalIterable = false
 reportOptionalComparison = false
 reportArgumentType = false
+reportOptionalIn = false
 
 [dependency-groups]
 dev = [
