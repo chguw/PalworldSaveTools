@@ -32,6 +32,10 @@ def main():
         sys.argv.insert(1, "convert")
 
     subcommand = sys.argv.pop(1)
+    if subcommand == 'convert':
+        if len(sys.argv) > 2 and not sys.argv[2].startswith('-'):
+            output_path = sys.argv.pop(2)
+            sys.argv[2:2] = ['--force', '--output', output_path]
     module_path, _ = commands[subcommand]
     __import__(module_path)
     module = sys.modules[module_path]
