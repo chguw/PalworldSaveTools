@@ -3547,6 +3547,13 @@ class BaseInventoryTab(QWidget):
         wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
         map_objs = wsd.get('MapObjectSaveData', {}).get('value', {}).get('values', [])
         base_norm = str(self._current_base_id).lower().replace('-', '')
+        from palworld_aio.inventory.base_inventory_manager import load_structure_data
+        _sd = load_structure_data()
+        new_hp = None
+        for s in _sd.get('structures', []):
+            if s.get('asset', '').lower() == new_asset.lower():
+                new_hp = s.get('hp')
+                break
         replaced = 0
         for obj in map_objs:
             oid = obj.get('MapObjectId', {}).get('value', '')
@@ -3559,6 +3566,8 @@ class BaseInventoryTab(QWidget):
             obj['MapObjectId']['value'] = new_asset
             hp_data = mr.get('hp')
             if isinstance(hp_data, dict) and 'current' in hp_data and 'max' in hp_data:
+                if new_hp is not None:
+                    hp_data['max'] = new_hp
                 hp_data['current'] = hp_data['max']
             replaced += 1
         if replaced:
