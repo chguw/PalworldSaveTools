@@ -184,6 +184,14 @@ def import_base_json(loaded_level_json, exported_data, target_guild_id, offset=(
     _ensure_container_structure(data, 'GroupSaveDataMap', is_map_property=True)
     if 'WorkSaveData' not in data or not isinstance(data['WorkSaveData'], dict) or 'value' not in data['WorkSaveData']:
         data['WorkSaveData'] = {'array_type': 'StructProperty', 'id': None, 'type': 'ArrayProperty', 'custom_type': '.worldSaveData.WorkSaveData', 'value': {'prop_name': 'WorkSaveData', 'prop_type': 'StructProperty', 'type_name': 'PalWorkSaveData', 'id': '00000000-0000-0000-0000-000000000000', 'values': []}}
+    from palworld_aio.inventory.base_inventory_manager import load_structure_data
+    _sd = load_structure_data()
+    _import_hp_map = {}
+    for s in _sd.get('structures', []):
+        a = s.get('asset', '')
+        h = s.get('hp')
+        if a and h is not None:
+            _import_hp_map[a.lower()] = h
     base_camp_data = data['BaseCampSaveData']['value']
     groups = data['GroupSaveDataMap']['value']
     char_containers = data['CharacterContainerSaveData']['value']
@@ -512,6 +520,10 @@ def import_base_json(loaded_level_json, exported_data, target_guild_id, offset=(
                             char_containers.append(ncc)
             except:
                 pass
+        asset_name = no.get('MapObjectId', {}).get('value', '')
+        correct_hp = _import_hp_map.get(asset_name.lower())
+        if correct_hp is not None and isinstance(nmr.get('hp'), dict):
+            nmr['hp'] = {'current': correct_hp, 'max': correct_hp}
         map_objs.append(no)
     return True
 def clone_base_complete(loaded_level_json, source_base_id, target_guild_id, offset=(8000, 0, 0)):
