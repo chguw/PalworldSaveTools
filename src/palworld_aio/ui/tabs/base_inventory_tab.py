@@ -3556,6 +3556,9 @@ class BaseInventoryTab(QWidget):
             if bcid != base_norm:
                 continue
             obj['MapObjectId']['value'] = new_asset
+            hp_data = mr.get('hp')
+            if isinstance(hp_data, dict) and 'current' in hp_data and 'max' in hp_data:
+                hp_data['current'] = hp_data['max']
             replaced += 1
         if replaced:
             constants.invalidate_container_lookup()
