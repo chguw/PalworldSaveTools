@@ -4,6 +4,7 @@ import json
 import re
 import shutil
 import subprocess
+import glob
 from pathlib import Path
 import io
 import itertools
@@ -30,6 +31,10 @@ def _ensure_venv():
     uv_lock = Path(__file__).resolve().parent.parent.parent / 'uv.lock'
     if uv_lock.exists():
         uv_lock.unlink()
+    for pattern in ['*egg-info', 'src/*egg-info', 'src/palsav/*egg-info']:
+        for match in glob.glob(pattern):
+            if os.path.isdir(match):
+                shutil.rmtree(match, ignore_errors=True)
     if result.returncode == 0:
         print('Environment ready')
         return True

@@ -1,6 +1,5 @@
 import os
 import sys
-from palsav import json_tools
 import traceback
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QScrollArea, QSizePolicy, QSpacerItem, QGridLayout, QApplication, QDialog, QStylePainter, QStyleOptionButton, QStyle
 from PySide6.QtCore import Qt, QSize, Signal, QPropertyAnimation, QEasingCurve, QRectF
@@ -11,15 +10,6 @@ from palworld_aio import constants
 from resource_resolver import resource_path
 from palworld_aio.ui.chrome.styles import ThemeManager
 from ..chrome.sidebar_widget import ICONS
-def load_tool_icons():
-    icon_file = os.path.join(constants.get_src_path(), 'data', 'configs', 'toolicon.json')
-    if not os.path.exists(icon_file):
-        return {}
-    try:
-        data = json_tools.load(icon_file)
-        return data if isinstance(data, dict) else {}
-    except Exception:
-        return {}
 CONVERTING_TOOL_KEYS = ['tool.convert.saves', 'tool.convert.gamepass.steam', 'tool.convert.steamid', 'tool.restore_map']
 MANAGEMENT_TOOL_KEYS = ['tool.slot_injector', 'tool.modify_save', 'tool.character_transfer', 'tool.fix_host_save']
 TOOL_DESCRIPTIONS = {'tool.convert.saves': 'tool.convert.saves.desc', 'tool.convert.gamepass.steam': 'tool.convert.gamepass.steam.desc', 'tool.convert.steamid': 'tool.convert.steamid.desc', 'tool.restore_map': 'tool.restore_map.desc', 'tool.slot_injector': 'tool.slot_injector.desc', 'tool.modify_save': 'tool.modify_save.desc', 'tool.character_transfer': 'tool.character_transfer.desc', 'tool.fix_host_save': 'tool.fix_host_save.desc'}
@@ -245,7 +235,6 @@ class ToolsTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent_window = parent
-        self.tool_icons = load_tool_icons()
         self.tool_buttons = []
         self._section_titles = []
         self._drag_hover_active = False
@@ -359,13 +348,17 @@ class ToolsTab(QWidget):
             self.refresh()
             if hasattr(self, '_stats_frame'):
                 self._stats_frame.setVisible(True)
+    @staticmethod
+    def _safe_list(data: dict, key: str) -> list:
+        return data.get(key, {}).get('value', [])
+
     def _update_stats(self):
         if not hasattr(constants, 'loaded_level_json') or not constants.loaded_level_json:
             return
         wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
-        group_data = wsd.get('GroupSaveDataMap', {}).get('value', [])
-        base_data = wsd.get('BaseCampSaveData', {}).get('value', [])
-        char_data = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
+        group_data = self._safe_list(wsd, 'GroupSaveDataMap')
+        base_data = self._safe_list(wsd, 'BaseCampSaveData')
+        char_data = self._safe_list(wsd, 'CharacterSaveParameterMap')
         total_players = sum((len(g['value']['RawData']['value'].get('players', [])) for g in group_data if g['value']['GroupType']['value']['value'] == 'EPalGroupType::Guild'))
         total_guilds = sum((1 for g in group_data if g['value']['GroupType']['value']['value'] == 'EPalGroupType::Guild'))
         total_bases = len(base_data)
@@ -395,7 +388,7 @@ class ToolsTab(QWidget):
         grid = QGridLayout()
         grid.setSpacing(8)
         for idx, key in enumerate(tool_keys):
-            icon_path = self._get_tool_icon_path(key)
+            icon_path = None
             desc_key = TOOL_DESCRIPTIONS.get(key)
             desc_text = t(desc_key) if desc_key and t else None
             card = ToolCard(t(key) if t else key, t(key) if t else key, desc_text, icon_path)
@@ -408,15 +401,6 @@ class ToolsTab(QWidget):
         grid.setRowStretch(1, 1)
         section_layout.addLayout(grid, stretch=1)
         return section_frame
-    def _get_tool_icon_path(self, tool_key):
-        if tool_key in self.tool_icons:
-            icon_name = self.tool_icons[tool_key]
-            icon_dir = os.path.join(constants.get_src_path(), 'data', 'icon')
-            for ext in ['.ico', '.png']:
-                icon_path = os.path.join(icon_dir, f'{icon_name}{ext}')
-                if os.path.exists(icon_path):
-                    return icon_path
-        return None
     def _import_and_call(self, module_name, function_name, *args):
         try:
             src_path = constants.get_src_path()

@@ -1,4 +1,4 @@
-import os, sys, subprocess, shutil, re, argparse, configparser
+import os, sys, glob, subprocess, shutil, re, argparse, configparser
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 os.chdir(ROOT_DIR)
@@ -50,7 +50,10 @@ def build_with_cx_freeze():
     if os.path.exists('uv.lock'):
         os.remove('uv.lock')
 def clean_build_artifacts():
-    items = ['PalworldSaveTools.egg-info', 'src/PalworldSaveTools.egg-info', 'Backups', 'PST_standalone', 'Logs', 'psp_windows', 'ppe_windows', 'updated_worldmap.png', 'PalDefender', 'XGP_converted_saves', 'saves']
+    items = ['Backups', 'PST_standalone', 'Logs', 'psp_windows', 'ppe_windows', 'updated_worldmap.png', 'PalDefender', 'XGP_converted_saves', 'saves']
+    for pattern in ['*egg-info', 'src/*egg-info', 'src/palsav/*egg-info']:
+        for match in glob.glob(pattern):
+            items.append(match)
     for item in items:
         if os.path.exists(item):
             print(f'Removing {item}...')
@@ -85,6 +88,16 @@ def get_app_version():
             if line.strip().startswith('APP_VERSION'):
                 return line.split('=')[1].strip().strip('"').strip("'")
     return 'unknown'
+def cleanup_build_artifacts():
+    build_dir = 'PST_standalone'
+    if not os.path.exists(build_dir):
+        return
+    for f in ('frozen_application_license.txt', 'README.md', 'license'):
+        p = os.path.join(build_dir, f)
+        if os.path.exists(p):
+            os.remove(p)
+            print(f'Removed {p}')
+
 def create_release_archive():
     version = get_app_version()
     build_dir = 'PST_standalone'
@@ -126,6 +139,7 @@ def main():
     set_standalone_mode(True)
     try:
         build_with_cx_freeze()
+        cleanup_build_artifacts()
         print_logo()
         create_release_archive()
         print_logo()

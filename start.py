@@ -1,5 +1,5 @@
 from __future__ import annotations
-import os, sys, subprocess, shutil, pathlib
+import os, sys, glob, subprocess, shutil, pathlib
 PROJECT_DIR = pathlib.Path(__file__).resolve().parent
 uv_lock = PROJECT_DIR / 'uv.lock'
 if uv_lock.exists():
@@ -45,6 +45,10 @@ def ensure_venv():
     uv_lock = PROJECT_DIR / 'uv.lock'
     if uv_lock.exists():
         uv_lock.unlink()
+    for pattern in ['*egg-info', 'src/*egg-info', 'src/palsav/*egg-info']:
+        for match in glob.glob(pattern):
+            if os.path.isdir(match):
+                shutil.rmtree(match, ignore_errors=True)
     if result.returncode == 0:
         log('Environment ready', GREEN)
         return True

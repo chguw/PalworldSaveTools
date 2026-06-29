@@ -1,4 +1,4 @@
-import sys, os, json, mmap, shutil, subprocess
+import sys, os, json, mmap, shutil, subprocess, glob
 from pathlib import Path
 _SCRIPT_DIR = Path(__file__).resolve().parent
 _PROJECT_DIR = _SCRIPT_DIR.parent.parent
@@ -25,6 +25,10 @@ def _ensure_venv():
     uv_lock = _PROJECT_DIR / 'uv.lock'
     if uv_lock.exists():
         uv_lock.unlink()
+    for pattern in ['*egg-info', 'src/*egg-info', 'src/palsav/*egg-info']:
+        for match in glob.glob(pattern):
+            if os.path.isdir(match):
+                shutil.rmtree(match, ignore_errors=True)
     print('Environment ready')
     return True
 def _load_save_tools():

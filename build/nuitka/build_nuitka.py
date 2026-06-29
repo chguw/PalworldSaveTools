@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 import subprocess
 import shutil
 import re
@@ -74,7 +75,6 @@ def check_nuitka(python_cmd):
 
 def clean_build_artifacts():
     items = [
-        'PalworldSaveTools.egg-info', 'src/PalworldSaveTools.egg-info',
         'Backups', 'Logs',
     ]
     for item in items:
@@ -83,6 +83,12 @@ def clean_build_artifacts():
                 shutil.rmtree(item, ignore_errors=True)
             else:
                 os.remove(item)
+    for pattern in ['*egg-info', 'src/*egg-info', 'src/palsav/*egg-info', 'uv.lock']:
+        for match in glob.glob(pattern):
+            if os.path.isdir(match):
+                shutil.rmtree(match, ignore_errors=True)
+            elif os.path.isfile(match):
+                os.remove(match)
     for root, dirs, files in os.walk('.', topdown=False):
         for d in dirs:
             if d == '__pycache__':
