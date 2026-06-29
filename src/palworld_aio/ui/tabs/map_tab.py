@@ -812,6 +812,11 @@ class MapTab(QWidget):
             wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
             group_map = wsd.get('GroupSaveDataMap', {}).get('value', [])
             base_map = {str(b['key']).replace('-', ''): b['value'] for b in wsd.get('BaseCampSaveData', {}).get('value', [])}
+            char_containers = wsd.get('CharacterContainerSaveData', {}).get('value', [])
+            cont_lookup = {}
+            for cc in char_containers:
+                cid = str(cc['key']['ID']['value']).replace('-', '').lower()
+                cont_lookup[cid] = cc
             tick = get_tick()
             for entry in group_map:
                 try:
@@ -867,7 +872,16 @@ class MapTab(QWidget):
                                 pt_old = palworld_coord.sav_to_map(translation['x'], translation['y'], new=False)
                                 bx_old, by_old = (pt_old.x, pt_old.y)
                                 img_x, img_y = self._to_image_coordinates(bx_new, by_new, self.map_width, self.map_height)
-                                valid_bases.append({'base_id': bid, 'coords': (bx_old, by_old), 'map_coords': (bx_new, by_new), 'img_coords': (img_x, img_y), 'z': translation['z'], 'map_type': 'world', 'raw_x': translation['x'], 'raw_y': translation['y'], 'data': {'key': bid, 'value': base_val}, 'guild_id': gid, 'guild_name': g_val['RawData']['value'].get('guild_name', t('map.unknown.guild') if t else 'Unknown'), 'leader_name': leader_name, 'guild_level': guild_level, 'member_count': member_count, 'total_bases': total_bases, 'base_position': base_position})
+                                pal_count = 0
+                                try:
+                                    wd = base_val.get('WorkerDirector', {}).get('value', {}).get('RawData', {}).get('value', {})
+                                    wc_id = str(wd.get('container_id', '')).replace('-', '').lower()
+                                    if wc_id and wc_id in cont_lookup:
+                                        slots = cont_lookup[wc_id]['value'].get('Slots', {}).get('value', {}).get('values', [])
+                                        pal_count = sum(1 for s in slots if s is not None)
+                                except:
+                                    pass
+                                valid_bases.append({'base_id': bid, 'coords': (bx_old, by_old), 'map_coords': (bx_new, by_new), 'img_coords': (img_x, img_y), 'z': translation['z'], 'map_type': 'world', 'raw_x': translation['x'], 'raw_y': translation['y'], 'data': {'key': bid, 'value': base_val}, 'guild_id': gid, 'guild_name': g_val['RawData']['value'].get('guild_name', t('map.unknown.guild') if t else 'Unknown'), 'leader_name': leader_name, 'guild_level': guild_level, 'member_count': member_count, 'total_bases': total_bases, 'base_position': base_position, 'pal_count': pal_count})
                                 base_position += 1
                         except:
                             pass
@@ -1114,8 +1128,9 @@ class MapTab(QWidget):
         total_bases = base_data.get('total_bases', 0)
         base_position = base_data.get('base_position', 1)
         base_id = str(base_data.get('base_id', ''))
+        pal_count = base_data.get('pal_count', 0)
         coords = base_data.get('coords', (0, 0))
-        info = f"\n        <b>{guild_name}</b><br>\n        {(t('map.info.level') if t else 'Level:')} {guild_level}<br>\n        {(t('map.info.admin') if t else 'Admin:')} {leader_name}<br>\n        {(t('map.info.members') if t else 'Members:')} {member_count}<br>\n        {(t('map.info.base_camps') if t else 'Base Camps:')} {base_position}/{total_bases}<br>\n        {(t('map.info.base_id') if t else 'Base ID:')} {base_id}<br>\n        {(t('map.info.location') if t else 'Location:')} X:{int(coords[0])},Y:{int(coords[1])}\n        "
+        info = f"\n        <b>{guild_name}</b><br>\n        {(t('map.info.level') if t else 'Level:')} {guild_level}<br>\n        {(t('map.info.admin') if t else 'Admin:')} {leader_name}<br>\n        {(t('map.info.members') if t else 'Members:')} {member_count}<br>\n        {(t('map.info.base_camps') if t else 'Base Camps:')} {base_position}/{total_bases}<br>\n        {(t('map.info.base_id') if t else 'Base ID:')} {base_id}<br>\n        {(t('map.info.base_pals') if t else 'Base Pals:')} {pal_count}<br>\n        {(t('map.info.location') if t else 'Location:')} X:{int(coords[0])},Y:{int(coords[1])}\n        "
         self.info_label.setText(info.strip())
     def _on_marker_clicked(self, data, marker=None):
         if 'player_uid' in data:

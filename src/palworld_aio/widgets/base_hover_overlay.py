@@ -47,6 +47,10 @@ class BaseHoverOverlay(QWidget):
         self.base_id_label.setObjectName('hoverDetailLabel')
         self.base_id_label.setFont(QFont(constants.FONT_FAMILY, 9))
         inner_layout.addWidget(self.base_id_label)
+        self.base_pals_label = QLabel()
+        self.base_pals_label.setObjectName('hoverDetailLabel')
+        self.base_pals_label.setFont(QFont(constants.FONT_FAMILY, 9))
+        inner_layout.addWidget(self.base_pals_label)
         self.coords_label = QLabel()
         self.coords_label.setObjectName('hoverDetailLabel')
         self.coords_label.setFont(QFont(constants.FONT_FAMILY, 9))
@@ -87,6 +91,9 @@ class BaseHoverOverlay(QWidget):
         self.bases_label.show()
         self.base_id_label.setText(f"{(t('map.info.base_id') if t else 'Base ID:')} {base_id}")
         self.base_id_label.show()
+        pal_count = base_data.get('pal_count', 0)
+        self.base_pals_label.setText(f"{(t('map.info.base_pals') if t else 'Base Pals:')} {pal_count}")
+        self.base_pals_label.show()
         self.coords_label.setText(f"{(t('map.info.location') if t else 'Location:')} X:{int(coords[0])},Y:{int(coords[1])}")
         self.coords_label.show()
         self.uid_label.hide()
@@ -127,6 +134,7 @@ class BaseHoverOverlay(QWidget):
         self.coords_label.show()
         self.uid_label.hide()
         self.guild_id_label.hide()
+        self.base_pals_label.hide()
         self.adjustSize()
         offset_x = 20
         offset_y = -self.height() // 2

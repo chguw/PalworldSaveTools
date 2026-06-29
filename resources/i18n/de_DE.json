@@ -1666,5 +1666,6 @@
     "docs.tours.description": "Interaktiver Leitfaden durch die Registerkarte {tab_name}",
     "docs.tours.title": "Touren",
     "tab_guide.section.docs.title": "📖 Wiki-Nachschlagewerk",
-    "tab_guide.section.docs.toc": "📖 Dokumente"
+    "tab_guide.section.docs.toc": "📖 Dokumente",
+    "map.info.base_pals": "Basisfreunde:"
 }

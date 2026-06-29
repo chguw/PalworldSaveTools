@@ -1636,5 +1636,6 @@
     "docs.tours.description": "Guía interactiva a través de la pestaña {tab_name}",
     "docs.tours.title": "Visitas guiadas",
     "tab_guide.section.docs.title": "📖 Referencia Wiki",
-    "tab_guide.section.docs.toc": "📖 Documentos"
+    "tab_guide.section.docs.toc": "📖 Documentos",
+    "map.info.base_pals": "Amigos básicos:"
 }

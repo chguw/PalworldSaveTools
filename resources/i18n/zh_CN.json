@@ -1644,5 +1644,6 @@
     "docs.tours.description": "通过 {tab_name} 选项卡进行互动指南",
     "docs.tours.title": "旅游",
     "tab_guide.section.docs.title": "📖 Wiki参考资料",
-    "tab_guide.section.docs.toc": "📖 文档"
+    "tab_guide.section.docs.toc": "📖 文档",
+    "map.info.base_pals": "基础伙伴："
 }

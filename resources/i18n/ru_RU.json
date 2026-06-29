@@ -1605,7 +1605,7 @@
     "base_inventory.replace_no_building_parts": "На этой базе не найдено никаких строительных деталей.",
     "base_inventory.replace_source_label": "Заменять:",
     "base_inventory.replace_target_label": "С:",
-    "base_inventory.replace_confirm": "Replace {count} {old_name} with {new_name}?",
+    "base_inventory.replace_confirm": "Заменить {count} {old_name} на {new_name}?",
     "base_inventory.replace_success": "Заменено структур: {count}.",
     "base_inventory.replace_skip_current": "Тот же элемент",
     "stat_tooltip.hp": "HP",
@@ -1613,7 +1613,7 @@
     "stat_tooltip.atk": "Атака",
     "stat_tooltip.atk_desc": "Атака Пала.\nНаносимый урон увеличивается по мере\nАтака увеличивается.",
     "stat_tooltip.def": "Оборона",
-    "stat_tooltip.def_desc": "Защита Пала.\nПолученный урон уменьшается по мере\nЗащита увеличивается.",
+    "stat_tooltip.def_desc": "Защита Пала.\nПолучаемый урон уменьшается по мере\nЗащита увеличивается.",
     "stat_tooltip.ws": "Скорость работы",
     "stat_tooltip.ws_desc": "Скорость работы Пала.\nВлияет на эффективность работы\nработа над различными задачами\nна базе.",
     "stat_tooltip.bonus_trust": "Бонус от доверия +{value}",
@@ -1640,5 +1640,6 @@
     "docs.tours.description": "Интерактивное руководство по вкладке {tab_name}",
     "docs.tours.title": "Туры",
     "tab_guide.section.docs.title": "📖 Wiki справочник",
-    "tab_guide.section.docs.toc": "📖 Документы"
+    "tab_guide.section.docs.toc": "📖 Документы",
+    "map.info.base_pals": "Базовые друзья:"
 }

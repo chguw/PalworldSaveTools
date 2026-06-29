@@ -450,7 +450,7 @@ def update_pal_data():
     def _get_pal_name(name_key: str) -> str | None:
         n = _lookup_l10n(name_key)
         return n if n and _is_valid_name(n) else None
-    PREFIX_MAP = {'BOSS_': 'Boss', 'POLICE_': 'Police', 'PREDATOR_': 'Predator', 'GYM_': 'Gym', 'RAID_': 'Raid', 'SUMMON_': 'Summon'}
+    PREFIX_MAP = {'BOSS_': 'Boss', 'POLICE_': 'Police', 'PREDATOR_': 'Predator', 'GYM_': 'Gym', 'RAID_': 'Raid', 'SUMMON_': 'Summon', 'QUEST_': 'Quest'}
     def _get_base_l10n_name(raw_id: str) -> str | None:
         direct = _get_pal_name(f'PAL_NAME_{raw_id}')
         if direct:
@@ -539,10 +539,20 @@ def update_pal_data():
         processed_ids.add(pal_id_lower)
         monster_row = monster_rows[pal_id_lower] if pal_id_lower in monster_rows else monster_rows.get(pal_id, {})
         base_pal_id = pal_id
-        if pal_id.startswith('BOSS_'):
-            base_pal_id = pal_id[5:]
-        elif pal_id.startswith('POLICE_'):
-            base_pal_id = pal_id[7:]
+        pal_id_upper = pal_id.upper()
+        for prefix in PREFIX_MAP:
+            if pal_id_upper.startswith(prefix):
+                base_pal_id = pal_id[len(prefix):]
+                break
+        m = re.search(r'_\d+$', base_pal_id)
+        if m: base_pal_id = base_pal_id[:m.start()]
+        if base_pal_id not in icon_rows and '_' in base_pal_id:
+            _suffix = base_pal_id
+            while '_' in _suffix:
+                _suffix = _suffix.split('_', 1)[1]
+                if _suffix in icon_rows:
+                    base_pal_id = _suffix
+                    break
         base_icon = None
         if base_pal_id != pal_id and base_pal_id in icon_rows:
             base_icon_data = icon_rows[base_pal_id].get('Icon', {})
@@ -554,6 +564,8 @@ def update_pal_data():
         true_base = base_pal_id
         for _s in ['_otomo','_BossRush']:
             if true_base.endswith(_s): true_base = true_base[:-len(_s)]; break
+        m = re.search(r'_\d+$', true_base)
+        if m: true_base = true_base[:m.start()]
         icon_path = None
         if not base_icon:
             search_names = [f'T_{pal_id}_icon_normal',f'T_{pal_id}_icon',f'T_{pal_id}',f'T_{base_pal_id}_icon_normal',f'T_{base_pal_id}']
@@ -576,7 +588,7 @@ def update_pal_data():
                 parts.pop()
                 candidates = ['_'.join(parts)]
                 stripped = candidates[0]
-                for pfx in ('BOSS_', 'POLICE_', 'PREDATOR_', 'GYM_', 'RAID_', 'SUMMON_'):
+                for pfx in PREFIX_MAP:
                     if stripped.startswith(pfx):
                         candidates.append(stripped[len(pfx):])
                         break

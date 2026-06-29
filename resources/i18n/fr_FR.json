@@ -1595,7 +1595,7 @@
     "stat_tooltip.hp": "HP",
     "stat_tooltip.hp_desc": "Les HP de mon pote.\nSurvit plus longtemps que\nLes PV augmentent.",
     "stat_tooltip.atk": "Attaque",
-    "stat_tooltip.atk_desc": "L'attaque de mon copain.\nLes dégâts infligés augmentent à mesure que\nL'attaque augmente.",
+    "stat_tooltip.atk_desc": "L'attaque de mon copain.\nLes dégâts infligés augmentent à mesure\nL'attaque augmente.",
     "stat_tooltip.def": "Défense",
     "stat_tooltip.def_desc": "La défense de mon copain.\nLes dégâts subis diminuent à mesure que\nLa défense augmente.",
     "stat_tooltip.ws": "Vitesse de travail",
@@ -1604,7 +1604,7 @@
     "stat_tooltip.bonus_awakening": "Bonus d'éveil + {valeur}",
     "stat_tooltip.enhance_souls": "Améliorer les âmes + {percent} %",
     "docs.tab": "Documents",
-    "docs.wiki": "Wiki",
+    "docs.wiki": "Wikia",
     "docs.guides": "Guides",
     "docs.tours": "Visites",
     "docs.wiki.pals": "Copains",
@@ -1624,5 +1624,6 @@
     "docs.tours.description": "Guide interactif via l'onglet {tab_name}",
     "docs.tours.title": "Visites",
     "tab_guide.section.docs.title": "📖 Référence Wiki",
-    "tab_guide.section.docs.toc": "📖 Documents"
+    "tab_guide.section.docs.toc": "📖 Documents",
+    "map.info.base_pals": "Copains de base :"
 }

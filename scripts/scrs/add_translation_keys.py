@@ -82,6 +82,7 @@ NEW_TRANSLATIONS = {
     'docs.tours.start': 'Start Tour',
     'docs.tours.description': 'Interactive guide through the {tab_name} tab',
     'docs.tours.title': 'Tours',
+    'map.info.base_pals': 'Base Pals:',
 }
 OLD_KEYS = [
     'inventory.add_all_effigies',
@@ -107,7 +108,7 @@ def remove_old_keys_from_all():
             data = json.load(f)
         removed = [key for key in OLD_KEYS if data.pop(key, None) is not None]
         with open(lang_file, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+            json.dump(data, f, ensure_ascii=False, indent=4)
         if removed:
             print(f'  {lang_code}: removed {len(removed)} keys')
 def add_english_keys():
@@ -117,7 +118,7 @@ def add_english_keys():
     for key, english_text in NEW_TRANSLATIONS.items():
         data[key] = english_text
     with open(lang_file, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, indent=4)
 def translate_text(text: str, target_lang: str) -> str:
     translator = GoogleTranslator(source='en', target=target_lang)
     return translator.translate(text)
@@ -136,7 +137,7 @@ def add_keys_to_language(lang_code: str, lang_info: dict) -> bool:
                 data[key] = english_text
                 had_failure = True
         with open(lang_file, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+            json.dump(data, f, ensure_ascii=False, indent=4)
         return not had_failure
     except Exception as e:
         print(f'  [ERROR] File-level failure: {e}')

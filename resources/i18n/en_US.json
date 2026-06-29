@@ -1930,5 +1930,6 @@
     "docs.tours.description": "Interactive guide through the {tab_name} tab",
     "docs.tours.title": "Tours",
     "tab_guide.section.docs.title": "📖 Wiki Reference",
-    "tab_guide.section.docs.toc": "📖 Docs"
+    "tab_guide.section.docs.toc": "📖 Docs",
+    "map.info.base_pals": "Base Pals:"
 }

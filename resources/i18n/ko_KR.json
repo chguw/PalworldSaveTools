@@ -1591,7 +1591,7 @@
     "base_inventory.max_all_confirm": "이 기지에 있는 모든 일하는 친구의 모든 능력치(재능, 순위, 우정, 각성, 레벨 80, 업무 적합성)를 최대화하시겠습니까?",
     "base_inventory.max_all_success": "최대 {count}명의 친구가 있습니다.",
     "edit_pals.restore_all_confirm": "파티에 있는 모든 친구와 모든 팔박스 페이지에 대한 HP, SAN 및 배고픔을 복원하시겠습니까? 질병도 치료될 것입니다.",
-    "edit_pals.max_all_confirm": "파티의 모든 친구와 모든 팔박스 페이지의 모든 통계(재능, 순위, 우정, 각성, 레벨 80, 업무 적합성)를 최대화하시겠습니까?",
+    "edit_pals.max_all_confirm": "파티의 모든 친구와 모든 팔박스 페이지의 모든 통계(재능, 순위, 우정, 각성, 레벨 80, 작업 적합성)를 최대화하시겠습니까?",
     "inventory.max_all_abilities": "모든 능력 최대화",
     "inventory.max_all_abilities_confirm.title": "모든 능력 최대화",
     "inventory.max_all_abilities_confirm.msg": "이 플레이어의 모든 유물 능력을 최대화하시겠습니까?",
@@ -1641,5 +1641,6 @@
     "docs.tours.description": "{tab_name} 탭을 통한 대화형 가이드",
     "docs.tours.title": "투어",
     "tab_guide.section.docs.title": "📖 Wiki 참조",
-    "tab_guide.section.docs.toc": "📖 문서"
+    "tab_guide.section.docs.toc": "📖 문서",
+    "map.info.base_pals": "기본 친구:"
 }
