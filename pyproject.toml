@@ -6,7 +6,7 @@ name = "PalworldSaveTools"
 version="2.0.0"
 description = "All-in-one tool for fixing/transferring/editing Palworld saves"
 readme = "README.md"
-license = "GPL-3.0-or-later"
+license = "MIT"
 authors = [{ name = "Pylar" }]
 requires-python = ">=3.11"
 dependencies = [
