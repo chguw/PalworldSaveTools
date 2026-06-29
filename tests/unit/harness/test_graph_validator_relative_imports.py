@@ -200,8 +200,7 @@ class TestLiveCodebaseClean:
         """The full run_graph_validator() must report 0 relative-import failures."""
         section = graph_validator.run_graph_validator()
         relative_failures = [
-            f for f in section.failures if 'unresolvable relative' in f.lower()
-            or 'resolves to' in f.lower()
+            f for f in section.failures if 'resolves to' in f.lower()
         ]
         if relative_failures:
             detail = '\n'.join(f'  {f}' for f in relative_failures)

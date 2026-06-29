@@ -94,7 +94,7 @@ def gvasfile_to_sav(gvas_file, path):
 class GvasFileWrapper:
     def __init__(self, gvas_file):
         self._gvas_file = gvas_file
-    def __getitem__(self, key):
+    def __getitem__(self, key: str):
         if key == 'properties':
             return self._gvas_file.properties
         elif key == 'header':
@@ -139,7 +139,8 @@ def sav_to_gvas_wrapper(path):
     return GvasFileWrapper(g)
 def wrapper_to_sav(wrapper, path):
     gvasfile_to_sav(wrapper.gvas_file, path)
-def extract_value(data, key, default_value=''):
+from typing import Any
+def extract_value(data, key, default_value: Any = ''):
     value = data.get(key, default_value)
     if isinstance(value, dict):
         value = value.get('value', default_value)

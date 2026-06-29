@@ -279,6 +279,149 @@ def _check_relative_imports_resolve(files: list[Path]) -> list[str]:
     return violations
 
 
+def _collect_module_level_names(tree: ast.Module) -> set[str]:
+    """Collect names defined/imported at module top level (NOT inside functions/classes)."""
+    names: set[str] = set()
+    for node in ast.iter_child_nodes(tree):
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    names.add(alias.asname or alias.name.split('.')[0])
+            else:
+                # from X import *  — can't statically resolve; return empty set to skip file
+                if any(a.name == '*' for a in node.names):
+                    return set()
+                for alias in node.names:
+                    names.add(alias.asname or alias.name)
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            names.add(node.name)
+        elif isinstance(node, ast.Assign):
+            for t in node.targets:
+                if isinstance(t, ast.Name):
+                    names.add(t.id)
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            names.add(node.target.id)
+        elif isinstance(node, ast.NamedExpr) and isinstance(node.target, ast.Name):
+            names.add(node.target.id)
+    return names
+
+
+def _collect_local_names(func_node: ast.FunctionDef | ast.AsyncFunctionDef) -> set[str]:
+    """Collect names defined inside a function (imports, params, assigns, except-as, comprehensions, for-loops)."""
+    names: set[str] = set()
+    for sub in ast.walk(func_node):
+        if isinstance(sub, ast.Import):
+            for alias in sub.names:
+                names.add(alias.asname or alias.name.split('.')[0])
+        elif isinstance(sub, ast.ImportFrom):
+            if any(a.name == '*' for a in sub.names):
+                continue
+            for alias in sub.names:
+                names.add(alias.asname or alias.name)
+        elif isinstance(sub, ast.ExceptHandler) and sub.name:
+            names.add(sub.name)
+        elif isinstance(sub, ast.Assign):
+            for t in sub.targets:
+                if isinstance(t, ast.Name):
+                    names.add(t.id)
+                elif isinstance(t, (ast.List, ast.Tuple)):
+                    for elt in ast.walk(t):
+                        if isinstance(elt, ast.Name) and isinstance(elt.ctx, ast.Store):
+                            names.add(elt.id)
+        elif isinstance(sub, ast.AnnAssign) and isinstance(sub.target, ast.Name):
+            names.add(sub.target.id)
+        elif isinstance(sub, (ast.For, ast.AsyncFor)):
+            target = sub.target
+            if isinstance(target, ast.Name):
+                names.add(target.id)
+            elif isinstance(target, (ast.List, ast.Tuple)):
+                for elt in ast.walk(target):
+                    if isinstance(elt, ast.Name) and isinstance(elt.ctx, ast.Store):
+                        names.add(elt.id)
+        elif isinstance(sub, ast.comprehension):
+            target = sub.target
+            if isinstance(target, ast.Name):
+                names.add(target.id)
+            elif isinstance(target, (ast.List, ast.Tuple)):
+                for elt in ast.walk(target):
+                    if isinstance(elt, ast.Name) and isinstance(elt.ctx, ast.Store):
+                        names.add(elt.id)
+    for arg in func_node.args.args + func_node.args.posonlyargs + func_node.args.kwonlyargs:
+        names.add(arg.arg)
+    if func_node.args.vararg:
+        names.add(func_node.args.vararg.arg)
+    if func_node.args.kwarg:
+        names.add(func_node.args.kwarg.arg)
+    return names
+
+
+def _check_missing_imports(files: list[Path]) -> list[str]:
+    """Check src/ .py files for names used without being imported or defined.
+
+    Walks each file's AST, collects all names brought into scope via module-level
+    and local imports, function/class defs, assigns, and function params.  Flags
+    any ``ast.Name`` with ``Load`` context that isn't resolvable to any of those,
+    a built-in, or a known special name (self, cls, True, False, None, _).
+
+    Designed to catch bugs like ``fix_illegal_pals_in_save`` using ``resolve_name``
+    without importing it — which the relative-import resolver can't catch because
+    the import path itself is valid, it's just missing entirely.
+    """
+    import builtins
+    _BUILTINS = set(dir(builtins))
+    _ALWAYS_OK = {'self', 'cls', '_', 'True', 'False', 'None', 'NotImplemented', 'Ellipsis', '__debug__', '__file__'}
+
+    violations: list[str] = []
+
+    for f in files:
+        try:
+            rel = f.relative_to(SRC_DIR)
+        except ValueError:
+            continue
+        # skip build artifacts and installed workspace packages
+        if 'build' in rel.parts or rel.parts[0] in _INSTALLED_PACKAGES:
+            continue
+
+        try:
+            tree = ast.parse(f.read_text(encoding='utf-8', errors='replace'))
+        except SyntaxError:
+            continue
+
+        if not isinstance(tree, ast.Module):
+            continue
+
+        module_names = _collect_module_level_names(tree)
+        if not module_names:
+            continue  # has star import — can't statically check
+
+        # ── walk each function body checking name usage ──────
+        # Only check top-level functions (skip nested to reduce noise)
+        for func_node in ast.iter_child_nodes(tree):
+            if not isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+
+            local_names = _collect_local_names(func_node)
+
+            for sub in ast.walk(func_node):
+                if not isinstance(sub, ast.Name):
+                    continue
+                if not isinstance(sub.ctx, ast.Load):
+                    continue
+                name = sub.id
+                if name in _BUILTINS or name in _ALWAYS_OK:
+                    continue
+                if name in module_names or name in local_names:
+                    continue
+                try:
+                    rel = f.relative_to(PROJECT_ROOT)
+                except ValueError:
+                    rel = f
+                violations.append(
+                    f'{rel}:{sub.lineno}: name "{name}" is not imported or defined in scope'
+                )
+    return violations
+
+
 def run_graph_validator() -> ReportSection:
     section = ReportSection('Import Graph')
     files = _collect_py_files()
@@ -323,11 +466,20 @@ def run_graph_validator() -> ReportSection:
         for v in relative_failures:
             section.failures.append(f'  {v}')
 
+    missing_imports = _check_missing_imports(files)
+    if missing_imports:
+        section.warnings.append(
+            f'{len(missing_imports)} missing import(s):'
+        )
+        for v in missing_imports:
+            section.warnings.append(f'  {v}')
+
     module_count = len(adj)
     d = (
         f'{module_count} modules scanned, {len(cycles)} cycle(s), '
         f'{len(purity_violations)} purity violation(s), '
-        f'{len(relative_failures)} unresolvable relative import(s)'
+        f'{len(relative_failures)} unresolvable relative import(s), '
+        f'{len(missing_imports)} missing import(s)'
     )
     if startup_warnings:
         d += f', {len(startup_warnings)} startup warning(s)'

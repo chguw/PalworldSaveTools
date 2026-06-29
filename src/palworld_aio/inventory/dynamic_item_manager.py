@@ -178,7 +178,7 @@ class DynamicItemManager:
             return True
         except Exception as e:
             return False
-    def sync_with_save_data(self, save_data: Dict[str, Any]) -> None:
+    def sync_with_save_data(self, save_data) -> None:
         self.registry.clear()
         wsd = save_data.get('properties', {}).get('worldSaveData', {}).get('value', {})
         dynamic_items = wsd.get('DynamicItemSaveData', {}).get('value', {}).get('values', [])

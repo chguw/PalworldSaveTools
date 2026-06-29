@@ -163,8 +163,6 @@ class SaveManager(QObject):
         constants.PLAYER_PAL_COUNTS = player_pals_count
         playerdir = os.path.join(constants.current_save_path, 'Players')
         self._process_scan_log(data_source, playerdir, log_folder, guild_name_map, base_path, illegal_pals_by_owner, owner_nicknames)
-        from palworld_aio.validation.engine import snapshot
-        snapshot()
         return True
     def save_changes(self, parent=None):
         if not constants.current_save_path or not constants.loaded_level_json:
@@ -195,6 +193,8 @@ class SaveManager(QObject):
     def _sanitize_for_alignment(self, text):
         return re.sub('[^\\x00-\\x7F\\u00C0-\\u017F\\u0080-\\u00BF]', '', text)
     def _build_player_levels(self):
+        if not constants.loaded_level_json:
+            return
         char_map = constants.loaded_level_json['properties']['worldSaveData']['value'].get('CharacterSaveParameterMap', {}).get('value', [])
         uid_level_map = defaultdict(lambda: '?')
         uid_entry_map = {}
@@ -307,14 +307,24 @@ class SaveManager(QObject):
             rk = extract_value(raw, 'Rank', 1)
             gv = raw.get('Gender', {}).get('value', {}).get('value', '')
             ginfo = {'EPalGenderType::Male': 'Male', 'EPalGenderType::Female': 'Female'}.get(gv, 'Unknown')
-            p_list = raw.get('PassiveSkillList', {}).get('value', {}).get('values', [])
+            ps_raw = raw.get('PassiveSkillList')
+            if isinstance(ps_raw, dict):
+                ps_v = ps_raw.get('value')
+                p_list = ps_v.get('values', []) if isinstance(ps_v, dict) else (ps_v if isinstance(ps_v, list) else [])
+            else:
+                p_list = []
             for s in p_list:
                 if s.lower() not in PASSMAP:
                     miss['Passives'].add(s)
                     skill_name = s
                     invalid_objects['Invalid Passives'][skill_name] += 1
             pskills = [PASSMAP.get(s.lower(), s) for s in p_list]
-            e_list = raw.get('EquipWaza', {}).get('value', {}).get('values', [])
+            eq_raw = raw.get('EquipWaza')
+            if isinstance(eq_raw, dict):
+                eq_v = eq_raw.get('value')
+                e_list = eq_v.get('values', []) if isinstance(eq_v, dict) else (eq_v if isinstance(eq_v, list) else [])
+            else:
+                e_list = []
             for w in e_list:
                 w_short = w.split('::')[-1]
                 if w_short.lower() not in SKILLMAP:
@@ -322,7 +332,12 @@ class SaveManager(QObject):
                     skill_name = w
                     invalid_objects['Invalid Active Skills'][skill_name] += 1
             active = [SKILLMAP.get(w.split('::')[-1].lower(), w.split('::')[-1]) for w in e_list]
-            m_list = raw.get('MasteredWaza', {}).get('value', {}).get('values', [])
+            mw_raw = raw.get('MasteredWaza')
+            if isinstance(mw_raw, dict):
+                mw_v = mw_raw.get('value')
+                m_list = mw_v.get('values', []) if isinstance(mw_v, dict) else (mw_v if isinstance(mw_v, list) else [])
+            else:
+                m_list = []
             for w in m_list:
                 w_short = w.split('::')[-1]
                 if w_short.lower() not in SKILLMAP:
@@ -972,11 +987,26 @@ def _process_dps_scan_worker(args):
                 ra = rank_attack * 3
                 rd = rank_defense * 3
                 iv_str = f'HP: {talent_hp}(+{rh}%),ATK: {talent_shot}(+{ra}%),DEF: {talent_defense}(+{rd}%)'
-                p_list = sp.get('PassiveSkillList', {}).get('value', {}).get('values', [])
+                ps_raw = sp.get('PassiveSkillList')
+                if isinstance(ps_raw, dict):
+                    ps_v = ps_raw.get('value')
+                    p_list = ps_v.get('values', []) if isinstance(ps_v, dict) else (ps_v if isinstance(ps_v, list) else [])
+                else:
+                    p_list = []
                 pskills = [PASSMAP.get(s.lower(), s) for s in p_list]
-                e_list = sp.get('EquipWaza', {}).get('value', {}).get('values', [])
+                eq_raw = sp.get('EquipWaza')
+                if isinstance(eq_raw, dict):
+                    eq_v = eq_raw.get('value')
+                    e_list = eq_v.get('values', []) if isinstance(eq_v, dict) else (eq_v if isinstance(eq_v, list) else [])
+                else:
+                    e_list = []
                 active = [SKILLMAP.get(w.split('::')[-1].lower(), w.split('::')[-1]) for w in e_list]
-                m_list = sp.get('MasteredWaza', {}).get('value', {}).get('values', [])
+                mw_raw = sp.get('MasteredWaza')
+                if isinstance(mw_raw, dict):
+                    mw_v = mw_raw.get('value')
+                    m_list = mw_v.get('values', []) if isinstance(mw_v, dict) else (mw_v if isinstance(mw_v, list) else [])
+                else:
+                    m_list = []
                 learned = [SKILLMAP.get(w.split('::')[-1].lower(), w.split('::')[-1]) for w in m_list]
                 slot_id = sp.get('SlotId', {}).get('value', {})
                 container_id = str(slot_id.get('ContainerId', {}).get('value', {}).get('ID', {}).get('value', 'Unknown')).lower()

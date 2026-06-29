@@ -46,7 +46,7 @@ def get_icon_path():
 ICON_PATH = get_icon_path()
 EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'deletion_exclusions.json')
 ZONE_EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'zone_exclusions.json')
-current_save_path = None
+current_save_path: str | None = None
 loaded_level_json = None
 original_loaded_level_json = None
 backup_save_path = None
