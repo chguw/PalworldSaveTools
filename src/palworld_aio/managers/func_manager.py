@@ -1558,6 +1558,14 @@ def repair_structures(parent=None):
     map_objs = wsd.get('MapObjectSaveData', {}).get('value', {}).get('values', [])
     if not map_objs:
         return {'total': 0, 'repaired': 0}
+    from palworld_aio.inventory.base_inventory_manager import load_structure_data
+    sd = load_structure_data()
+    asset_hp_map = {}
+    for s in sd.get('structures', []):
+        asset = s.get('asset', '')
+        hp = s.get('hp')
+        if asset and hp is not None:
+            asset_hp_map[asset.lower()] = hp
     total_structures = 0
     repaired_structures = 0
     for obj in map_objs:
@@ -1571,6 +1579,11 @@ def repair_structures(parent=None):
                 if isinstance(hp_data, dict) and 'current' in hp_data and ('max' in hp_data):
                     current = hp_data['current']
                     max_hp = hp_data['max']
+                    asset_name = obj.get('MapObjectId', {}).get('value', '')
+                    correct_hp = asset_hp_map.get(asset_name.lower())
+                    if correct_hp is not None and max_hp != correct_hp:
+                        max_hp = correct_hp
+                        hp_data['max'] = correct_hp
                     if current < max_hp:
                         hp_data['current'] = max_hp
                         repaired_structures += 1
