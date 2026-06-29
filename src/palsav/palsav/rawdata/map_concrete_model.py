@@ -46,6 +46,7 @@ def decode_bytes(parent_reader: FArchiveReader, m_bytes: Sequence[int], object_i
                 data['unknown_after_lock'] = reader.byte_list(7)
             case 'PalMapObjectPalBoothModel':
                 data['leading_bytes'] = reader.byte_list(4)
+                data['private_lock_player_uid'] = reader.guid()
                 data['trade_infos'] = reader.tarray(pal_pal_booth_trade_info_read)
                 data['trailing_bytes'] = reader.read_to_end()
             case 'PalMapObjectMultiHatchingEggModel':
@@ -197,6 +198,7 @@ def encode_bytes(p: Optional[dict[str, Any]]) -> bytes:
             writer.write(coerce_bytes(p['unknown_after_lock']))
         case 'PalMapObjectPalBoothModel':
             writer.write(coerce_bytes(p['leading_bytes']))
+            writer.guid(p['private_lock_player_uid'])
             writer.tarray(pal_pal_booth_trade_info_writer, p['trade_infos'])
             writer.write(coerce_bytes(p['trailing_bytes']))
         case 'PalMapObjectMultiHatchingEggModel':
