@@ -864,6 +864,7 @@ class ReplaceStructureDialog(QDialog):
         self.right_list.viewport().setAcceptDrops(False)
         self.right_list.setStyleSheet('QListWidget { background: transparent; border: 1px solid rgba(125,211,252,0.15); border-radius: 8px; } QListWidget::item { border-radius: 6px; padding: 4px; } QListWidget::item:selected { background: rgba(125,211,252,0.15); border: 1px solid #7DD3FC; } QListWidget::item:hover { background: rgba(125,211,252,0.06); } QListWidget::item:disabled { color: #555; }')
         self.right_list.itemClicked.connect(self._on_right_clicked)
+        self.right_list.itemDoubleClicked.connect(self._on_confirm)
         right_layout.addWidget(self.right_list)
 
         content_layout.addWidget(left_widget, 1)
