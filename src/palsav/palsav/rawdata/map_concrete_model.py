@@ -45,10 +45,15 @@ def decode_bytes(parent_reader: FArchiveReader, m_bytes: Sequence[int], object_i
                 data['is_private_lock'] = reader.byte()
                 data['unknown_after_lock'] = reader.byte_list(7)
             case 'PalMapObjectPalBoothModel':
-                data['unknown_prefix'] = reader.byte_list(224)
-                data['unknown_mid'] = reader.byte_list(6)
-                data['is_private_lock'] = reader.byte()
-                data['trailing_bytes'] = reader.byte_list(11)
+                data['leading_bytes'] = reader.byte_list(4)
+                rest = reader.read_to_end()
+                if len(rest) >= 18:
+                    data['unknown_prefix'] = rest[:-18]
+                    data['unknown_mid'] = rest[-18:-12]
+                    data['is_private_lock'] = rest[-12]
+                    data['trailing_bytes'] = rest[-11:]
+                else:
+                    data['unknown_prefix'] = rest
             case 'PalMapObjectMultiHatchingEggModel':
                 data['unknown_bytes'] = reader.read_to_end()
             case 'PalMapObjectEnergyStorageModel':
@@ -197,10 +202,14 @@ def encode_bytes(p: Optional[dict[str, Any]]) -> bytes:
             writer.byte(p['is_private_lock'])
             writer.write(coerce_bytes(p['unknown_after_lock']))
         case 'PalMapObjectPalBoothModel':
-            writer.write(coerce_bytes(p['unknown_prefix']))
-            writer.write(coerce_bytes(p['unknown_mid']))
-            writer.byte(p['is_private_lock'])
-            writer.write(coerce_bytes(p['trailing_bytes']))
+            if 'leading_bytes' in p:
+                writer.write(coerce_bytes(p['leading_bytes']))
+                writer.write(coerce_bytes(p['unknown_prefix']))
+            else:
+                writer.write(coerce_bytes(p['unknown_prefix']))
+            writer.write(coerce_bytes(p.get('unknown_mid', [])))
+            writer.byte(p.get('is_private_lock', 0))
+            writer.write(coerce_bytes(p.get('trailing_bytes', [])))
         case 'PalMapObjectMultiHatchingEggModel':
             writer.write(coerce_bytes(p['unknown_bytes']))
         case 'PalMapObjectEnergyStorageModel':
