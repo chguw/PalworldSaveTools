@@ -23,31 +23,39 @@ from .icons import _strip_prefix_label
 
 class PalInfoHandlerMixin:
     def eventFilter(self, obj, event):
-        if event.type() == QEvent.Type.MouseButtonPress and event.button() == Qt.LeftButton:
-            if obj is self.name_lbl:
-                self._on_name_click()
-                return True
-            if hasattr(obj, '_star_idx'):
-                self._on_star_click(obj._star_idx)
-                return True
-            if obj is self.level_num_lbl:
-                self._on_level_click()
-                return True
-            if obj is self.trust_bar or obj is self.trust_icon:
-                self._on_trust_click()
-                return True
-            if obj in (self.ivs_hp_lbl, self.ivs_atk_lbl, self.ivs_def_lbl):
-                self._on_talent_click(obj)
-                return True
-            if obj in (self.soul_hp_lbl, self.soul_atk_lbl, self.soul_def_lbl, self.soul_craft_lbl):
-                self._on_soul_click(obj)
-                return True
-            if hasattr(obj, '_skill_slot_idx'):
-                self._on_active_skill_click(obj._skill_slot_idx, obj.mapToGlobal(QPoint(0, obj.height())))
-                return True
-            if hasattr(obj, '_ws_key') and obj._ws_key:
-                self._on_work_skill_click(obj._ws_key, obj)
-                return True
+        if event.type() == QEvent.Type.MouseButtonPress:
+            if event.button() == Qt.LeftButton:
+                if obj is self.name_lbl:
+                    self._on_name_click()
+                    return True
+                if hasattr(obj, '_star_idx'):
+                    self._on_star_click(obj._star_idx)
+                    return True
+                if obj is self.level_num_lbl:
+                    self._on_level_click()
+                    return True
+                if obj is self.trust_bar or obj is self.trust_icon:
+                    self._on_trust_click()
+                    return True
+                if obj in (self.ivs_hp_lbl, self.ivs_atk_lbl, self.ivs_def_lbl):
+                    self._on_talent_click(obj)
+                    return True
+                if obj in (self.soul_hp_lbl, self.soul_atk_lbl, self.soul_def_lbl, self.soul_craft_lbl):
+                    self._on_soul_click(obj)
+                    return True
+                if hasattr(obj, '_skill_slot_idx'):
+                    self._on_active_skill_click(obj._skill_slot_idx, obj.mapToGlobal(QPoint(0, obj.height())))
+                    return True
+                if hasattr(obj, '_ws_key') and obj._ws_key:
+                    self._on_work_skill_click(obj._ws_key, obj)
+                    return True
+            elif event.button() == Qt.RightButton:
+                if hasattr(obj, '_skill_slot_idx'):
+                    self._set_active_skill(obj._skill_slot_idx, '')
+                    return True
+                if hasattr(obj, '_passive_index'):
+                    self._set_passive_skill(obj._passive_index, '')
+                    return True
         if event.type() == QEvent.Type.Enter and hasattr(obj, '_stat_tip_text') and hasattr(self, '_stat_tip'):
             self._stat_tip.setText(obj._stat_tip_text)
             self._stat_tip.adjustSize()
@@ -251,12 +259,13 @@ class PalInfoHandlerMixin:
             self._recalc_hp()
 
     def _on_active_skill_click(self, slot_idx, pos=None):
-        self._show_skill_picker(t('edit_pals.select_skill'), PalFrame._SKILLMAP, slot_idx, True, pos)
+        cid = extract_value(self._raw, 'CharacterID', '') if self._raw else ''
+        self._show_skill_picker(t('edit_pals.select_skill'), PalFrame._SKILLMAP, slot_idx, True, pos, pal_asset=cid)
 
     def _on_passive_click(self, slot_idx, pos=None):
         self._show_skill_picker(t('edit_pals.select_passive'), PalFrame._PASSMAP, slot_idx, False, pos)
 
-    def _show_skill_picker(self, title, skill_map, slot_idx, is_active, pos=None):
+    def _show_skill_picker(self, title, skill_map, slot_idx, is_active, pos=None, pal_asset=None):
         picker = SkillPicker(self)
         try:
             cur_data = self._raw.get('EquipWaza' if is_active else 'PassiveSkillList', {})
@@ -284,7 +293,7 @@ class PalInfoHandlerMixin:
                         skip_items.add(clean.lower())
         except Exception:
             pass
-        result = picker.pick(skill_map, is_active, pos=pos, current_value=cur_val if isinstance(cur_val, str) else '', skip_items=skip_items)
+        result = picker.pick(skill_map, is_active, pos=pos, current_value=cur_val if isinstance(cur_val, str) else '', skip_items=skip_items, pal_asset=pal_asset)
         if result is None:
             return
         if result == '':

@@ -1630,7 +1630,7 @@ def update_learnset_data():
         for row_key, row_data in rows.items():
             if not isinstance(row_data, dict):
                 continue
-            pal_id = row_data.get('PalId', '')
+            pal_id = re.sub(r'\s+', '', row_data.get('PalId', ''))
             waza = row_data.get('WazaID', '')
             if not pal_id or not waza:
                 continue

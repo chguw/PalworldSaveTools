@@ -18,6 +18,29 @@ def _learn_all_skills_raw(raw):
         if any((pat.lower() in original_asset.lower() for pat in dm._SKILL_EXCLUSION_PATTERNS)):
             continue
         mastered.append(f'EPalWazaID::{original_asset}')
+    cid = extract_value(raw, 'CharacterID', '')
+    if cid:
+        try:
+            base_dir = constants.get_base_path()
+            from resource_resolver import resource_path
+            from palsav import json_tools
+            import re
+            ls_path = resource_path(base_dir, 'game_data', 'pals_learnset.json')
+            ls_data = json_tools.load(ls_path)
+            learnset_map = ls_data.get('learnset', {})
+            learnset_ci = {k.lower(): v for k, v in learnset_map.items()}
+            ls = learnset_map.get(cid) or learnset_ci.get(cid.lower())
+            if not ls:
+                stripped = re.sub('_v\\d+$', '', cid)
+                if stripped != cid:
+                    ls = learnset_map.get(stripped) or learnset_ci.get(stripped.lower())
+            if ls:
+                for m in ls:
+                    waza = m.get('WazaID', '')
+                    if waza and waza not in mastered:
+                        mastered.append(waza)
+        except Exception:
+            pass
     ew_data = raw.get('EquipWaza', {})
     e_list = ew_data.get('value', {}).get('values', []) if isinstance(ew_data, dict) else ew_data if isinstance(ew_data, list) else []
     if isinstance(e_list, list):
@@ -31,7 +54,6 @@ def _learn_all_skills_raw(raw):
             seen.add(skill)
             mastered_unique.append(skill)
     raw['MasteredWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': mastered_unique}, 'type': 'ArrayProperty'}
-    cid = extract_value(raw, 'CharacterID', '')
     base_data = _data.get_pal_base_data(cid)
     elements = base_data.get('elements', []) if base_data else []
     if elements:

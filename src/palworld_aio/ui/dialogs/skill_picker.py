@@ -1,4 +1,5 @@
 import os
+import re
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QStyledItemDelegate, QApplication
 from PySide6.QtCore import Qt, QTimer, QRectF, QSize, QPoint, QThread
 from PySide6.QtGui import QPainter, QColor, QPen, QBrush, QLinearGradient, QIcon, QCursor, QFontMetrics
@@ -10,6 +11,23 @@ from palworld_aio.editor.pal_editor import data as _pedata
 import palworld_aio.managers.data_manager as dm
 from palworld_aio.ui.chrome.styles import PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
 from resource_resolver import resource_path
+from palsav import json_tools
+
+_LEARNSET_CACHE = None
+_LEARNSET_CI = None
+def _load_learnset():
+    global _LEARNSET_CACHE, _LEARNSET_CI
+    if _LEARNSET_CACHE is not None:
+        return
+    try:
+        base_dir = palworld_constants.get_base_path()
+        path = resource_path(base_dir, 'game_data', 'pals_learnset.json')
+        data = json_tools.load(path)
+        _LEARNSET_CACHE = data.get('learnset', {}) if isinstance(data, dict) else {}
+        _LEARNSET_CI = {k.lower(): v for k, v in _LEARNSET_CACHE.items()}
+    except Exception:
+        _LEARNSET_CACHE = {}
+        _LEARNSET_CI = {}
 class _PassiveSkillDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         painter.save()
@@ -185,7 +203,7 @@ class SkillPicker(QWidget):
             item.setHidden(text.lower() not in item.text().lower())
     def _on_select(self):
         sel = self._list.currentItem()
-        if not sel:
+        if not sel or not (sel.flags() & Qt.ItemIsSelectable):
             self._result = None
         elif sel.text().startswith('-- '):
             self._result = ''
@@ -193,7 +211,7 @@ class SkillPicker(QWidget):
             chosen_name = sel.data(Qt.UserRole) or sel.text()
             self._result = chosen_name
         self.hide()
-    def pick(self, skill_map, is_active, pos=None, current_value='', use_exclusions=True, skip_items=None):
+    def pick(self, skill_map, is_active, pos=None, current_value='', use_exclusions=True, skip_items=None, pal_asset=None):
         self._result = None
         self._search.clear()
         self._list.clear()
@@ -203,6 +221,15 @@ class SkillPicker(QWidget):
         if is_active:
             self._list.setItemDelegate(_ActiveSkillDelegate(self._list))
             _ensure_skill_data()
+            learnset_keys = set()
+            if pal_asset:
+                _load_learnset()
+                ls = _LEARNSET_CACHE.get(pal_asset) or _LEARNSET_CI.get(pal_asset.lower(), [])
+                if not ls:
+                    stripped = re.sub('_v\\d+$', '', pal_asset)
+                    if stripped != pal_asset:
+                        ls = _LEARNSET_CACHE.get(stripped) or _LEARNSET_CI.get(stripped.lower(), [])
+                learnset_keys = {m.get('WazaID', '').replace('EPalWazaID::', '').lower() for m in ls}
             for name in names:
                 if not name:
                     continue
@@ -215,7 +242,7 @@ class SkillPicker(QWidget):
                     continue
                 key = asset.split('::')[-1].lower()
                 if use_exclusions:
-                    if any((pat.lower() in key for pat in dm._SKILL_EXCLUSION_PATTERNS)):
+                    if key not in learnset_keys and any((pat.lower() in key for pat in dm._SKILL_EXCLUSION_PATTERNS)):
                         continue
                 item = QListWidgetItem(name)
                 info = _pedata._SKILL_DATA.get(key, {}) if isinstance(_pedata._SKILL_DATA, dict) else {}

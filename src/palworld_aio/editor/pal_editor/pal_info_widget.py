@@ -845,6 +845,7 @@ class PalInfoWidget(PalInfoDisplayMixin, PalInfoHandlerMixin, QFrame):
             rank_icon.hide()
             card_layout.addWidget(rank_icon)
             card.setCursor(Qt.PointingHandCursor)
+            card.installEventFilter(self)
             btn = QPushButton('', card)
             btn.setStyleSheet('QPushButton { background: transparent; border: none; }')
             btn.setCursor(Qt.PointingHandCursor)
