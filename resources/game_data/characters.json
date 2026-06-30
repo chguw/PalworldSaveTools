@@ -1797,7 +1797,7 @@
                 "Transport": 0,
                 "MonsterFarm": 1
             },
-            "partner_skill": "Ice Whispers",
+            "partner_skill": "Icy Whispers",
             "description": "Sometimes drops Ice Organ when assigned to Ranch."
         },
         {
@@ -2727,7 +2727,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Dig, Smokie Cryst, Dig!",
+            "partner_skill": "Cryo Instincts",
             "description": "While at a base, increases the Cool Work Suitability Level for all other Base Pals by +{Passive1_EffectValue1}. (Does not stack)",
             "passives": [
                 "WorkSuitabilityAddRank_Cool"
@@ -3475,7 +3475,7 @@
                 "Transport": 1,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Please Hug Me",
+            "partner_skill": "Hug Me Please",
             "description": "While in party, increases player's and Pals' damage to enemies afflicted with [EFFECT:IvyCling] by {Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
                 "DamageUpTrainerAndOtomo_ToIvyCling_PartnerSkill_CactusDoll_1"
@@ -4405,7 +4405,7 @@
                 "Transport": 2,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Trick Show Fluffle",
+            "partner_skill": "Trick-Loving Fluffle",
             "description": "While in party, when the player's Health falls below 50%, Dupin generates an explosion around the player ([ICON:ElemIcon_Fire][ELEM:Fire] / Power: {Passive1_EffectValue1} / [EFFECT:Burn] buildup: {ReferencePassive1_EffectValue1}). Additionally, while the player's Health is below 50%, the player's Attack is increased by {Passive2_EffectValue1}%. (Does not stack)",
             "reference_passives": [
                 "Dummy_ClownRabbit_CoolTime",
@@ -10190,7 +10190,7 @@
                 "Transport": 2,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Deep Sea Top Chef",
+            "partner_skill": "Abyssal Celebrity Chef",
             "description": "Can be ridden to travel on water. This Pal’s Movement Speed increases by {Passive1_EffectValue1}% for each other [ICON:ElemIcon_Fire][ELEM:Fire] or [ICON:ElemIcon_Water][ELEM:Water] Pal in your party. (Excluding Ghangler Ignis)",
             "passives": [
                 "MoveSpeed_PartnerSkill_SpecificElement_1"
@@ -14412,7 +14412,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Ice Steed",
+            "partner_skill": "Icy Steed",
             "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice], inflict [EFFECT:Freeze] {Passive3_EffectValue1}, increases Attack by {Passive2_EffectValue1}%.",
             "passives": [
                 "GiveAIce_Ride",
@@ -27471,7 +27471,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Severed Flesh for Bone",
+            "partner_skill": "Fish Fillet",
             "description": "When activated, Skutlass becomes the player's katana (Attack: {ActiveSkillMainValueByRank}). If it does not revert to its normal form quickly, Skutlass will become incapacitated. It will also become incapacitated if Iaigiri is used.",
             "active_skill_main_value": [
                 2600.0,
@@ -27539,7 +27539,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Seered Flesh for Bone",
+            "partner_skill": "Seared Fish Fillet",
             "description": "When activated, Skutlass Ignis becomes the player's katana (Attack: {ActiveSkillMainValueByRank}). If it does not revert to its normal form quickly, Skutlass Ignis will become incapacitated. It will also become incapacitated if Iaigiri is used.",
             "active_skill_main_value": [
                 2900.0,
@@ -31928,7 +31928,7 @@
                 "Transport": 0,
                 "MonsterFarm": 1
             },
-            "partner_skill": "Ice Whispers",
+            "partner_skill": "Icy Whispers",
             "description": "Sometimes drops Ice Organ when assigned to Ranch."
         },
         {
@@ -32644,7 +32644,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Dig, Smokie Cryst, Dig!",
+            "partner_skill": "Cryo Instincts",
             "description": "While at a base, increases the Cool Work Suitability Level for all other Base Pals by +{Passive1_EffectValue1}. (Does not stack)",
             "passives": [
                 "WorkSuitabilityAddRank_Cool"
@@ -33369,7 +33369,7 @@
                 "Transport": 1,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Please Hug Me",
+            "partner_skill": "Hug Me Please",
             "description": "While in party, increases player's and Pals' damage to enemies afflicted with [EFFECT:IvyCling] by {Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
                 "DamageUpTrainerAndOtomo_ToIvyCling_PartnerSkill_CactusDoll_1"
@@ -34220,7 +34220,7 @@
                 "Transport": 2,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Trick Show Fluffle",
+            "partner_skill": "Trick-Loving Fluffle",
             "description": "While in party, when the player's Health falls below 50%, Dupin generates an explosion around the player ([ICON:ElemIcon_Fire][ELEM:Fire] / Power: {Passive1_EffectValue1} / [EFFECT:Burn] buildup: {ReferencePassive1_EffectValue1}). Additionally, while the player's Health is below 50%, the player's Attack is increased by {Passive2_EffectValue1}%. (Does not stack)",
             "reference_passives": [
                 "Dummy_ClownRabbit_CoolTime",
@@ -37650,7 +37650,7 @@
                 "Transport": 2,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Deep Sea Top Chef",
+            "partner_skill": "Abyssal Celebrity Chef",
             "description": "Can be ridden to travel on water. This Pal’s Movement Speed increases by {Passive1_EffectValue1}% for each other [ICON:ElemIcon_Fire][ELEM:Fire] or [ICON:ElemIcon_Water][ELEM:Water] Pal in your party. (Excluding Ghangler Ignis)",
             "passives": [
                 "MoveSpeed_PartnerSkill_SpecificElement_1"
@@ -39804,7 +39804,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Ice Steed",
+            "partner_skill": "Icy Steed",
             "description": "Can be ridden as a flying mount. While mounted, changes the player's attack type to [ICON:ElemIcon_Ice][ELEM:Ice], inflict [EFFECT:Freeze] {Passive3_EffectValue1}, increases Attack by {Passive2_EffectValue1}%.",
             "passives": [
                 "GiveAIce_Ride",
@@ -48052,7 +48052,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Severed Flesh for Bone",
+            "partner_skill": "Fish Fillet",
             "description": "When activated, Skutlass becomes the player's katana (Attack: {ActiveSkillMainValueByRank}). If it does not revert to its normal form quickly, Skutlass will become incapacitated. It will also become incapacitated if Iaigiri is used.",
             "active_skill_main_value": [
                 2600.0,
@@ -48120,7 +48120,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Seered Flesh for Bone",
+            "partner_skill": "Seared Fish Fillet",
             "description": "When activated, Skutlass Ignis becomes the player's katana (Attack: {ActiveSkillMainValueByRank}). If it does not revert to its normal form quickly, Skutlass Ignis will become incapacitated. It will also become incapacitated if Iaigiri is used.",
             "active_skill_main_value": [
                 2900.0,

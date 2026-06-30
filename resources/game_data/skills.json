@@ -25005,7 +25005,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Zen Mind",
+            "name": "Spirit of Zen",
             "asset": "ElementBoost_Normal_1_PAL",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.webp",
@@ -30521,7 +30521,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "PIDF Officer",
+            "name": "PIDF Commander",
             "asset": "GYM_NAME_Desert",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.webp",
@@ -30577,7 +30577,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Rayne Syndicate Officer",
+            "name": "Rayne Syndicate Boss",
             "asset": "GYM_NAME_Meadow",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.webp",
@@ -46817,7 +46817,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Cold Resistant Lv. 1",
+            "name": "Cold Resistance Lv. 1",
             "asset": "TemperatureResist_Cold1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.webp",
@@ -46845,7 +46845,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Cold Resistant Lv. 2",
+            "name": "Cold Resistance Lv. 2",
             "asset": "TemperatureResist_Cold2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_02.webp",
@@ -46901,7 +46901,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Cold Resistant Lv. 3",
+            "name": "Cold Resistance Lv. 3",
             "asset": "TemperatureResist_Cold3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.webp",
@@ -46957,7 +46957,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Heat Resistant Lv. 1",
+            "name": "Heat Resistance Lv. 1",
             "asset": "TemperatureResist_Heat1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.webp",
@@ -46985,7 +46985,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Heat Resistant Lv. 1 / Cold Resistant Lv. 1",
+            "name": "Heat Resistance Lv. 1 / Cold Resistance Lv. 1",
             "asset": "TemperatureResist_Heat1Cold1",
             "rank": 1,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_01.webp",
@@ -47013,7 +47013,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Heat Resistant Lv. 2",
+            "name": "Heat Resistance Lv. 2",
             "asset": "TemperatureResist_Heat2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_02.webp",
@@ -47041,7 +47041,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Heat Resistant Lv. 2 / Cold Resistant Lv. 2",
+            "name": "Heat Resistance Lv. 2 / Cold Resistance Lv. 2",
             "asset": "TemperatureResist_Heat2Cold2",
             "rank": 2,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_02.webp",
@@ -47097,7 +47097,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Heat Resistant Lv. 3",
+            "name": "Heat Resistance Lv. 3",
             "asset": "TemperatureResist_Heat3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.webp",
@@ -47125,7 +47125,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Heat Resistant Lv. 3 / Cold Resistant Lv. 3",
+            "name": "Heat Resistance Lv. 3 / Cold Resistance Lv. 3",
             "asset": "TemperatureResist_Heat3Cold3",
             "rank": 3,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_03.webp",
@@ -52221,7 +52221,7 @@
             "category": "EPalPassiveCategory::SortDisplayable"
         },
         {
-            "name": "Farm Head",
+            "name": "Ranch Master",
             "asset": "WorkSuitabilityAddRank_MonsterFarm_2",
             "rank": 4,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_04.webp",
@@ -52473,7 +52473,7 @@
             "category": "EPalPassiveCategory::SortNotDisplayable"
         },
         {
-            "name": "Wrath of the World Tree",
+            "name": "Twin-Edged Holy Blade",
             "asset": "WorldTree_ATK",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_05.webp",
@@ -52501,7 +52501,7 @@
             "category": "EPalPassiveCategory::SortDisplayable"
         },
         {
-            "name": "Bane of the World Tree",
+            "name": "God of Destruction",
             "asset": "WorldTree_ATK_DEF",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_05.webp",
@@ -52529,7 +52529,7 @@
             "category": "EPalPassiveCategory::SortDisplayable"
         },
         {
-            "name": "Thrall of the World Tree",
+            "name": "Demon’s Hand",
             "asset": "WorldTree_CraftSpeed",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_05.webp",
@@ -52557,7 +52557,7 @@
             "category": "EPalPassiveCategory::SortDisplayable"
         },
         {
-            "name": "Aegis of the World Tree",
+            "name": "Sanctified Meat Shield",
             "asset": "WorldTree_DEF",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_05.webp",
@@ -52585,7 +52585,7 @@
             "category": "EPalPassiveCategory::SortDisplayable"
         },
         {
-            "name": "Bounty of the World Tree",
+            "name": "World Tree Seedbed",
             "asset": "WorldTree_FullStomach",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_05.webp",
@@ -52613,7 +52613,7 @@
             "category": "EPalPassiveCategory::SortDisplayable"
         },
         {
-            "name": "Surge of the World Tree",
+            "name": "Dimensional Leap",
             "asset": "WorldTree_MoveSpeed",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_05.webp",
@@ -52641,7 +52641,7 @@
             "category": "EPalPassiveCategory::SortDisplayable"
         },
         {
-            "name": "Insight of the World Tree",
+            "name": "Hermit Sage",
             "asset": "WorldTree_Sanity",
             "rank": 5,
             "icon": "/icons/passives/T_icon_skillstatus_rank_arrow_05.webp",
@@ -53693,7 +53693,7 @@
             "HitInterval": null
         },
         {
-            "name": "Creeping Bubble",
+            "name": "Creeping Bubbles",
             "asset": "CreepingBubble",
             "element": "Water",
             "power": 200,
@@ -55443,7 +55443,7 @@
             "HitInterval": null
         },
         {
-            "name": "Stone Beat",
+            "name": "Rocky Impact",
             "asset": "RockBeat",
             "element": "Earth",
             "power": 600,
@@ -57043,7 +57043,7 @@
             "HitInterval": null
         },
         {
-            "name": "Trick Show",
+            "name": "Trickster Show",
             "asset": "Unique_ClownRabbit_TrickShow",
             "element": "Fire",
             "power": 700,
@@ -57068,7 +57068,7 @@
             "HitInterval": null
         },
         {
-            "name": "Pyramid Press",
+            "name": "Cube Press",
             "asset": "Unique_CubeTurtle_CubePress",
             "element": "Earth",
             "power": 600,
@@ -59518,7 +59518,7 @@
             "HitInterval": null
         },
         {
-            "name": "Ballet of the Black Quill",
+            "name": "Black Quilled Ballet",
             "asset": "Unique_MonochromeQueen_BalletJump",
             "element": "Dark",
             "power": 500,

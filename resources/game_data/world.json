@@ -263,7 +263,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Ancient Material Manifester",
+            "name": "Ancient Material Synthesizer",
             "asset": "AncientMultiProduct",
             "icon": "/icons/structures/T_icon_buildObject_AncientMultiProduct.webp",
             "description": "A special generator based on ancient technology that uses the power of the World Tree to produce all kinds of wood and ore.\r\nDue to its complex structure, only one Pal can be assigned to it.",
@@ -2980,7 +2980,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Coal Mine",
+            "name": "Coal Quarry",
             "asset": "CoalPit",
             "icon": "/icons/structures/T_icon_buildObject_CoalPit.webp",
             "description": "Facility for producing Coal.\r\nDigging Coal is grueling physical work.\r\nLeave it to a Pal that is good at mining.",
@@ -17895,7 +17895,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Flowering Bush A",
+            "name": "Faux Flowering Bush A",
             "asset": "FurnitureBush01_Flower",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureBush01_Flower.webp",
             "description": "A realistic replication of a flowering bush. For decoration only. Cannot be harvested for materials.",
@@ -17927,7 +17927,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Bush",
+            "name": "Faux Bush",
             "asset": "FurnitureBush01_Green",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureBush01_Green.webp",
             "description": "A realistic replication of a bush. For decoration only. Cannot be harvested for materials.",
@@ -17959,7 +17959,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake White Bush",
+            "name": "Faux White Bush",
             "asset": "FurnitureBush01_Snow",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureBush01_Snow.webp",
             "description": "A realistic replication of a snow-covered bush. For decoration only. Cannot be harvested for materials.",
@@ -17991,7 +17991,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Tropical Bush",
+            "name": "Faux Tropical Bush",
             "asset": "FurnitureBush01_Tropical",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureBush01_Tropical.webp",
             "description": "A realistic replication of a tropical bush. For decoration only. Cannot be harvested for materials.",
@@ -18023,7 +18023,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Golden Bush",
+            "name": "Faux Golden Bush",
             "asset": "FurnitureBush01_Yellow",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureBush01_Yellow.webp",
             "description": "A realistic replication of a golden bush. For decoration only. Cannot be harvested for materials.",
@@ -18055,7 +18055,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Flowering Bush B",
+            "name": "Faux Flowering Bush B",
             "asset": "FurnitureBush02_Flower",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureBush02_Flower.webp",
             "description": "A realistic replication of a flowering bush. For decoration only. Cannot be harvested for materials.",
@@ -18087,7 +18087,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Rock",
+            "name": "Faux Rock",
             "asset": "FurnitureStone01",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureStone01.webp",
             "description": "A realistic replication of a boulder. For decoration only. Cannot be harvested for materials.",
@@ -18119,7 +18119,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Bamboo A",
+            "name": "Faux Bamboo A",
             "asset": "FurnitureTree01_Bamboo",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree01_Bamboo.webp",
             "description": "A realistic replication of some bamboo. For decoration only. Cannot be harvested for materials.",
@@ -18151,7 +18151,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Cherry Blossoms A",
+            "name": "Faux Cherry Blossoms A",
             "asset": "FurnitureTree01_Cherry",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree01_Cherry.webp",
             "description": "A realistic replication of some cherry blossoms. For decoration only. Cannot be harvested for materials.",
@@ -18183,7 +18183,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Desert Greenery A",
+            "name": "Faux Desert Greenery A",
             "asset": "FurnitureTree01_Desert",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree01_Desert.webp",
             "description": "A realistic replication of some desert greenery. For decoration only. Cannot be harvested for materials.",
@@ -18215,7 +18215,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Greenery A",
+            "name": "Faux Greenery A",
             "asset": "FurnitureTree01_Green",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree01_Green.webp",
             "description": "A realistic replication of some greenery. For decoration only. Cannot be harvested for materials.",
@@ -18247,7 +18247,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Crimson Foliage A",
+            "name": "Faux Crimson Foliage A",
             "asset": "FurnitureTree01_Red",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree01_Red.webp",
             "description": "A realistic replication of some crimson foliage. For decoration only. Cannot be harvested for materials.",
@@ -18279,7 +18279,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Snowy Greenery A",
+            "name": "Faux Snowy Greenery A",
             "asset": "FurnitureTree01_Snow",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree01_Snow.webp",
             "description": "A realistic replication of some snow-covered greenery. For decoration only. Cannot be harvested for materials.",
@@ -18311,7 +18311,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Tropical Greenery A",
+            "name": "Faux Tropical Greenery A",
             "asset": "FurnitureTree01_Tropical",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree01_Tropical.webp",
             "description": "A realistic replication of some tropical greenery. For decoration only. Cannot be harvested for materials.",
@@ -18343,7 +18343,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Golden Foliage A",
+            "name": "Faux Golden Foliage A",
             "asset": "FurnitureTree01_Yellow",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree01_Yellow.webp",
             "description": "A realistic replication of some golden foliage. For decoration only. Cannot be harvested for materials.",
@@ -18375,7 +18375,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Bamboo B",
+            "name": "Faux Bamboo B",
             "asset": "FurnitureTree02_Bamboo",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree02_Bamboo.webp",
             "description": "A realistic replication of some bamboo. For decoration only. Cannot be harvested for materials.",
@@ -18407,7 +18407,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Cherry Blossoms B",
+            "name": "Faux Cherry Blossoms B",
             "asset": "FurnitureTree02_Cherry",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree02_Cherry.webp",
             "description": "A realistic replication of some cherry blossoms. For decoration only. Cannot be harvested for materials.",
@@ -18439,7 +18439,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Desert Greenery B",
+            "name": "Faux Desert Greenery B",
             "asset": "FurnitureTree02_Desert",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree02_Desert.webp",
             "description": "A realistic replication of some desert greenery. For decoration only. Cannot be harvested for materials.",
@@ -18471,7 +18471,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Greenery B",
+            "name": "Faux Greenery B",
             "asset": "FurnitureTree02_Green",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree02_Green.webp",
             "description": "A realistic replication of some greenery. For decoration only. Cannot be harvested for materials.",
@@ -18503,7 +18503,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Crimson Foliage B",
+            "name": "Faux Crimson Foliage B",
             "asset": "FurnitureTree02_Red",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree02_Red.webp",
             "description": "A realistic replication of some crimson foliage. For decoration only. Cannot be harvested for materials.",
@@ -18535,7 +18535,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Snowy Greenery B",
+            "name": "Faux Snowy Greenery B",
             "asset": "FurnitureTree02_Snow",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree02_Snow.webp",
             "description": "A realistic replication of some snow-covered greenery. For decoration only. Cannot be harvested for materials.",
@@ -18567,7 +18567,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Tropical Greenery B",
+            "name": "Faux Tropical Greenery B",
             "asset": "FurnitureTree02_Tropical",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree02_Tropical.webp",
             "description": "A realistic replication of some tropical greenery. For decoration only. Cannot be harvested for materials.",
@@ -18599,7 +18599,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Golden Foliage B",
+            "name": "Faux Golden Foliage B",
             "asset": "FurnitureTree02_Yellow",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree02_Yellow.webp",
             "description": "A realistic replication of some golden foliage. For decoration only. Cannot be harvested for materials.",
@@ -18631,7 +18631,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Bamboo C",
+            "name": "Faux Bamboo C",
             "asset": "FurnitureTree03_Bamboo",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree03_Bamboo.webp",
             "description": "A realistic replication of some bamboo. For decoration only. Cannot be harvested for materials.",
@@ -18663,7 +18663,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Cherry Blossoms C",
+            "name": "Faux Cherry Blossoms C",
             "asset": "FurnitureTree03_Cherry",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree03_Cherry.webp",
             "description": "A realistic replication of some cherry blossoms. For decoration only. Cannot be harvested for materials.",
@@ -18695,7 +18695,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Desert Greenery C",
+            "name": "Faux Desert Greenery C",
             "asset": "FurnitureTree03_Desert",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree03_Desert.webp",
             "description": "A realistic replication of some desert greenery. For decoration only. Cannot be harvested for materials.",
@@ -18727,7 +18727,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Greenery C",
+            "name": "Faux Greenery C",
             "asset": "FurnitureTree03_Green",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree03_Green.webp",
             "description": "A realistic replication of some greenery. For decoration only. Cannot be harvested for materials.",
@@ -18759,7 +18759,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Crimson Foliage C",
+            "name": "Faux Crimson Foliage C",
             "asset": "FurnitureTree03_Red",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree03_Red.webp",
             "description": "A realistic replication of some crimson foliage. For decoration only. Cannot be harvested for materials.",
@@ -18791,7 +18791,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Snowy Greenery C",
+            "name": "Faux Snowy Greenery C",
             "asset": "FurnitureTree03_Snow",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree03_Snow.webp",
             "description": "A realistic replication of some snow-covered greenery. For decoration only. Cannot be harvested for materials.",
@@ -18823,7 +18823,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Tropical Greenery C",
+            "name": "Faux Tropical Greenery C",
             "asset": "FurnitureTree03_Tropical",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree03_Tropical.webp",
             "description": "A realistic replication of some tropical greenery. For decoration only. Cannot be harvested for materials.",
@@ -18855,7 +18855,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Fake Golden Foliage C",
+            "name": "Faux Golden Foliage C",
             "asset": "FurnitureTree03_Yellow",
             "icon": "/icons/structures/T_icon_buildObject_FurnitureTree03_Yellow.webp",
             "description": "A realistic replication of some golden foliage. For decoration only. Cannot be harvested for materials.",
@@ -20179,7 +20179,7 @@
             "blueprint_item_id": "Blueprint_Hunter_GangFlag"
         },
         {
-            "name": "Refrigerated Crusher",
+            "name": "Cryogenic Crusher",
             "asset": "IceCrusher",
             "icon": "/icons/structures/T_icon_buildObject_IceCrusher.webp",
             "description": "Facility that crushes Ore and\r\nconverts it into other materials.\r\nRequires a power supply and a Pal with Cooling suitability, but it's very efficient.",
@@ -21811,7 +21811,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Pal Labor Research Laboratory",
+            "name": "Pal Labor Research Lab",
             "asset": "Lab",
             "icon": "/icons/structures/T_icon_buildObject_Lab.webp",
             "description": "A facility for conducting research on the various tasks of Pals. \r\nBy assigning tasks to Pals in this facility, research progresses, granting various benefits.",
@@ -22574,7 +22574,7 @@
             "blueprint_item_id": ""
         },
         {
-            "name": "Claw Crane",
+            "name": "Claw Machine",
             "asset": "MachineGame01_Iron",
             "icon": "/icons/structures/T_icon_buildObject_MachineGame01_Iron.webp",
             "description": "Decorative claw crane.\r\nBroken, it can't be played.",
@@ -23990,10 +23990,10 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Crude Oil Extractor High Pressure",
+            "name": "High-Pressure Crude Oil Extractor",
             "asset": "OilPump02",
             "icon": "/icons/structures/T_icon_buildObject_OilPump02.webp",
-            "description": "A device that pumps up and extracts Crude Oil from deep underground.\r\nIt can produce Crude Oil even in areas without oil fields, but can only be placed on open ground with no structures beneath it.\r\nRequires a far greater power supply than the Crude Oil Extractor.",
+            "description": "A device that pumps and extracts Crude Oil from deep underground.\r\nIt can produce Crude Oil even in areas without oil fields, but it can only be placed on open ground with no structures beneath it.\r\nIt requires a far greater supply of electricity than the Crude Oil Extractor.",
             "type_a": "EPalBuildObjectTypeA::Product",
             "type_b": "EPalBuildObjectTypeB::Prod_Resource",
             "type_ui_display": "EPalBuildObjectTypeForUIDisplay::Deforest_Mining",
@@ -25888,7 +25888,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Pure Quartz Mine",
+            "name": "Pure Quartz Quarry",
             "asset": "QuartzPit",
             "icon": "/icons/structures/T_icon_buildObject_QuartzPit.webp",
             "description": "A facility for producing Pure Quartz. \r\nMining Pure Quartz is grueling physical work.\r\nLeave it to Pals skilled at mining.",
@@ -27976,7 +27976,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Soralite Mine",
+            "name": "Soralite Quarry",
             "asset": "SkyIslandOrePit",
             "icon": "/icons/structures/T_icon_buildObject_SkyIslandOrePit.webp",
             "description": "Facility for producing Soralite.\r\nDigging Soralite is grueling physical work.\r\nLeave it to a Pal that is good at mining.",
@@ -28016,10 +28016,10 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Azure Oath Banner",
+            "name": "Azure Covenant Banner",
             "asset": "SkyIsland_Banner",
             "icon": "/icons/structures/T_icon_buildObject_SkyIsland_Banner.webp",
-            "description": "Decorative Azure Oath banner.",
+            "description": "Decorative Azure Covenant banner.",
             "type_a": "EPalBuildObjectTypeA::Furniture",
             "type_b": "EPalBuildObjectTypeB::Infra_Environment",
             "type_ui_display": "EPalBuildObjectTypeForUIDisplay::Flag",
@@ -28056,10 +28056,10 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Azure Oath Flag",
+            "name": "Azure Covenant Flag",
             "asset": "SkyIsland_Flag",
             "icon": "/icons/structures/T_icon_buildObject_SkyIsland_Flag.webp",
-            "description": "Decorative Azure Oath flag.",
+            "description": "Decorative Azure Covenant flag.",
             "type_a": "EPalBuildObjectTypeA::Furniture",
             "type_b": "EPalBuildObjectTypeB::Infra_Environment",
             "type_ui_display": "EPalBuildObjectTypeForUIDisplay::Flag",
@@ -30013,7 +30013,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Sulfur Mine",
+            "name": "Sulfur Quarry",
             "asset": "SulfurPit",
             "icon": "/icons/structures/T_icon_buildObject_SulfurPit.webp",
             "description": "Facility for producing Sulfur.\r\nDigging Sulfur is grueling physical work.\r\nLeave it to a Pal that is good at mining.",
@@ -31564,7 +31564,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Moving panels",
+            "name": "Moving Panels",
             "asset": "Trap_MovingPanel",
             "icon": "/icons/structures/T_icon_unknown.webp",
             "description": "A description of the moving panel",
@@ -32628,7 +32628,7 @@
             "blueprint_item_id": "None"
         },
         {
-            "name": "Wood dismantling tables",
+            "name": "Wood Dismantling Table",
             "asset": "WoodCrusher",
             "icon": "/icons/structures/T_icon_unknown.webp",
             "description": "Facility that can saw Wood to extract Fiber.",
@@ -34075,7 +34075,7 @@
             "asset": "AIcore",
             "icon": "/icons/technologies/T_itemicon_Material_AIcore.webp",
             "type": "standard",
-            "description": "Capable of making complex judgments and autonomous management, this pivotal part is integral to any state-of-the-art devices.\r\nCan be crafted at Advanced Workshop.",
+            "description": "A core component essential to cutting-edge devices, enabling complex decision-making and autonomous control.\r\nCan be crafted at Advanced Workshop.",
             "level_cap": 67,
             "tier": 0,
             "cost": 4,
@@ -34143,7 +34143,7 @@
             "asset": "Accessory_ExplosionResist",
             "icon": "/icons/technologies/T_itemicon_Accessory_ExplosionResist.webp",
             "type": "standard",
-            "description": "A lightweight yet durable undergarment crafted from unique fibers. \r\nNullifies damage taken from explosions.",
+            "description": "A lightweight yet durable undergarment made from special fibers.\r\nIt nullifies damage from explosions.",
             "level_cap": 76,
             "tier": 0,
             "cost": 5,
@@ -34228,7 +34228,7 @@
             "asset": "Accessory_TalentChecker",
             "icon": "/icons/technologies/T_itemicon_Accessory_TalentChecker.webp",
             "type": "boss",
-            "description": "Glasses used to discern hidden Pal abilities.\r\nDisplays Health, Attack and Defense stats on a scale of 0 to 100.",
+            "description": "Glasses used to discern hidden Pal potentials.\r\nDisplays Health, Attack and Defense stats on a scale of 0 to 100.",
             "level_cap": 34,
             "tier": 0,
             "cost": 4,
@@ -34330,7 +34330,7 @@
             "asset": "AncientArmor",
             "icon": "/icons/technologies/T_itemicon_Armor_AncientArmor.webp",
             "type": "standard",
-            "description": "Armor forged from Soralite Ingot. \r\nA sophisticated symbol of a long-forgotten culture, this is the ultimate in defensive gear, capable of standing strong against cataclysmic threats.",
+            "description": "Ancient armor forged from Soralite Ingot.\r\nCrafted with the essence of a lost civilization, it boasts overwhelming defensive power and is capable of withstanding cataclysmic threats.",
             "level_cap": 68,
             "tier": 0,
             "cost": 5,
@@ -34347,7 +34347,7 @@
             "asset": "AncientArmorCold",
             "icon": "/icons/technologies/T_itemicon_Armor_AncientArmorCold.webp",
             "type": "standard",
-            "description": "A refined set of Ancient Armor that has been augmented using ancient technology, boosting its frost-resistant properties. \r\nThese improvements allow the wearer to face extremely cold environments without succumbing to the chill.",
+            "description": "Refined Ancient Armor.\r\nIts cold resistance has been further enhanced using ancient technology, allowing the wearer to maintain their strength even in extreme cold regions.",
             "level_cap": 77,
             "tier": 0,
             "cost": 5,
@@ -34364,7 +34364,7 @@
             "asset": "AncientArmorHeat",
             "icon": "/icons/technologies/T_itemicon_Armor_AncientArmorHeat.webp",
             "type": "standard",
-            "description": "A refined set of Ancient Armor that has been augmented using ancient technology, boosting its heat-resistant properties. \r\nThese improvements allow the wearer to walk through scorching hot environments unscathed.",
+            "description": "Refined Ancient Armor.\r\nIts heat resistance has been further enhanced using ancient technology, allowing it to endure scorching environments",
             "level_cap": 75,
             "tier": 0,
             "cost": 5,
@@ -34381,7 +34381,7 @@
             "asset": "AncientArmorWeight",
             "icon": "/icons/technologies/T_itemicon_Armor_AncientArmorWeight.webp",
             "type": "standard",
-            "description": "A refined set of Ancient Armor that has been outfitted with a variety of ancient support systems. \r\nThese allow the wearer to carry considerably more supplies.",
+            "description": "Refined Ancient Armor.\r\nIt is equipped with ancient auxiliary mechanisms, allowing the wearer to carry more supplies.",
             "level_cap": 79,
             "tier": 0,
             "cost": 5,
@@ -34398,7 +34398,7 @@
             "asset": "AncientBlastFurnace",
             "icon": "/icons/technologies/T_icon_buildObject_AncientBlastFurnace.webp",
             "type": "standard",
-            "description": "This specially designed furnace can create any kind of ingot. \r\nMaterials are first melted down under intense heat, then blasted with ice to solidify the liquid metal. \r\nThis smelting process requires two Pals—one with Kindling, the other with Cooling.",
+            "description": "A special furnace based on ancient technology that can smelt all types of ingots.\r\nMaterials are melted with fire, then quickly cooled and solidified using ice.\r\nIt requires Pals with high-level Kindling and Cooling suitability.",
             "level_cap": 66,
             "tier": 0,
             "cost": 5,
@@ -34415,7 +34415,7 @@
             "asset": "AncientCookingStove",
             "icon": "/icons/technologies/T_icon_buildObject_AncientCookingStove.webp",
             "type": "standard",
-            "description": "From time-tested dishes to ground-breaking new cuisines, this kitchen can do it all. \r\nPrecision heat control and fine finishing work ensures that every dish comes out perfectly. \r\nOperating this state-of-the-(ancient)-art system requires a Pal with high-level Kindling that can work with its hands.",
+            "description": "A special kitchen based on ancient technology that can create everything from existing dishes to entirely new recipes.\r\nIt retains heat through fire and completes cooking with manual preparation, allowing it to prepare any kind of cuisine.\r\nIt requires Pals with high-level Kindling and Handiwork suitability.",
             "level_cap": 70,
             "tier": 0,
             "cost": 4,
@@ -34432,7 +34432,7 @@
             "asset": "AncientElectricGenerator",
             "icon": "/icons/technologies/T_icon_buildObject_AncientElectricGenerator.webp",
             "type": "standard",
-            "description": "Crafted using long-lost ancient technology, this power generator is hyper-efficient. \r\nWhile its output is immense, it's also prone to overheating. \r\nAs a result, both an Electric Pal and a Water Pal are require to operate this beast.",
+            "description": "A highly efficient power generator restored from lost ancient technology.\r\nIt produces massive amounts of electricity, but is prone to overheating while in operation.\r\nIt requires Pals with high-level Generating Electricity and any level of Watering suitability.",
             "level_cap": 75,
             "tier": 0,
             "cost": 5,
@@ -34449,7 +34449,7 @@
             "asset": "AncientFarmBlock",
             "icon": "/icons/technologies/T_icon_buildObject_AncientFarmBlock.webp",
             "type": "standard",
-            "description": "Thanks to the World Tree, this ancient plot can grow any plant from the Palpagos Islands. \r\nSmaller than a berry plantation, and capable of being placed indoors, the cultivation process remains unchanged from conventional plots. \r\nPals with high-level sowing/watering abilities are required to run this farm.",
+            "description": "A special cultivation device based on ancient technology that harnesses the power of the World Tree to grow all kinds of plants on Palpagos Island.\r\nSmaller than a berry plantation and suitable for indoor placement, it still follows the same cultivation process as standard plots.\r\nIt requires Pals with high-level Planting, Watering, and Harvesting suitability.",
             "level_cap": 78,
             "tier": 0,
             "cost": 4,
@@ -34466,7 +34466,7 @@
             "asset": "AncientHelmet",
             "icon": "/icons/technologies/T_itemicon_Armor_AncientHelmet.webp",
             "type": "standard",
-            "description": "A helmet forged from Soralite Ingot, favored in an age long since past. \r\nTempered with wisdom that has persisted through an eternity, this unyielding equipment has better defensive properties than any of its modern counterparts.",
+            "description": "An ancient helmet forged from Soralite Ingot.\r\nIt is imbued with wisdom passed down through the ages, protecting its wearer with unwavering strength.\r\nIts defensive capabilities far surpass those of modern equipment.",
             "level_cap": 68,
             "tier": 0,
             "cost": 5,
@@ -34483,7 +34483,7 @@
             "asset": "AncientMultiProduct",
             "icon": "/icons/technologies/T_icon_buildObject_AncientMultiProduct.webp",
             "type": "standard",
-            "description": "By harnessing the power of the World Tree, this ancient tool can produce any wood or ore under the sun. \r\nHowever, after selecting your material of choice, it won't work any faster than a conventional facility. \r\nDue to the complex nature of this structure, only one Pal can be assigned to it at a time.",
+            "description": "A special generator based on ancient technology that uses the power of the World Tree to produce all kinds of wood and ore.\r\nDue to its complex structure, only one Pal can be assigned to it.",
             "level_cap": 78,
             "tier": 0,
             "cost": 5,
@@ -34517,7 +34517,7 @@
             "asset": "AncientWorkBench",
             "icon": "/icons/technologies/T_icon_buildObject_AncientWorkBench.webp",
             "type": "standard",
-            "description": "A workbench that is capable of crafting any item, but can only be used by Pals. \r\nOperates at the same speed as a regular workbench, despite the restrictions. \r\nDue to its advanced equipment, Pals with high-level Handiwork and Medicine Production work suitability are required.",
+            "description": "A Pal-exclusive workbench that is capable of crafting any item in one place.\r\nIt cannot be used by the player, and operates at the same speed as a regular workbench.\r\nDue to its advanced equipment, it requires Pals with high-level Handiwork and Medicine Production suitability.",
             "level_cap": 67,
             "tier": 0,
             "cost": 5,
@@ -34688,7 +34688,7 @@
             "asset": "AutoMealPouch_Tier1",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier1.webp",
             "type": "standard",
-            "description": "A small pouch for holding food. Unlocks a food slot in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
+            "description": "A small pouch for holding food. \r\nUnlocks a food slot in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
             "level_cap": 9,
             "tier": 0,
             "cost": 1,
@@ -34705,7 +34705,7 @@
             "asset": "AutoMealPouch_Tier2",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier2.webp",
             "type": "standard",
-            "description": "A decently sized pouch for holding food. Unlocks 2 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
+            "description": "A decently sized pouch for holding food. \r\nUnlocks 2 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
             "level_cap": 14,
             "tier": 0,
             "cost": 2,
@@ -34722,7 +34722,7 @@
             "asset": "AutoMealPouch_Tier3",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier3.webp",
             "type": "standard",
-            "description": "A large pouch for holding food. Unlocks 3 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
+            "description": "A large pouch for holding food. \r\nUnlocks 3 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
             "level_cap": 23,
             "tier": 0,
             "cost": 3,
@@ -34739,7 +34739,7 @@
             "asset": "AutoMealPouch_Tier4",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier4.webp",
             "type": "standard",
-            "description": "A large pouch for holding food. Unlocks 4 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
+            "description": "A large pouch for holding food. \r\nUnlocks 4 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
             "level_cap": 36,
             "tier": 0,
             "cost": 4,
@@ -34756,7 +34756,7 @@
             "asset": "AutoMealPouch_Tier5",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier5.webp",
             "type": "standard",
-            "description": "An extraordinarily large sack for storing food. Unlocks 5 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
+            "description": "An extraordinarily large sack for storing food. \r\nUnlocks 5 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
             "level_cap": 47,
             "tier": 0,
             "cost": 5,
@@ -34892,7 +34892,7 @@
             "asset": "Battle_Armor_Grade_01_Cloth",
             "icon": "/icons/technologies/T_itemicon_Armor_ClothArmor.webp",
             "type": "standard",
-            "description": "Clothes made from Cloth. Protects against cold nights.\r\nCan be crafted at Primitive Workbench.",
+            "description": "Clothes made from Cloth. \r\nProtects against cold nights.\r\nCan be crafted at Primitive Workbench.",
             "level_cap": 4,
             "tier": 0,
             "cost": 2,
@@ -35708,7 +35708,7 @@
             "asset": "Battle_RangeWeapon_HomingSphereLauncher",
             "icon": "/icons/technologies/T_itemicon_Weapon_HomingSphereLauncher.webp",
             "type": "boss",
-            "description": "A launcher for firing spheres. Fired spheres home in on Pals.\r\nCan be crafted at Weapon Assembly Line II.",
+            "description": "A launcher for firing spheres. \r\nFired spheres home in on Pals.\r\nCan be crafted at Weapon Assembly Line II.",
             "level_cap": 55,
             "tier": 0,
             "cost": 5,
@@ -35878,7 +35878,7 @@
             "asset": "Battle_RangeWeapon_SphereLauncher_Once",
             "icon": "/icons/technologies/T_itemicon_Weapon_SphereLauncher_Once.webp",
             "type": "boss",
-            "description": "A launcher that fires spheres. It can capture Pals from a greater distance.\r\nCan be crafted at Weapon Workbench.",
+            "description": "A launcher that fires spheres. \r\nIt can capture Pals from a greater distance.\r\nCan be crafted at Weapon Workbench.",
             "level_cap": 26,
             "tier": 0,
             "cost": 4,
@@ -35912,7 +35912,7 @@
             "asset": "BeamLauncher",
             "icon": "/icons/technologies/T_itemicon_Weapon_BeamLauncher.webp",
             "type": "standard",
-            "description": "Fires a high-powered beam capable of blowing up just about anything in its path. \r\nHowever, continuous use can cause it to overheat.",
+            "description": "Fires a high-density beam that causes explosions over a wide area.\r\nCaution is required to prevent overheating during rapid fire.",
             "level_cap": 80,
             "tier": 0,
             "cost": 5,
@@ -35981,7 +35981,7 @@
             "asset": "Bio_Battery",
             "icon": "/icons/technologies/T_itemicon_Material_Bio_Battery.webp",
             "type": "standard",
-            "description": "A device that stores bioenergy for use as electrical power. \r\nIts high density ensures a long run life.\r\nCan be crafted at Production Assembly Line II.",
+            "description": "A device that stores bio-energy as electrical power.\r\nUsed for equipment requiring high energy density.\r\nCan be crafted at Production Assembly Line II.",
             "level_cap": 44,
             "tier": 0,
             "cost": 2,
@@ -35998,7 +35998,7 @@
             "asset": "Bio_Coolant",
             "icon": "/icons/technologies/T_itemicon_Material_Bio_Coolant.webp",
             "type": "standard",
-            "description": "A highly efficient cooling medium made from certain Pal-based extractions. \r\nAble to keep even extremely hot environments reliably chilly.\r\nCan be crafted at Production Assembly Line.",
+            "description": "A high-efficiency cooling medium made from special components derived from Pals.\r\nUsed to regulate temperature in high-output devices.\r\nCan be crafted at Production Assembly Line.",
             "level_cap": 31,
             "tier": 0,
             "cost": 2,
@@ -36083,7 +36083,7 @@
             "asset": "Cake02",
             "icon": "/icons/technologies/T_itemicon_food_Cake02.webp",
             "type": "standard",
-            "description": "When this dish is placed in a Breeding Farm chest, the Pal that consumes it will lay a particularly healthy egg. The Pal born from that egg will have stats that improve slightly faster than normal.",
+            "description": "Place it in the chest at a Breeding Farm to make Pals lay a particularly healthy egg.\r\nThe talents of the resulting Pals will grow slightly more easily.",
             "level_cap": 30,
             "tier": 0,
             "cost": 4,
@@ -36100,7 +36100,7 @@
             "asset": "Cake03",
             "icon": "/icons/technologies/T_itemicon_food_Cake03.webp",
             "type": "standard",
-            "description": "When this dish is placed in a Breeding Farm chest, the Pal that consumes it will lay two particularly healthy eggs at the same time, instead of one.",
+            "description": "Place it in the chest at a Breeding Farm to make Pals lay a particularly healthy egg.\r\nLay eggs twice at once.",
             "level_cap": 47,
             "tier": 0,
             "cost": 4,
@@ -36117,7 +36117,7 @@
             "asset": "Cake04",
             "icon": "/icons/technologies/T_itemicon_food_Cake04.webp",
             "type": "standard",
-            "description": "When this dish is placed in a Breeding Farm chest, the Pal that consumes it will lay a particularly healthy egg. The Pal born from that egg will be more prone to mutations and have stats that improve faster than normal.",
+            "description": "Place it in the chest at a Breeding Farm to make Pals lay a particularly healthy egg.\r\nMutations are more likely to occur, and talents will grow more easily.",
             "level_cap": 60,
             "tier": 0,
             "cost": 4,
@@ -36134,7 +36134,7 @@
             "asset": "Cake05",
             "icon": "/icons/technologies/T_itemicon_food_Cake05.webp",
             "type": "standard",
-            "description": "When this dish is placed in a Breeding Farm chest, the Pal that consumes it will lay a particularly healthy egg. \r\nThe Pal born from that egg may inherit more of their best traits.",
+            "description": "Place it in the chest at a Breeding Farm to make Pals lay a particularly healthy egg.\r\nMore likely inherit multiple passive skills from their parents.",
             "level_cap": 74,
             "tier": 0,
             "cost": 4,
@@ -36305,7 +36305,7 @@
             "asset": "Computer",
             "icon": "/icons/technologies/T_itemicon_Material_Computer.webp",
             "type": "standard",
-            "description": "Used to control automated equipment and precision machinery, \r\nit's a key component of modern technology.\r\nCan be crafted at Production Assembly Line II.",
+            "description": "A component used in the control of automated equipment and precision machinery.\r\nIt's a key component forming the foundation of modern technology.\r\nCan be crafted at Production Assembly Line II.",
             "level_cap": 50,
             "tier": 0,
             "cost": 2,
@@ -36373,7 +36373,7 @@
             "asset": "Corrosive_Solvent",
             "icon": "/icons/technologies/T_itemicon_Material_Corrosive_Solvent.webp",
             "type": "standard",
-            "description": "This dangerously potent solvent is an important component in precision manufacturing and special processing methods.\r\nCan be crafted at Production Assembly Line.",
+            "description": "A dangerous chemical solvent with strong decomposing properties.\r\nUsed for precision processing and special treatments.\r\nCan be crafted at Production Assembly Line.",
             "level_cap": 37,
             "tier": 0,
             "cost": 2,
@@ -36600,7 +36600,7 @@
             "asset": "DroneLauncher",
             "icon": "/icons/technologies/T_itemicon_Weapon_DroneLauncher.webp",
             "type": "standard",
-            "description": "This launcher sends out fully automated offensive drones. \r\nCapable of deploying up to 9 at a time, these bots will keep your enemies on their toes.",
+            "description": "A launcher that fires drones which perform autonomous attacks.\r\nCapable of deploying up to 9 units, enabling sustained suppression.",
             "level_cap": 77,
             "tier": 0,
             "cost": 4,
@@ -36634,7 +36634,7 @@
             "asset": "ElectricArcAssaultRifle",
             "icon": "/icons/technologies/T_itemicon_Weapon_ElectricArcAssaultRifle.webp",
             "type": "standard",
-            "description": "This rifle releases an electrical shock on impact, striking multiple enemies in a chain.",
+            "description": "A rifle that releases an electrical discharge from the point of impact, which chains to multiple enemies.",
             "level_cap": 78,
             "tier": 0,
             "cost": 5,
@@ -37917,11 +37917,11 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Fake Bamboo Set",
+            "name": "Faux Bamboo Set",
             "asset": "FurnitureTree_Bamboo",
             "icon": "/icons/technologies/T_icon_buildObject_FurnitureTree01_Bamboo.webp",
             "type": "standard",
-            "description": "An assortment of painstakingly replicated bamboo. \r\nCreate a Bamboo Grove-inspired base by adorning it with (fake) plants! \r\nCannot be harvested for materials.",
+            "description": "A decorative artificial bamboo set.\r\nUse them to create a Bamboo Grove-inspired base.\r\nNo materials can be obtained from this structure.",
             "level_cap": 23,
             "tier": 0,
             "cost": 1,
@@ -37938,11 +37938,11 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Fake Cherry Blossoms Set",
+            "name": "Faux Cherry Blossoms Set",
             "asset": "FurnitureTree_Cherry",
             "icon": "/icons/technologies/T_icon_buildObject_FurnitureTree01_Cherry.webp",
             "type": "standard",
-            "description": "An assortment of painstakingly replicated cherry blossoms. \r\nCreate a Sakurajima-inspired base by adorning it with (fake) plants! \r\nCannot be harvested for materials.",
+            "description": "A decorative artificial cherry blossom tree set.\r\nUse them to create a Sakurajima-inspired base.\r\nNo materials can be obtained from this structure.",
             "level_cap": 56,
             "tier": 0,
             "cost": 1,
@@ -37957,11 +37957,11 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Fake Desert Greenery Set",
+            "name": "Faux Desert Greenery Set",
             "asset": "FurnitureTree_Desert",
             "icon": "/icons/technologies/T_icon_buildObject_FurnitureTree01_Desert.webp",
             "type": "standard",
-            "description": "An assortment of painstakingly replicated greenery. \r\nCreate an oasis-worthy base by adorning it with (fake) plants! \r\nCannot be harvested for materials.",
+            "description": "A decorative artificial desert tree set.\r\nUse them to create a oasis-inspired base.\r\nNo materials can be obtained from this structure.",
             "level_cap": 37,
             "tier": 0,
             "cost": 1,
@@ -37976,11 +37976,11 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Fake Greenery Set",
+            "name": "Faux Greenery Set",
             "asset": "FurnitureTree_Green",
             "icon": "/icons/technologies/T_icon_buildObject_FurnitureTree01_Green.webp",
             "type": "standard",
-            "description": "An assortment of painstakingly replicated greenery. \r\nCreate a natural-looking base by adorning it with (fake) plants! \r\nCannot be harvested for materials.",
+            "description": "A decorative artificial tree set.\r\nUse them to create a natural-looking base.\r\nNo materials can be obtained from this structure.",
             "level_cap": 12,
             "tier": 0,
             "cost": 1,
@@ -37996,11 +37996,11 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Fake Crimson Foliage Set",
+            "name": "Faux Crimson Foliage Set",
             "asset": "FurnitureTree_Red",
             "icon": "/icons/technologies/T_icon_buildObject_FurnitureTree01_Red.webp",
             "type": "standard",
-            "description": "An assortment of painstakingly replicated crimson foliage. \r\nCreate a natural-looking base by adorning it with (fake) plants! \r\nCannot be harvested for materials.",
+            "description": "A decorative artificial autumn tree set.\r\nUse them to create a natural-looking base.\r\nNo materials can be obtained from this structure.",
             "level_cap": 14,
             "tier": 0,
             "cost": 1,
@@ -38016,11 +38016,11 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Fake Snowy Greenery Set",
+            "name": "Faux Snowy Greenery Set",
             "asset": "FurnitureTree_Snow",
             "icon": "/icons/technologies/T_icon_buildObject_FurnitureTree01_Snow.webp",
             "type": "standard",
-            "description": "An assortment of painstakingly replicated snowy greenery. \r\nCreate a wintery base by adorning it with (fake) plants! \r\nCannot be harvested for materials.",
+            "description": "A decorative artificial snow-covered tree set.\r\nUse them to create a winte-inspired base.\r\nNo materials can be obtained from this structure.",
             "level_cap": 49,
             "tier": 0,
             "cost": 1,
@@ -38036,11 +38036,11 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Fake Tropical Greenery Set",
+            "name": "Faux Tropical Greenery Set",
             "asset": "FurnitureTree_Tropical",
             "icon": "/icons/technologies/T_icon_buildObject_FurnitureTree01_Tropical.webp",
             "type": "standard",
-            "description": "An assortment of painstakingly replicated tropical greenery. \r\nCreate a resort-worthy base by adorning it with (fake) plants! \r\nCannot be harvested for materials.",
+            "description": "A decorative artificial tropical tree set.\r\nUse them to create a tropical-inspired base.\r\nNo materials can be obtained from this structure.",
             "level_cap": 27,
             "tier": 0,
             "cost": 1,
@@ -38056,11 +38056,11 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Fake Golden Foliage Set",
+            "name": "Faux Golden Foliage Set",
             "asset": "FurnitureTree_Yellow",
             "icon": "/icons/technologies/T_icon_buildObject_FurnitureTree01_Yellow.webp",
             "type": "standard",
-            "description": "An assortment of painstakingly replicated golden foliage. \r\nCreate a natural-looking base by adorning it with (fake) plants! \r\nCannot be harvested for materials.",
+            "description": "A decorative artificial yellow autumn tree set.\r\nUse them to create a natural-looking base.\r\nNo materials can be obtained from this structure.",
             "level_cap": 16,
             "tier": 0,
             "cost": 1,
@@ -38353,7 +38353,7 @@
             "asset": "HighGrade_Processed_Wood",
             "icon": "/icons/technologies/T_itemicon_Material_HighGrade_Processed_Wood.webp",
             "type": "standard",
-            "description": "Hardwood that has been cut into high-quality planks. \r\nThe elegant wood grain has been preserved, giving anything made from it an air of luxury.\r\nCan be crafted at Production Assembly Line II.",
+            "description": "Fine planks carefully carved from Hardwood.\r\nThey have beautiful wood grain and are used for structures with a luxurious feel.\r\nCan be crafted at Production Assembly Line II.",
             "level_cap": 43,
             "tier": 0,
             "cost": 2,
@@ -38886,7 +38886,7 @@
             "asset": "LaserMiningTool",
             "icon": "/icons/technologies/T_itemicon_Weapon_LaserMiningTool.webp",
             "type": "standard",
-            "description": "This portable cutter uses concentrated plasma energy to slice through anything in its path, from the hardest ores to the toughest lumber.\r\nIts high-output energy can even extract special minerals.",
+            "description": "A portable plasma cutter that concentrates and emits plasma energy.\r\nIt supports a wide range of uses, from ore excavation to tree cutting.\r\nIts high-output energy also allows for the mining of special ores.",
             "level_cap": 54,
             "tier": 0,
             "cost": 4,
@@ -39108,7 +39108,7 @@
             "asset": "MetalDetector",
             "icon": "/icons/technologies/T_itemicon_Essential_MetalDetector.webp",
             "type": "standard",
-            "description": "Using this reveals hidden Chromite deposits in dungeons, marking them for easier mining. \r\nHowever, the mark disappears if you move too far away.",
+            "description": "Using this reveals hidden Chromite deposits in dungeons, marking them for easier mining. \r\nDeposits will become unmarked if you move too far away.",
             "level_cap": 58,
             "tier": 0,
             "cost": 3,
@@ -39367,7 +39367,7 @@
             "asset": "OilPump02",
             "icon": "/icons/technologies/T_icon_buildObject_OilPump02.webp",
             "type": "boss",
-            "description": "A device that pumps up and extracts Crude Oil from deep underground.\r\nIt can produce Crude Oil even in areas without oil fields, but can only be placed on open ground with no structures beneath it.\r\nRequires a far greater power supply than the Crude Oil Extractor.",
+            "description": "A device that pumps and extracts Crude Oil from deep underground.\r\nIt can produce Crude Oil even in areas without oil fields, but it can only be placed on open ground with no structures beneath it.\r\nIt requires a far greater supply of electricity than the Crude Oil Extractor.",
             "level_cap": 51,
             "tier": 0,
             "cost": 4,
@@ -39605,7 +39605,7 @@
             "asset": "PalSphere_Ancient_1",
             "icon": "/icons/technologies/T_itemicon_PalSphere_Ancient_1.webp",
             "type": "standard",
-            "description": "An item that captures Pals when thrown. \r\nA relic from an age since past, this exceptional Sphere proves that humanity's relationship with Pals has persevered.",
+            "description": "An item that captures Pals when thrown.\r\nA high-grade Sphere from an ancient civilization that secured coexistence with Pals.",
             "level_cap": 67,
             "tier": 0,
             "cost": 5,
@@ -39622,7 +39622,7 @@
             "asset": "PalSphere_Ancient_2",
             "icon": "/icons/technologies/T_itemicon_PalSphere_Ancient_2.webp",
             "type": "standard",
-            "description": "An item that captures Pals when thrown. \r\nThis omnipotent Sphere contains the power of the World Tree itself, harnessed by an ancient civilization at their peak.",
+            "description": "A tool that captures Pals when thrown.\r\nAn ultimate Sphere created as the pinnacle of an ancient civilization, imbued with the power of the World Tree.",
             "level_cap": 74,
             "tier": 0,
             "cost": 5,
@@ -39691,7 +39691,7 @@
             "asset": "Polymer",
             "icon": "/icons/technologies/T_itemicon_Material_Polymer.webp",
             "type": "standard",
-            "description": "Polymer made from refined oil. \r\nRequired for producing various advanced items such as rifles.\r\nCan be crafted at Production Assembly Line.",
+            "description": "Polymer made from refined oil. \r\nRequired for producing various advanced items such as firearms.\r\nCan be crafted at Production Assembly Line.",
             "level_cap": 33,
             "tier": 0,
             "cost": 2,
@@ -39725,7 +39725,7 @@
             "asset": "Processed_Wood",
             "icon": "/icons/technologies/T_itemicon_Material_Processed_Wood.webp",
             "type": "standard",
-            "description": "Wood that has been cut into easy-to-use planks. \r\nMore versatile than unprocessed logs, the construction possibilities are almost limitless.\r\nCan be crafted at Primitive Workbench.",
+            "description": "Planks made from processed wood for easier use.\r\nMore versatile than raw logs, with a wide variety of uses.\r\nCan be crafted at Primitive Workbench.",
             "level_cap": 15,
             "tier": 0,
             "cost": 1,
@@ -39759,7 +39759,7 @@
             "asset": "Product_Axe_Grade_02",
             "icon": "/icons/technologies/T_itemicon_Weapon_Axe_Tier_00.webp",
             "type": "standard",
-            "description": "A metal axe made to fell harder trees. \r\nUseful for harvesting sturdy trees far inland.\r\nCan be crafted at High-Quality Workbench.",
+            "description": "A metal axe capable of cutting down even hard trees.\r\nEffective against the sturdy trees that grow deep within the continent.\r\nCan be crafted at High-Quality Workbench.",
             "level_cap": 11,
             "tier": 0,
             "cost": 2,
@@ -39776,7 +39776,7 @@
             "asset": "Product_Axe_Grade_03",
             "icon": "/icons/technologies/T_itemicon_Weapon_Axe_Tier_00.webp",
             "type": "standard",
-            "description": "An axe capable of gathering Hardwood from trees found in extreme environments such as deserts and volcanic areas.\r\nCan be crafted at Production Assembly Line.",
+            "description": "An axe that can gather Hardwood from trees found in harsh environments such as deserts and volcanic areas.\r\nCan be crafted at Production Assembly Line.",
             "level_cap": 34,
             "tier": 0,
             "cost": 2,
@@ -40167,7 +40167,7 @@
             "asset": "Product_Pickaxe_Grade_02",
             "icon": "/icons/technologies/T_itemicon_Weapon_Pickaxe_Tier_00.webp",
             "type": "standard",
-            "description": "A pickaxe used for mining. Made from metal, its durability and efficiency have improved.\r\nCan be crafted at High-Quality Workbench.",
+            "description": "A pickaxe used for mining. \r\nMade from metal, its durability and efficiency have improved.\r\nCan be crafted at High-Quality Workbench.",
             "level_cap": 11,
             "tier": 0,
             "cost": 2,
@@ -40184,7 +40184,7 @@
             "asset": "Product_Pickaxe_Grade_03",
             "icon": "/icons/technologies/T_itemicon_Weapon_Pickaxe_Tier_00.webp",
             "type": "standard",
-            "description": "A pickaxe used for mining. Its durability and efficiency have further improved.\r\nCan be crafted at Production Assembly Line.",
+            "description": "A pickaxe used for mining. \r\nIts durability and efficiency have further improved.\r\nCan be crafted at Production Assembly Line.",
             "level_cap": 34,
             "tier": 0,
             "cost": 2,
@@ -40371,7 +40371,7 @@
             "asset": "ReinforcedArrow",
             "icon": "/icons/technologies/T_itemicon_Ammo_ReinforcedArrow.webp",
             "type": "standard",
-            "description": "Enhanced arrows for shooting with Compound Bow.\r\nCan be crafted at Primitive Workbench.",
+            "description": "Enhanced arrows for shooting with \r\nCompound Bow.\r\nCan be crafted at Primitive Workbench.",
             "level_cap": 42,
             "tier": 0,
             "cost": 1,
@@ -40507,7 +40507,7 @@
             "asset": "SFArrow",
             "icon": "/icons/technologies/T_itemicon_Ammo_SFArrow.webp",
             "type": "standard",
-            "description": "Enhanced arrows for shooting with Advanced Bow.\r\nCan be crafted at Primitive Workbench.",
+            "description": "Enhanced arrows for shooting with \r\nAdvanced Bow.\r\nCan be crafted at Primitive Workbench.",
             "level_cap": 57,
             "tier": 0,
             "cost": 1,
@@ -40731,7 +40731,7 @@
             "asset": "Shield_07",
             "icon": "/icons/technologies/T_itemicon_Armor_Shield_07.webp",
             "type": "standard",
-            "description": "Shield made with lost ancient technology. \r\nIt automatically repairs itself after not taking damage for a while. \r\nIts power is considered beyond modern replication.",
+            "description": "A shield created using lost ancient technology.\r\nIt automatically repairs itself after not taking damage for a while. \r\nIts performance is said to be impossible to reproduce in the modern era.",
             "level_cap": 71,
             "tier": 0,
             "cost": 5,
@@ -40765,7 +40765,7 @@
             "asset": "ShotGunBullet",
             "icon": "/icons/technologies/T_itemicon_Ammo_ShotgunBullet.webp",
             "type": "standard",
-            "description": "Ammo for the Pump-Action Shotgun and similar weapons.\r\nCan be crafted at Weapon Workbench.",
+            "description": "Ammo for shotguns and other similar weapons.\r\nCan be crafted at Weapon Workbench.",
             "level_cap": 39,
             "tier": 0,
             "cost": 2,
@@ -41513,7 +41513,7 @@
             "asset": "SkillUnlock_GrassGolem",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "Saddle for safely riding Dualith. Grants the ability to fire a powerful Grass laser while on the go.",
+            "description": "Saddle for safely riding Dualith. \r\nGrants the ability to fire a powerful Grass-element laser while mounted.",
             "level_cap": 48,
             "tier": 0,
             "cost": 4,
@@ -41530,7 +41530,7 @@
             "asset": "SkillUnlock_GrassGolem_Dark",
             "icon": "/icons/technologies/T_itemicon_Essential_SkillUnlock_Saddle.webp",
             "type": "standard",
-            "description": "Saddle for safely riding Dualith Noct. Grants the ability to fire a powerful Dark laser while on the go.",
+            "description": "Saddle for safely riding Dualith Noct. \r\nGrants the ability to fire a powerful Dark-element laser while mounted.",
             "level_cap": 69,
             "tier": 0,
             "cost": 4,
@@ -42975,7 +42975,7 @@
             "asset": "SkyBeamSword",
             "icon": "/icons/technologies/T_itemicon_Weapon_SkyBeamSword.webp",
             "type": "standard",
-            "description": "A Beam Sword made from Soralite Ingots. \r\nThe high-intensity beam severs targets the second they get within range, making this perfect for close-quarter combat.",
+            "description": "A Beam Sword made from Soralite Ingots. \r\nA close-range weapon that instantly cuts targets using its high-output energy blade.",
             "level_cap": 73,
             "tier": 0,
             "cost": 5,
@@ -42992,7 +42992,7 @@
             "asset": "SkyBow",
             "icon": "/icons/technologies/T_itemicon_Weapon_SkyBow.webp",
             "type": "standard",
-            "description": "Enhanced arrows for shooting with Mechanical Bow.\r\nCan be crafted at Ancient Workbench.",
+            "description": "A bow crafted from Soralite Ingots.\r\nWith greatly enhanced initial velocity and piercing power, this high-precision weapon excels at ranged combat.",
             "level_cap": 67,
             "tier": 0,
             "cost": 4,
@@ -43056,11 +43056,11 @@
             ]
         },
         {
-            "name": "Azure Oath Flag Set",
+            "name": "Azure Covenant Flag Set",
             "asset": "SkyIslandFlagSet",
             "icon": "/icons/technologies/T_icon_buildObject_SkyIsland_Flag.webp",
             "type": "standard",
-            "description": "Azure Oath Flag and Azure Oath Banner set. \r\nProof of your victory over the Azure Oath.",
+            "description": "Azure Oath Flag and Azure Oath Banner set. \r\nProof of your victory over the Azure Covenant.",
             "level_cap": 71,
             "tier": 0,
             "cost": 1,
@@ -43163,7 +43163,7 @@
             "asset": "SkyislandIngot",
             "icon": "/icons/technologies/T_itemicon_Material_SkyislandIngot.webp",
             "type": "standard",
-            "description": "An ingot refined from ore unique to Sunreach. \r\nThis metal is a key component of ancient technology and, subsequently, top-tier equipment and structures.\r\nCan be refined at Ancient Furnace.",
+            "description": "An ancient metal refined from ore that slumbers in Sunreach. \r\nA rare processed material, forming the foundation of high-grade equipment and structures.\r\nCan be refined at Ancient Furnace.",
             "level_cap": 66,
             "tier": 0,
             "cost": 3,
@@ -43776,7 +43776,7 @@
             "asset": "TableCircular",
             "icon": "/icons/technologies/T_icon_buildObject_TableCircular_Wood_None.webp",
             "type": "standard",
-            "description": "A set of neat and tidy decorative tables. \r\nA clean base is a happy base!",
+            "description": "A neat decorative table set for building a clean and well-kept base.",
             "level_cap": 12,
             "tier": 0,
             "cost": 1,
@@ -43811,7 +43811,7 @@
             "asset": "Thermal_Core",
             "icon": "/icons/technologies/T_itemicon_Material_Thermal_Core.webp",
             "type": "standard",
-            "description": "This core houses an intense thermal reaction that radiates a massive amount of energy. \r\nIdeal for powering advanced pieces of equipment.\r\nCan be crafted at Production Assembly Line II.",
+            "description": "A high-temperature reaction core containing vast thermal energy.\r\nUsed as a power component in advanced devices.\r\nCan be crafted at Production Assembly Line II.",
             "level_cap": 59,
             "tier": 0,
             "cost": 3,
@@ -43981,7 +43981,7 @@
             "asset": "UnlockEquipmentSlot_Weapon_01",
             "icon": "/icons/technologies/T_itemicon_Accessory_UnlockEquipmentSlot_Weapon_01.webp",
             "type": "boss",
-            "description": "This holster allows the wearer to equip an additional weapon. \r\nUnlocks an extra weapon slot when equipped.\r\nCarrying one is enough.",
+            "description": "A holster that allows an additional weapon to be equipped.\r\nWhile in possession, it increases weapon equip slots by 1.\r\nCarrying one is enough.",
             "level_cap": 27,
             "tier": 0,
             "cost": 5,
@@ -43998,7 +43998,7 @@
             "asset": "UnlockEquipmentSlot_Weapon_02",
             "icon": "/icons/technologies/T_itemicon_Accessory_UnlockEquipmentSlot_Weapon_02.webp",
             "type": "boss",
-            "description": "This holster allows the wearer to equip yet another additional weapon. \r\nUnlocks an extra weapon slot when equipped.\r\nCarrying one is enough.",
+            "description": "A holster that lets you equip additional weapons.\r\nWhen in inventory, adds an extra weapon slot.\r\nCarrying one is enough.",
             "level_cap": 54,
             "tier": 0,
             "cost": 5,
@@ -44134,7 +44134,7 @@
             "asset": "WidePenetrateShotgun",
             "icon": "/icons/technologies/T_itemicon_Weapon_WidePenetrateShotgun.webp",
             "type": "standard",
-            "description": "This weapon excels at shorter ranged combat. \r\nCompressed energy is shot out as a scattering beam, dealing widespread damage.",
+            "description": "A specialized beam weapon for close-range combat.\r\nIt fires compressed energy in a wide, scattering blast.",
             "level_cap": 75,
             "tier": 0,
             "cost": 5,
@@ -44305,7 +44305,7 @@
             "asset": "WorldTreeIngot",
             "icon": "/icons/technologies/T_itemicon_Material_WorldTreeIngot.webp",
             "type": "standard",
-            "description": "An indomitable alloy formed by combining Soralite and Paloxite. \r\nThis incredibly rare material combines ancient technology with crystallized World Tree energy, and is vital for the construction of supreme equipment and structures.",
+            "description": "An indomitable alloy created by fusing Soralite and Paloxite.\r\nA highly rare material, crystallizing the technology of ancient civilization and the power of the World Tree.\r\nIt is vital for crafting the highest-grade equipment and structures.",
             "level_cap": 74,
             "tier": 0,
             "cost": 4,
