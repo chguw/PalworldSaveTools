@@ -1009,7 +1009,8 @@ class MainWindow(QMainWindow):
                 parts = action.split(':')
                 active_skill_id = parts[1] if len(parts) > 1 and parts[1] else None
                 passive_skill_id = parts[2] if len(parts) > 2 and parts[2] else None
-                result = remove_skill_from_all_pals(active_skill_id=active_skill_id, passive_skill_id=passive_skill_id)
+                scope = parts[3] if len(parts) > 3 and parts[3] else 'all'
+                result = remove_skill_from_all_pals(active_skill_id=active_skill_id, passive_skill_id=passive_skill_id, scope=scope)
                 if result and result.get('skills_removed', 0) > 0:
                     self._show_info(t('player_pal.skill_remove_complete') if t else 'Bulk Skill Remove Complete', t('player_pal.skill_removed_from_all').format(count=result.get('skills_removed', 0), pals=result.get('pals_affected', 0)) if t else f"Removed {result.get('skills_removed', 0)} skills from {result.get('pals_affected', 0)} pals (players + bases).")
                 else:

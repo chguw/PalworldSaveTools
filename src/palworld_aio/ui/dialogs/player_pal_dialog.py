@@ -2,11 +2,13 @@ import os
 import re
 from palsav import json_tools
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QGroupBox, QMessageBox, QAbstractItemView, QListView, QTabWidget, QCheckBox, QWidget, QStyledItemDelegate, QFrame
-from PySide6.QtCore import Qt, Signal, QSize, QTimer
+from PySide6.QtCore import Qt, Signal, QSize, QTimer, QPoint
 from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor
 from i18n import t
 from palworld_aio import constants
-from palworld_aio.editor.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data, _resolve_partner_desc, _partner_desc_to_html, PalInfoWidget
+from palworld_aio.editor.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data, _resolve_partner_desc, _partner_desc_to_html, _get_cached_pixmap, PalInfoWidget
+from palworld_aio.editor.pal_editor.widgets import PassiveEffectOverlay
+from palworld_aio.editor.pal_editor import data as _pedata
 from palworld_aio.ui.dialogs.skill_picker import SkillPicker
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
 from resource_resolver import resource_path
@@ -137,10 +139,30 @@ class PlayerPalActionDialog(QDialog):
         self.passive_skill_btn = QPushButton(t('player_pal.select_passive') if t else 'Select Passive Skill')
         self.passive_skill_btn.clicked.connect(self._on_passive_skill_pick)
         passive_layout.addWidget(self.passive_skill_btn)
+        self.passive_skill_card = QFrame()
+        self.passive_skill_card.setObjectName('passiveCard')
+        self.passive_skill_card.setFixedHeight(28)
+        self.passive_skill_card.setMaximumWidth(165)
+        default_bg = PalFrame._RANK_COLORS[1][0]
+        default_bd = PalFrame._RANK_COLORS[1][1]
+        default_tc = PalFrame._RANK_COLORS[1][2]
+        self.passive_skill_card.setStyleSheet(f'QFrame#passiveCard {{ background: {default_bg}; border: 1.5px solid {default_bd}; border-radius: 4px; }}')
+        card_layout = QHBoxLayout(self.passive_skill_card)
+        card_layout.setContentsMargins(6, 0, 6, 0)
+        card_layout.setSpacing(2)
+        card_layout.setAlignment(Qt.AlignVCenter)
         self.passive_skill_label = QLabel(t('player_pal.no_passive_selected') if t else 'No passive skill selected')
-        self.passive_skill_label.setStyleSheet('color: #888; padding: 5px;')
-        self.passive_skill_label.setWordWrap(True)
-        passive_layout.addWidget(self.passive_skill_label, 1)
+        self.passive_skill_label.setStyleSheet(f'font-size: 10px; font-weight: 700; color: {default_tc}; background: transparent; border: none;')
+        card_layout.addWidget(self.passive_skill_label, 1)
+        card_layout.addStretch()
+        self.passive_rank_icon = QLabel()
+        self.passive_rank_icon.setFixedSize(14, 14)
+        self.passive_rank_icon.setAlignment(Qt.AlignCenter)
+        self.passive_rank_icon.setStyleSheet('background: transparent; border: none;')
+        self.passive_rank_icon.hide()
+        card_layout.addWidget(self.passive_rank_icon)
+        self.passive_effect_overlay = PassiveEffectOverlay(self.passive_skill_card)
+        passive_layout.addWidget(self.passive_skill_card, 1)
         passive_layout.addStretch()
         self.passive_clear_btn = QPushButton('X')
         self.passive_clear_btn.setFixedSize(22, 22)
@@ -154,11 +176,9 @@ class PlayerPalActionDialog(QDialog):
         scope_layout = QVBoxLayout()
         self.skills_player_pals_checkbox = QCheckBox(t('player_pal.player_pals') if t else 'Player Pals (Party + Palbox)')
         self.skills_player_pals_checkbox.setChecked(True)
-        self.skills_player_pals_checkbox.setEnabled(False)
         scope_layout.addWidget(self.skills_player_pals_checkbox)
         self.skills_base_pals_checkbox = QCheckBox(t('player_pal.base_pals') if t else 'Base Pals (All bases)')
         self.skills_base_pals_checkbox.setChecked(True)
-        self.skills_base_pals_checkbox.setEnabled(False)
         scope_layout.addWidget(self.skills_base_pals_checkbox)
         scope_group.setLayout(scope_layout)
         layout.addWidget(scope_group)
@@ -330,11 +350,61 @@ class PlayerPalActionDialog(QDialog):
         self.selected_passive_skill_name = PalFrame._PASSMAP.get(result, result)
         asset_lower = (self.selected_passive_skill_id or '').lower()
         rank = PalFrame._PASSRANK.get(asset_lower, 1)
-        tc = PalFrame._passive_rank_color(asset_lower)[2]
-        self.passive_skill_label.setText(f'Passive: {self.selected_passive_skill_name}')
-        self.passive_skill_label.setStyleSheet(f'color: {tc}; font-weight: bold; padding: 5px;')
+        bg, bd, tc = PalFrame._passive_rank_color(asset_lower)
+        self.passive_skill_label.setText(self.selected_passive_skill_name)
+        self.passive_skill_label.setStyleSheet(f'font-size: 10px; font-weight: 700; color: {tc}; background: transparent; border: none;')
+        self.passive_skill_card.setStyleSheet(f'QFrame#passiveCard {{ background: {bg}; border: 1.5px solid {bd}; border-radius: 4px; }}')
+        _pedata._ensure_passive_data()
+        p_info = _pedata._PASSIVE_DATA.get(asset_lower, {}) if isinstance(_pedata._PASSIVE_DATA, dict) else {}
+        icon_path = p_info.get('icon', '') if isinstance(p_info, dict) else ''
+        if icon_path:
+            base_dir = constants.get_base_path()
+            full_path = resource_path(base_dir, 'game_data', icon_path.lstrip('/'))
+            pix = _get_cached_pixmap(full_path, 14)
+            if pix:
+                self.passive_rank_icon.setPixmap(pix)
+                self.passive_rank_icon.show()
+            else:
+                self.passive_rank_icon.hide()
+        else:
+            self.passive_rank_icon.hide()
+        anim_mode = 'world_tree' if rank >= 5 else ('legend' if rank >= 4 else None)
+        if anim_mode:
+            self.passive_effect_overlay.setGeometry(0, 0, self.passive_skill_card.width(), 28)
+            self.passive_effect_overlay.set_mode(anim_mode)
+        else:
+            self.passive_effect_overlay.set_mode(None)
         self.passive_clear_btn.setVisible(True)
+        QTimer.singleShot(0, self._shrink_passive_text)
         self._update_remove_button()
+    def _shrink_passive_text(self):
+        lbl = self.passive_skill_label
+        text = lbl.text()
+        if not text or text == (t('player_pal.no_passive_selected') if t else 'No passive skill selected'):
+            lbl.setStyleSheet(re.sub('font-size:\\s*\\d+px', 'font-size:10px', lbl.styleSheet()))
+            return
+        w = lbl.width()
+        if w <= 0:
+            QTimer.singleShot(50, self._shrink_passive_text)
+            return
+        from PySide6.QtGui import QFontMetrics
+        ss = lbl.styleSheet()
+        m = re.search('font-size:\\s*(\\d+)px', ss)
+        if not m:
+            return
+        cur = int(m.group(1))
+        if cur <= 6:
+            return
+        f = lbl.font()
+        f.setPointSize(cur)
+        if QFontMetrics(f).horizontalAdvance(text) <= w:
+            return
+        for sz in range(cur - 1, 5, -1):
+            f.setPointSize(sz)
+            if QFontMetrics(f).horizontalAdvance(text) <= w:
+                lbl.setStyleSheet(re.sub('font-size:\\s*\\d+px', f'font-size:{sz}px', ss))
+                return
+        lbl.setStyleSheet(re.sub('font-size:\\s*\\d+px', 'font-size:6px', ss))
     def _clear_active_skill(self):
         self.selected_active_skill_id = None
         self.selected_active_skill_name = None
@@ -345,8 +415,14 @@ class PlayerPalActionDialog(QDialog):
     def _clear_passive_skill(self):
         self.selected_passive_skill_id = None
         self.selected_passive_skill_name = None
+        default_bg = PalFrame._RANK_COLORS[1][0]
+        default_bd = PalFrame._RANK_COLORS[1][1]
+        default_tc = PalFrame._RANK_COLORS[1][2]
         self.passive_skill_label.setText(t('player_pal.no_passive_selected') if t else 'No passive skill selected')
-        self.passive_skill_label.setStyleSheet('color: #888; padding: 5px;')
+        self.passive_skill_label.setStyleSheet(f'font-size: 10px; font-weight: 700; color: {default_tc}; background: transparent; border: none;')
+        self.passive_skill_card.setStyleSheet(f'QFrame#passiveCard {{ background: {default_bg}; border: 1.5px solid {default_bd}; border-radius: 4px; }}')
+        self.passive_rank_icon.hide()
+        self.passive_effect_overlay.set_mode(None)
         self.passive_clear_btn.setVisible(False)
         self._update_remove_button()
     def _update_remove_button(self):
@@ -383,10 +459,22 @@ class PlayerPalActionDialog(QDialog):
             skill_names.append(f'Active: {self.selected_active_skill_name}')
         if self.selected_passive_skill_name:
             skill_names.append(f'Passive: {self.selected_passive_skill_name}')
-        msg = t('player_pal.confirm_remove_all_msg').format(skills='\n- '.join(skill_names)) if t else f"Remove the following skills from ALL pals (players + bases)?\n- {'\n- '.join(skill_names)}\n\nThis will also remove them from learned skills lists. This cannot be undone!"
+        skills_text = '\n- '.join(skill_names)
+        msg = t('player_pal.confirm_remove_all_msg')
+        if msg:
+            import re
+            msg = re.sub(r'\{[^}]+\}', skills_text, msg)
+        else:
+            msg = f"Remove the following skills from ALL pals (players + bases)?\n- {skills_text}\n\nThis will also remove them from learned skills lists. This cannot be undone!"
         reply = QMessageBox.question(self, t('player_pal.confirm_remove_all') if t else 'Confirm Remove Skills', msg, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            action = f"remove_all:{self.selected_active_skill_id or ''}:{self.selected_passive_skill_id or ''}"
+            scope_parts = []
+            if self.skills_player_pals_checkbox.isChecked():
+                scope_parts.append('player')
+            if self.skills_base_pals_checkbox.isChecked():
+                scope_parts.append('base')
+            scope_str = ','.join(scope_parts) if scope_parts else 'all'
+            action = f"remove_all:{self.selected_active_skill_id or ''}:{self.selected_passive_skill_id or ''}:{scope_str}"
             self.pal_action_selected.emit('all', action, [])
             self._refresh_after_action()
     def _refresh_after_action(self):

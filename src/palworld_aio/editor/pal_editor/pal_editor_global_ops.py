@@ -91,14 +91,16 @@ def delete_pal_from_all(pal_id):
     return {'pals_removed': pals_removed, 'affected_count': affected_count}
 
 
-def remove_skill_from_all_pals(active_skill_id=None, passive_skill_id=None):
+def remove_skill_from_all_pals(active_skill_id=None, passive_skill_id=None, scope='all'):
     from palworld_aio import constants
     if not constants.loaded_level_json:
         return {'skills_removed': 0, 'pals_affected': 0}
-    cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
+    wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+    cmap = wsd['CharacterSaveParameterMap']['value']
     skills_removed = 0
     pals_affected = 0
     active_skill_full = f'EPalWazaID::{active_skill_id}' if active_skill_id else None
+    scope_list = scope.split(',') if scope else ['all']
     for entry in cmap:
         try:
             raw = entry.get('value', {}).get('RawData', {}).get('value', {})
@@ -107,6 +109,16 @@ def remove_skill_from_all_pals(active_skill_id=None, passive_skill_id=None):
                 continue
             if sp.get('IsPlayer', {}).get('value'):
                 continue
+            if 'all' not in scope_list:
+                slot_data = sp.get('SlotId', {}).get('value', {})
+                container_id = slot_data.get('ContainerId', {}).get('value', {}).get('ID', {}).get('value')
+                group_id = raw.get('group_id', '')
+                is_player_pal = bool(container_id)
+                is_base_pal = bool(group_id)
+                if is_player_pal and 'player' not in scope_list:
+                    continue
+                if is_base_pal and 'base' not in scope_list:
+                    continue
             pal_skills_removed = 0
             if active_skill_full:
                 equip_waza = sp.get('EquipWaza', {})
