@@ -3,7 +3,7 @@ import re
 from palsav import json_tools
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QGroupBox, QMessageBox, QAbstractItemView, QListView, QTabWidget, QCheckBox, QWidget, QStyledItemDelegate, QFrame
 from PySide6.QtCore import Qt, Signal, QSize, QTimer, QPoint
-from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor
+from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor, QFont
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.editor.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data, _resolve_partner_desc, _partner_desc_to_html, _get_cached_pixmap, PalInfoWidget
@@ -11,6 +11,12 @@ from palworld_aio.editor.pal_editor.widgets import PassiveEffectOverlay
 from palworld_aio.editor.pal_editor import data as _pedata
 from palworld_aio.ui.dialogs.skill_picker import SkillPicker
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
+from palworld_aio.ui.chrome.sidebar_widget import NerdBtn
+try:
+    import nerdfont as nf
+except:
+    class nf:
+        icons = {'nf-fa-times': '\uf00d'}
 from resource_resolver import resource_path
 class PalSlotDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
@@ -126,9 +132,10 @@ class PlayerPalActionDialog(QDialog):
         self.active_skill_label.setWordWrap(True)
         active_layout.addWidget(self.active_skill_label, 1)
         active_layout.addStretch()
-        self.active_clear_btn = QPushButton('X')
+        self.active_clear_btn = NerdBtn(nf.icons.get('nf-fa-times', '\uf00d'))
         self.active_clear_btn.setFixedSize(22, 22)
-        self.active_clear_btn.setStyleSheet('QPushButton { background: rgba(239,68,68,0.12); color: #EF4444; border: 1px solid rgba(239,68,68,0.2); border-radius: 11px; font-size: 10px; font-weight: bold; } QPushButton:hover { background: rgba(239,68,68,0.25); }')
+        self.active_clear_btn.setFont(QFont(constants.FONT_FAMILY_NERD, 10))
+        self.active_clear_btn.setStyleSheet(f'QPushButton {{ font-family: "{constants.FONT_FAMILY_NERD}"; background: rgba(239,68,68,0.12); color: #EF4444; border: 1px solid rgba(239,68,68,0.2); border-radius: 11px; }} QPushButton:hover {{ background: rgba(239,68,68,0.25); }}')
         self.active_clear_btn.clicked.connect(self._clear_active_skill)
         self.active_clear_btn.setVisible(False)
         active_layout.addWidget(self.active_clear_btn)
@@ -164,9 +171,10 @@ class PlayerPalActionDialog(QDialog):
         self.passive_effect_overlay = PassiveEffectOverlay(self.passive_skill_card)
         passive_layout.addWidget(self.passive_skill_card, 1)
         passive_layout.addStretch()
-        self.passive_clear_btn = QPushButton('X')
+        self.passive_clear_btn = NerdBtn(nf.icons.get('nf-fa-times', '\uf00d'))
         self.passive_clear_btn.setFixedSize(22, 22)
-        self.passive_clear_btn.setStyleSheet('QPushButton { background: rgba(239,68,68,0.12); color: #EF4444; border: 1px solid rgba(239,68,68,0.2); border-radius: 11px; font-size: 10px; font-weight: bold; } QPushButton:hover { background: rgba(239,68,68,0.25); }')
+        self.passive_clear_btn.setFont(QFont(constants.FONT_FAMILY_NERD, 10))
+        self.passive_clear_btn.setStyleSheet(f'QPushButton {{ font-family: "{constants.FONT_FAMILY_NERD}"; background: rgba(239,68,68,0.12); color: #EF4444; border: 1px solid rgba(239,68,68,0.2); border-radius: 11px; }} QPushButton:hover {{ background: rgba(239,68,68,0.25); }}')
         self.passive_clear_btn.clicked.connect(self._clear_passive_skill)
         self.passive_clear_btn.setVisible(False)
         passive_layout.addWidget(self.passive_clear_btn)
