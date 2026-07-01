@@ -1394,7 +1394,7 @@ class WikiCategoryPage(QWidget):
                         found += 1
             if self._cat == 'pals':
                 deck = item.get('stats', {}).get('zukan_index', 0)
-                display = f'#{deck}  {name}' if deck else name
+                display = f'#{deck}  {name}' if deck and deck > 0 else name
                 li = QListWidgetItem(display)
                 li.setData(Qt.UserRole, idx)
                 ip = _icon(icon_path)
