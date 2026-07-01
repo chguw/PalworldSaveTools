@@ -1,7 +1,7 @@
 import os
 import re
 from palsav import json_tools
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QGroupBox, QMessageBox, QAbstractItemView, QListView, QTabWidget, QCheckBox, QWidget, QStyledItemDelegate, QFrame
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QGroupBox, QMessageBox, QAbstractItemView, QListView, QTabWidget, QWidget, QStyledItemDelegate, QFrame, QSizePolicy
 from PySide6.QtCore import Qt, Signal, QSize, QTimer, QPoint
 from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor, QFont
 from i18n import t
@@ -12,12 +12,14 @@ from palworld_aio.editor.pal_editor import data as _pedata
 from palworld_aio.ui.dialogs.skill_picker import SkillPicker
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE
 from palworld_aio.ui.chrome.sidebar_widget import NerdBtn
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 try:
     import nerdfont as nf
 except:
     class nf:
         icons = {'nf-fa-times': '\uf00d'}
 from resource_resolver import resource_path
+
 class PalSlotDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
         super().paint(painter, option, index)
@@ -82,11 +84,11 @@ class PlayerPalActionDialog(QDialog):
         self.pal_search_input.textChanged.connect(self._search_pals)
         search_bar_layout.addWidget(search_label)
         search_bar_layout.addWidget(self.pal_search_input)
-        self._show_standard_chk = QCheckBox(t('edit_pals.show_standard') if t else 'Standard')
+        self._show_standard_chk = ToggleCheckBtn(t('edit_pals.show_standard') if t else 'Standard')
         self._show_standard_chk.setChecked(True)
         self._show_standard_chk.toggled.connect(self._search_pals)
         search_bar_layout.addWidget(self._show_standard_chk)
-        self._show_boss_chk = QCheckBox(t('edit_pals.show_boss') if t else 'Boss')
+        self._show_boss_chk = ToggleCheckBtn(t('edit_pals.show_boss') if t else 'Boss')
         self._show_boss_chk.toggled.connect(self._search_pals)
         search_bar_layout.addWidget(self._show_boss_chk)
         search_bar_layout.addStretch()
@@ -182,10 +184,10 @@ class PlayerPalActionDialog(QDialog):
         layout.addWidget(passive_group)
         scope_group = QGroupBox(t('player_pal.scope') if t else 'Apply To')
         scope_layout = QVBoxLayout()
-        self.skills_player_pals_checkbox = QCheckBox(t('player_pal.player_pals') if t else 'Player Pals (Party + Palbox)')
+        self.skills_player_pals_checkbox = ToggleCheckBtn(t('player_pal.player_pals') if t else 'Player Pals (Party + Palbox)')
         self.skills_player_pals_checkbox.setChecked(True)
         scope_layout.addWidget(self.skills_player_pals_checkbox)
-        self.skills_base_pals_checkbox = QCheckBox(t('player_pal.base_pals') if t else 'Base Pals (All bases)')
+        self.skills_base_pals_checkbox = ToggleCheckBtn(t('player_pal.base_pals') if t else 'Base Pals (All bases)')
         self.skills_base_pals_checkbox.setChecked(True)
         scope_layout.addWidget(self.skills_base_pals_checkbox)
         scope_group.setLayout(scope_layout)

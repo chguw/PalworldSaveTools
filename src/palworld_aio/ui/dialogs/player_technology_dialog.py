@@ -1,6 +1,7 @@
 import os
 from palsav import json_tools
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QScrollArea, QGroupBox, QCheckBox, QMessageBox, QAbstractItemView, QListView
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QScrollArea, QGroupBox, QMessageBox, QAbstractItemView, QListView
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt, Signal, QSize, QEvent
 from PySide6.QtGui import QShowEvent
 from PySide6.QtGui import QPixmap, QIcon, QFont
@@ -184,7 +185,7 @@ class PlayerTechnologyActionDialog(QDialog):
                     name = member.get('name', 'Unknown')
                     if uid:
                         self.players_data.append({'uid': uid, 'name': name})
-                        checkbox = QCheckBox(name)
+                        checkbox = ToggleCheckBtn(name)
                         checkbox.setProperty('uid', uid)
                         item = QListWidgetItem()
                         self.player_list.addItem(item)

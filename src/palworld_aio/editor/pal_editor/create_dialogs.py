@@ -1,7 +1,8 @@
 import copy
 import os
 import re
-from PySide6.QtWidgets import QAbstractItemView, QCheckBox, QDialog, QHBoxLayout, QLabel, QLineEdit, QListWidget, QListWidgetItem, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QAbstractItemView, QDialog, QHBoxLayout, QLabel, QLineEdit, QListWidget, QListWidgetItem, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QVBoxLayout, QWidget
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QIcon
 from i18n import t
@@ -344,10 +345,8 @@ class BulkSyncPalDialog(FramelessDialog):
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
             display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
-            cb = QCheckBox(display)
+            cb = ToggleCheckBtn(display)
             cb.setChecked(True)
-            cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
-            cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
             pal_list_layout.addWidget(cb)
             self._checkboxes.append(cb)
         pal_scroll.setWidget(pal_list_inner)
@@ -453,11 +452,11 @@ class PalCreateDialog(QDialog):
         self._search_edit = QLineEdit()
         self._search_edit.setPlaceholderText('Type to filter pals...')
         filter_layout.addWidget(self._search_edit)
-        self._show_standard_chk = QCheckBox(t('edit_pals.show_standard') if t else 'Standard')
+        self._show_standard_chk = ToggleCheckBtn(t('edit_pals.show_standard') if t else 'Standard')
         self._show_standard_chk.setChecked(True)
         self._show_standard_chk.toggled.connect(self._filter_pal_list)
         filter_layout.addWidget(self._show_standard_chk)
-        self._show_boss_chk = QCheckBox(t('edit_pals.show_boss') if t else 'Boss')
+        self._show_boss_chk = ToggleCheckBtn(t('edit_pals.show_boss') if t else 'Boss')
         self._show_boss_chk.toggled.connect(self._filter_pal_list)
         filter_layout.addWidget(self._show_boss_chk)
         filter_layout.addStretch()

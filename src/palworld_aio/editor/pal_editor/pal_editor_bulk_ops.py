@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QCheckBox, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea, QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea, QSizePolicy, QVBoxLayout, QWidget
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt
 from i18n import t
 from loading_manager import show_information, show_warning
@@ -79,10 +80,8 @@ class BulkOperationMixin:
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
             display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
-            cb = QCheckBox(display)
+            cb = ToggleCheckBtn(display)
             cb.setChecked(True)
-            cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
-            cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
             chk_layout.addWidget(cb)
             checkboxes.append((cb, pi))
         scroll.setWidget(inner_w)
@@ -164,10 +163,8 @@ class BulkOperationMixin:
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
             display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
-            cb = QCheckBox(display)
+            cb = ToggleCheckBtn(display)
             cb.setChecked(True)
-            cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
-            cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
             chk_layout.addWidget(cb)
             checkboxes.append((cb, pi))
         scroll.setWidget(inner_w)
@@ -253,10 +250,8 @@ class BulkOperationMixin:
             nick = extract_value(pr, 'NickName', '') if pr else ''
             lv = extract_value(pr, 'Level', 1) if pr else 1
             display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
-            cb = QCheckBox(display)
+            cb = ToggleCheckBtn(display)
             cb.setChecked(True)
-            cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
-            cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
             chk_layout.addWidget(cb)
             checkboxes.append((cb, pi))
         scroll.setWidget(inner_w)
