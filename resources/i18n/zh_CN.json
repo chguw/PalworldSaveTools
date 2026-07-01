@@ -1663,5 +1663,7 @@
     "docs.wiki.filter.rank": "秩",
     "docs.wiki.filter.value.boss": "古老的",
     "docs.wiki.filter.value.standard": "标准",
-    "docs.wiki.sort.work_level": "等级"
+    "docs.wiki.sort.work_level": "等级",
+    "edit_pals.learnt_skills_search": "搜索技巧...",
+    "edit_pals.learnt_skills_learn_all": "了解全部"
 }

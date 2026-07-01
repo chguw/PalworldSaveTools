@@ -14,7 +14,7 @@ from . import data as _data
 from .data import _ensure_skill_data
 from . import icons as _icons
 from .icons import _partner_desc_to_html, _strip_prefix_label
-from .pal_ops import _generate_pal_save_param, _get_raw_from_item, _register_pal_instance_to_guild
+from .pal_ops import _generate_pal_save_param, _get_raw_from_item, _learn_all_skills_raw, _register_pal_instance_to_guild
 from .legacy_frame import PalFrame
 from .pal_info_widget import PalInfoWidget
 from .widgets import FramelessDialog, SkillSlotFrame
@@ -45,6 +45,10 @@ def _show_learned_moves_dialog(raw, parent):
     count_lbl = QLabel(t('edit_pals.learnt_skills_count', count=len(mw_list)))
     count_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #9CA3AF; background: transparent; border: none; padding: 2px 4px;')
     il.addWidget(count_lbl)
+    search_edit = QLineEdit()
+    search_edit.setPlaceholderText(t('edit_pals.learnt_skills_search'))
+    search_edit.setStyleSheet('QLineEdit { background: rgba(0,0,0,0.3); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 4px 8px; font-size: 11px; } QLineEdit:focus { border-color: rgba(125,211,252,0.5); }')
+    il.addWidget(search_edit)
     scroll = QScrollArea()
     scroll.setWidgetResizable(True)
     scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -56,6 +60,48 @@ def _show_learned_moves_dialog(raw, parent):
     scl.setContentsMargins(2, 2, 2, 2)
     scl.setSpacing(2)
     scl.addStretch()
+    skill_slots = []
+    def _make_handler(sv, parent_dlg, slot_widget, outer_layout, count_label):
+        def handler(event):
+            event.accept()
+            sname = PalFrame._SKILLMAP.get(sv.split('::')[-1].lower(), sv.split('::')[-1])
+            confirm = show_question(parent_dlg, t('edit_pals.learnt_skills_title'), t('edit_pals.confirm_remove_skill', name=sname))
+            if not confirm:
+                return
+            mw_data = raw.get('MasteredWaza', {})
+            if isinstance(mw_data, dict):
+                mlist = mw_data.get('value', {}).get('values', [])
+            elif isinstance(mw_data, list):
+                mlist = mw_data
+            else:
+                mlist = []
+            if sv in mlist:
+                mlist.remove(sv)
+                new_mw = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': mlist}, 'type': 'ArrayProperty'}
+                raw['MasteredWaza'] = new_mw
+            outer_layout.removeWidget(slot_widget)
+            slot_widget.deleteLater()
+            skill_slots[:] = [(s, n) for s, n in skill_slots if s is not slot_widget]
+            search_edit.clear()
+            remaining = outer_layout.count() - 1
+            count_label.setText(t('edit_pals.learnt_skills_count', count=remaining))
+            if remaining == 0:
+                nl = QLabel('--')
+                nl.setAlignment(Qt.AlignCenter)
+                nl.setStyleSheet('font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.25); background: transparent; border: none; padding: 20px;')
+                outer_layout.insertWidget(0, nl)
+        return handler
+    def _filter_skills(text):
+        text = text.lower()
+        visible = 0
+        for slot, name_lower in skill_slots:
+            if text in name_lower:
+                slot.show()
+                visible += 1
+            else:
+                slot.hide()
+        count_lbl.setText(t('edit_pals.learnt_skills_count', count=visible))
+    search_edit.textChanged.connect(_filter_skills)
     if not mw_list:
         nl = QLabel('--')
         nl.setAlignment(Qt.AlignCenter)
@@ -117,39 +163,96 @@ def _show_learned_moves_dialog(raw, parent):
                     tip_parts.append('')
                     tip_parts.append(desc)
                 slot.setToolTip('<br>'.join(tip_parts))
-            def _make_handler(sv, parent_dlg, slot_widget, slot_layout, count_label):
-                def handler(event):
-                    event.accept()
-                    sname = PalFrame._SKILLMAP.get(sv.split('::')[-1].lower(), sv.split('::')[-1])
-                    confirm = show_question(parent_dlg, t('edit_pals.learnt_skills_title'), t('edit_pals.confirm_remove_skill', name=sname))
-                    if not confirm:
-                        return
-                    mw_data = raw.get('MasteredWaza', {})
-                    if isinstance(mw_data, dict):
-                        mlist = mw_data.get('value', {}).get('values', [])
-                    elif isinstance(mw_data, list):
-                        mlist = mw_data
-                    else:
-                        mlist = []
-                    if sv in mlist:
-                        mlist.remove(sv)
-                        new_mw = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': mlist}, 'type': 'ArrayProperty'}
-                        raw['MasteredWaza'] = new_mw
-                    slot_layout.removeWidget(slot_widget)
-                    slot_widget.deleteLater()
-                    remaining = slot_layout.count() - 1
-                    count_label.setText(t('edit_pals.learnt_skills_count', count=remaining))
-                    if remaining == 0:
-                        nl = QLabel('--')
-                        nl.setAlignment(Qt.AlignCenter)
-                        nl.setStyleSheet('font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.25); background: transparent; border: none; padding: 20px;')
-                        slot_layout.insertWidget(0, nl)
-                return handler
             slot.mousePressEvent = _make_handler(skill_val, dlg, slot, scl, count_lbl)
             scl.insertWidget(scl.count() - 1, slot)
+            skill_slots.append((slot, move_name.lower()))
+    def _rebuild_list():
+        while scl.count() > 1:
+            item = scl.takeAt(0)
+            w = item.widget()
+            if w:
+                w.deleteLater()
+        mw_data = raw.get('MasteredWaza', {})
+        if isinstance(mw_data, dict):
+            new_mw_list = mw_data.get('value', {}).get('values', [])
+        elif isinstance(mw_data, list):
+            new_mw_list = mw_data
+        else:
+            new_mw_list = []
+        count_lbl.setText(t('edit_pals.learnt_skills_count', count=len(new_mw_list)))
+        search_edit.clear()
+        skill_slots.clear()
+        if not new_mw_list:
+            nl = QLabel('--')
+            nl.setAlignment(Qt.AlignCenter)
+            nl.setStyleSheet('font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.25); background: transparent; border: none; padding: 20px;')
+            scl.insertWidget(0, nl)
+        else:
+            elem_colors = PalInfoWidget._ELEMENT_COLORS if hasattr(PalInfoWidget, '_ELEMENT_COLORS') else {}
+            for idx, skill_val in enumerate(new_mw_list):
+                if isinstance(skill_val, dict):
+                    skill_val = skill_val.get('value', '')
+                if not skill_val:
+                    continue
+                w_clean = skill_val.split('::')[-1].lower()
+                move_name = PalFrame._SKILLMAP.get(w_clean, skill_val.split('::')[-1])
+                skill_info = _data._SKILL_DATA.get(w_clean, {}) if isinstance(_data._SKILL_DATA, dict) else {}
+                skill_elem = skill_info.get('element', 'Normal')
+                skill_power = skill_info.get('power', 0)
+                elem_color = elem_colors.get(skill_elem, '#9CA3AF')
+                slot = SkillSlotFrame()
+                slot.setStyleSheet('SkillSlotFrame { background: rgba(0,0,0,0); border: 1px solid rgba(125,211,252,0.08); border-radius: 3px; } SkillSlotFrame:hover { background: rgba(125,211,252,0.06); border: 1px solid rgba(125,211,252,0.2); }')
+                slot.setFixedHeight(28)
+                slot.setCursor(Qt.PointingHandCursor)
+                slot._skill_raw_value = skill_val
+                slot._skill_idx = idx
+                slot_layout = QHBoxLayout(slot)
+                slot_layout.setContentsMargins(6, 0, 6, 0)
+                slot_layout.setSpacing(4)
+                slot_layout.setAlignment(Qt.AlignVCenter)
+                name_lbl = QLabel(move_name)
+                name_lbl.setStyleSheet('font-size: 9px; font-weight: 600; color: #E2E8F0; background: transparent; border: none;')
+                slot_layout.addWidget(name_lbl, 1)
+                elem_badge = QLabel()
+                elem_badge.setFixedSize(18, 18)
+                elem_badge.setAlignment(Qt.AlignCenter)
+                if skill_elem:
+                    ep = _icons._get_element_pixmap(skill_elem, 'small', 16)
+                    if ep:
+                        elem_badge.setScaledContents(True)
+                        elem_badge.setPixmap(ep)
+                        elem_badge.setStyleSheet('background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 2px; padding: 1px; margin: 0px;')
+                    else:
+                        elem_badge.setText(skill_elem[:4])
+                        elem_badge.setStyleSheet(f'font-size: 6px; font-weight: 700; color: {elem_color}; background: rgba(255,255,255,0.04); border: 1px solid {elem_color}40; border-radius: 2px;')
+                else:
+                    elem_badge.setStyleSheet('background: transparent; border: none;')
+                slot_layout.addWidget(elem_badge)
+                power_lbl = QLabel(str(skill_power) if skill_power else '--')
+                power_lbl.setFixedWidth(24)
+                power_lbl.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+                power_lbl.setStyleSheet('font-size: 9px; font-weight: 700; color: #F59E0B; background: transparent; border: none;')
+                slot_layout.addWidget(power_lbl)
+                if skill_info:
+                    tip_parts = [f'<b>{move_name}</b>', f'Element: {skill_elem}', f'Power: {skill_power}']
+                    cd = skill_info.get('cooldown', 0)
+                    if cd:
+                        tip_parts.append(f'Cooldown: {cd}s')
+                    desc = skill_info.get('description', '')
+                    if desc:
+                        tip_parts.append('')
+                        tip_parts.append(desc)
+                    slot.setToolTip('<br>'.join(tip_parts))
+                slot.mousePressEvent = _make_handler(skill_val, dlg, slot, scl, count_lbl)
+                scl.insertWidget(scl.count() - 1, slot)
+                skill_slots.append((slot, move_name.lower()))
     scroll.setWidget(scroll_ct)
     il.addWidget(scroll, 1)
     btn_row = QHBoxLayout()
+    learn_all_btn = QPushButton(t('edit_pals.learnt_skills_learn_all'))
+    learn_all_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.15); color: #4ADE80; border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.25); color: #FFFFFF; }')
+    learn_all_btn.clicked.connect(lambda: (_learn_all_skills_raw(raw), _rebuild_list()))
+    btn_row.addWidget(learn_all_btn)
     btn_row.addStretch()
     close_btn = QPushButton('Close')
     close_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.1); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.25); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.2); color: #FFFFFF; }')

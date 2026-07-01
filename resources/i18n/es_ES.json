@@ -1655,5 +1655,7 @@
     "docs.wiki.filter.rank": "Rango",
     "docs.wiki.filter.value.boss": "Antiguo",
     "docs.wiki.filter.value.standard": "Estándar",
-    "docs.wiki.sort.work_level": "Nivel"
+    "docs.wiki.sort.work_level": "Nivel",
+    "edit_pals.learnt_skills_search": "Habilidades de búsqueda...",
+    "edit_pals.learnt_skills_learn_all": "Aprender todo"
 }

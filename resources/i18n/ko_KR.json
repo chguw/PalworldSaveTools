@@ -1660,5 +1660,7 @@
     "docs.wiki.filter.rank": "계급",
     "docs.wiki.filter.value.boss": "고대의",
     "docs.wiki.filter.value.standard": "기준",
-    "docs.wiki.sort.work_level": "수준"
+    "docs.wiki.sort.work_level": "수준",
+    "edit_pals.learnt_skills_search": "검색 스킬...",
+    "edit_pals.learnt_skills_learn_all": "모두 알아보기"
 }

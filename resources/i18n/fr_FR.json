@@ -1643,5 +1643,7 @@
     "docs.wiki.filter.rank": "Rang",
     "docs.wiki.filter.value.boss": "Ancien",
     "docs.wiki.filter.value.standard": "Standard",
-    "docs.wiki.sort.work_level": "Niveau"
+    "docs.wiki.sort.work_level": "Niveau",
+    "edit_pals.learnt_skills_search": "Compétences de recherche...",
+    "edit_pals.learnt_skills_learn_all": "Tout apprendre"
 }

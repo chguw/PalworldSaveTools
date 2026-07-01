@@ -87,6 +87,8 @@ NEW_TRANSLATIONS = {
     'docs.wiki.filter.value.boss': 'Ancient',
     'docs.wiki.filter.value.standard': 'Standard',
     'docs.wiki.sort.work_level': 'Level',
+    'edit_pals.learnt_skills_search': 'Search skills...',
+    'edit_pals.learnt_skills_learn_all': 'Learn All',
 }
 OLD_KEYS = [
     'inventory.add_all_effigies',

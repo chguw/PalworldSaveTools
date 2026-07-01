@@ -1685,5 +1685,7 @@
     "docs.wiki.filter.rank": "Rang",
     "docs.wiki.filter.value.boss": "Uralt",
     "docs.wiki.filter.value.standard": "Standard",
-    "docs.wiki.sort.work_level": "Ebene"
+    "docs.wiki.sort.work_level": "Ebene",
+    "edit_pals.learnt_skills_search": "Suchfähigkeiten...",
+    "edit_pals.learnt_skills_learn_all": "Alles erfahren"
 }

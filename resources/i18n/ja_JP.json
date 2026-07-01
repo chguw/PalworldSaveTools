@@ -1615,7 +1615,7 @@
     "stat_tooltip.atk": "攻撃",
     "stat_tooltip.atk_desc": "パルの攻撃。\n与えるダメージが増加する\n攻撃力が上がる。",
     "stat_tooltip.def": "防衛",
-    "stat_tooltip.def_desc": "パルの守備。\n受けるダメージは次のように減少します\n防御力が上がります。",
+    "stat_tooltip.def_desc": "パルの守備。\n受けるダメージが減少する\n防御力が上がります。",
     "stat_tooltip.ws": "作業スピード",
     "stat_tooltip.ws_desc": "パルの仕事のスピード。\nの効率に影響します\nさまざまなタスクに取り組んでいる\n基地で。",
     "stat_tooltip.bonus_trust": "信頼からのボーナス+{value}",
@@ -1661,5 +1661,7 @@
     "docs.wiki.filter.rank": "ランク",
     "docs.wiki.filter.value.boss": "古代",
     "docs.wiki.filter.value.standard": "標準",
-    "docs.wiki.sort.work_level": "レベル"
+    "docs.wiki.sort.work_level": "レベル",
+    "edit_pals.learnt_skills_search": "検索スキル...",
+    "edit_pals.learnt_skills_learn_all": "すべてを学ぶ"
 }
