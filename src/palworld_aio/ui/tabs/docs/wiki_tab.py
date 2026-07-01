@@ -27,7 +27,7 @@ _CATEGORY_CONFIG = {
     'pals': {
         'sort_fields': [
             ('name', 'docs.wiki.sort.name', lambda d: (d.get('name') or '').lower()),
-            ('paldeck', 'docs.wiki.sort.index', lambda d: d.get('stats', {}).get('zukan_index', 9999)),
+            ('paldeck', 'docs.wiki.sort.index', lambda d: _resolve_zukan(d) or 9999),
         ],
         'filter_groups': [
             {'id': 'element', 'label_key': 'docs.wiki.filter.element', 'field': 'elements', 'type': 'dict_keys', 'is_element': True},
@@ -106,14 +106,15 @@ _LIST_S = "QListWidget { background: transparent; border: 1px solid rgba(125,211
 _DETAIL_S = "QScrollArea { border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; background: rgba(0,0,0,0.1); }"
 _CARD_S = "background: rgba(255,255,255,0.04); border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; padding: 8px;"
 _SORT_BTN_S = (
-    'QPushButton { background: transparent; color: #6b7280; border: none; '
+    'QPushButton { background: transparent; color: #6b7280; border: 1px solid rgba(125,211,252,0.1); '
     'border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 600; }'
     'QPushButton:hover { color: #e2e8f0; background: rgba(125,211,252,0.08); }'
-    'QPushButton[active=true] { color: #7DD3FC; background: rgba(125,211,252,0.16); }'
+    'QPushButton[active=true] { color: #7DD3FC; background: rgba(125,211,252,0.16); '
+    'border-color: #7DD3FC; }'
 )
 _FILTER_BTN_S = (
     'QPushButton { background: transparent; color: #94a3b8; border: 1px solid rgba(125,211,252,0.1); '
-    'border-radius: 4px; padding: 2px 8px; font-size: 10px; }'
+    'border-radius: 4px; padding: 2px 6px; font-size: 9px; }'
     'QPushButton:hover { background: rgba(125,211,252,0.08); color: #e2e8f0; }'
     'QPushButton[active=true] { background: rgba(125,211,252,0.18); color: #7DD3FC; '
     'border-color: #7DD3FC; font-weight: 700; }'
@@ -261,6 +262,36 @@ def _normalize_elem(name):
     if s.startswith('EPalElementType::'):
         return s.split('::')[-1]
     return s
+
+
+_zukan_map = None
+_zukan_prefixes = ('boss_', 'megaboss_', 'predator_', 'gym_', 'raid_', 'police_')
+
+def _resolve_zukan(item):
+    global _zukan_map
+    if _zukan_map is None:
+        pals = _load_json('characters.json', 'pals')
+        _zukan_map = {}
+        for p in pals:
+            idx = p.get('stats', {}).get('zukan_index')
+            if idx and idx > 0:
+                _zukan_map[p.get('asset', '').lower()] = idx
+    idx = item.get('stats', {}).get('zukan_index')
+    if idx and idx > 0:
+        return idx
+    key = item.get('asset', '').lower()
+    # Strip prefix
+    for prefix in _zukan_prefixes:
+        if key.startswith(prefix):
+            key = key[len(prefix):]
+            break
+    # Progressively strip trailing _tokens until a match
+    parts = key.split('_')
+    for i in range(len(parts), 0, -1):
+        candidate = '_'.join(parts[:i])
+        if candidate in _zukan_map:
+            return _zukan_map[candidate]
+    return 0
 
 
 def _compute_filter_values(all_data, fg):
@@ -1278,12 +1309,13 @@ class WikiCategoryPage(QWidget):
             ep = _get_element_pixmap(ename, 'small', 20)
             if ep:
                 btn.setIcon(QIcon(ep))
-            btn.setStyleSheet(_FILTER_BTN_S.replace('padding: 2px 8px;', 'padding: 2px;'))
+            btn.setStyleSheet(_FILTER_BTN_S.replace('padding: 2px 6px;', 'padding: 2px;'))
             btn.setIconSize(QSize(20, 20))
         else:
             btn = QPushButton(display)
             btn.setFixedHeight(22)
             btn.setStyleSheet(_FILTER_BTN_S)
+            btn.setToolTip(display)
         btn.setProperty('active', False)
         btn.setCursor(QCursor(Qt.PointingHandCursor))
         btn.clicked.connect(lambda checked, g=fg['id'], v=val: self._toggle_filter(g, v))
@@ -1393,8 +1425,8 @@ class WikiCategoryPage(QWidget):
                             break
                         found += 1
             if self._cat == 'pals':
-                deck = item.get('stats', {}).get('zukan_index', 0)
-                display = f'#{deck}  {name}' if deck and deck > 0 else name
+                deck = _resolve_zukan(item)
+                display = f'#{deck}  {name}' if deck else name
                 li = QListWidgetItem(display)
                 li.setData(Qt.UserRole, idx)
                 ip = _icon(icon_path)
@@ -1487,7 +1519,9 @@ class WikiCategoryPage(QWidget):
             if vkeys and fg['id'] in self._filter_btns:
                 for raw_val, btn in self._filter_btns[fg['id']].items():
                     if raw_val in vkeys:
-                        btn.setText(t(vkeys[raw_val]))
+                        tt = t(vkeys[raw_val])
+                        btn.setText(tt)
+                        btn.setToolTip(tt)
         self._detail.show_item({})
         cur = self._list.currentItem()
         if cur:
