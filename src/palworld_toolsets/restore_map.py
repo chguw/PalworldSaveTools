@@ -21,10 +21,8 @@ def backup_local_data(subfolder_path):
         shutil.copy(original_local_data, backup_file)
         print(t('Backup created at: {backup_file}', backup_file=backup_file))
 def clear_fog_in_local_data(path):
-    with open(path, 'rb') as f:
-        data = f.read()
-    raw_gvas, save_type = decompress_sav_to_gvas(data)
-    gvas = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES)
+    from palsav.io import load_sav
+    gvas = load_sav(path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
     d = gvas.dump()
     sd = d['properties']['SaveData']['value']
     if 'WorldMapUISaveDataMap' in sd:
@@ -41,10 +39,8 @@ def clear_fog_in_local_data(path):
         entry['value'] = False
     print(f'  Hidden locations set: {len(hl)} entries')
     ng = GvasFile.load(d)
-    st = 50 if 'Pal.PalWorldSaveGame' in ng.header.save_game_class_name or 'Pal.PalLocalWorldSaveGame' in ng.header.save_game_class_name else 49
-    sav = compress_gvas_to_sav(ng.write(SKP_PALWORLD_CUSTOM_PROPERTIES), st)
-    with open(path, 'wb') as f:
-        f.write(sav)
+    from palsav.io import save_sav
+    save_sav(ng, path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def clear_fog_in_all_subfolders():
     updated_count = 0
     for folder in os.listdir(savegames_path):

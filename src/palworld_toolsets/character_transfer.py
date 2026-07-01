@@ -6,8 +6,6 @@ from PySide6.QtGui import QIcon, QFont
 import os
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 
-from palsav.paltypes import PALWORLD_TYPE_HINTS, PALWORLD_CUSTOM_PROPERTIES
-from palsav.gvas import GvasFile
 from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio.inventory.container_ownership import ContainerOwnership
 from palworld_aio.inventory.inventory_manager import PlayerInventory
@@ -16,20 +14,16 @@ from palworld_aio.utils import calculate_max_hp, safe_nested_get
 from palworld_aio import constants
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palsav.archive import UUID as PalUUID
+from palsav.io import load_sav
 _TRANSFER_STEPS = {'character': True, 'tech_data': True, 'inventory': True, 'guild': True, 'pals': True, 'dynamics': True, 'timestamps': True}
 player_list_cache = []
 def _load_sav(path):
-    with open(path, 'rb') as f:
-        raw_gvas, save_type = decompress_sav_to_gvas(f.read())
-    gvas_file = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
-    gvas_file.save_type = save_type
+    gvas_file = load_sav(path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
     return gvas_file
 def _write_sav(gvas_file, path):
-    data = gvas_file.write(SKP_PALWORLD_CUSTOM_PROPERTIES)
-    t = getattr(gvas_file, 'save_type', 50)
+    from palsav.io import save_sav
     tmp = path + '.tmp'
-    with open(tmp, 'wb') as f:
-        f.write(compress_gvas_to_sav(data, t))
+    save_sav(gvas_file, tmp, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
     os.replace(tmp, path)
 def extract_value(data, key, default_value=''):
     value = data.get(key, default_value)

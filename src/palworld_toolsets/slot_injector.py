@@ -13,16 +13,11 @@ import os
 from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
 def sav_to_gvasfile(filepath):
-    with open(filepath, 'rb') as f:
-        data = f.read()
-        raw_gvas, save_type = decompress_sav_to_gvas(data)
-    return GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
+    from palsav.io import load_sav
+    return load_sav(filepath, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def gvasfile_to_sav(gvas_file, output_filepath):
-    save_type = 50 if 'PalPalLocalWorldSaveGame' in gvas_file.header.save_game_class_name else 49
-    save_type = 50 if 'Pal.PalworldSaveGame' in gvas_file.header.save_game_class_name or 'Pal.PalLocalWorldSaveGame' in gvas_file.header.save_game_class_name else 49
-    sav_file = compress_gvas_to_sav(gvas_file.write(SKP_PALWORLD_CUSTOM_PROPERTIES), save_type)
-    with open(output_filepath, 'wb') as f:
-        f.write(sav_file)
+    from palsav.io import save_sav
+    save_sav(gvas_file, output_filepath, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def center_window(win):
     screen = QApplication.primaryScreen().availableGeometry()
     size = win.sizeHint()

@@ -93,6 +93,10 @@ def clean_build_artifacts():
         for d in dirs:
             if d == '__pycache__':
                 shutil.rmtree(os.path.join(root, d), ignore_errors=True)
+    palsav_build = os.path.join('src', 'palsav', 'build')
+    if os.path.isdir(palsav_build):
+        print(f'Removing {palsav_build}...')
+        shutil.rmtree(palsav_build, ignore_errors=True)
 
 
 def set_standalone_mode(enabled: bool):

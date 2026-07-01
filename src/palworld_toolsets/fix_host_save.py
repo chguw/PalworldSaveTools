@@ -55,12 +55,9 @@ class SkipGvasFile(GvasFile):
         writer.write(self.trailer)
         return writer.bytes()
 def gvas_to_sav(output_filepath, gvas_bytes):
+    from palsav.io import save_sav
     gvas_file = GvasFile.read(gvas_bytes, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES)
-    save_type = 50 if 'Pal.PalworldSaveGame' in gvas_file.header.save_game_class_name or 'Pal.PalLocalWorldSaveGame' in gvas_file.header.save_game_class_name else 49
-    sav_file = compress_gvas_to_sav(gvas_file.write(SKP_PALWORLD_CUSTOM_PROPERTIES), save_type)
-    with open(output_filepath, 'wb') as f:
-        f.write(sav_file)
-target_save_type = 49
+    save_sav(gvas_file, output_filepath, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def format_last_seen(last_online_time, current_tick):
     try:
         if last_online_time is None or last_online_time == 0:
@@ -299,17 +296,12 @@ def ask_string_with_icon(title, prompt, icon_path):
     result = dialog.exec()
     return dialog.entry.text() if result == QDialog.Accepted else None
 def sav_to_json(filepath):
-    with open(filepath, 'rb') as f:
-        data = f.read()
-        raw_gvas, save_type = decompress_sav_to_gvas(data)
-    gvas_file = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
-    return gvas_file.dump()
+    from palsav.io import load_sav
+    return load_sav(filepath, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES).dump()
 def json_to_sav(json_data, output_filepath):
+    from palsav.io import save_sav
     gvas_file = GvasFile.load(json_data)
-    save_type = 50 if 'Pal.PalworldSaveGame' in gvas_file.header.save_game_class_name or 'Pal.PalLocalWorldSaveGame' in gvas_file.header.save_game_class_name else 49
-    sav_file = compress_gvas_to_sav(gvas_file.write(SKP_PALWORLD_CUSTOM_PROPERTIES), save_type)
-    with open(output_filepath, 'wb') as f:
-        f.write(sav_file)
+    save_sav(gvas_file, output_filepath, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def populate_player_lists(folder_path):
     global player_list_cache
     if player_list_cache:

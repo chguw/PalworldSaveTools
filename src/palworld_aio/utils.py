@@ -11,11 +11,13 @@ from palsav.archive import UUID
 from palsav.gvas import GvasFile
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 from palsav.paltypes import PALWORLD_TYPE_HINTS
+from palsav import io as palsav_io
 from common import get_versions, get_base_directory
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palworld_aio import constants
 from resource_resolver import resource_path
 from i18n import t
+
 def resolve_name(character_id: str, name_map: dict) -> str | None:
     if not character_id:
         return None
@@ -54,43 +56,14 @@ def are_equal_uuids(a, b):
 def fast_deepcopy(json_dict):
     return pickle.loads(pickle.dumps(json_dict, -1))
 def sav_to_json(path):
-    file_size = os.path.getsize(path)
-    if file_size > 100 * 1024 * 1024:
-        print(f'Large file detected({file_size / (1024 * 1024):.1f}MB),using memory mapping for decompression...')
-        with open(path, 'rb') as f:
-            with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
-                raw_gvas, _ = decompress_sav_to_gvas(mm.read())
-    else:
-        with open(path, 'rb') as f:
-            data = f.read()
-        raw_gvas, _ = decompress_sav_to_gvas(data)
-    g = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
-    return g.dump()
+    return palsav_io.load_sav(path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES).dump()
 def json_to_sav(j, path):
     g = GvasFile.load(j)
-    t = 50 if 'Pal.PalworldSaveGame' in g.header.save_game_class_name else 49
-    data = compress_gvas_to_sav(g.write(SKP_PALWORLD_CUSTOM_PROPERTIES), t)
-    with open(path, 'wb') as f:
-        f.write(data)
+    palsav_io.save_sav(g, path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def sav_to_gvasfile(path):
-    file_size = os.path.getsize(path)
-    if file_size > 100 * 1024 * 1024:
-        print(f'Large file detected({file_size / (1024 * 1024):.1f}MB),using memory mapping for decompression...')
-        with open(path, 'rb') as f:
-            with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
-                raw_gvas, _ = decompress_sav_to_gvas(mm.read())
-    else:
-        with open(path, 'rb') as f:
-            data = f.read()
-        raw_gvas, _ = decompress_sav_to_gvas(data)
-    g = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
-    return g
+    return palsav_io.load_sav(path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def gvasfile_to_sav(gvas_file, path):
-    data = gvas_file.write(SKP_PALWORLD_CUSTOM_PROPERTIES)
-    t = 50 if 'Pal.PalworldSaveGame' in gvas_file.header.save_game_class_name else 49
-    compressed = compress_gvas_to_sav(data, t)
-    with open(path, 'wb') as f:
-        f.write(compressed)
+    palsav_io.save_sav(gvas_file, path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 class GvasFileWrapper:
     def __init__(self, gvas_file):
         self._gvas_file = gvas_file
@@ -125,17 +98,7 @@ class GvasFileWrapper:
     def gvas_file(self):
         return self._gvas_file
 def sav_to_gvas_wrapper(path):
-    file_size = os.path.getsize(path)
-    if file_size > 100 * 1024 * 1024:
-        print(f'Large file detected({file_size / (1024 * 1024):.1f}MB), using memory mapping for decompression...')
-        with open(path, 'rb') as f:
-            with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
-                raw_gvas, _ = decompress_sav_to_gvas(mm.read())
-    else:
-        with open(path, 'rb') as f:
-            data = f.read()
-        raw_gvas, _ = decompress_sav_to_gvas(data)
-    g = GvasFile.read(raw_gvas, PALWORLD_TYPE_HINTS, SKP_PALWORLD_CUSTOM_PROPERTIES, allow_nan=True)
+    g = palsav_io.load_sav(path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
     return GvasFileWrapper(g)
 def wrapper_to_sav(wrapper, path):
     gvasfile_to_sav(wrapper.gvas_file, path)

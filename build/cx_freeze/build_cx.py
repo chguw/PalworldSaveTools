@@ -66,6 +66,10 @@ def clean_build_artifacts():
             if d == '__pycache__':
                 path = os.path.join(root, d)
                 shutil.rmtree(path, ignore_errors=True)
+    palsav_build = os.path.join('src', 'palsav', 'build')
+    if os.path.isdir(palsav_build):
+        print(f'Removing {palsav_build}...')
+        shutil.rmtree(palsav_build, ignore_errors=True)
 def set_standalone_mode(enabled: bool):
     os.makedirs(BUILD_CFG_DIR, exist_ok=True)
     if not os.path.exists(BUILD_CFG_PATH):
