@@ -188,7 +188,7 @@ class PlayerTechnologyActionDialog(QDialog):
                         checkbox = ToggleCheckBtn(name)
                         checkbox.setProperty('uid', uid)
                         item = QListWidgetItem()
-                        item.setSizeHint(QSize(0, 32))
+                        item.setSizeHint(QSize(0, 36))
                         self.player_list.addItem(item)
                         self.player_list.setItemWidget(item, checkbox)
         except Exception as e:
