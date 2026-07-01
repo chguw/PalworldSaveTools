@@ -2880,6 +2880,8 @@ class BaseInventoryTab(QWidget):
         clear_item.setData(Qt.UserRole, '__clear__')
         list_widget.addItem(clear_item)
         for guild in self._guilds_data:
+            if self._current_guild_id and str(guild['id']) == str(self._current_guild_id):
+                continue
             item = QListWidgetItem(f"{guild['name']} (Level {guild['level']})")
             item.setData(Qt.UserRole, guild['id'])
             list_widget.addItem(item)
@@ -2938,6 +2940,8 @@ class BaseInventoryTab(QWidget):
         clear_item.setData(Qt.UserRole, '__clear__')
         list_widget.addItem(clear_item)
         for base in self._bases_data:
+            if self._current_base_id and str(base['id']) == str(self._current_base_id):
+                continue
             item = QListWidgetItem(f"{base['id'][:8]}")
             item.setData(Qt.UserRole, base['id'])
             list_widget.addItem(item)

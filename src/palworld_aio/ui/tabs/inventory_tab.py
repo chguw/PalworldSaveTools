@@ -1094,6 +1094,8 @@ class PlayerInventoryTab(QWidget):
         clear_item = QListWidgetItem(t('common.clear') if t else '-- clear --')
         lst.addItem(clear_item)
         for player in self._player_list:
+            if self.current_player_uid and str(player['uid']) == str(self.current_player_uid):
+                continue
             item = QListWidgetItem(player['display'])
             item.setData(Qt.UserRole, player)
             lst.addItem(item)
