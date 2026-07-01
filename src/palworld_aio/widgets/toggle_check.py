@@ -27,7 +27,6 @@ class ToggleCheckBtn(QWidget):
         self._label = QLabel(label)
         self._label.setStyleSheet('color: #e2e8f0; background: transparent;')
         layout.addWidget(self._label)
-        layout.addStretch()
         self._update_style()
 
     def _toggle(self):
