@@ -13,6 +13,24 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
+    'json_editor.tab': 'JSON Editor',
+    'json_editor.refresh': 'Refresh from Save',
+    'json_editor.export': 'Export JSON',
+    'json_editor.import': 'Import JSON',
+    'json_editor.no_save': 'No save loaded',
+    'json_editor.loaded': 'JSON loaded from save',
+    'json_editor.export_save': 'Export JSON',
+    'json_editor.import_save': 'Import JSON',
+    'json_editor.exported': 'Exported to {path}',
+    'json_editor.imported': 'Imported {path}',
+    'json_editor.col_key': 'Key',
+    'json_editor.col_value': 'Value',
+    'json_editor.col_type': 'Type',
+    'json_editor.search_placeholder': 'Search...',
+    'json_editor.search_prev': 'Previous match',
+    'json_editor.search_next': 'Next match',
+    'json_editor.search_count': '{count} matches',
+    'json_editor.search_no_matches': 'No matches',
     'base_inventory.booth_item_title': 'Booth Items: {count}',
     'base_inventory.booth_item_no_data': 'Booth: No container data',
     'base_inventory.booth_pal_title': 'Booth Pals: {count}',
@@ -91,6 +109,9 @@ NEW_TRANSLATIONS = {
     'edit_pals.learnt_skills_learn_all': 'Learn All',
 }
 OLD_KEYS = [
+    'json_editor.apply', 'json_editor.validate', 'json_editor.applied',
+    'json_editor.apply_error', 'json_editor.apply_error_detail',
+    'json_editor.empty', 'json_editor.valid', 'json_editor.modified', 'json_editor.unchanged',
     'inventory.add_all_effigies',
     'inventory.add_all_effigies_confirm.title',
     'inventory.add_all_effigies_confirm.msg',
