@@ -733,8 +733,6 @@ class ItemPickerDialog(QDialog):
             desc = item.get('description', '').strip()
             if not desc or desc.lower() in ('', 'en text', 'en_text', 'none', '-', '---'):
                 continue
-            if item.get('name', '') == item.get('asset', ''):
-                continue
             if 'en_text' in item.get('name', '').lower():
                 continue
             list_item = QListWidgetItem(item.get('name', 'Unknown'))
