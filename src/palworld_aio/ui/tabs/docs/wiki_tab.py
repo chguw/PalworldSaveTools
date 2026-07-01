@@ -23,6 +23,81 @@ _CATEGORIES = [
     ('work_suitability', 'docs.wiki.work_suitability', 'work_suitability.json', 'work_types'),
 ]
 
+_CATEGORY_CONFIG = {
+    'pals': {
+        'sort_fields': [
+            ('name', 'docs.wiki.sort.name', lambda d: (d.get('name') or '').lower()),
+            ('paldeck', 'docs.wiki.sort.index', lambda d: d.get('stats', {}).get('zukan_index', 9999)),
+        ],
+        'filter_groups': [
+            {'id': 'element', 'label_key': 'docs.wiki.filter.element', 'field': 'elements', 'type': 'dict_keys', 'is_element': True},
+        ],
+    },
+    'items': {
+        'sort_fields': [
+            ('name', 'docs.wiki.sort.name', lambda d: (d.get('name') or '').lower()),
+            ('price', 'docs.wiki.sort.price', lambda d: d.get('price') or 0),
+            ('weight', 'docs.wiki.sort.weight', lambda d: d.get('weight') or 0),
+        ],
+        'filter_groups': [
+            {'id': 'type', 'label_key': 'docs.wiki.filter.type', 'field': 'type_a_display', 'type': 'field_values'},
+            {'id': 'rarity', 'label_key': 'docs.wiki.filter.rarity', 'field': 'rarity', 'type': 'field_values'},
+        ],
+    },
+    'buildings': {
+        'sort_fields': [
+            ('name', 'docs.wiki.sort.name', lambda d: (d.get('name') or '').lower()),
+            ('rank', 'docs.wiki.sort.rank', lambda d: d.get('rank') or 0),
+            ('hp', 'docs.wiki.sort.hp', lambda d: d.get('hp') or 0),
+        ],
+        'filter_groups': [
+            {'id': 'type', 'label_key': 'docs.wiki.filter.type', 'field': 'type_a_display', 'type': 'field_values'},
+        ],
+    },
+    'active_skills': {
+        'sort_fields': [
+            ('name', 'docs.wiki.sort.name', lambda d: (d.get('name') or '').lower()),
+            ('power', 'docs.wiki.sort.power', lambda d: d.get('power') or 0),
+            ('cooldown', 'docs.wiki.sort.cooldown', lambda d: d.get('cooldown') or 0),
+        ],
+        'filter_groups': [
+            {'id': 'element', 'label_key': 'docs.wiki.filter.element', 'field': 'element', 'type': 'field_values', 'is_element': True},
+        ],
+    },
+    'passive_skills': {
+        'sort_fields': [
+            ('name', 'docs.wiki.sort.name', lambda d: (d.get('name') or '').lower()),
+            ('rank', 'docs.wiki.sort.rank', lambda d: d.get('rank') or 0),
+        ],
+        'filter_groups': [
+            {'id': 'rank', 'label_key': 'docs.wiki.filter.rank', 'field': 'rank', 'type': 'int_values', 'values': [1, 2, 3, 4]},
+        ],
+    },
+    'technologies': {
+        'sort_fields': [
+            ('name', 'docs.wiki.sort.name', lambda d: (d.get('name') or '').lower()),
+            ('tier', 'docs.wiki.sort.tier', lambda d: d.get('tier') or 0),
+            ('level', 'docs.wiki.sort.level', lambda d: d.get('level_cap') or 0),
+            ('cost', 'docs.wiki.sort.cost', lambda d: d.get('cost') or 0),
+        ],
+        'filter_groups': [
+            {'id': 'type', 'label_key': 'docs.wiki.filter.type', 'field': 'type', 'type': 'field_values', 'value_keys': {'boss': 'docs.wiki.filter.value.boss', 'standard': 'docs.wiki.filter.value.standard'}},
+        ],
+    },
+    'elements': {
+        'sort_fields': [
+            ('name', 'docs.wiki.sort.name', lambda d: (d.get('display') or d.get('name') or '').lower()),
+        ],
+        'filter_groups': [],
+    },
+    'work_suitability': {
+        'sort_fields': [
+            ('name', 'docs.wiki.sort.name', lambda d: (d.get('display_name') or d.get('id') or '').lower()),
+        ],
+        'filter_groups': [],
+    },
+}
+
 _BASE = "QPushButton { background: transparent; color: #94a3b8; border: none; border-radius: 4px; font-size: 11px; }"
 _BASE += "QPushButton:hover { background: rgba(125,211,252,0.06); color: #e2e8f0; }"
 _BASE += "QPushButton[active=true] { background: rgba(125,211,252,0.08); color: #7DD3FC; font-weight: 600; }"
@@ -30,6 +105,19 @@ _SEARCH_S = "QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; bor
 _LIST_S = "QListWidget { background: transparent; border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; color: #e2e8f0; font-size: 11px; } QListWidget::item { padding: 4px 6px; border-radius: 3px; } QListWidget::item:selected { background: rgba(125,211,252,0.12); color: #7DD3FC; } QListWidget::item:hover { background: rgba(125,211,252,0.06); }"
 _DETAIL_S = "QScrollArea { border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; background: rgba(0,0,0,0.1); }"
 _CARD_S = "background: rgba(255,255,255,0.04); border: 1px solid rgba(125,211,252,0.1); border-radius: 6px; padding: 8px;"
+_SORT_BTN_S = (
+    'QPushButton { background: transparent; color: #6b7280; border: none; '
+    'border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 600; }'
+    'QPushButton:hover { color: #e2e8f0; background: rgba(125,211,252,0.08); }'
+    'QPushButton[active=true] { color: #7DD3FC; background: rgba(125,211,252,0.16); }'
+)
+_FILTER_BTN_S = (
+    'QPushButton { background: transparent; color: #94a3b8; border: 1px solid rgba(125,211,252,0.1); '
+    'border-radius: 4px; padding: 2px 8px; font-size: 10px; }'
+    'QPushButton:hover { background: rgba(125,211,252,0.08); color: #e2e8f0; }'
+    'QPushButton[active=true] { background: rgba(125,211,252,0.18); color: #7DD3FC; '
+    'border-color: #7DD3FC; font-weight: 700; }'
+)
 
 _LIST_ICON = 28
 
@@ -167,6 +255,44 @@ def _v(text):
         return None
     return str(text)
 
+
+def _normalize_elem(name):
+    s = str(name)
+    if s.startswith('EPalElementType::'):
+        return s.split('::')[-1]
+    return s
+
+
+def _compute_filter_values(all_data, fg):
+    ftype = fg['type']
+    field = fg['field']
+    if ftype == 'dict_keys':
+        vals = set()
+        for d in all_data:
+            v = d.get(field, {})
+            if isinstance(v, dict):
+                vals.update(v.keys())
+        result = sorted(vals)
+        if fg.get('is_element') and 'None' not in result:
+            result.append('None')
+        return result
+    elif ftype == 'field_values':
+        vals = set()
+        for d in all_data:
+            v = d.get(field)
+            if v is not None and v != '':
+                normalized = _normalize_elem(v) if fg.get('is_element') else v
+                vals.add(normalized)
+        result = sorted(vals, key=str)
+        if fg.get('is_element') and 'None' in result:
+            result.remove('None')
+            result.append('None')
+        return result
+    elif ftype == 'int_values':
+        return list(fg.get('values', []))
+    return []
+
+
 class CatBtn(QPushButton):
     def paintEvent(self, event):
         sp = QStylePainter(self)
@@ -198,6 +324,9 @@ class WikiDetailPanel(QScrollArea):
         self.setWidgetResizable(True)
         self.setStyleSheet(_DETAIL_S)
         self._cat = category_id
+        self._cached_data = None
+        self._pal_sort_by = 'name'
+        self._pal_sort_rev = False
         self._c = QWidget()
         self._l = QVBoxLayout(self._c)
         self._l.setContentsMargins(16, 16, 16, 16)
@@ -292,7 +421,6 @@ class WikiDetailPanel(QScrollArea):
             clo.addStretch()
             gl.addWidget(card, r, c)
         gl.setRowStretch(gl.rowCount(), 1)
-        self._l.addWidget(self._hl(f'Pals ({len(pals)})', 12, True, '#94a3b8'))
         self._l.addWidget(gw)
 
     def _render_pal(self, d):
@@ -667,6 +795,15 @@ class WikiDetailPanel(QScrollArea):
         pals = [(p, None) for p in _pals_by_element(name)]
         if pals:
             self._l.addWidget(self._sep())
+            if self._pal_sort_by == 'name':
+                pals.sort(key=lambda x: x[0].get('name', '').lower(), reverse=self._pal_sort_rev)
+            elif self._pal_sort_by == 'index':
+                pals.sort(key=lambda x: x[0].get('stats', {}).get('zukan_index', 9999), reverse=self._pal_sort_rev)
+            self._l.addWidget(self._hl(f'Pals ({len(pals)})', 12, True, '#94a3b8'))
+            self._render_pal_sort_bar([
+                ('name', t('docs.wiki.sort.name')),
+                ('index', t('docs.wiki.sort.index')),
+            ])
             self._pal_grid(pals)
 
     def _render_work(self, d):
@@ -695,7 +832,45 @@ class WikiDetailPanel(QScrollArea):
         pals = _pals_by_work(wids) if wids else []
         if pals:
             self._l.addWidget(self._sep())
+            if self._pal_sort_by == 'name':
+                pals.sort(key=lambda x: x[0].get('name', '').lower(), reverse=self._pal_sort_rev)
+            elif self._pal_sort_by == 'level':
+                pals.sort(key=lambda x: x[1], reverse=self._pal_sort_rev)
+            self._l.addWidget(self._hl(f'Pals ({len(pals)})', 12, True, '#94a3b8'))
+            self._render_pal_sort_bar([
+                ('name', t('docs.wiki.sort.name')),
+                ('level', t('docs.wiki.sort.work_level')),
+            ])
             self._pal_grid(pals, show_level=True)
+
+    def _render_pal_sort_bar(self, options):
+        w = QWidget()
+        lo = QHBoxLayout(w)
+        lo.setContentsMargins(0, 2, 0, 4)
+        lo.setSpacing(4)
+        for fid, label in options:
+            text = f'{label} ▲' if fid == self._pal_sort_by and not self._pal_sort_rev else (
+                f'{label} ▼' if fid == self._pal_sort_by else label)
+            btn = QPushButton(text)
+            btn.setProperty('active', fid == self._pal_sort_by)
+            btn.setStyleSheet(_SORT_BTN_S)
+            btn.setCursor(QCursor(Qt.PointingHandCursor))
+            btn.setFixedHeight(22)
+            btn.clicked.connect(lambda checked, f=fid: self._toggle_pal_sort(f))
+            lo.addWidget(btn)
+        lo.addStretch()
+        self._l.addWidget(w)
+
+    def _toggle_pal_sort(self, field):
+        if self._pal_sort_by != field:
+            self._pal_sort_by = field
+            self._pal_sort_rev = False
+        elif not self._pal_sort_rev:
+            self._pal_sort_rev = True
+        else:
+            self._pal_sort_rev = False
+        if self._cached_data is not None:
+            self.show_item(self._cached_data)
 
     def _render_active_skill(self, d):
         name = _get(d, 'name') or ''
@@ -947,6 +1122,7 @@ class WikiDetailPanel(QScrollArea):
 
     def show_item(self, data):
         self._clr()
+        self._cached_data = data
         if data is None or not isinstance(data, dict):
             return
         if self._cat == 'pals':
@@ -976,6 +1152,18 @@ class WikiCategoryPage(QWidget):
         self._cat = category_id
         self._all_data = []
         self._loaded = False
+        self._config = _CATEGORY_CONFIG.get(category_id, {})
+        self._sort_by = None
+        self._sort_reverse = False
+        self._sort_fields = {}
+        self._sort_labels = {}
+        self._filter_groups = []
+        self._active_filters = {}
+        self._filter_btns = {}
+        self._filter_labels = {}
+        self._sort_btns = {}
+        self._filter_values_cache = {}
+        self._filtered_indices = []
         self._setup_ui()
 
     def _setup_ui(self):
@@ -993,8 +1181,42 @@ class WikiCategoryPage(QWidget):
         self._search = QLineEdit()
         self._search.setPlaceholderText(t('docs.wiki.search') if t else 'Search...')
         self._search.setStyleSheet(_SEARCH_S)
-        self._search.textChanged.connect(self._filter)
+        self._search.textChanged.connect(lambda: self._apply_sort_filter() if self._loaded else None)
         ll.addWidget(self._search)
+
+        sort_cfg = self._config.get('sort_fields', [])
+        if sort_cfg:
+            self._sort_fields = {sid: fn for sid, _, fn in sort_cfg}
+            self._sort_labels = {sid: lbl for sid, lbl, _ in sort_cfg}
+            sw = QWidget()
+            sl = QHBoxLayout(sw)
+            sl.setContentsMargins(0, 0, 0, 0)
+            sl.setSpacing(2)
+            for sid, label_key, _ in sort_cfg:
+                btn = QPushButton(t(label_key))
+                btn.setProperty('active', False)
+                btn.setStyleSheet(_SORT_BTN_S)
+                btn.setCursor(QCursor(Qt.PointingHandCursor))
+                btn.setFixedHeight(22)
+                btn.clicked.connect(lambda checked, s=sid: self._toggle_sort(s))
+                self._sort_btns[sid] = btn
+                sl.addWidget(btn)
+            sl.addStretch()
+            ll.addWidget(sw)
+
+        fg_configs = self._config.get('filter_groups', [])
+        self._filter_groups = fg_configs
+        self._filter_section = QWidget()
+        self._filter_layout = QVBoxLayout(self._filter_section)
+        self._filter_layout.setContentsMargins(0, 0, 0, 0)
+        self._filter_layout.setSpacing(2)
+        for fg in fg_configs:
+            if fg['type'] == 'int_values':
+                gw = self._build_filter_group_widget(fg)
+                if gw:
+                    self._filter_layout.addWidget(gw)
+        if fg_configs:
+            ll.addWidget(self._filter_section)
 
         self._list = QListWidget()
         self._list.setStyleSheet(_LIST_S)
@@ -1012,6 +1234,62 @@ class WikiCategoryPage(QWidget):
         sp.setSizes([260, 500])
         lo.addWidget(sp, 1)
 
+    def _build_filter_group_widget(self, fg):
+        data = self._all_data if self._loaded else []
+        vals = _compute_filter_values(data, fg)
+        if not vals and fg['type'] not in ('dict_keys', 'field_values'):
+            vals = fg.get('values', [])
+        if not vals:
+            return None
+        self._filter_values_cache[fg['id']] = vals
+        w = QWidget()
+        if len(vals) > 3:
+            cols = len(vals) if fg.get('is_element') or len(vals) <= 7 else 6
+        else:
+            cols = len(vals)
+        gl = QGridLayout(w)
+        gl.setContentsMargins(0, 1, 0, 1)
+        gl.setSpacing(3)
+        self._filter_btns[fg['id']] = {}
+        lbl = QLabel(t(fg['label_key']) + ':')
+        lbl.setStyleSheet('font-size:10px;color:#6b7280;font-weight:600;')
+        self._filter_labels[fg['id']] = lbl
+        if len(vals) <= cols:
+            gl.addWidget(lbl, 0, 0, Qt.AlignLeft | Qt.AlignVCenter)
+            for i, val in enumerate(vals):
+                btn = self._make_filter_btn(fg, val)
+                gl.addWidget(btn, 0, i + 1)
+        else:
+            gl.addWidget(lbl, 0, 0, 1, cols + 1, Qt.AlignLeft)
+            for i, val in enumerate(vals):
+                r, c = 1 + i // cols, i % cols
+                btn = self._make_filter_btn(fg, val)
+                gl.addWidget(btn, r, c)
+        gl.setColumnStretch(cols + 1, 1)
+        return w
+
+    def _make_filter_btn(self, fg, val):
+        vkeys = fg.get('value_keys', {})
+        display = t(vkeys[val]) if val in vkeys else str(val)
+        if fg.get('is_element'):
+            btn = QPushButton()
+            btn.setFixedSize(28, 28)
+            ename = _normalize_elem(val).lower()
+            ep = _get_element_pixmap(ename, 'small', 20)
+            if ep:
+                btn.setIcon(QIcon(ep))
+            btn.setStyleSheet(_FILTER_BTN_S.replace('padding: 2px 8px;', 'padding: 2px;'))
+            btn.setIconSize(QSize(20, 20))
+        else:
+            btn = QPushButton(display)
+            btn.setFixedHeight(22)
+            btn.setStyleSheet(_FILTER_BTN_S)
+        btn.setProperty('active', False)
+        btn.setCursor(QCursor(Qt.PointingHandCursor))
+        btn.clicked.connect(lambda checked, g=fg['id'], v=val: self._toggle_filter(g, v))
+        self._filter_btns[fg['id']][val] = btn
+        return btn
+
     def load(self):
         idx = [c[0] for c in _CATEGORIES].index(self._cat)
         _, _, fname, data_key = _CATEGORIES[idx]
@@ -1023,8 +1301,86 @@ class WikiCategoryPage(QWidget):
                     item['icon'] = fixed
         self._all_data = items
         self._loaded = True
+        self._active_filters = {}
+        self._filter_btns = {}
+        while self._filter_layout.count():
+            item = self._filter_layout.takeAt(0)
+            w = item.widget()
+            if w:
+                w.deleteLater()
+        for fg in self._filter_groups:
+            vals = _compute_filter_values(items, fg)
+            self._filter_values_cache[fg['id']] = vals
+            if vals:
+                gw = self._build_filter_group_widget(fg)
+                if gw:
+                    self._filter_layout.addWidget(gw)
+        self._apply_sort_filter()
+
+    def _apply_sort_filter(self):
+        if not self._loaded or not self._all_data:
+            return
+
+        q = self._search.text().lower()
+        indices = list(range(len(self._all_data)))
+
+        if q:
+            indices = [i for i in indices
+                       if q in (self._all_data[i].get('name') or '').lower()
+                       or q in (self._all_data[i].get('asset') or '').lower()
+                       or q in (self._all_data[i].get('display_name') or '').lower()
+                       or q in (self._all_data[i].get('display') or '').lower()
+                       or q in (self._all_data[i].get('id') or '').lower()]
+
+        for fg in self._filter_groups:
+            av = self._active_filters.get(fg['id'])
+            if av is None:
+                continue
+            indices = [i for i in indices if self._item_matches_filter(self._all_data[i], fg, av)]
+
+        if self._sort_by is not None and self._sort_by in self._sort_fields:
+            key_fn = self._sort_fields[self._sort_by]
+            indices.sort(key=lambda i, f=key_fn: f(self._all_data[i]), reverse=self._sort_reverse)
+
+        self._filtered_indices = indices
+        self._rebuild_list()
+        if self._list.count() > 0:
+            self._list.setCurrentRow(0)
+            it = self._list.item(0)
+            if it:
+                idx = it.data(Qt.UserRole)
+                if idx is not None and idx < len(self._all_data):
+                    self._detail.show_item(self._all_data[idx])
+
+    def _item_matches_filter(self, item, fg, active_val):
+        ftype = fg['type']
+        field = fg['field']
+        if ftype == 'dict_keys':
+            v = item.get(field, {})
+            if active_val == 'None':
+                return not isinstance(v, dict) or len(v) == 0
+            return isinstance(v, dict) and active_val in v
+        elif ftype == 'field_values':
+            raw = item.get(field)
+            if raw is None or raw == '':
+                return active_val == 'None'
+            check = _normalize_elem(raw) if fg.get('is_element') else raw
+            return str(check) == str(active_val)
+        elif ftype == 'int_values':
+            raw = item.get(field)
+            if raw is None:
+                return False
+            try:
+                return int(raw) == int(active_val)
+            except (ValueError, TypeError):
+                return False
+        return True
+
+    def _rebuild_list(self):
+        self._list.blockSignals(True)
         self._list.clear()
-        for i, item in enumerate(items):
+        for idx in self._filtered_indices:
+            item = self._all_data[idx]
             name = item.get('name', item.get('display_name', item.get('id', '?')))
             icon_path = item.get('icon', '')
             if not icon_path and self._cat == 'elements':
@@ -1040,15 +1396,14 @@ class WikiCategoryPage(QWidget):
                 deck = item.get('stats', {}).get('zukan_index', 0)
                 display = f'#{deck}  {name}' if deck else name
                 li = QListWidgetItem(display)
-                li.setData(Qt.UserRole, i)
+                li.setData(Qt.UserRole, idx)
                 ip = _icon(icon_path)
                 if ip:
                     li.setIcon(QIcon(ip))
                 self._list.addItem(li)
             elif self._cat == 'active_skills':
-                display = f'{name}'
-                li = QListWidgetItem(display)
-                li.setData(Qt.UserRole, i)
+                li = QListWidgetItem(name)
+                li.setData(Qt.UserRole, idx)
                 elem = item.get('element', '')
                 if elem:
                     ep = _get_element_pixmap(elem.lower(), 'small', 20)
@@ -1057,24 +1412,55 @@ class WikiCategoryPage(QWidget):
                 self._list.addItem(li)
             else:
                 li = QListWidgetItem(name)
-                li.setData(Qt.UserRole, i)
+                li.setData(Qt.UserRole, idx)
                 ip = _icon(icon_path)
                 if ip:
                     li.setIcon(QIcon(ip))
                 self._list.addItem(li)
+        self._list.blockSignals(False)
 
-    def _filter(self, q):
-        q = q.lower()
-        for i in range(self._list.count()):
-            it = self._list.item(i)
-            idx = it.data(Qt.UserRole)
-            if idx is not None and idx < len(self._all_data):
-                d = self._all_data[idx]
-                name = d.get('name', d.get('display_name', d.get('id', '')))
-                asset = d.get('asset', '')
-                it.setHidden(bool(q) and q not in name.lower() and q not in asset.lower())
+    def _toggle_sort(self, field_id):
+        if self._sort_by != field_id:
+            self._sort_by = field_id
+            self._sort_reverse = False
+        elif not self._sort_reverse:
+            self._sort_reverse = True
+        else:
+            self._sort_by = None
+            self._sort_reverse = False
+        self._update_sort_buttons()
+        self._apply_sort_filter()
+
+    def _update_sort_buttons(self):
+        for fid, btn in self._sort_btns.items():
+            label = t(self._sort_labels[fid])
+            if fid == self._sort_by:
+                arrow = '▼' if self._sort_reverse else '▲'
+                btn.setText(f'{label} {arrow}')
+                btn.setProperty('active', True)
             else:
-                it.setHidden(True)
+                btn.setText(label)
+                btn.setProperty('active', False)
+            btn.style().unpolish(btn)
+            btn.style().polish(btn)
+
+    def _toggle_filter(self, group_id, value):
+        active_val = self._active_filters.get(group_id)
+        btns = self._filter_btns.get(group_id, {})
+        if active_val == value:
+            self._active_filters[group_id] = None
+            if value in btns:
+                btns[value].setProperty('active', False)
+                btns[value].style().unpolish(btns[value])
+                btns[value].style().polish(btns[value])
+        else:
+            self._active_filters[group_id] = value
+            for v, b in btns.items():
+                active = v == value
+                b.setProperty('active', active)
+                b.style().unpolish(b)
+                b.style().polish(b)
+        self._apply_sort_filter()
 
     def _on_sel(self, cur, prev):
         if not cur:
@@ -1084,8 +1470,30 @@ class WikiCategoryPage(QWidget):
             self._detail.show_item(self._all_data[idx])
 
     def refresh_labels(self):
-        self._search.setPlaceholderText(t('docs.wiki.search') if t else 'Search...')
+        self._search.setPlaceholderText(t('docs.wiki.search'))
+        if self._sort_labels:
+            for fid, btn in self._sort_btns.items():
+                label = t(self._sort_labels[fid])
+                if fid == self._sort_by:
+                    arrow = '▼' if self._sort_reverse else '▲'
+                    btn.setText(f'{label} {arrow}')
+                else:
+                    btn.setText(label)
+        for fg in self._filter_groups:
+            key = fg.get('label_key')
+            if key and fg['id'] in self._filter_labels:
+                self._filter_labels[fg['id']].setText(t(key) + ':')
+            vkeys = fg.get('value_keys', {})
+            if vkeys and fg['id'] in self._filter_btns:
+                for raw_val, btn in self._filter_btns[fg['id']].items():
+                    if raw_val in vkeys:
+                        btn.setText(t(vkeys[raw_val]))
         self._detail.show_item({})
+        cur = self._list.currentItem()
+        if cur:
+            idx = cur.data(Qt.UserRole)
+            if idx is not None and idx < len(self._all_data):
+                self._detail.show_item(self._all_data[idx])
 
 
 class WikiTab(QWidget):

@@ -83,6 +83,10 @@ NEW_TRANSLATIONS = {
     'docs.tours.description': 'Interactive guide through the {tab_name} tab',
     'docs.tours.title': 'Tours',
     'map.info.base_pals': 'Base Pals:',
+    'docs.wiki.filter.rank': 'Rank',
+    'docs.wiki.filter.value.boss': 'Ancient',
+    'docs.wiki.filter.value.standard': 'Standard',
+    'docs.wiki.sort.work_level': 'Level',
 }
 OLD_KEYS = [
     'inventory.add_all_effigies',
