@@ -884,10 +884,10 @@ class PalDefenderDialog(ThemedDialog):
         guild_item.setToolTip(self.COL_GUILD, f"Guild ID: {ge['id']}")
         guild_item.setToolTip(self.COL_PLAYER_UID, player_uids)
         if has_bases:
-            checkbox = ToggleCheckBtn(ge['name'])
-            checkbox.setChecked(True)
-            checkbox.setProperty('guild_id', ge['id'])
-            self.tree.setItemWidget(guild_item, self.COL_GUILD, checkbox)
+            guild_item.setFlags(guild_item.flags() | Qt.ItemIsUserCheckable)
+            guild_item.setCheckState(self.COL_GUILD, Qt.Checked)
+        else:
+            guild_item.setFlags(guild_item.flags() & ~Qt.ItemIsUserCheckable)
             for c in range(8):
                 guild_item.setForeground(c, QColor('#666666'))
         self.tree.addTopLevelItem(guild_item)
@@ -904,24 +904,21 @@ class PalDefenderDialog(ThemedDialog):
         ids = []
         for i in range(self.tree.topLevelItemCount()):
             item = self.tree.topLevelItem(i)
-            widget = self.tree.itemWidget(item, self.COL_GUILD)
-            if widget and widget.isChecked():
-                gid = widget.property('guild_id')
+            if item.flags() & Qt.ItemIsUserCheckable and item.checkState(self.COL_GUILD) == Qt.Checked:
+                gid = item.data(self.COL_GUILD, Qt.UserRole)
                 if gid:
                     ids.append(gid)
         return ids
     def _select_all(self):
         for i in range(self.tree.topLevelItemCount()):
             item = self.tree.topLevelItem(i)
-            widget = self.tree.itemWidget(item, self.COL_GUILD)
-            if widget:
-                widget.setChecked(True)
+            if item.flags() & Qt.ItemIsUserCheckable:
+                item.setCheckState(self.COL_GUILD, Qt.Checked)
     def _deselect_all(self):
         for i in range(self.tree.topLevelItemCount()):
             item = self.tree.topLevelItem(i)
-            widget = self.tree.itemWidget(item, self.COL_GUILD)
-            if widget:
-                widget.setChecked(False)
+            if item.flags() & Qt.ItemIsUserCheckable:
+                item.setCheckState(self.COL_GUILD, Qt.Unchecked)
     def _on_generate(self):
         self._clear_log()
         checked_ids = self._get_checked_guild_ids()
