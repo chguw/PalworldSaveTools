@@ -6,7 +6,7 @@ from PySide6.QtGui import QIcon, QFont
 import os
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 
-from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager, SCROLLBAR_STYLE
 from palworld_aio.inventory.container_ownership import ContainerOwnership
 from palworld_aio.inventory.inventory_manager import PlayerInventory
 from palworld_aio.editor.edit_pals import _generate_pal_save_param, get_pal_base_data, _ensure_friendship_thresholds
@@ -226,6 +226,48 @@ class CharacterTransferWindow(QWidget):
         src_header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
         src_header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
         src_header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        self.source_player_list.setAlternatingRowColors(False)
+        self.source_player_list.setStyleSheet(f'''
+            QTreeWidget {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 8px;
+                color: #A6B8C8;
+                font-size: 11px;
+                outline: none;
+            }}
+            QTreeWidget::item {{
+                padding: 4px 8px;
+                border-radius: 4px;
+            }}
+            QTreeWidget::item:hover {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QTreeWidget::item:selected {{
+                background: rgba(125,211,252,0.15);
+                color: #7DD3FC;
+                border-left: 3px solid #7DD3FC;
+            }}
+            QTreeWidget::item:selected:!active {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QHeaderView::section {{
+                background: rgba(8,10,16,0.9);
+                color: #7DD3FC;
+                padding: 6px 8px;
+                border: none;
+                border-bottom: 1px solid rgba(125,211,252,0.15);
+                font-weight: 600;
+                font-size: 10px;
+                text-align: center;
+            }}
+            QHeaderView::section:hover {{
+                background: rgba(125,211,252,0.08);
+            }}
+            {SCROLLBAR_STYLE}
+        ''')
         source_panel_layout.addWidget(self.source_player_list, 1)
         trees_layout.addWidget(source_panel, 1)
         target_panel = QFrame()
@@ -252,6 +294,48 @@ class CharacterTransferWindow(QWidget):
         tgt_header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
         tgt_header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
         tgt_header.setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        self.target_player_list.setAlternatingRowColors(False)
+        self.target_player_list.setStyleSheet(f'''
+            QTreeWidget {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 8px;
+                color: #A6B8C8;
+                font-size: 11px;
+                outline: none;
+            }}
+            QTreeWidget::item {{
+                padding: 4px 8px;
+                border-radius: 4px;
+            }}
+            QTreeWidget::item:hover {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QTreeWidget::item:selected {{
+                background: rgba(125,211,252,0.15);
+                color: #7DD3FC;
+                border-left: 3px solid #7DD3FC;
+            }}
+            QTreeWidget::item:selected:!active {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QHeaderView::section {{
+                background: rgba(8,10,16,0.9);
+                color: #7DD3FC;
+                padding: 6px 8px;
+                border: none;
+                border-bottom: 1px solid rgba(125,211,252,0.15);
+                font-weight: 600;
+                font-size: 10px;
+                text-align: center;
+            }}
+            QHeaderView::section:hover {{
+                background: rgba(125,211,252,0.08);
+            }}
+            {SCROLLBAR_STYLE}
+        ''')
         target_panel_layout.addWidget(self.target_player_list, 1)
         trees_layout.addWidget(target_panel, 1)
         glass_layout.addLayout(trees_layout)

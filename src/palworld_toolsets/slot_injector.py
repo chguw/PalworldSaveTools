@@ -11,7 +11,7 @@ from PySide6.QtGui import QIcon, QFont, QPixmap, QColor, QPalette
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from concurrent.futures import ThreadPoolExecutor
 import os
-from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager, SCROLLBAR_STYLE
 from palworld_aio import constants
 def sav_to_gvasfile(filepath):
     from palsav.io import load_sav
@@ -272,6 +272,46 @@ class SlotNumUpdaterApp(QDialog):
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setAlternatingRowColors(True)
         self.table.setSortingEnabled(True)
+        self.table.setStyleSheet(f'''
+            QTableWidget {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 8px;
+                color: #A6B8C8;
+                font-size: 11px;
+                outline: none;
+                gridline-color: rgba(125,211,252,0.08);
+            }}
+            QTableWidget::item {{
+                padding: 4px 8px;
+            }}
+            QTableWidget::item:hover {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QTableWidget::item:selected {{
+                background: rgba(125,211,252,0.15);
+                color: #7DD3FC;
+            }}
+            QTableWidget::item:selected:!active {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QHeaderView::section {{
+                background: rgba(8,10,16,0.9);
+                color: #7DD3FC;
+                padding: 6px 8px;
+                border: none;
+                border-bottom: 1px solid rgba(125,211,252,0.15);
+                font-weight: 600;
+                font-size: 10px;
+                text-align: center;
+            }}
+            QHeaderView::section:hover {{
+                background: rgba(125,211,252,0.08);
+            }}
+            {SCROLLBAR_STYLE}
+        ''')
         table_layout.addLayout(selection_layout)
         table_layout.addWidget(self.table)
         main_layout.addWidget(header_frame)

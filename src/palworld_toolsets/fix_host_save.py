@@ -9,7 +9,7 @@ from loading_manager import show_information, show_warning
 from PySide6.QtWidgets import QHeaderView, QMainWindow, QWidget, QLineEdit, QTreeWidget, QTreeWidgetItem, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
-from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager, SCROLLBAR_STYLE
 from palworld_aio.inventory.container_ownership import ContainerOwnership
 from palworld_aio import constants
 import struct
@@ -494,6 +494,48 @@ class FixHostSaveWindow(QWidget):
         self.old_tree.setHeaderLabels([t('GUID'), t('Name'), t('Guild ID'), t('Level'), t('deletion.col.pals'), t('Last Seen')])
         self.old_tree.setSortingEnabled(True)
         self.old_tree.setSelectionMode(QTreeWidget.SingleSelection)
+        self.old_tree.setAlternatingRowColors(False)
+        self.old_tree.setStyleSheet(f'''
+            QTreeWidget {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 8px;
+                color: #A6B8C8;
+                font-size: 11px;
+                outline: none;
+            }}
+            QTreeWidget::item {{
+                padding: 4px 8px;
+                border-radius: 4px;
+            }}
+            QTreeWidget::item:hover {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QTreeWidget::item:selected {{
+                background: rgba(125,211,252,0.15);
+                color: #7DD3FC;
+                border-left: 3px solid #7DD3FC;
+            }}
+            QTreeWidget::item:selected:!active {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QHeaderView::section {{
+                background: rgba(8,10,16,0.9);
+                color: #7DD3FC;
+                padding: 6px 8px;
+                border: none;
+                border-bottom: 1px solid rgba(125,211,252,0.15);
+                font-weight: 600;
+                font-size: 10px;
+                text-align: center;
+            }}
+            QHeaderView::section:hover {{
+                background: rgba(125,211,252,0.08);
+            }}
+            {SCROLLBAR_STYLE}
+        ''')
         old_panel_layout.addWidget(self.old_tree, 1)
         self.source_result_label = QLabel(t('Source Player: N/A'))
         old_panel_layout.addWidget(self.source_result_label)
@@ -519,6 +561,48 @@ class FixHostSaveWindow(QWidget):
         self.new_tree.setHeaderLabels([t('GUID'), t('Name'), t('Guild ID'), t('Level'), t('deletion.col.pals'), t('Last Seen')])
         self.new_tree.setSortingEnabled(True)
         self.new_tree.setSelectionMode(QTreeWidget.SingleSelection)
+        self.new_tree.setAlternatingRowColors(False)
+        self.new_tree.setStyleSheet(f'''
+            QTreeWidget {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 8px;
+                color: #A6B8C8;
+                font-size: 11px;
+                outline: none;
+            }}
+            QTreeWidget::item {{
+                padding: 4px 8px;
+                border-radius: 4px;
+            }}
+            QTreeWidget::item:hover {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QTreeWidget::item:selected {{
+                background: rgba(125,211,252,0.15);
+                color: #7DD3FC;
+                border-left: 3px solid #7DD3FC;
+            }}
+            QTreeWidget::item:selected:!active {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QHeaderView::section {{
+                background: rgba(8,10,16,0.9);
+                color: #7DD3FC;
+                padding: 6px 8px;
+                border: none;
+                border-bottom: 1px solid rgba(125,211,252,0.15);
+                font-weight: 600;
+                font-size: 10px;
+                text-align: center;
+            }}
+            QHeaderView::section:hover {{
+                background: rgba(125,211,252,0.08);
+            }}
+            {SCROLLBAR_STYLE}
+        ''')
         new_panel_layout.addWidget(self.new_tree, 1)
         self.target_result_label = QLabel(t('Target Player: N/A'))
         new_panel_layout.addWidget(self.target_result_label)

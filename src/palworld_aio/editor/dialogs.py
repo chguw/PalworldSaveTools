@@ -7,7 +7,7 @@ from i18n import t
 from loading_manager import show_critical
 from palworld_aio import constants
 from palworld_aio.utils import sav_to_json, extract_value, get_pal_data, calculate_max_hp, calculate_attack, calculate_defense, format_character_key
-from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLESHEET, PICKER_SEARCH_STYLE
+from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLESHEET, PICKER_SEARCH_STYLE, SCROLLBAR_STYLE
 class ThemedDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -700,7 +700,7 @@ class PalDefenderDialog(ThemedDialog):
         h.setStretchLastSection(True)
         for i in range(8):
             h.setSectionResizeMode(i, QHeaderView.Stretch)
-        self.tree.setStyleSheet(f'\n            QTreeWidget {{\n                background-color: {constants.GLASS};\n                color: {constants.TEXT};\n                border: 1px solid {constants.BORDER};\n                border-radius: 4px;\n            }}\n            QTreeWidget::item {{\n                padding: 3px;\n            }}\n            QTreeWidget::item:selected {{\n                background-color: {constants.ACCENT};\n            }}\n            QHeaderView::section {{\n                background-color: #2a2d3a;\n                color: {constants.EMPHASIS};\n                padding: 6px;\n                border: none;\n                font-weight: bold;\n            }}\n        ')
+        self.tree.setStyleSheet(f'\n            QTreeWidget {{\n                background-color: rgba(18,20,24,0.65);\n                color: #A6B8C8;\n                border: 1px solid rgba(125,211,252,0.15);\n                border-radius: 8px;\n                font-size: 11px;\n                outline: none;\n            }}\n            QTreeWidget::item {{\n                padding: 4px 8px;\n                border-radius: 4px;\n            }}\n            QTreeWidget::item:hover {{\n                background: rgba(125,211,252,0.1);\n                color: #7DD3FC;\n            }}\n            QTreeWidget::item:selected {{\n                background: rgba(125,211,252,0.15);\n                color: #7DD3FC;\n                border-left: 3px solid #7DD3FC;\n            }}\n            QTreeWidget::item:selected:!active {{\n                background: rgba(125,211,252,0.1);\n                color: #7DD3FC;\n            }}\n            QHeaderView::section {{\n                background: rgba(8,10,16,0.9);\n                color: #7DD3FC;\n                padding: 6px 8px;\n                border: none;\n                border-bottom: 1px solid rgba(125,211,252,0.15);\n                font-weight: 600;\n                font-size: 10px;\n                text-align: center;\n            }}\n            QHeaderView::section:hover {{\n                background: rgba(125,211,252,0.08);\n            }}\n            {SCROLLBAR_STYLE}\n        ')
         layout.addWidget(self.tree)
         action_row = QHBoxLayout()
         self.gen_btn = QPushButton(t('paldefender.generate') if t else 'Generate Kill Commands')

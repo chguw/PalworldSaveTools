@@ -80,6 +80,41 @@ def slot_rarity(slot_class: str, color: str) -> str:
 def slot_selected(slot_class: str='') -> str:
     s = slot_class or ''
     return f'{s} {{ {SLOT_SELECTED_STYLE} }}'
+SCROLLBAR_STYLE = """
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: rgba(18,20,24,0.8);
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    margin: 2px;
+}
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: rgba(125,211,252,0.25);
+    border-radius: 4px;
+    min-height: 24px;
+    min-width: 24px;
+}
+QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover {
+    background: rgba(125,211,252,0.45);
+}
+QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal {
+    background: none;
+    border: none;
+    height: 0;
+    width: 0;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical,
+QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+    background: none;
+    border: none;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical,
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+"""
+
 def wrap_tooltip_text(text: str, width: int=80) -> str:
     if not text:
         return text
