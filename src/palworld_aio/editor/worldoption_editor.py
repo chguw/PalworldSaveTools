@@ -1,7 +1,8 @@
 import os
 import sys
 from palsav import json_tools
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QFrame, QCheckBox, QSpinBox, QDoubleSpinBox, QLineEdit, QComboBox, QWidget, QApplication, QGroupBox, QFormLayout, QGridLayout, QTabWidget, QTextEdit, QListWidget, QListWidgetItem, QSplitter
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QFrame, QSpinBox, QDoubleSpinBox, QLineEdit, QComboBox, QWidget, QApplication, QGroupBox, QFormLayout, QGridLayout, QTabWidget, QTextEdit, QListWidget, QListWidgetItem, QSplitter
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QCursor
 from i18n import t
@@ -134,7 +135,7 @@ class WorldOptionEditorDialog(QDialog):
             self.editor_layout.addLayout(form_layout)
             self.editors[setting_name] = {'editor': editor, 'type': prop_type}
             if prop_type == 'BoolProperty':
-                editor.stateChanged.connect(lambda: self._update_setting_in_memory(setting_name, prop_type))
+                editor.toggled.connect(lambda: self._update_setting_in_memory(setting_name, prop_type))
             elif prop_type == 'IntProperty':
                 editor.valueChanged.connect(lambda: self._update_setting_in_memory(setting_name, prop_type))
             elif prop_type == 'FloatProperty':
@@ -145,7 +146,7 @@ class WorldOptionEditorDialog(QDialog):
                 editor.currentTextChanged.connect(lambda: self._update_setting_in_memory(setting_name, prop_type))
     def _create_editor(self, prop_name, prop_type, value):
         if prop_type == 'BoolProperty':
-            checkbox = QCheckBox()
+            checkbox = ToggleCheckBtn('')
             checkbox.setChecked(bool(value))
             return checkbox
         elif prop_type == 'IntProperty':

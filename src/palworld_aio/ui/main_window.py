@@ -7,7 +7,7 @@ import io
 import sys
 from functools import partial
 import logging
-from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QMenuBar, QMenu, QStatusBar, QSplitter, QMessageBox, QFileDialog, QInputDialog, QDialog, QCheckBox, QComboBox, QApplication, QStackedWidget, QTextEdit, QLineEdit
+from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QMenuBar, QMenu, QStatusBar, QSplitter, QMessageBox, QFileDialog, QInputDialog, QDialog, QComboBox, QApplication, QStackedWidget, QTextEdit, QLineEdit
 from PySide6.QtCore import Qt, QTimer, Signal, QObject, QPoint, QPropertyAnimation, QEasingCurve, QByteArray, QThread
 from PySide6.QtGui import QIcon, QFont, QAction, QPixmap, QCloseEvent, QTextCursor
 from i18n import t, set_language, load_resources
@@ -19,6 +19,7 @@ GITHUB_RAW_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSa
 GITHUB_LATEST_ZIP = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 from palworld_aio import constants
 from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palworld_aio.utils import check_for_update, as_uuid
 from palworld_aio.managers.save_manager import save_manager
 from palworld_aio.managers.data_manager import get_guilds, get_guild_members, get_bases, delete_guild, delete_player, load_exclusions, save_exclusions, delete_base_camp
@@ -522,23 +523,23 @@ class MainWindow(QMainWindow):
             self.updater.cleanup()
         dialog.close()
     def _show_update_settings(self):
-        from PySide6.QtWidgets import QCheckBox, QRadioButton, QGroupBox, QVBoxLayout as QVBox
+        from PySide6.QtWidgets import QRadioButton, QGroupBox, QVBoxLayout as QVBox
         dialog = QDialog(self)
         dialog.setWindowTitle(t('aio.menu.update_settings') if t else 'Update Settings')
         dialog.setWindowFlags(Qt.Dialog | Qt.WindowStaysOnTopHint)
         layout = QVBoxLayout(dialog)
         settings = get_update_settings()
-        self.check_updates_cb = QCheckBox(t('update.check_auto') if t else 'Automatically check for updates')
+        self.check_updates_cb = ToggleCheckBtn(t('update.check_auto') if t else 'Automatically check for updates')
         self.check_updates_cb.setChecked(settings.get('check_updates', True))
         layout.addWidget(self.check_updates_cb)
         if is_standalone():
             dialog.setFixedSize(400, 250)
-            self.auto_update_cb = QCheckBox(t('update.auto_update') if t else 'Auto-update when available')
+            self.auto_update_cb = ToggleCheckBtn(t('update.auto_update') if t else 'Auto-update when available')
             self.auto_update_cb.setChecked(settings.get('auto_update', True))
             layout.addWidget(self.auto_update_cb)
         else:
             dialog.setFixedSize(400, 200)
-            self.git_pull_cb = QCheckBox(t('update.git_pull') if t else 'Allow git pull updates')
+            self.git_pull_cb = ToggleCheckBtn(t('update.git_pull') if t else 'Allow git pull updates')
             self.git_pull_cb.setChecked(settings.get('git_pull', True))
             layout.addWidget(self.git_pull_cb)
         btn_layout = QHBoxLayout()

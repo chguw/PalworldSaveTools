@@ -1740,5 +1740,6 @@
     "docs.wiki.yes": "Ja",
     "docs.wiki.no": "NEIN",
     "docs.wiki.subcategory": "Unterkategorie",
-    "docs.wiki.pals_count": "Freunde ({count})"
+    "docs.wiki.pals_count": "Freunde ({count})",
+    "update.git_pull": "Git-Pull-Updates zulassen"
 }

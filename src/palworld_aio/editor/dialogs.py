@@ -1,5 +1,6 @@
 import os
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QSpinBox, QComboBox, QTextEdit, QFileDialog, QGroupBox, QFormLayout, QCheckBox, QRadioButton, QFrame, QTabWidget, QScrollArea, QWidget, QGridLayout, QSlider, QProgressBar, QApplication, QButtonGroup, QTreeWidget, QTreeWidgetItem
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QSpinBox, QComboBox, QTextEdit, QFileDialog, QGroupBox, QFormLayout, QRadioButton, QFrame, QTabWidget, QScrollArea, QWidget, QGridLayout, QSlider, QProgressBar, QApplication, QButtonGroup, QTreeWidget, QTreeWidgetItem
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtCore import Qt, Signal, QTimer
 from PySide6.QtGui import QIcon, QFont, QColor, QPen, QBrush, QPainter, QLinearGradient
 from i18n import t
@@ -227,7 +228,7 @@ class KillNearestBaseDialog(ThemedDialog):
         self.radius.setRange(1, 100000)
         self.radius.setValue(5000)
         form_layout.addRow(t('kill_nearest_base.radius') if t else 'Radius:', self.radius)
-        self.use_new_coords = QCheckBox(t('kill_nearest_base.use_new_coords') if t else 'Use New Coordinates')
+        self.use_new_coords = ToggleCheckBtn(t('kill_nearest_base.use_new_coords') if t else 'Use New Coordinates')
         self.use_new_coords.setChecked(True)
         form_layout.addRow('', self.use_new_coords)
         form_group.setLayout(form_layout)
@@ -617,7 +618,7 @@ class PalDefenderDialog(ThemedDialog):
                 self.activateWindow()
                 self.raise_()
     def _setup_ui(self):
-        from PySide6.QtWidgets import QRadioButton, QButtonGroup, QFrame, QCheckBox, QHeaderView
+        from PySide6.QtWidgets import QRadioButton, QButtonGroup, QFrame, QHeaderView
         layout = QVBoxLayout(self)
         layout.setSpacing(12)
         layout.setContentsMargins(20, 20, 20, 20)
@@ -663,10 +664,10 @@ class PalDefenderDialog(ThemedDialog):
         params_row.addStretch()
         filter_layout.addLayout(params_row)
         opts_row = QHBoxLayout()
-        self.skip_excl_cb = QCheckBox(t('paldefender.skip_exclusions') if t else 'Skip excluded guilds/bases')
+        self.skip_excl_cb = ToggleCheckBtn(t('paldefender.skip_exclusions') if t else 'Skip excluded guilds/bases')
         self.skip_excl_cb.setChecked(True)
         opts_row.addWidget(self.skip_excl_cb)
-        self.hide_no_bases_cb = QCheckBox(t('paldefender.hide_no_bases') if t else 'Hide guilds with no bases')
+        self.hide_no_bases_cb = ToggleCheckBtn(t('paldefender.hide_no_bases') if t else 'Hide guilds with no bases')
         self.hide_no_bases_cb.setChecked(True)
         opts_row.addWidget(self.hide_no_bases_cb)
         opts_row.addStretch()
@@ -883,10 +884,10 @@ class PalDefenderDialog(ThemedDialog):
         guild_item.setToolTip(self.COL_GUILD, f"Guild ID: {ge['id']}")
         guild_item.setToolTip(self.COL_PLAYER_UID, player_uids)
         if has_bases:
-            guild_item.setFlags(guild_item.flags() | Qt.ItemIsUserCheckable)
-            guild_item.setCheckState(self.COL_GUILD, Qt.Checked)
-        else:
-            guild_item.setFlags(guild_item.flags() & ~Qt.ItemIsUserCheckable)
+            checkbox = ToggleCheckBtn(ge['name'])
+            checkbox.setChecked(True)
+            checkbox.setProperty('guild_id', ge['id'])
+            self.tree.setItemWidget(guild_item, self.COL_GUILD, checkbox)
             for c in range(8):
                 guild_item.setForeground(c, QColor('#666666'))
         self.tree.addTopLevelItem(guild_item)
@@ -897,28 +898,30 @@ class PalDefenderDialog(ThemedDialog):
             child.setText(self.COL_LEVEL, str(pi['level']))
             child.setText(self.COL_PLAYER_UID, pi['uid'])
             child.setText(self.COL_PALS, str(pi['pals']))
-            child.setFlags(child.flags() & ~Qt.ItemIsUserCheckable)
             child.setForeground(self.COL_GUILD, QColor(constants.MUTED))
             guild_item.addChild(child)
     def _get_checked_guild_ids(self):
         ids = []
         for i in range(self.tree.topLevelItemCount()):
             item = self.tree.topLevelItem(i)
-            if item.flags() & Qt.ItemIsUserCheckable and item.checkState(self.COL_GUILD) == Qt.Checked:
-                gid = item.data(self.COL_GUILD, Qt.UserRole)
+            widget = self.tree.itemWidget(item, self.COL_GUILD)
+            if widget and widget.isChecked():
+                gid = widget.property('guild_id')
                 if gid:
                     ids.append(gid)
         return ids
     def _select_all(self):
         for i in range(self.tree.topLevelItemCount()):
             item = self.tree.topLevelItem(i)
-            if item.flags() & Qt.ItemIsUserCheckable:
-                item.setCheckState(self.COL_GUILD, Qt.Checked)
+            widget = self.tree.itemWidget(item, self.COL_GUILD)
+            if widget:
+                widget.setChecked(True)
     def _deselect_all(self):
         for i in range(self.tree.topLevelItemCount()):
             item = self.tree.topLevelItem(i)
-            if item.flags() & Qt.ItemIsUserCheckable:
-                item.setCheckState(self.COL_GUILD, Qt.Unchecked)
+            widget = self.tree.itemWidget(item, self.COL_GUILD)
+            if widget:
+                widget.setChecked(False)
     def _on_generate(self):
         self._clear_log()
         checked_ids = self._get_checked_guild_ids()

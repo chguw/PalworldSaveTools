@@ -2,8 +2,9 @@ import os
 import sys
 from functools import partial
 from palsav import json_tools
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 import time
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox, QTreeWidget, QTreeWidgetItem, QSplitter, QFrame, QScrollArea, QGridLayout, QGroupBox, QMenu, QHeaderView, QMessageBox, QFileDialog, QInputDialog, QDialog, QCheckBox, QSpinBox, QDoubleSpinBox, QSizePolicy, QAbstractItemView, QSpacerItem, QTabWidget, QTabBar, QStyleOptionTab, QStyle, QApplication, QStyledItemDelegate, QListWidget, QListWidgetItem, QLineEdit, QListView, QStackedWidget
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox, QTreeWidget, QTreeWidgetItem, QSplitter, QFrame, QScrollArea, QGridLayout, QGroupBox, QMenu, QHeaderView, QMessageBox, QFileDialog, QInputDialog, QDialog, QSpinBox, QDoubleSpinBox, QSizePolicy, QAbstractItemView, QSpacerItem, QTabWidget, QTabBar, QStyleOptionTab, QStyle, QApplication, QStyledItemDelegate, QListWidget, QListWidgetItem, QLineEdit, QListView, QStackedWidget
 from PySide6.QtCore import Qt, Signal, QTimer, QPropertyAnimation, QEasingCurve, QSize, QPoint, QRect, QEvent, QMargins, QThread
 from PySide6.QtGui import QPixmap, QIcon, QFont, QAction, QCursor, QPainter, QColor, QBrush, QPen, QLinearGradient, QPalette, QMouseEvent, QWheelEvent, QResizeEvent, QPaintEvent, QContextMenuEvent, QDragEnterEvent, QDragMoveEvent, QDropEvent, QDrag
 from PySide6.QtWidgets import QStyledItemDelegate
@@ -252,11 +253,13 @@ class GuildItemPickerDialog(QDialog):
                     self.guild_locations[guild_id_normalized] = {'name': guild_name, 'bases': bases}
                     count = self.guild_item_counts.get(guild_id_normalized, 0)
                     display_text = f'{guild_name}: {count}'
-                    list_item = QListWidgetItem(display_text)
-                    list_item.setFlags(list_item.flags() | Qt.ItemIsUserCheckable)
-                    list_item.setCheckState(Qt.Checked)
-                    list_item.setData(Qt.UserRole, guild_id_normalized)
-                    self.guild_list.addItem(list_item)
+                    checkbox = ToggleCheckBtn(display_text)
+                    checkbox.setProperty('guild_id', guild_id_normalized)
+                    checkbox.setChecked(True)
+                    item = QListWidgetItem()
+                    item.setSizeHint(QSize(0, 36))
+                    self.guild_list.addItem(item)
+                    self.guild_list.setItemWidget(item, checkbox)
                 self.guild_list.setEnabled(True)
                 self.select_all_btn.setEnabled(True)
                 self.deselect_all_btn.setEnabled(True)
@@ -282,19 +285,24 @@ class GuildItemPickerDialog(QDialog):
     def _select_all_guilds(self):
         for i in range(self.guild_list.count()):
             item = self.guild_list.item(i)
-            if item.flags() & Qt.ItemIsUserCheckable:
-                item.setCheckState(Qt.Checked)
+            widget = self.guild_list.itemWidget(item)
+            if widget:
+                widget.setChecked(True)
     def _deselect_all_guilds(self):
         for i in range(self.guild_list.count()):
             item = self.guild_list.item(i)
-            if item.flags() & Qt.ItemIsUserCheckable:
-                item.setCheckState(Qt.Unchecked)
+            widget = self.guild_list.itemWidget(item)
+            if widget:
+                widget.setChecked(False)
     def _get_selected_guild_ids(self):
         selected_guilds = []
         for i in range(self.guild_list.count()):
             item = self.guild_list.item(i)
-            if item.checkState() == Qt.Checked:
-                selected_guilds.append(item.data(Qt.UserRole))
+            widget = self.guild_list.itemWidget(item)
+            if widget and widget.isChecked():
+                gid = widget.property('guild_id')
+                if gid:
+                    selected_guilds.append(gid)
         return selected_guilds
     def _on_find_containers(self):
         if self.selected_item_id:
@@ -555,11 +563,13 @@ class GuildStructurePickerDialog(QDialog):
                     self.guild_locations[guild_id_normalized] = {'name': guild_name, 'bases': bases}
                     count = self.guild_structure_counts.get(guild_id_normalized, 0)
                     display_text = f'{guild_name}: {count}'
-                    list_item = QListWidgetItem(display_text)
-                    list_item.setFlags(list_item.flags() | Qt.ItemIsUserCheckable)
-                    list_item.setCheckState(Qt.Checked)
-                    list_item.setData(Qt.UserRole, guild_id_normalized)
-                    self.guild_list.addItem(list_item)
+                    checkbox = ToggleCheckBtn(display_text)
+                    checkbox.setProperty('guild_id', guild_id_normalized)
+                    checkbox.setChecked(True)
+                    item = QListWidgetItem()
+                    item.setSizeHint(QSize(0, 36))
+                    self.guild_list.addItem(item)
+                    self.guild_list.setItemWidget(item, checkbox)
                 self.guild_list.setEnabled(True)
                 self.select_all_btn.setEnabled(True)
                 self.deselect_all_btn.setEnabled(True)
@@ -585,19 +595,24 @@ class GuildStructurePickerDialog(QDialog):
     def _select_all_guilds(self):
         for i in range(self.guild_list.count()):
             item = self.guild_list.item(i)
-            if item.flags() & Qt.ItemIsUserCheckable:
-                item.setCheckState(Qt.Checked)
+            widget = self.guild_list.itemWidget(item)
+            if widget:
+                widget.setChecked(True)
     def _deselect_all_guilds(self):
         for i in range(self.guild_list.count()):
             item = self.guild_list.item(i)
-            if item.flags() & Qt.ItemIsUserCheckable:
-                item.setCheckState(Qt.Unchecked)
+            widget = self.guild_list.itemWidget(item)
+            if widget:
+                widget.setChecked(False)
     def _get_selected_guild_ids(self):
         selected = []
         for i in range(self.guild_list.count()):
             item = self.guild_list.item(i)
-            if item.checkState() == Qt.Checked:
-                selected.append(item.data(Qt.UserRole))
+            widget = self.guild_list.itemWidget(item)
+            if widget and widget.isChecked():
+                gid = widget.property('guild_id')
+                if gid:
+                    selected.append(gid)
         return selected
     def _on_find_bases(self):
         if self.selected_structure_asset:
@@ -2177,10 +2192,8 @@ class BasePalsContentWidget(QFrame):
                 nick = extract_value(pr, 'NickName', '') if pr else ''
                 lv = extract_value(pr, 'Level', 1) if pr else 1
                 display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
-                cb = QCheckBox(display)
+                cb = ToggleCheckBtn(display)
                 cb.setChecked(True)
-                cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
-                cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
                 chk_layout.addWidget(cb)
                 checkboxes.append((cb, pi))
             scroll.setWidget(inner_w)
@@ -2259,10 +2272,8 @@ class BasePalsContentWidget(QFrame):
                 nick = extract_value(pr, 'NickName', '') if pr else ''
                 lv = extract_value(pr, 'Level', 1) if pr else 1
                 display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
-                cb = QCheckBox(display)
+                cb = ToggleCheckBtn(display)
                 cb.setChecked(True)
-                cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
-                cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
                 chk_layout.addWidget(cb)
                 checkboxes.append((cb, pi))
             scroll.setWidget(inner_w)

@@ -1710,5 +1710,6 @@
     "docs.wiki.yes": "Sí",
     "docs.wiki.no": "No",
     "docs.wiki.subcategory": "Subcategoría",
-    "docs.wiki.pals_count": "Amigos ({count})"
+    "docs.wiki.pals_count": "Amigos ({count})",
+    "update.git_pull": "Permitir actualizaciones de git pull"
 }

@@ -1698,5 +1698,6 @@
     "docs.wiki.yes": "Oui",
     "docs.wiki.no": "Non",
     "docs.wiki.subcategory": "Sous-catégorie",
-    "docs.wiki.pals_count": "Copains ({count})"
+    "docs.wiki.pals_count": "Copains ({count})",
+    "update.git_pull": "Autoriser les mises à jour git pull"
 }

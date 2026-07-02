@@ -1718,5 +1718,6 @@
     "docs.wiki.yes": "是的",
     "docs.wiki.no": "不",
     "docs.wiki.subcategory": "子类别",
-    "docs.wiki.pals_count": "好友 ({count})"
+    "docs.wiki.pals_count": "好友 ({count})",
+    "update.git_pull": "允许 git pull 更新"
 }

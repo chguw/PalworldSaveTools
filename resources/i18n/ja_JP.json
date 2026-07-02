@@ -1716,5 +1716,6 @@
     "docs.wiki.yes": "はい",
     "docs.wiki.no": "いいえ",
     "docs.wiki.subcategory": "サブカテゴリ",
-    "docs.wiki.pals_count": "友達 ({count})"
+    "docs.wiki.pals_count": "友達 ({count})",
+    "update.git_pull": "git pull アップデートを許可する"
 }

@@ -1714,5 +1714,6 @@
     "docs.wiki.yes": "Да",
     "docs.wiki.no": "Нет",
     "docs.wiki.subcategory": "Подкатегория",
-    "docs.wiki.pals_count": "Друзья ({count})"
+    "docs.wiki.pals_count": "Друзья ({count})",
+    "update.git_pull": "Разрешить обновления git pull"
 }
