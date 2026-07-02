@@ -1681,5 +1681,6 @@
     "json_editor.search_prev": "前回の試合",
     "json_editor.search_next": "次の試合",
     "json_editor.search_count": "{count} 件の一致",
-    "json_editor.search_no_matches": "一致しません"
+    "json_editor.search_no_matches": "一致しません",
+    "guild.set_level.prompt": "現在のレベル: {current_level}\n新しいレベル (1 ～ 35) を入力してください:"
 }

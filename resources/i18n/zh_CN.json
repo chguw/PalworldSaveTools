@@ -1683,5 +1683,6 @@
     "json_editor.search_prev": "上一场比赛",
     "json_editor.search_next": "下一场比赛",
     "json_editor.search_count": "{count} 场比赛",
-    "json_editor.search_no_matches": "没有匹配项"
+    "json_editor.search_no_matches": "没有匹配项",
+    "guild.set_level.prompt": "当前级别：{current_level}\n进入新级别（1-35）："
 }

@@ -1675,5 +1675,6 @@
     "json_editor.search_prev": "Partido anterior",
     "json_editor.search_next": "Próximo partido",
     "json_editor.search_count": "{count} coincidencias",
-    "json_editor.search_no_matches": "No hay coincidencias"
+    "json_editor.search_no_matches": "No hay coincidencias",
+    "guild.set_level.prompt": "Nivel actual: {current_level}\nIngrese al nuevo nivel (1-35):"
 }

@@ -1679,5 +1679,6 @@
     "json_editor.search_prev": "Предыдущий матч",
     "json_editor.search_next": "Следующий матч",
     "json_editor.search_count": "{count} совпадений",
-    "json_editor.search_no_matches": "Нет совпадений"
+    "json_editor.search_no_matches": "Нет совпадений",
+    "guild.set_level.prompt": "Текущий уровень: {current_level}\nВведите новый уровень (1-35):"
 }

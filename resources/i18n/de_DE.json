@@ -1705,5 +1705,6 @@
     "json_editor.search_prev": "Vorheriges Spiel",
     "json_editor.search_next": "Nächstes Spiel",
     "json_editor.search_count": "{count} Übereinstimmungen",
-    "json_editor.search_no_matches": "Keine Übereinstimmungen"
+    "json_editor.search_no_matches": "Keine Übereinstimmungen",
+    "guild.set_level.prompt": "Aktuelles Level: {current_level}\nNeues Level eingeben (1-35):"
 }

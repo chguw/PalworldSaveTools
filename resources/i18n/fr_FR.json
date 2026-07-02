@@ -1663,5 +1663,6 @@
     "json_editor.search_prev": "Match précédent",
     "json_editor.search_next": "Prochain match",
     "json_editor.search_count": "{count} correspondances",
-    "json_editor.search_no_matches": "Aucune correspondance"
+    "json_editor.search_no_matches": "Aucune correspondance",
+    "guild.set_level.prompt": "Niveau actuel : {current_level}\nEntrez un nouveau niveau (1-35) :"
 }

@@ -1680,5 +1680,6 @@
     "json_editor.search_prev": "이전 경기",
     "json_editor.search_next": "다음 경기",
     "json_editor.search_count": "{count}개 일치",
-    "json_editor.search_no_matches": "일치하는 항목 없음"
+    "json_editor.search_no_matches": "일치하는 항목 없음",
+    "guild.set_level.prompt": "현재 레벨: {current_level}\n새 레벨 입력(1-35):"
 }

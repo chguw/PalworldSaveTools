@@ -1637,60 +1637,20 @@ class MainWindow(QMainWindow):
             self.refresh_all()
             self._show_info(t('guild.rename.done_title'), t('guild.rename.done_msg', old=old_name, new=new_name))
     def _set_guild_level(self, gid):
-        dialog = QDialog(self)
-        dialog.setWindowTitle(t('guild.menu.set_level'))
-        dialog.setMinimumWidth(250)
-        main_layout = QVBoxLayout(dialog)
-        main_layout.setContentsMargins(20, 20, 20, 20)
-        level_layout = QHBoxLayout()
-        level_layout.setSpacing(8)
-        minus_btn = QPushButton('-')
-        minus_btn.setFixedSize(28, 28)
-        minus_btn.setStyleSheet('QPushButton { background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; font-weight: bold; font-size: 14px; } QPushButton:hover { background-color: #444; }')
-        level_label = QLabel(t('guild.menu.set_level'))
-        level_label.setStyleSheet('font-size: 13px; font-weight: bold; color: #ddd;')
-        level_input = QLineEdit('1')
-        level_input.setFixedWidth(40)
-        level_input.setAlignment(Qt.AlignCenter)
-        level_input.setStyleSheet('QLineEdit { background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 4px 6px; font-size: 13px; font-weight: bold; } QLineEdit:focus { border-color: rgba(125,211,252,0.4); }')
-        plus_btn = QPushButton('+')
-        plus_btn.setFixedSize(28, 28)
-        plus_btn.setStyleSheet('QPushButton { background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; font-weight: bold; font-size: 14px; } QPushButton:hover { background-color: #444; }')
-        level_layout.addWidget(minus_btn)
-        level_layout.addWidget(level_label)
-        level_layout.addWidget(level_input)
-        level_layout.addWidget(plus_btn)
-        main_layout.addLayout(level_layout)
-        btn_layout = QHBoxLayout()
-        btn_layout.addStretch()
-        cancel_btn = QPushButton(t('button.cancel'))
-        cancel_btn.setStyleSheet('QPushButton { background-color: #444; color: #ddd; border: 1px solid #555; border-radius: 4px; padding: 6px 16px; } QPushButton:hover { background-color: #555; }')
-        confirm_btn = QPushButton(t('button.confirm'))
-        confirm_btn.setStyleSheet('QPushButton { background-color: #256aa0; color: #fff; border: none; border-radius: 4px; padding: 6px 16px; } QPushButton:hover { background-color: #2a7fc0; }')
-        btn_layout.addWidget(cancel_btn)
-        btn_layout.addWidget(confirm_btn)
-        main_layout.addLayout(btn_layout)
-        def update_level(delta):
-            current = int(level_input.text())
-            new_val = max(1, min(35, current + delta))
-            level_input.setText(str(new_val))
-        minus_btn.clicked.connect(lambda: update_level(-1))
-        plus_btn.clicked.connect(lambda: update_level(1))
-        def update_from_input():
-            val = int(level_input.text())
-            level_input.setText(str(max(1, min(35, val))))
-        level_input.returnPressed.connect(update_from_input)
-        level_input.editingFinished.connect(update_from_input)
-        cancel_btn.clicked.connect(dialog.reject)
-        def on_confirm():
-            level = int(level_input.text())
-            if 1 <= level <= 35:
-                set_guild_level(gid, level)
-                self.refresh_all()
-                self._show_info(t('success.title'), t('guild.level.set', level=level))
-            dialog.accept()
-        confirm_btn.clicked.connect(on_confirm)
-        dialog.exec()
+        if not constants.loaded_level_json:
+            return
+        current_level = 1
+        wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+        for g in wsd['GroupSaveDataMap']['value']:
+            from palworld_aio.utils import are_equal_uuids
+            if are_equal_uuids(g['key'], gid):
+                current_level = g['value']['RawData']['value'].get('base_camp_level', 1)
+                break
+        new_level = LevelInputDialog.get_level(t('guild.menu.set_level') if t else 'Set Guild Level', t('guild.set_level.prompt', current_level=current_level) if t else f'Current level: {current_level}\nEnter new level (1-35):', current_level, self, minimum=1, maximum=35)
+        if new_level is not None and new_level != current_level:
+            set_guild_level(gid, new_level)
+            self.refresh_all()
+            self._show_info(t('success.title'), t('guild.level.set', level=new_level))
     def _make_leader(self, gid, uid):
         make_member_leader(gid, uid)
         self.refresh_all()

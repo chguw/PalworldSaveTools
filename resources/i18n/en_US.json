@@ -1969,5 +1969,6 @@
     "json_editor.search_prev": "Previous match",
     "json_editor.search_next": "Next match",
     "json_editor.search_count": "{count} matches",
-    "json_editor.search_no_matches": "No matches"
+    "json_editor.search_no_matches": "No matches",
+    "guild.set_level.prompt": "Current level: {current_level}\nEnter new level (1-35):"
 }

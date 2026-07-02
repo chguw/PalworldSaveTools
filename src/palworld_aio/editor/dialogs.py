@@ -136,7 +136,7 @@ class DaysInputDialog(ThemedDialog):
             return dialog.result_value
         return None
 class LevelInputDialog(ThemedDialog):
-    def __init__(self, title, prompt, current_level, parent=None):
+    def __init__(self, title, prompt, current_level, parent=None, minimum=1, maximum=80):
         super().__init__(parent)
         self.setWindowTitle(title)
         self.setModal(True)
@@ -147,8 +147,8 @@ class LevelInputDialog(ThemedDialog):
         label = QLabel(prompt)
         layout.addWidget(label)
         self.spin_box = QSpinBox()
-        self.spin_box.setMinimum(1)
-        self.spin_box.setMaximum(80)
+        self.spin_box.setMinimum(minimum)
+        self.spin_box.setMaximum(maximum)
         self.spin_box.setValue(current_level)
         layout.addWidget(self.spin_box)
         button_layout = QHBoxLayout()
@@ -164,8 +164,8 @@ class LevelInputDialog(ThemedDialog):
         self.result_value = self.spin_box.value()
         super().accept()
     @staticmethod
-    def get_level(title, prompt, current_level, parent=None):
-        dialog = LevelInputDialog(title, prompt, current_level, parent)
+    def get_level(title, prompt, current_level, parent=None, minimum=1, maximum=80):
+        dialog = LevelInputDialog(title, prompt, current_level, parent, minimum=minimum, maximum=maximum)
         if dialog.exec() == QDialog.Accepted:
             return dialog.result_value
         return None
