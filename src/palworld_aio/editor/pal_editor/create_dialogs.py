@@ -339,6 +339,7 @@ class BulkSyncPalDialog(FramelessDialog):
         pal_list_layout = QVBoxLayout(pal_list_inner)
         pal_list_layout.setContentsMargins(2, 2, 2, 2)
         pal_list_layout.setSpacing(2)
+        pal_list_layout.setAlignment(Qt.AlignTop)
         self._checkboxes = []
         for pi in self._all_candidates:
             pr = _get_raw_from_item(pi)
@@ -349,6 +350,7 @@ class BulkSyncPalDialog(FramelessDialog):
             cb.setChecked(True)
             pal_list_layout.addWidget(cb)
             self._checkboxes.append(cb)
+        pal_list_layout.addStretch()
         pal_scroll.setWidget(pal_list_inner)
         left_col.addWidget(pal_scroll, 1)
         body.addLayout(left_col, 1)
