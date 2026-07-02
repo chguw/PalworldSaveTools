@@ -3,6 +3,7 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QFont, QColor
 from i18n import t
 from palworld_aio import constants
+from palworld_aio.ui.chrome.styles import CONTENT_PANEL_STYLE
 _SORT_ROLE = Qt.UserRole + 1
 class _SortableTreeWidgetItem(QTreeWidgetItem):
     def __lt__(self, other):
@@ -37,6 +38,23 @@ class SearchPanel(QWidget):
         self.search_input = QLineEdit()
         self.search_input.setObjectName('searchInput')
         self.search_input.setPlaceholderText(t('search.placeholder') if t else 'Type to search...')
+        self.search_input.setStyleSheet(f'''
+            QLineEdit {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 6px;
+                padding: 4px 8px;
+                color: #E2E8F0;
+                font-size: 11px;
+                min-height: 24px;
+            }}
+            QLineEdit:focus {{
+                border-color: rgba(125,211,252,0.4);
+            }}
+            QLineEdit::placeholder {{
+                color: #6B7280;
+            }}
+        ''')
         self.search_input.textChanged.connect(self._on_search)
         search_layout.addWidget(self.search_input, stretch=1)
         layout.addLayout(search_layout)
@@ -44,16 +62,56 @@ class SearchPanel(QWidget):
         self.tree.setObjectName('searchTree')
         self.columns = [t(k) if k else '' for k in self.column_keys]
         self.tree.setHeaderLabels(self.columns)
-        self.tree.setAlternatingRowColors(True)
+        self.tree.setAlternatingRowColors(False)
         self.tree.setRootIsDecorated(False)
         self.tree.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tree.setSortingEnabled(True)
         self.tree.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.tree.setStyleSheet(f'''
+            QTreeWidget {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 8px;
+                color: #A6B8C8;
+                font-size: 11px;
+                outline: none;
+            }}
+            QTreeWidget::item {{
+                padding: 4px 8px;
+                border-radius: 4px;
+            }}
+            QTreeWidget::item:hover {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QTreeWidget::item:selected {{
+                background: rgba(125,211,252,0.15);
+                color: #7DD3FC;
+                border-left: 3px solid #7DD3FC;
+            }}
+            QTreeWidget::item:selected:!active {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QHeaderView::section {{
+                background: rgba(8,10,16,0.9);
+                color: #7DD3FC;
+                padding: 6px 8px;
+                border: none;
+                border-bottom: 1px solid rgba(125,211,252,0.15);
+                font-weight: 600;
+                font-size: 10px;
+            }}
+            QHeaderView::section:hover {{
+                background: rgba(125,211,252,0.08);
+            }}
+        ''')
         header = self.tree.header()
         for i, width in enumerate(self.column_widths):
             if i < len(self.columns):
                 self.tree.setColumnWidth(i, width)
         header.setStretchLastSection(True)
+        header.setDefaultAlignment(Qt.AlignLeft)
         self.tree.itemSelectionChanged.connect(self._on_selection_changed)
         self.tree.itemDoubleClicked.connect(self._on_double_click)
         layout.addWidget(self.tree, stretch=1)

@@ -18,7 +18,7 @@ from .tabs.tools_tab import center_on_parent
 GITHUB_RAW_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
 GITHUB_LATEST_ZIP = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 from palworld_aio import constants
-from palworld_aio.ui.chrome.styles import ThemeManager
+from palworld_aio.ui.chrome.styles import ThemeManager, MENU_STYLE
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palworld_aio.utils import check_for_update, as_uuid
 from palworld_aio.managers.save_manager import save_manager
@@ -1094,6 +1094,7 @@ class MainWindow(QMainWindow):
         if not item:
             return
         menu = QMenu(self)
+        menu.setStyleSheet(MENU_STYLE)
         menu.addAction(self._create_action(t('deletion.ctx.add_exclusion'), lambda: self._add_exclusion('guilds', item.text(1))))
         menu.addAction(self._create_action(t('deletion.ctx.remove_exclusion'), lambda: self._remove_exclusion('guilds', item.text(1))))
         menu.addAction(self._create_action(t('deletion.ctx.delete_guild'), lambda: self._delete_guild(item.text(1))))
@@ -1113,6 +1114,7 @@ class MainWindow(QMainWindow):
         if not guild_data:
             return
         menu = QMenu(self)
+        menu.setStyleSheet(MENU_STYLE)
         menu.addAction(self._create_action(t('guild.ctx.make_leader'), lambda: self._make_leader(guild_data[1], item.text(4))))
         menu.addAction(self._create_action(t('guild.unlock_lab_research.menu') if t else 'Unlock All Lab Research', lambda: self._unlock_all_lab_research_for_guild(guild_data[1])))
         menu.addSeparator()
@@ -1129,6 +1131,7 @@ class MainWindow(QMainWindow):
         if not item:
             return
         menu = QMenu(self)
+        menu.setStyleSheet(MENU_STYLE)
         menu.addAction(self._create_action(t('deletion.ctx.add_exclusion'), lambda: self._add_exclusion('bases', item.text(0))))
         menu.addAction(self._create_action(t('deletion.ctx.remove_exclusion'), lambda: self._remove_exclusion('bases', item.text(0))))
         menu.addAction(self._create_action(t('deletion.ctx.delete_base'), lambda: self._delete_base(item.text(0), item.text(1))))
