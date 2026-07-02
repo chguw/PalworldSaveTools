@@ -485,6 +485,7 @@ class WikiDetailPanel(QScrollArea):
                     el = QLabel()
                     el.setPixmap(px)
                     el.setFixedSize(24, 24)
+                    el.setToolTip(ename)
                     nr.addWidget(el)
         if zukan:
             nr.addWidget(self._hl(f'#{zukan}', 13, False, '#6b7280'))
@@ -522,19 +523,19 @@ class WikiDetailPanel(QScrollArea):
         cl = QHBoxLayout(cr)
         cl.setContentsMargins(0, 0, 0, 0)
         cl.setSpacing(8)
-        for lbl, key in [('HP', 'hp'), ('Melee Atk', 'meal_attack'), ('Shot Atk', 'shot_attack'), ('Defense', 'defense')]:
+        for lbl_key, key in [('docs.wiki.hp', 'hp'), ('docs.wiki.melee_atk', 'meal_attack'), ('docs.wiki.shot_atk', 'shot_attack'), ('docs.wiki.defense', 'defense')]:
             val = stats.get(key, '')
             if val != '':
-                cl.addWidget(self._card(lbl, val))
+                cl.addWidget(self._card(t(lbl_key) if t else lbl_key, val))
         cl.addStretch()
         rl.addWidget(cr)
 
         extra = [
-            ('Rarity', stats.get('rarity', '')),
-            ('Food', stats.get('food_amount', '')),
-            ('Size', str(stats.get('size', '')).split('::')[-1] if stats.get('size') else ''),
-            ('Run Speed', stats.get('run_speed', '')),
-            ('Ride Sprint', stats.get('ride_sprint_speed', '')),
+            (t('docs.wiki.rarity') if t else 'Rarity', stats.get('rarity', '')),
+            (t('docs.wiki.food') if t else 'Food', stats.get('food_amount', '')),
+            (t('docs.wiki.size') if t else 'Size', str(stats.get('size', '')).split('::')[-1] if stats.get('size') else ''),
+            (t('docs.wiki.run_speed') if t else 'Run Speed', stats.get('run_speed', '')),
+            (t('docs.wiki.ride_sprint') if t else 'Ride Sprint', stats.get('ride_sprint_speed', '')),
         ]
         extra = [(l, v) for l, v in extra if v != '']
         if extra:
@@ -554,7 +555,7 @@ class WikiDetailPanel(QScrollArea):
             active = {k: v for k, v in work.items() if isinstance(v, (int, float)) and v > 0}
             if active:
                 ws_map = PalInfoWidget._WORK_SUITABILITY_DISPLAY
-                self._l.addWidget(self._hl('Work Suitability', 12, True, '#94a3b8'))
+                self._l.addWidget(self._hl(t('docs.wiki.work_suitability') if t else 'Work Suitability', 12, True, '#94a3b8'))
                 ww = QWidget()
                 wl = QHBoxLayout(ww)
                 wl.setContentsMargins(0, 0, 0, 0)
@@ -571,8 +572,8 @@ class WikiDetailPanel(QScrollArea):
                         il = QLabel()
                         il.setPixmap(wip)
                         il.setFixedSize(18, 18)
+                        il.setToolTip(dname)
                         clo.addWidget(il)
-                    clo.addWidget(QLabel(dname))
                     lvl = QLabel(f'Lv.{int(v)}')
                     lvl.setStyleSheet('font-size:10px;color:#7DD3FC;font-weight:600;')
                     clo.addWidget(lvl)
@@ -600,7 +601,7 @@ class WikiDetailPanel(QScrollArea):
             moves = _learnset_for_pal(code)
             if moves:
                 self._l.addWidget(self._sep())
-                self._l.addWidget(self._hl('Skill Set', 12, True, '#94a3b8'))
+                self._l.addWidget(self._hl(t('docs.wiki.skill_set') if t else 'Skill Set', 12, True, '#94a3b8'))
                 mw = QWidget()
                 ml = QGridLayout(mw)
                 ml.setContentsMargins(0, 0, 0, 0)
@@ -623,6 +624,7 @@ class WikiDetailPanel(QScrollArea):
                         sl = QLabel()
                         sl.setPixmap(spx)
                         sl.setFixedSize(18, 18)
+                        sl.setToolTip(elem)
                         clo.addWidget(sl)
                     clo.addWidget(QLabel(sname))
                     if lvl:
@@ -660,10 +662,10 @@ class WikiDetailPanel(QScrollArea):
         hl.addWidget(nw, 1)
         self._l.addWidget(h)
         stat_pairs = [
-            ('Category', _get(d, 'type_a_display')),
-            ('Subcategory', _get(d, 'type_b_display')),
-            ('Rarity', _get(d, 'rarity')),
-            ('Price', _get(d, 'price')),
+            (t('docs.wiki.category') if t else 'Category', _get(d, 'type_a_display')),
+            (t('docs.wiki.subcategory') if t else 'Subcategory', _get(d, 'type_b_display')),
+            (t('docs.wiki.rarity') if t else 'Rarity', _get(d, 'rarity')),
+            (t('docs.wiki.price') if t else 'Price', _get(d, 'price')),
         ]
         gw = QWidget()
         gl = QHBoxLayout(gw)
@@ -673,12 +675,12 @@ class WikiDetailPanel(QScrollArea):
             gl.addWidget(self._card(lbl, val if val is not None else ''))
         self._l.addWidget(gw)
         extra_pairs = [
-            ('Weight', _get(d, 'weight')),
-            ('Max Stack', _get(d, 'max_stack')),
-            ('Rank', _get(d, 'rank')),
-            ('Satiety', _get(d, 'restore_satiety')),
-            ('Sanity', _get(d, 'restore_sanity')),
-            ('Durability', _get(d, 'durability')),
+            (t('docs.wiki.weight') if t else 'Weight', _get(d, 'weight')),
+            (t('docs.wiki.max_stack') if t else 'Max Stack', _get(d, 'max_stack')),
+            (t('docs.wiki.rank') if t else 'Rank', _get(d, 'rank')),
+            (t('docs.wiki.satiety') if t else 'Satiety', _get(d, 'restore_satiety')),
+            (t('docs.wiki.sanity') if t else 'Sanity', _get(d, 'restore_sanity')),
+            (t('docs.wiki.durability') if t else 'Durability', _get(d, 'durability')),
         ]
         ew = QWidget()
         el = QHBoxLayout(ew)
@@ -726,10 +728,10 @@ class WikiDetailPanel(QScrollArea):
             dl.setWordWrap(True)
             self._l.addWidget(dl)
         stat_pairs = [
-            ('Rank', _get(d, 'rank')),
-            ('HP', _get(d, 'hp')),
-            ('Defense', _get(d, 'defense')),
-            ('Work Required', _get(d, 'required_work_amount')),
+            (t('docs.wiki.rank') if t else 'Rank', _get(d, 'rank')),
+            (t('docs.wiki.hp') if t else 'HP', _get(d, 'hp')),
+            (t('docs.wiki.defense') if t else 'Defense', _get(d, 'defense')),
+            (t('docs.wiki.work_required') if t else 'Work Required', _get(d, 'required_work_amount')),
         ]
         sw = QWidget()
         sl = QHBoxLayout(sw)
@@ -743,11 +745,11 @@ class WikiDetailPanel(QScrollArea):
             self._l.addWidget(sw)
         extra = []
         if _get(d, 'belongs_to_base') is not None:
-            extra.append(('Base Required', 'Yes' if _get(d, 'belongs_to_base') else 'No'))
+            extra.append((t('docs.wiki.base_required') if t else 'Base Required', (t('docs.wiki.yes') if t else 'Yes') if _get(d, 'belongs_to_base') else (t('docs.wiki.no') if t else 'No')))
         if _get(d, 'install_max_per_base') is not None:
-            extra.append(('Max per Base', _get(d, 'install_max_per_base')))
+            extra.append((t('docs.wiki.max_per_base') if t else 'Max per Base', _get(d, 'install_max_per_base')))
         if _get(d, 'is_paintable') is not None:
-            extra.append(('Paintable', 'Yes' if _get(d, 'is_paintable') else 'No'))
+            extra.append((t('docs.wiki.paintable') if t else 'Paintable', (t('docs.wiki.yes') if t else 'Yes') if _get(d, 'is_paintable') else (t('docs.wiki.no') if t else 'No')))
         if extra:
             ew = QWidget()
             el = QHBoxLayout(ew)
@@ -759,7 +761,7 @@ class WikiDetailPanel(QScrollArea):
             self._l.addWidget(ew)
         materials = _get(d, 'materials')
         if isinstance(materials, list) and materials:
-            self._l.addWidget(self._hl('Materials', 12, True, '#94a3b8'))
+            self._l.addWidget(self._hl(t('docs.wiki.materials') if t else 'Materials', 12, True, '#94a3b8'))
             mw = QWidget()
             ml = QHBoxLayout(mw)
             ml.setContentsMargins(0, 0, 0, 0)
@@ -830,7 +832,7 @@ class WikiDetailPanel(QScrollArea):
                 pals.sort(key=lambda x: x[0].get('name', '').lower(), reverse=self._pal_sort_rev)
             elif self._pal_sort_by == 'index':
                 pals.sort(key=lambda x: x[0].get('stats', {}).get('zukan_index', 9999), reverse=self._pal_sort_rev)
-            self._l.addWidget(self._hl(f'Pals ({len(pals)})', 12, True, '#94a3b8'))
+            self._l.addWidget(self._hl(t('docs.wiki.pals_count', count=len(pals)) if t else f'Pals ({len(pals)})', 12, True, '#94a3b8'))
             self._render_pal_sort_bar([
                 ('name', t('docs.wiki.sort.name')),
                 ('index', t('docs.wiki.sort.index')),
@@ -867,7 +869,7 @@ class WikiDetailPanel(QScrollArea):
                 pals.sort(key=lambda x: x[0].get('name', '').lower(), reverse=self._pal_sort_rev)
             elif self._pal_sort_by == 'level':
                 pals.sort(key=lambda x: x[1], reverse=self._pal_sort_rev)
-            self._l.addWidget(self._hl(f'Pals ({len(pals)})', 12, True, '#94a3b8'))
+            self._l.addWidget(self._hl(t('docs.wiki.pals_count', count=len(pals)) if t else f'Pals ({len(pals)})', 12, True, '#94a3b8'))
             self._render_pal_sort_bar([
                 ('name', t('docs.wiki.sort.name')),
                 ('level', t('docs.wiki.sort.work_level')),
@@ -922,6 +924,7 @@ class WikiDetailPanel(QScrollArea):
                 el = QLabel()
                 el.setPixmap(px)
                 el.setFixedSize(36, 36)
+                el.setToolTip(elem)
                 hl.addWidget(el)
         nw = QWidget()
         nl = QVBoxLayout(nw)
@@ -944,18 +947,18 @@ class WikiDetailPanel(QScrollArea):
         sl.setContentsMargins(0, 0, 0, 0)
         sl.setSpacing(8)
         if power is not None:
-            sl.addWidget(self._card('Power', power))
+            sl.addWidget(self._card(t('docs.wiki.power') if t else 'Power', power))
         if ct is not None:
-            sl.addWidget(self._card('CT', f'{ct}s'))
+            sl.addWidget(self._card(t('docs.wiki.ct') if t else 'CT', f'{ct}s'))
         wpr = _get(d, 'WazaPowerRate')
         if wpr is not None:
-            sl.addWidget(self._card('Hit Power Rate', wpr))
+            sl.addWidget(self._card(t('docs.wiki.hit_power_rate') if t else 'Hit Power Rate', wpr))
         mhn = _get(d, 'MaxHitNum')
         if mhn is not None:
-            sl.addWidget(self._card('Max Hits', mhn))
+            sl.addWidget(self._card(t('docs.wiki.max_hits') if t else 'Max Hits', mhn))
         hi = _get(d, 'HitInterval')
         if hi is not None:
-            sl.addWidget(self._card('Hit Interval', f'{hi}s'))
+            sl.addWidget(self._card(t('docs.wiki.hit_interval') if t else 'Hit Interval', f'{hi}s'))
         sl.addStretch()
         self._l.addWidget(sw)
 
@@ -1014,7 +1017,7 @@ class WikiDetailPanel(QScrollArea):
                 if v != 0:
                     effects.append((_enum_name(etype), v))
         if effects:
-            self._l.addWidget(self._hl('Effects', 12, True, '#94a3b8'))
+            self._l.addWidget(self._hl(t('docs.wiki.effects') if t else 'Effects', 12, True, '#94a3b8'))
             ew = QWidget()
             el = QHBoxLayout(ew)
             el.setContentsMargins(0, 0, 0, 0)
@@ -1064,7 +1067,7 @@ class WikiDetailPanel(QScrollArea):
         nlb.setWordWrap(False)
         nr.addWidget(nlb)
         if btype == 'boss':
-            nr.addWidget(self._badge('Ancient', '#FBBF24'))
+            nr.addWidget(self._badge(t('docs.wiki.ancient') if t else 'Ancient', '#FBBF24'))
         nr.addStretch()
         nl.addLayout(nr)
         if code:
@@ -1080,9 +1083,9 @@ class WikiDetailPanel(QScrollArea):
 
         stat_pairs = []
         if cost is not None:
-            stat_pairs.append(('Cost', cost))
+            stat_pairs.append((t('docs.wiki.cost') if t else 'Cost', cost))
         if lvl is not None:
-            stat_pairs.append(('Level Cap', lvl))
+            stat_pairs.append((t('docs.wiki.level_cap') if t else 'Level Cap', lvl))
         if stat_pairs:
             sw = QWidget()
             sl = QHBoxLayout(sw)
@@ -1115,12 +1118,12 @@ class WikiDetailPanel(QScrollArea):
         unlocks_b = [_resolve_item(b) for b in unlock_b]
         unlocks_i = [_resolve_item(i) for i in unlock_i]
         if unlocks_b:
-            self._l.addWidget(self._hl('Unlocks Buildings', 12, True, '#94a3b8'))
+            self._l.addWidget(self._hl(t('docs.wiki.unlocks_buildings') if t else 'Unlocks Buildings', 12, True, '#94a3b8'))
             gw = _grid_badges(unlocks_b)
             if gw:
                 self._l.addWidget(gw)
         if unlocks_i:
-            self._l.addWidget(self._hl('Unlocks Items', 12, True, '#94a3b8'))
+            self._l.addWidget(self._hl(t('docs.wiki.unlocks_items') if t else 'Unlocks Items', 12, True, '#94a3b8'))
             gw = _grid_badges(unlocks_i)
             if gw:
                 self._l.addWidget(gw)
@@ -1311,6 +1314,7 @@ class WikiCategoryPage(QWidget):
                 btn.setIcon(QIcon(ep))
             btn.setStyleSheet(_FILTER_BTN_S.replace('padding: 2px 6px;', 'padding: 2px;'))
             btn.setIconSize(QSize(20, 20))
+            btn.setToolTip(display)
         else:
             btn = QPushButton(display)
             btn.setFixedHeight(22)
