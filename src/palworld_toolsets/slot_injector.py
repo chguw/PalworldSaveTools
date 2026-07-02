@@ -11,7 +11,7 @@ from PySide6.QtGui import QIcon, QFont, QPixmap, QColor, QPalette
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from concurrent.futures import ThreadPoolExecutor
 import os
-from palworld_aio.ui.chrome.styles import ThemeManager, SCROLLBAR_STYLE
+from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
 def sav_to_gvasfile(filepath):
     from palsav.io import load_sav
@@ -310,7 +310,6 @@ class SlotNumUpdaterApp(QDialog):
             QHeaderView::section:hover {{
                 background: rgba(125,211,252,0.08);
             }}
-            {SCROLLBAR_STYLE}
         ''')
         table_layout.addLayout(selection_layout)
         table_layout.addWidget(self.table)

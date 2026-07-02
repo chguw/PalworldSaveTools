@@ -6,7 +6,7 @@ from PySide6.QtGui import QIcon, QFont
 import os
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 
-from palworld_aio.ui.chrome.styles import ThemeManager, SCROLLBAR_STYLE
+from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio.inventory.container_ownership import ContainerOwnership
 from palworld_aio.inventory.inventory_manager import PlayerInventory
 from palworld_aio.editor.edit_pals import _generate_pal_save_param, get_pal_base_data, _ensure_friendship_thresholds
@@ -266,7 +266,6 @@ class CharacterTransferWindow(QWidget):
             QHeaderView::section:hover {{
                 background: rgba(125,211,252,0.08);
             }}
-            {SCROLLBAR_STYLE}
         ''')
         source_panel_layout.addWidget(self.source_player_list, 1)
         trees_layout.addWidget(source_panel, 1)
@@ -334,7 +333,6 @@ class CharacterTransferWindow(QWidget):
             QHeaderView::section:hover {{
                 background: rgba(125,211,252,0.08);
             }}
-            {SCROLLBAR_STYLE}
         ''')
         target_panel_layout.addWidget(self.target_player_list, 1)
         trees_layout.addWidget(target_panel, 1)
