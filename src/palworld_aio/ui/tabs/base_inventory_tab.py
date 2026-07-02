@@ -2185,6 +2185,7 @@ class BasePalsContentWidget(QFrame):
             chk_layout = QVBoxLayout(inner_w)
             chk_layout.setContentsMargins(2, 2, 2, 2)
             chk_layout.setSpacing(2)
+            chk_layout.setAlignment(Qt.AlignTop)
             checkboxes = []
             for pi in affected:
                 pr = _get_raw_from_item(pi)
@@ -2195,6 +2196,7 @@ class BasePalsContentWidget(QFrame):
                 cb.setChecked(True)
                 chk_layout.addWidget(cb)
                 checkboxes.append((cb, pi))
+            chk_layout.addStretch()
             scroll.setWidget(inner_w)
             il.addWidget(scroll, 1)
             btn_row = QHBoxLayout()
@@ -2265,6 +2267,7 @@ class BasePalsContentWidget(QFrame):
             chk_layout = QVBoxLayout(inner_w)
             chk_layout.setContentsMargins(2, 2, 2, 2)
             chk_layout.setSpacing(2)
+            chk_layout.setAlignment(Qt.AlignTop)
             checkboxes = []
             for pi in affected:
                 pr = _get_raw_from_item(pi)
@@ -2275,6 +2278,7 @@ class BasePalsContentWidget(QFrame):
                 cb.setChecked(True)
                 chk_layout.addWidget(cb)
                 checkboxes.append((cb, pi))
+            chk_layout.addStretch()
             scroll.setWidget(inner_w)
             il.addWidget(scroll, 1)
             btn_row = QHBoxLayout()
