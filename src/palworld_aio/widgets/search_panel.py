@@ -101,6 +101,7 @@ class SearchPanel(QWidget):
                 border-bottom: 1px solid rgba(125,211,252,0.15);
                 font-weight: 600;
                 font-size: 10px;
+                text-align: center;
             }}
             QHeaderView::section:hover {{
                 background: rgba(125,211,252,0.08);
@@ -111,7 +112,7 @@ class SearchPanel(QWidget):
             if i < len(self.columns):
                 self.tree.setColumnWidth(i, width)
         header.setStretchLastSection(True)
-        header.setDefaultAlignment(Qt.AlignLeft)
+        header.setDefaultAlignment(Qt.AlignCenter)
         self.tree.itemSelectionChanged.connect(self._on_selection_changed)
         self.tree.itemDoubleClicked.connect(self._on_double_click)
         layout.addWidget(self.tree, stretch=1)
