@@ -11,6 +11,7 @@ from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
 
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, wrap_tooltip_text
 from palworld_aio.editor.edit_pals import _clean_desc_for_tooltip
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 SINGLETON_TYPE_A = {'EPalItemTypeA::Weapon', 'EPalItemTypeA::MonsterEquipWeapon', 'EPalItemTypeA::Armor', 'EPalItemTypeA::Accessory', 'EPalItemTypeA::Glider', 'EPalItemTypeA::CaptureItemModifier'}
 class RarityBorderDelegate(QStyledItemDelegate):
     def paint(self, painter, option, index):
@@ -278,11 +279,13 @@ class PlayerItemActionDialog(QDialog):
             display_text = f'{name} (Lv.{level}) - {guild_name}'
             if item_count > 0:
                 display_text += f' [x{item_count}]'
-            list_item = QListWidgetItem(display_text)
-            list_item.setFlags(list_item.flags() | Qt.ItemIsUserCheckable)
-            list_item.setCheckState(Qt.Checked if uid in self.players_with_item else Qt.Unchecked)
-            list_item.setData(Qt.UserRole, uid)
-            self.player_list.addItem(list_item)
+            checkbox = ToggleCheckBtn(display_text)
+            checkbox.setProperty('uid', uid)
+            checkbox.setChecked(uid in self.players_with_item)
+            item = QListWidgetItem()
+            item.setSizeHint(QSize(0, 36))
+            self.player_list.addItem(item)
+            self.player_list.setItemWidget(item, checkbox)
     def _player_item_count(self, player_uid, item_id):
         try:
             from palworld_aio import constants
@@ -351,23 +354,31 @@ class PlayerItemActionDialog(QDialog):
             return
         for i in range(self.player_list.count()):
             item = self.player_list.item(i)
-            uid = item.data(Qt.UserRole)
-            if uid in self.players_with_item:
-                item.setCheckState(Qt.Checked)
-            else:
-                item.setCheckState(Qt.Unchecked)
+            widget = self.player_list.itemWidget(item)
+            if widget:
+                uid = widget.property('uid')
+                widget.setChecked(uid in self.players_with_item)
     def _select_all_players(self):
         for i in range(self.player_list.count()):
-            self.player_list.item(i).setCheckState(Qt.Checked)
+            item = self.player_list.item(i)
+            widget = self.player_list.itemWidget(item)
+            if widget:
+                widget.setChecked(True)
     def _deselect_all_players(self):
         for i in range(self.player_list.count()):
-            self.player_list.item(i).setCheckState(Qt.Unchecked)
+            item = self.player_list.item(i)
+            widget = self.player_list.itemWidget(item)
+            if widget:
+                widget.setChecked(False)
     def _get_selected_players(self):
         selected = []
         for i in range(self.player_list.count()):
             item = self.player_list.item(i)
-            if item.checkState() == Qt.Checked:
-                selected.append(item.data(Qt.UserRole))
+            widget = self.player_list.itemWidget(item)
+            if widget and widget.isChecked():
+                uid = widget.property('uid')
+                if uid:
+                    selected.append(uid)
         return selected
     def _on_remove_item(self):
         if not self.selected_item_id:
@@ -402,7 +413,15 @@ class PlayerItemActionDialog(QDialog):
             self._update_player_list()
             self._find_players_with_item()
     def _get_checked_player_uids(self):
-        return [self.player_list.item(i).data(Qt.UserRole) for i in range(self.player_list.count()) if self.player_list.item(i).checkState() == Qt.Checked]
+        uids = []
+        for i in range(self.player_list.count()):
+            item = self.player_list.item(i)
+            widget = self.player_list.itemWidget(item)
+            if widget and widget.isChecked():
+                uid = widget.property('uid')
+                if uid:
+                    uids.append(uid)
+        return uids
     def _load_all_players(self):
         self.player_list.clear()
         self._players_tab.setEnabled(True)
@@ -413,11 +432,13 @@ class PlayerItemActionDialog(QDialog):
             if not uid:
                 continue
             text = f"{player.get('name', 'Unknown')} (Lv.{player.get('level', '?')}) - {player.get('guild_name', 'Unknown')}"
-            item = QListWidgetItem(text)
-            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-            item.setCheckState(Qt.Checked)
-            item.setData(Qt.UserRole, uid)
+            checkbox = ToggleCheckBtn(text)
+            checkbox.setProperty('uid', uid)
+            checkbox.setChecked(True)
+            item = QListWidgetItem()
+            item.setSizeHint(QSize(0, 36))
             self.player_list.addItem(item)
+            self.player_list.setItemWidget(item, checkbox)
     def _on_tab_changed(self, idx):
         if idx == 2 and self.player_list.count() == 0:
             self._load_all_players()
