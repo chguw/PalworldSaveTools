@@ -259,7 +259,6 @@ def build_pal_context_menu(parent, raw):
     popup.add_sep()
     popup.add_item('clone', t('edit_pals.ctx.clone'))
     popup.add_item('bulk_rename', t('edit_pals.ctx.bulk_rename'))
-    popup.add_item('bulk_feed', t('edit_pals.ctx.bulk_feed'))
     popup.add_item('bulk_heal', t('edit_pals.ctx.bulk_heal'))
     popup.add_sep()
     popup.add_item('delete', t('edit_pals.delete'))

@@ -304,8 +304,6 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                 self._clone_pal(sender)
         elif action == 'bulk_rename':
             self._bulk_rename_pal(sender)
-        elif action == 'bulk_feed':
-            self._bulk_feed_pal(sender)
         elif action == 'bulk_heal':
             self._bulk_heal_pal(sender)
     def _bulk_sync_pal(self, raw):

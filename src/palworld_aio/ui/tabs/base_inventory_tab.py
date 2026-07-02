@@ -1469,8 +1469,6 @@ class _BasePalIcon(QFrame):
                 self.rightClicked.emit(self.slot_index, 'clone')
             elif key == 'bulk_rename':
                 self.rightClicked.emit(self.slot_index, 'bulk_rename')
-            elif key == 'bulk_feed':
-                self.rightClicked.emit(self.slot_index, 'bulk_feed')
             elif key == 'bulk_heal':
                 self.rightClicked.emit(self.slot_index, 'bulk_heal')
             elif key == 'delete':
@@ -2218,95 +2216,6 @@ class BasePalsContentWidget(QFrame):
                 show_information(dlg, t('edit_pals.ctx.bulk_rename'), t('edit_pals.bulk_rename_success', count=count, name=pal_name))
                 dlg.accept()
             apply_btn.clicked.connect(on_bulk_rename)
-            dlg.exec()
-        elif action == 'bulk_feed':
-            from palworld_aio.editor.edit_pals import _get_raw_from_item, get_pal_base_data, FramelessDialog
-            base_id = extract_value(raw, 'CharacterID', '').lower().replace('boss_', '')
-            affected = []
-            for p in self._pals:
-                pr = _get_raw_from_item(p['character_entry'])
-                if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
-                    affected.append(p['character_entry'])
-            if not affected:
-                show_information(self, t('edit_pals.ctx.bulk_feed'), 'No same-species pals found.')
-                return
-            cid = extract_value(raw, 'CharacterID', '')
-            pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
-            dlg = FramelessDialog('edit_pals.ctx.bulk_feed', self)
-            dlg.setWindowTitle(f"{t('edit_pals.bulk_feed_title', name=pal_name)}")
-            dlg.setModal(True)
-            dlg.setMinimumSize(500, 450)
-            inner = QWidget()
-            il = QVBoxLayout(inner)
-            il.setContentsMargins(8, 4, 8, 8)
-            il.setSpacing(6)
-            info_lbl = QLabel('FullStomach→max, Sanity→100, clears sickness/negative status.')
-            info_lbl.setStyleSheet('font-size: 11px; color: #94A3B8; background: transparent; border: none; padding: 4px 0;')
-            il.addWidget(info_lbl)
-            list_lbl = QLabel(t('edit_pals.select_pals_to_sync'))
-            list_lbl.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none; padding: 2px 0;')
-            il.addWidget(list_lbl)
-            scroll = QScrollArea()
-            scroll.setWidgetResizable(True)
-            scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-            scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); }')
-            inner_w = QWidget()
-            inner_w.setStyleSheet('background: transparent; border: none;')
-            chk_layout = QVBoxLayout(inner_w)
-            chk_layout.setContentsMargins(2, 2, 2, 2)
-            chk_layout.setSpacing(2)
-            checkboxes = []
-            for pi in affected:
-                pr = _get_raw_from_item(pi)
-                nick = extract_value(pr, 'NickName', '') if pr else ''
-                lv = extract_value(pr, 'Level', 1) if pr else 1
-                display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pal_name}'
-                cb = QCheckBox(display)
-                cb.setChecked(True)
-                cb.setStyleSheet('QCheckBox { color: #E2E8F0; font-size: 11px; font-weight: 600; spacing: 6px; } QCheckBox::indicator { width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(125,211,252,0.3); background: rgba(0,0,0,0.3); } QCheckBox::indicator:checked { background: rgba(16,185,129,0.5); border-color: #10B981; }')
-                cb.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-                chk_layout.addWidget(cb)
-                checkboxes.append((cb, pi))
-            scroll.setWidget(inner_w)
-            il.addWidget(scroll, 1)
-            btn_row = QHBoxLayout()
-            btn_row.addStretch()
-            cancel_btn = QPushButton(t('edit_pals.bulk_sync_cancel'))
-            cancel_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 16px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
-            cancel_btn.clicked.connect(dlg.reject)
-            btn_row.addWidget(cancel_btn)
-            apply_btn = QPushButton(t('edit_pals.bulk_sync_apply'))
-            apply_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.15); color: #4ADE80; border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.25); color: #FFFFFF; }')
-            btn_row.addWidget(apply_btn)
-            il.addLayout(btn_row)
-            dlg.content_layout.addWidget(inner)
-            def on_bulk_feed():
-                sel = [pi for cb, pi in checkboxes if cb.isChecked()]
-                if not sel:
-                    show_warning(dlg, t('edit_pals.bulk_feed_title', name=pal_name), t('edit_pals.bulk_no_selection'))
-                    return
-                count = 0
-                for pi in sel:
-                    tr = _get_raw_from_item(pi)
-                    if not tr:
-                        continue
-                    cid_i = extract_value(tr, 'CharacterID', '')
-                    base = get_pal_base_data(cid_i)
-                    max_stomach = (base.get('stats', {}).get('max_full_stomach', 300) if base else 300)
-                    tr['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
-                    tr['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
-                    tr.pop('WorkerSick', None)
-                    tr.pop('PhysicalHealth', None)
-                    tr.pop('HungerType', None)
-                    tr.pop('FoodWithStatusEffect', None)
-                    tr.pop('Tiemr_FoodWithStatusEffect', None)
-                    tr.pop('FoodRegeneEffectInfo', None)
-                    count += 1
-                for icon in self._icons:
-                    icon.update_display()
-                show_information(dlg, t('edit_pals.ctx.bulk_feed'), t('edit_pals.bulk_feed_success', count=count, name=pal_name))
-                dlg.accept()
-            apply_btn.clicked.connect(on_bulk_feed)
             dlg.exec()
         elif action == 'bulk_heal':
             from palworld_aio.editor.edit_pals import _get_raw_from_item, get_pal_base_data, _ensure_friendship_thresholds, FramelessDialog

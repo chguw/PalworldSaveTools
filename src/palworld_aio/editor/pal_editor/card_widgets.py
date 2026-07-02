@@ -362,10 +362,6 @@ class PalIcon(QFrame):
 
                 self.rightClicked.emit(self.slot_index, 'bulk_rename')
 
-            elif key == 'bulk_feed':
-
-                self.rightClicked.emit(self.slot_index, 'bulk_feed')
-
             elif key == 'bulk_heal':
 
                 self.rightClicked.emit(self.slot_index, 'bulk_heal')
