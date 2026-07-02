@@ -1,22 +1,120 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QFrame, QGraphicsDropShadowEffect, QMenu, QLabel, QScrollArea, QMenu, QSizePolicy
-from PySide6.QtCore import Qt, QPoint, Signal, QTimer, QEvent, QRect, QEventLoop
-from PySide6.QtGui import QFont, QColor, QCursor, QGuiApplication, QIcon
-from i18n import t
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QFrame, QGraphicsDropShadowEffect, QLabel, QScrollArea
+from PySide6.QtCore import Qt, QPoint, QEventLoop, QTimer, QRect
+from PySide6.QtGui import QColor, QCursor, QFont
 from palworld_aio import constants
-_BTN_STYLE = '''QPushButton { background: transparent; border: none; padding: 6px 16px; text-align: left; color: #E2E8F0; font-size: 12px; font-weight: 500; border-radius: 3px; min-height: 28px; } QPushButton:hover { background: rgba(125,211,252,0.15); color: #FFFFFF; } QPushButton:checked { background: rgba(125,211,252,0.08); color: #7DD3FC; } QPushButton:checked:hover { background: rgba(125,211,252,0.2); }'''
-_SEP_STYLE = 'border-top: 1px solid rgba(255,255,255,0.1); margin: 4px 8px;'
+
+_MENU_BG = 'rgba(18,20,24,0.95)'
+_MENU_BORDER = 'rgba(125,211,252,0.2)'
+_MENU_TEXT = '#A6B8C8'
+_MENU_HOVER_BG = 'rgba(125,211,252,0.1)'
+_MENU_HOVER_TEXT = '#7DD3FC'
+_MENU_ACTIVE_BG = 'rgba(125,211,252,0.15)'
+_MENU_ACTIVE_BORDER = '#7DD3FC'
+
+_ITEM_STYLE = f'''QPushButton {{ background: transparent; border: none; padding: 8px 12px; text-align: left; color: {_MENU_TEXT}; font-size: 11px; border-radius: 0px; min-height: 28px; }} QPushButton:hover {{ background: {_MENU_HOVER_BG}; color: {_MENU_HOVER_TEXT}; }} QPushButton:checked {{ background: rgba(125,211,252,0.08); color: {_MENU_HOVER_TEXT}; }} QPushButton:checked:hover {{ background: {_MENU_HOVER_BG}; }}'''
+_SEP_STYLE = 'border-top: 1px solid rgba(255,255,255,0.08); margin: 4px 8px;'
+
+class _GroupHeader(QWidget):
+    def __init__(self, name, idx):
+        super().__init__()
+        self._idx = idx
+        self.setObjectName('groupBtn')
+        self.setCursor(Qt.PointingHandCursor)
+        self.setMinimumHeight(36)
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(12, 0, 12, 0)
+        self._label = QLabel(name)
+        self._label.setFont(QFont(constants.FONT_FAMILY, 11))
+        self._label.setStyleSheet('color: #A6B8C8; background: transparent; border: none;')
+        layout.addWidget(self._label)
+        layout.addStretch()
+        self._chevron = QLabel('▶')
+        self._chevron.setFont(QFont(constants.FONT_FAMILY, 11))
+        self._chevron.setStyleSheet('color: #A6B8C8; background: transparent; border: none;')
+        layout.addWidget(self._chevron)
+        self.setStyleSheet(f'''
+            QWidget#groupBtn {{ background: transparent; border: none; border-radius: 6px; }}
+            QWidget#groupBtn[hovered="true"] {{ background: {_MENU_HOVER_BG}; }}
+            QWidget#groupBtn[active="true"] {{ background: {_MENU_ACTIVE_BG}; border-left: 3px solid {_MENU_ACTIVE_BORDER}; }}
+            QWidget#groupBtn[hovered="true"] QLabel, QWidget#groupBtn[active="true"] QLabel {{ color: {_MENU_HOVER_TEXT}; }}
+        ''')
+
+    def set_active(self, active):
+        self.setProperty('active', active)
+        self.style().unpolish(self)
+        self.style().polish(self)
+
+    def set_hovered(self, hovered):
+        self.setProperty('hovered', hovered)
+        self.style().unpolish(self)
+        self.style().polish(self)
+
+class _SubPopup(QWidget):
+    def __init__(self, parent_ctx):
+        super().__init__(None)
+        self._parent_ctx = parent_ctx
+        self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(6, 6, 6, 6)
+        container = QFrame(self)
+        container.setStyleSheet(f'QFrame {{ background: {_MENU_BG}; border: 1px solid rgba(125,211,252,0.2); border-radius: 10px; }}')
+        shadow = QGraphicsDropShadowEffect(container)
+        shadow.setBlurRadius(20)
+        shadow.setOffset(3, 3)
+        shadow.setColor(QColor(0, 0, 0, 120))
+        container.setGraphicsEffect(shadow)
+        cl = QVBoxLayout(container)
+        cl.setContentsMargins(0, 0, 0, 0)
+        cl.setSpacing(0)
+        self.scroll = QScrollArea(container)
+        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setFrameStyle(QFrame.NoFrame)
+        self.scroll.setMaximumHeight(400)
+        self.scroll.setStyleSheet('QScrollArea { background: transparent; border: none; }')
+        cw = QWidget()
+        cw.setStyleSheet('background: transparent;')
+        self.layout = QVBoxLayout(cw)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        cw.setMinimumWidth(180)
+        self.scroll.setWidget(cw)
+        cl.addWidget(self.scroll)
+        main_layout.addWidget(container)
+
+    def add_item(self, key, text, checkable=False, checked=False):
+        btn = QPushButton(text)
+        btn.setFlat(True)
+        btn.setCursor(Qt.PointingHandCursor)
+        btn.setFocusPolicy(Qt.NoFocus)
+        btn.setCheckable(checkable)
+        btn.setChecked(checked)
+        btn.setMinimumHeight(34)
+        btn.setStyleSheet(_ITEM_STYLE)
+        btn.clicked.connect(lambda: self._parent_ctx._select(key))
+        self.layout.addWidget(btn)
+        return btn
+
+    def add_sep(self):
+        sep = QFrame()
+        sep.setFrameShape(QFrame.HLine)
+        sep.setFixedHeight(1)
+        sep.setStyleSheet(_SEP_STYLE)
+        self.layout.addWidget(sep)
+
 class ScrollableContextMenu(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._result = None
         self._loop = None
-        self.is_dark = True
         self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(6, 6, 6, 6)
         self.container = QFrame(self)
-        self.container.setStyleSheet('QFrame { background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(10,12,16,0.98), stop:0.5 rgba(12,16,22,0.98), stop:1 rgba(8,10,14,0.98)); border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; }')
+        self.container.setStyleSheet(f'QFrame {{ background: {_MENU_BG}; border: 1px solid {_MENU_BORDER}; border-radius: 10px; }}')
         _shadow = QGraphicsDropShadowEffect(self.container)
         _shadow.setBlurRadius(20)
         _shadow.setOffset(3, 3)
@@ -30,8 +128,8 @@ class ScrollableContextMenu(QWidget):
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setFrameStyle(QFrame.NoFrame)
-        self.scroll_area.setFixedHeight(215)
-        self.scroll_area.setStyleSheet('QScrollArea { background: transparent; border: none; } QScrollBar:vertical { width: 5px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.35); } QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }')
+        self.scroll_area.setMaximumHeight(400)
+        self.scroll_area.setStyleSheet('QScrollArea { background: transparent; border: none; }')
         self.content_widget = QWidget()
         self.content_widget.setStyleSheet('background: transparent;')
         self.layout = QVBoxLayout(self.content_widget)
@@ -42,43 +140,123 @@ class ScrollableContextMenu(QWidget):
         cl.addWidget(self.scroll_area)
         main_layout.addWidget(self.container)
         self.setMinimumWidth(220)
+        self._groups = []
+        self._active_group = -1
+        self._sub_popup = None
+        self._cursor_timer = QTimer(self)
+        self._cursor_timer.timeout.connect(self._check_cursor)
+        self._cursor_timer.setInterval(50)
+        self._in_group = False
+        self._group_sub = None
+
+    def add_group_end(self):
+        self._in_group = False
+        self._group_sub = None
+
+    def add_group_start(self, name, expanded=True):
+        self._in_group = True
+        sub = _SubPopup(self)
+        self._group_sub = sub
+        idx = len(self._groups)
+        hdr = _GroupHeader(name, idx)
+        self._groups.append((hdr, sub))
+        self.layout.addWidget(hdr)
+
+    def _is_over_widget(self, widget, cursor_pos):
+        if not widget or not widget.isVisible():
+            return False
+        tl = widget.mapToGlobal(QPoint(0, 0))
+        rect = QRect(tl, widget.size())
+        return rect.contains(cursor_pos)
+
+    def _show_group(self, idx):
+        if idx == self._active_group:
+            return
+        if self._sub_popup:
+            self._sub_popup.hide()
+        hdr, sub = self._groups[idx]
+        self._sub_popup = sub
+        hdr_pos = hdr.mapToGlobal(QPoint(hdr.width(), 0))
+        sub.move(hdr_pos)
+        sub.show()
+        sub.raise_()
+        self._active_group = idx
+
+    def _hide_sub(self):
+        if self._sub_popup:
+            self._sub_popup.hide()
+            self._sub_popup = None
+        if self._active_group >= 0:
+            self._groups[self._active_group][0].set_active(False)
+        self._active_group = -1
+
+    def _check_cursor(self):
+        pos = QCursor.pos()
+        over_sub = self._sub_popup and self._is_over_widget(self._sub_popup, pos)
+        over_header = False
+        for idx, (hdr, sub) in enumerate(self._groups):
+            hov = self._is_over_widget(hdr, pos)
+            hdr.set_hovered(hov)
+            if hov:
+                over_header = True
+                if idx != self._active_group:
+                    self._show_group(idx)
+            hdr.set_active(not over_header and idx == self._active_group)
+        if self._sub_popup and not over_sub and not over_header:
+            self._hide_sub()
+
     def add_item(self, key, text, checkable=False, checked=False):
+        if self._in_group:
+            self._group_sub.add_item(key, text, checkable, checked)
+            return
         btn = QPushButton(text)
         btn.setFlat(True)
         btn.setCursor(Qt.PointingHandCursor)
+        btn.setFocusPolicy(Qt.NoFocus)
         btn.setCheckable(checkable)
         btn.setChecked(checked)
         btn.setMinimumHeight(34)
-        btn.setStyleSheet(_BTN_STYLE)
+        btn.setStyleSheet(_ITEM_STYLE)
         btn.clicked.connect(lambda: self._select(key))
         self.layout.addWidget(btn)
         return btn
+
     def add_sep(self):
+        if self._in_group:
+            self._group_sub.add_sep()
+            return
         sep = QFrame()
         sep.setFrameShape(QFrame.HLine)
         sep.setFixedHeight(1)
         sep.setStyleSheet(_SEP_STYLE)
         self.layout.addWidget(sep)
+
     def add_label(self, text):
         lbl = QLabel(text)
-        lbl.setStyleSheet('color: #94A3B8; font-size: 10px; font-weight: 600; padding: 4px 16px 2px 16px; background: transparent; border: none;')
+        lbl.setStyleSheet(f'color: {_MENU_TEXT}; font-size: 10px; font-weight: 600; padding: 4px 12px 2px 12px; background: transparent; border: none;')
         self.layout.addWidget(lbl)
+
     def add_action(self, action):
         btn = QPushButton(action.text())
         btn.setFlat(True)
         btn.setCursor(Qt.PointingHandCursor)
+        btn.setFocusPolicy(Qt.NoFocus)
         btn.setMinimumHeight(34)
-        btn.setStyleSheet(_BTN_STYLE)
+        btn.setStyleSheet(_ITEM_STYLE)
         btn.clicked.connect(action.trigger)
         self.layout.addWidget(btn)
         return btn
+
     def addSeparator(self):
         self.add_sep()
+
     def exec(self, pos):
         return self.exec_(pos)
+
     def _select(self, key):
         self._result = key
         self.close()
+
     def exec_(self, pos):
         self._result = None
         self.move(pos)
@@ -86,12 +264,16 @@ class ScrollableContextMenu(QWidget):
         self.show()
         self.raise_()
         self.activateWindow()
+        self._cursor_timer.start()
         loop = QEventLoop()
         self._loop = loop
         self.destroyed.connect(loop.quit)
         loop.exec()
         return self._result
+
     def closeEvent(self, event):
+        self._cursor_timer.stop()
+        self._hide_sub()
         if self._loop and self._loop.isRunning():
             self._loop.quit()
         super().closeEvent(event)
