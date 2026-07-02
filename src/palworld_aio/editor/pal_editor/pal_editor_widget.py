@@ -835,7 +835,7 @@ class EditPalsDialog(FramelessDialog):
         super().__init__('edit_pals.title', parent)
         self.player_uid = player_uid
         self.player_name = player_name
-        self.set_title_text(f"{t('edit_pals.title')} - {player_name}")
+        self.setWindowTitle(f"{t('edit_pals.title')} - {player_name}")
         self.setModal(True)
         self.setMinimumSize(1200, 800)
         if os.path.exists(constants.ICON_PATH):

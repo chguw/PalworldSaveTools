@@ -32,7 +32,7 @@ def _show_learned_moves_dialog(raw, parent):
     else:
         mw_list = []
     dlg = FramelessDialog('edit_pals.learnt_skills_title', parent)
-    dlg.set_title_text(t('edit_pals.learnt_skills_title'))
+    dlg.setWindowTitle(t('edit_pals.learnt_skills_title'))
     dlg.setModal(True)
     dlg.setMinimumSize(420, 400)
     dlg.setMaximumSize(500, 600)
@@ -273,7 +273,7 @@ class BulkSyncPalDialog(FramelessDialog):
             return
         cid = extract_value(raw, 'CharacterID', '')
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
-        self.set_title_text(f"{t('edit_pals.bulk_sync_pal_title')} - {pal_name}")
+        self.setWindowTitle(f"{t('edit_pals.bulk_sync_pal_title')} - {pal_name}")
         self.setModal(True)
         self.setMinimumSize(740, 750)
         self._all_candidates = []

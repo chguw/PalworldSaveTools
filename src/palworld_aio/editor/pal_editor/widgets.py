@@ -13,15 +13,9 @@ class FramelessDialog(QDialog):
 
         super().__init__(parent)
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
+        self.setWindowTitle(t(title_key))
 
-        self.setAttribute(Qt.WA_TranslucentBackground)
-
-        self._drag_position = QPoint()
-
-        self._maximized = False
-
-        self._normal_geometry = None
+        self.setMinimumSize(400, 300)
 
         self.container = QWidget(self)
 
@@ -29,7 +23,7 @@ class FramelessDialog(QDialog):
 
         main_layout = QVBoxLayout(self)
 
-        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setContentsMargins(0, 0, 0, 0)
 
         main_layout.addWidget(self.container)
 
@@ -38,62 +32,6 @@ class FramelessDialog(QDialog):
         container_layout.setContentsMargins(0, 0, 0, 0)
 
         container_layout.setSpacing(0)
-
-        self.title_bar = QWidget(self.container)
-
-        self.title_bar.setObjectName('editPalsTitleBar')
-
-        self.title_bar.setFixedHeight(48)
-
-        title_layout = QHBoxLayout(self.title_bar)
-
-        title_layout.setContentsMargins(16, 0, 8, 0)
-
-        self.icon_label = QLabel('🐾')
-
-        self.icon_label.setObjectName('titleBarIcon')
-
-        title_layout.addWidget(self.icon_label)
-
-        self.title_label = QLabel(t(title_key))
-
-        self.title_label.setObjectName('titleBarTitle')
-
-        title_layout.addWidget(self.title_label)
-
-        title_layout.addStretch()
-
-        self.minimize_btn = QPushButton('−')
-
-        self.minimize_btn.setObjectName('titleBarMinimize')
-
-        self.minimize_btn.setFixedSize(36, 28)
-
-        self.minimize_btn.clicked.connect(self.showMinimized)
-
-        title_layout.addWidget(self.minimize_btn)
-
-        self.maximize_btn = QPushButton('□')
-
-        self.maximize_btn.setObjectName('titleBarMaximize')
-
-        self.maximize_btn.setFixedSize(36, 28)
-
-        self.maximize_btn.clicked.connect(self._toggle_maximize)
-
-        title_layout.addWidget(self.maximize_btn)
-
-        self.close_btn = QPushButton('×')
-
-        self.close_btn.setObjectName('titleBarClose')
-
-        self.close_btn.setFixedSize(36, 28)
-
-        self.close_btn.clicked.connect(self.close)
-
-        title_layout.addWidget(self.close_btn)
-
-        container_layout.addWidget(self.title_bar)
 
         self.content_widget = QWidget(self.container)
 
@@ -107,69 +45,20 @@ class FramelessDialog(QDialog):
 
         self._apply_styles()
 
-        self.title_bar.installEventFilter(self)
-
     def _apply_styles(self):
 
-        self.setStyleSheet(TOOLTIP_STYLE + '\n            QWidget#editPalsContainer {\n                background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,\n                            stop:0 rgba(12,14,18,0.98),stop:0.5 rgba(10,16,22,0.98),stop:1 rgba(8,12,18,0.98));\n                border: 1px solid rgba(125,211,252,0.2);\n                border-radius: 12px;\n            }\n            QWidget#editPalsTitleBar {\n                background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,\n                            stop:0 rgba(125,211,252,0.08),stop:1 rgba(167,139,250,0.08));\n                border: none;\n                border-top-left-radius: 12px;\n                border-top-right-radius: 12px;\n            }\n            QLabel#titleBarIcon {\n                font-size: 20px;\n                padding: 0px 4px;\n            }\n            QLabel#titleBarTitle {\n                font-size: 14px;\n                font-weight: 700;\n                color: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:0,\n                            stop:0 #7DD3FC,stop:1 #A78BFA);\n                padding: 0px 8px;\n            }\n            QPushButton#titleBarMinimize,QPushButton#titleBarMaximize {\n                background: transparent;\n                border: none;\n                color: #A6B8C8;\n                font-size: 16px;\n                font-weight: bold;\n                border-radius: 4px;\n            }\n            QPushButton#titleBarMinimize:hover,QPushButton#titleBarMaximize:hover {\n                background: rgba(255,255,255,0.1);\n                color: #FFFFFF;\n            }\n            QPushButton#titleBarClose {\n                background: transparent;\n                border: none;\n                color: #FB7185;\n                font-size: 20px;\n                font-weight: bold;\n                border-radius: 4px;\n            }\n            QPushButton#titleBarClose:hover {\n                background: rgba(251,113,133,0.2);\n            }\n            QWidget#editPalsContent {\n                background: transparent;\n            }\n        ')
-
-    def _toggle_maximize(self):
-
-        if self._maximized:
-
-            self.showNormal()
-
-            self._maximized = False
-
-            self.maximize_btn.setText('□')
-
-        else:
-
-            self._normal_geometry = self.geometry()
-
-            self.showMaximized()
-
-            self._maximized = True
-
-            self.maximize_btn.setText('❐')
-
-    def eventFilter(self, obj, event):
-
-        if obj == self.title_bar:
-
-            if event.type() == QEvent.Type.MouseButtonPress:
-
-                if event.button() == Qt.LeftButton:
-
-                    self._drag_position = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
-
-                    event.accept()
-
-            elif event.type() == QEvent.Type.MouseMove:
-
-                if event.buttons() == Qt.LeftButton and self._drag_position:
-
-                    self.move(event.globalPosition().toPoint() - self._drag_position)
-
-                    event.accept()
-
-            elif event.type() == QEvent.Type.MouseButtonDblClick:
-
-                self._toggle_maximize()
-
-                event.accept()
-
-                return True
-
-        return super().eventFilter(obj, event)
-
-    def set_title(self, title_key):
-
-        self.title_label.setText(t(title_key))
-
-    def set_title_text(self, text):
-
-        self.title_label.setText(text)
+        self.setStyleSheet(TOOLTIP_STYLE + '''
+            QWidget#editPalsContainer {
+                background: qlineargradient(spread:pad,x1:0,y1:0,x2:1,y2:1,
+                            stop:0 rgba(12,14,18,0.98),stop:0.5 rgba(10,16,22,0.98),stop:1 rgba(8,12,18,0.98));
+                border: 1px solid rgba(125,211,252,0.2);
+                border-radius: 12px;
+            }
+            QWidget#editPalsContent {
+                background: transparent;
+                border: none;
+            }
+        ''')
 
 class StarButton(QPushButton):
 
