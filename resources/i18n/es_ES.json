@@ -1711,5 +1711,7 @@
     "docs.wiki.no": "No",
     "docs.wiki.subcategory": "Subcategoría",
     "docs.wiki.pals_count": "Amigos ({count})",
-    "update.git_pull": "Permitir actualizaciones de git pull"
+    "update.git_pull": "Permitir actualizaciones de git pull",
+    "edit_pals.ctx.fav": "favorito",
+    "edit_pals.ctx.bulk_ops": "Operaciones masivas"
 }

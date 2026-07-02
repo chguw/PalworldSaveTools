@@ -1717,5 +1717,7 @@
     "docs.wiki.no": "いいえ",
     "docs.wiki.subcategory": "サブカテゴリ",
     "docs.wiki.pals_count": "友達 ({count})",
-    "update.git_pull": "git pull アップデートを許可する"
+    "update.git_pull": "git pull アップデートを許可する",
+    "edit_pals.ctx.fav": "お気に入り",
+    "edit_pals.ctx.bulk_ops": "一括運用"
 }

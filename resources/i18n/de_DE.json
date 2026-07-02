@@ -1741,5 +1741,7 @@
     "docs.wiki.no": "NEIN",
     "docs.wiki.subcategory": "Unterkategorie",
     "docs.wiki.pals_count": "Freunde ({count})",
-    "update.git_pull": "Git-Pull-Updates zulassen"
+    "update.git_pull": "Git-Pull-Updates zulassen",
+    "edit_pals.ctx.fav": "Favorit",
+    "edit_pals.ctx.bulk_ops": "Massenoperationen"
 }

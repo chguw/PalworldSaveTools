@@ -1719,5 +1719,7 @@
     "docs.wiki.no": "不",
     "docs.wiki.subcategory": "子类别",
     "docs.wiki.pals_count": "好友 ({count})",
-    "update.git_pull": "允许 git pull 更新"
+    "update.git_pull": "允许 git pull 更新",
+    "edit_pals.ctx.fav": "最爱",
+    "edit_pals.ctx.bulk_ops": "批量操作"
 }

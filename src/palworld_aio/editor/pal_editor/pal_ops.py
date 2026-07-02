@@ -247,7 +247,7 @@ def build_pal_context_menu(parent, raw):
     popup.add_item('awake', t('edit_pals.ctx.awakened'), True, is_awake)
     popup.add_item('dna', t('edit_pals.ctx.imported'), True, is_dna)
     popup.add_sep()
-    popup.add_group_start('Fav', expanded=True)
+    popup.add_group_start(t('edit_pals.ctx.fav'), expanded=True)
     for i in range(4):
         popup.add_item(f'fav_{i}', f"  {t('edit_pals.ctx.lock_level')} {i}", True, fav_idx == i)
     popup.add_group_end()
@@ -258,7 +258,7 @@ def build_pal_context_menu(parent, raw):
     popup.add_sep()
     popup.add_item('clone', t('edit_pals.ctx.clone'))
     popup.add_sep()
-    popup.add_group_start('Bulk Ops', expanded=True)
+    popup.add_group_start(t('edit_pals.ctx.bulk_ops'), expanded=True)
     popup.add_item('bulk_sync_pal', t('edit_pals.ctx.bulk_sync_pal'))
     popup.add_item('bulk_rename', t('edit_pals.ctx.bulk_rename'))
     popup.add_item('bulk_heal', t('edit_pals.ctx.bulk_heal'))

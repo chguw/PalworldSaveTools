@@ -2004,5 +2004,7 @@
     "docs.wiki.yes": "Yes",
     "docs.wiki.no": "No",
     "docs.wiki.subcategory": "Subcategory",
-    "docs.wiki.pals_count": "Pals ({count})"
+    "docs.wiki.pals_count": "Pals ({count})",
+    "edit_pals.ctx.fav": "Fav",
+    "edit_pals.ctx.bulk_ops": "Bulk Ops"
 }

@@ -1699,5 +1699,7 @@
     "docs.wiki.no": "Non",
     "docs.wiki.subcategory": "Sous-catégorie",
     "docs.wiki.pals_count": "Copains ({count})",
-    "update.git_pull": "Autoriser les mises à jour git pull"
+    "update.git_pull": "Autoriser les mises à jour git pull",
+    "edit_pals.ctx.fav": "Favoris",
+    "edit_pals.ctx.bulk_ops": "Opérations en masse"
 }
