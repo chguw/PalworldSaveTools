@@ -5,7 +5,8 @@ from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from loading_manager import show_information, show_critical, run_with_loading
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QFileDialog, QApplication, QFrame, QGridLayout, QTableWidget, QTableWidgetItem, QHeaderView, QCheckBox, QAbstractItemView, QMessageBox, QSpinBox, QGroupBox, QWidget, QScrollArea, QProgressBar
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QFileDialog, QApplication, QFrame, QGridLayout, QTableWidget, QTableWidgetItem, QHeaderView, QAbstractItemView, QMessageBox, QSpinBox, QGroupBox, QWidget, QScrollArea, QProgressBar
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from PySide6.QtGui import QIcon, QFont, QPixmap, QColor, QPalette
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from concurrent.futures import ThreadPoolExecutor
@@ -342,14 +343,14 @@ class SlotNumUpdaterApp(QDialog):
     def populate_table(self):
         self.table.setRowCount(len(self.player_containers))
         for row, container in enumerate(self.player_containers):
-            checkbox = QCheckBox()
+            checkbox = ToggleCheckBtn('')
             checkbox.setChecked(True)
-            checkbox_widget = QWidget()
-            checkbox_layout = QHBoxLayout(checkbox_widget)
-            checkbox_layout.addWidget(checkbox)
-            checkbox_layout.setAlignment(Qt.AlignCenter)
-            checkbox_layout.setContentsMargins(0, 0, 0, 0)
-            self.table.setCellWidget(row, 0, checkbox_widget)
+            wrapper = QWidget()
+            wrapper_layout = QHBoxLayout(wrapper)
+            wrapper_layout.addWidget(checkbox)
+            wrapper_layout.setAlignment(Qt.AlignCenter)
+            wrapper_layout.setContentsMargins(0, 0, 0, 0)
+            self.table.setCellWidget(row, 0, wrapper)
             name_item = QTableWidgetItem(container['player_name'])
             name_item.setFlags(name_item.flags() & ~Qt.ItemIsEditable)
             self.table.setItem(row, 1, name_item)
@@ -386,24 +387,24 @@ class SlotNumUpdaterApp(QDialog):
     def select_all(self):
         for row in range(self.table.rowCount()):
             if not self.table.isRowHidden(row):
-                checkbox_widget = self.table.cellWidget(row, 0)
-                if checkbox_widget:
-                    checkbox = checkbox_widget.findChild(QCheckBox)
+                wrapper = self.table.cellWidget(row, 0)
+                if wrapper:
+                    checkbox = wrapper.findChild(ToggleCheckBtn)
                     if checkbox:
                         checkbox.setChecked(True)
     def select_none(self):
         for row in range(self.table.rowCount()):
-            checkbox_widget = self.table.cellWidget(row, 0)
-            if checkbox_widget:
-                checkbox = checkbox_widget.findChild(QCheckBox)
+            wrapper = self.table.cellWidget(row, 0)
+            if wrapper:
+                checkbox = wrapper.findChild(ToggleCheckBtn)
                 if checkbox:
                     checkbox.setChecked(False)
     def get_selected_containers(self):
         selected = []
         for row in range(self.table.rowCount()):
-            checkbox_widget = self.table.cellWidget(row, 0)
-            if checkbox_widget:
-                checkbox = checkbox_widget.findChild(QCheckBox)
+            wrapper = self.table.cellWidget(row, 0)
+            if wrapper:
+                checkbox = wrapper.findChild(ToggleCheckBtn)
                 if checkbox and checkbox.isChecked():
                     selected.append(self.player_containers[row])
         return selected
