@@ -2018,7 +2018,6 @@ class BasePalsContentWidget(QFrame):
                     w._refresh_players()
                 break
     def _delete_base_pal(self, pal_idx):
-        import gc
         pal = self._pals[pal_idx]
         try:
             cmap = constants.loaded_level_json['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']

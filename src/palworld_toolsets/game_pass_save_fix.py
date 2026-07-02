@@ -173,7 +173,6 @@ class GamePassSaveFixWidget(QWidget):
         self.direct_saves_map = {display: s for display, s in zip(save_list_display, saves)}
         self.update_combobox_signal.emit(save_list_display)
     def get_save_steam(self):
-        import gc
         self.raise_()
         self.activateWindow()
         folder = QFileDialog.getExistingDirectory(self, t('xgp.ui.select_steam_folder'))
@@ -197,7 +196,6 @@ class GamePassSaveFixWidget(QWidget):
                 del meta_json
             except Exception as e:
                 print(f'Metadata processing failed: {e}')
-        gc.collect()
         if not self.is_admin():
             self.message_signal.emit('critical', t('xgp.err.admin_required.title'), t('xgp.err.admin_required.msg'))
             return
@@ -265,7 +263,6 @@ class GamePassSaveFixWidget(QWidget):
         else:
             self.message_signal.emit('critical', t('xgp.msg.conversion_failed.title'), t('xgp.msg.no_saves_converted'))
     def run_save_extractor(self):
-        import gc
         global save_info_map
         try:
             from palworld_toolsets import xgp_save_extract as extractor
@@ -304,8 +301,6 @@ class GamePassSaveFixWidget(QWidget):
             self.update_combobox_signal.emit(save_list_display)
         except Exception as e:
             self.message_signal.emit('critical', t('Error'), str(e))
-        finally:
-            gc.collect()
     def convert_sav_JSON(self, saveName):
         if hasattr(self, 'direct_saves_map') and saveName in self.direct_saves_map:
             source_base = self.direct_saves_map[saveName]

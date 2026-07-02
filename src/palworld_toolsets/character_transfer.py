@@ -156,8 +156,6 @@ class CharacterTransferWindow(QWidget):
         targ_json_gvas = None
         modified_target_players = set()
         modified_targets_data = {}
-        import gc
-        gc.collect()
         event.accept()
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
@@ -1111,8 +1109,6 @@ def source_level_file():
         show_warning(None, t('error.title'), t('character_transfer.no_players_folder'))
         return
     level_json = None
-    import gc
-    gc.collect()
     def task():
         global source_world_tick
         print('Now loading the data from Source Save...')
@@ -1154,8 +1150,6 @@ def target_level_file():
     target_gvas_file = None
     modified_target_players = set()
     modified_targets_data = {}
-    import gc
-    gc.collect()
     def task():
         global target_world_tick
         print('Now loading the data from Target Save...')
