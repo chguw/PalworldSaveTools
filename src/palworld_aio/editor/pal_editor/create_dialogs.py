@@ -670,7 +670,7 @@ class PalCreateDialog(QDialog):
                 'SanityValue': {'id': None, 'type': 'FloatProperty', 'value': 100.0},
                 'Hp': {'struct_type': 'FixedPoint64', 'struct_id': eu, 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'},
                 'OwnerPlayerUId': {'struct_type': 'Guid', 'struct_id': eu, 'id': None, 'value': owner_uid, 'type': 'StructProperty'},
-                'SlotId': {'struct_type': 'PalCharacterSlotId', 'struct_id': eu, 'id': None, 'value': {'ContainerId': {'struct_type': 'Guid', 'struct_id': eu, 'id': None, 'value': inst_id, 'type': 'StructProperty'}, 'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': 0}}, 'type': 'StructProperty'},
+                'SlotId': {'struct_type': 'PalCharacterSlotId', 'struct_id': eu, 'id': None, 'value': {'ContainerId': {'struct_type': 'PalContainerId', 'struct_id': eu, 'id': None, 'value': {'ID': {'struct_type': 'Guid', 'struct_id': eu, 'id': None, 'value': inst_id, 'type': 'StructProperty'}}, 'type': 'StructProperty'}, 'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': 0}}, 'type': 'StructProperty'},
                 'PassiveSkillList': {'array_type': 'NameProperty', 'id': None, 'value': {'values': []}, 'type': 'ArrayProperty'},
                 'EquipWaza': {'array_type': 'EnumProperty', 'id': None, 'value': {'values': []}, 'type': 'ArrayProperty'},
                 'MasteredWaza': {'array_type': 'EnumProperty', 'id': None, 'value': {'values': []}, 'type': 'ArrayProperty'},
