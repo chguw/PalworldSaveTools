@@ -190,6 +190,9 @@ class PlayerPalActionDialog(QDialog):
         self.skills_base_pals_checkbox = ToggleCheckBtn(t('player_pal.base_pals') if t else 'Base Pals (All bases)')
         self.skills_base_pals_checkbox.setChecked(True)
         scope_layout.addWidget(self.skills_base_pals_checkbox)
+        self.skills_dps_pals_checkbox = ToggleCheckBtn(t('player_pal.dps_pals') if t else 'Player DPS Pals (DPS saves)')
+        self.skills_dps_pals_checkbox.setChecked(True)
+        scope_layout.addWidget(self.skills_dps_pals_checkbox)
         scope_group.setLayout(scope_layout)
         layout.addWidget(scope_group)
         self.skills_info_label = QLabel(t('player_pal.select_skill_info') if t else 'Select active and/or passive skills to remove from ALL pals everywhere.')
@@ -483,6 +486,8 @@ class PlayerPalActionDialog(QDialog):
                 scope_parts.append('player')
             if self.skills_base_pals_checkbox.isChecked():
                 scope_parts.append('base')
+            if self.skills_dps_pals_checkbox.isChecked():
+                scope_parts.append('dps')
             scope_str = ','.join(scope_parts) if scope_parts else 'all'
             action = f"remove_all:{self.selected_active_skill_id or ''}:{self.selected_passive_skill_id or ''}:{scope_str}"
             self.pal_action_selected.emit('all', action, [])
@@ -520,5 +525,6 @@ class PlayerPalActionDialog(QDialog):
         self.skills_info_label.setText(t('player_pal.select_skill_info') if t else 'Select active and/or passive skills to remove from ALL pals everywhere.')
         self.skills_player_pals_checkbox.setText(t('player_pal.player_pals') if t else 'Player Pals (Party + Palbox)')
         self.skills_base_pals_checkbox.setText(t('player_pal.base_pals') if t else 'Base Pals (All bases)')
+        self.skills_dps_pals_checkbox.setText(t('player_pal.dps_pals') if t else 'Player DPS Pals (DPS saves)')
         self.delete_pal_btn.setText(t('player_pal.delete_pal') if t else 'Delete All Selected Pal')
         self._update_remove_button()

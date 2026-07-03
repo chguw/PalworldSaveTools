@@ -86,6 +86,41 @@ def delete_pal_from_all(pal_id):
         except Exception as e:
             print(f'Error removing pal instance: {e}')
             continue
+    # DPS files
+    import os
+    from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
+    players_dir = os.path.join(constants.current_save_path, 'Players')
+    if os.path.exists(players_dir):
+        for fname in os.listdir(players_dir):
+            if not fname.endswith('_dps.sav'):
+                continue
+            dps_path = os.path.join(players_dir, fname)
+            try:
+                gvas = sav_to_gvasfile(dps_path)
+                arr = gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+                changed = False
+                for entry in arr:
+                    if not isinstance(entry, dict):
+                        continue
+                    sp_entry = entry.get('SaveParameter')
+                    if not isinstance(sp_entry, dict):
+                        continue
+                    sp = sp_entry.get('value', {})
+                    if not isinstance(sp, dict):
+                        continue
+                    cid = sp.get('CharacterID', {}).get('value', '')
+                    if cid and cid.lower() == pal_id.lower():
+                        for k in list(sp.keys()):
+                            if k != 'SlotId':
+                                del sp[k]
+                        sp['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'None'}
+                        sp['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 1}}
+                        changed = True
+                        pals_removed += 1
+                if changed:
+                    gvasfile_to_sav(gvas, dps_path)
+            except:
+                continue
     constants.invalidate_container_lookup()
     affected_count = len(affected_players) + len(affected_bases)
     return {'pals_removed': pals_removed, 'affected_count': affected_count}
@@ -152,4 +187,64 @@ def remove_skill_from_all_pals(active_skill_id=None, passive_skill_id=None, scop
         except Exception as e:
             print(f'Error processing pal for skill removal: {e}')
             continue
+    # DPS files
+    scope_list = scope.split(',') if scope else ['all']
+    should_process_dps = 'all' in scope_list or 'dps' in scope_list
+    if should_process_dps:
+        import os
+        from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
+        players_dir = os.path.join(constants.current_save_path, 'Players')
+        if os.path.exists(players_dir):
+            for fname in os.listdir(players_dir):
+                if not fname.endswith('_dps.sav'):
+                    continue
+                dps_path = os.path.join(players_dir, fname)
+                try:
+                    gvas = sav_to_gvasfile(dps_path)
+                    arr = gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+                    changed = False
+                    for entry in arr:
+                        if not isinstance(entry, dict):
+                            continue
+                        sp_entry = entry.get('SaveParameter')
+                        if not isinstance(sp_entry, dict):
+                            continue
+                        sp = sp_entry.get('value', {})
+                        if not isinstance(sp, dict):
+                            continue
+                        pal_skills_removed = 0
+                        if active_skill_full:
+                            equip_waza = sp.get('EquipWaza', {})
+                            if equip_waza:
+                                skill_values = equip_waza.get('value', {}).get('values', [])
+                                orig = len(skill_values)
+                                skill_values = [s for s in skill_values if s.lower() != active_skill_full.lower()]
+                                if len(skill_values) < orig:
+                                    equip_waza['value']['values'] = skill_values
+                                    pal_skills_removed += orig - len(skill_values)
+                            mastered_waza = sp.get('MasteredWaza', {})
+                            if mastered_waza:
+                                mastered_values = mastered_waza.get('value', {}).get('values', [])
+                                orig = len(mastered_values)
+                                mastered_values = [s for s in mastered_values if s.lower() != active_skill_full.lower()]
+                                if len(mastered_values) < orig:
+                                    mastered_waza['value']['values'] = mastered_values
+                                    pal_skills_removed += orig - len(mastered_values)
+                        if passive_skill_id:
+                            passive_list = sp.get('PassiveSkillList', {})
+                            if passive_list:
+                                skill_values = passive_list.get('value', {}).get('values', [])
+                                orig = len(skill_values)
+                                skill_values = [s for s in skill_values if s.lower() != passive_skill_id.lower()]
+                                if len(skill_values) < orig:
+                                    passive_list['value']['values'] = skill_values
+                                    pal_skills_removed += orig - len(skill_values)
+                        if pal_skills_removed > 0:
+                            skills_removed += pal_skills_removed
+                            pals_affected += 1
+                            changed = True
+                    if changed:
+                        gvasfile_to_sav(gvas, dps_path)
+                except:
+                    continue
     return {'skills_removed': skills_removed, 'pals_affected': pals_affected}

@@ -1731,8 +1731,9 @@
     "func_manager.max_all_pals.success": "好友数量上限为 {count} 个",
     "deletion.menu.restore_all_pals": "恢复所有好友",
     "deletion.menu.max_all_pals": "最大所有朋友",
-    "pal_editor.dps": "DPS",
+    "pal_editor.dps": "输出功率",
     "pal_editor.box_tab": "盒子",
-    "edit_pals.dps": "DPS Storage",
-    "pal_editor.dps_page": "DPS {当前}/{总计}"
+    "edit_pals.dps": "DPS存储",
+    "pal_editor.dps_page": "DPS {当前}/{总计}",
+    "player_pal.dps_pals": "玩家 DPS 好友（DPS 保存）"
 }

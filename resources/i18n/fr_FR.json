@@ -1713,6 +1713,7 @@
     "deletion.menu.max_all_pals": "Max tous les copains",
     "pal_editor.dps": "DPS",
     "pal_editor.box_tab": "Boîte",
-    "edit_pals.dps": "DPS Storage",
-    "pal_editor.dps_page": "DPS {actuel}/{total}"
+    "edit_pals.dps": "Stockage DPS",
+    "pal_editor.dps_page": "DPS {actuel}/{total}",
+    "player_pal.dps_pals": "Joueur DPS Pals (sauvegardes DPS)"
 }

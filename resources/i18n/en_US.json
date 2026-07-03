@@ -2019,5 +2019,6 @@
     "pal_editor.dps": "DPS",
     "pal_editor.box_tab": "Box",
     "edit_pals.dps": "DPS Storage",
-    "pal_editor.dps_page": "DPS {current}/{total}"
+    "pal_editor.dps_page": "DPS {current}/{total}",
+    "player_pal.dps_pals": "Player DPS Pals (DPS saves)"
 }

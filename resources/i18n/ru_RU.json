@@ -1727,8 +1727,9 @@
     "func_manager.max_all_pals.success": "Максимум друзей: {count}",
     "deletion.menu.restore_all_pals": "Восстановить всех друзей",
     "deletion.menu.max_all_pals": "Макс Олл Пэлс",
-    "pal_editor.dps": "DPS",
+    "pal_editor.dps": "ДПС",
     "pal_editor.box_tab": "Коробка",
-    "edit_pals.dps": "DPS Storage",
-    "pal_editor.dps_page": "ДПС {текущий}/{всего}"
+    "edit_pals.dps": "Хранилище ДПС",
+    "pal_editor.dps_page": "ДПС {текущий}/{всего}",
+    "player_pal.dps_pals": "Player DPS Pals (сохранения ДПС)"
 }

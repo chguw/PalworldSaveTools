@@ -26,6 +26,7 @@ NEW_TRANSLATIONS = {
     'pal_editor.dps': 'DPS',
     'pal_editor.box_tab': 'Box',
     'edit_pals.dps': 'DPS Storage',
+    'player_pal.dps_pals': 'Player DPS Pals (DPS saves)',
 }
 OLD_KEYS = []
 def _clean_uv_locks():
