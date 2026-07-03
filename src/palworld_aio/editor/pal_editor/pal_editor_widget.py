@@ -5,7 +5,7 @@ import threading
 import uuid
 from functools import partial
 from PySide6.QtWidgets import QApplication, QCheckBox, QDialog, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QScrollArea, QScrollBar, QSizePolicy, QToolTip, QVBoxLayout, QWidget
-from PySide6.QtCore import Qt, QEvent, QSize
+from PySide6.QtCore import Qt, QEvent, QSize, QTimer
 from PySide6.QtGui import QIcon, QKeySequence, QShortcut
 from i18n import t
 from loading_manager import show_information, show_warning, show_question
@@ -59,6 +59,11 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self._last_clicked_dps_pal = None
         self._palbox_mode = 'box'
         self.palbox_pal_dict = {}
+        self._dps_modified = False
+        self._dps_save_timer = QTimer(self)
+        self._dps_save_timer.setSingleShot(True)
+        self._dps_save_timer.setInterval(500)
+        self._dps_save_timer.timeout.connect(self._save_dps)
         self._setup_ui()
         self._setup_hotkeys()
     def _setup_hotkeys(self):
@@ -182,6 +187,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         root.addWidget(palbox_panel, 1)
         self.pal_info = PalInfoWidget()
         self.pal_info.setMinimumWidth(340)
+        self.pal_info.pal_data_changed.connect(self._mark_dps_modified)
         root.addWidget(self.pal_info)
     def _set_palbox_mode(self, mode):
         if mode == self._palbox_mode:
@@ -207,10 +213,19 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         inactive = 'QPushButton { background: rgba(125,211,252,0.06); color: #94A3B8; border: none; padding: 4px 14px; font-size: 10px; font-weight: 600; border-radius: 4px; } QPushButton:hover { background: rgba(125,211,252,0.1); color: #CBD5E1; }'
         self.mode_box_btn.setStyleSheet(active if self._palbox_mode == 'box' else inactive)
         self.mode_dps_btn.setStyleSheet(active if self._palbox_mode == 'dps' else inactive)
+    def _mark_dps_modified(self):
+        if self._palbox_mode != 'dps' or not self.dps_file_path:
+            return
+        self._dps_modified = True
+        if self._dps_save_timer.isActive():
+            self._dps_save_timer.stop()
+        self._dps_save_timer.start()
+
     def _load_dps_pals(self):
         self.dps_pals = {}
         self.dps_gvas = None
         self.dps_total_slots = 0
+        self._dps_modified = False
         if not self.dps_file_path or not os.path.isfile(self.dps_file_path):
             self.dps_loaded = False
             self._update_box_label()
@@ -239,9 +254,13 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         if self.dps_file_path and os.path.isfile(self.dps_file_path):
             self._load_dps_pals()
             self._update_mode_buttons()
-    def _save_dps(self):
+    def _save_dps(self, force=False):
         if not self.dps_gvas or not self.dps_file_path:
             return
+        if not force and not self._dps_modified:
+            return
+        self._dps_save_timer.stop()
+        self._dps_modified = False
         try:
             gvasfile_to_sav(self.dps_gvas, self.dps_file_path)
         except Exception as e:
@@ -369,33 +388,45 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                 _toggle_boss_raw(raw, not is_boss)
                 self.pal_info._refresh()
                 sender.update_display()
+            if is_dps:
+                self._mark_dps_modified()
         elif action == 'lucky_toggle':
             if raw:
                 is_lucky = extract_value(raw, 'IsRarePal', False)
                 _toggle_lucky_raw(raw, not is_lucky)
                 self.pal_info._refresh()
                 sender.update_display()
+            if is_dps:
+                self._mark_dps_modified()
         elif action == 'awake_toggle':
             if raw:
                 is_awake = extract_value(raw, 'bIsAwakening', False)
                 _toggle_awake_raw(raw, not is_awake)
                 self.pal_info._refresh()
                 sender.update_display()
+            if is_dps:
+                self._mark_dps_modified()
         elif action == 'dna_toggle':
             if raw:
                 is_dna = extract_value(raw, 'bImportedCharacter', False)
                 _toggle_dna_raw(raw, not is_dna)
                 self.pal_info._refresh()
                 sender.update_display()
+            if is_dps:
+                self._mark_dps_modified()
         elif action.startswith('fav_set_'):
             if raw:
                 idx = int(action.split('_')[-1])
                 _set_fav_raw(raw, idx)
                 self.pal_info._refresh()
                 sender.update_display()
+            if is_dps:
+                self._mark_dps_modified()
         elif action == 'max_all_stats':
             if raw:
                 self.pal_info._on_max_click()
+            if is_dps:
+                self._mark_dps_modified()
         elif action == 'learn_all':
             if raw:
                 try:
@@ -405,6 +436,8 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                     show_information(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_success'))
                 except Exception:
                     show_warning(self, t('edit_pals.ctx.learn_all_moves'), t('edit_pals.learn_all_fail'))
+            if is_dps:
+                self._mark_dps_modified()
         elif action == 'learnt_skills':
             if raw:
                 _show_learned_moves_dialog(raw, self)
@@ -442,6 +475,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.selected_pal_slot = None
         self._clear_palbox_highlight()
         self.pal_info.set_clicked_pal(None)
+        self._mark_dps_modified()
     def _add_new_dps_pal(self, slot_index):
         from .create_dialogs import PalCreateDialog
         dlg = PalCreateDialog(self, False, slot_index, is_dps=True)
@@ -468,6 +502,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             self.dps_pals[abs_idx] = wrapper
             self.palbox_slots[slot_index].pal_data = wrapper
             self.palbox_slots[slot_index].update_display()
+            self._mark_dps_modified()
     def _clone_dps_pal(self, src_slot_index):
         abs_src = (self.current_box_index - 1) * 30 + src_slot_index
         source_raw = _get_raw_from_item(self.dps_pals.get(abs_src))
@@ -503,6 +538,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                 self.palbox_slots[empty_slot].pal_data = wrapper
                 self.palbox_slots[empty_slot].update_display()
                 show_information(self, 'Clone Pal', 'DPS pal cloned successfully.')
+                self._mark_dps_modified()
         else:
             show_warning(self, 'Clone', 'DPS data not loaded.')
             return
@@ -745,6 +781,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.pal_info.set_clicked_pal(None)
         self._update_party_slots()
         self._update_palbox_page()
+        self._save_dps(force=True)
         self._update_dashboard_stats()
         show_information(self, t('edit_pals.ctx.bulk_heal'), t('edit_pals.restore_all_success', count=count))
     def _max_all_pals(self):
@@ -825,6 +862,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.pal_info.set_clicked_pal(None)
         self._update_party_slots()
         self._update_palbox_page()
+        self._save_dps(force=True)
         self._update_dashboard_stats()
         show_information(self, t('edit_pals.ctx.max_all_stats'), t('edit_pals.max_all_success', count=count))
     def _add_new_pal_at_slot(self, slot_index):
@@ -909,16 +947,22 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                     p_uid_raw = filename.replace('.sav', '').lower()
                     if p_uid_raw == target_uid:
                         self.player_sav_path = os.path.join(players_dir, filename)
-                        try:
-                            p_gvas = sav_to_gvasfile(self.player_sav_path)
-                            p_prop = p_gvas.properties.get('SaveData', {})
-                            save_data = p_prop.get('value', {}) if isinstance(p_prop, dict) else {}
+                        from palworld_aio.managers.save_manager import save_manager as _sm
+                        save_data = _sm.player_sav_cache.get(target_uid) if target_uid else None
+                        if not save_data:
+                            try:
+                                p_gvas = sav_to_gvasfile(self.player_sav_path)
+                                p_prop = p_gvas.properties.get('SaveData', {})
+                                save_data = p_prop.get('value', {}) if isinstance(p_prop, dict) else None
+                                if save_data and target_uid:
+                                    _sm.player_sav_cache[target_uid] = save_data
+                            except Exception as e:
+                                print(f'Error loading player container IDs: {e}')
+                        if save_data:
                             self.party_container = safe_nested_get(save_data, ['OtomoCharacterContainerId', 'value', 'ID', 'value'])
                             self.palbox_container = safe_nested_get(save_data, ['PalStorageContainerId', 'value', 'ID', 'value'])
-                        except Exception as e:
-                            print(f'Error loading player container IDs: {e}')
-                            self.party_container = None
-                            self.palbox_container = None
+                        if not self.party_container or not self.palbox_container:
+                            print(f'Container IDs not found for {target_uid}')
                 elif filename.endswith('.sav') and '_dps' in filename:
                     p_uid_raw = filename.replace('_dps.sav', '').lower()
                     if p_uid_raw == target_uid:
@@ -932,6 +976,8 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.dps_gvas = None
         self.dps_pals = {}
         self.dps_total_slots = 0
+        self._dps_modified = False
+        self._dps_save_timer.stop()
         self._last_clicked_dps_pal = None
         self._palbox_mode = 'box'
         self._update_mode_buttons()

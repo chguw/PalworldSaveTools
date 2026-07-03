@@ -129,7 +129,7 @@ class BulkOperationMixin:
                 self._update_dps_slots()
             self.pal_info._refresh()
             if hasattr(self, '_save_dps'):
-                self._save_dps()
+                self._save_dps(force=True)
             result['applied'] = True
             show_information(dlg, t('edit_pals.ctx.bulk_rename'), t('edit_pals.bulk_rename_success', count=count, name=pal_name))
             dlg.accept()
@@ -245,7 +245,7 @@ class BulkOperationMixin:
                 self._update_dps_slots()
             self.pal_info._refresh()
             if hasattr(self, '_save_dps'):
-                self._save_dps()
+                self._save_dps(force=True)
             show_information(dlg, t('edit_pals.ctx.bulk_heal'), t('edit_pals.bulk_heal_success', count=count, name=pal_name))
             dlg.accept()
         apply_btn.clicked.connect(on_apply)

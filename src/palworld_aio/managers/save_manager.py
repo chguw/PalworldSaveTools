@@ -33,6 +33,7 @@ class SaveManager(QObject):
     def __init__(self):
         super().__init__()
         self.dps_tasks = []
+        self.player_sav_cache = {}
     def load_save(self, path=None, parent=None):
         base_path = '.'
         if path is None:
@@ -70,6 +71,7 @@ class SaveManager(QObject):
             constants.dps_tasks = []
             constants.original_loaded_level_json = None
             self.dps_tasks.clear()
+            self.player_sav_cache.clear()
         from palobject import MappingCacheObject
         if hasattr(MappingCacheObject, '_MappingCacheInstances'):
             MappingCacheObject._MappingCacheInstances.clear()
@@ -125,6 +127,7 @@ class SaveManager(QObject):
         if not constants.current_save_path:
             raise Exception('No save is currently loaded')
         self.dps_tasks.clear()
+        self.player_sav_cache.clear()
         level_sav_path = os.path.join(constants.current_save_path, 'Level.sav')
         if not os.path.exists(level_sav_path):
             raise Exception(f'Level.sav not found at {level_sav_path}')
@@ -255,6 +258,8 @@ class SaveManager(QObject):
                         p_uid = p_uid_raw.lower()
                         p_box = p_prop.get('PalStorageContainerId', {}).get('value', {}).get('ID', {}).get('value')
                         p_party = p_prop.get('OtomoCharacterContainerId', {}).get('value', {}).get('ID', {}).get('value')
+                        # Cache full SaveData for reuse in _top_process_player / editor
+                        self.player_sav_cache[p_uid] = p_prop
                         if p_box and p_party:
                             return (p_uid, {'Party': str(p_party).lower(), 'PalBox': str(p_box).lower()})
                     except:
@@ -792,12 +797,16 @@ class SaveManager(QObject):
         if not uid:
             return (uid, pname, uniques, caught, encounters)
         clean_uid = str(uid).replace('-', '').upper()
+        clean_lower = clean_uid.lower()
         sav_file = os.path.join(playerdir, f'{clean_uid}.sav')
         dps_file = os.path.join(playerdir, f'{clean_uid}_dps.sav')
         if os.path.isfile(sav_file):
             try:
-                gvas_file = sav_to_gvasfile(sav_file)
-                save_data = gvas_file.properties.get('SaveData', {}).get('value', {})
+                save_data = self.player_sav_cache.get(clean_lower)
+                if save_data is None:
+                    gvas_file = sav_to_gvasfile(sav_file)
+                    save_data = gvas_file.properties.get('SaveData', {}).get('value', {})
+                    self.player_sav_cache[clean_lower] = save_data
                 record_data = save_data.get('RecordData', {}).get('value', {})
                 pal_capture_count_list = record_data.get('PalCaptureCount', {}).get('value', [])
                 uniques = len(pal_capture_count_list) if pal_capture_count_list else 0
