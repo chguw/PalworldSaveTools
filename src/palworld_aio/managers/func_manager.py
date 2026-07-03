@@ -9,7 +9,7 @@ from palsav.archive import UUID
 from PySide6.QtWidgets import QMessageBox, QInputDialog
 from i18n import t
 from palworld_aio import constants
-from palworld_aio.utils import sav_to_json, json_to_sav, sav_to_gvasfile, gvasfile_to_sav, are_equal_uuids, as_uuid, is_valid_level, extract_value, format_duration, sanitize_filename, resolve_name
+from palworld_aio.utils import sav_to_json, json_to_sav, sav_to_gvasfile, gvasfile_to_sav, are_equal_uuids, as_uuid, is_valid_level, extract_value, format_duration, sanitize_filename, resolve_name, calculate_max_hp
 from palworld_aio.managers.data_manager import delete_base_camp, load_game_data_map
 from palworld_aio.editor.dialogs import GameDaysInputDialog
 from palworld_aio.inventory.container_ownership import ContainerOwnership
@@ -1709,8 +1709,11 @@ def check_is_illegal_pal(raw):
             pv = ps_val.get('value')
             if isinstance(pv, dict):
                 pv = pv.get('values', [])
-            if isinstance(pv, list) and len(pv) > 4:
-                illegal_markers.append('>4 Passives')
+            if isinstance(pv, list):
+                if len(pv) > 4:
+                    illegal_markers.append('>4 Passives')
+                if len(pv) != len(set(pv)):
+                    illegal_markers.append('Duplicate Passives')
         eq_val = sp.get('EquipWaza')
         if isinstance(eq_val, dict):
             ev = eq_val.get('value')
@@ -1727,7 +1730,7 @@ def check_is_illegal_pal(raw):
     except:
         return (False, [])
 def _process_dps_file_worker(args):
-    filename, players_dir, PAL_EXP_TABLE, NAMEMAP = args
+    filename, players_dir, PAL_EXP_TABLE, NAMEMAP, valid_passive_set = args
     file_path = os.path.join(players_dir, filename)
     result = {'filename': filename, 'actual_pals': 0, 'illegals_fixed': 0, 'illegal_entries': [], 'changed': False, 'gvas_file': None}
     try:
@@ -1836,12 +1839,21 @@ def _process_dps_file_worker(args):
                 if isinstance(ps_raw, dict):
                     ps_val = ps_raw.get('value')
                     passives = ps_val.get('values', []) if isinstance(ps_val, dict) else (ps_val if isinstance(ps_val, list) else [])
-                    if isinstance(passives, list) and len(passives) > 4:
-                        if isinstance(ps_val, dict):
-                            sp['PassiveSkillList']['value']['values'] = passives[:4]
-                        else:
-                            sp['PassiveSkillList']['value'] = passives[:4]
-                        changed = True
+                    if isinstance(passives, list):
+                        filtered = [p for p in passives if p.lower() in valid_passive_set]
+                        seen = set()
+                        deduped = []
+                        for p in filtered:
+                            if p not in seen:
+                                seen.add(p)
+                                deduped.append(p)
+                        deduped = deduped[:4]
+                        if deduped != passives:
+                            if isinstance(ps_val, dict):
+                                sp['PassiveSkillList']['value']['values'] = deduped
+                            else:
+                                sp['PassiveSkillList']['value'] = deduped
+                            changed = True
                 eq_raw = sp.get('EquipWaza')
                 if isinstance(eq_raw, dict):
                     eq_val = eq_raw.get('value')
@@ -1853,6 +1865,39 @@ def _process_dps_file_worker(args):
                             sp['EquipWaza']['value']['values'] = trimmed_skills
                             changed = True
                 if changed:
+                    from palworld_aio.editor.pal_editor.data import get_pal_base_data, _ensure_friendship_thresholds
+                    from palworld_aio.utils import calculate_max_hp
+                    cid = extract_value(sp, 'CharacterID', '')
+                    level = extract_value(sp, 'Level', 1)
+                    talent_hp = extract_value(sp, 'Talent_HP', 0)
+                    rank_hp = extract_value(sp, 'Rank_HP', 0)
+                    is_boss = cid.upper().startswith('BOSS_')
+                    is_lucky = extract_value(sp, 'IsRarePal', False)
+                    trust = extract_value(sp, 'FriendshipPoint', 0)
+                    rank_raw = extract_value(sp, 'Rank', 0)
+                    is_awake = bool(extract_value(sp, 'bIsAwakening', False))
+                    thr = _ensure_friendship_thresholds()
+                    trust_rank = 0
+                    for r in range(len(thr) - 1, 0, -1):
+                        if trust >= thr[r]:
+                            trust_rank = r
+                            break
+                    condenser = int(rank_raw) if isinstance(rank_raw, (int, float)) else 0
+                    base = get_pal_base_data(cid)
+                    if base:
+                        new_max_hp = calculate_max_hp(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser, is_awake)
+                        if new_max_hp > 0:
+                            sp['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(new_max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+                            sp['MaxHP'] = sp['Hp']
+                        max_stomach = base.get('stats', {}).get('max_full_stomach', 300)
+                        sp['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+                        sp['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+                        sp.pop('WorkerSick', None)
+                        sp.pop('PhysicalHealth', None)
+                        sp.pop('HungerType', None)
+                        sp.pop('FoodWithStatusEffect', None)
+                        sp.pop('Tiemr_FoodWithStatusEffect', None)
+                        sp.pop('FoodRegeneEffectInfo', None)
                     illegals_in_file += 1
         if changed:
             gvasfile_to_sav(gvas_file, file_path)
@@ -1951,6 +1996,12 @@ def fix_illegal_pals_in_save(parent=None):
         PASSMAP = load_game_data_map('skills.json', 'passives')
         SKILLMAP = load_game_data_map('skills.json', 'skills')
         NAMEMAP = {**PALMAP, **NPCMAP}
+        try:
+            _full_skills = json_tools.load(resource_path(base_dir, 'game_data', 'skills.json'))
+            _all_passives = _full_skills.get('passives', [])
+            DISPLAYABLE_PASSIVE_SET = {p['asset'].lower() for p in _all_passives if p.get('category') == 'EPalPassiveCategory::SortDisplayable'}
+        except:
+            DISPLAYABLE_PASSIVE_SET = set()
         owner_nicknames = {}
         player_containers = {}
         players_dir = os.path.join(constants.current_save_path, 'Players')
@@ -2104,6 +2155,61 @@ def fix_illegal_pals_in_save(parent=None):
                     if rank_craftspeed > 20:
                         sp['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
                         changed = True
+                    if rank > 5:
+                        sp['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+                        changed = True
+                    ps_raw = sp.get('PassiveSkillList')
+                    if isinstance(ps_raw, dict):
+                        ps_v = ps_raw.get('value')
+                        passives = ps_v.get('values', []) if isinstance(ps_v, dict) else (ps_v if isinstance(ps_v, list) else [])
+                        if isinstance(passives, list):
+                            filtered = [p for p in passives if p.lower() in DISPLAYABLE_PASSIVE_SET]
+                            seen = set()
+                            deduped = []
+                            for p in filtered:
+                                if p not in seen:
+                                    seen.add(p)
+                                    deduped.append(p)
+                            deduped = deduped[:4]
+                            if deduped != passives:
+                                if isinstance(ps_v, dict):
+                                    sp['PassiveSkillList']['value']['values'] = deduped
+                                else:
+                                    sp['PassiveSkillList']['value'] = deduped
+                                changed = True
+                    if changed:
+                        from palworld_aio.editor.pal_editor.data import get_pal_base_data, _ensure_friendship_thresholds
+                        cid = extract_value(sp, 'CharacterID', '')
+                        level = extract_value(sp, 'Level', 1)
+                        talent_hp = extract_value(sp, 'Talent_HP', 0)
+                        rank_hp = extract_value(sp, 'Rank_HP', 0)
+                        is_boss = cid.upper().startswith('BOSS_')
+                        is_lucky = extract_value(sp, 'IsRarePal', False)
+                        trust = extract_value(sp, 'FriendshipPoint', 0)
+                        rank_raw = extract_value(sp, 'Rank', 0)
+                        is_awake = bool(extract_value(sp, 'bIsAwakening', False))
+                        thr = _ensure_friendship_thresholds()
+                        trust_rank = 0
+                        for r in range(len(thr) - 1, 0, -1):
+                            if trust >= thr[r]:
+                                trust_rank = r
+                                break
+                        condenser = int(rank_raw) if isinstance(rank_raw, (int, float)) else 0
+                        base = get_pal_base_data(cid)
+                        if base:
+                            new_max_hp = calculate_max_hp(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser, is_awake)
+                            if new_max_hp > 0:
+                                sp['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(new_max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+                                sp['MaxHP'] = sp['Hp']
+                            max_stomach = base.get('stats', {}).get('max_full_stomach', 300)
+                            sp['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+                            sp['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+                            sp.pop('WorkerSick', None)
+                            sp.pop('PhysicalHealth', None)
+                            sp.pop('HungerType', None)
+                            sp.pop('FoodWithStatusEffect', None)
+                            sp.pop('Tiemr_FoodWithStatusEffect', None)
+                            sp.pop('FoodRegeneEffectInfo', None)
                     if changed:
                         total_fixed += 1
                 except Exception as e:
@@ -2124,7 +2230,8 @@ def fix_illegal_pals_in_save(parent=None):
             dps_files = [f for f in os.listdir(players_dir) if f.endswith('.sav') and '_dps' in f and (f.replace('_dps.sav', '').lower() in valid_player_uids)]
             if dps_files:
                 print(f'Processing {len(dps_files)} DPS files using {os.cpu_count()} CPU cores...')
-                args_list = [(f, players_dir, PAL_EXP_TABLE, NAMEMAP) for f in dps_files]
+                valid_passive_set = DISPLAYABLE_PASSIVE_SET
+                args_list = [(f, players_dir, PAL_EXP_TABLE, NAMEMAP, valid_passive_set) for f in dps_files]
                 with ProcessPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
                     futures = {executor.submit(_process_dps_file_worker, args): args[0] for args in args_list}
                     for future in as_completed(futures):
