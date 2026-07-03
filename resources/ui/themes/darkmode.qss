@@ -120,6 +120,13 @@ QScrollArea {
     border-radius: 10px;
 }
 
+QScrollArea#subPopupScroll,
+QScrollArea#contextMenuScroll {
+    background: transparent;
+    border: none;
+    border-radius: 0px;
+}
+
 /* Card */
 QFrame#glass {
     background: rgba(18,20,24,0.65);
@@ -1840,5 +1847,55 @@ QFrame#saveCard {
     background: rgba(18,20,24,0.95);
     border: 1px solid rgba(125,211,252,0.12);
     border-radius: 12px;
+}
+
+/* ===== Global Tree/Table Scrollbars ===== */
+QTreeWidget QScrollBar:vertical,
+QTreeWidget QScrollBar:horizontal,
+QTableWidget QScrollBar:vertical,
+QTableWidget QScrollBar:horizontal {
+    background: rgba(255,255,255,0.02);
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    margin: 0px;
+}
+QTreeWidget QScrollBar::handle:vertical,
+QTreeWidget QScrollBar::handle:horizontal,
+QTableWidget QScrollBar::handle:vertical,
+QTableWidget QScrollBar::handle:horizontal {
+    background: rgba(125,211,252,0.2);
+    min-height: 30px;
+    min-width: 30px;
+    border-radius: 6px;
+}
+QTreeWidget QScrollBar::handle:vertical:hover,
+QTreeWidget QScrollBar::handle:horizontal:hover,
+QTableWidget QScrollBar::handle:vertical:hover,
+QTableWidget QScrollBar::handle:horizontal:hover {
+    background: rgba(125,211,252,0.35);
+}
+QTreeWidget QScrollBar::add-line:vertical,
+QTreeWidget QScrollBar::sub-line:vertical,
+QTreeWidget QScrollBar::add-line:horizontal,
+QTreeWidget QScrollBar::sub-line:horizontal,
+QTableWidget QScrollBar::add-line:vertical,
+QTableWidget QScrollBar::sub-line:vertical,
+QTableWidget QScrollBar::add-line:horizontal,
+QTableWidget QScrollBar::sub-line:horizontal {
+    height: 0px;
+    width: 0px;
+    background: none;
+    border: none;
+}
+QTreeWidget QScrollBar::add-page:vertical,
+QTreeWidget QScrollBar::sub-page:vertical,
+QTreeWidget QScrollBar::add-page:horizontal,
+QTreeWidget QScrollBar::sub-page:horizontal,
+QTableWidget QScrollBar::add-page:vertical,
+QTableWidget QScrollBar::sub-page:vertical,
+QTableWidget QScrollBar::add-page:horizontal,
+QTableWidget QScrollBar::sub-page:horizontal {
+    background: none;
 }
 
