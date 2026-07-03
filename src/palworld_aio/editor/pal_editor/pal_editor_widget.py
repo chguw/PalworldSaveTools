@@ -236,6 +236,8 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             save_param_array = self.dps_gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
             self.dps_total_slots = len(save_param_array)
             for idx, entry in enumerate(save_param_array):
+                if not isinstance(entry, dict):
+                    continue
                 sp = entry.get('SaveParameter', {}).get('value', {})
                 if not sp:
                     continue
@@ -487,7 +489,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             from palworld_aio.managers.func_manager import _restore_one_pal
             _restore_one_pal(raw)
             arr = self.dps_gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
-            if abs_idx >= len(arr):
+            if abs_idx >= len(arr) or not isinstance(arr[abs_idx], dict):
                 return
             sp = arr[abs_idx].get('SaveParameter', {}).get('value', {})
             sp.clear()
@@ -525,7 +527,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         empty_slot = empty_idx - start
         if self.dps_gvas:
             arr = self.dps_gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
-            if empty_idx < len(arr):
+            if empty_idx < len(arr) and isinstance(arr[empty_idx], dict):
                 sp = arr[empty_idx].get('SaveParameter', {}).get('value', {})
                 sp.clear()
                 sp.update(new_raw)

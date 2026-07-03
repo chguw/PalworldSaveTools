@@ -1745,6 +1745,8 @@ def _process_dps_file_worker(args):
         illegal_entries_list = []
         player_uid_from_file = filename.replace('.sav', '').replace('_dps', '')
         for idx, entry in enumerate(save_param_array):
+            if not isinstance(entry, dict):
+                continue
             sp = entry.get('SaveParameter', {}).get('value', {})
             char_id = sp.get('CharacterID', {}).get('value', 'None')
             if char_id == 'None':
@@ -2005,6 +2007,8 @@ def _apply_to_dps_files(transform_fn):
             arr = gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
             changed = False
             for entry in arr:
+                if not isinstance(entry, dict):
+                    continue
                 sp = entry.get('SaveParameter', {}).get('value', {})
                 if not sp:
                     continue

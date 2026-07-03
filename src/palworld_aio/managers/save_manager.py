@@ -969,6 +969,8 @@ def _process_dps_scan_worker(args):
         if not save_param_array:
             return (uid, pname, formatted_pals, illegal_pals)
         for entry in save_param_array:
+            if not isinstance(entry, dict):
+                continue
             try:
                 sp = entry.get('SaveParameter', {}).get('value', {})
                 char_id = extract_value(sp, 'CharacterID', 'None')
