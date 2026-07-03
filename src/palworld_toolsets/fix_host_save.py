@@ -155,6 +155,10 @@ def fix_save(save_path, new_guid, old_guid, guild_fix=True):
             new_player_pal_storage_id = new_j['properties']['SaveData']['value']['PalStorageContainerId']['value']['ID']['value']
         except:
             new_player_pal_storage_id = None
+        try:
+            old_player_pal_storage_id = old_j['properties']['SaveData']['value']['PalStorageContainerId']['value']['ID']['value']
+        except:
+            old_player_pal_storage_id = None
         cspm = level['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
         for e in cspm:
             if e['key']['InstanceId']['value'] == old_inst:
@@ -199,7 +203,19 @@ def fix_save(save_path, new_guid, old_guid, guild_fix=True):
                     deep_swap(i)
         deep_swap(level)
         players_folder = os.path.join(os.path.dirname(lvl), 'Players')
-        copy_dps_file(players_folder, old_guid, players_folder, new_guid, new_player_pal_storage_id)
+        old_dps_name = f"{str(old_guid).replace('-', '').upper()}_dps.sav"
+        new_dps_name = f"{str(new_guid).replace('-', '').upper()}_dps.sav"
+        old_dps_path = os.path.join(players_folder, old_dps_name)
+        new_dps_path = os.path.join(players_folder, new_dps_name)
+        import tempfile, shutil
+        _tmp = tempfile.mkdtemp()
+        if os.path.exists(old_dps_path):
+            shutil.copy2(old_dps_path, os.path.join(_tmp, old_dps_name))
+        if os.path.exists(new_dps_path):
+            shutil.copy2(new_dps_path, os.path.join(_tmp, new_dps_name))
+        copy_dps_file(_tmp, old_guid, players_folder, new_guid, new_player_pal_storage_id)
+        copy_dps_file(_tmp, new_guid, players_folder, old_guid, old_player_pal_storage_id)
+        shutil.rmtree(_tmp, ignore_errors=True)
         json_to_sav(level, lvl)
         json_to_sav(old_j, old_sav)
         json_to_sav(new_j, new_sav)
