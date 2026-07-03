@@ -25981,7 +25981,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Scorpion Sonar",
+            "partner_skill": "Phantom Venom",
             "description": "While in party, increases player's and Pals' damage to enemies afflicted with [EFFECT:Poison] by {Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
                 "DamageUpTrainerAndOtomo_ToPoison_PartnerSkill_ScorpionMan_1"
@@ -26708,7 +26708,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Sandy Beach Ball",
+            "partner_skill": "Sandball Soccer",
             "description": "While in party, increases Defense of [ICON:ElemIcon_Ground][ELEM:Earth] Pals by {Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
                 "DefenseUp_Earth_PartnerSkill_1"
@@ -46397,7 +46397,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Scorpion Sonar",
+            "partner_skill": "Phantom Venom",
             "description": "While in party, increases player's and Pals' damage to enemies afflicted with [EFFECT:Poison] by {Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
                 "DamageUpTrainerAndOtomo_ToPoison_PartnerSkill_ScorpionMan_1"
@@ -47124,7 +47124,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Sandy Beach Ball",
+            "partner_skill": "Sandball Soccer",
             "description": "While in party, increases Defense of [ICON:ElemIcon_Ground][ELEM:Earth] Pals by {Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
                 "DefenseUp_Earth_PartnerSkill_1"
@@ -55470,7 +55470,7 @@
                 "Transport": 0,
                 "MonsterFarm": 0
             },
-            "partner_skill": "Scorpion Sonar",
+            "partner_skill": "Phantom Venom",
             "description": "While in party, increases player's and Pals' damage to enemies afflicted with [EFFECT:Poison] by {Passive1_EffectValue1}%. (Does not stack)",
             "passives": [
                 "DamageUpTrainerAndOtomo_ToPoison_PartnerSkill_ScorpionMan_1"

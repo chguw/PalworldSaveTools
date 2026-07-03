@@ -34479,7 +34479,7 @@
             ]
         },
         {
-            "name": "Ancient Material Manifester",
+            "name": "Ancient Material Synthesizer",
             "asset": "AncientMultiProduct",
             "icon": "/icons/technologies/T_icon_buildObject_AncientMultiProduct.webp",
             "type": "standard",
@@ -34739,7 +34739,7 @@
             "asset": "AutoMealPouch_Tier4",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier4.webp",
             "type": "standard",
-            "description": "A large pouch for holding food. \r\nUnlocks 4 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
+            "description": "A extra-large pouch for holding food. \r\nUnlocks 4 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
             "level_cap": 36,
             "tier": 0,
             "cost": 4,
@@ -34756,7 +34756,7 @@
             "asset": "AutoMealPouch_Tier5",
             "icon": "/icons/technologies/T_itemicon_Essential_AutoMealPouch_Tier5.webp",
             "type": "standard",
-            "description": "An extraordinarily large sack for storing food. \r\nUnlocks 5 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
+            "description": "An enormous pouch for holding food.\r\nUnlocks 5 food slots in your inventory. \r\nPlayers and Pals automatically consume food when hungry.\r\nCarrying one is enough.",
             "level_cap": 47,
             "tier": 0,
             "cost": 5,
@@ -35994,7 +35994,7 @@
             ]
         },
         {
-            "name": "Bio Coolant EX",
+            "name": "Cryogenic Coolant",
             "asset": "Bio_Coolant",
             "icon": "/icons/technologies/T_itemicon_Material_Bio_Coolant.webp",
             "type": "standard",
@@ -38418,7 +38418,7 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Refrigerated Crusher",
+            "name": "Cryogenic Crusher",
             "asset": "IceCrusher",
             "icon": "/icons/technologies/T_icon_buildObject_IceCrusher.webp",
             "type": "standard",
@@ -38729,7 +38729,7 @@
             ]
         },
         {
-            "name": "Pal Labor Research Laboratory",
+            "name": "Pal Labor Research Lab",
             "asset": "Lab",
             "icon": "/icons/technologies/T_icon_buildObject_Lab.webp",
             "type": "standard",
@@ -39363,7 +39363,7 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Crude Oil Extractor High Pressure",
+            "name": "High-Pressure Crude Oil Extractor",
             "asset": "OilPump02",
             "icon": "/icons/technologies/T_icon_buildObject_OilPump02.webp",
             "type": "boss",
@@ -39789,7 +39789,7 @@
             ]
         },
         {
-            "name": "Coal Mine",
+            "name": "Coal Quarry",
             "asset": "Product_CoalPit",
             "icon": "/icons/technologies/T_icon_buildObject_CoalPit.webp",
             "type": "boss",
@@ -40197,7 +40197,7 @@
             ]
         },
         {
-            "name": "Pure Quartz Mine",
+            "name": "Pure Quartz Quarry",
             "asset": "Product_QuartzPit",
             "icon": "/icons/technologies/T_icon_buildObject_QuartzPit.webp",
             "type": "boss",
@@ -40265,7 +40265,7 @@
             "unlock_item_recipes": []
         },
         {
-            "name": "Sulfur Mine",
+            "name": "Sulfur Quarry",
             "asset": "Product_SulfurPit",
             "icon": "/icons/technologies/T_icon_buildObject_SulfurPit.webp",
             "type": "boss",
@@ -43060,7 +43060,7 @@
             "asset": "SkyIslandFlagSet",
             "icon": "/icons/technologies/T_icon_buildObject_SkyIsland_Flag.webp",
             "type": "standard",
-            "description": "Azure Oath Flag and Azure Oath Banner set. \r\nProof of your victory over the Azure Covenant.",
+            "description": "Azure Covenant Flag and Azure Covenant Banner set. \r\nProof of your victory over the Azure Covenant.",
             "level_cap": 71,
             "tier": 0,
             "cost": 1,
@@ -43652,7 +43652,7 @@
             ]
         },
         {
-            "name": "Sniper Module Ⅱ",
+            "name": "Sniper Module II",
             "asset": "SphereModule_Sniper2",
             "icon": "/icons/technologies/T_itemicon_SphereModule_Sniper2.webp",
             "type": "standard",

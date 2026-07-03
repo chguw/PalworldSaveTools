@@ -53993,7 +53993,7 @@
             "HitInterval": null
         },
         {
-            "name": "Draconic Breath",
+            "name": "Dragon Breath",
             "asset": "DragonBreath",
             "element": "Dragon",
             "power": 160,
@@ -55290,7 +55290,7 @@
             "description": "Utilizes gravity to deprive enemies of their freedom, \r\nthen slams them into the ground from high above.",
             "WazaPowerRate": 0.5,
             "MaxHitNum": null,
-            "HitInterval": 0.25
+            "HitInterval": null
         },
         {
             "name": "Radiant Barrage",
@@ -60168,7 +60168,7 @@
             "HitInterval": null
         },
         {
-            "name": "Flower Stamp",
+            "name": "Flower Stomp",
             "asset": "Unique_RedFlowerBird_JumpKick",
             "element": "Leaf",
             "power": 550,
