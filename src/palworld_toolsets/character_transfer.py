@@ -1119,6 +1119,30 @@ def get_val_safe(p):
         return p['value']['RawData']['value']['object']['SaveParameter']['value']
     except:
         return {}
+def _copy_dps_file(src_uid, tgt_uid, targ_save_data, src_dir, tgt_dir):
+    src_dps = os.path.join(src_dir, f'{str(src_uid).upper()}_dps.sav')
+    tgt_dps = os.path.join(tgt_dir, f'{str(tgt_uid).upper()}_dps.sav')
+    if not os.path.exists(src_dps):
+        return
+    try:
+        pal_id = targ_save_data['SaveData']['value']['PalStorageContainerId']['value']['ID']['value']
+    except (KeyError, TypeError):
+        print(f'[DPS] Cannot find PalStorageContainerId in target save for {tgt_uid}')
+        return
+    try:
+        dps_gvas = _load_sav(src_dps)
+        arr = dps_gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+        for entry in arr:
+            try:
+                sp = entry['SaveParameter']['value']
+                sp['SlotId']['value']['ContainerId']['value']['ID']['value'] = fast_deepcopy(pal_id)
+                if 'OwnerPlayerUId' in sp:
+                    sp['OwnerPlayerUId']['value'] = str(tgt_uid)
+            except Exception:
+                continue
+        _write_sav(dps_gvas, tgt_dps)
+    except Exception as e:
+        print(f'[DPS] Error processing {src_dps}: {e}')
 def finalize_save_task():
     errors = []
     if modified_targets_data or modified_target_players:
@@ -1126,11 +1150,14 @@ def finalize_save_task():
             _write_sav(target_gvas_file, t_level_sav_path)
         except Exception as e:
             errors.append(f'Level.sav: {e}')
+    src_players = os.path.join(os.path.dirname(level_sav_path), 'Players')
+    tgt_players = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
     for target_uid, (json_data, gvas_obj, src_uid) in modified_targets_data.items():
         try:
             tgt_dir = os.path.join(os.path.dirname(t_level_sav_path), 'Players')
             os.makedirs(tgt_dir, exist_ok=True)
             _write_sav(gvas_obj, os.path.join(tgt_dir, f'{target_uid.upper()}.sav'))
+            _copy_dps_file(src_uid, target_uid, json_data, src_players, tgt_players)
         except Exception as e:
             errors.append(f'Player {target_uid}: {e}')
     if errors:

@@ -252,7 +252,10 @@ def copy_dps_file(src_folder, src_uid, tgt_folder, tgt_uid, target_pal_storage_i
                                                         if isinstance(id_obj, dict) and 'value' in id_obj:
                                                             id_obj['value'] = target_pal_storage_id
                                                             update_count += 1
-        print(f'[DPS] Updated {update_count} container IDs')
+                                        if 'OwnerPlayerUId' in pal_data:
+                                            pal_data['OwnerPlayerUId']['value'] = str(tgt_uid)
+                                            update_count += 1
+        print(f'[DPS] Updated {update_count} container IDs + owner UIDs')
         gvas_to_sav(tgt_file, dps.write())
         print(f'[DPS] Successfully copied to {tgt_uid}')
     except Exception as e:
