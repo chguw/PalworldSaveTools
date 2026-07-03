@@ -304,10 +304,7 @@ class BulkSyncPalDialog(FramelessDialog):
                 for pi in pal_editor.dps_pals.values():
                     pr = _get_raw_from_item(pi)
                     if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
-                        inst_id = _extract_inst_id(pi, pr)
-                        if inst_id not in seen:
-                            seen.add(inst_id)
-                            self._all_candidates.append(pi)
+                        self._all_candidates.append(pi)
         inner = QWidget()
         inner.setStyleSheet('QWidget#bulkSyncInner { background: transparent; }')
         il = QVBoxLayout(inner)
