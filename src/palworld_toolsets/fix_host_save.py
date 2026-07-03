@@ -447,6 +447,7 @@ class FixHostSaveWindow(QWidget):
             self.setWindowIcon(QIcon(ICON_PATH))
         except:
             pass
+        self.load_styles()
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(14, 14, 14, 14)
         main_layout.setSpacing(12)
@@ -677,6 +678,8 @@ class FixHostSaveWindow(QWidget):
             self.target_result_label.setText(t('Target Player: {name}({guid})', name=values[1], guid=player_guid))
         else:
             self.target_result_label.setText(t('Target Player: N/A'))
+    def load_styles(self):
+        ThemeManager.load_styles(self)
 def fix_host_save():
     window = FixHostSaveWindow()
     return window

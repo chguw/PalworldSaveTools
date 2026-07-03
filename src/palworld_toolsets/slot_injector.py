@@ -11,6 +11,7 @@ from PySide6.QtGui import QIcon, QFont, QPixmap, QColor, QPalette
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from concurrent.futures import ThreadPoolExecutor
 import os
+from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
 def sav_to_gvasfile(filepath):
     from palsav.io import load_sav
@@ -165,6 +166,7 @@ class SlotNumUpdaterApp(QDialog):
         self.player_containers = []
         self.save_folder = None
         self.loading_thread = None
+        self.load_styles()
         self.setup_ui()
         self.center_window()
     def center_window(self):
@@ -733,6 +735,8 @@ class SlotNumUpdaterApp(QDialog):
                 event.ignore()
                 return
         event.accept()
+    def load_styles(self):
+        ThemeManager.load_styles(self)
 def slot_injector():
     return SlotNumUpdaterApp()
 if __name__ == '__main__':

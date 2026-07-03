@@ -6,6 +6,7 @@ from PySide6.QtGui import QIcon, QFont
 import os
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 
+from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio.inventory.container_ownership import ContainerOwnership
 from palworld_aio.inventory.inventory_manager import PlayerInventory
 from palworld_aio.editor.edit_pals import _generate_pal_save_param, get_pal_base_data, _ensure_friendship_thresholds
@@ -164,6 +165,7 @@ class CharacterTransferWindow(QWidget):
     def setup_ui(self):
         self.setWindowTitle(t('tool.character_transfer'))
         self.setFixedSize(1200, 640)
+        self.load_styles()
         try:
             if ICON_PATH and os.path.exists(ICON_PATH):
                 self.setWindowIcon(QIcon(ICON_PATH))
@@ -370,6 +372,8 @@ class CharacterTransferWindow(QWidget):
         if not event.spontaneous():
             self.activateWindow()
             self.raise_()
+    def load_styles(self):
+        ThemeManager.load_styles(self)
     def filter_treeview(self, tree, query, is_source):
         query = query.lower()
         for i in range(tree.topLevelItemCount()):
