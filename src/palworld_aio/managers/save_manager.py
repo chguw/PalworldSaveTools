@@ -1025,10 +1025,7 @@ def _process_dps_scan_worker(args):
                     m_list = []
                 learned = [SKILLMAP.get(w.split('::')[-1].lower(), w.split('::')[-1]) for w in m_list]
                 slot_id = sp.get('SlotId', {}).get('value', {})
-                cid_val = slot_id.get('ContainerId', {}).get('value', 'Unknown')
-                if isinstance(cid_val, dict):
-                    cid_val = cid_val.get('ID', {}).get('value', 'Unknown')
-                container_id = str(cid_val).lower()
+                container_id = str(slot_id.get('ContainerId', {}).get('value', {}).get('ID', {}).get('value', 'Unknown')).lower()
                 raw_data_val = entry.get('value', {}).get('RawData', {}).get('value', {})
                 guild_id = str(raw_data_val.get('group_id', 'Unknown')).lower()
                 name = resolve_name(char_id, NAMEMAP) or char_id
