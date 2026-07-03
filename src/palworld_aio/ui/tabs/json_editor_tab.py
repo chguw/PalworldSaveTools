@@ -222,6 +222,19 @@ class JsonEditorTab(QWidget):
             '  background-color: rgba(125, 211, 252, 0.15);'
             '  color: #7DD3FC;'
             '}'
+            'QHeaderView::section {'
+            '  background: rgba(8,10,16,0.9);'
+            '  color: #7DD3FC;'
+            '  padding: 6px 8px;'
+            '  border: none;'
+            '  border-bottom: 1px solid rgba(125,211,252,0.15);'
+            '  font-weight: 600;'
+            '  font-size: 10px;'
+            '  text-align: center;'
+            '}'
+            'QHeaderView::section:hover {'
+            '  background: rgba(125,211,252,0.08);'
+            '}'
         )
         mono = QFontDatabase.systemFont(QFontDatabase.FixedFont)
         mono.setPointSize(10)
