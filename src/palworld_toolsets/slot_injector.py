@@ -342,6 +342,10 @@ class SlotNumUpdaterApp(QDialog):
         if not fp.endswith('Level.sav'):
             show_critical(self, t('error.title'), t('slot.invalid_file'))
             return
+        players_folder = os.path.join(os.path.dirname(fp), 'Players')
+        if not os.path.isdir(players_folder):
+            show_critical(self, t('error.title'), t('error.players_folder_missing'))
+            return
         self.set_loading_state(True, 'Loading save file...')
         def task():
             return sav_to_gvasfile(fp)

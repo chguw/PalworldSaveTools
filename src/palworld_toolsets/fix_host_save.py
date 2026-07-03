@@ -129,8 +129,18 @@ def fix_save(save_path, new_guid, old_guid, guild_fix=True):
         fmt = lambda g: '{}-{}-{}-{}-{}'.format(g[:8], g[8:12], g[12:16], g[16:20], g[20:]).lower()
         old_uid, new_uid = (fmt(old_guid), fmt(new_guid))
         lvl = os.path.join(save_path, 'Level.sav')
-        old_sav = os.path.join(save_path, 'Players', old_guid.upper() + '.sav')
-        new_sav = os.path.join(save_path, 'Players', new_guid.upper() + '.sav')
+        players_folder = os.path.join(save_path, 'Players')
+        if not os.path.isdir(players_folder):
+            error_msg = t('fix_host_save.players_folder_not_found')
+            print(f'Error: {error_msg}')
+            try:
+                parent = QApplication.activeWindow()
+                show_warning(parent, t('Error'), error_msg)
+            except:
+                pass
+            return False
+        old_sav = os.path.join(players_folder, old_guid.upper() + '.sav')
+        new_sav = os.path.join(players_folder, new_guid.upper() + '.sav')
         level = sav_to_json(lvl)
         old_j = sav_to_json(old_sav)
         new_j = sav_to_json(new_sav)
@@ -718,8 +728,12 @@ if __name__ == '__main__':
             on_finished(result)
         globals()['run_with_loading'] = run_with_loading_mock
         print(f'Starting migration: {old_guid} ->{new_guid}')
-        fix_save(os.path.dirname(save_path) if save_path.endswith('Level.sav') else save_path, new_guid, old_guid)
-        print('Migration complete.')
+        result = fix_save(os.path.dirname(save_path) if save_path.endswith('Level.sav') else save_path, new_guid, old_guid)
+        if result:
+            print('Migration complete.')
+        else:
+            print('Migration failed.')
+            sys.exit(1)
     else:
         app = QApplication([])
         w = FixHostSaveWindow()
