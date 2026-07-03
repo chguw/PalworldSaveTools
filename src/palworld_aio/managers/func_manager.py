@@ -1747,7 +1747,12 @@ def _process_dps_file_worker(args):
         for idx, entry in enumerate(save_param_array):
             if not isinstance(entry, dict):
                 continue
-            sp = entry.get('SaveParameter', {}).get('value', {})
+            sp_entry = entry.get('SaveParameter')
+            if not isinstance(sp_entry, dict):
+                continue
+            sp = sp_entry.get('value', {})
+            if not isinstance(sp, dict):
+                continue
             char_id = sp.get('CharacterID', {}).get('value', 'None')
             if char_id == 'None':
                 continue
@@ -2009,7 +2014,12 @@ def _apply_to_dps_files(transform_fn):
             for entry in arr:
                 if not isinstance(entry, dict):
                     continue
-                sp = entry.get('SaveParameter', {}).get('value', {})
+                sp_entry = entry.get('SaveParameter')
+                if not isinstance(sp_entry, dict):
+                    continue
+                sp = sp_entry.get('value', {})
+                if not isinstance(sp, dict):
+                    continue
                 if not sp:
                     continue
                 cid = extract_value(sp, 'CharacterID', 'None')

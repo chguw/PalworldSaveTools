@@ -972,7 +972,12 @@ def _process_dps_scan_worker(args):
             if not isinstance(entry, dict):
                 continue
             try:
-                sp = entry.get('SaveParameter', {}).get('value', {})
+                sp_entry = entry.get('SaveParameter')
+                if not isinstance(sp_entry, dict):
+                    continue
+                sp = sp_entry.get('value', {})
+                if not isinstance(sp, dict):
+                    continue
                 char_id = extract_value(sp, 'CharacterID', 'None')
                 if char_id == 'None' or not char_id:
                     continue

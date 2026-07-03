@@ -238,8 +238,12 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             for idx, entry in enumerate(save_param_array):
                 if not isinstance(entry, dict):
                     continue
-                sp = entry.get('SaveParameter', {}).get('value', {})
-                if not sp:
+                sp_entry = entry.get('SaveParameter')
+                if not isinstance(sp_entry, dict):
+                    continue
+                sp = sp_entry.get('value', {})
+                if not isinstance(sp, dict):
+                    continue
                     continue
                 char_id = extract_value(sp, 'CharacterID', 'None')
                 if char_id == 'None' or not char_id:
