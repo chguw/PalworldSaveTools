@@ -1728,5 +1728,9 @@
     "func_manager.max_all_pals.confirm": "これにより、すべての仲間のすべてのステータス (レベル 80、個体値 100、ソウル 20、ランク 5) が最大になります。続く？",
     "func_manager.max_all_pals.success": "最大 {count} 人の友達",
     "deletion.menu.restore_all_pals": "すべての仲間を回復する",
-    "deletion.menu.max_all_pals": "すべての仲間を最大化する"
+    "deletion.menu.max_all_pals": "すべての仲間を最大化する",
+    "pal_editor.dps": "DPS",
+    "pal_editor.box_tab": "箱",
+    "edit_pals.dps": "DPS Storage",
+    "pal_editor.dps_page": "DPS {現在}/{合計}"
 }

@@ -1727,5 +1727,9 @@
     "func_manager.max_all_pals.confirm": "이렇게 하면 모든 친구의 모든 통계(레벨 80, IV 100, 영혼 20, 랭크 5)가 최대화됩니다. 계속하다?",
     "func_manager.max_all_pals.success": "최대 {count}명의 친구",
     "deletion.menu.restore_all_pals": "모든 친구 복원",
-    "deletion.menu.max_all_pals": "맥스 올 팔스"
+    "deletion.menu.max_all_pals": "맥스 올 팔스",
+    "pal_editor.dps": "DPS",
+    "pal_editor.box_tab": "상자",
+    "edit_pals.dps": "DPS Storage",
+    "pal_editor.dps_page": "DPS {현재}/{총계}"
 }

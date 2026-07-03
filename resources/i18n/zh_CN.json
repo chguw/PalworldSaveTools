@@ -1730,5 +1730,9 @@
     "func_manager.max_all_pals.confirm": "这将最大化所有好友的所有统计数据（等级 80、IV 100、灵魂 20、等级 5）。继续？",
     "func_manager.max_all_pals.success": "好友数量上限为 {count} 个",
     "deletion.menu.restore_all_pals": "恢复所有好友",
-    "deletion.menu.max_all_pals": "最大所有朋友"
+    "deletion.menu.max_all_pals": "最大所有朋友",
+    "pal_editor.dps": "DPS",
+    "pal_editor.box_tab": "盒子",
+    "edit_pals.dps": "DPS Storage",
+    "pal_editor.dps_page": "DPS {当前}/{总计}"
 }

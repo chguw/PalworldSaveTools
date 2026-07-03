@@ -280,22 +280,34 @@ class BulkSyncPalDialog(FramelessDialog):
         if candidates is not None:
             self._all_candidates = list(candidates)
         else:
+            def _extract_inst_id(pi, pr):
+                if 'data' in pi:
+                    return str(pr.get('InstanceId', {}).get('value', '')) if pr else ''
+                return str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
             base_id = cid.lower().replace('boss_', '')
             seen = set()
             for pi in list(pal_editor.party_pals.values()):
                 pr = _get_raw_from_item(pi)
                 if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
-                    inst_id = str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+                    inst_id = _extract_inst_id(pi, pr)
                     if inst_id not in seen:
                         seen.add(inst_id)
                         self._all_candidates.append(pi)
             for pi in pal_editor.palbox_pal_dict.values():
                 pr = _get_raw_from_item(pi)
                 if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
-                    inst_id = str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+                    inst_id = _extract_inst_id(pi, pr)
                     if inst_id not in seen:
                         seen.add(inst_id)
                         self._all_candidates.append(pi)
+            if hasattr(pal_editor, 'dps_pals'):
+                for pi in pal_editor.dps_pals.values():
+                    pr = _get_raw_from_item(pi)
+                    if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
+                        inst_id = _extract_inst_id(pi, pr)
+                        if inst_id not in seen:
+                            seen.add(inst_id)
+                            self._all_candidates.append(pi)
         inner = QWidget()
         inner.setStyleSheet('QWidget#bulkSyncInner { background: transparent; }')
         il = QVBoxLayout(inner)
@@ -435,13 +447,14 @@ class BulkSyncPalDialog(FramelessDialog):
         show_information(self, 'Bulk Sync', t('edit_pals.bulk_sync_success', count=len(selected), name=pal_name))
         self.accept()
 class PalCreateDialog(QDialog):
-    def __init__(self, pal_editor, is_party, slot_index, parent=None):
+    def __init__(self, pal_editor, is_party, slot_index, parent=None, is_dps=False):
         super().__init__(parent)
         self.pal_editor = pal_editor
         self.is_party = is_party
         self.slot_index = slot_index
+        self.is_dps = is_dps
         self.created_item = None
-        container_name = t('edit_pals.party') if is_party else t('edit_pals.palbox')
+        container_name = t('edit_pals.dps') if is_dps else (t('edit_pals.party') if is_party else t('edit_pals.palbox'))
         self.setWindowTitle(f'Create New Pal in {container_name} Slot {slot_index}')
         self.setModal(True)
         self.setMinimumSize(840, 600)
@@ -629,6 +642,43 @@ class PalCreateDialog(QDialog):
             return
         cid = self.selected_pal['asset']
         nick = self.nick_edit.text().strip() or f"🆕{self.selected_pal['name']}"
+        if self.is_dps:
+            import uuid
+            from palworld_aio.utils import calculate_max_hp
+            from palworld_aio.editor.pal_editor.data import get_pal_base_data
+            eu = '00000000-0000-0000-0000-000000000000'
+            inst_id = str(uuid.uuid4())
+            owner_uid = str(self.pal_editor.player_uid) if self.pal_editor.player_uid else eu
+            base = get_pal_base_data(cid)
+            is_boss = cid.upper().startswith('BOSS_')
+            max_hp = calculate_max_hp(base, 1, 0, 0, is_boss, False, 0, 0, False) if base else 1000
+            raw = {
+                'CharacterID': {'id': None, 'type': 'NameProperty', 'value': cid},
+                'Gender': {'id': None, 'type': 'EnumProperty', 'value': {'type': 'EPalGenderType', 'value': 'EPalGenderType::Female'}},
+                'NickName': {'id': None, 'type': 'StrProperty', 'value': nick},
+                'Level': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 1}},
+                'Rank': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 1}},
+                'Exp': {'id': None, 'type': 'Int64Property', 'value': 0},
+                'Talent_HP': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 0}},
+                'Talent_Shot': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 0}},
+                'Talent_Defense': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 0}},
+                'Rank_HP': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 0}},
+                'Rank_Attack': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 0}},
+                'Rank_Defence': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 0}},
+                'Rank_CraftSpeed': {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 0}},
+                'FullStomach': {'id': None, 'type': 'FloatProperty', 'value': 300.0},
+                'SanityValue': {'id': None, 'type': 'FloatProperty', 'value': 100.0},
+                'Hp': {'struct_type': 'FixedPoint64', 'struct_id': eu, 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'},
+                'OwnerPlayerUId': {'struct_type': 'Guid', 'struct_id': eu, 'id': None, 'value': owner_uid, 'type': 'StructProperty'},
+                'SlotId': {'struct_type': 'PalCharacterSlotId', 'struct_id': eu, 'id': None, 'value': {'ContainerId': {'struct_type': 'Guid', 'struct_id': eu, 'id': None, 'value': inst_id, 'type': 'StructProperty'}, 'SlotIndex': {'id': None, 'type': 'IntProperty', 'value': 0}}, 'type': 'StructProperty'},
+                'PassiveSkillList': {'array_type': 'NameProperty', 'id': None, 'value': {'values': []}, 'type': 'ArrayProperty'},
+                'EquipWaza': {'array_type': 'EnumProperty', 'id': None, 'value': {'values': []}, 'type': 'ArrayProperty'},
+                'MasteredWaza': {'array_type': 'EnumProperty', 'id': None, 'value': {'values': []}, 'type': 'ArrayProperty'},
+            }
+            compat = {'data': raw}
+            self.created_item = compat
+            self.accept()
+            return
         container_id = self.pal_editor.party_container if self.is_party else self.pal_editor.palbox_container
         container_name = t('edit_pals.party') if self.is_party else t('edit_pals.palbox')
         if not container_id:

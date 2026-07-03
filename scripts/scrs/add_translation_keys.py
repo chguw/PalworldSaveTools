@@ -23,6 +23,9 @@ NEW_TRANSLATIONS = {
     'func_manager.max_all_pals.success': 'Maxed {count} pals',
     'deletion.menu.restore_all_pals': 'Restore All Pals',
     'deletion.menu.max_all_pals': 'Max All Pals',
+    'pal_editor.dps': 'DPS',
+    'pal_editor.box_tab': 'Box',
+    'edit_pals.dps': 'DPS Storage',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

@@ -1959,6 +1959,67 @@ def fix_unassigned_pals(parent=None):
         except Exception:
             continue
     return fixed_count
+def _restore_one_pal(raw):
+    from palworld_aio.editor.pal_editor.data import get_pal_base_data, _ensure_friendship_thresholds
+    cid = extract_value(raw, 'CharacterID', '')
+    is_boss = cid.upper().startswith('BOSS_')
+    is_lucky = extract_value(raw, 'IsRarePal', False)
+    lv = extract_value(raw, 'Level', 1)
+    talent_hp = extract_value(raw, 'Talent_HP', 0)
+    rank_hp = extract_value(raw, 'Rank_HP', 0)
+    trust = extract_value(raw, 'FriendshipPoint', 0)
+    rank = extract_value(raw, 'Rank', 0)
+    is_awake = bool(extract_value(raw, 'bIsAwakening', False))
+    thr = _ensure_friendship_thresholds()
+    trust_rank = 0
+    for r in range(len(thr) - 1, 0, -1):
+        if trust >= thr[r]:
+            trust_rank = r
+            break
+    condenser = int(rank) if isinstance(rank, (int, float)) else 0
+    base = get_pal_base_data(cid)
+    if base:
+        max_hp = calculate_max_hp(base, lv, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser, is_awake)
+        if max_hp > 0:
+            raw['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+            raw['MaxHP'] = raw['Hp']
+        max_stomach = base.get('stats', {}).get('max_full_stomach', 300)
+        raw['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+        raw['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+        for k in ('WorkerSick', 'PhysicalHealth', 'HungerType', 'FoodWithStatusEffect', 'Tiemr_FoodWithStatusEffect', 'FoodRegeneEffectInfo'):
+            raw.pop(k, None)
+        return True
+    return False
+
+def _apply_to_dps_files(transform_fn):
+    players_dir = os.path.join(constants.current_save_path, 'Players')
+    if not os.path.exists(players_dir):
+        return 0
+    count = 0
+    for fname in os.listdir(players_dir):
+        if not fname.endswith('_dps.sav'):
+            continue
+        dps_path = os.path.join(players_dir, fname)
+        try:
+            gvas = sav_to_gvasfile(dps_path)
+            arr = gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+            changed = False
+            for entry in arr:
+                sp = entry.get('SaveParameter', {}).get('value', {})
+                if not sp:
+                    continue
+                cid = extract_value(sp, 'CharacterID', 'None')
+                if cid == 'None' or not cid:
+                    continue
+                if transform_fn(sp):
+                    changed = True
+                    count += 1
+            if changed:
+                gvasfile_to_sav(gvas, dps_path)
+        except Exception:
+            continue
+    return count
+
 def restore_all_pals(parent=None):
     if not constants.loaded_level_json:
         return 0
@@ -1970,46 +2031,74 @@ def restore_all_pals(parent=None):
             raw = entry['value']['RawData']['value']['object']['SaveParameter']['value']
             if 'IsPlayer' in raw:
                 continue
-            cid = extract_value(raw, 'CharacterID', '')
-            from palworld_aio.editor.pal_editor.data import get_pal_base_data, _ensure_friendship_thresholds
-            is_boss = cid.upper().startswith('BOSS_')
-            is_lucky = extract_value(raw, 'IsRarePal', False)
-            lv = extract_value(raw, 'Level', 1)
-            talent_hp = extract_value(raw, 'Talent_HP', 0)
-            rank_hp = extract_value(raw, 'Rank_HP', 0)
-            trust = extract_value(raw, 'FriendshipPoint', 0)
-            rank = extract_value(raw, 'Rank', 0)
-            is_awake = bool(extract_value(raw, 'bIsAwakening', False))
-            thr = _ensure_friendship_thresholds()
-            trust_rank = 0
-            for r in range(len(thr) - 1, 0, -1):
-                if trust >= thr[r]:
-                    trust_rank = r
-                    break
-            condenser = int(rank) if isinstance(rank, (int, float)) else 0
-            base = get_pal_base_data(cid)
-            if base:
-                max_hp = calculate_max_hp(base, lv, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser, is_awake)
-                if max_hp > 0:
-                    raw['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
-                    raw['MaxHP'] = raw['Hp']
-                max_stomach = base.get('stats', {}).get('max_full_stomach', 300)
-                raw['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
-                raw['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
-                for k in ('WorkerSick', 'PhysicalHealth', 'HungerType', 'FoodWithStatusEffect', 'Tiemr_FoodWithStatusEffect', 'FoodRegeneEffectInfo'):
-                    raw.pop(k, None)
+            if _restore_one_pal(raw):
                 count += 1
         except Exception:
             continue
+    count += _apply_to_dps_files(_restore_one_pal)
     return count
+def _max_one_pal(raw):
+    from palworld_aio.editor.pal_editor.data import get_pal_base_data, _ensure_friendship_thresholds
+    cid = extract_value(raw, 'CharacterID', '')
+    base = get_pal_base_data(cid)
+    raw['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 80}}
+    try:
+        base_dir = constants.get_base_path()
+        PAL_EXP_TABLE = json_tools.load(resource_path(base_dir, 'game_data', 'pal_exp_table.json'))
+        exp = PAL_EXP_TABLE['80']['PalTotalEXP']
+    except:
+        exp = 0
+    raw['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp}
+    raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+    raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+    raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
+    raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+    raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+    raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+    raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
+    raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+    raw['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
+    raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
+    if base:
+        ws_base = base.get('work_suitabilities', {})
+        from palworld_aio.editor.pal_editor.pal_ops import _set_work_suitability
+        for k, v in ws_base.items():
+            if v > 0:
+                _set_work_suitability(raw, k, 10)
+        is_boss = cid.upper().startswith('BOSS_')
+        is_lucky = extract_value(raw, 'IsRarePal', False)
+        lv = 80
+        talent_hp = 100
+        rank_hp = 20
+        trust = 200000
+        rank = 5
+        is_awake = True
+        thr = _ensure_friendship_thresholds()
+        trust_rank = 0
+        for r in range(len(thr) - 1, 0, -1):
+            if trust >= thr[r]:
+                trust_rank = r
+                break
+        condenser = 5
+        max_hp = calculate_max_hp(base, lv, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser, is_awake)
+        if max_hp > 0:
+            raw['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+            raw['MaxHP'] = raw['Hp']
+        max_stomach = base.get('stats', {}).get('max_full_stomach', 300)
+        raw['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
+        raw['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+    else:
+        raw['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': 1, 'type': 'Int64Property'}}, 'type': 'StructProperty'}
+        raw['MaxHP'] = raw['Hp']
+        raw['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': 300.0}
+        raw['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
+    for k in ('WorkerSick', 'PhysicalHealth', 'HungerType', 'FoodWithStatusEffect', 'Tiemr_FoodWithStatusEffect', 'FoodRegeneEffectInfo'):
+        raw.pop(k, None)
+    return True
+
 def max_all_pals(parent=None):
     if not constants.loaded_level_json:
         return 0
-    base_dir = constants.get_base_path()
-    try:
-        PAL_EXP_TABLE = json_tools.load(resource_path(base_dir, 'game_data', 'pal_exp_table.json'))
-    except:
-        PAL_EXP_TABLE = {}
     wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
     cmap = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
     count = 0
@@ -2018,63 +2107,11 @@ def max_all_pals(parent=None):
             raw = entry['value']['RawData']['value']['object']['SaveParameter']['value']
             if 'IsPlayer' in raw:
                 continue
-            cid = extract_value(raw, 'CharacterID', '')
-            from palworld_aio.editor.pal_editor.data import get_pal_base_data, _ensure_friendship_thresholds
-            base = get_pal_base_data(cid)
-            raw['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 80}}
-            try:
-                exp = PAL_EXP_TABLE['80']['PalTotalEXP']
-            except:
-                exp = 0
-            raw['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp}
-            raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-            raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-            raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-            raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-            raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-            raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-            raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-            raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
-            raw['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
-            raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
-            if base:
-                ws_base = base.get('work_suitabilities', {})
-                from palworld_aio.editor.pal_editor.pal_ops import _set_work_suitability
-                for k, v in ws_base.items():
-                    if v > 0:
-                        _set_work_suitability(raw, k, 10)
-                is_boss = cid.upper().startswith('BOSS_')
-                is_lucky = extract_value(raw, 'IsRarePal', False)
-                lv = 80
-                talent_hp = 100
-                rank_hp = 20
-                trust = 200000
-                rank = 5
-                is_awake = True
-                thr = _ensure_friendship_thresholds()
-                trust_rank = 0
-                for r in range(len(thr) - 1, 0, -1):
-                    if trust >= thr[r]:
-                        trust_rank = r
-                        break
-                condenser = 5
-                max_hp = calculate_max_hp(base, lv, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser, is_awake)
-                if max_hp > 0:
-                    raw['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
-                    raw['MaxHP'] = raw['Hp']
-                max_stomach = base.get('stats', {}).get('max_full_stomach', 300)
-                raw['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': float(max_stomach)}
-                raw['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
-            else:
-                raw['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': 1, 'type': 'Int64Property'}}, 'type': 'StructProperty'}
-                raw['MaxHP'] = raw['Hp']
-                raw['FullStomach'] = {'id': None, 'type': 'FloatProperty', 'value': 300.0}
-                raw['SanityValue'] = {'id': None, 'type': 'FloatProperty', 'value': 100.0}
-            for k in ('WorkerSick', 'PhysicalHealth', 'HungerType', 'FoodWithStatusEffect', 'Tiemr_FoodWithStatusEffect', 'FoodRegeneEffectInfo'):
-                raw.pop(k, None)
-            count += 1
+            if _max_one_pal(raw):
+                count += 1
         except:
             continue
+    count += _apply_to_dps_files(_max_one_pal)
     return count
 def fix_illegal_pals_in_save(parent=None):
     if not constants.current_save_path or not constants.loaded_level_json:

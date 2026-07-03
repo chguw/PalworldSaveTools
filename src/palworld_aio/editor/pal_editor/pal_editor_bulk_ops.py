@@ -35,6 +35,14 @@ class BulkOperationMixin:
                 if inst_id not in seen:
                     seen.add(inst_id)
                     items.append(pi)
+        if hasattr(self, 'dps_pals'):
+            for pi in self.dps_pals.values():
+                pr = _get_raw_from_item(pi)
+                if pr and extract_value(pr, 'CharacterID', '').lower().replace('boss_', '') == base_id:
+                    inst_id = str(pr.get('InstanceId', {}).get('value', ''))
+                    if inst_id not in seen:
+                        seen.add(inst_id)
+                        items.append(pi)
         return items
 
     def _bulk_rename_pal(self, sender):
@@ -117,7 +125,11 @@ class BulkOperationMixin:
                     count += 1
             self._update_party_slots()
             self._update_palbox_page()
+            if hasattr(self, '_update_dps_slots'):
+                self._update_dps_slots()
             self.pal_info._refresh()
+            if hasattr(self, '_save_dps'):
+                self._save_dps()
             result['applied'] = True
             show_information(dlg, t('edit_pals.ctx.bulk_rename'), t('edit_pals.bulk_rename_success', count=count, name=pal_name))
             dlg.accept()
@@ -229,7 +241,11 @@ class BulkOperationMixin:
                 count += 1
             self._update_party_slots()
             self._update_palbox_page()
+            if hasattr(self, '_update_dps_slots'):
+                self._update_dps_slots()
             self.pal_info._refresh()
+            if hasattr(self, '_save_dps'):
+                self._save_dps()
             show_information(dlg, t('edit_pals.ctx.bulk_heal'), t('edit_pals.bulk_heal_success', count=count, name=pal_name))
             dlg.accept()
         apply_btn.clicked.connect(on_apply)

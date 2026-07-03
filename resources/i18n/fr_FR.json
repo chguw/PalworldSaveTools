@@ -1710,5 +1710,9 @@
     "func_manager.max_all_pals.confirm": "Cela maximisera toutes les statistiques (niveau 80, IV 100, âmes 20, rang 5) pour tous les amis. Continuer?",
     "func_manager.max_all_pals.success": "Nombre maximum d'amis : {count} amis",
     "deletion.menu.restore_all_pals": "Restaurer tous les amis",
-    "deletion.menu.max_all_pals": "Max tous les copains"
+    "deletion.menu.max_all_pals": "Max tous les copains",
+    "pal_editor.dps": "DPS",
+    "pal_editor.box_tab": "Boîte",
+    "edit_pals.dps": "DPS Storage",
+    "pal_editor.dps_page": "DPS {actuel}/{total}"
 }

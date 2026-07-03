@@ -1726,5 +1726,9 @@
     "func_manager.max_all_pals.confirm": "Это максимально увеличит все характеристики (уровень 80, IV 100, души 20, ранг 5) для всех друзей. Продолжать?",
     "func_manager.max_all_pals.success": "Максимум друзей: {count}",
     "deletion.menu.restore_all_pals": "Восстановить всех друзей",
-    "deletion.menu.max_all_pals": "Макс Олл Пэлс"
+    "deletion.menu.max_all_pals": "Макс Олл Пэлс",
+    "pal_editor.dps": "DPS",
+    "pal_editor.box_tab": "Коробка",
+    "edit_pals.dps": "DPS Storage",
+    "pal_editor.dps_page": "ДПС {текущий}/{всего}"
 }
