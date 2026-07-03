@@ -1137,38 +1137,32 @@ QTextEdit#consoleTextEdit {
     selection-background-color: rgba(125,211,252,0.3);
 }
 
-/* Console scrollbar */
-QTextEdit#consoleTextEdit QScrollBar:vertical {
-    background: rgba(18,20,24,0.8);
+/* ===== Unified Scrollbars ===== */
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: rgba(255,255,255,0.02);
     width: 12px;
+    height: 12px;
     border-radius: 6px;
-    margin: 2px;
+    margin: 0px;
 }
-
-QTextEdit#consoleTextEdit QScrollBar::handle:vertical {
-    background: rgba(125,211,252,0.4);
-    border-radius: 4px;
-    min-height: 20px;
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+    background: rgba(125,211,252,0.2);
+    min-height: 30px;
+    min-width: 30px;
+    border-radius: 6px;
 }
-
-QTextEdit#consoleTextEdit QScrollBar::handle:vertical:hover {
-    background: rgba(125,211,252,0.6);
+QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover {
+    background: rgba(125,211,252,0.35);
 }
-
-QTextEdit#consoleTextEdit QScrollBar::add-line:vertical,
-QTextEdit#consoleTextEdit QScrollBar::sub-line:vertical {
+QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal {
+    height: 0px;
+    width: 0px;
     background: none;
     border: none;
 }
-
-QTextEdit#consoleTextEdit QScrollBar::up-arrow:vertical,
-QTextEdit#consoleTextEdit QScrollBar::down-arrow:vertical {
-    background: none;
-    border: none;
-}
-
-QTextEdit#consoleTextEdit QScrollBar::add-page:vertical,
-QTextEdit#consoleTextEdit QScrollBar::sub-page:vertical {
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical,
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     background: none;
 }
 
@@ -1768,79 +1762,7 @@ QDialog[dialogType="skillSelect"] {
     border-radius: 12px;
 }
 
-/* ===== ScrollBar Styling for Edit Pals ===== */
 
-QScrollArea#editPalsScroll QScrollBar:vertical,
-QScrollArea#skillsScrollArea QScrollBar:vertical {
-    background: rgba(255,255,255,0.02);
-    width: 12px;
-    border-radius: 6px;
-    margin: 0px;
-}
-
-QScrollArea#editPalsScroll QScrollBar::handle:vertical,
-QScrollArea#skillsScrollArea QScrollBar::handle:vertical {
-    background: rgba(125,211,252,0.2);
-    min-height: 30px;
-    border-radius: 6px;
-}
-
-QScrollArea#editPalsScroll QScrollBar::handle:vertical:hover,
-QScrollArea#skillsScrollArea QScrollBar::handle:vertical:hover {
-    background: rgba(125,211,252,0.35);
-}
-
-QScrollArea#editPalsScroll QScrollBar::add-line:vertical,
-QScrollArea#editPalsScroll QScrollBar::sub-line:vertical,
-QScrollArea#skillsScrollArea QScrollBar::add-line:vertical,
-QScrollArea#skillsScrollArea QScrollBar::sub-line:vertical {
-    height: 0px;
-    background: none;
-}
-
-QScrollArea#editPalsScroll QScrollBar::add-page:vertical,
-QScrollArea#editPalsScroll QScrollBar::sub-page:vertical,
-QScrollArea#skillsScrollArea QScrollBar::add-page:vertical,
-QScrollArea#skillsScrollArea QScrollBar::sub-page:vertical {
-    background: none;
-}
-
-/* ===== Horizontal ScrollBar ===== */
-
-QScrollArea#editPalsScroll QScrollBar:horizontal,
-QScrollArea#skillsScrollArea QScrollBar:horizontal {
-    background: rgba(255,255,255,0.02);
-    height: 12px;
-    border-radius: 6px;
-    margin: 0px;
-}
-
-QScrollArea#editPalsScroll QScrollBar::handle:horizontal,
-QScrollArea#skillsScrollArea QScrollBar::handle:horizontal {
-    background: rgba(125,211,252,0.2);
-    min-width: 30px;
-    border-radius: 6px;
-}
-
-QScrollArea#editPalsScroll QScrollBar::handle:horizontal:hover,
-QScrollArea#skillsScrollArea QScrollBar::handle:horizontal:hover {
-    background: rgba(125,211,252,0.35);
-}
-
-QScrollArea#editPalsScroll QScrollBar::add-line:horizontal,
-QScrollArea#editPalsScroll QScrollBar::sub-line:horizontal,
-QScrollArea#skillsScrollArea QScrollBar::add-line:horizontal,
-QScrollArea#skillsScrollArea QScrollBar::sub-line:horizontal {
-    width: 0px;
-    background: none;
-}
-
-QScrollArea#editPalsScroll QScrollBar::add-page:horizontal,
-QScrollArea#editPalsScroll QScrollBar::sub-page:horizontal,
-QScrollArea#skillsScrollArea QScrollBar::add-page:horizontal,
-QScrollArea#skillsScrollArea QScrollBar::sub-page:horizontal {
-    background: none;
-}
 
 /* Dashboard Save Card */
 QFrame#saveCard {
@@ -1850,52 +1772,5 @@ QFrame#saveCard {
 }
 
 /* ===== Global Tree/Table Scrollbars ===== */
-QTreeWidget QScrollBar:vertical,
-QTreeWidget QScrollBar:horizontal,
-QTableWidget QScrollBar:vertical,
-QTableWidget QScrollBar:horizontal {
-    background: rgba(255,255,255,0.02);
-    width: 12px;
-    height: 12px;
-    border-radius: 6px;
-    margin: 0px;
-}
-QTreeWidget QScrollBar::handle:vertical,
-QTreeWidget QScrollBar::handle:horizontal,
-QTableWidget QScrollBar::handle:vertical,
-QTableWidget QScrollBar::handle:horizontal {
-    background: rgba(125,211,252,0.2);
-    min-height: 30px;
-    min-width: 30px;
-    border-radius: 6px;
-}
-QTreeWidget QScrollBar::handle:vertical:hover,
-QTreeWidget QScrollBar::handle:horizontal:hover,
-QTableWidget QScrollBar::handle:vertical:hover,
-QTableWidget QScrollBar::handle:horizontal:hover {
-    background: rgba(125,211,252,0.35);
-}
-QTreeWidget QScrollBar::add-line:vertical,
-QTreeWidget QScrollBar::sub-line:vertical,
-QTreeWidget QScrollBar::add-line:horizontal,
-QTreeWidget QScrollBar::sub-line:horizontal,
-QTableWidget QScrollBar::add-line:vertical,
-QTableWidget QScrollBar::sub-line:vertical,
-QTableWidget QScrollBar::add-line:horizontal,
-QTableWidget QScrollBar::sub-line:horizontal {
-    height: 0px;
-    width: 0px;
-    background: none;
-    border: none;
-}
-QTreeWidget QScrollBar::add-page:vertical,
-QTreeWidget QScrollBar::sub-page:vertical,
-QTreeWidget QScrollBar::add-page:horizontal,
-QTreeWidget QScrollBar::sub-page:horizontal,
-QTableWidget QScrollBar::add-page:vertical,
-QTableWidget QScrollBar::sub-page:vertical,
-QTableWidget QScrollBar::add-page:horizontal,
-QTableWidget QScrollBar::sub-page:horizontal {
-    background: none;
-}
+
 

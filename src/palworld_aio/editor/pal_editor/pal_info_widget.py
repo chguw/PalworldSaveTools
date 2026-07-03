@@ -157,7 +157,7 @@ class PalInfoWidget(PalInfoDisplayMixin, PalInfoHandlerMixin, QFrame):
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        scroll.setStyleSheet('QScrollArea { background: transparent; border: none; } QScrollBar:vertical { width: 4px; background: rgba(255,255,255,0.02); border-radius: 2px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.15); border-radius: 2px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.3); } QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }')
+        scroll.setStyleSheet('QScrollArea { background: transparent; border: none; }')
         inner = QWidget()
         inner.setObjectName('palInfoInner')
         inner.setStyleSheet('QWidget#palInfoInner { background: rgba(8,10,16,0.98); border: 1px solid rgba(30,40,55,0.9); border-radius: 6px; }')

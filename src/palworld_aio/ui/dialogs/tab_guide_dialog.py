@@ -182,10 +182,6 @@ class TabGuideDialog(QDialog):
         self._scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self._scroll_area.setStyleSheet(f'''
             QScrollArea {{ background-color: {BG_COLOR}; border: none; }}
-            QScrollBar:vertical {{ background: {BG_COLOR}; width: 10px; }}
-            QScrollBar::handle:vertical {{ background: {BORDER_COLOR}; border-radius: 5px; min-height: 30px; }}
-            QScrollBar::handle:vertical:hover {{ background: {HEADER_COLOR}; }}
-            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{ height: 0; }}
         ''')
 
         scroll_content = QWidget()

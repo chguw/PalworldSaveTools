@@ -133,7 +133,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self.grid_scroll.setWidgetResizable(True)
         self.grid_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.grid_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.grid_scroll.setStyleSheet('QScrollArea { background: transparent; border: none; } QScrollBar:vertical { width: 6px; background: rgba(255,255,255,0.03); border-radius: 3px; } QScrollBar::handle:vertical { background: rgba(125,211,252,0.2); border-radius: 3px; min-height: 20px; } QScrollBar::handle:vertical:hover { background: rgba(125,211,252,0.4); } QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }')
+        self.grid_scroll.setStyleSheet('QScrollArea { background: transparent; border: none; }')
         self.grid_scroll.viewport().installEventFilter(self)
         grid_container = QWidget()
         grid_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
