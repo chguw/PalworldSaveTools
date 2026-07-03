@@ -15,6 +15,14 @@ LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': 
 NEW_TRANSLATIONS = {
     'edit_pals.ctx.fav': 'Fav',
     'edit_pals.ctx.bulk_ops': 'Bulk Ops',
+    'func_manager.restore_all_pals.title': 'Restore All Pals',
+    'func_manager.restore_all_pals.confirm': 'This will restore all pals (HP, FullStomach, Sanity) and remove sickness. Continue?',
+    'func_manager.restore_all_pals.success': 'Restored {count} pals',
+    'func_manager.max_all_pals.title': 'Max All Pals',
+    'func_manager.max_all_pals.confirm': 'This will max all stats (level 80, IVs 100, souls 20, rank 5) for all pals. Continue?',
+    'func_manager.max_all_pals.success': 'Maxed {count} pals',
+    'deletion.menu.restore_all_pals': 'Restore All Pals',
+    'deletion.menu.max_all_pals': 'Max All Pals',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

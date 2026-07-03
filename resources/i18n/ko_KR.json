@@ -1719,5 +1719,13 @@
     "update.git_pull": "git pull 업데이트 허용",
     "edit_pals.ctx.fav": "즐겨찾기",
     "edit_pals.ctx.bulk_ops": "대량 운영",
-    "map.sidebar.label": "맵 브라우저"
+    "map.sidebar.label": "맵 브라우저",
+    "func_manager.restore_all_pals.title": "모든 친구 복원",
+    "func_manager.restore_all_pals.confirm": "이렇게 하면 모든 친구(HP, FullStomach, Sanity)가 회복되고 질병이 제거됩니다. 계속하다?",
+    "func_manager.restore_all_pals.success": "{count}명의 친구를 복원했습니다.",
+    "func_manager.max_all_pals.title": "맥스 올 팔스",
+    "func_manager.max_all_pals.confirm": "이렇게 하면 모든 친구의 모든 통계(레벨 80, IV 100, 영혼 20, 랭크 5)가 최대화됩니다. 계속하다?",
+    "func_manager.max_all_pals.success": "최대 {count}명의 친구",
+    "deletion.menu.restore_all_pals": "모든 친구 복원",
+    "deletion.menu.max_all_pals": "맥스 올 팔스"
 }

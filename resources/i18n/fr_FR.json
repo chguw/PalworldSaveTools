@@ -1702,5 +1702,13 @@
     "update.git_pull": "Autoriser les mises à jour git pull",
     "edit_pals.ctx.fav": "Favoris",
     "edit_pals.ctx.bulk_ops": "Opérations en masse",
-    "map.sidebar.label": "Navigateur de cartes"
+    "map.sidebar.label": "Navigateur de cartes",
+    "func_manager.restore_all_pals.title": "Restaurer tous les amis",
+    "func_manager.restore_all_pals.confirm": "Cela restaurera tous les amis (HP, FullStomach, Sanity) et supprimera la maladie. Continuer?",
+    "func_manager.restore_all_pals.success": "{count} amis restaurés",
+    "func_manager.max_all_pals.title": "Max tous les copains",
+    "func_manager.max_all_pals.confirm": "Cela maximisera toutes les statistiques (niveau 80, IV 100, âmes 20, rang 5) pour tous les amis. Continuer?",
+    "func_manager.max_all_pals.success": "Nombre maximum d'amis : {count} amis",
+    "deletion.menu.restore_all_pals": "Restaurer tous les amis",
+    "deletion.menu.max_all_pals": "Max tous les copains"
 }

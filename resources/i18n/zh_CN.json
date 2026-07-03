@@ -1722,5 +1722,13 @@
     "update.git_pull": "允许 git pull 更新",
     "edit_pals.ctx.fav": "最爱",
     "edit_pals.ctx.bulk_ops": "批量操作",
-    "map.sidebar.label": "地图浏览器"
+    "map.sidebar.label": "地图浏览器",
+    "func_manager.restore_all_pals.title": "恢复所有好友",
+    "func_manager.restore_all_pals.confirm": "这将恢复所有朋友（HP、FullStomach、理智）并消除疾病。继续？",
+    "func_manager.restore_all_pals.success": "已恢复 {count} 个好友",
+    "func_manager.max_all_pals.title": "最大所有朋友",
+    "func_manager.max_all_pals.confirm": "这将最大化所有好友的所有统计数据（等级 80、IV 100、灵魂 20、等级 5）。继续？",
+    "func_manager.max_all_pals.success": "好友数量上限为 {count} 个",
+    "deletion.menu.restore_all_pals": "恢复所有好友",
+    "deletion.menu.max_all_pals": "最大所有朋友"
 }

@@ -1744,5 +1744,13 @@
     "update.git_pull": "Git-Pull-Updates zulassen",
     "edit_pals.ctx.fav": "Favorit",
     "edit_pals.ctx.bulk_ops": "Massenoperationen",
-    "map.sidebar.label": "Kartenbrowser"
+    "map.sidebar.label": "Kartenbrowser",
+    "func_manager.restore_all_pals.title": "Alle Freunde wiederherstellen",
+    "func_manager.restore_all_pals.confirm": "Dadurch werden alle Freunde (HP, FullStomach, Sanity) wiederhergestellt und Krankheiten beseitigt. Weitermachen?",
+    "func_manager.restore_all_pals.success": "{count} Freunde wiederhergestellt",
+    "func_manager.max_all_pals.title": "Max Alle Freunde",
+    "func_manager.max_all_pals.confirm": "Dadurch werden alle Statistiken (Level 80, IVs 100, Seelen 20, Rang 5) für alle Freunde maximiert. Weitermachen?",
+    "func_manager.max_all_pals.success": "Maximal {count} Freunde",
+    "deletion.menu.restore_all_pals": "Alle Freunde wiederherstellen",
+    "deletion.menu.max_all_pals": "Max Alle Freunde"
 }
