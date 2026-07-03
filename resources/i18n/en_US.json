@@ -2006,5 +2006,6 @@
     "docs.wiki.subcategory": "Subcategory",
     "docs.wiki.pals_count": "Pals ({count})",
     "edit_pals.ctx.fav": "Fav",
-    "edit_pals.ctx.bulk_ops": "Bulk Ops"
+    "edit_pals.ctx.bulk_ops": "Bulk Ops",
+    "map.sidebar.label": "Map Browser"
 }

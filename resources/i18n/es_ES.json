@@ -1713,5 +1713,6 @@
     "docs.wiki.pals_count": "Amigos ({count})",
     "update.git_pull": "Permitir actualizaciones de git pull",
     "edit_pals.ctx.fav": "favorito",
-    "edit_pals.ctx.bulk_ops": "Operaciones masivas"
+    "edit_pals.ctx.bulk_ops": "Operaciones masivas",
+    "map.sidebar.label": "Explorador de mapas"
 }

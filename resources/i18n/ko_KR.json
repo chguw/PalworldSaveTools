@@ -1718,5 +1718,6 @@
     "docs.wiki.pals_count": "친구({count})",
     "update.git_pull": "git pull 업데이트 허용",
     "edit_pals.ctx.fav": "즐겨찾기",
-    "edit_pals.ctx.bulk_ops": "대량 운영"
+    "edit_pals.ctx.bulk_ops": "대량 운영",
+    "map.sidebar.label": "맵 브라우저"
 }

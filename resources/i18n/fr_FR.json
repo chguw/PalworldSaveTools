@@ -1701,5 +1701,6 @@
     "docs.wiki.pals_count": "Copains ({count})",
     "update.git_pull": "Autoriser les mises à jour git pull",
     "edit_pals.ctx.fav": "Favoris",
-    "edit_pals.ctx.bulk_ops": "Opérations en masse"
+    "edit_pals.ctx.bulk_ops": "Opérations en masse",
+    "map.sidebar.label": "Navigateur de cartes"
 }

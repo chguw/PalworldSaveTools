@@ -1717,5 +1717,6 @@
     "docs.wiki.pals_count": "Друзья ({count})",
     "update.git_pull": "Разрешить обновления git pull",
     "edit_pals.ctx.fav": "Избранное",
-    "edit_pals.ctx.bulk_ops": "Массовые операции"
+    "edit_pals.ctx.bulk_ops": "Массовые операции",
+    "map.sidebar.label": "Браузер карт"
 }

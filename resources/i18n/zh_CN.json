@@ -1721,5 +1721,6 @@
     "docs.wiki.pals_count": "好友 ({count})",
     "update.git_pull": "允许 git pull 更新",
     "edit_pals.ctx.fav": "最爱",
-    "edit_pals.ctx.bulk_ops": "批量操作"
+    "edit_pals.ctx.bulk_ops": "批量操作",
+    "map.sidebar.label": "地图浏览器"
 }

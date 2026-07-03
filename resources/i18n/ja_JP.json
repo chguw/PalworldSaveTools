@@ -1719,5 +1719,6 @@
     "docs.wiki.pals_count": "友達 ({count})",
     "update.git_pull": "git pull アップデートを許可する",
     "edit_pals.ctx.fav": "お気に入り",
-    "edit_pals.ctx.bulk_ops": "一括運用"
+    "edit_pals.ctx.bulk_ops": "一括運用",
+    "map.sidebar.label": "マップブラウザ"
 }

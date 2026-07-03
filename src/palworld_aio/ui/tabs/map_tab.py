@@ -63,6 +63,8 @@ class MapTab(QWidget):
                 self.view.zoom_label.setText((t('zoom') if t else 'Zoom') + f': {int(1.0 * 100)}%')
                 self.view.zoom_changed.emit(1.0)
     def refresh_labels(self):
+        if hasattr(self, 'sidebar_label'):
+            self.sidebar_label.setText(t('map.sidebar.label') if t else 'Map Browser')
         if hasattr(self, 'search_input'):
             self.search_input.setPlaceholderText(t('map.search.placeholder') if t else 'Search guilds,leaders,bases...')
         if hasattr(self, 'toggle_map_bases'):
@@ -274,14 +276,37 @@ class MapTab(QWidget):
         self._sidebar_widget.setAttribute(Qt.WA_StyledBackground, True)
         self._sidebar_widget.setStyleSheet('background-color: rgba(14, 16, 20, 0.95);')
         sidebar_layout = QVBoxLayout(self._sidebar_widget)
-        sidebar_layout.setContentsMargins(0, 0, 0, 0)
-        sidebar_layout.setSpacing(0)
+        sidebar_layout.setContentsMargins(8, 8, 8, 8)
+        sidebar_layout.setSpacing(8)
+        self.sidebar_label = QLabel(t('map.sidebar.label') if t else 'Map Browser')
+        self.sidebar_label.setFont(QFont(constants.FONT_FAMILY, constants.FONT_SIZE, QFont.Bold))
+        self.sidebar_label.setObjectName('sectionHeader')
+        self.sidebar_label.setStyleSheet('QLabel#sectionHeader { margin-left: 0px; padding-left: 10px; }')
+        self.sidebar_label.setAlignment(Qt.AlignCenter)
+        sidebar_layout.addWidget(self.sidebar_label)
         search_tab_layout = QHBoxLayout()
         search_tab_layout.setContentsMargins(0, 0, 0, 0)
         search_tab_layout.setSpacing(4)
         self.search_input = QLineEdit()
         self.search_input.setObjectName('searchInput')
         self.search_input.setPlaceholderText(t('map.search.placeholder') if t else 'Search guilds,leaders,bases...')
+        self.search_input.setStyleSheet(f'''
+            QLineEdit {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 6px;
+                padding: 4px 8px;
+                color: #E2E8F0;
+                font-size: 11px;
+                min-height: 24px;
+            }}
+            QLineEdit:focus {{
+                border-color: rgba(125,211,252,0.4);
+            }}
+            QLineEdit::placeholder {{
+                color: #6B7280;
+            }}
+        ''')
         self.search_input.textChanged.connect(self._on_search_changed)
         search_tab_layout.addWidget(self.search_input, 1)
         self.bases_tab_btn = QPushButton(t('map.toggle.bases') if t else 'Bases')
@@ -299,35 +324,79 @@ class MapTab(QWidget):
         sidebar_layout.addLayout(search_tab_layout)
         self.map_tab_stack = QStackedWidget()
         self.map_tab_stack.setStyleSheet('QStackedWidget { border: none; background: transparent; margin: 0px; padding: 0px; }')
+        tree_css = f'''
+            QTreeWidget {{
+                background: rgba(18,20,24,0.65);
+                border: 1px solid rgba(125,211,252,0.15);
+                border-radius: 8px;
+                color: #A6B8C8;
+                font-size: 11px;
+                outline: none;
+            }}
+            QTreeWidget::item {{
+                padding: 4px 8px;
+                border-radius: 4px;
+            }}
+            QTreeWidget::item:hover {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QTreeWidget::item:selected {{
+                background: rgba(125,211,252,0.15);
+                color: #7DD3FC;
+                border-left: 3px solid #7DD3FC;
+            }}
+            QTreeWidget::item:selected:!active {{
+                background: rgba(125,211,252,0.1);
+                color: #7DD3FC;
+            }}
+            QHeaderView::section {{
+                background: rgba(8,10,16,0.9);
+                color: #7DD3FC;
+                padding: 6px 8px;
+                border: none;
+                border-bottom: 1px solid rgba(125,211,252,0.15);
+                font-weight: 600;
+                font-size: 10px;
+                text-align: center;
+            }}
+            QHeaderView::section:hover {{
+                background: rgba(125,211,252,0.08);
+            }}
+        '''
         self.base_tree = QTreeWidget()
         self.base_tree.setObjectName('baseTree')
         self.base_tree.setHeaderLabels([t('map.header.guild') if t else 'Guild', t('map.header.leader') if t else 'Leader', t('map.header.lastseen') if t else 'Last Seen', t('map.header.bases') if t else 'Bases'])
+        self.base_tree.setAlternatingRowColors(False)
+        self.base_tree.setRootIsDecorated(False)
         self.base_tree.itemExpanded.connect(self._on_item_expanded)
         self.base_tree.itemClicked.connect(self._on_tree_item_clicked)
         self.base_tree.itemDoubleClicked.connect(self._on_tree_item_double_clicked)
         self.base_tree.setContextMenuPolicy(Qt.CustomContextMenu)
         self.base_tree.customContextMenuRequested.connect(self._on_tree_context_menu)
         self.base_tree.setSortingEnabled(True)
+        self.base_tree.setStyleSheet(tree_css)
         self.base_tree.header().setMouseTracking(True)
         self.base_tree.header().setAttribute(Qt.WA_Hover, True)
         self.base_tree.header().setSectionsClickable(True)
-        self.base_tree.header().setStretchLastSection(False)
-        self.base_tree.header().setSectionResizeMode(QHeaderView.Stretch)
+        self.base_tree.header().setStretchLastSection(True)
         self.base_tree.header().setDefaultAlignment(Qt.AlignCenter)
         self.base_tree.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.player_tree = QTreeWidget()
         self.player_tree.setObjectName('playerTree')
         self.player_tree.setHeaderLabels([t('map.header.player') if t else 'Player', t('map.info.level') if t else 'Level', t('map.header.lastseen') if t else 'Last Seen', t('player.pals') if t else 'Pals'])
+        self.player_tree.setAlternatingRowColors(False)
+        self.player_tree.setRootIsDecorated(False)
         self.player_tree.itemClicked.connect(self._on_tree_item_clicked)
         self.player_tree.itemDoubleClicked.connect(self._on_tree_item_double_clicked)
         self.player_tree.setContextMenuPolicy(Qt.CustomContextMenu)
         self.player_tree.customContextMenuRequested.connect(self._on_tree_context_menu)
         self.player_tree.setSortingEnabled(True)
+        self.player_tree.setStyleSheet(tree_css)
         self.player_tree.header().setMouseTracking(True)
         self.player_tree.header().setAttribute(Qt.WA_Hover, True)
         self.player_tree.header().setSectionsClickable(True)
-        self.player_tree.header().setStretchLastSection(False)
-        self.player_tree.header().setSectionResizeMode(QHeaderView.Stretch)
+        self.player_tree.header().setStretchLastSection(True)
         self.player_tree.header().setDefaultAlignment(Qt.AlignCenter)
         self.player_tree.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.map_tab_stack.addWidget(self.base_tree)
