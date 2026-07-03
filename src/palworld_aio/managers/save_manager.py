@@ -968,7 +968,7 @@ def _process_dps_scan_worker(args):
         save_param_array = gvas_file.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
         if not save_param_array:
             return (uid, pname, formatted_pals, illegal_pals)
-        for entry in save_param_array:
+        for idx, entry in enumerate(save_param_array):
             if not isinstance(entry, dict):
                 continue
             try:
@@ -1025,7 +1025,10 @@ def _process_dps_scan_worker(args):
                     m_list = []
                 learned = [SKILLMAP.get(w.split('::')[-1].lower(), w.split('::')[-1]) for w in m_list]
                 slot_id = sp.get('SlotId', {}).get('value', {})
-                container_id = str(slot_id.get('ContainerId', {}).get('value', {}).get('ID', {}).get('value', 'Unknown')).lower()
+                cid_val = slot_id.get('ContainerId', {}).get('value', 'Unknown')
+                if isinstance(cid_val, dict):
+                    cid_val = cid_val.get('ID', {}).get('value', 'Unknown')
+                container_id = str(cid_val).lower()
                 raw_data_val = entry.get('value', {}).get('RawData', {}).get('value', {})
                 guild_id = str(raw_data_val.get('group_id', 'Unknown')).lower()
                 name = resolve_name(char_id, NAMEMAP) or char_id
@@ -1066,7 +1069,9 @@ def _process_dps_scan_worker(args):
                     illegal_info = {'name': name, 'nickname': nick, 'cid': char_id, 'level': level, 'talent_hp': talent_hp, 'talent_shot': talent_shot, 'talent_defense': talent_defense, 'rank_hp': rank_hp, 'rank_attack': rank_attack, 'rank_defense': rank_defense, 'rank_craftspeed': rank_craftspeed, 'rank': rank, 'passive_count': passive_count, 'active_count': active_count, 'passive_skills': passive_skills_list, 'active_skills': active_skills_list, 'learned_skills': learned_skills_list, 'illegal_markers': illegal_markers, 'instance_id': inst_id, 'container_id': container_id, 'location': 'DPS Storage'}
                     illegal_pals.append(illegal_info)
             except Exception as e:
-                print(f'Error processing pal in DPS file: {e}')
+                import traceback
+                print(f'Error processing pal in DPS file [{idx}]: {e}')
+                traceback.print_exc()
                 continue
     except Exception as e:
         print(f'Error processing DPS file {dps_file}: {e}')
