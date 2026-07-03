@@ -951,7 +951,51 @@ def remove_invalid_pals_from_save(parent=None):
                 continue
             newslots.append(s)
         cont['value']['Slots']['value']['values'] = newslots
+    removed += _remove_invalid_pals_from_dps(valid_all, constants.current_save_path)
     return removed
+def _remove_invalid_pals_from_dps(valid_all, current_save_path):
+    players_dir = os.path.join(current_save_path, 'Players')
+    if not os.path.exists(players_dir):
+        return 0
+    total = 0
+    for fname in os.listdir(players_dir):
+        if not fname.endswith('_dps.sav'):
+            continue
+        dps_path = os.path.join(players_dir, fname)
+        try:
+            gvas = sav_to_gvasfile(dps_path)
+            arr = gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+            if not arr:
+                continue
+            changed = False
+            new_arr = []
+            for entry in arr:
+                if not isinstance(entry, dict):
+                    new_arr.append(entry)
+                    continue
+                sp_entry = entry.get('SaveParameter')
+                if not isinstance(sp_entry, dict):
+                    new_arr.append(entry)
+                    continue
+                sp = sp_entry.get('value', {})
+                if not isinstance(sp, dict):
+                    new_arr.append(entry)
+                    continue
+                cid = sp.get('CharacterID', {}).get('value', 'None')
+                if cid == 'None' or not cid:
+                    new_arr.append(entry)
+                    continue
+                if cid.lower() not in valid_all:
+                    changed = True
+                    total += 1
+                else:
+                    new_arr.append(entry)
+            if changed:
+                gvas.properties['SaveParameterArray']['value']['values'] = new_arr
+                gvasfile_to_sav(gvas, dps_path)
+        except Exception:
+            continue
+    return total
 def fix_missions(parent=None):
     if not constants.current_save_path:
         return {'total': 0, 'fixed': 0, 'skipped': 0}
@@ -1341,7 +1385,49 @@ def remove_invalid_passives_from_save(parent=None):
             with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
                 results = list(executor.map(process_player_file, player_files))
                 removed_count += sum(results)
+    removed_count += _remove_invalid_passives_from_dps(valid_passives, players_dir)
     return removed_count
+def _remove_invalid_passives_from_dps(valid_passives, players_dir):
+    total = 0
+    for fname in os.listdir(players_dir):
+        if not fname.endswith('_dps.sav'):
+            continue
+        dps_path = os.path.join(players_dir, fname)
+        try:
+            gvas = sav_to_gvasfile(dps_path)
+            arr = gvas.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+            if not arr:
+                continue
+            changed = False
+            for entry in arr:
+                if not isinstance(entry, dict):
+                    continue
+                sp_entry = entry.get('SaveParameter')
+                if not isinstance(sp_entry, dict):
+                    continue
+                sp = sp_entry.get('value', {})
+                if not isinstance(sp, dict):
+                    continue
+                ps_raw = sp.get('PassiveSkillList')
+                if not isinstance(ps_raw, dict):
+                    continue
+                ps_val = ps_raw.get('value')
+                passives = ps_val.get('values', []) if isinstance(ps_val, dict) else (ps_val if isinstance(ps_val, list) else [])
+                if not isinstance(passives, list):
+                    continue
+                filtered = [p for p in passives if p.lower() in valid_passives]
+                if len(filtered) != len(passives):
+                    total += len(passives) - len(filtered)
+                    changed = True
+                    if isinstance(ps_val, dict):
+                        sp['PassiveSkillList']['value']['values'] = filtered
+                    else:
+                        sp['PassiveSkillList']['value'] = filtered
+            if changed:
+                gvasfile_to_sav(gvas, dps_path)
+        except Exception:
+            continue
+    return total
 def unlock_all_technologies_for_player(player_uid, parent=None):
     if not constants.current_save_path:
         return False
