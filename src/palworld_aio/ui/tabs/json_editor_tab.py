@@ -202,6 +202,7 @@ class JsonEditorTab(QWidget):
         self._tree.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
         self._tree.header().setSectionResizeMode(1, QHeaderView.Stretch)
         self._tree.header().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        self._tree.header().setDefaultAlignment(Qt.AlignCenter)
         self._tree.setAlternatingRowColors(True)
         self._tree.setAnimated(True)
         self._tree.setStyleSheet(
