@@ -390,6 +390,7 @@ class GamePassSaveFixWidget(QWidget):
             destination = QFileDialog.getExistingDirectory(self, t('xgp.ui.select_destination'), initial)
             if not destination:
                 return
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             if hasattr(self, 'direct_saves_map') and saveName in self.direct_saves_map:
                 source_base = self.direct_saves_map[saveName]
             else:
@@ -421,6 +422,8 @@ class GamePassSaveFixWidget(QWidget):
             print(t('xgp.err.copy_exception', err=e))
             traceback.print_exc()
             self.message_signal.emit('critical', t('Error'), t('xgp.err.copy_failed', err=e))
+        finally:
+            QApplication.restoreOverrideCursor()
     def is_admin(self):
         try:
             return ctypes.windll.shell32.IsUserAnAdmin() != 0

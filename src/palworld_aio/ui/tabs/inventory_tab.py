@@ -1062,9 +1062,13 @@ class PlayerInventoryTab(QWidget):
         self.current_player_name = name
         self.player_select_btn.setText(display)
         self.modified = False
-        self._show_inventory()
-        self.inventory = get_player_inventory(self.current_player_uid)
-        self._refresh_display()
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            self._show_inventory()
+            self.inventory = get_player_inventory(self.current_player_uid)
+            self._refresh_display()
+        finally:
+            QApplication.restoreOverrideCursor()
     def clear_player(self):
         if self._syncing:
             return
@@ -1126,26 +1130,34 @@ class PlayerInventoryTab(QWidget):
             QApplication.processEvents()
             QThread.msleep(5)
         if chosen == '__clear__':
-            self._clear_display()
-            self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
-            self.current_player_uid = None
-            self.current_player_name = None
-            if hasattr(self.parent_window, 'pal_editor_tab'):
-                self._syncing = True
-                self.parent_window.pal_editor_tab.clear_player()
-                self._syncing = False
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            try:
+                self._clear_display()
+                self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
+                self.current_player_uid = None
+                self.current_player_name = None
+                if hasattr(self.parent_window, 'pal_editor_tab'):
+                    self._syncing = True
+                    self.parent_window.pal_editor_tab.clear_player()
+                    self._syncing = False
+            finally:
+                QApplication.restoreOverrideCursor()
         elif chosen:
-            self.current_player_uid = chosen['uid']
-            self.current_player_name = chosen['name']
-            self.player_select_btn.setText(chosen['display'])
-            self.modified = False
-            self._show_inventory()
-            self.inventory = get_player_inventory(self.current_player_uid)
-            self._refresh_display()
-            if hasattr(self.parent_window, 'pal_editor_tab'):
-                self._syncing = True
-                self.parent_window.pal_editor_tab.select_player(chosen['uid'], chosen['name'], chosen['display'])
-                self._syncing = False
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            try:
+                self.current_player_uid = chosen['uid']
+                self.current_player_name = chosen['name']
+                self.player_select_btn.setText(chosen['display'])
+                self.modified = False
+                self._show_inventory()
+                self.inventory = get_player_inventory(self.current_player_uid)
+                self._refresh_display()
+                if hasattr(self.parent_window, 'pal_editor_tab'):
+                    self._syncing = True
+                    self.parent_window.pal_editor_tab.select_player(chosen['uid'], chosen['name'], chosen['display'])
+                    self._syncing = False
+            finally:
+                QApplication.restoreOverrideCursor()
     def _show_inventory(self):
         self.placeholder_label.hide()
         self.inv_tabs.show()
@@ -1167,11 +1179,15 @@ class PlayerInventoryTab(QWidget):
         reply = self._themed_message_box(QMessageBox.Question, t('inventory.max_all_abilities_confirm.title', default='Max All Abilities'), t('inventory.max_all_abilities_confirm.msg', default='Max all relic abilities for this player?'), QMessageBox.Yes | QMessageBox.No)
         if reply != QMessageBox.Yes:
             return
-        max_all_abilities([self.current_player_uid])
-        constants.invalidate_container_lookup()
-        from palworld_aio.inventory.inventory_manager import get_player_inventory
-        self.inventory = get_player_inventory(self.current_player_uid)
-        self._refresh_display()
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            max_all_abilities([self.current_player_uid])
+            constants.invalidate_container_lookup()
+            from palworld_aio.inventory.inventory_manager import get_player_inventory
+            self.inventory = get_player_inventory(self.current_player_uid)
+            self._refresh_display()
+        finally:
+            QApplication.restoreOverrideCursor()
         self._themed_message_box(QMessageBox.Information, t('Done') if t else 'Done', t('inventory.max_all_abilities_done', default='Abilities maxed to maximum rank.'))
     def _on_add_all_key_items(self):
         if not self.current_player_uid:
@@ -1179,6 +1195,7 @@ class PlayerInventoryTab(QWidget):
             return
         if not self.inventory:
             return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             all_items = ItemData.get_all_items()
             unlock_assets = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
@@ -1223,6 +1240,8 @@ class PlayerInventoryTab(QWidget):
             self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items_success.title', default='Add All Key Items'), t('inventory.add_all_key_items_success.msg', count=total, default=f'Added {total} missing key items.'))
         except Exception as e:
             print(f'Error in _on_add_all_key_items: {e}')
+        finally:
+            QApplication.restoreOverrideCursor()
     def _refresh_display(self):
         if not self.inventory:
             return
@@ -1368,9 +1387,13 @@ class PlayerInventoryTab(QWidget):
             return
         if not container:
             return
-        _consolidate_container_slots(container, ct, SINGLETON_TYPE_A)
-        self._update_raw_save_data(ct, container)
-        self._refresh_display()
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            _consolidate_container_slots(container, ct, SINGLETON_TYPE_A)
+            self._update_raw_save_data(ct, container)
+            self._refresh_display()
+        finally:
+            QApplication.restoreOverrideCursor()
     def _on_equipment_loadout(self):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
@@ -1436,14 +1459,18 @@ class PlayerInventoryTab(QWidget):
         reply = self._themed_message_box(QMessageBox.Question, t('inventory.clear_confirm_title', default='Clear Inventory'), t('inventory.clear_confirm_msg', default='Remove all items from inventory? (Key items, equipment, and unlocks will be preserved)'), QMessageBox.Yes | QMessageBox.No)
         if reply != QMessageBox.Yes:
             return
-        for ct in ('main',):
-            container = self.inventory.get_container(ct) if self.inventory else None
-            if container:
-                container.update_slots([])
-                self._update_raw_save_data(ct, container)
-        if self.inventory:
-            self.inventory.save()
-        self._refresh_display()
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            for ct in ('main',):
+                container = self.inventory.get_container(ct) if self.inventory else None
+                if container:
+                    container.update_slots([])
+                    self._update_raw_save_data(ct, container)
+            if self.inventory:
+                self.inventory.save()
+            self._refresh_display()
+        finally:
+            QApplication.restoreOverrideCursor()
     def _clear_all_key_items(self):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
@@ -1453,32 +1480,36 @@ class PlayerInventoryTab(QWidget):
             return
         if not self.inventory:
             return
-        self.inventory.clear_all_bounty_tokens()
-        key_container = self.inventory.get_container('key')
-        if key_container:
-            key_container.update_slots([])
-            self._update_raw_save_data('key', key_container)
-        foodbag = self.inventory.get_container('foodbag')
-        if foodbag:
-            foodbag.update_slots([])
-            self._update_raw_save_data('foodbag', foodbag)
-        armor = self.inventory.get_container('armor')
-        if armor:
-            armor.update_slots([s for s in armor.slots if s.get('slot_index', 0) not in (6, 7)])
-            self._update_raw_save_data('armor', armor)
-        weapons = self.inventory.get_container('weapons')
-        if weapons:
-            weapons.update_slots([s for s in weapons.slots if s.get('slot_index', 0) < 4])
-            self._update_raw_save_data('weapons', weapons)
-        self.inventory._calculate_max_slots()
-        main_container = self.inventory.get_container('main')
-        if main_container:
-            max_slots = self.inventory.max_slots
-            main_container.update_slots([s for s in main_container.slots if s.get('slot_index', 0) < max_slots])
-            self._update_raw_save_data('main', main_container)
-        self.inventory.save()
-        self.selected_item = None
-        self._refresh_display()
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            self.inventory.clear_all_bounty_tokens()
+            key_container = self.inventory.get_container('key')
+            if key_container:
+                key_container.update_slots([])
+                self._update_raw_save_data('key', key_container)
+            foodbag = self.inventory.get_container('foodbag')
+            if foodbag:
+                foodbag.update_slots([])
+                self._update_raw_save_data('foodbag', foodbag)
+            armor = self.inventory.get_container('armor')
+            if armor:
+                armor.update_slots([s for s in armor.slots if s.get('slot_index', 0) not in (6, 7)])
+                self._update_raw_save_data('armor', armor)
+            weapons = self.inventory.get_container('weapons')
+            if weapons:
+                weapons.update_slots([s for s in weapons.slots if s.get('slot_index', 0) < 4])
+                self._update_raw_save_data('weapons', weapons)
+            self.inventory._calculate_max_slots()
+            main_container = self.inventory.get_container('main')
+            if main_container:
+                max_slots = self.inventory.max_slots
+                main_container.update_slots([s for s in main_container.slots if s.get('slot_index', 0) < max_slots])
+                self._update_raw_save_data('main', main_container)
+            self.inventory.save()
+            self.selected_item = None
+            self._refresh_display()
+        finally:
+            QApplication.restoreOverrideCursor()
     def _clear_all_equipment(self):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
@@ -1486,14 +1517,18 @@ class PlayerInventoryTab(QWidget):
         reply = self._themed_message_box(QMessageBox.Question, t('inventory.equip_clear_title', default='Clear Equipment'), t('inventory.equip_clear_msg', default='Remove all equipment from weapon, armor, and food slots?'), QMessageBox.Yes | QMessageBox.No)
         if reply != QMessageBox.Yes:
             return
-        for ct in ('weapons', 'armor', 'foodbag'):
-            container = self.inventory.get_container(ct) if self.inventory else None
-            if container:
-                container.update_slots([])
-                self._update_raw_save_data(ct, container)
-        if self.inventory:
-            self.inventory.save()
-        self._refresh_display()
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            for ct in ('weapons', 'armor', 'foodbag'):
+                container = self.inventory.get_container(ct) if self.inventory else None
+                if container:
+                    container.update_slots([])
+                    self._update_raw_save_data(ct, container)
+            if self.inventory:
+                self.inventory.save()
+            self._refresh_display()
+        finally:
+            QApplication.restoreOverrideCursor()
     def _on_unlock_all_map_clicked(self):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))

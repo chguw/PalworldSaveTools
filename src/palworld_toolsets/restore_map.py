@@ -136,7 +136,11 @@ def restore_map():
                 self.activateWindow()
                 self.raise_()
         def on_yes(self):
-            clear_fog_in_all_subfolders()
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            try:
+                clear_fog_in_all_subfolders()
+            finally:
+                QApplication.restoreOverrideCursor()
             self.result_label.setText(t('Fog cleared successfully!'))
             self.yes_button.setEnabled(False)
             self.no_button.setEnabled(False)

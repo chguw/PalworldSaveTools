@@ -1,6 +1,6 @@
 import os
 from palsav import json_tools
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QStackedWidget, QDialog, QPushButton, QSizePolicy, QHeaderView
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QStackedWidget, QDialog, QPushButton, QSizePolicy, QHeaderView, QApplication
 from PySide6.QtCore import Qt, QRectF, QPointF, QPoint, QSize, QTimer, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QPixmap, QPen, QBrush, QColor, QPainter, QFont, QIcon
 from i18n import t
@@ -1457,6 +1457,7 @@ class MapTab(QWidget):
             return
         reply = show_question(self, t('confirm.title') if t else 'Confirm', t('confirm.delete_base') if t else f"Delete base at X:{int(base_data['coords'][0])},Y:{int(base_data['coords'][1])}?")
         if reply:
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
                 img_x, img_y = base_data['img_coords']
                 self._play_effect(DeleteEffect, img_x, img_y)
@@ -1475,13 +1476,16 @@ class MapTab(QWidget):
                 show_information(self, t('success.title') if t else 'Success', t('base.delete.success') if t else 'Base deleted successfully')
             except Exception as e:
                 show_critical(self, t('error.title') if t else 'Error', f'Failed to delete base: {str(e)}')
+            finally:
+                QApplication.restoreOverrideCursor()
     def _export_base(self, base_data):
+        bid = str(base_data['base_id'])
+        default_name = f'base_{bid[:8]}'
+        file_path, selected_filter = QFileDialog.getSaveFileName(self, t('base.export.title') if t else 'Export Base', default_name, 'PSTB Base Files (*.pstbase);;JSON Files (*.json)')
+        if not file_path:
+            return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
-            bid = str(base_data['base_id'])
-            default_name = f'base_{bid[:8]}'
-            file_path, selected_filter = QFileDialog.getSaveFileName(self, t('base.export.title') if t else 'Export Base', default_name, 'PSTB Base Files (*.pstbase);;JSON Files (*.json)')
-            if not file_path:
-                return
             is_pstbase = 'pstbase' in selected_filter if selected_filter else file_path.endswith('.pstbase')
             if is_pstbase:
                 if not file_path.endswith('.pstbase'):
@@ -1504,7 +1508,10 @@ class MapTab(QWidget):
             show_information(self, t('success.title') if t else 'Success', t('base.export.success') if t else 'Base exported successfully')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f'Failed to export base: {str(e)}')
+        finally:
+            QApplication.restoreOverrideCursor()
     def _adjust_base_radius(self, base_data):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             bid = str(base_data['base_id'])
             wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
@@ -1549,10 +1556,13 @@ class MapTab(QWidget):
                     show_critical(self, t('error.title') if t else 'Error', t('base.radius.failed') if t else 'Failed to update base radius')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f'Failed to adjust base radius: {str(e)}')
+        finally:
+            QApplication.restoreOverrideCursor()
     def _rename_guild(self, guild_id):
         current_name = self.guilds_data.get(guild_id, {}).get('guild_name', '')
         new_name = InputDialog.get_text(t('guild.rename.title') if t else 'Rename Guild', t('guild.rename.prompt') if t else 'Enter new guild name:', self, initial_text=current_name)
         if new_name:
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
                 rename_guild(guild_id, new_name)
                 self.refresh()
@@ -1561,6 +1571,8 @@ class MapTab(QWidget):
                 show_information(self, t('success.title') if t else 'Success', t('guild.rename.success') if t else 'Guild renamed successfully')
             except Exception as e:
                 show_critical(self, t('error.title') if t else 'Error', f'Failed to rename guild: {str(e)}')
+            finally:
+                QApplication.restoreOverrideCursor()
     def _delete_guild(self, guild_id):
         from ...managers.data_manager import delete_guild, load_exclusions
         guild_name = self.guilds_data.get(guild_id, {}).get('guild_name', 'Unknown')
@@ -1597,6 +1609,7 @@ class MapTab(QWidget):
                 pass
         reply = show_question(self, t('confirm.title') if t else 'Confirm', f'Delete guild "{guild_name}" and all {base_count} bases?\n\nThis will also delete all characters owned by guild members.')
         if reply:
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
                 if delete_guild(guild_id):
                     self.refresh()
@@ -1610,52 +1623,58 @@ class MapTab(QWidget):
                     show_warning(self, t('error.title') if t else 'Error', 'Failed to delete guild - guild not found or not a guild type')
             except Exception as e:
                 show_critical(self, t('error.title') if t else 'Error', f'Failed to delete guild: {str(e)}')
+            finally:
+                QApplication.restoreOverrideCursor()
     def _import_base_to_guild(self, guild_id):
         file_paths, _ = QFileDialog.getOpenFileNames(self, t('base.import_multi') if t else 'Import Bases(Multi-File)', '', 'Base Files (*.json *.pstbase)')
         if not file_paths:
             return
-        successful_imports = 0
-        failed_imports = 0
-        failed_files = []
-        imported_coords_list = []
-        for file_path in file_paths:
-            try:
-                exported_data = load_base_file(file_path)
-                if import_base_json(constants.loaded_level_json, exported_data, guild_id):
-                    constants.invalidate_container_lookup()
-                    if self.parent_window and hasattr(self.parent_window, 'base_inventory_tab'):
-                        self.parent_window.base_inventory_tab.manager.invalidate_cache()
-                    successful_imports += 1
-                    try:
-                        raw_t = exported_data['base_camp']['value']['RawData']['value']['transform']['translation']
-                        pt = palworld_coord.sav_to_map_by_z(raw_t['x'], raw_t['y'], raw_t.get('z', 0))
-                        bx, by = (pt.x, pt.y)
-                        img_x, img_y = self._to_image_coordinates(bx, by, self.map_width, self.map_height)
-                        imported_coords_list.append((bx, by, img_x, img_y))
-                        self._play_effect(ImportEffect, img_x, img_y)
-                    except:
-                        pass
-                else:
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            successful_imports = 0
+            failed_imports = 0
+            failed_files = []
+            imported_coords_list = []
+            for file_path in file_paths:
+                try:
+                    exported_data = load_base_file(file_path)
+                    if import_base_json(constants.loaded_level_json, exported_data, guild_id):
+                        constants.invalidate_container_lookup()
+                        if self.parent_window and hasattr(self.parent_window, 'base_inventory_tab'):
+                            self.parent_window.base_inventory_tab.manager.invalidate_cache()
+                        successful_imports += 1
+                        try:
+                            raw_t = exported_data['base_camp']['value']['RawData']['value']['transform']['translation']
+                            pt = palworld_coord.sav_to_map_by_z(raw_t['x'], raw_t['y'], raw_t.get('z', 0))
+                            bx, by = (pt.x, pt.y)
+                            img_x, img_y = self._to_image_coordinates(bx, by, self.map_width, self.map_height)
+                            imported_coords_list.append((bx, by, img_x, img_y))
+                            self._play_effect(ImportEffect, img_x, img_y)
+                        except:
+                            pass
+                    else:
+                        failed_imports += 1
+                        failed_files.append(os.path.basename(file_path) + '(import failed)')
+                except Exception as e:
                     failed_imports += 1
-                    failed_files.append(os.path.basename(file_path) + '(import failed)')
-            except Exception as e:
-                failed_imports += 1
-                failed_files.append(os.path.basename(file_path) + f'(error: {str(e)})')
-        self.refresh()
-        if self.parent_window:
-            self.parent_window.refresh_all()
-        if imported_coords_list:
-            _, _, img_x, img_y = imported_coords_list[0]
-            self.view.animate_to_coords(img_x, img_y, zoom_level=self.config['zoom']['double_click_target'])
-        if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
-            self._show_all_radius_rings()
-        if successful_imports > 0:
-            msg = f'Successfully imported {successful_imports} base(s).'
-            if failed_imports > 0:
-                msg += f'\nFailed to import {failed_imports} file(s):\n' + '\n'.join(failed_files)
-            show_information(self, t('success.title') if t else 'Success', msg)
-        else:
-            show_warning(self, t('error.title') if t else 'Error', f'Failed to import any bases.\n' + '\n'.join(failed_files))
+                    failed_files.append(os.path.basename(file_path) + f'(error: {str(e)})')
+            self.refresh()
+            if self.parent_window:
+                self.parent_window.refresh_all()
+            if imported_coords_list:
+                _, _, img_x, img_y = imported_coords_list[0]
+                self.view.animate_to_coords(img_x, img_y, zoom_level=self.config['zoom']['double_click_target'])
+            if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
+                self._show_all_radius_rings()
+            if successful_imports > 0:
+                msg = f'Successfully imported {successful_imports} base(s).'
+                if failed_imports > 0:
+                    msg += f'\nFailed to import {failed_imports} file(s):\n' + '\n'.join(failed_files)
+                show_information(self, t('success.title') if t else 'Success', msg)
+            else:
+                show_warning(self, t('error.title') if t else 'Error', f'Failed to import any bases.\n' + '\n'.join(failed_files))
+        finally:
+            QApplication.restoreOverrideCursor()
     def _export_bases_for_guild(self, guild_id):
         guild_name = self.guilds_data.get(guild_id, {}).get('guild_name', '')
         if not guild_name:
@@ -1670,43 +1689,47 @@ class MapTab(QWidget):
         export_dir = QFileDialog.getExistingDirectory(self, f'Select Export Directory for "{guild_name}"')
         if not export_dir:
             return
-        level_sav = os.path.join(constants.current_save_path, 'Level.sav')
-        successful_exports = 0
-        failed_exports = 0
-        failed_bases = []
-        for base_data in guild_bases:
-            bid = str(base_data['base_id'])
-            try:
-                safe_gname = ''.join((c for c in guild_name if c.isalnum() or c in (' ', '-', '_'))).rstrip()
-                ext = '.pstbase' if compressed else '.json'
-                filename = f'base_{bid}_{safe_gname}{ext}'
-                file_path = os.path.join(export_dir, filename)
-                if compressed:
-                    if not os.path.exists(level_sav):
-                        failed_exports += 1
-                        failed_bases.append(f'Base {bid}(Level.sav not found)')
-                        continue
-                    export_base_backup(level_sav, bid, file_path, compressed=True)
-                else:
-                    data = export_base_json(constants.loaded_level_json, bid)
-                    if not data:
-                        failed_exports += 1
-                        failed_bases.append(f'Base {bid}(no data)')
-                        continue
-                    json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
-                successful_exports += 1
-                img_x, img_y = base_data['img_coords']
-                self._play_effect(ExportEffect, img_x, img_y)
-            except Exception as e:
-                failed_exports += 1
-                failed_bases.append(f'Base {bid}(error: {str(e)})')
-        if successful_exports > 0:
-            msg = f'Successfully exported {successful_exports} base(s)for guild "{guild_name}" to {export_dir}.'
-            if failed_exports > 0:
-                msg += f'\nFailed to export {failed_exports} base(s):\n' + '\n'.join(failed_bases)
-            show_information(self, t('success.title'), msg)
-        else:
-            show_warning(self, t('error.title'), f'Failed to export any bases for guild "{guild_name}".\n' + '\n'.join(failed_bases))
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            level_sav = os.path.join(constants.current_save_path, 'Level.sav')
+            successful_exports = 0
+            failed_exports = 0
+            failed_bases = []
+            for base_data in guild_bases:
+                bid = str(base_data['base_id'])
+                try:
+                    safe_gname = ''.join((c for c in guild_name if c.isalnum() or c in (' ', '-', '_'))).rstrip()
+                    ext = '.pstbase' if compressed else '.json'
+                    filename = f'base_{bid}_{safe_gname}{ext}'
+                    file_path = os.path.join(export_dir, filename)
+                    if compressed:
+                        if not os.path.exists(level_sav):
+                            failed_exports += 1
+                            failed_bases.append(f'Base {bid}(Level.sav not found)')
+                            continue
+                        export_base_backup(level_sav, bid, file_path, compressed=True)
+                    else:
+                        data = export_base_json(constants.loaded_level_json, bid)
+                        if not data:
+                            failed_exports += 1
+                            failed_bases.append(f'Base {bid}(no data)')
+                            continue
+                        json_tools.dump(data, file_path, cls=json_tools.CustomEncoder, indent=2)
+                    successful_exports += 1
+                    img_x, img_y = base_data['img_coords']
+                    self._play_effect(ExportEffect, img_x, img_y)
+                except Exception as e:
+                    failed_exports += 1
+                    failed_bases.append(f'Base {bid}(error: {str(e)})')
+            if successful_exports > 0:
+                msg = f'Successfully exported {successful_exports} base(s)for guild "{guild_name}" to {export_dir}.'
+                if failed_exports > 0:
+                    msg += f'\nFailed to export {failed_exports} base(s):\n' + '\n'.join(failed_bases)
+                show_information(self, t('success.title'), msg)
+            else:
+                show_warning(self, t('error.title'), f'Failed to export any bases for guild "{guild_name}".\n' + '\n'.join(failed_bases))
+        finally:
+            QApplication.restoreOverrideCursor()
     def _delete_player(self, player_data):
         from ...managers.data_manager import load_exclusions, delete_player
         player_uid = player_data.get('player_uid', '')
@@ -1716,19 +1739,24 @@ class MapTab(QWidget):
         if uid_clean in [ex.replace('-', '').lower() for ex in constants.exclusions.get('players', [])]:
             show_warning(self, t('warning.title') if t else 'Warning', t('deletion.warning.protected_player') if t else f'Player "{player_name}" is in exclusion list and cannot be deleted.')
             return
-        delete_player(player_uid)
-        self.refresh()
-        if self.parent_window:
-            self.parent_window.refresh_all()
-        self._hide_all_radius_rings()
-        if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
-            self._show_all_radius_rings()
-        show_information(self, t('Done') if t else 'Done', t('deletion.player_deleted') if t else 'Player deleted')
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            delete_player(player_uid)
+            self.refresh()
+            if self.parent_window:
+                self.parent_window.refresh_all()
+            self._hide_all_radius_rings()
+            if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
+                self._show_all_radius_rings()
+            show_information(self, t('Done') if t else 'Done', t('deletion.player_deleted') if t else 'Player deleted')
+        finally:
+            QApplication.restoreOverrideCursor()
     def _rename_player(self, player_data):
         player_uid = player_data.get('player_uid', '')
         current_name = player_data.get('player_name', 'Unknown')
         new_name = InputDialog.get_text(t('player.rename.title') if t else 'Rename Player', t('player.rename.prompt') if t else 'Enter new player name:', self, initial_text=current_name)
         if new_name:
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
                 from ...managers.player_manager import rename_player
                 if rename_player(player_uid, new_name):
@@ -1740,9 +1768,12 @@ class MapTab(QWidget):
                     show_warning(self, t('error.title') if t else 'Error', 'Failed to rename player')
             except Exception as e:
                 show_critical(self, t('error.title') if t else 'Error', f'Failed to rename player: {str(e)}')
+            finally:
+                QApplication.restoreOverrideCursor()
     def _unlock_viewing_cage(self, player_data):
         player_uid = player_data.get('player_uid', '')
         player_name = player_data.get('player_name', 'Unknown')
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             from ...managers.func_manager import unlock_viewing_cage_for_player
             if unlock_viewing_cage_for_player(player_uid, self):
@@ -1751,9 +1782,12 @@ class MapTab(QWidget):
                 show_warning(self, t('error.title') if t else 'Error', t('player.viewing_cage.failed') if t else 'Failed to unlock viewing cage')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f'Failed to unlock viewing cage: {str(e)}')
+        finally:
+            QApplication.restoreOverrideCursor()
     def _unlock_technologies(self, player_data):
         player_uid = player_data.get('player_uid', '')
         player_name = player_data.get('player_name', 'Unknown')
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             from ...managers.func_manager import unlock_all_technologies_for_player
             if unlock_all_technologies_for_player(player_uid, self):
@@ -1762,6 +1796,8 @@ class MapTab(QWidget):
                 show_warning(self, t('error.title') if t else 'Error', t('player.unlock_technologies.failed') if t else 'Unlock All Technologies failed')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f'Failed to unlock technologies: {str(e)}')
+        finally:
+            QApplication.restoreOverrideCursor()
     def _setup_preview_ring(self, base_data):
         if not isinstance(self.selected_base_marker, BaseMarker):
             return
@@ -1967,31 +2003,43 @@ class MapTab(QWidget):
         self._update_zone_items()
     def _export_zones(self):
         from palworld_aio.managers import zone_manager
+        default_name = 'protection_zones.json'
+        file_path, _ = QFileDialog.getSaveFileName(self, t('zone_management.export_title') if t else 'Export Protection Zones', default_name, 'JSON Files(*.json)')
+        if not file_path:
+            return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
-            default_name = 'protection_zones.json'
-            file_path, _ = QFileDialog.getSaveFileName(self, t('zone_management.export_title') if t else 'Export Protection Zones', default_name, 'JSON Files(*.json)')
-            if file_path:
-                zone_data = zone_manager.export_zones()
-                json_tools.dump(zone_data, file_path, indent=2)
-                show_information(self, t('success.title') if t else 'Success', t('zone_management.export_success') if t else 'Protection zones exported successfully')
+            zone_data = zone_manager.export_zones()
+            json_tools.dump(zone_data, file_path, indent=2)
+            show_information(self, t('success.title') if t else 'Success', t('zone_management.export_success') if t else 'Protection zones exported successfully')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f"{(t('zone_management.export_failed') if t else 'Failed to export zones')}: {str(e)}")
+        finally:
+            QApplication.restoreOverrideCursor()
     def _import_zones(self):
         from palworld_aio.managers import zone_manager
+        file_path, _ = QFileDialog.getOpenFileName(self, t('zone_management.import_title') if t else 'Import Protection Zones', '', 'JSON Files(*.json)')
+        if not file_path:
+            return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
-            file_path, _ = QFileDialog.getOpenFileName(self, t('zone_management.import_title') if t else 'Import Protection Zones', '', 'JSON Files(*.json)')
-            if file_path:
-                zone_data = json_tools.load(file_path)
-                if zone_manager.import_zones(zone_data):
-                    self._update_zone_items()
-                    show_information(self, t('success.title') if t else 'Success', t('zone_management.import_success') if t else 'Protection zones imported successfully')
-                else:
-                    show_warning(self, t('error.title') if t else 'Error', t('zone_management.import_failed') if t else 'Failed to import zones. Invalid file format.')
+            zone_data = json_tools.load(file_path)
+            if zone_manager.import_zones(zone_data):
+                self._update_zone_items()
+                show_information(self, t('success.title') if t else 'Success', t('zone_management.import_success') if t else 'Protection zones imported successfully')
+            else:
+                show_warning(self, t('error.title') if t else 'Error', t('zone_management.import_failed') if t else 'Failed to import zones. Invalid file format.')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f"{(t('zone_management.import_failed') if t else 'Failed to import zones')}: {str(e)}")
+        finally:
+            QApplication.restoreOverrideCursor()
     def _clear_zones(self):
         from palworld_aio.managers import zone_manager
         confirmed = show_question(self, t('zone_exclusion.delete_zone') if t else 'Delete Zone', t('zone_exclusion.confirm_delete_all') if t else 'Are you sure you want to delete all zones?')
         if confirmed:
-            zone_manager.clear_all_zones()
-            self._update_zone_items()
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            try:
+                zone_manager.clear_all_zones()
+                self._update_zone_items()
+            finally:
+                QApplication.restoreOverrideCursor()

@@ -2820,7 +2820,11 @@ class BaseInventoryTab(QWidget):
                 if guild_id == '__clear__':
                     self._clear_guild_selection()
                 elif guild_id:
-                    self._on_guild_changed(guild_id)
+                    QApplication.setOverrideCursor(Qt.WaitCursor)
+                    try:
+                        self._on_guild_changed(guild_id)
+                    finally:
+                        QApplication.restoreOverrideCursor()
             popup.close()
         list_widget.itemClicked.connect(select_guild)
         popup.setFixedWidth(self.guild_button.width())
@@ -2880,7 +2884,11 @@ class BaseInventoryTab(QWidget):
                 if base_id == '__clear__':
                     self._clear_base_selection()
                 elif base_id:
-                    self._on_base_changed(base_id)
+                    QApplication.setOverrideCursor(Qt.WaitCursor)
+                    try:
+                        self._on_base_changed(base_id)
+                    finally:
+                        QApplication.restoreOverrideCursor()
             popup.close()
         list_widget.itemClicked.connect(select_base)
         popup.setFixedWidth(self.base_button.width())
@@ -2900,40 +2908,44 @@ class BaseInventoryTab(QWidget):
         self.replace_button.setEnabled(False)
         self._clear_display()
     def _load_guilds(self):
-        self._guilds_data = []
-        self._bases_data = []
-        self._current_guild_id = None
-        self._current_guild_name = ''
-        self._current_base_id = None
-        self._current_base_name = ''
-        self.guild_button.setText(t('base_inventory.select_guild') if t else 'Select Guild')
-        self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
-        guilds = self.manager.load_guilds()
-        if not guilds:
-            self.guild_button.setText(t('base_inventory.no_save_loaded') if t else 'No save file loaded')
-            self.guild_button.setEnabled(False)
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            self._guilds_data = []
+            self._bases_data = []
+            self._current_guild_id = None
+            self._current_guild_name = ''
+            self._current_base_id = None
+            self._current_base_name = ''
+            self.guild_button.setText(t('base_inventory.select_guild') if t else 'Select Guild')
             self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
-            self.base_button.setEnabled(False)
-            self.replace_button.setEnabled(False)
-            self._clear_display()
-            return
-        guilds_with_bases = []
-        for guild in guilds:
-            bases = self.manager.load_bases_for_guild(guild['id'])
-            if bases:
-                guilds_with_bases.append(guild)
-        if not guilds_with_bases:
-            self._guilds_data = guilds
-            self.guild_button.setText(t('base_inventory.no_guilds_with_bases') if t else 'No guilds with bases found')
+            guilds = self.manager.load_guilds()
+            if not guilds:
+                self.guild_button.setText(t('base_inventory.no_save_loaded') if t else 'No save file loaded')
+                self.guild_button.setEnabled(False)
+                self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
+                self.base_button.setEnabled(False)
+                self.replace_button.setEnabled(False)
+                self._clear_display()
+                return
+            guilds_with_bases = []
+            for guild in guilds:
+                bases = self.manager.load_bases_for_guild(guild['id'])
+                if bases:
+                    guilds_with_bases.append(guild)
+            if not guilds_with_bases:
+                self._guilds_data = guilds
+                self.guild_button.setText(t('base_inventory.no_guilds_with_bases') if t else 'No guilds with bases found')
+                self.guild_button.setEnabled(True)
+                self.base_button.setText(t('base_inventory.no_bases_available') if t else 'No bases available')
+                self.base_button.setEnabled(False)
+                self._clear_display()
+                return
+            self._guilds_data = guilds_with_bases
             self.guild_button.setEnabled(True)
-            self.base_button.setText(t('base_inventory.no_bases_available') if t else 'No bases available')
-            self.base_button.setEnabled(False)
+            self.base_button.setEnabled(True)
             self._clear_display()
-            return
-        self._guilds_data = guilds_with_bases
-        self.guild_button.setEnabled(True)
-        self.base_button.setEnabled(True)
-        self._clear_display()
+        finally:
+            QApplication.restoreOverrideCursor()
     def _on_guild_changed(self, guild_id):
         if guild_id is None:
             self._bases_data = []
@@ -2942,17 +2954,21 @@ class BaseInventoryTab(QWidget):
             self.base_button.setText(t('base_inventory.select_base') if t else 'Select Base')
             self._clear_display()
             return
-        self._current_guild_id = guild_id
-        guild = next((g for g in self._guilds_data if str(g['id']) == str(guild_id)), None)
-        self._current_guild_name = f"{guild['name']} (Level {guild['level']})" if guild else str(guild_id)
-        self.guild_button.setText(self._current_guild_name)
-        guild_id_key = str(guild_id).replace('-', '').lower()
-        if hasattr(self, '_structure_locations') and self._structure_locations and guild_id_key and (guild_id_key in self._structure_locations):
-            self._load_bases_for_guild_filtered_by_structure(guild_id)
-        elif hasattr(self, '_item_locations') and self._item_locations and guild_id_key and (guild_id_key in self._item_locations):
-            self._load_bases_for_guild_filtered(guild_id)
-        else:
-            self._load_bases_for_guild(guild_id)
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            self._current_guild_id = guild_id
+            guild = next((g for g in self._guilds_data if str(g['id']) == str(guild_id)), None)
+            self._current_guild_name = f"{guild['name']} (Level {guild['level']})" if guild else str(guild_id)
+            self.guild_button.setText(self._current_guild_name)
+            guild_id_key = str(guild_id).replace('-', '').lower()
+            if hasattr(self, '_structure_locations') and self._structure_locations and guild_id_key and (guild_id_key in self._structure_locations):
+                self._load_bases_for_guild_filtered_by_structure(guild_id)
+            elif hasattr(self, '_item_locations') and self._item_locations and guild_id_key and (guild_id_key in self._item_locations):
+                self._load_bases_for_guild_filtered(guild_id)
+            else:
+                self._load_bases_for_guild(guild_id)
+        finally:
+            QApplication.restoreOverrideCursor()
     def _load_bases_for_guild(self, guild_id):
         self._bases_data = []
         self._current_base_id = None
