@@ -15,6 +15,16 @@ from palworld_aio import constants
 import struct
 import io
 player_list_cache = []
+_SORT_ROLE = Qt.UserRole + 1
+class _SortableItem(QTreeWidgetItem):
+    def __lt__(self, other):
+        tree = self.treeWidget()
+        col = tree.sortColumn() if tree is not None else 0
+        a = self.data(col, _SORT_ROLE)
+        b = other.data(col, _SORT_ROLE)
+        if a is not None and b is not None:
+            return a < b
+        return self.text(col) < other.text(col)
 def extract_value(data, key, default_value=''):
     value = data.get(key, default_value)
     if isinstance(value, dict):
@@ -363,20 +373,22 @@ def populate_player_lists(folder_path):
                 pals_count = get_player_pals_count_from_cspm(level_json, uid)
                 last_online_time = player.get('player_info', {}).get('last_online_real_time', 0)
                 last_seen = format_last_seen(last_online_time, world_tick)
-                player_files.append((uid, name, guild_id, level, pals_count, last_seen))
+                sort_key = (world_tick - last_online_time) / 10000000.0 if last_online_time and last_online_time != 0 else float('inf')
+                player_files.append((uid, name, guild_id, level, pals_count, last_seen, sort_key))
     player_list_cache = player_files
     return player_files
 def populate_player_tree(tree, folder_path):
     tree.clear()
     player_list = populate_player_lists(folder_path)
     existing_iids = set()
-    for uid, name, guild, level, pals_count, last_seen in player_list:
+    for uid, name, guild, level, pals_count, last_seen, sort_key in player_list:
         orig_uid = uid
         count = 1
         while uid in existing_iids:
             uid = f'{orig_uid}_{count}'
             count += 1
-        item = QTreeWidgetItem([orig_uid, name, guild, str(level), str(pals_count), last_seen])
+        item = _SortableItem([orig_uid, name, guild, str(level), str(pals_count), last_seen])
+        item.setData(5, _SORT_ROLE, sort_key)
         tree.addTopLevelItem(item)
         existing_iids.add(uid)
     tree.original_items = [tree.topLevelItem(i) for i in range(tree.topLevelItemCount())]
@@ -408,7 +420,8 @@ def background_load_task(path):
                 pals_count = get_player_pals_count_from_cspm(level_json, uid)
                 last_online_time = p.get('player_info', {}).get('last_online_real_time', 0)
                 last_seen = format_last_seen(last_online_time, world_tick)
-                player_files.append((uid, name, guild_id, level, pals_count, last_seen))
+                sort_key = (world_tick - last_online_time) / 10000000.0 if last_online_time and last_online_time != 0 else float('inf')
+                player_files.append((uid, name, guild_id, level, pals_count, last_seen, sort_key))
     return (player_files, level_json)
 def choose_level_file(window, level_sav_entry, old_tree, new_tree):
     path, _ = QFileDialog.getOpenFileName(window, t('Select Level.sav file'), '', 'SAV Files(*.sav)')
@@ -429,12 +442,16 @@ def choose_level_file(window, level_sav_entry, old_tree, new_tree):
         backup_whole_directory(os.path.dirname(path), 'Backups/Fix Host Save')
         old_tree.clear()
         new_tree.clear()
-        for uid, name, guild, level, pals_count, last_seen in player_data_list:
-            old_tree.addTopLevelItem(QTreeWidgetItem([uid, name, guild, str(level), str(pals_count), last_seen]))
-            new_tree.addTopLevelItem(QTreeWidgetItem([uid, name, guild, str(level), str(pals_count), last_seen]))
+        for uid, name, guild, level, pals_count, last_seen, sort_key in player_data_list:
+            old_item = _SortableItem([uid, name, guild, str(level), str(pals_count), last_seen])
+            old_item.setData(5, _SORT_ROLE, sort_key)
+            new_item = _SortableItem([uid, name, guild, str(level), str(pals_count), last_seen])
+            new_item.setData(5, _SORT_ROLE, sort_key)
+            old_tree.addTopLevelItem(old_item)
+            new_tree.addTopLevelItem(new_item)
         old_tree.original_items = [old_tree.topLevelItem(i) for i in range(old_tree.topLevelItemCount())]
         new_tree.original_items = [new_tree.topLevelItem(i) for i in range(new_tree.topLevelItemCount())]
-        player_list_cache = [(u, n, g, l, pc, ls) for u, n, g, l, pc, ls in player_data_list]
+        player_list_cache = [(u, n, g, l, pc, ls, sk) for u, n, g, l, pc, ls, sk in player_data_list]
     run_with_loading(on_task_complete, task)
 def extract_guid_from_tree_selection(tree):
     selected = tree.selectedItems()
@@ -454,11 +471,11 @@ def fix_save_wrapper(window, level_sav_entry, old_tree, new_tree):
     folder_path = os.path.dirname(file_path)
     fix_save(folder_path, new_guid, old_guid)
     for i, entry in enumerate(player_list_cache):
-        uid, name, guild, level, pals_count, last_seen = entry
+        uid, name, guild, level, pals_count, last_seen, sort_key = entry
         if uid == old_guid:
-            player_list_cache[i] = (new_guid, name, guild, level, pals_count, last_seen)
+            player_list_cache[i] = (new_guid, name, guild, level, pals_count, last_seen, sort_key)
         elif uid == new_guid:
-            player_list_cache[i] = (old_guid, name, guild, level, pals_count, last_seen)
+            player_list_cache[i] = (old_guid, name, guild, level, pals_count, last_seen, sort_key)
     populate_player_tree(old_tree, folder_path)
     populate_player_tree(new_tree, folder_path)
 def center_window(win):

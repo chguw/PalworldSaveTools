@@ -17,6 +17,16 @@ from palsav.archive import UUID as PalUUID
 from palsav.io import load_sav
 _TRANSFER_STEPS = {'character': True, 'tech_data': True, 'inventory': True, 'guild': True, 'pals': True, 'dynamics': True, 'timestamps': True}
 player_list_cache = []
+_SORT_ROLE = Qt.UserRole + 1
+class _SortableItem(QTreeWidgetItem):
+    def __lt__(self, other):
+        tree = self.treeWidget()
+        col = tree.sortColumn() if tree is not None else 0
+        a = self.data(col, _SORT_ROLE)
+        b = other.data(col, _SORT_ROLE)
+        if a is not None and b is not None:
+            return a < b
+        return self.text(col) < other.text(col)
 def _load_sav(path):
     gvas_file = load_sav(path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
     return gvas_file
@@ -1211,7 +1221,9 @@ def load_players(save_json, is_source):
             player_pals_count = get_player_pals_count_from_cspm(cspm_json, playerUId)
             last_online_time = player_item.get('player_info', {}).get('last_online_real_time', 0)
             last_seen = format_last_seen(last_online_time, current_tick)
-            item = QTreeWidgetItem([safe_uuid_str(guild_id), playerUId, player_name, str(player_level), str(player_pals_count), last_seen])
+            item = _SortableItem([safe_uuid_str(guild_id), playerUId, player_name, str(player_level), str(player_pals_count), last_seen])
+            sort_key = (current_tick - last_online_time) / 10000000.0 if last_online_time and last_online_time != 0 else float('inf')
+            item.setData(5, _SORT_ROLE, sort_key)
             list_box.addTopLevelItem(item)
 def source_level_file():
     global level_sav_path, level_json, selected_source_player

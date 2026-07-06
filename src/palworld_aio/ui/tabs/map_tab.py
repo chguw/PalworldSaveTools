@@ -20,6 +20,17 @@ from ..map_view.map_markers import BaseMarker, PlayerMarker
 from ..map_view.map_effects import DeleteEffect, ImportEffect, ExportEffect, CalibrationEffect
 from ..map_view.map_items import ExclusionZoneItem, PolygonExclusionZoneItem, BaseRadiusRing, ZonePreviewItem
 from ..map_view.map_view import MapGraphicsView
+_SORT_ROLE = Qt.UserRole + 1
+class _SortableItem(QTreeWidgetItem):
+    def __lt__(self, other):
+        tree = self.treeWidget()
+        col = tree.sortColumn() if tree is not None else 0
+        a = self.data(col, _SORT_ROLE)
+        b = other.data(col, _SORT_ROLE)
+        if a is not None and b is not None:
+            return a < b
+        return self.text(col) < other.text(col)
+
 class MapTab(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -954,7 +965,7 @@ class MapTab(QWidget):
                                 base_position += 1
                         except:
                             pass
-                guilds[gid] = {'guild_name': g_val['RawData']['value'].get('guild_name', t('map.unknown.guild') if t else 'Unknown'), 'leader_name': leader_name, 'last_seen': last_seen, 'bases': valid_bases}
+                guilds[gid] = {'guild_name': g_val['RawData']['value'].get('guild_name', t('map.unknown.guild') if t else 'Unknown'), 'leader_name': leader_name, 'last_seen': last_seen, 'last_seen_sort': diff if times else float('inf'), 'bases': valid_bases}
         except Exception as e:
             print(f'Error getting guild bases: {e}')
         return guilds
@@ -968,8 +979,9 @@ class MapTab(QWidget):
         players_dir = os.path.join(constants.current_save_path, 'Players')
         if not os.path.exists(players_dir):
             return players
-        for uid, name, gid, lastseen, level, *_ in players_data:
+        for uid, name, gid, lastseen, level, *rest in players_data:
             player_uid = uid.replace('-', '').upper()
+            elapsed = rest[0] if rest else None
             if not player_uid:
                 continue
             sav_file = os.path.join(players_dir, f'{player_uid}.sav')
@@ -998,7 +1010,7 @@ class MapTab(QWidget):
                         img_x, img_y = self._to_image_coordinates(bx, by, self.map_width, self.map_height)
                     pal_count = constants.PLAYER_PAL_COUNTS.get(player_uid.lower(), 0)
                     guild_name = save_manager.get_guild_name_by_id(gid)
-                    players.append({'player_uid': player_uid, 'player_name': name, 'level': level, 'coords': (bx, by), 'img_coords': (img_x, img_y), 'map_type': map_type, 'save_coords': (x, y, z), 'guild_name': guild_name, 'guild_id': gid, 'last_seen': lastseen, 'pal_count': pal_count})
+                    players.append({'player_uid': player_uid, 'player_name': name, 'level': level, 'coords': (bx, by), 'img_coords': (img_x, img_y), 'map_type': map_type, 'save_coords': (x, y, z), 'guild_name': guild_name, 'guild_id': gid, 'last_seen': lastseen, 'last_seen_sort': elapsed if elapsed is not None else float('inf'), 'pal_count': pal_count})
             except Exception as e:
                 continue
         return players
@@ -1049,8 +1061,9 @@ class MapTab(QWidget):
         if hasattr(self, 'base_tree'):
             self.base_tree.clear()
             for gid, guild in self.filtered_guilds.items():
-                guild_item = QTreeWidgetItem([guild['guild_name'], guild['leader_name'], guild['last_seen'], str(len(guild['bases']))])
+                guild_item = _SortableItem([guild['guild_name'], guild['leader_name'], guild['last_seen'], str(len(guild['bases']))])
                 guild_item.setData(0, Qt.UserRole, ('guild', gid))
+                guild_item.setData(2, _SORT_ROLE, guild.get('last_seen_sort', float('inf')))
                 for base in guild['bases']:
                     base_item = QTreeWidgetItem([f"X:{int(base['coords'][0])} Y:{int(base['coords'][1])}", str(base['base_id'])[:12] + '...', '', ''])
                     base_item.setData(0, Qt.UserRole, ('base', base))
@@ -1061,8 +1074,9 @@ class MapTab(QWidget):
             self.player_tree.clear()
             filtered_players = self._filter_players(self.search_text)
             for player in filtered_players:
-                player_item = QTreeWidgetItem([player['player_name'], str(player['level']), player['last_seen'], str(player['pal_count'])])
+                player_item = _SortableItem([player['player_name'], str(player['level']), player['last_seen'], str(player['pal_count'])])
                 player_item.setData(0, Qt.UserRole, ('player', player))
+                player_item.setData(2, _SORT_ROLE, player.get('last_seen_sort', float('inf')))
                 player_item.setForeground(0, QColor(0, 200, 120))
                 self.player_tree.addTopLevelItem(player_item)
     def _filter_players(self, search_text):
