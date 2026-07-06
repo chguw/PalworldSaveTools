@@ -1224,6 +1224,8 @@ def load_players(save_json, is_source):
             item = _SortableItem([safe_uuid_str(guild_id), playerUId, player_name, str(player_level), str(player_pals_count), last_seen])
             sort_key = (current_tick - last_online_time) / 10000000.0 if last_online_time and last_online_time != 0 else float('inf')
             item.setData(5, _SORT_ROLE, sort_key)
+            item.setData(3, _SORT_ROLE, player_level)
+            item.setData(4, _SORT_ROLE, player_pals_count)
             list_box.addTopLevelItem(item)
 def source_level_file():
     global level_sav_path, level_json, selected_source_player

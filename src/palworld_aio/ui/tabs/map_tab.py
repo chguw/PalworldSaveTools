@@ -1064,6 +1064,7 @@ class MapTab(QWidget):
                 guild_item = _SortableItem([guild['guild_name'], guild['leader_name'], guild['last_seen'], str(len(guild['bases']))])
                 guild_item.setData(0, Qt.UserRole, ('guild', gid))
                 guild_item.setData(2, _SORT_ROLE, guild.get('last_seen_sort', float('inf')))
+                guild_item.setData(3, _SORT_ROLE, len(guild['bases']))
                 for base in guild['bases']:
                     base_item = QTreeWidgetItem([f"X:{int(base['coords'][0])} Y:{int(base['coords'][1])}", str(base['base_id'])[:12] + '...', '', ''])
                     base_item.setData(0, Qt.UserRole, ('base', base))
@@ -1076,7 +1077,9 @@ class MapTab(QWidget):
             for player in filtered_players:
                 player_item = _SortableItem([player['player_name'], str(player['level']), player['last_seen'], str(player['pal_count'])])
                 player_item.setData(0, Qt.UserRole, ('player', player))
+                player_item.setData(1, _SORT_ROLE, player.get('level', 0))
                 player_item.setData(2, _SORT_ROLE, player.get('last_seen_sort', float('inf')))
+                player_item.setData(3, _SORT_ROLE, player.get('pal_count', 0))
                 player_item.setForeground(0, QColor(0, 200, 120))
                 self.player_tree.addTopLevelItem(player_item)
     def _filter_players(self, search_text):

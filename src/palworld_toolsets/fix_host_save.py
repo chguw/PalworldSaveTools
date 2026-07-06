@@ -388,6 +388,8 @@ def populate_player_tree(tree, folder_path):
             uid = f'{orig_uid}_{count}'
             count += 1
         item = _SortableItem([orig_uid, name, guild, str(level), str(pals_count), last_seen])
+        item.setData(3, _SORT_ROLE, level)
+        item.setData(4, _SORT_ROLE, pals_count)
         item.setData(5, _SORT_ROLE, sort_key)
         tree.addTopLevelItem(item)
         existing_iids.add(uid)
@@ -444,8 +446,12 @@ def choose_level_file(window, level_sav_entry, old_tree, new_tree):
         new_tree.clear()
         for uid, name, guild, level, pals_count, last_seen, sort_key in player_data_list:
             old_item = _SortableItem([uid, name, guild, str(level), str(pals_count), last_seen])
+            old_item.setData(3, _SORT_ROLE, level)
+            old_item.setData(4, _SORT_ROLE, pals_count)
             old_item.setData(5, _SORT_ROLE, sort_key)
             new_item = _SortableItem([uid, name, guild, str(level), str(pals_count), last_seen])
+            new_item.setData(3, _SORT_ROLE, level)
+            new_item.setData(4, _SORT_ROLE, pals_count)
             new_item.setData(5, _SORT_ROLE, sort_key)
             old_tree.addTopLevelItem(old_item)
             new_tree.addTopLevelItem(new_item)

@@ -729,7 +729,7 @@ class MainWindow(QMainWindow):
             glevel = save_manager.get_guild_level_by_id(gid)
             is_leader = save_manager.is_player_guild_leader(gid, uid)
             display_name = f'[L]{name}' if is_leader else name
-            sort_keys = {1: elapsed if elapsed is not None else float('inf')}
+            sort_keys = {1: elapsed if elapsed is not None else float('inf'), 2: int(level) if str(level).isdigit() else 0, 3: int(pals) if str(pals).isdigit() else 0}
             self.players_panel.add_item([display_name, lastseen, level, pals, uid, gname, gid, glevel], sort_keys=sort_keys)
     def _refresh_guilds(self):
         self.guilds_panel.clear()
@@ -1042,7 +1042,7 @@ class MainWindow(QMainWindow):
             for m in members:
                 prefix = '[L]' if m['is_leader'] else ''
                 last_sort = m.get('last_sort')
-                sort_keys = {1: last_sort if last_sort is not None else float('inf')}
+                sort_keys = {1: last_sort if last_sort is not None else float('inf'), 2: int(m['level']) if str(m['level']).isdigit() else 0, 3: int(m['pals']) if str(m['pals']).isdigit() else 0}
                 self.guild_members_panel.add_item([prefix + m['name'], m['lastseen'], m['level'], m['pals'], m['uid']], sort_keys=sort_keys)
     def _on_guild_member_selected(self, data):
         if data:
