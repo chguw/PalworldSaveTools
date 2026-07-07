@@ -142,17 +142,9 @@ def get_player_containers(gvas_file, players_folder=None):
                 slots = value.get('Slots', {}).get('value', {})
                 slots_values = slots.get('values', [])
                 player_info = container_to_player.get(container_id_str)
-                if player_info:
-                    player_name = player_info['name']
-                    player_uid = player_info['uid']
-                    guild = player_info['guild']
-                    container_type = player_info.get('type', 'Unknown')
-                else:
-                    player_name = 'Unknown Player'
-                    player_uid = container_id_str[:8] + '...'
-                    guild = 'Unknown Guild'
-                    container_type = 'Unknown'
-                player_containers.append({'index': i, 'container_id': container_id_str, 'slot_num': slot_num, 'used_slots': len(slots_values), 'max_slots': slot_num, 'player_uid': player_uid, 'player_name': player_name, 'guild': guild, 'container_type': container_type, 'entry': entry})
+                if not player_info:
+                    continue
+                player_containers.append({'index': i, 'container_id': container_id_str, 'slot_num': slot_num, 'used_slots': len(slots_values), 'max_slots': slot_num, 'player_uid': player_info['uid'], 'player_name': player_info['name'], 'guild': player_info['guild'], 'container_type': player_info.get('type', 'Unknown'), 'entry': entry})
     return player_containers
 class LoadingThread(QThread):
     progress = Signal(int, str)
