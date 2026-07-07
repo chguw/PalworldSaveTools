@@ -1216,7 +1216,7 @@ class MapTab(QWidget):
         base_id = str(base_data.get('base_id', ''))
         pal_count = base_data.get('pal_count', 0)
         coords = base_data.get('coords', (0, 0))
-        info = f"\n        <b>{guild_name}</b><br>\n        {(t('map.info.level') if t else 'Level:')} {guild_level}<br>\n        {(t('map.info.admin') if t else 'Admin:')} {leader_name}<br>\n        {(t('map.info.members') if t else 'Members:')} {member_count}<br>\n        {(t('map.info.base_camps') if t else 'Base Camps:')} {base_position}/{total_bases}<br>\n        {(t('map.info.base_id') if t else 'Base ID:')} {base_id}<br>\n        {(t('map.info.base_pals') if t else 'Base Pals:')} {pal_count}<br>\n        {(t('map.info.location') if t else 'Location:')} X:{int(coords[0])},Y:{int(coords[1])}\n        "
+        info = f"\n        <b>{guild_name}</b><br>\n        {(t('map.info.level') if t else 'Level')}: {guild_level}<br>\n        {(t('map.info.admin') if t else 'Admin:')} {leader_name}<br>\n        {(t('map.info.members') if t else 'Members:')} {member_count}<br>\n        {(t('map.info.base_camps') if t else 'Base Camps:')} {base_position}/{total_bases}<br>\n        {(t('map.info.base_id') if t else 'Base ID:')} {base_id}<br>\n        {(t('map.info.base_pals') if t else 'Base Pals:')} {pal_count}<br>\n        {(t('map.info.location') if t else 'Location:')} X:{int(coords[0])},Y:{int(coords[1])}\n        "
         self.info_label.setText(info.strip())
     def _on_marker_clicked(self, data, marker=None):
         if 'player_uid' in data:

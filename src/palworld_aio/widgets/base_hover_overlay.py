@@ -81,7 +81,7 @@ class BaseHoverOverlay(QWidget):
         coords = base_data.get('coords', (0, 0))
         self.guild_label.setText(guild_name)
         self.guild_label.show()
-        self.level_label.setText(f"{(t('map.info.level') if t else 'Level:')} {guild_level}")
+        self.level_label.setText(f"{(t('map.info.level') if t else 'Level')}: {guild_level}")
         self.level_label.show()
         self.leader_label.setText(f"{(t('map.info.admin') if t else 'Admin:')} {leader_name}")
         self.leader_label.show()

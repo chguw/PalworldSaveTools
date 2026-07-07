@@ -617,7 +617,7 @@
     "map.info.base_camps": "基地营地:",
     "map.info.base_id": "基地ID:",
     "map.info.lastseen": "最后在线:",
-    "map.info.level": "等级:",
+    "map.info.level": "等级",
     "map.info.location": "位置:",
     "map.info.members": "成员:",
     "map.info.select_base": "点击基地标记或列表项查看详情",

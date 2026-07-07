@@ -921,7 +921,7 @@
     "map.info.base_camps": "Base Camps:",
     "map.info.base_id": "Base ID:",
     "map.info.lastseen": "Last Seen:",
-    "map.info.level": "Level:",
+    "map.info.level": "Level",
     "map.info.location": "Location:",
     "map.info.members": "Members:",
     "map.info.select_base": "Click on a base marker or list item to view details",

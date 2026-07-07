@@ -609,7 +609,7 @@
     "map.info.base_camps": "Campamentos base:",
     "map.info.base_id": "ID base:",
     "map.info.lastseen": "Visto por última vez:",
-    "map.info.level": "Nivel:",
+    "map.info.level": "Nivel",
     "map.info.location": "Ubicación:",
     "map.info.members": "Miembros:",
     "map.info.select_base": "Haga clic en un marcador de base o en un elemento de la lista para ver los detalles",

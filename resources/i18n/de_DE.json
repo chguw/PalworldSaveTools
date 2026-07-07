@@ -640,7 +640,7 @@
     "map.info.base_camps": "Basislager:",
     "map.info.base_id": "Basis-ID:",
     "map.info.lastseen": "Zuletzt online:",
-    "map.info.level": "Stufe:",
+    "map.info.level": "Stufe",
     "map.info.location": "Standort:",
     "map.info.members": "Mitglieder:",
     "map.info.select_base": "Klicke auf eine Basis-Markierung oder ein Listenelement, um Details anzuzeigen",

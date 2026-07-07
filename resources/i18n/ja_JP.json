@@ -616,7 +616,7 @@
     "map.info.base_camps": "ベースキャンプ:",
     "map.info.base_id": "ベースID:",
     "map.info.lastseen": "最終ログイン:",
-    "map.info.level": "レベル:",
+    "map.info.level": "レベル",
     "map.info.location": "場所:",
     "map.info.members": "メンバー:",
     "map.info.select_base": "拠点のマーカーまたはリストのアイテムをクリックして詳細を表示",

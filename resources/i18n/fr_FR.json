@@ -598,7 +598,7 @@
     "map.info.base_camps": "Camps de base:",
     "map.info.base_id": "ID base:",
     "map.info.lastseen": "Vu pour la dernière fois:",
-    "map.info.level": "Niveau:",
+    "map.info.level": "Niveau",
     "map.info.location": "Localisation:",
     "map.info.members": "Membres:",
     "map.info.select_base": "Cliquez sur un marqueur de base ou un élément de la liste pour voir les détails",

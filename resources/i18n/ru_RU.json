@@ -612,7 +612,7 @@
     "map.info.base_camps": "Базовые лагеря:",
     "map.info.base_id": "ID базы:",
     "map.info.lastseen": "Последний вход:",
-    "map.info.level": "Уровень:",
+    "map.info.level": "Уровень",
     "map.info.location": "Местоположение:",
     "map.info.members": "Участники:",
     "map.info.select_base": "Нажмите на маркер базы или элемент списка, чтобы просмотреть детали",
