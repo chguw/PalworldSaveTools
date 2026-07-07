@@ -1,5 +1,5 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QFrame, QGraphicsDropShadowEffect, QLabel, QScrollArea
-from PySide6.QtCore import Qt, QPoint, QEventLoop, QTimer, QRect
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QFrame, QGraphicsDropShadowEffect, QLabel, QScrollArea, QMenu
+from PySide6.QtCore import Qt, QPoint, QEvent, QEventLoop, QTimer, QRect
 from PySide6.QtGui import QColor, QCursor, QFont
 from palworld_aio import constants
 
@@ -18,25 +18,50 @@ class _GroupHeader(QWidget):
     def __init__(self, name, idx):
         super().__init__()
         self._idx = idx
-        self.setObjectName('groupBtn')
+        self.setObjectName('menuPopupButton')
         self.setCursor(Qt.PointingHandCursor)
+        self.setMinimumWidth(180)
         self.setMinimumHeight(36)
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(12, 0, 12, 0)
-        self._label = QLabel(name)
-        self._label.setFont(QFont(constants.FONT_FAMILY, 11))
-        self._label.setStyleSheet('color: #A6B8C8; background: transparent; border: none;')
-        layout.addWidget(self._label)
+        layout.setContentsMargins(12, 8, 12, 8)
+        layout.setSpacing(8)
+        self.icon_label = QLabel('')
+        self.icon_label.setFont(QFont(constants.FONT_FAMILY, 11))
+        layout.addWidget(self.icon_label)
+        self.text_label = QLabel(name)
+        self.text_label.setFont(QFont(constants.FONT_FAMILY, 11))
+        layout.addWidget(self.text_label)
         layout.addStretch()
-        self._chevron = QLabel('▶')
-        self._chevron.setFont(QFont(constants.FONT_FAMILY, 11))
-        self._chevron.setStyleSheet('color: #A6B8C8; background: transparent; border: none;')
-        layout.addWidget(self._chevron)
+        self.chevron_label = QLabel('▶')
+        self.chevron_label.setFont(QFont(constants.FONT_FAMILY, 11))
+        layout.addWidget(self.chevron_label)
+        self._update_theme()
+
+    def _update_theme(self):
         self.setStyleSheet(f'''
-            QWidget#groupBtn {{ background: transparent; border: none; border-radius: 6px; }}
-            QWidget#groupBtn[hovered="true"] {{ background: {_MENU_HOVER_BG}; }}
-            QWidget#groupBtn[active="true"] {{ background: {_MENU_ACTIVE_BG}; border-left: 3px solid {_MENU_ACTIVE_BORDER}; }}
-            QWidget#groupBtn[hovered="true"] QLabel, QWidget#groupBtn[active="true"] QLabel {{ color: {_MENU_HOVER_TEXT}; }}
+            QWidget#menuPopupButton {{
+                background: transparent;
+                border: none;
+                border-radius: 6px;
+            }}
+            QWidget#menuPopupButton[hovered="true"] {{
+                background: {_MENU_HOVER_BG};
+            }}
+            QWidget#menuPopupButton[active="true"] {{
+                background: {_MENU_ACTIVE_BG};
+                border-left: 3px solid {_MENU_ACTIVE_BORDER};
+            }}
+            QLabel {{
+                color: {_MENU_TEXT};
+                background: transparent;
+                border: none;
+            }}
+            QWidget#menuPopupButton[hovered="true"] QLabel {{
+                color: {_MENU_HOVER_TEXT};
+            }}
+            QWidget#menuPopupButton[active="true"] QLabel {{
+                color: {_MENU_HOVER_TEXT};
+            }}
         ''')
 
     def set_active(self, active):
@@ -49,60 +74,38 @@ class _GroupHeader(QWidget):
         self.style().unpolish(self)
         self.style().polish(self)
 
-class _SubPopup(QWidget):
-    def __init__(self, parent_ctx):
-        super().__init__(None)
-        self._parent_ctx = parent_ctx
-        self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(6, 6, 6, 6)
-        container = QFrame(self)
-        container.setStyleSheet(f'QFrame {{ background: {_MENU_BG}; border: 1px solid rgba(125,211,252,0.2); border-radius: 10px; }}')
-        shadow = QGraphicsDropShadowEffect(container)
-        shadow.setBlurRadius(20)
-        shadow.setOffset(3, 3)
-        shadow.setColor(QColor(0, 0, 0, 120))
-        container.setGraphicsEffect(shadow)
-        cl = QVBoxLayout(container)
-        cl.setContentsMargins(0, 0, 0, 0)
-        cl.setSpacing(0)
-        self.scroll = QScrollArea(container)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll.setWidgetResizable(True)
-        self.scroll.setFrameStyle(QFrame.NoFrame)
-        self.scroll.setMaximumHeight(160)
-        self.scroll.setObjectName('subPopupScroll')
-        cw = QWidget()
-        cw.setStyleSheet('background: transparent;')
-        self.layout = QVBoxLayout(cw)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        cw.setMinimumWidth(180)
-        self.scroll.setWidget(cw)
-        cl.addWidget(self.scroll)
-        main_layout.addWidget(container)
-
-    def add_item(self, key, text, checkable=False, checked=False):
-        btn = QPushButton(text)
-        btn.setFlat(True)
-        btn.setCursor(Qt.PointingHandCursor)
-        btn.setFocusPolicy(Qt.NoFocus)
-        btn.setCheckable(checkable)
-        btn.setChecked(checked)
-        btn.setMinimumHeight(34)
-        btn.setStyleSheet(_ITEM_STYLE)
-        btn.clicked.connect(lambda: self._parent_ctx._select(key))
-        self.layout.addWidget(btn)
-        return btn
-
-    def add_sep(self):
-        sep = QFrame()
-        sep.setFrameShape(QFrame.HLine)
-        sep.setFixedHeight(1)
-        sep.setStyleSheet(_SEP_STYLE)
-        self.layout.addWidget(sep)
+_SUBMENU_STYLE = f'''
+QMenu {{
+    background: {_MENU_BG};
+    border: 1px solid {_MENU_BORDER};
+    border-radius: 10px;
+    padding: 6px;
+    color: {_MENU_TEXT};
+    font-size: 11px;
+}}
+QMenu::item {{
+    padding: 8px 12px;
+    min-height: 28px;
+    border-radius: 4px;
+    color: {_MENU_TEXT};
+}}
+QMenu::item:selected {{
+    background: {_MENU_HOVER_BG};
+    color: {_MENU_HOVER_TEXT};
+}}
+QMenu::item:checked {{
+    background: rgba(125,211,252,0.08);
+    color: {_MENU_HOVER_TEXT};
+}}
+QMenu::separator {{
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 4px 8px;
+}}
+QMenu::icon {{
+    padding-left: 4px;
+}}
+'''
 
 class ScrollableContextMenu(QWidget):
     def __init__(self, parent=None):
@@ -147,19 +150,19 @@ class ScrollableContextMenu(QWidget):
         self._cursor_timer.timeout.connect(self._check_cursor)
         self._cursor_timer.setInterval(50)
         self._in_group = False
-        self._group_sub = None
+        self._group_items = []
+        self._hiding_sub = False
 
     def add_group_end(self):
         self._in_group = False
-        self._group_sub = None
+        self._group_items = []
 
     def add_group_start(self, name, expanded=True):
         self._in_group = True
-        sub = _SubPopup(self)
-        self._group_sub = sub
+        self._group_items = []
         idx = len(self._groups)
         hdr = _GroupHeader(name, idx)
-        self._groups.append((hdr, sub))
+        self._groups.append((hdr, self._group_items))
         self.layout.addWidget(hdr)
 
     def _is_over_widget(self, widget, cursor_pos):
@@ -169,45 +172,73 @@ class ScrollableContextMenu(QWidget):
         rect = QRect(tl, widget.size())
         return rect.contains(cursor_pos)
 
+    def _on_qmenu_triggered(self, action):
+        self._select(action.data())
+
+    def _on_qmenu_about_to_hide(self):
+        self._hide_sub()
+
     def _show_group(self, idx):
-        if idx == self._active_group:
-            return
         if self._sub_popup:
-            self._sub_popup.hide()
-        hdr, sub = self._groups[idx]
-        self._sub_popup = sub
+            return
+        hdr, items = self._groups[idx]
+        qmenu = QMenu(self)
+        qmenu.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        qmenu.setAttribute(Qt.WA_TranslucentBackground)
+        qmenu.setStyleSheet(_SUBMENU_STYLE)
+        for key, text, checkable, checked in items:
+            if key == '---':
+                qmenu.addSeparator()
+                continue
+            action = qmenu.addAction(text)
+            action.setCheckable(checkable)
+            action.setChecked(checked)
+            action.setData(key)
+        qmenu.triggered.connect(self._on_qmenu_triggered)
+        qmenu.aboutToHide.connect(self._on_qmenu_about_to_hide)
+        self._sub_popup = qmenu
         hdr_pos = hdr.mapToGlobal(QPoint(hdr.width(), 0))
-        sub.move(hdr_pos)
-        sub.show()
-        sub.raise_()
+        qmenu.popup(hdr_pos)
         self._active_group = idx
+        hdr.set_active(True)
 
     def _hide_sub(self):
-        if self._sub_popup:
-            self._sub_popup.hide()
-            self._sub_popup = None
-        if self._active_group >= 0:
-            self._groups[self._active_group][0].set_active(False)
-        self._active_group = -1
+        if self._hiding_sub:
+            return
+        self._hiding_sub = True
+        try:
+            if self._sub_popup:
+                try:
+                    self._sub_popup.triggered.disconnect()
+                    self._sub_popup.aboutToHide.disconnect()
+                except (RuntimeError, TypeError):
+                    pass
+                self._sub_popup.close()
+                self._sub_popup.deleteLater()
+                self._sub_popup = None
+            for idx, (hdr, items) in enumerate(self._groups):
+                hdr.set_active(False)
+            self._active_group = -1
+        finally:
+            self._hiding_sub = False
 
     def _check_cursor(self):
         pos = QCursor.pos()
         over_sub = self._sub_popup and self._is_over_widget(self._sub_popup, pos)
-        over_header = False
-        for idx, (hdr, sub) in enumerate(self._groups):
+        over_header = None
+        for idx, (hdr, items) in enumerate(self._groups):
             hov = self._is_over_widget(hdr, pos)
             hdr.set_hovered(hov)
             if hov:
-                over_header = True
-                if idx != self._active_group:
+                over_header = idx
+                if self._active_group != idx:
                     self._show_group(idx)
-            hdr.set_active(not over_header and idx == self._active_group)
-        if self._sub_popup and not over_sub and not over_header:
+        if over_header is None and not over_sub:
             self._hide_sub()
 
     def add_item(self, key, text, checkable=False, checked=False):
         if self._in_group:
-            self._group_sub.add_item(key, text, checkable, checked)
+            self._group_items.append((key, text, checkable, checked))
             return
         btn = QPushButton(text)
         btn.setFlat(True)
@@ -223,7 +254,7 @@ class ScrollableContextMenu(QWidget):
 
     def add_sep(self):
         if self._in_group:
-            self._group_sub.add_sep()
+            self._group_items.append(('---', '', False, False))
             return
         sep = QFrame()
         sep.setFrameShape(QFrame.HLine)
