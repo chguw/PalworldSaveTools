@@ -299,6 +299,7 @@ class MainWindow(QMainWindow):
         self._setup_exclusions_tab()
         self._setup_json_editor_tab()
         self._setup_docs_tab()
+        self._setup_breeding_tab()
         self.splitter.addWidget(self.stacked_widget)
         from .chrome.results_widget import ResultsWidget
         self.results_widget = ResultsWidget()
@@ -398,6 +399,11 @@ class MainWindow(QMainWindow):
         from .tabs.json_editor_tab import JsonEditorTab
         self.json_editor_tab = JsonEditorTab(self)
         self.stacked_widget.addWidget(self.json_editor_tab)
+
+    def _setup_breeding_tab(self):
+        from .tabs.breeding_tab import BreedingTab
+        self.breeding_tab = BreedingTab(self)
+        self.stacked_widget.addWidget(self.breeding_tab)
 
     def _setup_exclusions_tab(self):
         exclusions_tab = QWidget()
@@ -593,7 +599,7 @@ class MainWindow(QMainWindow):
         msg_box.setText(text)
         msg_box.exec()
     def _on_nav_changed(self, button_id):
-        page_index = {'tools': 0, 'base_inventory': 1, 'player_inventory': 2, 'pal_editor': 3, 'players': 4, 'guilds': 5, 'bases': 6, 'map': 7, 'exclusions': 8, 'json_editor': 9, 'docs': 10}[button_id]
+        page_index = {'tools': 0, 'base_inventory': 1, 'player_inventory': 2, 'pal_editor': 3, 'players': 4, 'guilds': 5, 'bases': 6, 'map': 7, 'exclusions': 8, 'json_editor': 9, 'docs': 10, 'breeding': 11}[button_id]
         self.stacked_widget.setCurrentIndex(page_index)
     def _load_user_settings(self):
         from boot_paths import CONFIG_DIR
@@ -712,6 +718,8 @@ class MainWindow(QMainWindow):
                 self.tools_tab.refresh()
             if hasattr(self, 'json_editor_tab'):
                 self.json_editor_tab.refresh()
+            if hasattr(self, 'breeding_tab'):
+                self.breeding_tab.refresh()
         finally:
             self._is_refreshing = False
     def _refresh_inventory(self):
@@ -1568,6 +1576,8 @@ class MainWindow(QMainWindow):
                 self.base_inventory_tab.refresh_labels()
             if hasattr(self, 'docs_tab') and self.docs_tab:
                 self.docs_tab.refresh_labels()
+            if hasattr(self, 'breeding_tab') and self.breeding_tab:
+                self.breeding_tab.refresh_labels()
             if hasattr(self, 'json_editor_tab') and self.json_editor_tab:
                 self.json_editor_tab.refresh_labels()
             if hasattr(self, 'pal_editor_tab') and self.pal_editor_tab:

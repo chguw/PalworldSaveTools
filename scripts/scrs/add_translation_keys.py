@@ -13,10 +13,24 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
-    'pal_editor.box_count': 'Box {n} ({count})',
-    'pal_editor.dps_count': 'DPS {n}/{m} ({count})',
+    'breeding.tab': 'Breeding',
+    'breeding.mode.parents': 'Parents',
+    'breeding.mode.children': 'Children',
+    'breeding.search': 'Search pal...',
+    'breeding.egg_hint': 'Palworld Breeding Combos',
+    'breeding.hint': 'Click the button above to select a pal and view breeding combinations.',
+    'breeding.parents_for': 'Parents for {name}',
+    'breeding.children_for': 'Children for {name}',
+    'breeding.unique': 'Unique Combos',
+    'breeding.formula': 'Formula Combos',
+    'breeding.no_breed': 'This pal cannot breed',
+    'breeding.no_combos': 'No breeding combos found',
+    'breeding.select_pal': 'Select a Pal...',
+    'breeding.select_btn': 'Select',
+    'breeding.search_placeholder': 'Type to filter pals...',
+    'breeding.no_selection': 'Select a pal to see breeding combinations',
 }
-OLD_KEYS = ['pal_editor.box_count', 'pal_editor.dps_count']
+OLD_KEYS = []
 def _clean_uv_locks():
     for p in [Path.cwd() / 'uv.lock', PROJECT_ROOT / 'uv.lock']:
         if p.exists():

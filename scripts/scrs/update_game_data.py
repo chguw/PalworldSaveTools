@@ -2571,7 +2571,7 @@ def _convert_icons(Image):
     for fname in _MERGED_FILES_WHOLE:
         if fname not in scan_fnames:
             scan_fnames.append(fname)
-    scan_fnames += ['uidata.json']
+    scan_fnames += ['uidata.json', 'breedingdata.json']
     for fname in scan_fnames:
         fpath = RESOURCES_DIR / fname
         if not fpath.exists():
@@ -2671,7 +2671,7 @@ def _cleanup_stale_icons():
                 _collect_icon_refs(item, refs)
         elif isinstance(data, str) and data.startswith('/icons/'):
             refs.add(data)
-    also_check = ['uidata.json', 'friendship.json']
+    also_check = ['uidata.json', 'friendship.json', 'breedingdata.json']
     for fname in also_check:
         fpath = RESOURCES_DIR / fname
         if fpath.exists():
@@ -2722,6 +2722,139 @@ def update_work_data():
     result = {'work_types': work_types}
     save_resource_json('work_suitability.json', result)
     print(f'  Total work types: {len(work_types)}')
+def update_breeding_data():
+    print('\n=== Updating Breeding Data ===')
+    monster_data = load_export_json('Character/DT_PalMonsterParameter.json')
+    monster_common = load_export_json('Character/DT_PalMonsterParameter_Common.json')
+    unique_data = load_export_json('Character/DT_PalCombiUnique.json')
+    name_l10n = load_l10n_table('DT_PalNameText_Common.json')
+    monster_rows = {}
+    for d in [monster_data, monster_common]:
+        if d:
+            rows = get_rows(d)
+            if rows:
+                monster_rows.update(rows)
+    if not monster_rows:
+        print('  No monster rows found. Skipping.')
+        return
+    pal_data = load_resource_json('paldata.json')
+    if not pal_data or 'pals' not in pal_data:
+        pal_data = load_resource_json('characters.json')
+    pal_icon_map = {}
+    if pal_data and 'pals' in pal_data:
+        for p in pal_data['pals']:
+            if isinstance(p, dict) and 'asset' in p:
+                pal_icon_map[p['asset'].lower()] = p.get('icon', f'/icons/pals/{p["asset"]}_icon_normal.webp')
+    def _name_map():
+        nm = {}
+        for k, v in name_l10n.items():
+            if k.startswith('PAL_NAME_') and v:
+                cid = k[len('PAL_NAME_'):]
+                if v.lower() not in ('en text', 'en_text', '', 'none'):
+                    nm[cid] = v
+        return nm
+    name_map = _name_map()
+    pals = []
+    seen_tribes = {}
+    for idx, (internal_id, data) in enumerate(sorted(monster_rows.items())):
+        rank = _safe_get(data, 'CombiRank', 0)
+        if rank is None or rank <= 0:
+            continue
+        tribe = data.get('Tribe', '')
+        if isinstance(tribe, str) and tribe.startswith('EPalTribeID::'):
+            tribe = tribe[len('EPalTribeID::'):]
+        if not tribe:
+            continue
+        ignore_combi = bool(data.get('IgnoreCombi', False))
+        is_variant = '_' in tribe
+        is_base = internal_id == tribe
+        if tribe in seen_tribes:
+            existing = seen_tribes[tribe]
+            if is_base or (existing['rank'] > rank and not existing['is_base']):
+                seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
+        else:
+            seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
+    pals = list(seen_tribes.values())
+    tribe_map = {p['tribe']: p for p in pals if p['tribe'] in name_map}
+    pals = [p for p in pals if p['tribe'] in name_map]
+    rank_map = {p['tribe']: p['rank'] for p in pals}
+    breedable = [p for p in pals if not p['ignore_combi']]
+    rank_to_best = {}
+    for p in breedable:
+        r = p['rank']
+        if r not in rank_to_best:
+            rank_to_best[r] = p
+        else:
+            e = rank_to_best[r]
+            if p['index'] < e['index'] or (p['index'] == e['index'] and not p['is_variant'] and e['is_variant']):
+                rank_to_best[r] = p
+    sorted_ranks = sorted(rank_to_best.keys())
+    def closest_pal(cp):
+        import bisect
+        idx = bisect.bisect_left(sorted_ranks, cp)
+        cand = []
+        if idx < len(sorted_ranks):
+            cand.append(sorted_ranks[idx])
+        if idx > 0:
+            cand.append(sorted_ranks[idx - 1])
+        best, best_diff = None, float('inf')
+        for r in cand:
+            p = rank_to_best[r]
+            diff = abs(r - cp)
+            if diff < best_diff:
+                best_diff = diff
+                best = p
+            elif diff == best_diff:
+                if p['index'] < best['index'] or (p['index'] == best['index'] and not p['is_variant'] and best['is_variant']):
+                    best = p
+        return best
+    pair_to_child = {}
+    child_to_pairs = {}
+    import bisect
+    for i in range(len(breedable)):
+        p1 = breedable[i]
+        for j in range(i, len(breedable)):
+            p2 = breedable[j]
+            cp = (max(p1['rank'], p2['rank']) * 7 + min(p1['rank'], p2['rank'])) // 9
+            best = closest_pal(cp)
+            if best:
+                key = (p1['tribe'], p2['tribe'])
+                pair_to_child[key] = best['tribe']
+                child = best['tribe']
+                if child not in child_to_pairs:
+                    child_to_pairs[child] = []
+                child_to_pairs[child].append({'parent_a': p1['tribe'], 'parent_b': p2['tribe']})
+    unique_combos = []
+    unique_child_to_pairs_map = {}
+    u_rows = get_rows(unique_data)
+    for _, row in u_rows.items():
+        p1 = row.get('ParentTribeA', '')
+        p2 = row.get('ParentTribeB', '')
+        child = row.get('ChildCharacterID', '')
+        if isinstance(p1, str) and p1.startswith('EPalTribeID::'):
+            p1 = p1[len('EPalTribeID::'):]
+        if isinstance(p2, str) and p2.startswith('EPalTribeID::'):
+            p2 = p2[len('EPalTribeID::'):]
+        if not p1 or not p2 or not child:
+            continue
+        if child not in tribe_map or p1 not in tribe_map or p2 not in tribe_map:
+            continue
+        unique_combos.append({'parent_a': p1, 'parent_b': p2, 'child': child})
+        key = (p1, p2)
+        if child not in unique_child_to_pairs_map:
+            unique_child_to_pairs_map[child] = []
+        unique_child_to_pairs_map[child].append({'parent_a': p1, 'parent_b': p2})
+    pal_info = {}
+    for p in pals:
+        tribe = p['tribe']
+        asset_lower = tribe.lower()
+        icon = pal_icon_map.get(asset_lower, pal_icon_map.get(tribe.lower(), f'/icons/pals/T_{tribe}_icon_normal.webp'))
+        pal_info[tribe] = {'name': name_map.get(tribe, tribe), 'combi_rank': p['rank'], 'ignore_combi': p['ignore_combi'], 'icon': icon}
+    result = {'pal_info': pal_info, 'unique_combos': unique_combos, 'child_to_parents_formula': child_to_pairs, 'child_to_parents_unique': unique_child_to_pairs_map}
+    save_resource_json('breedingdata.json', result)
+    print(f'  Total breedable pals: {len(pals)}')
+    print(f'  Unique combos: {len(unique_combos)}')
+    print(f'  Formula combos: {sum(len(v) for v in child_to_pairs.values())}')
 def main():
     if os.name == 'nt':
         os.system('title PalworldSaveTools - Game Data Extractor and Updater')
@@ -2786,6 +2919,7 @@ def main():
     _run_step('Updating boss mapping...', update_boss_mapping)
     _run_step('Updating work data...', update_work_data)
     _run_step('Updating world map areas...', update_world_map_area_data)
+    _run_step('Updating breeding data...', update_breeding_data)
     _run_step('Updating map data...', update_map_data)
     _run_step('Writing merged game data files...', _write_merged_files)
     _run_step('Deleting individual source files...', _delete_individual_files)
