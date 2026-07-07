@@ -13,6 +13,19 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
+_SORT_ROLE = Qt.UserRole + 1
+class _SortableTableItem(QTableWidgetItem):
+    def __lt__(self, other):
+        if not isinstance(other, QTableWidgetItem):
+            return super().__lt__(other)
+        my_val = self.data(_SORT_ROLE)
+        other_val = other.data(_SORT_ROLE)
+        if my_val is not None and other_val is not None:
+            try:
+                return float(my_val) < float(other_val)
+            except (ValueError, TypeError):
+                pass
+        return super().__lt__(other)
 def sav_to_gvasfile(filepath):
     from palsav.io import load_sav
     return load_sav(filepath, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
@@ -87,20 +100,18 @@ def get_player_info_from_save(gvas_file, players_folder=None):
     if isinstance(char_map, list):
         for entry in char_map:
             key = entry.get('key', {})
-            value = entry.get('value', {})
-            raw_data = value.get('RawData', {}).get('value', {})
             player_uid = key.get('PlayerUId', {}).get('value', 'N/A')
             player_uid_str = str(player_uid).replace('-', '').lower() if player_uid else 'N/A'
-            obj = raw_data.get('object', {})
-            sp = obj.get('SaveParameter', {})
-            sp_val = sp.get('value', {})
+            if player_uid_str not in valid_player_uids or player_uid_str == '00000000000000000000000000000001':
+                continue
+            value = entry.get('value', {})
+            raw_data = value.get('RawData', {}).get('value', {})
+            sp_val = raw_data.get('object', {}).get('SaveParameter', {}).get('value', {})
             is_player = sp_val.get('IsPlayer', {}).get('value', False)
             nick_name = sp_val.get('NickName', {}).get('value', '')
-            if player_uid_str == '00000000000000000000000000000001':
+            if not is_player:
                 continue
-            if is_player and player_uid_str not in players:
-                players[player_uid_str] = {'name': nick_name if nick_name else 'Unknown', 'guild': 'Unknown Guild', 'uid': player_uid_str, 'party_id': None, 'palbox_id': None}
-            elif is_player and nick_name and (players.get(player_uid_str, {}).get('name') == 'Unknown'):
+            if nick_name and player_uid_str in players:
                 players[player_uid_str]['name'] = nick_name
     if players_folder and valid_player_uids:
         container_mapping = load_player_container_mapping(players_folder, valid_player_uids)
@@ -403,10 +414,12 @@ class SlotNumUpdaterApp(QDialog):
             guild_item = QTableWidgetItem(container['guild'])
             guild_item.setFlags(guild_item.flags() & ~Qt.ItemIsEditable)
             self.table.setItem(row, 3, guild_item)
-            current_item = QTableWidgetItem(str(container['slot_num']))
+            current_item = _SortableTableItem(str(container['slot_num']))
+            current_item.setData(_SORT_ROLE, container['slot_num'])
             current_item.setFlags(current_item.flags() & ~Qt.ItemIsEditable)
             self.table.setItem(row, 4, current_item)
-            used_item = QTableWidgetItem(f"{container['used_slots']}/{container['max_slots']}")
+            used_item = _SortableTableItem(f"{container['used_slots']}/{container['max_slots']}")
+            used_item.setData(_SORT_ROLE, container['used_slots'])
             used_item.setFlags(used_item.flags() & ~Qt.ItemIsEditable)
             self.table.setItem(row, 5, used_item)
             new_item = QTableWidgetItem('-')
@@ -565,13 +578,16 @@ class SlotNumUpdaterApp(QDialog):
             modified_container_ids = {c['container_id'] for c in containers}
             for row, container in enumerate(self.player_containers):
                 if container['container_id'] in modified_container_ids:
-                    new_item = QTableWidgetItem(str(new_value))
+                    new_item = _SortableTableItem(str(new_value))
+                    new_item.setData(_SORT_ROLE, new_value)
                     new_item.setFlags(new_item.flags() & ~Qt.ItemIsEditable)
                     self.table.setItem(row, 6, new_item)
-                    current_item = QTableWidgetItem(str(new_value))
+                    current_item = _SortableTableItem(str(new_value))
+                    current_item.setData(_SORT_ROLE, new_value)
                     current_item.setFlags(current_item.flags() & ~Qt.ItemIsEditable)
                     self.table.setItem(row, 4, current_item)
-                    used_item = QTableWidgetItem(f"{container['used_slots']}/{new_value}")
+                    used_item = _SortableTableItem(f"{container['used_slots']}/{new_value}")
+                    used_item.setData(_SORT_ROLE, container['used_slots'])
                     used_item.setFlags(used_item.flags() & ~Qt.ItemIsEditable)
                     self.table.setItem(row, 5, used_item)
             self.set_loading_state(False)
