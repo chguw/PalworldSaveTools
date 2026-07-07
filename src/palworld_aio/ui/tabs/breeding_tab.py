@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QScrollArea, QFrame, QDialog
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QCursor, QPixmap
@@ -30,6 +31,10 @@ _SELECT_BTN_STYLE = (
     'font-size: 14px; font-weight: 600; }'
     'QPushButton:hover { background: rgba(125,211,252,0.2); border-color: rgba(125,211,252,0.4); color: #fff; }'
 )
+
+
+def _fmt(text, name):
+    return re.sub(r'\{(\w+)\}', name, text)
 
 
 class _SelectPalDialog(PalCreateDialog):
@@ -217,7 +222,7 @@ class BreedingTab(QWidget):
         pal_info_map = pal_info
         if target_info is None:
             target_info = pal_info_map.get(target_tribe, {})
-        title = QLabel((t('breeding.parents_for') if t else 'Parents for {name}').format(name=target_name))
+        title = QLabel(_fmt(t('breeding.parents_for') if t else 'Parents for {name}', target_name))
         title.setStyleSheet('color: #e2e8f0; font-size: 14px; font-weight: 600; padding: 4px 0;')
         self._results_layout.addWidget(title)
 
@@ -262,7 +267,7 @@ class BreedingTab(QWidget):
         pal_info_map = pal_info
         if target_info is None:
             target_info = pal_info_map.get(target_tribe, {})
-        title = QLabel((t('breeding.children_for') if t else 'Children for {name}').format(name=target_name))
+        title = QLabel(_fmt(t('breeding.children_for') if t else 'Children for {name}', target_name))
         title.setStyleSheet('color: #e2e8f0; font-size: 14px; font-weight: 600; padding: 4px 0;')
         self._results_layout.addWidget(title)
 
