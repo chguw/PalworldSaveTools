@@ -729,20 +729,22 @@ class MainWindow(QMainWindow):
             glevel = save_manager.get_guild_level_by_id(gid)
             is_leader = save_manager.is_player_guild_leader(gid, uid)
             display_name = f'[L]{name}' if is_leader else name
-            sort_keys = {1: elapsed if elapsed is not None else float('inf'), 2: int(level) if str(level).isdigit() else 0, 3: int(pals) if str(pals).isdigit() else 0}
+            sort_keys = {1: elapsed if elapsed is not None else float('inf'), 2: int(level) if str(level).isdigit() else 0, 3: int(pals) if str(pals).isdigit() else 0, 7: int(glevel) if str(glevel).isdigit() else 0}
             self.players_panel.add_item([display_name, lastseen, level, pals, uid, gname, gid, glevel], sort_keys=sort_keys)
     def _refresh_guilds(self):
         self.guilds_panel.clear()
         self.guild_members_panel.clear()
         guilds = get_guilds()
         for g in guilds:
-            self.guilds_panel.add_item([g['name'], g['id'], g['level']])
+            sort_keys = {2: int(g['level']) if str(g['level']).isdigit() else 0}
+            self.guilds_panel.add_item([g['name'], g['id'], g['level']], sort_keys=sort_keys)
     def _refresh_bases(self):
         self.bases_panel.clear()
         bases = get_bases()
         for b in bases:
             glevel = save_manager.get_guild_level_by_id(b['guild_id'])
-            self.bases_panel.add_item([b['id'], b['guild_id'], b['guild_name'], glevel])
+            sort_keys = {3: int(glevel) if str(glevel).isdigit() else 0}
+            self.bases_panel.add_item([b['id'], b['guild_id'], b['guild_name'], glevel], sort_keys=sort_keys)
     def _refresh_map(self):
         if hasattr(self, 'map_tab'):
             self.map_tab.refresh()
