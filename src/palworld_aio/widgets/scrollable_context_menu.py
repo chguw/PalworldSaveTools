@@ -172,20 +172,13 @@ class ScrollableContextMenu(QWidget):
         rect = QRect(tl, widget.size())
         return rect.contains(cursor_pos)
 
-    def _on_qmenu_triggered(self, action):
-        self._select(action.data())
-
-    def _on_qmenu_about_to_hide(self):
-        self._hide_sub()
-
     def _show_group(self, idx):
-        if self._sub_popup:
+        if self._sub_popup or getattr(self, '_skip_header', -1) == idx:
             return
         hdr, items = self._groups[idx]
         qmenu = QMenu(self)
-        qmenu.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-        qmenu.setAttribute(Qt.WA_TranslucentBackground)
         qmenu.setStyleSheet(_SUBMENU_STYLE)
+        qmenu.installEventFilter(self)
         for key, text, checkable, checked in items:
             if key == '---':
                 qmenu.addSeparator()
@@ -194,33 +187,33 @@ class ScrollableContextMenu(QWidget):
             action.setCheckable(checkable)
             action.setChecked(checked)
             action.setData(key)
-        qmenu.triggered.connect(self._on_qmenu_triggered)
-        qmenu.aboutToHide.connect(self._on_qmenu_about_to_hide)
         self._sub_popup = qmenu
-        hdr_pos = hdr.mapToGlobal(QPoint(hdr.width(), 0))
-        qmenu.popup(hdr_pos)
+        qmenu.popup(hdr.mapToGlobal(QPoint(hdr.width(), 0)))
+        qmenu.triggered.connect(self._on_sub_triggered)
+        qmenu.aboutToHide.connect(self._on_sub_hide)
         self._active_group = idx
         hdr.set_active(True)
 
+    def _on_sub_triggered(self, action):
+        self._result = action.data()
+        self.close()
+
+    def _on_sub_hide(self):
+        self._skip_header = self._active_group
+        QTimer.singleShot(200, self._clear_skip_header)
+        self._hide_sub()
+
+    def _clear_skip_header(self):
+        self._skip_header = -1
+
     def _hide_sub(self):
-        if self._hiding_sub:
-            return
-        self._hiding_sub = True
-        try:
-            if self._sub_popup:
-                try:
-                    self._sub_popup.triggered.disconnect()
-                    self._sub_popup.aboutToHide.disconnect()
-                except (RuntimeError, TypeError):
-                    pass
-                self._sub_popup.close()
-                self._sub_popup.deleteLater()
-                self._sub_popup = None
-            for idx, (hdr, items) in enumerate(self._groups):
-                hdr.set_active(False)
-            self._active_group = -1
-        finally:
-            self._hiding_sub = False
+        if self._sub_popup:
+            self._sub_popup.blockSignals(True)
+            self._sub_popup.deleteLater()
+            self._sub_popup = None
+        for idx, (hdr, items) in enumerate(self._groups):
+            hdr.set_active(False)
+        self._active_group = -1
 
     def _check_cursor(self):
         pos = QCursor.pos()
@@ -235,6 +228,13 @@ class ScrollableContextMenu(QWidget):
                     self._show_group(idx)
         if over_header is None and not over_sub:
             self._hide_sub()
+
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.Wheel and obj is self._sub_popup:
+            if self.scroll_area and self.scroll_area.isVisible():
+                self.scroll_area.wheelEvent(event)
+                return True
+        return super().eventFilter(obj, event)
 
     def add_item(self, key, text, checkable=False, checked=False):
         if self._in_group:

@@ -1198,19 +1198,22 @@ class ContainerListWidget(QTreeWidget):
         item = self.itemAt(position)
         if item:
             container_id = item.data(0, Qt.UserRole)
-            menu = QMenu(self)
-            menu.setStyleSheet(MENU_STYLE)
-            add_item_action = menu.addAction(t('base_inventory.add_item') if t else 'Add Item')
-            add_item_action.triggered.connect(lambda: self._add_item_debug(container_id))
-            clear_container_action = menu.addAction(t('base_inventory.clear_container') if t else 'Clear Container')
-            clear_container_action.triggered.connect(lambda: self._clear_container_debug(container_id))
-            modify_slots_action = menu.addAction(t('base_inventory.modify_container_slots') if t else 'Modify Container Slots')
-            modify_slots_action.triggered.connect(lambda: self._modify_container_slots_debug(container_id))
-            delete_container_action = menu.addAction(t('base_inventory.delete_container') if t else 'Delete Container')
-            delete_container_action.triggered.connect(lambda: self._delete_container_debug(container_id))
-            menu.exec(self.viewport().mapToGlobal(position))
-        else:
-            pass
+            from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+            popup = ScrollableContextMenu(self)
+            popup.add_item('add_item', t('base_inventory.add_item') if t else 'Add Item')
+            popup.add_item('clear_container', t('base_inventory.clear_container') if t else 'Clear Container')
+            popup.add_item('modify_slots', t('base_inventory.modify_container_slots') if t else 'Modify Container Slots')
+            popup.add_sep()
+            popup.add_item('delete_container', t('base_inventory.delete_container') if t else 'Delete Container')
+            key = popup.exec_(self.viewport().mapToGlobal(position))
+            if key == 'add_item':
+                self._add_item_debug(container_id)
+            elif key == 'clear_container':
+                self._clear_container_debug(container_id)
+            elif key == 'modify_slots':
+                self._modify_container_slots_debug(container_id)
+            elif key == 'delete_container':
+                self._delete_container_debug(container_id)
     def _view_container_details(self, container_id):
         for i in range(self.topLevelItemCount()):
             item = self.topLevelItem(i)
@@ -1489,12 +1492,11 @@ class _BasePalIcon(QFrame):
             elif key == 'delete':
                 self.rightClicked.emit(self.slot_index, 'delete')
         else:
-            from PySide6.QtWidgets import QMenu
-            menu = QMenu(self)
-            menu.setObjectName('editPalsContextMenu')
-            add_action = menu.addAction(t('edit_pals.add_new_pal'))
-            action = menu.exec(event.globalPos())
-            if action == add_action:
+            from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+            popup = ScrollableContextMenu(self)
+            popup.add_item('add_new', t('edit_pals.add_new_pal'))
+            key = popup.exec_(event.globalPos())
+            if key == 'add_new':
                 self.rightClicked.emit(self.slot_index, 'add_new')
     def _get_raw(self):
         if not self.pal_data:
@@ -3594,24 +3596,34 @@ class BaseInventoryTab(QWidget):
     def _show_item_context_menu(self, slot_data, pos):
         if not slot_data:
             return
-        menu = QMenu(self)
-        menu.setStyleSheet(MENU_STYLE)
+        from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+        popup = ScrollableContextMenu(self)
         item_id = slot_data.get('item_id', '')
         type_a = ItemData.get_item_type_a(item_id)
         type_b = ItemData.get_item_type_b(item_id)
         is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
         if not is_singleton:
-            menu.addAction(t('base_inventory.edit_quantity') if t else 'Edit Quantity', lambda: self._edit_item_quantity(slot_data))
-        menu.addAction(t('base_inventory.remove_item') if t else 'Remove Item', lambda: self._remove_item_from_slot(slot_data))
-        menu.addSeparator()
-        menu.addAction(t('base_inventory.clear_container') if t else 'Clear Container', self._clear_container)
-        menu.exec(pos)
+            popup.add_item('edit_qty', t('base_inventory.edit_quantity') if t else 'Edit Quantity')
+        popup.add_item('remove', t('base_inventory.remove_item') if t else 'Remove Item')
+        popup.add_sep()
+        popup.add_item('clear', t('base_inventory.clear_container') if t else 'Clear Container')
+        key = popup.exec_(pos)
+        if key == 'edit_qty':
+            self._edit_item_quantity(slot_data)
+        elif key == 'remove':
+            self._remove_item_from_slot(slot_data)
+        elif key == 'clear':
+            self._clear_container()
     def _show_empty_slot_context_menu(self, container_type, slot_index, pos):
-        menu = QMenu(self)
-        menu.setStyleSheet(MENU_STYLE)
-        menu.addAction(t('base_inventory.add_item') if t else 'Add Item', lambda: self._add_item_to_slot(slot_index))
-        menu.addAction(t('base_inventory.clear_container') if t else 'Clear Container', self._clear_container)
-        menu.exec(pos)
+        from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+        popup = ScrollableContextMenu(self)
+        popup.add_item('add_item', t('base_inventory.add_item') if t else 'Add Item')
+        popup.add_item('clear', t('base_inventory.clear_container') if t else 'Clear Container')
+        key = popup.exec_(pos)
+        if key == 'add_item':
+            self._add_item_to_slot(slot_index)
+        elif key == 'clear':
+            self._clear_container()
     def _edit_item_quantity(self, slot_data):
         if not self.manager.inventory_container:
             self._show_warning(t('base_inventory.select_container_first') if t else 'Please select a container first')

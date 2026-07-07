@@ -1585,27 +1585,37 @@ class PlayerInventoryTab(QWidget):
     def _show_item_context_menu(self, slot_data, pos):
         if not slot_data:
             return
-        menu = QMenu(self)
-        menu.setStyleSheet(MENU_STYLE)
+        from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+        popup = ScrollableContextMenu(self)
         item_id = slot_data.get('item_id', '')
         type_a = ItemData.get_item_type_a(item_id)
         type_b = ItemData.get_item_type_b(item_id)
         is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
         if not is_singleton:
-            menu.addAction(t('inventory.edit_qty', default='Edit Quantity')).triggered.connect(lambda: self._edit_quantity_for(slot_data))
-        menu.addAction(t('inventory.delete_item', default='Delete')).triggered.connect(lambda: self._delete_item(slot_data))
-        menu.addSeparator()
-        menu.addAction(t('inventory.add_item', default='Add Item')).triggered.connect(self._show_add_item_dialog)
-        menu.exec(pos)
+            popup.add_item('edit_qty', t('inventory.edit_qty', default='Edit Quantity'))
+        popup.add_item('delete', t('inventory.delete_item', default='Delete'))
+        popup.add_sep()
+        popup.add_item('add_item', t('inventory.add_item', default='Add Item'))
+        key = popup.exec_(pos)
+        if key == 'edit_qty':
+            self._edit_quantity_for(slot_data)
+        elif key == 'delete':
+            self._delete_item(slot_data)
+        elif key == 'add_item':
+            self._show_add_item_dialog()
     def _show_empty_slot_context_menu(self, container_type: str, slot_index: int, pos):
         self._context_container_type = container_type
         self._context_slot_index = slot_index
-        menu = QMenu(self)
-        menu.setStyleSheet(MENU_STYLE)
-        menu.addAction(t('inventory.add_item', default='Add Item')).triggered.connect(self._show_add_item_dialog)
-        menu.addSeparator()
-        menu.addAction(t('inventory.clear_slot', default='Clear Slot')).triggered.connect(lambda: self._clear_corrupted_slot(container_type, slot_index))
-        menu.exec(pos)
+        from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+        popup = ScrollableContextMenu(self)
+        popup.add_item('add_item', t('inventory.add_item', default='Add Item'))
+        popup.add_sep()
+        popup.add_item('clear_slot', t('inventory.clear_slot', default='Clear Slot'))
+        key = popup.exec_(pos)
+        if key == 'add_item':
+            self._show_add_item_dialog()
+        elif key == 'clear_slot':
+            self._clear_corrupted_slot(container_type, slot_index)
     def _on_empty_slot_double_clicked(self, container_type: str, slot_index: int):
         self._context_container_type = container_type
         self._context_slot_index = slot_index
@@ -1665,19 +1675,25 @@ class PlayerInventoryTab(QWidget):
     def _show_equip_context_menu(self, slot_widget, pos):
         slot_name = slot_widget.slot_name
         current_item = slot_widget.current_item
-        menu = QMenu(self)
-        menu.setStyleSheet(MENU_STYLE)
+        from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+        popup = ScrollableContextMenu(self)
         if current_item:
             item_id = current_item.get('item_id', '')
             type_a = ItemData.get_item_type_a(item_id)
             type_b = ItemData.get_item_type_b(item_id)
             is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
             if not is_singleton:
-                menu.addAction(t('inventory.edit_qty', default='Edit Quantity')).triggered.connect(lambda: self._edit_equip_item(slot_name, current_item))
-            menu.addAction(t('inventory.clear_slot', default='Clear Slot')).triggered.connect(lambda: self._clear_equip_slot(slot_name, slot_widget))
+                popup.add_item('edit_qty', t('inventory.edit_qty', default='Edit Quantity'))
+            popup.add_item('clear_slot', t('inventory.clear_slot', default='Clear Slot'))
         else:
-            menu.addAction(t('inventory.add_item', default='Add Item')).triggered.connect(lambda: self._add_to_equip_slot(slot_name))
-        menu.exec(pos)
+            popup.add_item('add_item', t('inventory.add_item', default='Add Item'))
+        key = popup.exec_(pos)
+        if key == 'edit_qty':
+            self._edit_equip_item(slot_name, current_item)
+        elif key == 'clear_slot':
+            self._clear_equip_slot(slot_name, slot_widget)
+        elif key == 'add_item':
+            self._add_to_equip_slot(slot_name)
     def _on_equip_double_clicked(self, slot_widget):
         slot_name = slot_widget.slot_name
         if slot_widget.current_item:

@@ -224,16 +224,11 @@ class PalboxSlotWidget(QFrame):
 
         else:
 
-            menu = QMenu(self)
-
-            menu.setObjectName('editPalsContextMenu')
-
-            add_action = menu.addAction(t('edit_pals.add_new_pal'))
-
-            action = menu.exec(event.globalPos())
-
-            if action == add_action:
-
+            from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
+            popup = ScrollableContextMenu(self)
+            popup.add_item('add_new', t('edit_pals.add_new_pal'))
+            key = popup.exec_(event.globalPos())
+            if key == 'add_new':
                 self.rightClicked.emit(self.slot_index, 'add_new')
 
     def _get_raw(self):

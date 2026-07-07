@@ -236,33 +236,9 @@ def _register_pal_instance_to_guild(instance_id, group_id):
 def build_pal_context_menu(parent, raw):
     from palworld_aio.widgets.scrollable_context_menu import ScrollableContextMenu
     popup = ScrollableContextMenu(parent)
-    cid = extract_value(raw, 'CharacterID', '') if raw else ''
-    is_boss = cid.upper().startswith('BOSS_')
-    is_lucky = extract_value(raw, 'IsRarePal', False) if raw else False
-    is_awake = extract_value(raw, 'bIsAwakening', False) if raw else False
-    is_dna = extract_value(raw, 'bImportedCharacter', False) if raw else False
-    fav_idx = extract_value(raw, 'FavoriteIndex', 0) if raw else 0
-    popup.add_item('boss', t('edit_pals.ctx.boss_alpha'), True, is_boss)
-    popup.add_item('lucky', t('edit_pals.ctx.lucky_shiny'), True, is_lucky)
-    popup.add_item('awake', t('edit_pals.ctx.awakened'), True, is_awake)
-    popup.add_item('dna', t('edit_pals.ctx.imported'), True, is_dna)
-    popup.add_sep()
-    popup.add_group_start(t('edit_pals.ctx.fav'), expanded=True)
-    for i in range(4):
-        popup.add_item(f'fav_{i}', f"  {t('edit_pals.ctx.lock_level')} {i}", True, fav_idx == i)
-    popup.add_group_end()
-    popup.add_sep()
-    popup.add_item('max', t('edit_pals.ctx.max_all_stats'))
-    popup.add_item('learn', t('edit_pals.ctx.learn_all_moves'))
     popup.add_item('learned', t('edit_pals.ctx.learnt_skills'))
     popup.add_sep()
     popup.add_item('clone', t('edit_pals.ctx.clone'))
-    popup.add_sep()
-    popup.add_group_start(t('edit_pals.ctx.bulk_ops'), expanded=True)
-    popup.add_item('bulk_sync_pal', t('edit_pals.ctx.bulk_sync_pal'))
-    popup.add_item('bulk_rename', t('edit_pals.ctx.bulk_rename'))
-    popup.add_item('bulk_heal', t('edit_pals.ctx.bulk_heal'))
-    popup.add_group_end()
     popup.add_sep()
     popup.add_item('delete', t('edit_pals.delete'))
     return popup
