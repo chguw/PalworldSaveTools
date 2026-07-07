@@ -1777,5 +1777,7 @@
     "breeding.select_pal": "Wähle einen Kumpel...",
     "breeding.search_placeholder": "Geben Sie ein, um Freunde zu filtern...",
     "breeding.no_selection": "Wählen Sie einen Freund aus, um Zuchtkombinationen zu sehen",
-    "breeding.select_btn": "Wählen"
+    "breeding.select_btn": "Wählen",
+    "breeding.page_of": "Seite {n} von {total}",
+    "breeding.combo_count": "{n} Kombination(en)"
 }

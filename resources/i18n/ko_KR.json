@@ -1752,5 +1752,7 @@
     "breeding.select_pal": "친구를 선택하세요...",
     "breeding.search_placeholder": "친구를 필터링하려면 입력하세요...",
     "breeding.no_selection": "번식 조합을 보려면 친구를 선택하세요.",
-    "breeding.select_btn": "선택하다"
+    "breeding.select_btn": "선택하다",
+    "breeding.page_of": "페이지 {n}/{total}",
+    "breeding.combo_count": "{n} 콤보"
 }

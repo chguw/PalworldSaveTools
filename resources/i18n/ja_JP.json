@@ -1753,5 +1753,7 @@
     "breeding.select_pal": "仲間を選択してください...",
     "breeding.search_placeholder": "友達をフィルタリングするには入力してください...",
     "breeding.no_selection": "交配組み合わせを確認するには仲間を選択してください",
-    "breeding.select_btn": "選択"
+    "breeding.select_btn": "選択",
+    "breeding.page_of": "ページ {n}/{total}",
+    "breeding.combo_count": "{n} コンボ"
 }

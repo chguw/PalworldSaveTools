@@ -2040,5 +2040,7 @@
     "breeding.select_pal": "Select a Pal...",
     "breeding.search_placeholder": "Type to filter pals...",
     "breeding.no_selection": "Select a pal to see breeding combinations",
-    "breeding.select_btn": "Select"
+    "breeding.select_btn": "Select",
+    "breeding.page_of": "Page {n} of {total}",
+    "breeding.combo_count": "{n} combo(s)"
 }

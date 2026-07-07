@@ -1751,5 +1751,7 @@
     "breeding.select_pal": "Выберите приятеля...",
     "breeding.search_placeholder": "Введите, чтобы отфильтровать друзей...",
     "breeding.no_selection": "Выберите приятеля, чтобы увидеть племенные комбинации",
-    "breeding.select_btn": "Выбирать"
+    "breeding.select_btn": "Выбирать",
+    "breeding.page_of": "Страница {n} из {total}",
+    "breeding.combo_count": "{n} комбо(ов)"
 }

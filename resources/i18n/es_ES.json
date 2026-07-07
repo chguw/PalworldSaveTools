@@ -1747,5 +1747,7 @@
     "breeding.select_pal": "Seleccione un amigo...",
     "breeding.search_placeholder": "Escribe para filtrar amigos...",
     "breeding.no_selection": "Seleccione un amigo para ver combinaciones de cría",
-    "breeding.select_btn": "Seleccionar"
+    "breeding.select_btn": "Seleccionar",
+    "breeding.page_of": "Página {n} de {total}",
+    "breeding.combo_count": "{n} combinaciones"
 }

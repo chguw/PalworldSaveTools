@@ -2,7 +2,7 @@ import json
 import os
 import re
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QScrollArea, QFrame, QDialog
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont, QCursor, QPixmap
 from palworld_aio import constants
 from resource_resolver import resource_path
@@ -13,10 +13,14 @@ try:
     ARROW_RIGHT = nf.icons.get('nf-fa-arrow_right', '\u2192')
     PLUS = nf.icons.get('nf-fa-plus', '+')
     EGG = nf.icons.get('nf-fa-egg', '\u2B55')
+    CHEVRON_LEFT = nf.icons.get('nf-fa-chevron_left', '<')
+    CHEVRON_RIGHT = nf.icons.get('nf-fa-chevron_right', '>')
 except Exception:
     ARROW_RIGHT = '\u2192'
     PLUS = '+'
     EGG = '\u2B55'
+    CHEVRON_LEFT = '<'
+    CHEVRON_RIGHT = '>'
 
 _BTN_STYLE = (
     'QPushButton { background: transparent; color: #94a3b8; border: none; '
@@ -25,6 +29,7 @@ _BTN_STYLE = (
     'QPushButton[active=true] { color: #7DD3FC; border-bottom: 2px solid #7DD3FC; }'
 )
 _CARD_STYLE = 'QFrame { background: transparent; border: none; }'
+_MAX_COMBOS = 100
 _SELECT_BTN_STYLE = (
     'QPushButton { background: rgba(125,211,252,0.12); color: #7DD3FC; '
     'border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; padding: 10px 20px; '
@@ -106,6 +111,12 @@ class BreedingTab(QWidget):
         self._selected_tribe = None
         self._selected_name = None
         self._selected_icon = None
+        self._refreshing = False
+        self._update_timer = QTimer(self)
+        self._update_timer.setSingleShot(True)
+        self._update_timer.timeout.connect(self._do_update_results)
+        self._page = 0
+        self._page_data = []
         self._setup_ui()
         self._load_data()
 
@@ -149,16 +160,16 @@ class BreedingTab(QWidget):
         self._hint_label.setWordWrap(True)
         layout.addWidget(self._hint_label)
 
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.NoFrame)
-        scroll.setStyleSheet('QScrollArea { background: transparent; } QScrollBar:vertical { width: 6px; }')
+        self._scroll = QScrollArea()
+        self._scroll.setWidgetResizable(True)
+        self._scroll.setFrameShape(QFrame.NoFrame)
+        self._scroll.setStyleSheet('QScrollArea { background: transparent; } QScrollBar:vertical { width: 6px; }')
         self._results_container = QWidget()
         self._results_layout = QVBoxLayout(self._results_container)
         self._results_layout.setSpacing(6)
         self._results_layout.setContentsMargins(0, 0, 0, 0)
-        scroll.setWidget(self._results_container)
-        layout.addWidget(scroll, 1)
+        self._scroll.setWidget(self._results_container)
+        layout.addWidget(self._scroll, 1)
 
         self._switch_mode('parents')
 
@@ -170,6 +181,43 @@ class BreedingTab(QWidget):
             btn.style().unpolish(btn)
             btn.style().polish(btn)
         self._update_results()
+
+    def _update_results(self):
+        if self._refreshing:
+            return
+        self._update_timer.start(0)
+
+    def _do_update_results(self):
+        self._refreshing = True
+        try:
+            for i in reversed(range(self._results_layout.count())):
+                w = self._results_layout.itemAt(i).widget()
+                if w:
+                    w.hide()
+                    w.deleteLater()
+            self._results_layout.update()
+        except Exception:
+            pass
+        self._scroll.verticalScrollBar().setValue(0)
+        try:
+            if not self._selected_tribe or not self._breeding_data:
+                empty = QLabel(t('breeding.no_selection') if t else 'Select a pal to see breeding combinations')
+                empty.setStyleSheet('color: #64748b; font-size: 13px; padding: 20px;')
+                empty.setAlignment(Qt.AlignCenter)
+                self._results_layout.addWidget(empty)
+                self._refreshing = False
+                return
+            bd = self._breeding_data
+            pal_info = bd.get('pal_info', {})
+            self._page_data = []
+            if self._mode == 'parents':
+                self._show_parents(self._selected_tribe, self._selected_name, self._selected_icon, bd, pal_info)
+            else:
+                self._show_children(self._selected_tribe, self._selected_name, self._selected_icon, bd, pal_info)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+        self._refreshing = False
 
     def _lookup_tribe(self, key):
         if not self._breeding_data:
@@ -186,6 +234,7 @@ class BreedingTab(QWidget):
     def _open_pal_dialog(self):
         dlg = _SelectPalDialog(self)
         if dlg.exec():
+            self._page = 0
             asset = dlg.selected_asset
             tribe, info, icon = self._lookup_tribe(asset)
             if tribe:
@@ -199,24 +248,6 @@ class BreedingTab(QWidget):
                 self._selected_icon = ''
                 self._selected_label.setText(dlg.selected_name)
             self._update_results()
-
-    def _update_results(self):
-        for i in reversed(range(self._results_layout.count())):
-            w = self._results_layout.itemAt(i).widget()
-            if w:
-                w.setParent(None)
-        if not self._selected_tribe or not self._breeding_data:
-            empty = QLabel(t('breeding.no_selection') if t else 'Select a pal to see breeding combinations')
-            empty.setStyleSheet('color: #64748b; font-size: 13px; padding: 20px;')
-            empty.setAlignment(Qt.AlignCenter)
-            self._results_layout.addWidget(empty)
-            return
-        bd = self._breeding_data
-        pal_info = bd.get('pal_info', {})
-        if self._mode == 'parents':
-            self._show_parents(self._selected_tribe, self._selected_name, self._selected_icon, bd, pal_info)
-        else:
-            self._show_children(self._selected_tribe, self._selected_name, self._selected_icon, bd, pal_info)
 
     def _show_parents(self, target_tribe, target_name, target_icon, bd, pal_info, target_info=None):
         pal_info_map = pal_info
@@ -238,30 +269,23 @@ class BreedingTab(QWidget):
         tw.setLayout(target_row)
         self._results_layout.addWidget(tw)
 
-        total = 0
         for ctype, clist, label in [
             ('unique', bd.get('child_to_parents_unique', {}).get(target_tribe, []), t('breeding.unique') if t else 'Unique Combos'),
             ('formula', bd.get('child_to_parents_formula', {}).get(target_tribe, []), t('breeding.formula') if t else 'Formula Combos'),
         ]:
             if not clist:
                 continue
-            total += len(clist)
-            sec = QLabel(f'<b style="color:#94a3b8;font-size:12px;padding:8px 0 2px 0;">{label}</b>')
-            sec.setTextFormat(Qt.RichText)
-            self._results_layout.addWidget(sec)
             for pair in clist:
-                card = self._make_pair_card(pair['parent_a'], pair['parent_b'], target_tribe, pal_info_map)
-                self._results_layout.addWidget(card)
-        if total == 0:
+                self._page_data.append({'type': 'pair', 'a': pair['parent_a'], 'b': pair['parent_b'], 'child': target_tribe})
+        if not self._page_data:
             if target_info.get('ignore_combi', False):
                 msg = QLabel(t('breeding.no_breed') if t else 'This pal cannot breed')
             else:
                 msg = QLabel(t('breeding.no_combos') if t else 'No breeding combos found')
             msg.setStyleSheet('color: #64748b; font-size: 12px; padding: 8px;')
             self._results_layout.addWidget(msg)
-        count = QLabel(f'<span style="color:#64748b;font-size:11px;">{total} combo(s)</span>')
-        count.setTextFormat(Qt.RichText)
-        self._results_layout.addWidget(count)
+            return
+        self._render_cards(pal_info_map)
 
     def _show_children(self, target_tribe, target_name, target_icon, bd, pal_info, target_info=None):
         pal_info_map = pal_info
@@ -295,22 +319,66 @@ class BreedingTab(QWidget):
                         if child_tribe not in children_map:
                             children_map[child_tribe] = {'partner': partner, 'type': ctype}
 
-        total = 0
         for child_tribe, data in sorted(children_map.items(), key=lambda x: pal_info_map.get(x[0], {}).get('name', x[0])):
-            total += 1
-            partner = data['partner']
-            card = self._make_child_card(target_tribe, partner, child_tribe, pal_info_map)
-            self._results_layout.addWidget(card)
-        if total == 0:
+            self._page_data.append({'type': 'child', 'parent': target_tribe, 'partner': data['partner'], 'child': child_tribe})
+        if not self._page_data:
             if target_info.get('ignore_combi', False):
                 msg = QLabel(t('breeding.no_breed') if t else 'This pal cannot breed')
             else:
                 msg = QLabel(t('breeding.no_combos') if t else 'No breeding combos found')
             msg.setStyleSheet('color: #64748b; font-size: 12px; padding: 8px;')
             self._results_layout.addWidget(msg)
-        count = QLabel(f'<span style="color:#64748b;font-size:11px;">{total} child combo(s)</span>')
-        count.setTextFormat(Qt.RichText)
-        self._results_layout.addWidget(count)
+            return
+        self._render_cards(pal_info_map)
+
+    def _render_cards(self, pal_info_map):
+        total = len(self._page_data)
+        start = self._page * _MAX_COMBOS
+        end = min(start + _MAX_COMBOS, total)
+        for i in range(start, end):
+            d = self._page_data[i]
+            if d['type'] == 'pair':
+                card = self._make_pair_card(d['a'], d['b'], d['child'], pal_info_map)
+            else:
+                card = self._make_child_card(d['parent'], d['partner'], d['child'], pal_info_map)
+            self._results_layout.addWidget(card)
+        nav = QHBoxLayout()
+        nav.setSpacing(6)
+        total_pages = max(1, (total + _MAX_COMBOS - 1) // _MAX_COMBOS)
+        prev_btn = QPushButton(CHEVRON_LEFT)
+        prev_btn.setFont(QFont(constants.FONT_FAMILY_NERD, 14))
+        prev_btn.setFixedSize(28, 28)
+        prev_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.1); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; } QPushButton:hover { background: rgba(125,211,252,0.2); } QPushButton:disabled { color: #475569; border-color: rgba(255,255,255,0.05); }')
+        prev_btn.setEnabled(self._page > 0)
+        prev_btn.clicked.connect(self._prev_page)
+        nav.addWidget(prev_btn)
+        page_lbl = QLabel(f'<span style="color:#94a3b8;font-size:12px;">{(t("breeding.page_of") if t else "Page {n} of {total}").replace("{n}", str(self._page + 1)).replace("{total}", str(total_pages))}</span>')
+        page_lbl.setTextFormat(Qt.RichText)
+        nav.addWidget(page_lbl)
+        next_btn = QPushButton(CHEVRON_RIGHT)
+        next_btn.setFont(QFont(constants.FONT_FAMILY_NERD, 14))
+        next_btn.setFixedSize(28, 28)
+        next_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.1); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; } QPushButton:hover { background: rgba(125,211,252,0.2); } QPushButton:disabled { color: #475569; border-color: rgba(255,255,255,0.05); }')
+        next_btn.setEnabled(end < total)
+        next_btn.clicked.connect(self._next_page)
+        nav.addWidget(next_btn)
+        count_lbl = QLabel(f'<span style="color:#64748b;font-size:11px;">{(t("breeding.combo_count") if t else "{n} combo(s)").replace("{n}", str(total))}</span>')
+        count_lbl.setTextFormat(Qt.RichText)
+        nav.addWidget(count_lbl)
+        nav.addStretch()
+        nw = QWidget()
+        nw.setLayout(nav)
+        self._results_layout.addWidget(nw)
+
+    def _prev_page(self):
+        if self._page > 0:
+            self._page -= 1
+            self._do_update_results()
+
+    def _next_page(self):
+        if (self._page + 1) * _MAX_COMBOS < len(self._page_data):
+            self._page += 1
+            self._do_update_results()
 
     def _make_pair_card(self, parent_a, parent_b, child, pal_info_map):
         frame = QFrame()
@@ -390,6 +458,7 @@ class BreedingTab(QWidget):
         self._load_data()
 
     def refresh_labels(self):
+        self._refreshing = False
         for sid, skey in [('parents', 'Parents'), ('children', 'Children')]:
             if sid in self._sub_btns:
                 self._sub_btns[sid].setText(t(f'breeding.mode.{sid}') if t else skey)

@@ -29,6 +29,10 @@ NEW_TRANSLATIONS = {
     'breeding.select_btn': 'Select',
     'breeding.search_placeholder': 'Type to filter pals...',
     'breeding.no_selection': 'Select a pal to see breeding combinations',
+    'breeding.page_of': 'Page {n} of {total}',
+    'breeding.combo_count': '{n} combo(s)',
+    'breeding.prev': '<',
+    'breeding.next': '>',
 }
 OLD_KEYS = []
 def _clean_uv_locks():
