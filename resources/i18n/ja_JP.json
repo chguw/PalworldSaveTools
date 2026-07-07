@@ -1733,5 +1733,7 @@
     "pal_editor.box_tab": "箱",
     "edit_pals.dps": "DPSストレージ",
     "pal_editor.dps_page": "DPS {現在}/{合計}",
-    "player_pal.dps_pals": "プレイヤー DPS 仲間 (DPS セーブ)"
+    "player_pal.dps_pals": "プレイヤー DPS 仲間 (DPS セーブ)",
+    "pal_editor.box_count": "ボックス {n} ({count})",
+    "pal_editor.dps_count": "DPS {n}/{m} ({count})"
 }

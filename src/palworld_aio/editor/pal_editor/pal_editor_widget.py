@@ -281,10 +281,11 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
     def _update_box_label(self):
         if self._palbox_mode == 'dps':
             total = (self.dps_total_slots + 29) // 30 if self.dps_total_slots else 1
-            label = t('pal_editor.dps') if t else 'DPS'
-            self.box_label.setText(f'{label} {self.current_box_index}/{total}')
+            count = len(self.dps_pals)
+            self.box_label.setText(t('pal_editor.dps_count', n=self.current_box_index, m=total, count=count) if t else f'DPS {self.current_box_index}/{total} ({count})')
         else:
-            self.box_label.setText(t('pal_editor.box', n=self.current_box_index) if t else f'Box {self.current_box_index}')
+            count = len(self.palbox_pal_dict)
+            self.box_label.setText(t('pal_editor.box_count', n=self.current_box_index, count=count) if t else f'Box {self.current_box_index} ({count})')
     def _prev_box(self):
         if self.current_box_index > 1:
             self.current_box_index -= 1
@@ -482,6 +483,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self._clear_palbox_highlight()
         self.pal_info.set_clicked_pal(None)
         self._mark_dps_modified()
+        self._update_box_label()
     def _add_new_dps_pal(self, slot_index):
         from .create_dialogs import PalCreateDialog
         dlg = PalCreateDialog(self, False, slot_index, is_dps=True)
@@ -509,6 +511,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             self.palbox_slots[slot_index].pal_data = wrapper
             self.palbox_slots[slot_index].update_display()
             self._mark_dps_modified()
+            self._update_box_label()
     def _clone_dps_pal(self, src_slot_index):
         abs_src = (self.current_box_index - 1) * 30 + src_slot_index
         source_raw = _get_raw_from_item(self.dps_pals.get(abs_src))
@@ -545,6 +548,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                 self.palbox_slots[empty_slot].update_display()
                 show_information(self, 'Clone Pal', 'DPS pal cloned successfully.')
                 self._mark_dps_modified()
+                self._update_box_label()
         else:
             show_warning(self, 'Clone', 'DPS data not loaded.')
             return
@@ -924,6 +928,7 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
             slot.pal_data = page_pals[i] if i < len(page_pals) else None
             slot.update_display()
             slot.set_selected(False)
+        self._update_box_label()
     def set_player(self, player_uid, player_name):
         self.player_uid = player_uid
         self.player_name = player_name

@@ -1757,5 +1757,7 @@
     "pal_editor.box_tab": "Kasten",
     "edit_pals.dps": "DPS-Speicher",
     "pal_editor.dps_page": "DPS {aktuell}/{gesamt}",
-    "player_pal.dps_pals": "Spieler-DPS-Freunde (DPS-Speicherungen)"
+    "player_pal.dps_pals": "Spieler-DPS-Freunde (DPS-Speicherungen)",
+    "pal_editor.box_count": "Box {n} ({count})",
+    "pal_editor.dps_count": "DPS {n}/{m} ({count})"
 }

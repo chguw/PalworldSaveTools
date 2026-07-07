@@ -1727,5 +1727,7 @@
     "pal_editor.box_tab": "Caja",
     "edit_pals.dps": "Almacenamiento DPS",
     "pal_editor.dps_page": "DPS {actual}/{total}",
-    "player_pal.dps_pals": "Jugador DPS Pals (guardados DPS)"
+    "player_pal.dps_pals": "Jugador DPS Pals (guardados DPS)",
+    "pal_editor.box_count": "Caja {n} ({count})",
+    "pal_editor.dps_count": "DPS {n}/{m} ({count})"
 }

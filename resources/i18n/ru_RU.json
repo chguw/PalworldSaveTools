@@ -1731,5 +1731,7 @@
     "pal_editor.box_tab": "Коробка",
     "edit_pals.dps": "Хранилище ДПС",
     "pal_editor.dps_page": "ДПС {текущий}/{всего}",
-    "player_pal.dps_pals": "Player DPS Pals (сохранения ДПС)"
+    "player_pal.dps_pals": "Player DPS Pals (сохранения ДПС)",
+    "pal_editor.box_count": "Ящик {n} ({count})",
+    "pal_editor.dps_count": "Урон {n}/{m} ({count})"
 }

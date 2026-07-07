@@ -13,22 +13,10 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
-    'edit_pals.ctx.fav': 'Fav',
-    'edit_pals.ctx.bulk_ops': 'Bulk Ops',
-    'func_manager.restore_all_pals.title': 'Restore All Pals',
-    'func_manager.restore_all_pals.confirm': 'This will restore all pals (HP, FullStomach, Sanity) and remove sickness. Continue?',
-    'func_manager.restore_all_pals.success': 'Restored {count} pals',
-    'func_manager.max_all_pals.title': 'Max All Pals',
-    'func_manager.max_all_pals.confirm': 'This will max all stats (level 80, IVs 100, souls 20, rank 5) for all pals. Continue?',
-    'func_manager.max_all_pals.success': 'Maxed {count} pals',
-    'deletion.menu.restore_all_pals': 'Restore All Pals',
-    'deletion.menu.max_all_pals': 'Max All Pals',
-    'pal_editor.dps': 'DPS',
-    'pal_editor.box_tab': 'Box',
-    'edit_pals.dps': 'DPS Storage',
-    'player_pal.dps_pals': 'Player DPS Pals (DPS saves)',
+    'pal_editor.box_count': 'Box {n} ({count})',
+    'pal_editor.dps_count': 'DPS {n}/{m} ({count})',
 }
-OLD_KEYS = []
+OLD_KEYS = ['pal_editor.box_count', 'pal_editor.dps_count']
 def _clean_uv_locks():
     for p in [Path.cwd() / 'uv.lock', PROJECT_ROOT / 'uv.lock']:
         if p.exists():

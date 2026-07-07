@@ -1732,5 +1732,7 @@
     "pal_editor.box_tab": "상자",
     "edit_pals.dps": "DPS 스토리지",
     "pal_editor.dps_page": "DPS {현재}/{총계}",
-    "player_pal.dps_pals": "플레이어 DPS 친구(DPS 저장)"
+    "player_pal.dps_pals": "플레이어 DPS 친구(DPS 저장)",
+    "pal_editor.box_count": "상자 {n} ({count})",
+    "pal_editor.dps_count": "DPS {n}/{m} ({count})"
 }

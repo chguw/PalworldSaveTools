@@ -1735,5 +1735,7 @@
     "pal_editor.box_tab": "盒子",
     "edit_pals.dps": "DPS存储",
     "pal_editor.dps_page": "DPS {当前}/{总计}",
-    "player_pal.dps_pals": "玩家 DPS 好友（DPS 保存）"
+    "player_pal.dps_pals": "玩家 DPS 好友（DPS 保存）",
+    "pal_editor.box_count": "方框 {n} ({count})",
+    "pal_editor.dps_count": "DPS {n}/{m} ({count})"
 }

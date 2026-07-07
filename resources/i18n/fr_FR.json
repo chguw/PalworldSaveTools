@@ -1715,5 +1715,7 @@
     "pal_editor.box_tab": "Boîte",
     "edit_pals.dps": "Stockage DPS",
     "pal_editor.dps_page": "DPS {actuel}/{total}",
-    "player_pal.dps_pals": "Joueur DPS Pals (sauvegardes DPS)"
+    "player_pal.dps_pals": "Joueur DPS Pals (sauvegardes DPS)",
+    "pal_editor.box_count": "Boîte {n} ({count})",
+    "pal_editor.dps_count": "DPS {n}/{m} ({count})"
 }
