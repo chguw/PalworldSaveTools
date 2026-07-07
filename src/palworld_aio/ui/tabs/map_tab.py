@@ -1066,8 +1066,9 @@ class MapTab(QWidget):
                 guild_item.setData(2, _SORT_ROLE, guild.get('last_seen_sort', float('inf')))
                 guild_item.setData(3, _SORT_ROLE, len(guild['bases']))
                 for base in guild['bases']:
-                    base_item = QTreeWidgetItem([f"X:{int(base['coords'][0])} Y:{int(base['coords'][1])}", str(base['base_id'])[:12] + '...', '', ''])
+                    base_item = _SortableItem([f"X:{int(base['coords'][0])} Y:{int(base['coords'][1])}", str(base['base_id'])[:12] + '...', '', ''])
                     base_item.setData(0, Qt.UserRole, ('base', base))
+                    base_item.setData(0, _SORT_ROLE, (int(base['coords'][0]), int(base['coords'][1])))
                     base_item.setForeground(0, QColor(0, 180, 255))
                     guild_item.addChild(base_item)
                 self.base_tree.addTopLevelItem(guild_item)
