@@ -93,6 +93,8 @@ class PalInfoHandlerMixin:
         gender_data = extract_value(self._raw, 'Gender', {})
         if isinstance(gender_data, dict) and 'value' in gender_data:
             current = gender_data['value']
+        elif isinstance(gender_data, str):
+            current = gender_data
         else:
             current = 'EPalGenderType::Female'
         new = 'EPalGenderType::Male' if 'Female' in current else 'EPalGenderType::Female'
