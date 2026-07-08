@@ -2790,7 +2790,7 @@ def update_breeding_data():
             if p['index'] < e['index'] or (p['index'] == e['index'] and not p['is_variant'] and e['is_variant']):
                 rank_to_best[r] = p
     sorted_ranks = sorted(rank_to_best.keys())
-    def closest_pal(cp):
+    def closest_pal(cp, parent_rarity_avg=None):
         import bisect
         idx = bisect.bisect_left(sorted_ranks, cp)
         cand = []
@@ -2799,14 +2799,22 @@ def update_breeding_data():
         if idx > 0:
             cand.append(sorted_ranks[idx - 1])
         best, best_diff = None, float('inf')
+        best_rarity_diff = float('inf')
         for r in cand:
             p = rank_to_best[r]
             diff = abs(r - cp)
             if diff < best_diff:
                 best_diff = diff
                 best = p
+                if parent_rarity_avg is not None:
+                    best_rarity_diff = abs(p.get('rarity', 999) - parent_rarity_avg)
             elif diff == best_diff:
-                if p.get('rarity', 999) < best.get('rarity', 999):
+                if parent_rarity_avg is not None:
+                    rd = abs(p.get('rarity', 999) - parent_rarity_avg)
+                    if rd < best_rarity_diff or (rd == best_rarity_diff and p.get('rarity', 999) < best.get('rarity', 999)):
+                        best = p
+                        best_rarity_diff = rd
+                elif p.get('rarity', 999) < best.get('rarity', 999):
                     best = p
         return best
     pair_to_child = {}
@@ -2817,7 +2825,8 @@ def update_breeding_data():
         for j in range(i, len(breedable)):
             p2 = breedable[j]
             cp = (p1['rank'] + p2['rank']) // 2
-            best = closest_pal(cp)
+            pra = (p1.get('rarity', 0) + p2.get('rarity', 0)) / 2.0
+            best = closest_pal(cp, pra)
             if best:
                 key = (p1['tribe'], p2['tribe'])
                 pair_to_child[key] = best['tribe']
@@ -2833,7 +2842,8 @@ def update_breeding_data():
             if partner['tribe'] == p['tribe']:
                 continue
             cp = (p['rank'] + partner['rank']) // 2
-            best = closest_pal(cp)
+            pra = (p.get('rarity', 0) + partner.get('rarity', 0)) / 2.0
+            best = closest_pal(cp, pra)
             if best:
                 child = best['tribe']
                 parent_to_children_formula.setdefault(p['tribe'], []).append({'partner': partner['tribe'], 'child': child})
