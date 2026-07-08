@@ -1757,5 +1757,8 @@
     "breeding.no_selection": "选择一个朋友查看育种组合",
     "breeding.select_btn": "选择",
     "breeding.page_of": "第 {n} 页，共 {total} 页",
-    "breeding.combo_count": "{n} 个组合"
+    "breeding.combo_count": "{n} 个组合",
+    "breeding.prev": null,
+    "breeding.next": null,
+    "breeding.filter": "筛选结果..."
 }

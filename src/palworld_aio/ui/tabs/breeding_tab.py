@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QScrollArea, QFrame, QDialog, QListWidgetItem
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QScrollArea, QFrame, QDialog, QListWidgetItem, QLineEdit
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont, QCursor, QPixmap, QIcon
 from palworld_aio import constants
@@ -171,6 +171,7 @@ class BreedingTab(QWidget):
         self._update_timer.timeout.connect(self._do_update_results)
         self._page = 0
         self._page_data = []
+        self._filter_text = ''
         self._setup_ui()
         self._load_data()
 
@@ -214,6 +215,14 @@ class BreedingTab(QWidget):
         self._hint_label.setWordWrap(True)
         layout.addWidget(self._hint_label)
 
+        self._search_filter = QLineEdit()
+        self._search_filter.setPlaceholderText(t('breeding.filter') if t else 'Filter results...')
+        self._search_filter.setStyleSheet('QLineEdit { background: rgba(30,35,45,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 6px 10px; color: #e2e8f0; font-size: 12px; } QLineEdit:focus { border-color: #7DD3FC; }')
+        self._search_filter.setFixedHeight(30)
+        self._search_filter.textChanged.connect(self._on_filter_changed)
+        self._search_filter.hide()
+        layout.addWidget(self._search_filter)
+
         self._scroll = QScrollArea()
         self._scroll.setWidgetResizable(True)
         self._scroll.setFrameShape(QFrame.NoFrame)
@@ -236,6 +245,10 @@ class BreedingTab(QWidget):
             btn.style().polish(btn)
         self._update_results()
 
+    def _on_filter_changed(self, text):
+        self._filter_text = text.strip().lower()
+        self._update_results()
+
     def _update_results(self):
         if self._refreshing:
             return
@@ -250,12 +263,14 @@ class BreedingTab(QWidget):
         self._scroll.verticalScrollBar().setValue(0)
         try:
             if not self._selected_tribe or not self._breeding_data:
+                self._search_filter.hide()
                 empty = QLabel(t('breeding.no_selection') if t else 'Select a pal to see breeding combinations')
                 empty.setStyleSheet('color: #64748b; font-size: 13px; padding: 20px;')
                 empty.setAlignment(Qt.AlignCenter)
                 self._results_layout.addWidget(empty)
                 self._refreshing = False
                 return
+            self._search_filter.show()
             bd = self._breeding_data
             pal_info = bd.get('pal_info', {})
             self._page_data = []
@@ -287,6 +302,8 @@ class BreedingTab(QWidget):
         dlg = _SelectPalDialog(self)
         if dlg.exec():
             self._page = 0
+            self._filter_text = ''
+            self._search_filter.setText('')
             asset = dlg.selected_asset
             tribe, info, icon = self._lookup_tribe(asset)
             if tribe:
@@ -396,11 +413,23 @@ class BreedingTab(QWidget):
         self._render_cards(pal_info_map)
 
     def _render_cards(self, pal_info_map):
-        total = len(self._page_data)
+        if self._filter_text:
+            filtered = []
+            for d in self._page_data:
+                if d['type'] == 'pair':
+                    names = [pal_info_map.get(x, {}).get('name', '').lower() for x in (d['a'], d['b'], d['child'])]
+                else:
+                    names = [pal_info_map.get(x, {}).get('name', '').lower() for x in (d['parent'], d['partner'], d['child'])]
+                if any(self._filter_text in n for n in names):
+                    filtered.append(d)
+            display_data = filtered
+        else:
+            display_data = self._page_data
+        total = len(display_data)
         start = self._page * _MAX_COMBOS
         end = min(start + _MAX_COMBOS, total)
         for i in range(start, end):
-            d = self._page_data[i]
+            d = display_data[i]
             if d['type'] == 'pair':
                 card = self._make_pair_card(d['a'], d['b'], d['child'], pal_info_map)
             else:
@@ -528,4 +557,5 @@ class BreedingTab(QWidget):
                 self._sub_btns[sid].setText(t(f'breeding.mode.{sid}') if t else skey)
         self._select_btn.setText(f'{EGG}  {(t("breeding.select_pal") if t else "Select a Pal...")}')
         self._hint_label.setText(t('breeding.hint') if t else 'Click the button above to select a pal and view breeding combinations.')
+        self._search_filter.setPlaceholderText(t('breeding.filter') if t else 'Filter results...')
         self._update_results()

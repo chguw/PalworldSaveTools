@@ -1754,5 +1754,8 @@
     "breeding.no_selection": "번식 조합을 보려면 친구를 선택하세요.",
     "breeding.select_btn": "선택하다",
     "breeding.page_of": "페이지 {n}/{total}",
-    "breeding.combo_count": "{n} 콤보"
+    "breeding.combo_count": "{n} 콤보",
+    "breeding.prev": null,
+    "breeding.next": null,
+    "breeding.filter": "결과 필터링..."
 }

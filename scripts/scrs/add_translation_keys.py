@@ -33,6 +33,7 @@ NEW_TRANSLATIONS = {
     'breeding.combo_count': '{n} combo(s)',
     'breeding.prev': '<',
     'breeding.next': '>',
+    'breeding.filter': 'Filter results...',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

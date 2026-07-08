@@ -2042,5 +2042,8 @@
     "breeding.no_selection": "Select a pal to see breeding combinations",
     "breeding.select_btn": "Select",
     "breeding.page_of": "Page {n} of {total}",
-    "breeding.combo_count": "{n} combo(s)"
+    "breeding.combo_count": "{n} combo(s)",
+    "breeding.prev": "<",
+    "breeding.next": ">",
+    "breeding.filter": "Filter results..."
 }

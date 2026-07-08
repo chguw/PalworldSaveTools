@@ -1753,5 +1753,8 @@
     "breeding.no_selection": "Выберите приятеля, чтобы увидеть племенные комбинации",
     "breeding.select_btn": "Выбирать",
     "breeding.page_of": "Страница {n} из {total}",
-    "breeding.combo_count": "{n} комбо(ов)"
+    "breeding.combo_count": "{n} комбо(ов)",
+    "breeding.prev": null,
+    "breeding.next": null,
+    "breeding.filter": "Фильтровать результаты..."
 }
