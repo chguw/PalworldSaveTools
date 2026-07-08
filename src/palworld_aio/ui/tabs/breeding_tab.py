@@ -338,6 +338,7 @@ class BreedingTab(QWidget):
         tw.setLayout(target_row)
         self._results_layout.addWidget(tw)
 
+        seen_pairs = set()
         all_sections = [
             ('unique', bd.get('child_to_parents_unique', {}).get(target_tribe, []), t('breeding.unique') if t else 'Unique Combos'),
             ('formula', bd.get('child_to_parents_formula', {}).get(target_tribe, []), t('breeding.formula') if t else 'Formula Combos'),
@@ -353,6 +354,10 @@ class BreedingTab(QWidget):
                 sec.setTextFormat(Qt.RichText)
                 self._results_layout.addWidget(sec)
             for pair in clist:
+                key = tuple(sorted((pair['parent_a'], pair['parent_b'])))
+                if key in seen_pairs:
+                    continue
+                seen_pairs.add(key)
                 self._page_data.append({'type': 'pair', 'a': pair['parent_a'], 'b': pair['parent_b'], 'child': target_tribe})
         if not self._page_data:
             if target_info.get('ignore_combi', False):
