@@ -1,13 +1,13 @@
 import json
 import os
 import re
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QScrollArea, QFrame, QDialog
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QScrollArea, QFrame, QDialog, QListWidgetItem
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QFont, QCursor, QPixmap
+from PySide6.QtGui import QFont, QCursor, QPixmap, QIcon
 from palworld_aio import constants
 from resource_resolver import resource_path
 from i18n import t
-from palworld_aio.editor.pal_editor import PalCreateDialog
+from palworld_aio.editor.pal_editor import PalFrame, PalCreateDialog, _get_pal_icon_path, _get_cached_pixmap
 try:
     import nerdfont as nf
     ARROW_RIGHT = nf.icons.get('nf-fa-arrow_right', '\u2192')
@@ -64,12 +64,66 @@ class _SelectPalDialog(PalCreateDialog):
                 self._breeding_ok_btn = btn
             elif 'Cancel' in txt or 'cancel' in txt:
                 self._breeding_cancel_btn = btn
+        self._search_edit.textChanged.disconnect()
+        self._search_edit.textChanged.connect(self._on_search)
+
+    def _on_search(self):
+        self._filter_pal_list()
+
+    def _filter_pal_list(self):
+        text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
+        show_standard = self._show_standard_chk.isChecked() if hasattr(self, '_show_standard_chk') else True
+        show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else False
+        self.pal_list.clear()
+        for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda kv: (kv[1], kv[0])):
+            asset_lower = asset.lower()
+            if any((asset_lower.startswith(p) for p in ('summon_', 'quest_', 'raid_', 'predator_', 'police_'))):
+                continue
+            if 'worldtreedragon' in asset_lower or 'oilrig' in asset_lower or 'tower' in asset_lower:
+                continue
+            if '_bossrush' in asset_lower:
+                continue
+            if asset_lower.startswith('gym_') and not asset_lower.endswith('_otomo'):
+                continue
+            otomo_key = asset_lower + '_otomo'
+            if otomo_key in PalFrame._NAMEMAP:
+                continue
+            boss_otomo_key = 'boss_' + asset_lower + '_otomo'
+            if boss_otomo_key in PalFrame._NAMEMAP:
+                continue
+            base_id = asset_lower
+            for prefix in ('boss_', 'gym_'):
+                if base_id.startswith(prefix):
+                    base_id = base_id[len(prefix):]
+            base_id = re.sub(r'_\d+$', '', base_id)
+            base_id = re.sub(r'_avatar|_servant|_otomo', '', base_id)
+            zukan = PalFrame._PAL_ZUKAN.get(base_id, -99)
+            if zukan != -99 and zukan < 0:
+                continue
+            if text and text not in name.lower() and text not in asset.lower():
+                continue
+            is_variant = any((asset.upper().startswith(p) for p in ('BOSS_', 'PREDATOR_', 'GYM_', 'RAID_', 'POLICE_', 'SUMMON_')))
+            if is_variant and not show_boss:
+                continue
+            if not is_variant and not show_standard:
+                continue
+            li = QListWidgetItem(name)
+            li.setData(Qt.UserRole, asset)
+            try:
+                pix = _get_cached_pixmap(_get_pal_icon_path(asset), 48)
+                if pix:
+                    li.setIcon(QIcon(pix))
+            except Exception:
+                pass
+            self.pal_list.addItem(li)
 
     def _on_select(self):
-        if self.selected_pal and self.selected_pal.get('asset'):
-            self.selected_asset = self.selected_pal['asset']
-            self.selected_name = self.selected_pal.get('name', self.selected_asset)
-            self.accept()
+        item = self.pal_list.currentItem()
+        if not item:
+            return
+        self.selected_asset = item.data(Qt.UserRole)
+        self.selected_name = item.text()
+        self.accept()
 
     def _on_create(self):
         self._on_select()
@@ -189,15 +243,10 @@ class BreedingTab(QWidget):
 
     def _do_update_results(self):
         self._refreshing = True
-        try:
-            for i in reversed(range(self._results_layout.count())):
-                w = self._results_layout.itemAt(i).widget()
-                if w:
-                    w.hide()
-                    w.deleteLater()
-            self._results_layout.update()
-        except Exception:
-            pass
+        while self._results_layout.count():
+            item = self._results_layout.takeAt(0)
+            if item and item.widget():
+                item.widget().deleteLater()
         self._scroll.verticalScrollBar().setValue(0)
         try:
             if not self._selected_tribe or not self._breeding_data:
@@ -232,6 +281,9 @@ class BreedingTab(QWidget):
         return None, {}, ''
 
     def _open_pal_dialog(self):
+        if self._refreshing:
+            return
+        self._update_timer.stop()
         dlg = _SelectPalDialog(self)
         if dlg.exec():
             self._page = 0
@@ -316,11 +368,15 @@ class BreedingTab(QWidget):
                 for pair in pairs:
                     if pair['parent_a'] == target_tribe or pair['parent_b'] == target_tribe:
                         partner = pair['parent_b'] if pair['parent_a'] == target_tribe else pair['parent_a']
-                        if child_tribe not in children_map:
-                            children_map[child_tribe] = {'partner': partner, 'type': ctype}
+                        children_map.setdefault(child_tribe, {'partners': set(), 'type': ctype})['partners'].add(partner)
+        for entry in bd.get('parent_to_children_formula', {}).get(target_tribe, []):
+            child_tribe = entry['child']
+            partner = entry['partner']
+            children_map.setdefault(child_tribe, {'partners': set(), 'type': 'formula'})['partners'].add(partner)
 
         for child_tribe, data in sorted(children_map.items(), key=lambda x: pal_info_map.get(x[0], {}).get('name', x[0])):
-            self._page_data.append({'type': 'child', 'parent': target_tribe, 'partner': data['partner'], 'child': child_tribe})
+            for partner in sorted(data['partners']):
+                self._page_data.append({'type': 'child', 'parent': target_tribe, 'partner': partner, 'child': child_tribe})
         if not self._page_data:
             if target_info.get('ignore_combi', False):
                 msg = QLabel(t('breeding.no_breed') if t else 'This pal cannot breed')

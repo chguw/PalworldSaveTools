@@ -2824,6 +2824,16 @@ def update_breeding_data():
                 if child not in child_to_pairs:
                     child_to_pairs[child] = []
                 child_to_pairs[child].append({'parent_a': p1['tribe'], 'parent_b': p2['tribe']})
+    parent_to_children_formula = {}
+    for p in pals:
+        if not p['ignore_combi']:
+            continue
+        for bp in breedable:
+            cp = (max(p['rank'], bp['rank']) * 7 + min(p['rank'], bp['rank'])) // 9
+            best = closest_pal(cp)
+            if best:
+                child = best['tribe']
+                parent_to_children_formula.setdefault(p['tribe'], []).append({'partner': bp['tribe'], 'child': child})
     unique_combos = []
     unique_child_to_pairs_map = {}
     u_rows = get_rows(unique_data)
@@ -2850,7 +2860,7 @@ def update_breeding_data():
         asset_lower = tribe.lower()
         icon = pal_icon_map.get(asset_lower, pal_icon_map.get(tribe.lower(), f'/icons/pals/T_{tribe}_icon_normal.webp'))
         pal_info[tribe] = {'name': name_map.get(tribe, tribe), 'combi_rank': p['rank'], 'ignore_combi': p['ignore_combi'], 'icon': icon}
-    result = {'pal_info': pal_info, 'unique_combos': unique_combos, 'child_to_parents_formula': child_to_pairs, 'child_to_parents_unique': unique_child_to_pairs_map}
+    result = {'pal_info': pal_info, 'unique_combos': unique_combos, 'child_to_parents_formula': child_to_pairs, 'child_to_parents_unique': unique_child_to_pairs_map, 'parent_to_children_formula': parent_to_children_formula}
     save_resource_json('breedingdata.json', result)
     print(f'  Total breedable pals: {len(pals)}')
     print(f'  Unique combos: {len(unique_combos)}')
