@@ -2847,7 +2847,7 @@ def update_breeding_data():
             if best:
                 child = best['tribe']
                 parent_to_children_formula.setdefault(p['tribe'], []).append({'partner': partner['tribe'], 'child': child})
-    unique_combos = []
+        unique_combos = []
     unique_child_to_pairs_map = {}
     u_rows = get_rows(unique_data)
     for _, row in u_rows.items():
