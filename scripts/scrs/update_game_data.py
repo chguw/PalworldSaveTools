@@ -2766,14 +2766,15 @@ def update_breeding_data():
         if not tribe:
             continue
         ignore_combi = bool(data.get('IgnoreCombi', False))
+        rarity = int(_safe_get(data, 'Rarity', 0))
         is_variant = '_' in tribe
         is_base = internal_id == tribe
         if tribe in seen_tribes:
             existing = seen_tribes[tribe]
             if is_base or (existing['rank'] > rank and not existing['is_base']):
-                seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
+                seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'rarity': rarity, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
         else:
-            seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
+            seen_tribes[tribe] = {'tribe': tribe, 'internal_id': internal_id, 'rank': rank, 'rarity': rarity, 'index': idx, 'is_variant': is_variant, 'ignore_combi': ignore_combi, 'is_base': is_base}
     pals = list(seen_tribes.values())
     tribe_map = {p['tribe']: p for p in pals if p['tribe'] in name_map}
     pals = [p for p in pals if p['tribe'] in name_map]
@@ -2804,8 +2805,9 @@ def update_breeding_data():
             if diff < best_diff:
                 best_diff = diff
                 best = p
-            elif diff == best_diff and r > best['rank']:
-                best = p
+            elif diff == best_diff:
+                if p.get('rarity', 999) < best.get('rarity', 999):
+                    best = p
         return best
     pair_to_child = {}
     child_to_pairs = {}
@@ -2860,7 +2862,7 @@ def update_breeding_data():
         tribe = p['tribe']
         asset_lower = tribe.lower()
         icon = pal_icon_map.get(asset_lower, pal_icon_map.get(tribe.lower(), f'/icons/pals/T_{tribe}_icon_normal.webp'))
-        pal_info[tribe] = {'name': name_map.get(tribe, tribe), 'combi_rank': p['rank'], 'ignore_combi': p['ignore_combi'], 'icon': icon}
+        pal_info[tribe] = {'name': name_map.get(tribe, tribe), 'combi_rank': p['rank'], 'rarity': p.get('rarity', 0), 'ignore_combi': p['ignore_combi'], 'icon': icon}
     child_to_parents_ignore = {}
     for parent_tribe, entries in parent_to_children_formula.items():
         for e in entries:
