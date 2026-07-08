@@ -321,12 +321,20 @@ class BreedingTab(QWidget):
         tw.setLayout(target_row)
         self._results_layout.addWidget(tw)
 
-        for ctype, clist, label in [
+        all_sections = [
             ('unique', bd.get('child_to_parents_unique', {}).get(target_tribe, []), t('breeding.unique') if t else 'Unique Combos'),
             ('formula', bd.get('child_to_parents_formula', {}).get(target_tribe, []), t('breeding.formula') if t else 'Formula Combos'),
-        ]:
+        ]
+        ignore_pairs = bd.get('child_to_parents_ignore', {}).get(target_tribe, [])
+        if ignore_pairs:
+            all_sections.append(('formula', ignore_pairs, None))
+        for ctype, clist, label in all_sections:
             if not clist:
                 continue
+            if label:
+                sec = QLabel(f'<b style="color:#94a3b8;font-size:12px;padding:8px 0 2px 0;">{label}</b>')
+                sec.setTextFormat(Qt.RichText)
+                self._results_layout.addWidget(sec)
             for pair in clist:
                 self._page_data.append({'type': 'pair', 'a': pair['parent_a'], 'b': pair['parent_b'], 'child': target_tribe})
         if not self._page_data:
