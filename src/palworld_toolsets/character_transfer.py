@@ -689,6 +689,7 @@ def transfer_all_characters():
         total_players = source_player_list.topLevelItemCount()
         print(f'Starting bulk transfer for {total_players} players...')
         total_start = time.perf_counter()
+        level_map = _build_level_map(level_json)
         for i in range(total_players):
             player_start = time.perf_counter()
             item = source_player_list.topLevelItem(i)
@@ -707,7 +708,7 @@ def transfer_all_characters():
             host_json_gvas = load_player_file(level_sav_path, selected_source_player)
             if not host_json_gvas:
                 continue
-            player_level = get_player_level_from_cspm(level_json, selected_source_player)
+            player_level = level_map.get(selected_source_player.lower(), 1)
             if player_level < 2:
                 print(f'[SKIP] {player_uuid} - Player level {player_level} < 2 (not leveled up)')
                 continue
