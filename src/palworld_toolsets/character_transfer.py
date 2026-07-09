@@ -107,6 +107,48 @@ def get_player_pals_count_from_cspm(level_json, player_uid):
         return pal_count
     except Exception:
         return 0
+def _build_level_map(cspm_json):
+    char_map = cspm_json.get('CharacterSaveParameterMap', {}).get('value', [])
+    result = {}
+    for entry in char_map:
+        try:
+            sp = entry['value']['RawData']['value']['object']['SaveParameter']
+            if sp['struct_type'] != 'PalIndividualCharacterSaveParameter':
+                continue
+            sp_val = sp['value']
+            if not sp_val.get('IsPlayer', {}).get('value', False):
+                continue
+            key = entry.get('key', {})
+            uid_obj = key.get('PlayerUId', {})
+            uid = str(uid_obj.get('value', '') if isinstance(uid_obj, dict) else uid_obj)
+            if uid:
+                uid_clean = uid.lower().replace('-', '')
+                level = extract_value(sp_val, 'Level', 1)
+                result[uid_clean] = int(level) if level is not None else 1
+        except Exception:
+            continue
+    return result
+def _build_pal_count_map(cspm_json):
+    char_map = cspm_json.get('CharacterSaveParameterMap', {}).get('value', [])
+    ownership = ContainerOwnership.build(char_map, cspm_json.get('CharacterContainerSaveData', {}).get('value', []))
+    result = {}
+    for entry in char_map:
+        try:
+            sp = entry['value']['RawData']['value']['object']['SaveParameter']
+            if sp['struct_type'] != 'PalIndividualCharacterSaveParameter':
+                continue
+            sp_val = sp['value']
+            if sp_val.get('IsPlayer', {}).get('value', False):
+                continue
+            inst_val = entry.get('key', {}).get('InstanceId', {}).get('value')
+            owner_uid_obj = sp_val.get('OwnerPlayerUId', {})
+            owner_uid = str(owner_uid_obj.get('value', '') if isinstance(owner_uid_obj, dict) else owner_uid_obj) if owner_uid_obj else ''
+            effective_owner = ownership.get_effective_owner(inst_val, owner_uid)
+            if effective_owner:
+                result[effective_owner] = result.get(effective_owner, 0) + 1
+        except Exception:
+            continue
+    return result
 level_sav_path, t_level_sav_path = (None, None)
 level_json, host_json, targ_lvl, targ_json = (None, None, None, None)
 target_gvas_file, targ_json_gvas = (None, None)
@@ -1213,12 +1255,14 @@ def load_players(save_json, is_source):
     list_box.clear()
     current_tick = source_world_tick if is_source else target_world_tick
     cspm_json = level_json if is_source else targ_lvl
+    level_map = _build_level_map(cspm_json)
+    pal_count_map = _build_pal_count_map(cspm_json)
     for guild_id, player_items in players.items():
         for player_item in player_items:
             playerUId = ''.join(safe_uuid_str(player_item['player_uid']).split('-')).upper()
             player_name = player_item.get('player_name', (player_item.get('player_info') or {}).get('player_name', ''))
-            player_level = get_player_level_from_cspm(cspm_json, playerUId)
-            player_pals_count = get_player_pals_count_from_cspm(cspm_json, playerUId)
+            player_level = level_map.get(playerUId.lower(), 1)
+            player_pals_count = pal_count_map.get(playerUId.lower(), 0)
             last_online_time = player_item.get('player_info', {}).get('last_online_real_time', 0)
             last_seen = format_last_seen(last_online_time, current_tick)
             item = _SortableItem([safe_uuid_str(guild_id), playerUId, player_name, str(player_level), str(player_pals_count), last_seen])
