@@ -969,13 +969,12 @@ class MainWindow(QMainWindow):
         from palworld_aio.inventory.inventory_manager import PlayerInventory
         from palworld_aio.utils import gvasfile_to_sav, sav_to_gvasfile
         from boot_paths import ROOT_DIR
-        ref_path = resource_path(str(ROOT_DIR), 'game_data', 'reference_unlock_data.json')
+        ft_path = resource_path(str(ROOT_DIR), 'game_data', 'fast_travel_points.json')
         areas_path = resource_path(str(ROOT_DIR), 'game_data', 'world_map_areas.json')
-        ref_data = json.load(open(ref_path, 'r'))
+        ft_data = json.load(open(ft_path, 'r'))
         area_ids = json.load(open(areas_path, 'r'))
-        ft_guids = sorted(set(ref_data.get('FastTravelPointUnlockFlag_guids', [])))
-        area_guids_set = set(ref_data.get('FindAreaFlagMap_keys', []))
-        all_area_keys = sorted(area_guids_set | set(area_ids if isinstance(area_ids, list) else area_ids.get('areas', [])))
+        ft_guids = sorted(ft_data.keys())
+        all_area_keys = sorted(set(area_ids if isinstance(area_ids, list) else area_ids.get('areas', [])))
         players_affected = 0
         for uid in player_uids:
             try:

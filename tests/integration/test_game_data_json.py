@@ -295,19 +295,15 @@ class TestSchemaValidation:
                     errors.append(f"  '{key}'.{f} not int")
         assert not errors, "\n" + "\n".join(errors)
 
-    # ---------- reference_unlock_data.json ----------
+    # ---------- fast_travel_points.json ----------
 
-    def test_reference_unlock_top_level(self):
-        data = _load("reference_unlock_data.json")
-        for key in ("FastTravelPointUnlockFlag_guids",
-                    "FindAreaFlagMap_keys",
-                    "UnlockedWorldMapFlags",
-                    "AreaBarrierUnlockFlags_guids"):
-            assert key in data, f"Missing top-level key '{key}'"
-        assert isinstance(data["FastTravelPointUnlockFlag_guids"], list)
-        assert isinstance(data["FindAreaFlagMap_keys"], list)
-        assert isinstance(data["UnlockedWorldMapFlags"], dict)
-        assert isinstance(data["AreaBarrierUnlockFlags_guids"], list)
+    def test_fast_travel_top_level(self):
+        data = _load("fast_travel_points.json")
+        assert isinstance(data, dict), "must be dict"
+        for guid, entry in data.items():
+            assert isinstance(entry, dict), f"{guid} must be dict"
+            for field in ("x", "y", "z", "id"):
+                assert field in entry, f"{guid} missing {field}"
 
     # ---------- relic_data.json ----------
 
@@ -448,17 +444,14 @@ class TestDataIntegrity:
                 )
         assert not errors, "\n" + "\n".join(errors)
 
-    # ---- reference_unlock_data.json ----
+    # ---- fast_travel_points.json ----
 
-    def test_reference_unlock_guid_format(self):
-        data = _load("reference_unlock_data.json")
+    def test_fast_travel_guid_format(self):
+        data = _load("fast_travel_points.json")
         import re
         guid_re = re.compile(r"^[0-9A-F]{32}$")
         errors = []
-        for guid in data["FastTravelPointUnlockFlag_guids"]:
-            if not guid_re.match(guid):
-                errors.append(f"  Bad GUID format: {guid!r}")
-        for guid in data["AreaBarrierUnlockFlags_guids"]:
+        for guid in data:
             if not guid_re.match(guid):
                 errors.append(f"  Bad GUID format: {guid!r}")
         assert not errors, "\n" + "\n".join(errors)

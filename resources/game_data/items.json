@@ -5169,7 +5169,7 @@
         {
             "name": "Antibiotic_Good",
             "asset": "Antibiotic_Good",
-            "icon": "/icons/items/Antibiotic_Good.webp",
+            "icon": "/icons/items/Tex_medicines_05.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Consume",
             "type_b": "EPalItemTypeB::ConsumeBandage",
@@ -5211,7 +5211,7 @@
         {
             "name": "Antibiotic_Normal",
             "asset": "Antibiotic_Normal",
-            "icon": "/icons/items/Antibiotic_Normal.webp",
+            "icon": "/icons/items/Tex_medicines_05.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Consume",
             "type_b": "EPalItemTypeB::ConsumeBandage",
@@ -5253,7 +5253,7 @@
         {
             "name": "Antibiotic_Super",
             "asset": "Antibiotic_Super",
-            "icon": "/icons/items/Antibiotic_Super.webp",
+            "icon": "/icons/items/Tex_medicines_05.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Consume",
             "type_b": "EPalItemTypeB::ConsumeBandage",
@@ -39735,7 +39735,7 @@
         {
             "name": "ClawsPendant",
             "asset": "ClawsPendant",
-            "icon": "/icons/items/ClawsPendant.webp",
+            "icon": "/icons/items/Tex_05_ff_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Accessory",
             "type_b": "EPalItemTypeB::Accessory",
@@ -45069,7 +45069,7 @@
         {
             "name": "FangNecklace",
             "asset": "FangNecklace",
-            "icon": "/icons/items/FangNecklace.webp",
+            "icon": "/icons/items/Tex_02_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Accessory",
             "type_b": "EPalItemTypeB::Accessory",
@@ -45951,7 +45951,7 @@
         {
             "name": "Fishing Rod_Good",
             "asset": "FishingRod_Good",
-            "icon": "/icons/items/T_itemicon_Weapon_FishingRod_1.webp",
+            "icon": "/icons/items/Tex_fishing_95_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Weapon",
             "type_b": "EPalItemTypeB::WeaponMelee",
@@ -45993,7 +45993,7 @@
         {
             "name": "Fishing Rod_Legendary",
             "asset": "FishingRod_Legendary",
-            "icon": "/icons/items/T_itemicon_Weapon_FishingRod_1.webp",
+            "icon": "/icons/items/Tex_fishing_95_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Weapon",
             "type_b": "EPalItemTypeB::WeaponMelee",
@@ -46035,7 +46035,7 @@
         {
             "name": "Fishing Rod_Old",
             "asset": "FishingRod_Old",
-            "icon": "/icons/items/T_itemicon_Weapon_FishingRod_1.webp",
+            "icon": "/icons/items/Tex_fishing_95_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Weapon",
             "type_b": "EPalItemTypeB::WeaponMelee",
@@ -46077,7 +46077,7 @@
         {
             "name": "Fishing Rod_Super",
             "asset": "FishingRod_Super",
-            "icon": "/icons/items/T_itemicon_Weapon_FishingRod_1.webp",
+            "icon": "/icons/items/Tex_fishing_95_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Weapon",
             "type_b": "EPalItemTypeB::WeaponMelee",
@@ -57921,7 +57921,7 @@
         {
             "name": "IronOre",
             "asset": "IronOre",
-            "icon": "/icons/items/IronOre.webp",
+            "icon": "/icons/items/Tex_MiningIcons_97_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialOre",
@@ -58719,7 +58719,7 @@
         {
             "name": "Kitsunebi_Fire",
             "asset": "Kitsunebi_Fire",
-            "icon": "/icons/items/Kitsunebi_Fire.webp",
+            "icon": "/icons/items/Tex_PrehistoricIcon_04_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialMonster",
@@ -60063,7 +60063,7 @@
         {
             "name": "Lightz Helmet",
             "asset": "LightzHelmet",
-            "icon": "/icons/items/LightzHelmet.webp",
+            "icon": "/icons/items/Tex_clothes_19.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Armor",
             "type_b": "EPalItemTypeB::ArmorHead",
@@ -63969,7 +63969,7 @@
         {
             "name": "Night Vision Goggles",
             "asset": "NightVisionGoggles",
-            "icon": "/icons/items/NightVisionGoggles.webp",
+            "icon": "/icons/items/Tex_clothes_24.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Accessory",
             "type_b": "EPalItemTypeB::Accessory",
@@ -67665,7 +67665,7 @@
         {
             "name": "PAL_Growth_Stone_L",
             "asset": "PAL_Growth_Stone_L",
-            "icon": "/icons/items/PAL_Growth_Stone_L.webp",
+            "icon": "/icons/items/Tex_Barbarian_icons_79_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialStone",
@@ -67707,7 +67707,7 @@
         {
             "name": "PAL_Growth_Stone_M",
             "asset": "PAL_Growth_Stone_M",
-            "icon": "/icons/items/PAL_Growth_Stone_M.webp",
+            "icon": "/icons/items/Tex_Barbarian_icons_79_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialStone",
@@ -67749,7 +67749,7 @@
         {
             "name": "PAL_Growth_Stone_S",
             "asset": "PAL_Growth_Stone_S",
-            "icon": "/icons/items/PAL_Growth_Stone_S.webp",
+            "icon": "/icons/items/Tex_Barbarian_icons_79_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialStone",
@@ -67791,7 +67791,7 @@
         {
             "name": "PAL_Growth_Stone_XL",
             "asset": "PAL_Growth_Stone_XL",
-            "icon": "/icons/items/PAL_Growth_Stone_XL.webp",
+            "icon": "/icons/items/Tex_Barbarian_icons_79_t.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialStone",
@@ -82071,7 +82071,7 @@
         {
             "name": "Sand",
             "asset": "Sand",
-            "icon": "/icons/items/T_itemicon_Food_Sandwich.webp",
+            "icon": "/icons/items/Tex_BagsAndBoxes_86_t.webp",
             "rarity": 1,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialOre",
@@ -82827,7 +82827,7 @@
         {
             "name": "Sharkkid_Scale",
             "asset": "Sharkkid_Scale",
-            "icon": "/icons/items/Sharkkid_Scale.webp",
+            "icon": "/icons/items/Tex_NecromancerIcons_44_t.webp",
             "rarity": 2,
             "type_a": "EPalItemTypeA::Material",
             "type_b": "EPalItemTypeB::MaterialMonster",
@@ -98913,7 +98913,7 @@
         {
             "name": "VenisonBoiledInTomato",
             "asset": "VenisonBoiledInTomato",
-            "icon": "/icons/items/VenisonBoiledInTomato.webp",
+            "icon": "/icons/items/Tex_Barbarian_icons_106_b.webp",
             "rarity": 0,
             "type_a": "EPalItemTypeA::Food",
             "type_b": "EPalItemTypeB::FoodDishMeat",

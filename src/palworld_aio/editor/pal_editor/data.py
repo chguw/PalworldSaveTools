@@ -133,7 +133,7 @@ def _ensure_append_text_data():
     _APPEND_TEXT_DATA = {}
     try:
         base_dir = constants.get_base_path()
-        path = resource_path(base_dir, 'game_data', 'reference_unlock_data.json')
+        path = resource_path(base_dir, 'game_data', 'append_text.json')
         data = json_tools.load(path)
         for k, v in data.get('append_text', {}).items():
             _APPEND_TEXT_DATA[k.lower()] = v

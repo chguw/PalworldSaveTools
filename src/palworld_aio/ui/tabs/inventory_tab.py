@@ -1533,7 +1533,15 @@ class PlayerInventoryTab(QWidget):
         if not self.current_player_uid:
             QMessageBox.warning(self, t('inventory.select_player', default='Select Player...'), t('inventory.select_player_first', default='Please select a player first.'))
             return
-        reply = self._themed_message_box(QMessageBox.Question, t('inventory.unlock_all_map_confirm.title', default='Unlock All Map + Fast Travel'), t('inventory.unlock_all_map_confirm.msg', count=1, default='Unlock all fast travel points, reveal all map areas, and unlock world map for 1 player?'), QMessageBox.Yes | QMessageBox.No)
+        try:
+            import json, os
+            from boot_paths import ROOT_DIR
+            from resource_resolver import resource_path
+            ft_path = resource_path(str(ROOT_DIR), 'game_data', 'fast_travel_points.json')
+            ft_count = len(json.load(open(ft_path, 'r'))) if os.path.exists(ft_path) else 0
+        except:
+            ft_count = 0
+        reply = self._themed_message_box(QMessageBox.Question, t('inventory.unlock_all_map_confirm.title', default='Unlock All Map + Fast Travel'), t('inventory.unlock_all_map_confirm.msg', count=ft_count, default=f'Unlock all {ft_count} fast travel points, reveal all map areas, and unlock world map for 1 player?'), QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.unlock_all_map_requested.emit([self.current_player_uid])
     def _update_stats(self):

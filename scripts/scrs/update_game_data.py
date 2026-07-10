@@ -2004,12 +2004,7 @@ def update_pal_descriptions():
         rank_match = re.search('_Rank_\\d+', k, re.IGNORECASE)
         if rank_match:
             append_text[k] = v
-    ref_data = load_resource_json('reference_unlock_data.json')
-    if isinstance(ref_data, dict):
-        ref_data['append_text'] = append_text
-        save_resource_json('reference_unlock_data.json', ref_data)
-    else:
-        save_resource_json('reference_unlock_data.json', {'append_text': append_text})
+    save_resource_json('append_text.json', {'append_text': append_text})
     human_param = load_export_json('Character/DT_PalHumanParameter.json')
     human_param_common = load_export_json('Character/DT_PalHumanParameter_Common.json')
     human_rows = {}
@@ -2398,6 +2393,8 @@ def update_lab_research_data():
         print('  No lab research rows found. Skipping.')
         return
     save_resource_json('labresearchdata.json', all_rows)
+MAPS_EXPORT_DIR = BASE_DIR / 'Exports' / 'Pal' / 'Content' / 'Pal' / 'Maps' / 'MainWorld_5'
+FAST_TRAVEL_OUTPUT = 'fast_travel_points.json'
 MAP_EXPORT_DIR = EXPORT_TEXTURES_DIR / 'UI' / 'Map'
 RELIC_TYPE_EXPORT_PATH = 'Player/DT_PlayerStatusRankMasterDataTable.json'
 RELIC_OUTPUT_FILE = 'relic_data.json'
@@ -2590,7 +2587,7 @@ def _convert_icons(Image):
         print(f'  Updated {updated_refs} icon references in data files')
 _MERGED_FILES = {'characters.json': ['pals', 'npcs'], 'skills.json': ['passives', 'skills', 'elements'], 'world.json': ['structures', 'technology'], 'items.json': ['items']}
 _MERGED_FILES_WHOLE = {'world.json': ['lab_research'], 'items.json': ['items_dynamic'], 'characters.json': ['friendship']}
-SPECIAL_KEEP_FILES = ['pal_exp_table.json', 'uidata.json', 'friendship.json']
+SPECIAL_KEEP_FILES = ['pal_exp_table.json', 'uidata.json', 'friendship.json', 'fast_travel_points.json', 'append_text.json']
 def _write_merged_files():
     print('\n=== Writing Merged Game Data Files ===')
     merged_group = {}
@@ -2884,6 +2881,69 @@ def update_breeding_data():
     print(f'  Total breedable pals: {len(pals)}')
     print(f'  Unique combos: {len(unique_combos)}')
     print(f'  Formula combos: {sum(len(v) for v in child_to_pairs.values())}')
+def update_fast_travel_data():
+    print('\n=== Updating Fast Travel Data ===')
+    maps_file = MAPS_EXPORT_DIR / 'PL_MainWorld5.json'
+    if not maps_file.exists():
+        print('  PL_MainWorld5.json not found. Skipping fast travel extraction.')
+        return
+    ft_names = load_l10n_table('DT_MapRespawnPointInfoText.json')
+    root_locs = {}
+    ft_actors = {}
+    print(f'  Scanning {maps_file.name} ({maps_file.stat().st_size / 1024 / 1024:.0f} MB)...')
+    decoder = json.JSONDecoder()
+    with open(str(maps_file), 'r', encoding='utf-8') as f:
+        f.read(1)
+        buf = ''
+        while True:
+            chunk = f.read(16 * 1024 * 1024)
+            if not chunk:
+                break
+            buf += chunk
+            pos = 0
+            while pos < len(buf):
+                c = buf[pos]
+                if c in ' \t\n\r,':
+                    pos += 1
+                    continue
+                if c == ']':
+                    break
+                try:
+                    obj, end = decoder.raw_decode(buf, pos)
+                except json.JSONDecodeError:
+                    break
+                if isinstance(obj, dict):
+                    props = obj.get('Properties', {})
+                    ot = obj.get('Type', '')
+                    outer = obj.get('Outer', '')
+                    name = obj.get('Name', '')
+                    if ot == 'SceneComponent' and name == 'Root':
+                        rl = props.get('RelativeLocation', {})
+                        if rl:
+                            root_locs[outer] = (rl.get('X', 0), rl.get('Y', 0), rl.get('Z', 0))
+                    if 'TowerFastTravelPoint' in ot or 'StaticRespawnPoint' in ot or 'UnlockMapPoint' in ot:
+                        ft_id = props.get('FastTravelPointID', '')
+                        guid = props.get('LevelObjectInstanceId', '')
+                        if ft_id and guid:
+                            key = name if outer == 'PersistentLevel' else outer
+                            ft_actors[key] = (ft_id, guid)
+                pos = end
+            if pos:
+                buf = buf[pos:]
+            else:
+                buf = buf[-16*1024*1024:]
+    result = {}
+    for actor_key, (ft_id, guid) in ft_actors.items():
+        guid_clean = guid.replace('-', '').upper()
+        loc = root_locs.get(actor_key, (0, 0, 0))
+        entry = {'x': loc[0], 'y': loc[1], 'z': loc[2], 'id': ft_id}
+        lname = ft_names.get(ft_id, '')
+        if lname:
+            entry['localized_name'] = lname
+        result[guid_clean] = entry
+    save_resource_json(FAST_TRAVEL_OUTPUT, result)
+    print(f'  Total fast travel points: {len(result)}')
+
 def main():
     if os.name == 'nt':
         os.system('title PalworldSaveTools - Game Data Extractor and Updater')
@@ -2948,6 +3008,7 @@ def main():
     _run_step('Updating boss mapping...', update_boss_mapping)
     _run_step('Updating work data...', update_work_data)
     _run_step('Updating world map areas...', update_world_map_area_data)
+    _run_step('Updating fast travel data...', update_fast_travel_data)
     _run_step('Updating breeding data...', update_breeding_data)
     _run_step('Updating map data...', update_map_data)
     _run_step('Writing merged game data files...', _write_merged_files)

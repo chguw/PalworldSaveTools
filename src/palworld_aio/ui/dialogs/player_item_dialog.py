@@ -460,6 +460,15 @@ class PlayerItemActionDialog(QDialog):
         if not uids:
             QMessageBox.warning(self, t('player_item.no_players_selected') if t else 'No Players Selected', t('player_item.select_at_least_one') if t else 'Please select at least one player.')
             return
-        reply = QMessageBox.question(self, t('inventory.unlock_all_map_confirm.title', default='Unlock All Map + Fast Travel'), t('inventory.unlock_all_map_confirm.msg', count=len(uids), default=f'Unlock all fast travel points, reveal all map areas, and unlock world map for {len(uids)} player(s)?'), QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        try:
+            from palworld_aio.inventory.inventory_manager import ItemData
+            import os, json
+            from boot_paths import ROOT_DIR
+            from resource_resolver import resource_path
+            ft_path = resource_path(str(ROOT_DIR), 'game_data', 'fast_travel_points.json')
+            ft_count = len(json.load(open(ft_path, 'r'))) if os.path.exists(ft_path) else 0
+        except:
+            ft_count = 0
+        reply = QMessageBox.question(self, t('inventory.unlock_all_map_confirm.title', default='Unlock All Map + Fast Travel'), t('inventory.unlock_all_map_confirm.msg', count=len(uids), default=f'Unlock all {ft_count} fast travel points, reveal all map areas, and unlock world map for {len(uids)} player(s)?'), QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.unlock_all_map_requested.emit(uids)
