@@ -2,17 +2,6 @@ name: Build All & Release
 
 on:
   workflow_dispatch:
-    inputs:
-      draft:
-        description: "Create as draft release"
-        required: false
-        default: true
-        type: boolean
-      prerelease:
-        description: "Is this a prerelease"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: write
@@ -216,8 +205,8 @@ jobs:
         with:
           tag_name: v${{ steps.app_info.outputs.version }}
           name: ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}
-          draft: ${{ github.event.inputs.draft }}
-          prerelease: ${{ github.event.inputs.prerelease }}
+          draft: true
+          prerelease: false
           files: artifacts/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
