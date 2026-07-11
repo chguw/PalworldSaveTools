@@ -30,8 +30,10 @@ jobs:
         run: |
           APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
           APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
+          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
       - name: Create source tarball
         run: |
           APP_NAME="${{ steps.app_info.outputs.app_name }}"
@@ -65,8 +67,10 @@ jobs:
         run: |
           APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
           APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
+          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
       - name: Install dependencies
         run: |
           uv venv --clear
@@ -103,8 +107,10 @@ jobs:
         run: |
           APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
           APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
+          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
       - name: Install system deps
         run: |
           sudo apt-get update
@@ -144,8 +150,10 @@ jobs:
         run: |
           APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
           APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
+          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
       - name: Install dependencies
         run: |
           uv venv --clear
@@ -194,17 +202,60 @@ jobs:
         run: |
           APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
           APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
+          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
       - uses: actions/download-artifact@v8
         with:
           path: artifacts
       - name: List all artifacts
         run: find artifacts -type f -ls
+      - name: Generate release notes
+        id: notes
+        env:
+          APP_NAME: ${{ steps.app_info.outputs.app_name }}
+          VERSION: ${{ steps.app_info.outputs.version }}
+          GAME_VERSION: ${{ steps.app_info.outputs.game_version }}
+        run: |
+          cat > release_notes.md <<EOF
+          # 🚀 Release v${VERSION}
+
+          ### 🛠️ Compatibility & Versions
+
+          * **App Version:** \`${VERSION}\`
+          * **Game Version:** \`${GAME_VERSION}\`
+
+          ---
+
+          <details>
+          <summary>🛠️ All-in-One Tools Update</summary>
+
+          ### 🚀 Updated:
+
+          ### 🔧 Fixed:
+
+          </details>
+
+          ---
+
+          ### 🤝 Support
+
+          If you encounter any bugs or have feedback regarding the new **Beta features**, please:
+
+          * Open a GitHub issue:
+            https://github.com/deafdudecomputers/PalworldSaveTools/issues
+          * Join our Discord:
+            https://discord.gg/sYcZwcT4cT
+          * DM **Pylar1991** on Discord
+
+          *Thank you for using the tool!* 🙏
+          EOF
       - uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ steps.app_info.outputs.version }}
           name: ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}
+          body_path: release_notes.md
           draft: true
           prerelease: false
           files: artifacts/**/*
