@@ -1758,5 +1758,9 @@
     "breeding.combo_count": "{n} コンボ",
     "breeding.prev": null,
     "breeding.next": null,
-    "breeding.filter": "結果をフィルタリング..."
+    "breeding.filter": "結果をフィルタリング...",
+    "base.reassign_guild": "ギルドへの再割り当て",
+    "base.reassign.no_other_guilds": "他に利用可能なギルドはありません。",
+    "base.reassign.same_guild": "拠点はすでにこのギルドに属しています。",
+    "base.reassign.success": "拠点がギルド「{name}」に再割り当てされました"
 }

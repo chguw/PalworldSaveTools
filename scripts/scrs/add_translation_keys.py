@@ -34,6 +34,10 @@ NEW_TRANSLATIONS = {
     'breeding.prev': '<',
     'breeding.next': '>',
     'breeding.filter': 'Filter results...',
+    'base.reassign_guild': 'Reassign to Guild',
+    'base.reassign.no_other_guilds': 'No other guilds available.',
+    'base.reassign.same_guild': 'Base already belongs to this guild.',
+    'base.reassign.success': 'Base reassigned to guild "{name}"',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

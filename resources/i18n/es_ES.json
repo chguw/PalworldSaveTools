@@ -1752,5 +1752,9 @@
     "breeding.combo_count": "{n} combinaciones",
     "breeding.prev": null,
     "breeding.next": null,
-    "breeding.filter": "Filtrar resultados..."
+    "breeding.filter": "Filtrar resultados...",
+    "base.reassign_guild": "Reasignar al gremio",
+    "base.reassign.no_other_guilds": "No hay otros gremios disponibles.",
+    "base.reassign.same_guild": "Base ya pertenece a este gremio.",
+    "base.reassign.success": "Base reasignada al gremio \"{name}\""
 }

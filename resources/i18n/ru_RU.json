@@ -1756,5 +1756,9 @@
     "breeding.combo_count": "{n} комбо(ов)",
     "breeding.prev": null,
     "breeding.next": null,
-    "breeding.filter": "Фильтровать результаты..."
+    "breeding.filter": "Фильтровать результаты...",
+    "base.reassign_guild": "Переназначить в гильдию",
+    "base.reassign.no_other_guilds": "Других гильдий нет.",
+    "base.reassign.same_guild": "База уже принадлежит этой гильдии.",
+    "base.reassign.success": "База переведена в гильдию \"{name}\""
 }

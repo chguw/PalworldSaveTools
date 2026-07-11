@@ -1757,5 +1757,9 @@
     "breeding.combo_count": "{n} 콤보",
     "breeding.prev": null,
     "breeding.next": null,
-    "breeding.filter": "결과 필터링..."
+    "breeding.filter": "결과 필터링...",
+    "base.reassign_guild": "길드에 재할당",
+    "base.reassign.no_other_guilds": "다른 길드가 없습니다.",
+    "base.reassign.same_guild": "기지는 이미 이 길드에 속해 있습니다.",
+    "base.reassign.success": "\"{name}\" 길드에 기지가 재할당되었습니다."
 }

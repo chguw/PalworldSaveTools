@@ -1,5 +1,6 @@
 import os
 from palsav import json_tools
+from palsav.archive import UUID
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGraphicsScene, QGraphicsPixmapItem, QMenu, QLineEdit, QTreeWidget, QTreeWidgetItem, QSplitter, QLabel, QFileDialog, QCheckBox, QStackedWidget, QDialog, QPushButton, QSizePolicy, QHeaderView, QApplication
 from PySide6.QtCore import Qt, QRectF, QPointF, QPoint, QSize, QTimer, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QPixmap, QPen, QBrush, QColor, QPainter, QFont, QIcon
@@ -1301,6 +1302,8 @@ class MapTab(QWidget):
             delete_action = menu.addAction(t('delete.base') if t else 'Delete Base')
             export_action = menu.addAction(t('button.export') if t else 'Export Base')
             radius_action = menu.addAction(t('base.radius.menu') if t else 'Adjust Radius')
+            menu.addSeparator()
+            reassign_action = menu.addAction(t('base.reassign_guild') if t else 'Reassign to Guild')
             action = menu.exec(global_pos.toPoint())
             if action == delete_action:
                 self._delete_base(data)
@@ -1308,6 +1311,8 @@ class MapTab(QWidget):
                 self._export_base(data)
             elif action == radius_action:
                 self._adjust_base_radius(data)
+            elif action == reassign_action:
+                self._reassign_base(data)
     def _on_empty_space_right_clicked(self, global_pos):
         from palworld_aio.editor.dialogs import ScrollableGuildSelectionDialog
         menu = QMenu(self)
@@ -1431,6 +1436,8 @@ class MapTab(QWidget):
             delete_action = menu.addAction(t('delete.base') if t else 'Delete Base')
             export_action = menu.addAction(t('button.export') if t else 'Export Base')
             radius_action = menu.addAction(t('base.radius.menu') if t else 'Adjust Radius')
+            menu.addSeparator()
+            reassign_action = menu.addAction(t('base.reassign_guild') if t else 'Reassign to Guild')
             action = menu.exec(tree.viewport().mapToGlobal(pos))
             if action == delete_action:
                 self._delete_base(item_data)
@@ -1438,6 +1445,8 @@ class MapTab(QWidget):
                 self._export_base(item_data)
             elif action == radius_action:
                 self._adjust_base_radius(item_data)
+            elif action == reassign_action:
+                self._reassign_base(item_data)
         elif item_type == 'guild':
             rename_action = menu.addAction(t('guild.rename.title') if t else 'Rename Guild')
             delete_action = menu.addAction(t('delete.guild') if t else 'Delete Guild')
@@ -1574,6 +1583,58 @@ class MapTab(QWidget):
                     show_critical(self, t('error.title') if t else 'Error', t('base.radius.failed') if t else 'Failed to update base radius')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f'Failed to adjust base radius: {str(e)}')
+        finally:
+            QApplication.restoreOverrideCursor()
+    def _reassign_base(self, base_data):
+        from palworld_aio.editor.dialogs import ScrollableGuildSelectionDialog
+        current_guild_id = base_data.get('guild_id', '')
+        guilds_for_selection = {gid: info for gid, info in self.guilds_data.items() if gid != current_guild_id}
+        if not guilds_for_selection:
+            show_warning(self, t('warning.title') if t else 'Warning', t('base.reassign.no_other_guilds') if t else 'No other guilds available.')
+            return
+        target_guild_id = ScrollableGuildSelectionDialog.get_guild(guilds_for_selection, self)
+        if not target_guild_id:
+            return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            bid = str(base_data['base_id']).replace('-', '').lower()
+            wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+            base_camp_data = wsd.get('BaseCampSaveData', {}).get('value', [])
+            src_base_entry = next((b for b in base_camp_data if str(b['key']).replace('-', '').lower() == bid), None)
+            if not src_base_entry:
+                show_warning(self, t('error.title') if t else 'Error', 'Base not found in save data')
+                return
+            src_base_raw = src_base_entry['value']['RawData']['value']
+            old_guild_id = str(src_base_raw.get('group_id_belong_to', '')).replace('-', '').lower()
+            target_gid_clean = str(target_guild_id).replace('-', '').lower()
+            if old_guild_id == target_gid_clean:
+                show_information(self, t('info.title') if t else 'Info', t('base.reassign.same_guild') if t else 'Base already belongs to this guild.')
+                return
+            src_base_raw['group_id_belong_to'] = UUID.from_str(target_guild_id)
+            group_map = wsd.get('GroupSaveDataMap', {}).get('value', [])
+            for g in group_map:
+                try:
+                    gid = str(g['key']).replace('-', '').lower()
+                    if g['value']['GroupType']['value']['value'] != 'EPalGroupType::Guild':
+                        continue
+                    raw = g['value']['RawData']['value']
+                    if gid == old_guild_id:
+                        raw['base_ids'] = [b for b in raw.get('base_ids', []) if str(b).replace('-', '').lower() != bid]
+                    elif gid == target_gid_clean:
+                        if bid not in [str(b).replace('-', '').lower() for b in raw.get('base_ids', [])]:
+                            raw['base_ids'].append(UUID.from_str(bid))
+                except:
+                    pass
+            self.refresh()
+            if self.parent_window:
+                self.parent_window.refresh_all()
+            self._hide_all_radius_rings()
+            if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
+                self._show_all_radius_rings()
+            target_name = self.guilds_data.get(target_guild_id, {}).get('guild_name', target_guild_id)
+            show_information(self, t('success.title') if t else 'Success', t('base.reassign.success') if t else f'Base reassigned to guild "{target_name}"')
+        except Exception as e:
+            show_critical(self, t('error.title') if t else 'Error', f'Failed to reassign base: {str(e)}')
         finally:
             QApplication.restoreOverrideCursor()
     def _rename_guild(self, guild_id):

@@ -1782,5 +1782,9 @@
     "breeding.combo_count": "{n} Kombination(en)",
     "breeding.prev": null,
     "breeding.next": null,
-    "breeding.filter": "Ergebnisse filtern..."
+    "breeding.filter": "Ergebnisse filtern...",
+    "base.reassign_guild": "Der Gilde neu zuweisen",
+    "base.reassign.no_other_guilds": "Keine anderen Gilden verfügbar.",
+    "base.reassign.same_guild": "Base gehört bereits zu dieser Gilde.",
+    "base.reassign.success": "Basis wurde der Gilde „{name}“ neu zugewiesen"
 }
