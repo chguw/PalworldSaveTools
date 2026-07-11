@@ -1770,5 +1770,7 @@
     "character_transfer.source_btn": "源保存",
     "character_transfer.target_btn": "目标保存",
     "tools.btn_steam": "蒸汽",
-    "tools.btn_gamepass": "游戏通行证"
+    "tools.btn_gamepass": "游戏通行证",
+    "fix_host_save.player_file_missing": "找不到 {guid} 的玩家保存文件",
+    "character_transfer.player_file_missing": "找不到 {guid} 的玩家保存文件"
 }

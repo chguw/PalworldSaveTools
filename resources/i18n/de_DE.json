@@ -1792,5 +1792,7 @@
     "character_transfer.source_btn": "Quelle speichern",
     "character_transfer.target_btn": "Ziel speichern",
     "tools.btn_steam": "Dampf",
-    "tools.btn_gamepass": "GamePass"
+    "tools.btn_gamepass": "GamePass",
+    "fix_host_save.player_file_missing": "Player-Speicherdatei für {guid} nicht gefunden",
+    "character_transfer.player_file_missing": "Player-Speicherdatei für {guid} nicht gefunden"
 }

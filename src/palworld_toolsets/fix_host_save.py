@@ -187,14 +187,15 @@ def fix_save(save_path, new_guid, old_guid, guild_fix=True):
         if not os.path.isdir(players_folder):
             error_msg = t('fix_host_save.players_folder_not_found')
             print(f'Error: {error_msg}')
-            try:
-                parent = QApplication.activeWindow()
-                show_warning(parent, t('Error'), error_msg)
-            except:
-                pass
             return False
         old_sav = os.path.join(players_folder, old_guid.upper() + '.sav')
         new_sav = os.path.join(players_folder, new_guid.upper() + '.sav')
+        if not os.path.isfile(old_sav):
+            print(f'Error: Source player file not found: {old_sav}')
+            return False
+        if not os.path.isfile(new_sav):
+            print(f'Error: Target player file not found: {new_sav}')
+            return False
         level = sav_to_json(lvl)
         old_j = sav_to_json(old_sav)
         new_j = sav_to_json(new_sav)
@@ -569,14 +570,12 @@ class FixHostSaveWindow(QWidget):
         self.browse_button.setFont(_nf_font)
         self.browse_button.setMinimumWidth(110)
         self.browse_button.setMaximumWidth(150)
-        self.browse_button.clicked.connect(lambda: choose_level_file(self, self.level_sav_entry, self.old_tree, self.new_tree))
         file_row.addWidget(self.browse_button)
         self.xgp_browse_btn = QPushButton(f"{nf.icons['nf-fa-xbox']} " + t('Browse'))
         self.xgp_browse_btn.setFont(_nf_font)
         self.xgp_browse_btn.setMinimumWidth(110)
         self.xgp_browse_btn.setMaximumWidth(150)
         self.xgp_browse_btn.setToolTip('Load a GamePass save from the container')
-        self.xgp_browse_btn.clicked.connect(self._load_xgp_save)
         self.xgp_browse_btn.setEnabled(True)
         file_row.addWidget(self.xgp_browse_btn)
         self.migrate_button = QPushButton(t('Migrate'))
@@ -810,11 +809,23 @@ class FixHostSaveWindow(QWidget):
             self.new_tree.original_items = [self.new_tree.topLevelItem(i) for i in range(self.new_tree.topLevelItemCount())]
             player_list_cache = [(u, n, g, l, pc, ls, sk) for u, n, g, l, pc, ls, sk in player_data_list]
         run_with_loading(on_task_complete, task)
+    def _check_player_file(self, player_guid) -> bool:
+        if not hasattr(self, 'level_sav_path') or not self.level_sav_path:
+            return True
+        sav_path = os.path.join(os.path.dirname(self.level_sav_path), 'Players', f'{player_guid.upper()}.sav')
+        if os.path.isfile(sav_path):
+            return True
+        return False
     def update_source_selection(self):
         selected = self.old_tree.selectedItems()
         if selected:
             values = [selected[0].text(col) for col in range(3)]
             player_guid = values[0]
+            if not self._check_player_file(player_guid):
+                self.old_tree.clearSelection()
+                self.source_result_label.setText(t('Source Player: N/A'))
+                show_warning(self, t('Error'), t('fix_host_save.player_file_missing', guid=player_guid))
+                return
             if hasattr(self, 'level_json') and self.level_json:
                 player_level = get_player_level_from_cspm(self.level_json, player_guid)
                 if player_level < 2:
@@ -830,6 +841,11 @@ class FixHostSaveWindow(QWidget):
         if selected:
             values = [selected[0].text(col) for col in range(3)]
             player_guid = values[0]
+            if not self._check_player_file(player_guid):
+                self.new_tree.clearSelection()
+                self.target_result_label.setText(t('Target Player: N/A'))
+                show_warning(self, t('Error'), t('fix_host_save.player_file_missing', guid=player_guid))
+                return
             if hasattr(self, 'level_json') and self.level_json:
                 player_level = get_player_level_from_cspm(self.level_json, player_guid)
                 if player_level < 2:

@@ -1762,5 +1762,7 @@
     "character_transfer.source_btn": "Guardar fuente",
     "character_transfer.target_btn": "Guardar objetivo",
     "tools.btn_steam": "Vapor",
-    "tools.btn_gamepass": "Pase de juego"
+    "tools.btn_gamepass": "Pase de juego",
+    "fix_host_save.player_file_missing": "No se encontró el archivo guardado del reproductor para {guid}",
+    "character_transfer.player_file_missing": "No se encontró el archivo guardado del reproductor para {guid}"
 }

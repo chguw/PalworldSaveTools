@@ -1768,5 +1768,7 @@
     "character_transfer.source_btn": "ソースの保存",
     "character_transfer.target_btn": "ターゲットの保存",
     "tools.btn_steam": "スチーム",
-    "tools.btn_gamepass": "ゲームパス"
+    "tools.btn_gamepass": "ゲームパス",
+    "fix_host_save.player_file_missing": "{guid} のプレーヤー保存ファイルが見つかりません",
+    "character_transfer.player_file_missing": "{guid} のプレーヤー保存ファイルが見つかりません"
 }

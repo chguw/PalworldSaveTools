@@ -1437,17 +1437,36 @@ def target_level_file():
         current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
         print('Done loading the data from Target Save!')
     run_with_loading(on_finished, task)
+def _check_player_sav(guid, base_path):
+    if not base_path:
+        return True
+    pdir = os.path.join(os.path.dirname(base_path), 'Players')
+    return os.path.isfile(os.path.join(pdir, f'{guid.upper()}.sav'))
 def on_selection_of_source_player():
     global selected_source_player
     selections = source_player_list.selectedItems()
     if selections:
-        selected_source_player = selections[0].text(1)
+        guid = selections[0].text(1)
+        if level_sav_path and not _check_player_sav(guid, level_sav_path):
+            source_player_list.clearSelection()
+            selected_source_player = None
+            current_selection_label.setText(t('character_transfer.selection_status', source='N/A', target=selected_target_player or 'N/A'))
+            show_warning(None, t('Error'), t('character_transfer.player_file_missing', guid=guid))
+            return
+        selected_source_player = guid
         current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
 def on_selection_of_target_player():
     global selected_target_player
     selections = target_player_list.selectedItems()
     if selections:
-        selected_target_player = selections[0].text(1)
+        guid = selections[0].text(1)
+        if t_level_sav_path and not _check_player_sav(guid, t_level_sav_path):
+            target_player_list.clearSelection()
+            selected_target_player = None
+            current_selection_label.setText(t('character_transfer.selection_status', source=selected_source_player or 'N/A', target='N/A'))
+            show_warning(None, t('Error'), t('character_transfer.player_file_missing', guid=guid))
+            return
+        selected_target_player = guid
         current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
 def finalize_save(window):
     global _xgp_new_world_name

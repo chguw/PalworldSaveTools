@@ -1750,5 +1750,7 @@
     "character_transfer.source_btn": "Source Enregistrer",
     "character_transfer.target_btn": "Sauvegarde de la cible",
     "tools.btn_steam": "Vapeur",
-    "tools.btn_gamepass": "Passe-jeu"
+    "tools.btn_gamepass": "Passe-jeu",
+    "fix_host_save.player_file_missing": "Fichier de sauvegarde du lecteur introuvable pour {guid}",
+    "character_transfer.player_file_missing": "Fichier de sauvegarde du lecteur introuvable pour {guid}"
 }

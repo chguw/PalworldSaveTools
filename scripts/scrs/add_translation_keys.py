@@ -44,6 +44,8 @@ NEW_TRANSLATIONS = {
     'character_transfer.target_btn': 'Target Save',
     'tools.btn_steam': 'Steam',
     'tools.btn_gamepass': 'GamePass',
+    'fix_host_save.player_file_missing': 'Player save file not found for {guid}',
+    'character_transfer.player_file_missing': 'Player save file not found for {guid}',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

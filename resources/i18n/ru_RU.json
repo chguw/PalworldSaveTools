@@ -1766,5 +1766,7 @@
     "character_transfer.source_btn": "Источник Сохранить",
     "character_transfer.target_btn": "Целевое сохранение",
     "tools.btn_steam": "Пар",
-    "tools.btn_gamepass": "GamePass"
+    "tools.btn_gamepass": "GamePass",
+    "fix_host_save.player_file_missing": "Файл сохранения игрока не найден для {guid}",
+    "character_transfer.player_file_missing": "Файл сохранения игрока не найден для {guid}"
 }

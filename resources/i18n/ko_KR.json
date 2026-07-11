@@ -1767,5 +1767,7 @@
     "character_transfer.source_btn": "소스 저장",
     "character_transfer.target_btn": "대상 저장",
     "tools.btn_steam": "증기",
-    "tools.btn_gamepass": "게임패스"
+    "tools.btn_gamepass": "게임패스",
+    "fix_host_save.player_file_missing": "{guid}에 대한 플레이어 저장 파일을 찾을 수 없습니다.",
+    "character_transfer.player_file_missing": "{guid}에 대한 플레이어 저장 파일을 찾을 수 없습니다."
 }
