@@ -1,4 +1,4 @@
-name: Build
+name: Release Build
 
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: build-${{ github.event.inputs.os }}-${{ github.ref }}
+  group: release-build-${{ github.event.inputs.os }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -59,7 +59,7 @@ jobs:
           ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v7
         with:
-          name: linux-build
+          name: linux-release-build
           path: dist/${{ steps.app_info.outputs.app_name }}-*-linux
           if-no-files-found: error
       - name: Generate release tag
@@ -122,7 +122,7 @@ jobs:
           ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v7
         with:
-          name: macos-build
+          name: macos-release-build
           path: dist/${{ steps.app_info.outputs.app_name }}-*-macos.dmg
           if-no-files-found: error
       - name: Generate release tag
@@ -175,7 +175,7 @@ jobs:
           ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v7
         with:
-          name: windows-build
+          name: windows-release-build
           path: dist/${{ steps.app_info.outputs.app_name }}-*.exe
           if-no-files-found: error
       - name: Generate release tag
