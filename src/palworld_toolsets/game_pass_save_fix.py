@@ -322,7 +322,10 @@ class GamePassSaveFixWidget(QWidget):
                 sys.argv = old_argv
                 return saveName
             except Exception as e:
-                return str(e)
+                print(f'SAV->JSON conversion failed for {saveName}: {e}')
+                import traceback
+                traceback.print_exc()
+                return None
             finally:
                 logging.disable(logging.NOTSET)
         run_with_loading(self.update_combobox_signal.emit, task)

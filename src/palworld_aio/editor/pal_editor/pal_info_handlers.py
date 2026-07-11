@@ -608,6 +608,14 @@ class PalInfoHandlerMixin:
     def _on_boss_toggle(self):
         if not self._raw:
             return
+        cid = extract_value(self._raw, 'CharacterID', '')
+        can_enable, can_disable = _data._pal_can_toggle_boss(cid)
+        is_boss = cid.upper().startswith('BOSS_')
+        if (is_boss and not can_disable) or (not is_boss and not can_enable):
+            self.info_boss_btn.blockSignals(True)
+            self.info_boss_btn.setChecked(is_boss)
+            self.info_boss_btn.blockSignals(False)
+            return
         _toggle_boss_raw(self._raw, self.info_boss_btn.isChecked())
         is_lucky = extract_value(self._raw, 'IsRarePal', False)
         self.info_lucky_btn.blockSignals(True)
@@ -618,6 +626,19 @@ class PalInfoHandlerMixin:
     def _on_lucky_toggle(self):
         if not self._raw:
             return
+        cid = extract_value(self._raw, 'CharacterID', '')
+        can_enable, can_disable = _data._pal_can_toggle_boss(cid)
+        is_boss = cid.upper().startswith('BOSS_')
+        is_lucky = extract_value(self._raw, 'IsRarePal', False)
+        if is_lucky:
+            if is_boss and not can_disable:
+                self.info_lucky_btn.blockSignals(True)
+                self.info_lucky_btn.setChecked(True)
+                self.info_lucky_btn.blockSignals(False)
+                return
+        else:
+            if not is_boss and not can_enable:
+                return
         _toggle_lucky_raw(self._raw, self.info_lucky_btn.isChecked())
         cid = extract_value(self._raw, 'CharacterID', '')
         is_boss = cid.upper().startswith('BOSS_')

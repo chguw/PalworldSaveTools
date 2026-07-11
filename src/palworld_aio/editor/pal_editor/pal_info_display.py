@@ -291,6 +291,12 @@ class PalInfoDisplayMixin:
             self.info_lucky_btn.blockSignals(True)
             self.info_lucky_btn.setChecked(is_lucky)
             self.info_lucky_btn.blockSignals(False)
+            can_enable_boss, can_disable_boss = _data._pal_can_toggle_boss(cid)
+            self.info_boss_btn.setEnabled(can_disable_boss if is_boss else can_enable_boss)
+            if is_lucky:
+                self.info_lucky_btn.setEnabled(not is_boss or can_disable_boss)
+            else:
+                self.info_lucky_btn.setEnabled(is_boss or can_enable_boss)
             self.info_awake_btn.blockSignals(True)
             self.info_awake_btn.setChecked(bool(is_awakening))
             self.info_awake_btn.blockSignals(False)

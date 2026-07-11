@@ -162,6 +162,19 @@ def _ensure_ui_icons_data():
         pass
     return _UI_ICONS_DATA
 
+def _pal_can_toggle_boss(cid: str) -> tuple[bool, bool]:
+    cache = _load_pal_base_data()
+    cid_lower = cid.lower()
+    base = cid_lower
+    if base.startswith('boss_'):
+        base = base[5:]
+    elif base.startswith('b_o_s_s_'):
+        base = base[7:]
+    boss_key = 'boss_' + base
+    has_base = bool(base) and base in cache
+    has_boss = boss_key in cache
+    return (has_boss, has_base)
+
 def _ensure_skill_data():
     global _SKILL_DATA
     if _SKILL_DATA is not None:

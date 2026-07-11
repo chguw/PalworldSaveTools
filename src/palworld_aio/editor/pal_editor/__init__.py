@@ -5,6 +5,7 @@ from .data import (
     _ensure_friendship_thresholds,
     _ensure_passive_data,
     _ensure_skill_data,
+    _pal_can_toggle_boss,
     get_pal_base_data,
 )
 from .icons import (
