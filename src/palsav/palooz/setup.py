@@ -5,7 +5,7 @@ from wheel.bdist_wheel import bdist_wheel
 sources = ['ooz/palooz_bindings.cpp']
 sources += ['ooz/dep/ooz/' + x for x in ['bitknit.cpp', 'kraken.cpp', 'lzna.cpp', 'compress.cpp', 'compr_kraken.cpp', 'compr_lzoffset.cpp', 'compr_entropy.cpp', 'compr_match_finder.cpp', 'compr_multiarray.cpp', 'compr_tans.cpp']]
 
-extra_compile_args = ['-O3', '-flto', '-fno-exceptions', '-fno-rtti', '-ffast-math']
+extra_compile_args = ['-O3', '-flto', '-fno-exceptions', '-fno-rtti', '-ffast-math', '-fno-strict-aliasing']
 if os.environ.get('DEBUG') == '1':
     extra_compile_args = ['-g', '-O0']
 
