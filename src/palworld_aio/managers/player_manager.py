@@ -43,7 +43,7 @@ def rename_player(player_uid, new_name):
         uid_obj = entry.get('key', {}).get('PlayerUId', {})
         uid = str(uid_obj.get('value', '')).replace('-', '') if isinstance(uid_obj, dict) else ''
         if uid == p_uid_clean:
-            sp_val.setdefault('NickName', {})['value'] = new_name
+            sp_val['NickName'] = {'id': None, 'type': 'StrProperty', 'value': new_name}
             break
     return True
 def get_player_info(player_uid):
