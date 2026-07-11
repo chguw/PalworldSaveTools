@@ -15,8 +15,7 @@ on:
         default: "https://github.com/deafdudecomputers/PalworldSaveTools/releases"
 
 jobs:
-  real-release:
-    if: ${{ github.event_name == 'release' }}
+  send-notification:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,47 +25,41 @@ jobs:
         run: |
           APP_NAME=$(python3 -c "import sys; sys.path.insert(0,'src'); from common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-      - name: Github Releases To Discord
-        uses: SethCohen/github-releases-to-discord@v1.13.1
-        with:
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
-          color: "2105893"
-          username: "${{ steps.app_info.outputs.app_name }}"
-          avatar_url: "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
-          content: "**${{ github.event.release.name }}** is now live!\n\n${{ github.event.release.html_url }}"
-          footer_title: "Changelog"
-          footer_icon_url: "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
-          footer_timestamp: true
+      - name: Build embed payload
+        id: payload
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            RELEASE_NAME="${{ github.event.release.name }}"
+            RELEASE_URL="${{ github.event.release.html_url }}"
+            TAG="${{ github.event.release.tag_name }}"
+          else
+            RELEASE_NAME="${{ github.event.inputs.mock_release_name }}"
+            RELEASE_URL="${{ github.event.inputs.mock_release_url }}"
+            TAG="manual-test"
+          fi
 
-  manual-test:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Extract app info
-        id: app_info
-        run: |
-          APP_NAME=$(python3 -c "import sys; sys.path.insert(0,'src'); from common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-      - name: Send mock Discord notification
+          echo "release_name=$RELEASE_NAME" >> "$GITHUB_OUTPUT"
+          echo "release_url=$RELEASE_URL" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+      - name: Send Discord notification
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
           APP_NAME: ${{ steps.app_info.outputs.app_name }}
-          RELEASE_NAME: ${{ github.event.inputs.mock_release_name }}
-          RELEASE_URL: ${{ github.event.inputs.mock_release_url }}
+          RELEASE_NAME: ${{ steps.payload.outputs.release_name }}
+          RELEASE_URL: ${{ steps.payload.outputs.release_url }}
+          TAG: ${{ steps.payload.outputs.tag }}
         run: |
           payload=$(cat <<ENDJSON
           {
             "username": "${APP_NAME}",
             "avatar_url": "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png",
-            "content": "**[MOCK] ${RELEASE_NAME}** — test notification\n\n${RELEASE_URL}",
             "embeds": [
               {
-                "title": "Changelog",
+                "title": "${RELEASE_NAME}",
+                "url": "${RELEASE_URL}",
                 "color": 2105893,
                 "footer": {
-                  "text": "Changelog",
+                  "text": "${APP_NAME}",
                   "icon_url": "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
                 },
                 "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')"
@@ -78,4 +71,4 @@ jobs:
           curl -sf -X POST "$WEBHOOK_URL" \
             -H "Content-Type: application/json" \
             -d "$payload"
-          echo "Mock notification sent successfully"
+          echo "Notification sent successfully"
