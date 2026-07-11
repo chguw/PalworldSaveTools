@@ -524,15 +524,126 @@ def fix_save_wrapper(window, level_sav_entry, old_tree, new_tree):
         show_warning(window, t('Error'), t('fix_host_save.guids_cannot_be_same'))
         return
     folder_path = os.path.dirname(file_path)
-    fix_save(folder_path, new_guid, old_guid)
-    for i, entry in enumerate(player_list_cache):
-        uid, name, guild, level, pals_count, last_seen, sort_key = entry
-        if uid == old_guid:
-            player_list_cache[i] = (new_guid, name, guild, level, pals_count, last_seen, sort_key)
-        elif uid == new_guid:
-            player_list_cache[i] = (old_guid, name, guild, level, pals_count, last_seen, sort_key)
-    populate_player_tree(old_tree, folder_path)
-    populate_player_tree(new_tree, folder_path)
+    xgp_new_name = None
+    xgp_tmp = getattr(window, '_xgp_tmp', None)
+    if xgp_tmp and folder_path == xgp_tmp:
+        old_name = 'World'
+        _mp = os.path.join(xgp_tmp, 'LevelMeta.sav')
+        if os.path.isfile(_mp):
+            try:
+                from palworld_aio.utils import sav_to_gvasfile
+                old_name = sav_to_gvasfile(_mp).properties.get('SaveData', {}).get('value', {}).get('WorldName', {}).get('value', 'World')
+            except Exception:
+                pass
+        new_name, ok = QInputDialog.getText(window, 'Save as New World',
+            f'World name (original: "{old_name}"):',
+            QLineEdit.Normal, f'{old_name} (fixed)')
+        if not ok or not new_name.strip():
+            return
+        xgp_new_name = new_name.strip()
+    # Single run_with_loading: fix + XGP save-back
+    def combined_task():
+        fmt = lambda g: '{}-{}-{}-{}-{}'.format(g[:8], g[8:12], g[12:16], g[16:20], g[20:]).lower()
+        f_old_uid, f_new_uid = (fmt(old_guid), fmt(new_guid))
+        f_lvl = os.path.join(folder_path, 'Level.sav')
+        f_players = os.path.join(folder_path, 'Players')
+        if not os.path.isdir(f_players):
+            print('Error: Players folder not found')
+            return False
+        f_old_sav = os.path.join(f_players, old_guid.upper() + '.sav')
+        f_new_sav = os.path.join(f_players, new_guid.upper() + '.sav')
+        if not os.path.isfile(f_old_sav) or not os.path.isfile(f_new_sav):
+            print(f'Error: Player save files missing')
+            return False
+        f_level = sav_to_json(f_lvl)
+        f_old_j = sav_to_json(f_old_sav)
+        f_new_j = sav_to_json(f_new_sav)
+        f_p_level = get_player_level_from_cspm(f_level, f_old_uid)
+        f_p_level2 = get_player_level_from_cspm(f_level, f_new_uid)
+        if f_p_level < 2 or f_p_level2 < 2:
+            print(f'Error: Both players must be level 2+')
+            return False
+        f_old_j['properties']['SaveData']['value']['PlayerUId']['value'] = f_new_uid
+        f_old_j['properties']['SaveData']['value']['IndividualId']['value']['PlayerUId']['value'] = f_new_uid
+        f_new_j['properties']['SaveData']['value']['PlayerUId']['value'] = f_old_uid
+        f_new_j['properties']['SaveData']['value']['IndividualId']['value']['PlayerUId']['value'] = f_old_uid
+        f_old_inst = f_old_j['properties']['SaveData']['value']['IndividualId']['value']['InstanceId']['value']
+        f_new_inst = f_new_j['properties']['SaveData']['value']['IndividualId']['value']['InstanceId']['value']
+        f_nps = None
+        try: f_nps = f_new_j['properties']['SaveData']['value']['PalStorageContainerId']['value']['ID']['value']
+        except: pass
+        f_ops = None
+        try: f_ops = f_old_j['properties']['SaveData']['value']['PalStorageContainerId']['value']['ID']['value']
+        except: pass
+        f_cspm = f_level['properties']['worldSaveData']['value']['CharacterSaveParameterMap']['value']
+        for e in f_cspm:
+            if e['key']['InstanceId']['value'] == f_old_inst:
+                e['key']['PlayerUId']['value'] = f_new_uid
+            elif e['key']['InstanceId']['value'] == f_new_inst:
+                e['key']['PlayerUId']['value'] = f_old_uid
+        f_guilds = f_level['properties']['worldSaveData']['value'].get('GroupSaveDataMap', {}).get('value', [])
+        for g in f_guilds:
+            if g['value']['GroupType']['value']['value'] != 'EPalGroupType::Guild':
+                continue
+            f_raw = g['value']['RawData']['value']
+            for h in f_raw.get('individual_character_handle_ids', []):
+                if h['instance_id'] == f_old_inst: h['guid'] = f_new_uid
+                elif h['instance_id'] == f_new_inst: h['guid'] = f_old_uid
+            if f_raw.get('admin_player_uid') == f_old_uid: f_raw['admin_player_uid'] = f_new_uid
+            elif f_raw.get('admin_player_uid') == f_new_uid: f_raw['admin_player_uid'] = f_old_uid
+            for p in f_raw.get('players', []):
+                if p.get('player_uid') == f_old_uid: p['player_uid'] = f_new_uid
+                elif p.get('player_uid') == f_new_uid: p['player_uid'] = f_old_uid
+        def deep_swap(data):
+            if isinstance(data, dict):
+                for k in ('OwnerPlayerUId', 'owner_player_uid', 'build_player_uid', 'private_lock_player_uid'):
+                    v = data.get(k)
+                    if isinstance(v, dict) and v.get('value') == f_old_uid: v['value'] = f_new_uid
+                    elif isinstance(v, dict) and v.get('value') == f_new_uid: v['value'] = f_old_uid
+                    elif v == f_old_uid: data[k] = f_new_uid
+                    elif v == f_new_uid: data[k] = f_old_uid
+                for x in data.values(): deep_swap(x)
+            elif isinstance(data, list):
+                for i in data: deep_swap(i)
+        deep_swap(f_level)
+        f_odps = os.path.join(f_players, f"{old_guid.replace('-', '').upper()}_dps.sav")
+        f_ndps = os.path.join(f_players, f"{new_guid.replace('-', '').upper()}_dps.sav")
+        import tempfile as _tf, shutil as _sh
+        _tmp = _tf.mkdtemp()
+        for s, d in [(f_odps, old_guid), (f_ndps, new_guid)]:
+            if os.path.exists(s):
+                _sh.copy2(s, os.path.join(_tmp, os.path.basename(s)))
+        copy_dps_file(_tmp, old_guid, f_players, new_guid, f_nps)
+        copy_dps_file(_tmp, new_guid, f_players, old_guid, f_ops)
+        _sh.rmtree(_tmp, ignore_errors=True)
+        json_to_sav(f_level, f_lvl)
+        json_to_sav(f_old_j, f_old_sav)
+        json_to_sav(f_new_j, f_new_sav)
+        f_tmp = f_old_sav + '.tmp_swap'
+        os.rename(f_old_sav, f_tmp)
+        if os.path.exists(f_new_sav):
+            os.rename(f_new_sav, os.path.join(f_players, old_guid.upper() + '.sav'))
+        os.rename(f_tmp, os.path.join(f_players, new_guid.upper() + '.sav'))
+        if xgp_new_name:
+            from palworld_xgp_import.gamepass_manager import save_xgp_changes
+            save_xgp_changes(
+                container_path=window._xgp_cpath,
+                current_save_path=xgp_tmp,
+                new_world_name=xgp_new_name,
+            )
+        return True
+    def on_combined_done(result):
+        if result:
+            for i, entry in enumerate(player_list_cache):
+                uid, name, guild, level, pals_count, last_seen, sort_key = entry
+                if uid == old_guid:
+                    player_list_cache[i] = (new_guid, name, guild, level, pals_count, last_seen, sort_key)
+                elif uid == new_guid:
+                    player_list_cache[i] = (old_guid, name, guild, level, pals_count, last_seen, sort_key)
+            populate_player_tree(old_tree, folder_path)
+            populate_player_tree(new_tree, folder_path)
+            show_information(window, t('Success'), t('Fix has been applied! Have fun!'))
+    run_with_loading(on_combined_done, combined_task)
 def center_window(win):
     screen = QApplication.primaryScreen().availableGeometry()
     geo = win.frameGeometry()
@@ -777,6 +888,7 @@ class FixHostSaveWindow(QWidget):
             show_critical(self, t('error.title'), f'Level.sav not found for {save_id}.')
             return
         self._xgp_tmp = tmp
+        self._xgp_cpath = cpath
         fpath = level_path
         players_dir = os.path.join(os.path.dirname(fpath), 'Players')
         if not os.path.isdir(players_dir):
