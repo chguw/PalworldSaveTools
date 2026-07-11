@@ -3,7 +3,7 @@ from palsav import json_tools
 from resource_resolver import get_base_dir, get_src_dir, get_resources_dir, resource_path
 APP_NAME = 'PalworldSaveTools'
 APP_VERSION = '2.0.1'
-RELEASE_VER = '2.0.1'
+TESTING_VER = '2.0.2'
 GAME_VERSION = '1.0.0'
 def get_base_directory():
     return get_base_dir()
@@ -28,9 +28,9 @@ def get_versions():
 def get_display_version():
     try:
         app_tuple = tuple(int(x) for x in APP_VERSION.split('.'))
-        release_tuple = tuple(int(x) for x in RELEASE_VER.split('.'))
-        if app_tuple > release_tuple:
-            return f'{APP_VERSION} (testing)'
+        testing_tuple = tuple(int(x) for x in TESTING_VER.split('.'))
+        if testing_tuple > app_tuple:
+            return f'{TESTING_VER} (testing)'
     except:
         pass
     return APP_VERSION
