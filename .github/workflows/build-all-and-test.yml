@@ -1,18 +1,37 @@
-name: Build Mac
+name: Build All & Test
 
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 concurrency:
-  group: build-mac-${{ github.ref }}
+  group: build-all-test-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+            build_mode: --onefile
+            system_deps: ""
+            extra_deps: ""
+            artifact_name: windows-build
+          - os: ubuntu-latest
+            platform: linux
+            build_mode: --onefile
+            system_deps: "patchelf file"
+            extra_deps: ""
+            artifact_name: linux-build
+          - os: macos-latest
+            platform: macos
+            build_mode: --onedir
+            system_deps: ""
+            extra_deps: "imageio"
+            artifact_name: macos-build
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -27,18 +46,25 @@ jobs:
         continue-on-error: true
       - name: Extract app info
         id: app_info
+        shell: bash
         run: |
           APP_NAME=$(uv run python -c "from src.common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
           APP_VERSION=$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo '0.0.0')
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Install system deps
+        if: ${{ matrix.system_deps != '' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ${{ matrix.system_deps }}
       - name: Install dependencies
         run: |
           uv venv
-          uv pip install -r requirements.txt nuitka imageio
+          uv pip install -r requirements.txt nuitka ${{ matrix.extra_deps }}
       - name: Build with Nuitka
-        run: uv run python build/nuitka/build_nuitka.py --onedir
-      - name: Create DMG
+        run: uv run python build/nuitka/build_nuitka.py ${{ matrix.build_mode }}
+      - name: Create DMG (macOS only)
+        if: ${{ matrix.platform == 'macos' }}
         run: |
           APP_NAME="${{ steps.app_info.outputs.app_name }}"
           VERSION="${{ steps.app_info.outputs.version }}"
@@ -51,24 +77,12 @@ jobs:
             exit 1
           fi
       - name: List built files
+        shell: bash
         run: |
           echo "=== Files in dist/ ==="
           ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v7
         with:
-          name: macos-build
-          path: dist/${{ steps.app_info.outputs.app_name }}-*-macos.dmg
+          name: ${{ matrix.artifact_name }}
+          path: dist/${{ steps.app_info.outputs.app_name }}-*
           if-no-files-found: error
-      - name: Generate release tag
-        id: tag
-        run: |
-          echo "tag=${{ steps.app_info.outputs.app_name }}-v${{ steps.app_info.outputs.version }}-macos-$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
-      - uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ steps.tag.outputs.tag }}
-          name: "MacOS Build ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}"
-          draft: true
-          prerelease: true
-          files: dist/${{ steps.app_info.outputs.app_name }}-*-macos.dmg
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

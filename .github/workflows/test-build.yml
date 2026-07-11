@@ -1,101 +1,25 @@
-name: Build All & Release
+name: Test Build
 
 on:
   workflow_dispatch:
     inputs:
-      draft:
-        description: "Create as draft release"
-        required: false
-        default: true
-        type: boolean
-      prerelease:
-        description: "Is this a prerelease"
-        required: false
-        default: false
-        type: boolean
-
-permissions:
-  contents: write
+      os:
+        description: "Target OS to build for"
+        required: true
+        default: linux
+        type: choice
+        options:
+          - linux
+          - macos
+          - windows
 
 concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
+  group: test-build-${{ github.event.inputs.os }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  prepare-source:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - uses: astral-sh/setup-uv@v8
-        with:
-          enable-cache: true
-          cache-dependency-glob: "requirements.txt"
-        continue-on-error: true
-      - name: Extract app info
-        id: app_info
-        run: |
-          APP_NAME=$(uv run python -c "from src.common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
-          APP_VERSION=$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo '0.0.0')
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
-      - name: Create source tarball
-        run: |
-          APP_NAME="${{ steps.app_info.outputs.app_name }}"
-          VERSION="${{ steps.app_info.outputs.version }}"
-          git archive --format=tar.gz -o "${APP_NAME}-v${VERSION}-source.tar.gz" HEAD
-      - name: List built files
-        run: ls -la *.tar.gz || echo "source tarball not found"
-      - uses: actions/upload-artifact@v7
-        with:
-          name: source-tarball
-          path: ${{ steps.app_info.outputs.app_name }}-*-source.tar.gz
-          if-no-files-found: error
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - uses: astral-sh/setup-uv@v8
-        with:
-          enable-cache: true
-          cache-dependency-glob: "requirements.txt"
-        continue-on-error: true
-      - name: Extract app info
-        id: app_info
-        shell: bash
-        run: |
-          APP_NAME=$(uv run python -c "from src.common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
-          APP_VERSION=$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo '0.0.0')
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
-      - name: Install dependencies
-        run: |
-          uv venv
-          uv pip install -r requirements.txt nuitka
-      - name: Build with Nuitka
-        run: uv run python build/nuitka/build_nuitka.py --onefile
-      - name: List built files
-        shell: bash
-        run: |
-          echo "=== Files in dist/ ==="
-          ls -la dist/ || echo "dist/ directory not found"
-      - uses: actions/upload-artifact@v7
-        with:
-          name: windows-build
-          path: dist/${{ steps.app_info.outputs.app_name }}-*.exe
-          if-no-files-found: error
-
   build-linux:
+    if: ${{ github.event.inputs.os == 'linux' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -132,11 +56,12 @@ jobs:
           ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v7
         with:
-          name: linux-build
+          name: linux-test-build
           path: dist/${{ steps.app_info.outputs.app_name }}-*-linux
           if-no-files-found: error
 
   build-mac:
+    if: ${{ github.event.inputs.os == 'macos' }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7
@@ -181,13 +106,13 @@ jobs:
           ls -la dist/ || echo "dist/ directory not found"
       - uses: actions/upload-artifact@v7
         with:
-          name: macos-build
+          name: macos-test-build
           path: dist/${{ steps.app_info.outputs.app_name }}-*-macos.dmg
           if-no-files-found: error
 
-  create-release:
-    needs: [prepare-source, build-windows, build-linux, build-mac]
-    runs-on: ubuntu-latest
+  build-windows:
+    if: ${{ github.event.inputs.os == 'windows' }}
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
         with:
@@ -202,22 +127,25 @@ jobs:
         continue-on-error: true
       - name: Extract app info
         id: app_info
+        shell: bash
         run: |
           APP_NAME=$(uv run python -c "from src.common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
           APP_VERSION=$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo '0.0.0')
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
-      - uses: actions/download-artifact@v8
+      - name: Install dependencies
+        run: |
+          uv venv
+          uv pip install -r requirements.txt nuitka
+      - name: Build with Nuitka
+        run: uv run python build/nuitka/build_nuitka.py --onefile
+      - name: List built files
+        shell: bash
+        run: |
+          echo "=== Files in dist/ ==="
+          ls -la dist/ || echo "dist/ directory not found"
+      - uses: actions/upload-artifact@v7
         with:
-          path: artifacts
-      - name: List all artifacts
-        run: find artifacts -type f -ls
-      - uses: softprops/action-gh-release@v3
-        with:
-          tag_name: v${{ steps.app_info.outputs.version }}
-          name: ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}
-          draft: ${{ github.event.inputs.draft }}
-          prerelease: ${{ github.event.inputs.prerelease }}
-          files: artifacts/**/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: windows-test-build
+          path: dist/${{ steps.app_info.outputs.app_name }}-*.exe
+          if-no-files-found: error
