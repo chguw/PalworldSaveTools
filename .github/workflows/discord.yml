@@ -25,46 +25,28 @@ jobs:
         run: |
           APP_NAME=$(python3 -c "import sys; sys.path.insert(0,'src'); from common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-      - name: Build embed payload
+      - name: Build payload
         id: payload
         run: |
           if [ "${{ github.event_name }}" = "release" ]; then
-            RELEASE_NAME="${{ github.event.release.name }}"
-            RELEASE_URL="${{ github.event.release.html_url }}"
-            TAG="${{ github.event.release.tag_name }}"
+            echo "release_name=${{ github.event.release.name }}" >> "$GITHUB_OUTPUT"
+            echo "release_url=${{ github.event.release.html_url }}" >> "$GITHUB_OUTPUT"
           else
-            RELEASE_NAME="${{ github.event.inputs.mock_release_name }}"
-            RELEASE_URL="${{ github.event.inputs.mock_release_url }}"
-            TAG="manual-test"
+            echo "release_name=${{ github.event.inputs.mock_release_name }}" >> "$GITHUB_OUTPUT"
+            echo "release_url=${{ github.event.inputs.mock_release_url }}" >> "$GITHUB_OUTPUT"
           fi
-
-          echo "release_name=$RELEASE_NAME" >> "$GITHUB_OUTPUT"
-          echo "release_url=$RELEASE_URL" >> "$GITHUB_OUTPUT"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
       - name: Send Discord notification
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
           APP_NAME: ${{ steps.app_info.outputs.app_name }}
           RELEASE_NAME: ${{ steps.payload.outputs.release_name }}
           RELEASE_URL: ${{ steps.payload.outputs.release_url }}
-          TAG: ${{ steps.payload.outputs.tag }}
         run: |
           payload=$(cat <<ENDJSON
           {
             "username": "${APP_NAME}",
             "avatar_url": "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png",
-            "embeds": [
-              {
-                "title": "${RELEASE_NAME}",
-                "url": "${RELEASE_URL}",
-                "color": 2105893,
-                "footer": {
-                  "text": "${APP_NAME}",
-                  "icon_url": "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
-                },
-                "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')"
-              }
-            ]
+            "content": "${RELEASE_NAME}\n${RELEASE_URL}"
           }
           ENDJSON
           )
