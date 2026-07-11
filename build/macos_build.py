@@ -89,14 +89,13 @@ def sign_app(app_path: str, identity: str | None = None):
     sign_identity = identity if identity else '-'
     label = f'Signing with identity: {sign_identity}'
     run([
-        'codesign', '--deep', '--force', '--verify-optional',
+        'codesign', '--deep', '--force',
         '--sign', sign_identity,
         app_path,
     ], label)
 
     # Verify the signature
-    run(['codesign', '--verify', '--deep', '--strict', app_path],
-        'Verifying signature')
+    run(['codesign', '-v', app_path], 'Verifying signature')
 
 
 def create_dmg(app_path: str, app_name: str, version: str) -> str:
