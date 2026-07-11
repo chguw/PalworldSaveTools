@@ -1612,6 +1612,8 @@ class MapTab(QWidget):
                 return
             src_base_raw['group_id_belong_to'] = UUID.from_str(target_guild_id)
             group_map = wsd.get('GroupSaveDataMap', {}).get('value', [])
+            source_guild_level = 1
+            target_group_raw = None
             for g in group_map:
                 try:
                     gid = str(g['key']).replace('-', '').lower()
@@ -1619,12 +1621,41 @@ class MapTab(QWidget):
                         continue
                     raw = g['value']['RawData']['value']
                     if gid == old_guild_id:
+                        source_guild_level = raw.get('base_camp_level', 1)
                         raw['base_ids'] = [b for b in raw.get('base_ids', []) if str(b).replace('-', '').lower() != bid]
                     elif gid == target_gid_clean:
                         if bid not in [str(b).replace('-', '').lower() for b in raw.get('base_ids', [])]:
                             raw['base_ids'].append(UUID.from_str(bid))
+                        if source_guild_level > raw.get('base_camp_level', 1):
+                            raw['base_camp_level'] = source_guild_level
+                        target_group_raw = raw
                 except:
                     pass
+            if target_group_raw:
+                wd_container_id = None
+                try:
+                    wd_container_id = src_base_entry['value']['WorkerDirector']['value']['RawData']['value']['container_id']
+                except:
+                    pass
+                if wd_container_id:
+                    wd_cid_norm = str(wd_container_id).replace('-', '').lower()
+                    char_containers = wsd.get('CharacterContainerSaveData', {}).get('value', [])
+                    wd_cont = next((c for c in char_containers if str(c.get('key', {}).get('ID', {}).get('value', '')).replace('-', '').lower() == wd_cid_norm), None)
+                    if wd_cont:
+                        char_map = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
+                        wd_slots = wd_cont['value']['Slots']['value'].get('values', [])
+                        new_target_gid_obj = UUID.from_str(target_guild_id)
+                        for slot in wd_slots:
+                            s_raw = slot.get('RawData', {}).get('value', {})
+                            inst_id = str(s_raw.get('instance_id', '')).replace('-', '').lower()
+                            if inst_id and inst_id != '00000000-0000-0000-0000-000000000000':
+                                for ch in char_map:
+                                    ch_inst = str(ch.get('key', {}).get('InstanceId', {}).get('value', '')).replace('-', '').lower()
+                                    if ch_inst == inst_id:
+                                        ch['value']['RawData']['value']['group_id'] = new_target_gid_obj
+                                        from palworld_aio.editor.edit_pals import _register_pal_instance_to_guild
+                                        _register_pal_instance_to_guild(ch['key']['InstanceId']['value'], target_guild_id)
+                                        break
             self.refresh()
             if self.parent_window:
                 self.parent_window.refresh_all()
@@ -1632,7 +1663,7 @@ class MapTab(QWidget):
             if hasattr(self, 'toggle_base_radius_rings') and self.toggle_base_radius_rings.isChecked():
                 self._show_all_radius_rings()
             target_name = self.guilds_data.get(target_guild_id, {}).get('guild_name', target_guild_id)
-            show_information(self, t('success.title') if t else 'Success', t('base.reassign.success') if t else f'Base reassigned to guild "{target_name}"')
+            show_information(self, t('success.title') if t else 'Success', t('base.reassign.success', name=target_name) if t else f'Base reassigned to guild "{target_name}"')
         except Exception as e:
             show_critical(self, t('error.title') if t else 'Error', f'Failed to reassign base: {str(e)}')
         finally:
