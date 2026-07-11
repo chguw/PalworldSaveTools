@@ -1,0 +1,28 @@
+name: Discord Release Notification
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  github-releases-to-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Extract app info
+        id: app_info
+        run: |
+          APP_NAME=$(python3 -c "import sys; sys.path.insert(0,'src'); from common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
+          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
+      - name: Github Releases To Discord
+        uses: SethCohen/github-releases-to-discord@v1.13.1
+        with:
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          color: "2105893"
+          username: "${{ steps.app_info.outputs.app_name }}"
+          avatar_url: "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
+          content: "**${{ github.event.release.name }}** is now live!\n\n${{ github.event.release.html_url }}"
+          footer_title: "Changelog"
+          footer_icon_url: "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
+          footer_timestamp: true
