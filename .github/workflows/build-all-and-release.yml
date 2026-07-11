@@ -158,20 +158,8 @@ jobs:
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka imageio
-      - name: Build with Nuitka
-        run: uv run python build/nuitka/build_nuitka.py --onedir
-      - name: Create DMG
-        run: |
-          APP_NAME="${{ steps.app_info.outputs.app_name }}"
-          VERSION="${{ steps.app_info.outputs.version }}"
-          app=$(ls -d dist/*.app 2>/dev/null | head -1)
-          if [ -n "$app" ]; then
-            hdiutil create -volname "Palworld Save Tools" -srcfolder "$app" -ov -format UDZO "dist/${APP_NAME}-${VERSION}-macos.dmg"
-          else
-            echo "No .app bundle found in dist/"
-            ls -la dist/ 2>/dev/null || echo "dist/ does not exist"
-            exit 1
-          fi
+      - name: Build macOS DMG
+        run: uv run python build/macos_build.py --ad-hoc
       - name: List built files
         run: |
           echo "=== Files in dist/ ==="
@@ -241,7 +229,7 @@ jobs:
 
           ### 🤝 Support
 
-          If you encounter any bugs or have feedback regarding the new **Beta features**, please:
+          If you encounter any bugs or have feedback, please:
 
           * Open a GitHub issue:
             https://github.com/deafdudecomputers/PalworldSaveTools/issues

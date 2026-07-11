@@ -19,7 +19,7 @@ jobs:
       - name: Extract app info
         id: app_info
         run: |
-          APP_NAME=$(python3 -c "import sys; sys.path.insert(0,'src'); from common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
+          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
       - name: Build payload
         id: payload

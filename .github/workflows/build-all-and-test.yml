@@ -74,20 +74,11 @@ jobs:
           uv venv --clear
           uv pip install -r requirements.txt nuitka ${{ matrix.extra_deps }}
       - name: Build with Nuitka
+        if: ${{ matrix.platform != 'macos' }}
         run: uv run python build/nuitka/build_nuitka.py ${{ matrix.build_mode }}
-      - name: Create DMG (macOS only)
+      - name: Build macOS DMG
         if: ${{ matrix.platform == 'macos' }}
-        run: |
-          APP_NAME="${{ steps.app_info.outputs.app_name }}"
-          VERSION="${{ steps.app_info.outputs.version }}"
-          app=$(ls -d dist/*.app 2>/dev/null | head -1)
-          if [ -n "$app" ]; then
-            hdiutil create -volname "Palworld Save Tools" -srcfolder "$app" -ov -format UDZO "dist/${APP_NAME}-${VERSION}-macos.dmg"
-          else
-            echo "No .app bundle found in dist/"
-            ls -la dist/ 2>/dev/null || echo "dist/ does not exist"
-            exit 1
-          fi
+        run: uv run python build/macos_build.py --ad-hoc
       - name: List built files
         shell: bash
         run: |
