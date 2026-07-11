@@ -205,25 +205,21 @@ jobs:
           path: artifacts
       - name: List all artifacts
         run: find artifacts -type f -ls
-      - name: Find existing draft by tag
+      - name: Verify existing release by tag
         if: ${{ github.event.inputs.append_only == 'true' }}
-        id: find_draft
+        id: find_release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: v${{ steps.app_info.outputs.version }}
         run: |
-          # Look for an existing draft release with this tag
-          DRAFT_ID=$(gh release list --repo "${{ github.repository }}" \
-            --json tagName,isDraft,nodeId \
-            --jq ".[] | select(.tagName == \"$TAG\" and .isDraft == true) | .nodeId" \
-            | head -1)
-          if [ -z "$DRAFT_ID" ]; then
-            echo "ERROR: No draft release found with tag '$TAG'. Untick 'append_only' or create the draft first."
+          # Confirm a release with this tag already exists (draft or published)
+          if ! gh release view "$TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "ERROR: No release found with tag '$TAG'. Untick 'append_only' or create the release first."
             gh release list --repo "${{ github.repository }}" --limit 10
             exit 1
           fi
-          echo "Found existing draft: $DRAFT_ID"
-      - name: Append files to existing draft (no edits)
+          echo "Found existing release: $TAG"
+      - name: Append files to existing release (no edits)
         if: ${{ github.event.inputs.append_only == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
