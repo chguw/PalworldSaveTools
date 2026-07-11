@@ -1746,7 +1746,7 @@
     "breeding.hint": "单击上面的按钮选择一个朋友并查看繁殖组合。",
     "breeding.type_to_search": "输入好友名称即可查看繁殖组合",
     "breeding.not_found": "育种数据中未找到 Pal",
-    "breeding.parents_for": "Parents for {name}",
+    "breeding.parents_for": "{name} 的家长",
     "breeding.children_for": "{name} 的孩子",
     "breeding.unique": "独特的组合",
     "breeding.formula": "公式组合",
@@ -1764,5 +1764,7 @@
     "base.reassign_guild": "重新分配到公会",
     "base.reassign.no_other_guilds": "没有其他公会可用。",
     "base.reassign.same_guild": "基地已经属于这个公会了。",
-    "base.reassign.success": "基地重新分配给公会“{name}”"
+    "base.reassign.success": "基地重新分配给公会“{name}”",
+    "xgp.err.missing_files": "保存不完整。缺少必需的：{文件}\n\n如果没有所有必需的组件，游戏将无法识别此保存。在 PST 中打开保存以导出丢失的文件，或从工作保存中获取它们。",
+    "menu.file.load_xgp_save": "加载 GamePass 保存"
 }

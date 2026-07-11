@@ -1321,6 +1321,7 @@
     "xgp.err.no_saves": "No save files found",
     "xgp.err.no_valid_saves": "No valid saves found to convert",
     "xgp.err.no_xgp_saves": "No save files found on XGP. Please reinstall the game on XGP and try again.",
+    "xgp.err.missing_files": "Save is incomplete. Missing required: {files}\n\nThe game will not recognize this save without all required components. Open the save in PST to export the missing files, or obtain them from a working save.",
     "xgp.err.no_zip_created": "No zip file created by extractor.",
     "xgp.err.source_not_found": "Source save folder not found: {src}",
     "xgp.label.select_zip": "Select a ZIP to use for conversion:",
@@ -2049,5 +2050,6 @@
     "base.reassign_guild": "Reassign to Guild",
     "base.reassign.no_other_guilds": "No other guilds available.",
     "base.reassign.same_guild": "Base already belongs to this guild.",
-    "base.reassign.success": "Base reassigned to guild \"{name}\""
+    "base.reassign.success": "Base reassigned to guild \"{name}\"",
+    "menu.file.load_xgp_save": "Load GamePass Save"
 }

@@ -1744,5 +1744,7 @@
     "base.reassign_guild": "Réaffecter à la guilde",
     "base.reassign.no_other_guilds": "Aucune autre guilde disponible.",
     "base.reassign.same_guild": "La base appartient déjà à cette guilde.",
-    "base.reassign.success": "Base réaffectée à la guilde \"{name}\""
+    "base.reassign.success": "Base réaffectée à la guilde \"{name}\"",
+    "xgp.err.missing_files": "La sauvegarde est incomplète. Manquant requis : {fichiers}\n\nLe jeu ne reconnaîtra pas cette sauvegarde sans tous les composants requis. Ouvrez la sauvegarde dans PST pour exporter les fichiers manquants ou obtenez-les à partir d'une sauvegarde fonctionnelle.",
+    "menu.file.load_xgp_save": "Charger la sauvegarde GamePass"
 }

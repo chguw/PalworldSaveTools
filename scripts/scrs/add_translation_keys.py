@@ -38,6 +38,8 @@ NEW_TRANSLATIONS = {
     'base.reassign.no_other_guilds': 'No other guilds available.',
     'base.reassign.same_guild': 'Base already belongs to this guild.',
     'base.reassign.success': 'Base reassigned to guild "{name}"',
+    'xgp.err.missing_files': 'Save is incomplete. Missing required: {files}\n\nThe game will not recognize this save without all required components. Open the save in PST to export the missing files, or obtain them from a working save.',
+    'menu.file.load_xgp_save': 'Load GamePass Save',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

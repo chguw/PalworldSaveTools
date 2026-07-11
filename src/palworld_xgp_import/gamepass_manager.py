@@ -10,8 +10,56 @@ from palworld_xgp_import.container_types import (
     ContainerIndex, ContainerFileList, FILETIME, Container,
 )
 
+SAVE_SUFFIXES = ("Level", "Level-01", "LocalData", "WorldOption")
+
 
 CONTAINER_REGEX = re.compile(r"[0-9A-F]{16}_[0-9A-F]{32}$")
+
+STEAM_SAVE_REQUIRED = ['Level.sav', 'LevelMeta.sav', 'LocalData.sav']
+XGP_CONTAINER_REQUIRED = ['Level', 'LevelMeta']
+
+
+def validate_steam_save(steam_dir: str) -> list[str]:
+    """Check a Steam save directory for required files. Returns list of missing files."""
+    missing = []
+    for fname in STEAM_SAVE_REQUIRED:
+        if not os.path.isfile(os.path.join(steam_dir, fname)):
+            missing.append(fname)
+    pdir = os.path.join(steam_dir, 'Players')
+    if not os.path.isdir(pdir) or not any(f.endswith('.sav') for f in os.listdir(pdir)):
+        missing.append('Players/<player>.sav')
+    return missing
+
+
+def validate_xgp_save(container_path: str, index: ContainerIndex) -> list[str]:
+    """Check XGP container index for required container types. Returns list of missing types."""
+    names = {c.container_name.split('-', 1)[1] if '-' in c.container_name else c.container_name
+             for c in index.containers}
+    missing = []
+    for req in XGP_CONTAINER_REQUIRED:
+        if not any(n == req or n.startswith(req) for n in names):
+            missing.append(req)
+    player_present = any('Players-' in c.container_name for c in index.containers)
+    if not player_present:
+        missing.append('Players-{uid}')
+    return missing
+
+
+def recompress_to_steam(data: bytes) -> bytes | None:
+    """Fast binary recompress XGP (PLZ) → Steam (PLM). Returns compressed
+    bytes on success, None if already Steam or format unknown (caller
+    should fall back to SAV→JSON→SAV roundtrip)."""
+    from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
+    try:
+        magic = data[8:11]
+        if magic == b'PlM':
+            return data
+        if magic == b'PlZ':
+            raw_gvas, _ = decompress_sav_to_gvas(data)
+            return compress_gvas_to_sav(raw_gvas, 49)
+        return None
+    except Exception:
+        return None
 
 
 def find_container_paths() -> list[str]:
@@ -124,7 +172,7 @@ def _read_container_data_by_name_multi(container_path: str, index: ContainerInde
 def extract_save_to_temp(container_path: str, index: ContainerIndex, save_id: str, temp_dir: str) -> dict[str, str]:
     extracted = {}
 
-    level_data = _read_container_data_by_name_multi(container_path, index, save_id, "Level", "Level-01")
+    level_data = _read_container_data_by_name_multi(container_path, index, save_id, *SAVE_SUFFIXES)
     if level_data:
         p = os.path.join(temp_dir, "Level.sav")
         with open(p, "wb") as f:
@@ -137,6 +185,20 @@ def extract_save_to_temp(container_path: str, index: ContainerIndex, save_id: st
         with open(p, "wb") as f:
             f.write(meta_data)
         extracted["LevelMeta.sav"] = p
+
+    local_data = _read_container_data_by_name(container_path, index, save_id, "LocalData")
+    if local_data:
+        p = os.path.join(temp_dir, "LocalData.sav")
+        with open(p, "wb") as f:
+            f.write(local_data)
+        extracted["LocalData.sav"] = p
+
+    world_opt = _read_container_data_by_name(container_path, index, save_id, "WorldOption")
+    if world_opt:
+        p = os.path.join(temp_dir, "WorldOption.sav")
+        with open(p, "wb") as f:
+            f.write(world_opt)
+        extracted["WorldOption.sav"] = p
 
     players_dir = os.path.join(temp_dir, "Players")
     os.makedirs(players_dir, exist_ok=True)
@@ -176,6 +238,8 @@ def save_to_container(
     level_data: bytes,
     meta_data: Optional[bytes],
     players_data: dict[str, bytes],
+    local_data: Optional[bytes] = None,
+    world_option_data: Optional[bytes] = None,
     world_name: str = "Modified World",
 ) -> None:
     now_ts = datetime.datetime.now().timestamp()
@@ -212,6 +276,10 @@ def save_to_container(
     index.containers.append(_create_container_entry("Level", level_data))
     if meta_data:
         index.containers.append(_create_container_entry("LevelMeta", meta_data))
+    if local_data:
+        index.containers.append(_create_container_entry("LocalData", local_data))
+    if world_option_data:
+        index.containers.append(_create_container_entry("WorldOption", world_option_data))
     for uid, pdata in players_data.items():
         index.containers.append(_create_container_entry(f"Players-{uid}", pdata))
 
@@ -219,10 +287,89 @@ def save_to_container(
     index.write_file(container_path)
 
 
+def write_gvas_to_container(
+    container_path: str, index: ContainerIndex, save_id: str,
+    level_data: bytes,
+    meta_data: Optional[bytes] = None,
+    local_data: Optional[bytes] = None,
+    world_option_data: Optional[bytes] = None,
+    players_data: Optional[dict[str, bytes]] = None,
+) -> None:
+    """Write modified save data back into an existing XGP container,
+    replacing only containers whose name starts with <save_id>-.
+    Does not touch containers belonging to other save IDs."""
+    import time as _t
+    _t0 = _t.perf_counter()
+    now_ts = datetime.datetime.now().timestamp()
+
+    prefix = f"{save_id}-"
+    old_count = len(index.containers)
+    index.containers = [c for c in index.containers if not c.container_name.startswith(prefix)]
+    removed = old_count - len(index.containers)
+    _t1 = _t.perf_counter()
+    print(f'  [write_gvas] filtered {removed} old containers: {_t1-_t0:.2f}s')
+
+    def _create_entry(suffix: str, data: bytes) -> Container:
+        _a = _t.perf_counter()
+        c_uuid = uuid.uuid4()
+        f_uuid = uuid.uuid4()
+        cdir = os.path.join(container_path, c_uuid.bytes_le.hex().upper())
+        os.makedirs(cdir, exist_ok=True)
+        _b = _t.perf_counter()
+        with open(os.path.join(cdir, "container.1"), "wb") as f:
+            f.write((4).to_bytes(4, "little"))
+            f.write((1).to_bytes(4, "little"))
+            name_bytes = "Data".encode("utf-16-le")
+            f.write(name_bytes + b"\x00" * (128 - len(name_bytes)))
+            f.write(b"\x00" * 16)
+            f.write(f_uuid.bytes)
+        _c = _t.perf_counter()
+        data_path = os.path.join(cdir, f_uuid.bytes_le.hex().upper())
+        with open(data_path, "wb") as f:
+            f.write(data)
+        _d = _t.perf_counter()
+        print(f'  [write_gvas] _create_entry({suffix}): mkdir={_b-_a:.2f}s container.1={_c-_b:.2f}s data={_d-_c:.2f}s data_len={len(data)}')
+        return Container(
+            container_name=f"{save_id}-{suffix}",
+            cloud_id="", seq=1, flag=5,
+            container_uuid=c_uuid,
+            mtime=FILETIME.from_timestamp(now_ts),
+            size=len(data),
+        )
+
+    _t2 = _t.perf_counter()
+    index.containers.append(_create_entry("Level", level_data))
+    _t3 = _t.perf_counter()
+    print(f'  [write_gvas] Level entry: {_t3-_t2:.2f}s')
+    if meta_data:
+        _t3a = _t.perf_counter()
+        index.containers.append(_create_entry("LevelMeta", meta_data))
+        print(f'  [write_gvas] LevelMeta entry: {_t.perf_counter()-_t3a:.2f}s')
+    if local_data:
+        _t3b = _t.perf_counter()
+        index.containers.append(_create_entry("LocalData", local_data))
+        print(f'  [write_gvas] LocalData entry: {_t.perf_counter()-_t3b:.2f}s')
+    if world_option_data:
+        _t3c = _t.perf_counter()
+        index.containers.append(_create_entry("WorldOption", world_option_data))
+        print(f'  [write_gvas] WorldOption entry: {_t.perf_counter()-_t3c:.2f}s')
+    if players_data:
+        _t3d = _t.perf_counter()
+        for uid, pdata in players_data.items():
+            index.containers.append(_create_entry(f"Players-{uid}", pdata))
+        print(f'  [write_gvas] {len(players_data)} player entries: {_t.perf_counter()-_t3d:.2f}s')
+    _t4 = _t.perf_counter()
+    index.mtime = FILETIME.from_timestamp(now_ts)
+    index.write_file(container_path)
+    _t5 = _t.perf_counter()
+    print(f'  [write_gvas] write_file: {_t5-_t4:.2f}s')
+    print(f'  [write_gvas] total: {_t5-_t0:.2f}s')
+
+
 def convert_to_steam(index: ContainerIndex, container_path: str, save_id: str, output_dir: str) -> None:
     os.makedirs(output_dir, exist_ok=True)
 
-    level_data = _read_container_data_by_name_multi(container_path, index, save_id, "Level", "Level-01")
+    level_data = _read_container_data_by_name_multi(container_path, index, save_id, *SAVE_SUFFIXES)
     if level_data:
         with open(os.path.join(output_dir, "Level.sav"), "wb") as f:
             f.write(level_data)
@@ -231,6 +378,16 @@ def convert_to_steam(index: ContainerIndex, container_path: str, save_id: str, o
     if meta_data:
         with open(os.path.join(output_dir, "LevelMeta.sav"), "wb") as f:
             f.write(meta_data)
+
+    local_data = _read_container_data_by_name(container_path, index, save_id, "LocalData")
+    if local_data:
+        with open(os.path.join(output_dir, "LocalData.sav"), "wb") as f:
+            f.write(local_data)
+
+    world_opt = _read_container_data_by_name(container_path, index, save_id, "WorldOption")
+    if world_opt:
+        with open(os.path.join(output_dir, "WorldOption.sav"), "wb") as f:
+            f.write(world_opt)
 
     players_dir = os.path.join(output_dir, "Players")
     os.makedirs(players_dir, exist_ok=True)
@@ -256,6 +413,8 @@ def convert_to_gamepass_from_steam(steam_dir: str, container_path: str, world_na
 
     level_path = os.path.join(steam_dir, "Level.sav")
     meta_path = os.path.join(steam_dir, "LevelMeta.sav")
+    local_path = os.path.join(steam_dir, "LocalData.sav")
+    world_opt_path = os.path.join(steam_dir, "WorldOption.sav")
     players_dir = os.path.join(steam_dir, "Players")
 
     def _create_entry(suffix, data):
@@ -268,6 +427,14 @@ def convert_to_gamepass_from_steam(steam_dir: str, container_path: str, world_na
     if os.path.exists(meta_path):
         with open(meta_path, "rb") as f:
             index.containers.append(_create_entry("LevelMeta", f.read()))
+
+    if os.path.exists(local_path):
+        with open(local_path, "rb") as f:
+            index.containers.append(_create_entry("LocalData", f.read()))
+
+    if os.path.exists(world_opt_path):
+        with open(world_opt_path, "rb") as f:
+            index.containers.append(_create_entry("WorldOption", f.read()))
 
     if os.path.isdir(players_dir):
         for pf in sorted(os.listdir(players_dir)):

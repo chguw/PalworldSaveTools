@@ -156,6 +156,25 @@ class GamePassSaveFixWidget(QWidget):
                     return True
             return False
         if is_xgp_container(folder):
+            from palworld_xgp_import.gamepass_manager import (
+                read_container_index, validate_xgp_save,
+            )
+            try:
+                idx_path = folder
+                if not os.path.isfile(os.path.join(idx_path, 'containers.index')):
+                    for root, _, files in os.walk(folder):
+                        if 'containers.index' in files:
+                            idx_path = root
+                            break
+                idx = read_container_index(idx_path)
+                xgp_missing = validate_xgp_save(idx_path, idx)
+                if xgp_missing:
+                    self.message_signal.emit('critical', t('Error'),
+                        t('xgp.err.missing_files', files=', '.join(xgp_missing)))
+                    return
+            except Exception as e:
+                self.message_signal.emit('critical', t('Error'), str(e))
+                return
             run_with_loading(None, self.run_save_extractor)
             return
         saves = self.find_valid_saves(folder)
@@ -179,9 +198,11 @@ class GamePassSaveFixWidget(QWidget):
         if not folder:
             return
         self.conversion_direction = 'steam_to_xgp'
-        sav_path = os.path.join(folder, 'Level.sav')
-        if not os.path.exists(sav_path):
-            self.message_signal.emit('critical', t('Error'), 'Selected folder does not contain Level.sav')
+        from palworld_xgp_import.gamepass_manager import validate_steam_save
+        missing = validate_steam_save(folder)
+        if missing:
+            self.message_signal.emit('critical', t('Error'),
+                t('xgp.err.missing_files', files=', '.join(missing)))
             return
         meta_path = os.path.join(folder, 'LevelMeta.sav')
         if os.path.exists(meta_path):
@@ -326,6 +347,22 @@ class GamePassSaveFixWidget(QWidget):
             finally:
                 logging.disable(logging.NOTSET)
         run_with_loading(self.update_combobox_signal.emit, task)
+    def _try_binary_recompress_dir(self, source_base):
+        from palworld_xgp_import.gamepass_manager import recompress_to_steam
+        converted = []
+        for root, _, files in os.walk(source_base):
+            for fn in files:
+                if not fn.endswith('.sav'):
+                    continue
+                fpath = os.path.join(root, fn)
+                with open(fpath, 'rb') as f:
+                    out = recompress_to_steam(f.read())
+                if out is not None:
+                    with open(fpath, 'wb') as f:
+                        f.write(out)
+                    converted.append(fpath)
+        return converted
+
     def convert_JSON_sav(self, saveName):
         if hasattr(self, 'direct_saves_map') and saveName in self.direct_saves_map:
             source_base = self.direct_saves_map[saveName]
@@ -344,6 +381,13 @@ class GamePassSaveFixWidget(QWidget):
             else:
                 self.message_signal.emit('info', t('Info'), t('xgp.msg.already_converted', save=saveName))
                 return
+        fast = self._try_binary_recompress_dir(source_base)
+        level_key = os.path.join(source_base, 'Level', '01.sav')
+        if level_key in fast:
+            level_dst = os.path.join(source_base, 'Level.sav')
+            shutil.copy2(level_key, level_dst)
+            self.move_save_steam(saveName)
+            return
         def run_conversion():
             try:
                 import logging

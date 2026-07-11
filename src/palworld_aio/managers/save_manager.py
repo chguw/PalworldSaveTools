@@ -34,8 +34,82 @@ class SaveManager(QObject):
         super().__init__()
         self.dps_tasks = []
         self.player_sav_cache = {}
-    def load_save(self, path=None, parent=None):
+        self._xgp_temp_dir = None
+    def _reset_state(self):
+        from palobject import MappingCacheObject
+        constants.loaded_level_json = None
+        constants.current_save_path = None
+        constants.backup_save_path = None
+        constants.srcGuildMapping = None
+        constants.base_guild_lookup = {}
+        constants.files_to_delete = set()
+        constants.PLAYER_PAL_COUNTS = {}
+        constants.player_levels = {}
+        constants.player_character_cache = {}
+        constants.PLAYER_DETAILS_CACHE = {}
+        constants.PLAYER_REMAPS = {}
+        constants.exclusions = {}
+        constants.death_bag_protected_instance_ids.clear()
+        constants.death_bag_protected_container_ids.clear()
+        constants.selected_source_player = None
+        constants.dps_executor = None
+        constants.dps_futures = []
+        constants.dps_tasks = []
+        constants.original_loaded_level_json = None
+        constants.xgp_container_path = None
+        constants.xgp_save_id = None
+        constants.xgp_container_index = None
+        constants.xgp_loaded = False
+        self.dps_tasks.clear()
+        self.player_sav_cache.clear()
+        if hasattr(MappingCacheObject, '_MappingCacheInstances'):
+            MappingCacheObject._MappingCacheInstances.clear()
+        if self._xgp_temp_dir:
+            shutil.rmtree(self._xgp_temp_dir, ignore_errors=True)
+            self._xgp_temp_dir = None
+    def _load_from_path(self, level_sav_path: str, parent=None) -> bool:
+        t0 = time.perf_counter()
+        constants.loaded_level_json = sav_to_gvas_wrapper(level_sav_path)
+        t1 = time.perf_counter()
+        constants.invalidate_container_lookup()
+        from palworld_aio.managers.func_manager import scan_and_protect_death_bags
+        scan_and_protect_death_bags()
+        from palworld_aio.inventory.dynamic_item_manager import get_dynamic_item_manager
+        get_dynamic_item_manager().sync_with_save_data(constants.loaded_level_json)
+        self._build_player_levels()
+        if not constants.loaded_level_json:
+            return False
+        data_source = constants.loaded_level_json['properties']['worldSaveData']['value']
+        from palobject import MappingCacheObject
+        try:
+            if hasattr(MappingCacheObject, 'clear_cache'):
+                MappingCacheObject.clear_cache()
+            constants.srcGuildMapping = MappingCacheObject.get(data_source, use_mp=True)
+            if constants.srcGuildMapping._worldSaveData.get('GroupSaveDataMap') is None:
+                constants.srcGuildMapping.GroupSaveDataMap = {}
+        except Exception as e:
+            if parent:
+                show_critical(parent, t('error.title'), t('error.guild_mapping_failed', err=e))
+            constants.srcGuildMapping = None
+        constants.base_guild_lookup = {}
+        guild_name_map = {}
+        if constants.srcGuildMapping:
+            for gid_uuid, gdata in constants.srcGuildMapping.GroupSaveDataMap.items():
+                gid = str(gid_uuid)
+                guild_name = gdata['value']['RawData']['value'].get('guild_name', 'Unnamed Guild')
+                guild_name_map[gid.lower()] = guild_name
+                for base_id_uuid in gdata['value']['RawData']['value'].get('base_ids', []):
+                    constants.base_guild_lookup[str(base_id_uuid)] = {'GuildName': guild_name, 'GuildID': gid}
         base_path = '.'
+        log_folder = os.path.join(base_path, 'Logs', 'Scan Save Logger')
+        os.makedirs(log_folder, exist_ok=True)
+        player_pals_count = {}
+        playerdir = os.path.join(constants.current_save_path, 'Players')
+        illegal_pals_by_owner, owner_nicknames = self._count_pals_found(data_source, player_pals_count, log_folder, constants.current_save_path, guild_name_map)
+        constants.PLAYER_PAL_COUNTS = player_pals_count
+        self._process_scan_log(data_source, playerdir, log_folder, guild_name_map, base_path, illegal_pals_by_owner, owner_nicknames)
+        return True
+    def load_save(self, path=None, parent=None):
         if path is None:
             p, _ = QFileDialog.getOpenFileName(parent, 'Select Level.sav', '', 'SAV Files(*.sav)')
         else:
@@ -50,78 +124,22 @@ class SaveManager(QObject):
         if not os.path.isdir(playerdir):
             show_critical(parent, t('error.title'), t('error.players_folder_missing'))
             return False
-        if constants.loaded_level_json is not None:
-            constants.loaded_level_json = None
-            constants.current_save_path = None
-            constants.backup_save_path = None
-            constants.srcGuildMapping = None
-            constants.base_guild_lookup = {}
-            constants.files_to_delete = set()
-            constants.PLAYER_PAL_COUNTS = {}
-            constants.player_levels = {}
-            constants.player_character_cache = {}
-            constants.PLAYER_DETAILS_CACHE = {}
-            constants.PLAYER_REMAPS = {}
-            constants.exclusions = {}
-            constants.death_bag_protected_instance_ids.clear()
-            constants.death_bag_protected_container_ids.clear()
-            constants.selected_source_player = None
-            constants.dps_executor = None
-            constants.dps_futures = []
-            constants.dps_tasks = []
-            constants.original_loaded_level_json = None
-            self.dps_tasks.clear()
-            self.player_sav_cache.clear()
-        from palobject import MappingCacheObject
-        if hasattr(MappingCacheObject, '_MappingCacheInstances'):
-            MappingCacheObject._MappingCacheInstances.clear()
+        self._reset_state()
         self.load_started.emit()
         constants.current_save_path = d
         constants.backup_save_path = constants.current_save_path
         backup_whole_directory(constants.backup_save_path, 'Backups/AllinOneTools')
         def load_task():
-            t0 = time.perf_counter()
-            constants.loaded_level_json = sav_to_gvas_wrapper(p)
-            t1 = time.perf_counter()
-            constants.invalidate_container_lookup()
-            from palworld_aio.managers.func_manager import scan_and_protect_death_bags
-            scan_and_protect_death_bags()
-            from palworld_aio.inventory.dynamic_item_manager import get_dynamic_item_manager
-            dynamic_manager = get_dynamic_item_manager()
-            dynamic_manager.sync_with_save_data(constants.loaded_level_json)
-            self._build_player_levels()
-            if not constants.loaded_level_json:
+            try:
+                ok = self._load_from_path(p, parent)
+                self.load_finished.emit(ok)
+                return ok
+            except Exception as e:
+                print(f'load_save error: {e}')
+                import traceback
+                traceback.print_exc()
                 self.load_finished.emit(False)
                 return False
-            data_source = constants.loaded_level_json['properties']['worldSaveData']['value']
-            try:
-                if hasattr(MappingCacheObject, 'clear_cache'):
-                    MappingCacheObject.clear_cache()
-                constants.srcGuildMapping = MappingCacheObject.get(data_source, use_mp=True)
-                if constants.srcGuildMapping._worldSaveData.get('GroupSaveDataMap') is None:
-                    constants.srcGuildMapping.GroupSaveDataMap = {}
-            except Exception as e:
-                if path is None:
-                    show_critical(parent, t('error.title'), t('error.guild_mapping_failed', err=e))
-                constants.srcGuildMapping = None
-            constants.base_guild_lookup = {}
-            guild_name_map = {}
-            if constants.srcGuildMapping:
-                for gid_uuid, gdata in constants.srcGuildMapping.GroupSaveDataMap.items():
-                    gid = str(gid_uuid)
-                    guild_name = gdata['value']['RawData']['value'].get('guild_name', 'Unnamed Guild')
-                    guild_name_map[gid.lower()] = guild_name
-                    for base_id_uuid in gdata['value']['RawData']['value'].get('base_ids', []):
-                        constants.base_guild_lookup[str(base_id_uuid)] = {'GuildName': guild_name, 'GuildID': gid}
-            log_folder = os.path.join(base_path, 'Logs', 'Scan Save Logger')
-            os.makedirs(log_folder, exist_ok=True)
-            player_pals_count = {}
-            illegal_pals_by_owner, owner_nicknames = self._count_pals_found(data_source, player_pals_count, log_folder, constants.current_save_path, guild_name_map)
-            constants.PLAYER_PAL_COUNTS = player_pals_count
-            self._process_scan_log(data_source, playerdir, log_folder, guild_name_map, base_path, illegal_pals_by_owner, owner_nicknames)
-            pass
-            self.load_finished.emit(True)
-            return True
         run_with_loading(lambda _: None, load_task)
     def reload_current_save(self):
         if not constants.current_save_path:
@@ -170,29 +188,185 @@ class SaveManager(QObject):
     def save_changes(self, parent=None):
         if not constants.current_save_path or not constants.loaded_level_json:
             return
+        if constants.xgp_loaded and not __import__('ctypes').windll.shell32.IsUserAnAdmin():
+            show_critical(parent, t('error.title'),
+                'Administrator privileges required to write XGP containers.')
+            return
+        self._xgp_new_world_name = None
+        if constants.xgp_loaded and parent:
+            from PySide6.QtWidgets import QInputDialog, QLineEdit
+            _old_name = 'World'
+            try:
+                _meta_path = os.path.join(constants.current_save_path, 'LevelMeta.sav')
+                if os.path.exists(_meta_path):
+                    from palworld_aio.utils import sav_to_gvasfile
+                    _mg = sav_to_gvasfile(_meta_path)
+                    _old_name = _mg.properties.get('SaveData', {}).get('value', {}).get('WorldName', {}).get('value', 'World')
+            except Exception:
+                pass
+            _name, _ok = QInputDialog.getText(parent, 'Save as New World',
+                f'Enter a name for the new world (original: "{_old_name}"):',
+                QLineEdit.Normal, f'{_old_name} (modified)')
+            if not _ok or not _name.strip():
+                return
+            self._xgp_new_world_name = _name.strip()
         self.save_started.emit()
         level_sav_path = os.path.join(constants.current_save_path, 'Level.sav')
         def save_task():
             t0 = time.perf_counter()
-            wrapper_to_sav(constants.loaded_level_json, level_sav_path)
-            t1 = time.perf_counter()
-            players_folder = os.path.join(constants.current_save_path, 'Players')
-            for uid in constants.files_to_delete:
-                f = os.path.join(players_folder, uid.upper() + '.sav')
-                f_dps = os.path.join(players_folder, f'{uid.upper()}_dps.sav')
-                try:
-                    os.remove(f)
-                except FileNotFoundError:
-                    pass
-                try:
-                    os.remove(f_dps)
-                except FileNotFoundError:
-                    pass
-            constants.files_to_delete.clear()
-            duration = t1 - t0
+            try:
+                wrapper_to_sav(constants.loaded_level_json, level_sav_path)
+                players_folder = os.path.join(constants.current_save_path, 'Players')
+                for uid in constants.files_to_delete:
+                    f = os.path.join(players_folder, uid.upper() + '.sav')
+                    f_dps = os.path.join(players_folder, f'{uid.upper()}_dps.sav')
+                    try: os.remove(f)
+                    except FileNotFoundError: pass
+                    try: os.remove(f_dps)
+                    except FileNotFoundError: pass
+                constants.files_to_delete.clear()
+                if constants.xgp_loaded:
+                    self._save_xgp_container()
+            except Exception:
+                import traceback
+                traceback.print_exc()
+            duration = time.perf_counter() - t0
             self.save_finished.emit(duration)
             return duration
         run_with_loading(lambda _: None, save_task)
+    def load_xgp_save(self, container_path, save_id, parent=None):
+        from palworld_xgp_import.gamepass_manager import (
+            read_container_index, extract_save_to_temp,
+        )
+        import tempfile as _tempfile
+        self._reset_state()
+        self._xgp_temp_dir = _tempfile.mkdtemp(prefix='pst_xgp_')
+        index = read_container_index(container_path)
+        extracted = extract_save_to_temp(container_path, index, save_id, self._xgp_temp_dir)
+        level_path = extracted.get('Level.sav')
+        if not level_path:
+            shutil.rmtree(self._xgp_temp_dir, ignore_errors=True)
+            self._xgp_temp_dir = None
+            if parent:
+                show_critical(parent, t('error.title'),
+                    f'Level.sav not found in container for save_id {save_id}')
+            return False
+        if not os.path.isfile(level_path):
+            shutil.rmtree(self._xgp_temp_dir, ignore_errors=True)
+            self._xgp_temp_dir = None
+            if parent:
+                show_critical(parent, t('error.title'),
+                    f'Extracted Level.sav path ({level_path}) does not exist on disk.\n'
+                    f'Extracted keys: {list(extracted.keys())}')
+            return False
+        self.load_started.emit()
+        constants.xgp_container_path = container_path
+        constants.xgp_save_id = save_id
+        constants.xgp_container_index = read_container_index(container_path)
+        constants.xgp_loaded = True
+        constants.current_save_path = self._xgp_temp_dir
+        constants.backup_save_path = self._xgp_temp_dir
+        def load_task():
+            try:
+                ok = self._load_from_path(level_path, parent)
+                self.load_finished.emit(ok)
+                return ok
+            except Exception as e:
+                print(f'load_xgp_save error: {e}')
+                import traceback
+                traceback.print_exc()
+                self.load_finished.emit(False)
+                return False
+        run_with_loading(lambda _: None, load_task)
+        return True
+    def _save_xgp_container(self):
+        t0 = __import__('time').perf_counter()
+        from palworld_xgp_import.gamepass_manager import (
+            read_container_index, write_gvas_to_container,
+        )
+        import subprocess, time as _time, uuid
+        level_path = os.path.join(constants.current_save_path, 'Level.sav')
+        with open(level_path, 'rb') as f:
+            level_data = f.read()
+        def _maybe_read(name):
+            p = os.path.join(constants.current_save_path, name)
+            if os.path.exists(p):
+                with open(p, 'rb') as f:
+                    return f.read()
+            return None
+        meta_data = _maybe_read('LevelMeta.sav')
+        if meta_data and self._xgp_new_world_name:
+            try:
+                from palworld_aio.utils import sav_to_json, json_to_sav
+                _meta_path = os.path.join(constants.current_save_path, 'LevelMeta.sav')
+                _mj = sav_to_json(_meta_path)
+                _old_name = _mj.get('properties', {}).get('SaveData', {}).get('value', {}).get('WorldName', {}).get('value', 'World')
+                _mj['properties']['SaveData']['value']['WorldName']['value'] = self._xgp_new_world_name
+                json_to_sav(_mj, _meta_path)
+                with open(_meta_path, 'rb') as _fm:
+                    meta_data = _fm.read()
+                print(f'[XGP save] renamed world: "{_old_name}" → "{self._xgp_new_world_name}"')
+            except Exception as _me:
+                print(f'[XGP save] world rename failed: {_me}')
+        local_data = _maybe_read('LocalData.sav')
+        world_opt = _maybe_read('WorldOption.sav')
+        players_data = {}
+        pdir = os.path.join(constants.current_save_path, 'Players')
+        if os.path.isdir(pdir):
+            for pf in os.listdir(pdir):
+                if pf.endswith('.sav'):
+                    uid = pf[:-4]
+                    with open(os.path.join(pdir, pf), 'rb') as f:
+                        players_data[uid] = f.read()
+        t1 = _time.perf_counter()
+        print(f'[XGP save] read files: {t1-t0:.2f}s')
+        index = read_container_index(constants.xgp_container_path)
+        t2 = _time.perf_counter()
+        print(f'[XGP save] read index: {t2-t1:.2f}s')
+        for svc in ('GamingServices', 'GamingServicesNet'):
+            r = subprocess.run(['cmd', '/c', f'net stop {svc} /y'],
+                               check=False, capture_output=True, timeout=10)
+            if r.returncode != 0:
+                print(f'[XGP save] net stop {svc} rc={r.returncode} stderr={r.stderr.decode(errors="replace").strip()}')
+            r2 = subprocess.run(['taskkill', '/f', '/im', f'{svc}.exe'],
+                                check=False, capture_output=True, timeout=5)
+            if r2.returncode != 0 and r2.returncode != 128:  # 128 = not running
+                print(f'[XGP save] taskkill {svc}.exe rc={r2.returncode} stderr={r2.stderr.decode(errors="replace").strip()}')
+        _time.sleep(3)
+        t_svc = _time.perf_counter()
+        print(f'[XGP save] services stopped + settle: {t_svc-t2:.2f}s')
+        try:
+            _new_id = uuid.uuid4().hex.upper()
+            print(f'[XGP save] writing as new world: {_new_id}')
+            write_gvas_to_container(
+                constants.xgp_container_path, index,
+                _new_id,
+                level_data=level_data,
+                meta_data=meta_data,
+                local_data=local_data,
+                world_option_data=world_opt,
+                players_data=players_data,
+            )
+            constants.xgp_save_id = _new_id
+        except Exception:
+            import traceback
+            print(f'[XGP save] write_gvas_to_container FAILED:')
+            traceback.print_exc()
+            raise
+        # Verify: re-read index and check our new save_id containers
+        try:
+            _vi = read_container_index(constants.xgp_container_path)
+            _our = [c for c in _vi.containers if c.container_name.startswith(f'{constants.xgp_save_id}-')]
+            print(f'[XGP save] verification: found {len(_our)} containers for save_id {constants.xgp_save_id}')
+            for _c in _our:
+                print(f'  {_c.container_name}: size={_c.size}')
+        except Exception as _ve:
+            print(f'[XGP save] verification error: {_ve}')
+        finally:
+            print('[XGP save] Services left stopped. Launch the game to auto-restart them and see your changes.')
+        t3 = _time.perf_counter()
+        print(f'[XGP save] write containers: {t3-t_svc:.2f}s')
+        print(f'[XGP save] total: {t3-t0:.2f}s')
     def _sanitize_for_alignment(self, text):
         return re.sub('[^\\x00-\\x7F\\u00C0-\\u017F\\u0080-\\u00BF]', '', text)
     def _build_player_levels(self):

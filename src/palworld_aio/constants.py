@@ -67,6 +67,10 @@ dps_executor = None
 dps_futures = []
 dps_tasks = []
 dirty = False
+xgp_container_path: str | None = None
+xgp_save_id: str | None = None
+xgp_container_index = None
+xgp_loaded: bool = False
 def get_container_lookup():
     global container_lookup
     if container_lookup and loaded_level_json:

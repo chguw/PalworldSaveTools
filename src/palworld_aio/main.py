@@ -149,6 +149,10 @@ def run_aio():
             constants.dps_futures = []
             constants.dps_tasks = []
             constants.original_loaded_level_json = None
+            constants.xgp_container_path = None
+            constants.xgp_save_id = None
+            constants.xgp_container_index = None
+            constants.xgp_loaded = False
             MappingCacheObject._MappingCacheInstances.clear()
         p = path_arg
         if not p:

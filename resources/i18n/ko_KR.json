@@ -1761,5 +1761,7 @@
     "base.reassign_guild": "길드에 재할당",
     "base.reassign.no_other_guilds": "다른 길드가 없습니다.",
     "base.reassign.same_guild": "기지는 이미 이 길드에 속해 있습니다.",
-    "base.reassign.success": "\"{name}\" 길드에 기지가 재할당되었습니다."
+    "base.reassign.success": "\"{name}\" 길드에 기지가 재할당되었습니다.",
+    "xgp.err.missing_files": "저장이 완료되지 않았습니다. 필수 누락: {파일}\n\n게임은 필수 구성요소가 모두 없으면 이 저장을 인식하지 못합니다. 누락된 파일을 내보내려면 PST에서 저장 파일을 열거나 작업 저장 파일에서 해당 파일을 얻으세요.",
+    "menu.file.load_xgp_save": "GamePass 저장 로드"
 }

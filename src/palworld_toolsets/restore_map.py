@@ -55,6 +55,13 @@ def clear_fog_in_all_subfolders():
                     print(t('Clearing fog in: {path}', path=subfolder_path))
                     clear_fog_in_local_data(target_path)
                     updated_count += 1
+    if constants.loaded_level_json and constants.current_save_path:
+        local_path = os.path.join(constants.current_save_path, 'LocalData.sav')
+        if os.path.exists(local_path):
+            backup_local_data(constants.current_save_path)
+            print(t('Clearing fog in: {path}', path=constants.current_save_path))
+            clear_fog_in_local_data(local_path)
+            updated_count += 1
     print('=' * 80)
     print(t('Total worlds/servers updated: {copied_count}', copied_count=updated_count))
     print('=' * 80)

@@ -1756,5 +1756,7 @@
     "base.reassign_guild": "Reasignar al gremio",
     "base.reassign.no_other_guilds": "No hay otros gremios disponibles.",
     "base.reassign.same_guild": "Base ya pertenece a este gremio.",
-    "base.reassign.success": "Base reasignada al gremio \"{name}\""
+    "base.reassign.success": "Base reasignada al gremio \"{name}\"",
+    "xgp.err.missing_files": "El guardado está incompleto. Faltan requeridos: {archivos}\n\nEl juego no reconocerá este guardado sin todos los componentes necesarios. Abra el archivo guardado en PST para exportar los archivos que faltan u obtengalos desde un archivo guardado que funcione.",
+    "menu.file.load_xgp_save": "Cargar GamePass Guardar"
 }

@@ -1,5 +1,6 @@
 import datetime, os, re, sys, uuid
 from palworld_xgp_import.container_types import ContainerIndex, ContainerFileList, FILETIME, Container
+from palworld_xgp_import.gamepass_manager import validate_steam_save
 def create_container_entry(root, save_id, data, suffix):
     c_uuid = uuid.uuid4()
     f_uuid = uuid.uuid4()
@@ -19,6 +20,11 @@ def main():
     if len(sys.argv) != 2:
         return
     steam = os.path.abspath(sys.argv[1])
+    missing = validate_steam_save(steam)
+    if missing:
+        print(f'ERROR: Save is incomplete. Missing required files: {", ".join(missing)}')
+        print('The game will not recognize this save without all required components.')
+        return
     wgs = os.path.expandvars('%LOCALAPPDATA%\\Packages\\PocketpairInc.Palworld_ad4psfrxyesvt\\SystemAppData\\wgs')
     root = next((os.path.join(wgs, d) for d in os.listdir(wgs) if re.match('[0-9A-F]{16}_[0-9A-F]{32}$', d)))
     with open(os.path.join(root, 'containers.index'), 'rb') as f:
@@ -27,7 +33,7 @@ def main():
     idx.containers = [c for c in idx.containers if not c.container_name.startswith('EggTest')]
     new_id = uuid.uuid4().hex.upper()
     print(f'Creating new World ID: {new_id}')
-    req = {'Level': 'Level.sav', 'LevelMeta': 'LevelMeta.sav'}
+    req = {'Level': 'Level.sav', 'LevelMeta': 'LevelMeta.sav', 'LocalData': 'LocalData.sav', 'WorldOption': 'WorldOption.sav'}
     for suffix, sfile in req.items():
         spath = os.path.join(steam, sfile)
         if os.path.exists(spath):
