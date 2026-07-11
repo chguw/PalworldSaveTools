@@ -2,6 +2,12 @@ name: Build All & Release
 
 on:
   workflow_dispatch:
+    inputs:
+      append_only:
+        description: "Just append files to an existing draft (leave title/notes untouched)"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -199,7 +205,35 @@ jobs:
           path: artifacts
       - name: List all artifacts
         run: find artifacts -type f -ls
+      - name: Find existing draft by tag
+        if: ${{ github.event.inputs.append_only == 'true' }}
+        id: find_draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: v${{ steps.app_info.outputs.version }}
+        run: |
+          # Look for an existing draft release with this tag
+          DRAFT_ID=$(gh release list --repo "${{ github.repository }}" \
+            --json tagName,isDraft,nodeId \
+            --jq ".[] | select(.tagName == \"$TAG\" and .isDraft == true) | .nodeId" \
+            | head -1)
+          if [ -z "$DRAFT_ID" ]; then
+            echo "ERROR: No draft release found with tag '$TAG'. Untick 'append_only' or create the draft first."
+            gh release list --repo "${{ github.repository }}" --limit 10
+            exit 1
+          fi
+          echo "Found existing draft: $DRAFT_ID"
+      - name: Append files to existing draft (no edits)
+        if: ${{ github.event.inputs.append_only == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "v${{ steps.app_info.outputs.version }}" \
+            --repo "${{ github.repository }}" \
+            artifacts/**/* \
+            --clobber
       - name: Generate release notes
+        if: ${{ github.event.inputs.append_only != 'true' }}
         id: notes
         env:
           APP_NAME: ${{ steps.app_info.outputs.app_name }}
@@ -239,7 +273,9 @@ jobs:
 
           *Thank you for using the tool!* 🙏
           EOF
-      - uses: softprops/action-gh-release@v3
+      - name: Create draft release (with notes)
+        if: ${{ github.event.inputs.append_only != 'true' }}
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ steps.app_info.outputs.version }}
           name: v${{ steps.app_info.outputs.version }}
