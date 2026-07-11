@@ -1632,6 +1632,8 @@ class MapTab(QWidget):
                 except:
                     pass
             if target_group_raw:
+                target_guild_name = target_group_raw.get('guild_name', 'Unknown')
+                constants.base_guild_lookup[str(src_base_entry['key'])] = {'GuildName': target_guild_name, 'GuildID': target_guild_id}
                 wd_container_id = None
                 try:
                     wd_container_id = src_base_entry['value']['WorkerDirector']['value']['RawData']['value']['container_id']
@@ -1656,6 +1658,9 @@ class MapTab(QWidget):
                                         from palworld_aio.editor.edit_pals import _register_pal_instance_to_guild
                                         _register_pal_instance_to_guild(ch['key']['InstanceId']['value'], target_guild_id)
                                         break
+                constants.invalidate_container_lookup()
+                if self.parent_window and hasattr(self.parent_window, 'base_inventory_tab'):
+                    self.parent_window.base_inventory_tab.manager.invalidate_cache()
             self.refresh()
             if self.parent_window:
                 self.parent_window.refresh_all()
