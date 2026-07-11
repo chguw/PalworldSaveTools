@@ -64,10 +64,6 @@ jobs:
           name: linux-release-build
           path: dist/${{ steps.app_info.outputs.app_name }}-*-linux
           if-no-files-found: error
-      - name: Generate release tag
-        id: tag
-        run: |
-          echo "tag=${{ steps.app_info.outputs.app_name }}-v${{ steps.app_info.outputs.version }}-linux-$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
       - name: Generate release notes
         env:
           VERSION: ${{ steps.app_info.outputs.version }}
@@ -109,7 +105,7 @@ jobs:
       - uses: softprops/action-gh-release@v3
         with:
           body_path: release_notes.md
-          tag_name: ${{ steps.tag.outputs.tag }}
+          tag_name: v${{ steps.app_info.outputs.version }}
           name: "Linux Build ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}"
           draft: true
           prerelease: true
@@ -168,10 +164,6 @@ jobs:
           name: macos-release-build
           path: dist/${{ steps.app_info.outputs.app_name }}-*-macos.dmg
           if-no-files-found: error
-      - name: Generate release tag
-        id: tag
-        run: |
-          echo "tag=${{ steps.app_info.outputs.app_name }}-v${{ steps.app_info.outputs.version }}-macos-$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
       - name: Generate release notes
         env:
           VERSION: ${{ steps.app_info.outputs.version }}
@@ -213,7 +205,7 @@ jobs:
       - uses: softprops/action-gh-release@v3
         with:
           body_path: release_notes.md
-          tag_name: ${{ steps.tag.outputs.tag }}
+          tag_name: v${{ steps.app_info.outputs.version }}
           name: "MacOS Build ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}"
           draft: true
           prerelease: true
@@ -262,11 +254,6 @@ jobs:
           name: windows-release-build
           path: dist/${{ steps.app_info.outputs.app_name }}-*.exe
           if-no-files-found: error
-      - name: Generate release tag
-        id: tag
-        shell: bash
-        run: |
-          echo "tag=${{ steps.app_info.outputs.app_name }}-v${{ steps.app_info.outputs.version }}-windows-$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
       - name: Generate release notes
         env:
           VERSION: ${{ steps.app_info.outputs.version }}
@@ -308,7 +295,7 @@ jobs:
       - uses: softprops/action-gh-release@v3
         with:
           body_path: release_notes.md
-          tag_name: ${{ steps.tag.outputs.tag }}
+          tag_name: v${{ steps.app_info.outputs.version }}
           name: "Windows Build ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}"
           draft: true
           prerelease: true
