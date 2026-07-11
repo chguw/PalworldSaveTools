@@ -36,8 +36,8 @@ jobs:
       - name: Extract app info
         id: app_info
         run: |
-          APP_NAME=$(uv run python -c "from src.common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
-          APP_VERSION=$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo '0.0.0')
+          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
+          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
       - name: Install system deps
@@ -78,8 +78,8 @@ jobs:
       - name: Extract app info
         id: app_info
         run: |
-          APP_NAME=$(uv run python -c "from src.common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
-          APP_VERSION=$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo '0.0.0')
+          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
+          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
       - name: Install dependencies
@@ -129,8 +129,8 @@ jobs:
         id: app_info
         shell: bash
         run: |
-          APP_NAME=$(uv run python -c "from src.common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
-          APP_VERSION=$(uv run python -c "from src.common import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo '0.0.0')
+          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
+          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
       - name: Install dependencies
