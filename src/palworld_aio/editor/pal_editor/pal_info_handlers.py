@@ -1,7 +1,7 @@
 import os
 from functools import partial
 from PySide6.QtWidgets import QApplication, QDialog, QFrame, QGridLayout, QHBoxLayout, QInputDialog, QLabel, QListWidget, QListWidgetItem, QPushButton, QVBoxLayout, QWidget
-from PySide6.QtCore import Qt, QEvent, QObject, QPoint, QTimer
+from PySide6.QtCore import Qt, QEvent, QPoint, QTimer
 from PySide6.QtGui import QPixmap
 from i18n import t
 import nerdfont as nf
@@ -368,7 +368,7 @@ class PalInfoHandlerMixin:
         from palworld_aio.editor.dialogs import ThemedDialog
         dlg = ThemedDialog(self)
         dlg.setWindowTitle(t('edit_pals.passive_loadouts'))
-        dlg.setMinimumSize(420, 400)
+        dlg.setMinimumSize(420, 420)
         dlg.setMaximumSize(520, 500)
         inner = QWidget()
         inner.setStyleSheet('QWidget { background: transparent; }')
@@ -386,6 +386,53 @@ class PalInfoHandlerMixin:
             item.setData(Qt.UserRole, name)
             list_widget.addItem(item)
         il.addWidget(list_widget, 1)
+        preview_lbl = QLabel(t('edit_pals.loadouts_preview') if t else 'Preview')
+        preview_lbl.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none;')
+        il.addWidget(preview_lbl)
+        preview_frame = QWidget()
+        preview_frame.setStyleSheet('QWidget { background: rgba(10,14,20,0.8); border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; }')
+        pf_layout = QVBoxLayout(preview_frame)
+        pf_layout.setContentsMargins(6, 4, 6, 4)
+        pf_layout.setSpacing(3)
+        preview_grid = QWidget()
+        preview_grid.setStyleSheet('background: transparent; border: none;')
+        pgl = QGridLayout(preview_grid)
+        pgl.setContentsMargins(0, 0, 0, 0)
+        pgl.setSpacing(3)
+        pgl.setColumnStretch(0, 1)
+        pgl.setColumnStretch(1, 1)
+        preview_cards = []
+        preview_labels = []
+        preview_rank_icons = []
+        preview_overlays = []
+        default_bg, default_bd, default_tc = PalFrame._RANK_COLORS[1]
+        for i in range(4):
+            card = QFrame()
+            card.setObjectName('previewPassiveCard')
+            card.setFixedHeight(28)
+            card.setStyleSheet(f'QFrame#previewPassiveCard {{ background: {default_bg}; border: none; border-radius: 4px; }}')
+            cl = QHBoxLayout(card)
+            cl.setContentsMargins(6, 0, 6, 0)
+            cl.setSpacing(2)
+            cl.setAlignment(Qt.AlignVCenter)
+            plbl = QLabel('--')
+            plbl.setStyleSheet(f'font-size: 10px; font-weight: 700; color: {default_tc}; background: transparent; border: none;')
+            cl.addWidget(plbl, 1)
+            cl.addStretch()
+            rank_icon = QLabel()
+            rank_icon.setFixedSize(14, 14)
+            rank_icon.setAlignment(Qt.AlignCenter)
+            rank_icon.setStyleSheet('background: transparent; border: none;')
+            rank_icon.hide()
+            cl.addWidget(rank_icon)
+            overlay = PassiveEffectOverlay(card)
+            pgl.addWidget(card, i // 2, i % 2)
+            preview_cards.append(card)
+            preview_labels.append(plbl)
+            preview_rank_icons.append(rank_icon)
+            preview_overlays.append(overlay)
+        pf_layout.addWidget(preview_grid)
+        il.addWidget(preview_frame)
         btn_row = QHBoxLayout()
         btn_row.setSpacing(4)
         save_btn = QPushButton(t('edit_pals.loadouts_save'))
@@ -459,31 +506,11 @@ class PalInfoHandlerMixin:
         load_btn.clicked.connect(_do_load)
         delete_btn.clicked.connect(_do_delete)
         close_btn.clicked.connect(dlg.accept)
-        _hover_frame = None
-        def _build_hover_frame(passive_list):
-            nonlocal _hover_frame
-            if _hover_frame is not None:
-                try:
-                    _hover_frame.close()
-                    _hover_frame.deleteLater()
-                except RuntimeError:
-                    pass
-            _hover_frame = QFrame(None)
-            _hover_frame.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool | Qt.ToolTip)
-            _hover_frame.setAttribute(Qt.WA_ShowWithoutActivating)
-            _hover_frame.setAttribute(Qt.WA_TranslucentBackground)
-            _hover_frame.setStyleSheet('QFrame { background: rgba(10,14,20,0.98); border: 1px solid rgba(125,211,252,0.2); border-radius: 6px; }')
-            fl = QVBoxLayout(_hover_frame)
-            fl.setContentsMargins(6, 4, 6, 6)
-            fl.setSpacing(2)
+        def _update_preview(item):
+            nonlocal preview_labels, preview_cards, preview_rank_icons, preview_overlays
+            name = item.data(Qt.UserRole)
+            passive_list = loadouts.get(name, [])
             _ensure_passive_data()
-            pg = QWidget()
-            pg.setStyleSheet('background: transparent; border: none;')
-            pgl = QGridLayout(pg)
-            pgl.setContentsMargins(0, 0, 0, 0)
-            pgl.setSpacing(2)
-            pgl.setColumnStretch(0, 1)
-            pgl.setColumnStretch(1, 1)
             for i in range(4):
                 p_clean = ''
                 display_name = '--'
@@ -508,31 +535,32 @@ class PalInfoHandlerMixin:
                         anim_mode = 'legend'
                     p_info = _data._PASSIVE_DATA.get(p_clean, {}) if isinstance(_data._PASSIVE_DATA, dict) else {}
                     icon_path = p_info.get('icon', '') if isinstance(p_info, dict) else ''
-                card = QFrame()
-                card.setObjectName('hCard')
-                card.setFixedHeight(26)
-                card.setStyleSheet(f'QFrame#hCard {{ background: {bg}; border: 1.5px solid {bd}; border-radius: 4px; padding: 3px 6px; }}')
-                cl = QHBoxLayout(card)
-                cl.setContentsMargins(6, 0, 6, 0)
-                cl.setSpacing(2)
-                cl.setAlignment(Qt.AlignVCenter)
-                plbl = QLabel(display_name)
-                plbl.setStyleSheet(f'font-size: 9px; font-weight: 700; color: {tc}; background: transparent; border: none;')
-                cl.addWidget(plbl, 1)
-                cl.addStretch()
+                card = preview_cards[i]
+                card.setStyleSheet(f'QFrame#previewPassiveCard {{ background: {bg}; border: 1.5px solid {bd}; border-radius: 4px; }}')
+                plbl = preview_labels[i]
+                plbl.setText(display_name)
+                plbl.setStyleSheet(f'font-size: 10px; font-weight: 700; color: {tc}; background: transparent; border: none;')
+                ri = preview_rank_icons[i]
+                ri.hide()
+                cl = card.layout()
+                for lbl in card.findChildren(QLabel, options=Qt.FindChildrenRecursively):
+                    if lbl is not plbl and lbl is not ri and lbl.parent() is card:
+                        lbl.deleteLater()
                 if icon_path:
                     full_path = resource_path(constants.get_base_path(), 'game_data', icon_path.lstrip('/'))
                     pix = _icons._get_cached_pixmap(full_path, 14)
                     if pix:
-                        ilbl = QLabel()
+                        ilbl = QLabel(card)
                         ilbl.setFixedSize(14, 14)
                         ilbl.setPixmap(pix)
                         ilbl.setStyleSheet('background: transparent; border: none;')
                         cl.addWidget(ilbl)
+                ov = preview_overlays[i]
                 if anim_mode:
-                    ov = PassiveEffectOverlay(card)
-                    ov.setGeometry(0, 0, 200, 26)
                     ov.set_mode(anim_mode)
+                    ov.setGeometry(0, 0, card.width(), card.height())
+                else:
+                    ov.set_mode(None)
                 if p_clean:
                     tip_parts = [f'<b style="color:{tc}">{display_name}</b>']
                     rank_labels = {1: 'Common', 2: 'Rare', 3: 'Rare', 4: 'Epic', 5: 'Epic', -99: 'Negative'}
@@ -547,57 +575,15 @@ class PalInfoHandlerMixin:
                         tip_parts.append('')
                         tip_parts.append(p_desc)
                     card.setToolTip('<br>'.join(tip_parts))
-                pgl.addWidget(card, i // 2, i % 2)
-            fl.addWidget(pg)
-            _hover_frame.adjustSize()
-            if _hover_frame.width() < 340:
-                _hover_frame.setFixedWidth(340)
-        def _on_item_enter(item):
-            nonlocal _hover_frame
-            name = item.data(Qt.UserRole)
-            passive_list = loadouts.get(name)
-            if not passive_list:
-                return
-            _build_hover_frame(passive_list)
-            if not _hover_frame:
-                return
-            item_rect = list_widget.visualItemRect(item)
-            global_pos = list_widget.mapToGlobal(item_rect.topRight())
-            screen = QApplication.primaryScreen().availableGeometry()
-            fw = _hover_frame.width()
-            x = min(global_pos.x() + 6, screen.right() - fw - 4)
-            y = global_pos.y()
-            _hover_frame.move(x, y)
-            _hover_frame.show()
-        def _on_item_leave():
-            nonlocal _hover_frame
-            if _hover_frame is not None:
-                try:
-                    _hover_frame.close()
-                    _hover_frame.hide()
-                except RuntimeError:
-                    pass
-        class _HoverFilter(QObject):
-            def __init__(self, parent, callback):
-                super().__init__(parent)
-                self._cb = callback
-            def eventFilter(self, obj, event):
-                if event.type() == QEvent.Type.Leave:
-                    self._cb()
-                return super().eventFilter(obj, event)
-        list_widget.viewport().installEventFilter(_HoverFilter(list_widget, _on_item_leave))
-        list_widget.itemEntered.connect(_on_item_enter)
+                else:
+                    card.setToolTip('')
+        list_widget.itemEntered.connect(_update_preview)
+        list_widget.currentItemChanged.connect(lambda cur, prev: _update_preview(cur) if cur else None)
         list_widget.itemDoubleClicked.connect(_do_load)
         dlg_layout = QVBoxLayout(dlg)
         dlg_layout.setContentsMargins(0, 0, 0, 0)
         dlg_layout.addWidget(inner)
         dlg.exec()
-        if _hover_frame is not None:
-            try:
-                _hover_frame.close()
-                _hover_frame.deleteLater()
-            except RuntimeError:
-                pass
 
     def _learn_all_skills(self):
         if not self._raw:
