@@ -15,7 +15,8 @@ on:
         default: "https://github.com/deafdudecomputers/PalworldSaveTools/releases"
 
 jobs:
-  github-releases-to-discord:
+  real-release:
+    if: ${{ github.event_name == 'release' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,18 +26,6 @@ jobs:
         run: |
           APP_NAME=$(python3 -c "import sys; sys.path.insert(0,'src'); from common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-      - name: Prepare payload
-        id: payload
-        run: |
-          if [ "${{ github.event_name }}" = "release" ]; then
-            echo "release_name=${{ github.event.release.name }}" >> "$GITHUB_OUTPUT"
-            echo "release_url=${{ github.event.release.html_url }}" >> "$GITHUB_OUTPUT"
-            echo "description=**${{ github.event.release.name }}** is now live!" >> "$GITHUB_OUTPUT"
-          else
-            echo "release_name=${{ github.event.inputs.mock_release_name }}" >> "$GITHUB_OUTPUT"
-            echo "release_url=${{ github.event.inputs.mock_release_url }}" >> "$GITHUB_OUTPUT"
-            echo "description=**[MOCK] ${{ github.event.inputs.mock_release_name }}** — test notification" >> "$GITHUB_OUTPUT"
-          fi
       - name: Github Releases To Discord
         uses: SethCohen/github-releases-to-discord@v1.13.1
         with:
@@ -44,7 +33,49 @@ jobs:
           color: "2105893"
           username: "${{ steps.app_info.outputs.app_name }}"
           avatar_url: "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
-          content: "${{ steps.payload.outputs.description }}\n\n${{ steps.payload.outputs.release_url }}"
+          content: "**${{ github.event.release.name }}** is now live!\n\n${{ github.event.release.html_url }}"
           footer_title: "Changelog"
           footer_icon_url: "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
           footer_timestamp: true
+
+  manual-test:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Extract app info
+        id: app_info
+        run: |
+          APP_NAME=$(python3 -c "import sys; sys.path.insert(0,'src'); from common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
+          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
+      - name: Send mock Discord notification
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          APP_NAME: ${{ steps.app_info.outputs.app_name }}
+          RELEASE_NAME: ${{ github.event.inputs.mock_release_name }}
+          RELEASE_URL: ${{ github.event.inputs.mock_release_url }}
+        run: |
+          payload=$(cat <<ENDJSON
+          {
+            "username": "${APP_NAME}",
+            "avatar_url": "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png",
+            "content": "**[MOCK] ${RELEASE_NAME}** — test notification\n\n${RELEASE_URL}",
+            "embeds": [
+              {
+                "title": "Changelog",
+                "color": 2105893,
+                "footer": {
+                  "text": "Changelog",
+                  "icon_url": "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
+                },
+                "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')"
+              }
+            ]
+          }
+          ENDJSON
+          )
+          curl -sf -X POST "$WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "$payload"
+          echo "Mock notification sent successfully"
