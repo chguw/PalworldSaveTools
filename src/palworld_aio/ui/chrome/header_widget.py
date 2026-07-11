@@ -231,6 +231,8 @@ class HeaderWidget(QWidget):
             self.close_btn.setToolTip(t('button.close') if t else 'Close')
         if hasattr(self, 'toolbox_btn'):
             self.toolbox_btn.setToolTip(t('tab_guide.tooltip') if t else 'Tab Usage Guide — Click to view detailed usage instructions for every tab')
+        if hasattr(self, 'save_btn'):
+            self.save_btn.setToolTip(t('menu.file.save_changes') if t else 'Save Changes')
         if hasattr(self, 'app_version_label'):
             self.app_version_label.setText(f"{nf.icons['nf-cod-github']} {display_version}")
             self.app_version_label.setToolTip(t('github.tooltip') if t else 'Click to open GitHub repository')

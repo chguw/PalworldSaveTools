@@ -271,6 +271,9 @@ def run_aio():
         app = QApplication(sys.argv)
     sys.excepthook = lambda exc_type, exc_value, exc_traceback: show_error_screen(''.join(traceback.format_exception(exc_type, exc_value, exc_traceback)))
     app.setStyle('Fusion')
+    app.setStyleSheet(
+        'QToolTip { color: #e2e8f0; background: #1e2128; border: 1px solid #3B8ED0; '
+        'padding: 6px 10px; font-size: 11px; border-radius: 4px; }')
     if os.path.exists(constants.ICON_PATH):
         app.setWindowIcon(QIcon(constants.ICON_PATH))
     window = MainWindow()

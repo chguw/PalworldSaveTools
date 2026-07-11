@@ -627,6 +627,10 @@ def main():
         try:
             app = QApplication(sys.argv)
             app.setQuitOnLastWindowClosed(False)
+            from PySide6.QtCore import QTimer
+            QTimer.singleShot(0, lambda: app.setStyleSheet(
+                'QToolTip { color: #e2e8f0; background: #1e2128; border: 1px solid #3B8ED0; '
+                'padding: 6px 10px; font-size: 11px; border-radius: 4px; }'))
             try:
                 splash_window, short_label, gui_progress_bar, tiny_label = build_splash_ui()
                 splash_window.show()
