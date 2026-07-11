@@ -12,6 +12,14 @@ on:
           - linux
           - macos
           - windows
+      signing:
+        description: "macOS code signing mode (ignored on other OSs)"
+        required: false
+        default: none
+        type: choice
+        options:
+          - none
+          - ad-hoc
 
 concurrency:
   group: test-build-${{ github.event.inputs.os }}-${{ github.ref }}
@@ -86,19 +94,12 @@ jobs:
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka imageio
-      - name: Build with Nuitka
-        run: uv run python build/nuitka/build_nuitka.py --onedir
-      - name: Create DMG
+      - name: Build macOS DMG
         run: |
-          APP_NAME="${{ steps.app_info.outputs.app_name }}"
-          VERSION="${{ steps.app_info.outputs.version }}"
-          app=$(ls -d dist/*.app 2>/dev/null | head -1)
-          if [ -n "$app" ]; then
-            hdiutil create -volname "Palworld Save Tools" -srcfolder "$app" -ov -format UDZO "dist/${APP_NAME}-${VERSION}-macos.dmg"
+          if [ "${{ github.event.inputs.signing }}" = "ad-hoc" ]; then
+            uv run python build/macos_build.py --ad-hoc
           else
-            echo "No .app bundle found in dist/"
-            ls -la dist/ 2>/dev/null || echo "dist/ does not exist"
-            exit 1
+            uv run python build/macos_build.py
           fi
       - name: List built files
         run: |
