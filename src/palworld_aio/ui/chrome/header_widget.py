@@ -136,25 +136,7 @@ class HeaderWidget(QWidget):
         self.close_btn.clicked.connect(self.close_clicked.emit)
         layout.addWidget(self.close_btn)
     def _on_version_click(self, event):
-        from common import BRANCH_VERSION
-        if BRANCH_VERSION == 'beta':
-            self._show_branch_menu(event)
-        else:
-            self._open_stable()
-    def _show_branch_menu(self, event):
-        from PySide6.QtWidgets import QMenu
-        menu = QMenu(self)
-        menu.setStyleSheet(self._get_menu_style())
-        beta_action = menu.addAction('Beta Branch')
-        stable_action = menu.addAction('Stable Branch')
-        beta_action.triggered.connect(self._open_beta)
-        stable_action.triggered.connect(self._open_stable)
-        menu.exec(event.globalPosition().toPoint())
-    def _get_menu_style(self):
-        return 'QMenu { background-color: #1a1a2e; color: #e0e0e0; border: 1px solid #333; } QMenu::item:selected { background-color: #4a90e2; }'
-    def _open_beta(self):
-        import webbrowser
-        webbrowser.open('https://github.com/deafdudecomputers/PalworldSaveTools/tree/beta')
+        self._open_stable()
     def _open_stable(self):
         import webbrowser
         webbrowser.open('https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest')

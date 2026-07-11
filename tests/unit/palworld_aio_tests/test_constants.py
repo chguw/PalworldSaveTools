@@ -19,7 +19,6 @@ def test_urls_exist():
     assert constants.GIT_REPO_URL.startswith('https://')
     assert constants.GITHUB_RAW_URL.startswith('https://')
     assert constants.STABLE_BRANCH == 'main'
-    assert constants.BETA_BRANCH == 'beta'
 
 
 def test_get_base_path():

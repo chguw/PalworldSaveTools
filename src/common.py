@@ -3,10 +3,8 @@ from palsav import json_tools
 from resource_resolver import get_base_dir, get_src_dir, get_resources_dir, resource_path
 APP_NAME = 'PalworldSaveTools'
 APP_VERSION = '2.0.1'
-APP_BETA_VERSION = '2.0.2'
-BETA_SUBVERSION = '1'
+RELEASE_VER = '2.0.1'
 GAME_VERSION = '1.0.0'
-BRANCH_VERSION = 'main'
 def get_base_directory():
     return get_base_dir()
 def get_src_directory():
@@ -28,14 +26,13 @@ def get_python_executable():
 def get_versions():
     return (APP_VERSION, GAME_VERSION)
 def get_display_version():
-    if BRANCH_VERSION == 'beta' and APP_BETA_VERSION:
-        try:
-            beta_tuple = tuple((int(x) for x in APP_BETA_VERSION.split('.')))
-            stable_tuple = tuple((int(x) for x in APP_VERSION.split('.')))
-            if beta_tuple > stable_tuple:
-                return f'{APP_BETA_VERSION}-Beta V{BETA_SUBVERSION}'
-        except:
-            pass
+    try:
+        app_tuple = tuple(int(x) for x in APP_VERSION.split('.'))
+        release_tuple = tuple(int(x) for x in RELEASE_VER.split('.'))
+        if app_tuple > release_tuple:
+            return f'{APP_VERSION} (testing)'
+    except:
+        pass
     return APP_VERSION
 def is_standalone():
     if is_frozen():
@@ -49,8 +46,6 @@ def is_standalone():
     except:
         return False
 def get_current_version():
-    if BRANCH_VERSION == 'beta':
-        return APP_BETA_VERSION
     return APP_VERSION
 def get_update_settings():
     from boot_paths import CONFIG_DIR

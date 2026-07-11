@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QL
 from PySide6.QtCore import Qt, QTimer, Signal, QObject, QPoint, QPropertyAnimation, QEasingCurve, QByteArray, QThread
 from PySide6.QtGui import QIcon, QFont, QAction, QPixmap, QCloseEvent, QTextCursor
 from i18n import t, set_language, load_resources
-from common import get_versions, get_current_version, is_standalone, get_update_settings, save_update_settings, BRANCH_VERSION
+from common import get_versions, get_current_version, get_display_version, is_standalone, get_update_settings, save_update_settings
 from import_libs import run_with_loading
 from loading_manager import show_question
 from .tabs.tools_tab import center_on_parent
@@ -197,10 +197,7 @@ class UpdateChecker(QThread):
             else:
                 branch = self.branch or SourceUpdater.get_current_branch()
                 remote_version = get_version_from_remote(branch)
-                if BRANCH_VERSION == 'beta':
-                    local = get_current_version()
-                else:
-                    local, _ = get_versions()
+                local, _ = get_versions()
                 latest = remote_version
                 available = False
                 if latest:
@@ -445,7 +442,7 @@ class MainWindow(QMainWindow):
         dialog.setFixedSize(450, 280)
         dialog.setWindowFlags(Qt.Dialog | Qt.WindowStaysOnTopHint)
         layout = QVBoxLayout(dialog)
-        current_version = get_current_version()
+        current_version = get_display_version()
         info_label = QLabel(f"{(t('update.current') if t else 'Current')}: {current_version}\n{(t('update.latest') if t else 'Latest')}: {latest}")
         info_label.setStyleSheet('font-size: 14px; margin: 10px;')
         layout.addWidget(info_label)
@@ -666,7 +663,7 @@ class MainWindow(QMainWindow):
     def _on_update_checked(self, ok, latest, branch):
         try:
             if not ok and latest:
-                tools_version = get_current_version()
+                tools_version = get_display_version()
                 self.header_widget.start_pulse_animation(latest)
                 self.header_widget.update_version_text(tools_version, latest)
                 branch_text = f' ({branch})' if branch else ''

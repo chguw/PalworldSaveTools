@@ -7,9 +7,8 @@ from tests.dynamic_importer import import_from
 _common = import_from('common')
 APP_NAME = _common.APP_NAME
 APP_VERSION = _common.APP_VERSION
-APP_BETA_VERSION = _common.APP_BETA_VERSION
+RELEASE_VER = _common.RELEASE_VER
 GAME_VERSION = _common.GAME_VERSION
-BRANCH_VERSION = _common.BRANCH_VERSION
 get_base_directory = _common.get_base_directory
 get_src_directory = _common.get_src_directory
 get_resources_directory = _common.get_resources_directory
@@ -32,9 +31,8 @@ def test_app_name():
 
 def test_version_constants():
     assert isinstance(APP_VERSION, str) and APP_VERSION.count('.') == 2
-    assert isinstance(APP_BETA_VERSION, str)
+    assert isinstance(RELEASE_VER, str) and RELEASE_VER.count('.') == 2
     assert isinstance(GAME_VERSION, str)
-    assert isinstance(BRANCH_VERSION, str)
 
 
 def test_get_base_directory(project_dir):
@@ -90,6 +88,12 @@ def test_get_display_version():
     result = get_display_version()
     assert isinstance(result, str)
     assert len(result) > 0
+    app_tuple = tuple(int(x) for x in APP_VERSION.split('.'))
+    release_tuple = tuple(int(x) for x in RELEASE_VER.split('.'))
+    if app_tuple <= release_tuple:
+        assert result == APP_VERSION
+    else:
+        assert result == f'{APP_VERSION} (testing)'
 
 
 def test_get_current_version():

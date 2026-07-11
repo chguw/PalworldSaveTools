@@ -32,9 +32,7 @@ TREE_ROW_HEIGHT = 22
 GITHUB_RAW_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
 GIT_REPO_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools.git'
 STABLE_BRANCH = 'main'
-BETA_BRANCH = 'beta'
 STABLE_VERSION_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
-BETA_VERSION_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/beta/src/common.py'
 RELEASE_DOWNLOAD_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/download/v{version}/PST_standalone_v{version}.7z'
 RELEASES_PAGE_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 def get_base_path():

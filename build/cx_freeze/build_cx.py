@@ -30,7 +30,7 @@ def sync_version():
                 if line.strip().startswith('APP_VERSION'):
                     version = line.split('=')[1].strip().strip('"').strip("'")
                     break
-    updates = [(pyproject_file, 'version\\s*=\\s*["\\\'].*?["\\\']', f'version="{version}"'), (setup_file, 'version\\s*=\\s*["\\\'].*?["\\\']', f'version="{version}"'), (common_file, 'BRANCH_VERSION\\s*=\\s*[\'\\"].*?[\'\\"]', "BRANCH_VERSION = 'main'")]
+    updates = [(pyproject_file, 'version\\s*=\\s*["\\\'].*?["\\\']', f'version="{version}"'), (setup_file, 'version\\s*=\\s*["\\\'].*?["\\\']', f'version="{version}"')]
     for file_path, pattern, replacement in updates:
         if not os.path.exists(file_path):
             continue
@@ -39,7 +39,7 @@ def sync_version():
         content = re.sub(pattern, replacement, content)
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
-    print(f'Synchronized version to {version} and branch to main')
+    print(f'Synchronized version to {version}')
 def build_with_cx_freeze():
     print('Running cx_Freeze build...')
     python_exe = os.path.join(VENV_DIR, 'Scripts', 'python.exe') if sys.platform == 'win32' else os.path.join(VENV_DIR, 'bin', 'python')

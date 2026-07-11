@@ -14,7 +14,6 @@ from typing import Optional, Callable, Dict, Tuple
 from palworld_aio import constants
 GIT_REPO_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools.git'
 STABLE_BRANCH = 'main'
-BETA_BRANCH = 'beta'
 STABLE_VERSION_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
 RELEASE_DOWNLOAD_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/download/v{version}/PST_standalone_v{version}.7z'
 RELEASES_PAGE_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
@@ -257,18 +256,11 @@ def check_for_updates(branch: str=None) -> Dict:
 def get_version_from_remote(branch: str=None) -> Optional[str]:
     try:
         context = ssl._create_unverified_context()
-        if branch == 'beta':
-            version_url = STABLE_VERSION_URL.replace('/main/', '/beta/')
-        else:
-            version_url = STABLE_VERSION_URL
-        req = urllib.request.Request(version_url)
+        req = urllib.request.Request(STABLE_VERSION_URL)
         req.add_header('Range', 'bytes=0-2048')
         with urllib.request.urlopen(req, timeout=10, context=context) as r:
             content = r.read().decode('utf-8')
-        if branch == 'beta':
-            match = re.search('APP_BETA_VERSION\\s*=\\s*["\\\']([^"\\\']+)["\\\']', content)
-        else:
-            match = re.search('APP_VERSION\\s*=\\s*["\\\']([^"\\\']+)["\\\']', content)
+        match = re.search('APP_VERSION\\s*=\\s*["\\\']([^"\\\']+)["\\\']', content)
         return match.group(1) if match else None
     except:
         return None
