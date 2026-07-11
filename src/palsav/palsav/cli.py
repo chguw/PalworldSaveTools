@@ -3,6 +3,14 @@ import sys
 import argparse
 
 
+def _ensure_package_path():
+    _script = os.path.abspath(__file__)
+    _pkg = os.path.dirname(os.path.dirname(_script))
+    _src = os.path.dirname(_pkg)
+    for p in (_src, _pkg):
+        if p not in sys.path:
+            sys.path.insert(0, p)
+
 def main():
     if os.environ.get('PYTHONHASHSEED', 'random') != '0':
         os.environ['PYTHONHASHSEED'] = '0'
@@ -43,4 +51,5 @@ def main():
 
 
 if __name__ == "__main__":
+    _ensure_package_path()
     main()

@@ -60,7 +60,15 @@ def sync_dynamic_items_with_registry(containers: Dict[str, Any]) -> bool:
                                 dynamic_manager.register_item(item_id, container_id, dynamic_id)
                         except Exception as e:
                             pass
-        dynamic_items.clear()
+        # Only remove dynamics referenced by the current containers, preserve all others
+        if referenced_dynamic_ids:
+            _rem = {str(k).lower() for k in referenced_dynamic_ids}
+            dynamic_items[:] = [
+                d for d in dynamic_items
+                if str(d.get('RawData', {}).get('value', {}).get('id', {}).get('local_id_in_created_world', '')).lower() not in _rem
+            ]
+        else:
+            dynamic_items.clear()
         registry_items = dynamic_manager.registry._items
         for dynamic_id, item_data in registry_items.items():
             dynamic_items.append(item_data)
