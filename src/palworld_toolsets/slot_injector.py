@@ -730,7 +730,19 @@ class SlotNumUpdaterApp(QDialog):
         gvas_file = self.gvas_file
         self.set_loading_state(True, 'Saving changes...')
         def task():
-            gvasfile_to_sav(gvas_file, filepath)
+            is_xgp = (constants.xgp_loaded and
+                      constants.current_save_path and
+                      filepath.startswith(constants.current_save_path))
+            if is_xgp:
+                level_dst = os.path.join(constants.current_save_path, 'Level.sav')
+                gvasfile_to_sav(gvas_file, level_dst)
+                from palworld_xgp_import.gamepass_manager import save_xgp_changes
+                save_xgp_changes(
+                    container_path=constants.xgp_container_path,
+                    current_save_path=constants.current_save_path,
+                )
+            else:
+                gvasfile_to_sav(gvas_file, filepath)
             return True
         def on_finished(result):
             self.set_loading_state(False)

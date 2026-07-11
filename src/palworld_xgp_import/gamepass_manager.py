@@ -488,3 +488,83 @@ def _create_container_entry_raw(container_path: str, name: str, data: bytes) -> 
         mtime=FILETIME.from_timestamp(datetime.datetime.now().timestamp()),
         size=len(data),
     )
+
+
+def save_xgp_changes(
+    container_path: str,
+    current_save_path: str,
+    new_save_id: str | None = None,
+    new_world_name: str | None = None,
+) -> str:
+    """Read save files from current_save_path, stop GamingServices, write
+    containers as a new world entry, leave services stopped.
+
+    Returns the new save_id (uuid4 hex upper).
+
+    Any tool can call this — the Source of Truth for XGP container writes."""
+
+    import subprocess, time as _time, uuid as _uuid
+
+    if new_save_id is None:
+        new_save_id = _uuid.uuid4().hex.upper()
+
+    def _r(name):
+        p = os.path.join(current_save_path, name)
+        if os.path.isfile(p):
+            with open(p, 'rb') as f:
+                return f.read()
+        return None
+
+    level_data = _r('Level.sav')
+    if not level_data:
+        raise FileNotFoundError(f'Level.sav not found in {current_save_path}')
+
+    meta_data = _r('LevelMeta.sav')
+    if meta_data and new_world_name:
+        try:
+            from palworld_aio.utils import sav_to_json, json_to_sav
+            _mp = os.path.join(current_save_path, 'LevelMeta.sav')
+            _mj = sav_to_json(_mp)
+            _mj['properties']['SaveData']['value']['WorldName']['value'] = new_world_name
+            json_to_sav(_mj, _mp)
+            with open(_mp, 'rb') as _fm:
+                meta_data = _fm.read()
+        except Exception as _me:
+            print(f'[save_xgp_changes] world rename failed: {_me}')
+
+    local_data = _r('LocalData.sav')
+    world_opt = _r('WorldOption.sav')
+    players_data: dict[str, bytes] = {}
+    pdir = os.path.join(current_save_path, 'Players')
+    if os.path.isdir(pdir):
+        for pf in os.listdir(pdir):
+            if pf.endswith('.sav'):
+                uid = pf[:-4]
+                with open(os.path.join(pdir, pf), 'rb') as f:
+                    players_data[uid] = f.read()
+
+    index = read_container_index(container_path)
+
+    for svc in ('GamingServices', 'GamingServicesNet'):
+        r = subprocess.run(['cmd', '/c', f'net stop {svc} /y'],
+                           check=False, capture_output=True, timeout=10)
+        if r.returncode != 0:
+            print(f'[save_xgp_changes] net stop {svc} rc={r.returncode}')
+        r2 = subprocess.run(['taskkill', '/f', '/im', f'{svc}.exe'],
+                            check=False, capture_output=True, timeout=5)
+        if r2.returncode != 0 and r2.returncode != 128:
+            print(f'[save_xgp_changes] taskkill {svc}.exe rc={r2.returncode}')
+    _time.sleep(3)
+
+    write_gvas_to_container(
+        container_path, index, new_save_id,
+        level_data=level_data,
+        meta_data=meta_data,
+        local_data=local_data,
+        world_option_data=world_opt,
+        players_data=players_data,
+    )
+
+    print(f'[save_xgp_changes] written as new world: {new_save_id}')
+    print('[save_xgp_changes] Services left stopped. Launch the game to auto-restart and see changes.')
+    return new_save_id

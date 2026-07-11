@@ -280,93 +280,14 @@ class SaveManager(QObject):
         run_with_loading(lambda _: None, load_task)
         return True
     def _save_xgp_container(self):
-        t0 = __import__('time').perf_counter()
-        from palworld_xgp_import.gamepass_manager import (
-            read_container_index, write_gvas_to_container,
+        from palworld_xgp_import.gamepass_manager import save_xgp_changes
+        new_id = save_xgp_changes(
+            container_path=constants.xgp_container_path,
+            current_save_path=constants.current_save_path,
+            new_save_id=None,
+            new_world_name=self._xgp_new_world_name,
         )
-        import subprocess, time as _time, uuid
-        level_path = os.path.join(constants.current_save_path, 'Level.sav')
-        with open(level_path, 'rb') as f:
-            level_data = f.read()
-        def _maybe_read(name):
-            p = os.path.join(constants.current_save_path, name)
-            if os.path.exists(p):
-                with open(p, 'rb') as f:
-                    return f.read()
-            return None
-        meta_data = _maybe_read('LevelMeta.sav')
-        if meta_data and self._xgp_new_world_name:
-            try:
-                from palworld_aio.utils import sav_to_json, json_to_sav
-                _meta_path = os.path.join(constants.current_save_path, 'LevelMeta.sav')
-                _mj = sav_to_json(_meta_path)
-                _old_name = _mj.get('properties', {}).get('SaveData', {}).get('value', {}).get('WorldName', {}).get('value', 'World')
-                _mj['properties']['SaveData']['value']['WorldName']['value'] = self._xgp_new_world_name
-                json_to_sav(_mj, _meta_path)
-                with open(_meta_path, 'rb') as _fm:
-                    meta_data = _fm.read()
-                print(f'[XGP save] renamed world: "{_old_name}" → "{self._xgp_new_world_name}"')
-            except Exception as _me:
-                print(f'[XGP save] world rename failed: {_me}')
-        local_data = _maybe_read('LocalData.sav')
-        world_opt = _maybe_read('WorldOption.sav')
-        players_data = {}
-        pdir = os.path.join(constants.current_save_path, 'Players')
-        if os.path.isdir(pdir):
-            for pf in os.listdir(pdir):
-                if pf.endswith('.sav'):
-                    uid = pf[:-4]
-                    with open(os.path.join(pdir, pf), 'rb') as f:
-                        players_data[uid] = f.read()
-        t1 = _time.perf_counter()
-        print(f'[XGP save] read files: {t1-t0:.2f}s')
-        index = read_container_index(constants.xgp_container_path)
-        t2 = _time.perf_counter()
-        print(f'[XGP save] read index: {t2-t1:.2f}s')
-        for svc in ('GamingServices', 'GamingServicesNet'):
-            r = subprocess.run(['cmd', '/c', f'net stop {svc} /y'],
-                               check=False, capture_output=True, timeout=10)
-            if r.returncode != 0:
-                print(f'[XGP save] net stop {svc} rc={r.returncode} stderr={r.stderr.decode(errors="replace").strip()}')
-            r2 = subprocess.run(['taskkill', '/f', '/im', f'{svc}.exe'],
-                                check=False, capture_output=True, timeout=5)
-            if r2.returncode != 0 and r2.returncode != 128:  # 128 = not running
-                print(f'[XGP save] taskkill {svc}.exe rc={r2.returncode} stderr={r2.stderr.decode(errors="replace").strip()}')
-        _time.sleep(3)
-        t_svc = _time.perf_counter()
-        print(f'[XGP save] services stopped + settle: {t_svc-t2:.2f}s')
-        try:
-            _new_id = uuid.uuid4().hex.upper()
-            print(f'[XGP save] writing as new world: {_new_id}')
-            write_gvas_to_container(
-                constants.xgp_container_path, index,
-                _new_id,
-                level_data=level_data,
-                meta_data=meta_data,
-                local_data=local_data,
-                world_option_data=world_opt,
-                players_data=players_data,
-            )
-            constants.xgp_save_id = _new_id
-        except Exception:
-            import traceback
-            print(f'[XGP save] write_gvas_to_container FAILED:')
-            traceback.print_exc()
-            raise
-        # Verify: re-read index and check our new save_id containers
-        try:
-            _vi = read_container_index(constants.xgp_container_path)
-            _our = [c for c in _vi.containers if c.container_name.startswith(f'{constants.xgp_save_id}-')]
-            print(f'[XGP save] verification: found {len(_our)} containers for save_id {constants.xgp_save_id}')
-            for _c in _our:
-                print(f'  {_c.container_name}: size={_c.size}')
-        except Exception as _ve:
-            print(f'[XGP save] verification error: {_ve}')
-        finally:
-            print('[XGP save] Services left stopped. Launch the game to auto-restart them and see your changes.')
-        t3 = _time.perf_counter()
-        print(f'[XGP save] write containers: {t3-t_svc:.2f}s')
-        print(f'[XGP save] total: {t3-t0:.2f}s')
+        constants.xgp_save_id = new_id
     def _sanitize_for_alignment(self, text):
         return re.sub('[^\\x00-\\x7F\\u00C0-\\u017F\\u0080-\\u00BF]', '', text)
     def _build_player_levels(self):
