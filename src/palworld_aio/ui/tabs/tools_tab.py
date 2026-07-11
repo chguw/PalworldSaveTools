@@ -278,13 +278,30 @@ class ToolsTab(QWidget):
         self._save_path_label.setStyleSheet('font-size: 11px; color: rgba(148,163,184,0.6); border: none; background: transparent; text-align: center;')
         self._save_path_label.clicked.connect(lambda: self._on_save_path_label_clicked())
         card_layout.addWidget(self._save_path_label)
-        self._load_btn = QPushButton(t('menu.file.load_save') if t else 'Load Save')
-        self._load_btn.setObjectName('loadSaveBtn')
-        self._load_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        self._load_btn.setMinimumHeight(42)
-        self._load_btn.clicked.connect(self._on_load_save_clicked)
-        self._load_btn.setStyleSheet('QPushButton { font-size: 14px; font-weight: 700; }')
-        card_layout.addWidget(self._load_btn)
+        import nerdfont as nf
+        btn_row = QHBoxLayout()
+        btn_row.setSpacing(8)
+        _nf_font = QFont(constants.FONT_FAMILY_NERD, 12)
+        self._load_steam_btn = QPushButton()
+        self._load_steam_btn.setFont(_nf_font)
+        self._load_steam_btn.setObjectName('loadSteamBtn')
+        self._load_steam_btn.setCursor(QCursor(Qt.PointingHandCursor))
+        self._load_steam_btn.setMinimumHeight(42)
+        self._load_steam_btn.setMinimumWidth(140)
+        self._load_steam_btn.setMaximumWidth(200)
+        self._load_steam_btn.clicked.connect(self._on_load_save_clicked)
+        btn_row.addWidget(self._load_steam_btn)
+        self._load_xgp_btn = QPushButton()
+        self._load_xgp_btn.setFont(_nf_font)
+        self._load_xgp_btn.setObjectName('loadXgpBtn')
+        self._load_xgp_btn.setCursor(QCursor(Qt.PointingHandCursor))
+        self._load_xgp_btn.setMinimumHeight(42)
+        self._load_xgp_btn.setMinimumWidth(140)
+        self._load_xgp_btn.setMaximumWidth(200)
+        self._load_xgp_btn.clicked.connect(self._on_load_xgp_clicked)
+        btn_row.addWidget(self._load_xgp_btn)
+        self._refresh_save_btns()
+        card_layout.addLayout(btn_row)
         self._drag_hint_label = QLabel(t('tools.drag_hint') if t else 'or drag & drop a Level.sav file here')
         self._drag_hint_label.setAlignment(Qt.AlignCenter)
         self._drag_hint_label.setWordWrap(True)
@@ -339,6 +356,9 @@ class ToolsTab(QWidget):
     def _on_load_save_clicked(self):
         if hasattr(self, 'parent_window') and self.parent_window:
             self.parent_window._load_save()
+    def _on_load_xgp_clicked(self):
+        if hasattr(self, 'parent_window') and self.parent_window:
+            self.parent_window._load_xgp_save()
     def _on_save_load_finished(self, success):
         if success:
             if hasattr(self, '_save_path_label') and hasattr(constants, 'current_save_path') and constants.current_save_path:
@@ -520,7 +540,14 @@ class ToolsTab(QWidget):
         super().resizeEvent(event)
         if hasattr(self, '_drop_overlay'):
             self._drop_overlay.setGeometry(self.rect())
+    def _refresh_save_btns(self):
+        import nerdfont as nf
+        if hasattr(self, '_load_steam_btn') and self._load_steam_btn:
+            self._load_steam_btn.setText(f"{nf.icons['nf-fa-steam']}  {t('tools.btn_steam')}")
+        if hasattr(self, '_load_xgp_btn') and self._load_xgp_btn:
+            self._load_xgp_btn.setText(f"{nf.icons['nf-fa-xbox']}  {t('tools.btn_gamepass')}")
     def refresh_labels(self):
+        self._refresh_save_btns()
         if hasattr(self, '_load_btn') and self._load_btn:
             self._load_btn.setText(t('menu.file.load_save') if t else 'Load Save')
         if hasattr(self, '_save_path_label') and self._save_path_label:

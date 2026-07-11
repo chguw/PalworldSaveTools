@@ -563,9 +563,22 @@ class FixHostSaveWindow(QWidget):
         self.level_sav_entry = QLineEdit()
         self.level_sav_entry.setPlaceholderText(t('fix_host_save.path_to_level_sav'))
         file_row.addWidget(self.level_sav_entry, 1)
-        self.browse_button = QPushButton(t('Browse'))
-        self.browse_button.setFixedWidth(100)
+        import nerdfont as nf
+        _nf_font = QFont(constants.FONT_FAMILY_NERD, 10)
+        self.browse_button = QPushButton(f"{nf.icons['nf-fa-steam']} " + t('Browse'))
+        self.browse_button.setFont(_nf_font)
+        self.browse_button.setMinimumWidth(110)
+        self.browse_button.setMaximumWidth(150)
+        self.browse_button.clicked.connect(lambda: choose_level_file(self, self.level_sav_entry, self.old_tree, self.new_tree))
         file_row.addWidget(self.browse_button)
+        self.xgp_browse_btn = QPushButton(f"{nf.icons['nf-fa-xbox']} " + t('Browse'))
+        self.xgp_browse_btn.setFont(_nf_font)
+        self.xgp_browse_btn.setMinimumWidth(110)
+        self.xgp_browse_btn.setMaximumWidth(150)
+        self.xgp_browse_btn.setToolTip('Load a GamePass save from the container')
+        self.xgp_browse_btn.clicked.connect(self._load_xgp_save)
+        self.xgp_browse_btn.setEnabled(True)
+        file_row.addWidget(self.xgp_browse_btn)
         self.migrate_button = QPushButton(t('Migrate'))
         self.migrate_button.setObjectName('MigrateButton')
         self.migrate_button.setFixedWidth(140)
@@ -731,6 +744,7 @@ class FixHostSaveWindow(QWidget):
         new_header_widget.setSectionResizeMode(3, QHeaderView.ResizeToContents)
         new_header_widget.setSectionResizeMode(4, QHeaderView.ResizeToContents)
         new_header_widget.setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        self.xgp_browse_btn.clicked.connect(self._load_xgp_save)
         self.browse_button.clicked.connect(lambda: choose_level_file(self, self.level_sav_entry, self.old_tree, self.new_tree))
         self.migrate_button.clicked.connect(lambda: fix_save_wrapper(self, self.level_sav_entry, self.old_tree, self.new_tree))
         self.old_search_entry.textChanged.connect(lambda: filter_treeview(self.old_tree, self.old_search_entry.text()))
@@ -743,11 +757,59 @@ class FixHostSaveWindow(QWidget):
         if not event.spontaneous():
             self.activateWindow()
             self.raise_()
+            self.xgp_browse_btn.setEnabled(True)
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.close()
         else:
             super().keyPressEvent(event)
+    def _load_xgp_save(self):
+        from palworld_xgp_import.gamepass_manager import pick_xgp_world, extract_save_to_temp
+        pick = pick_xgp_world(self, 'Load GamePass Save')
+        if not pick:
+            return
+        cpath, save_id, index = pick
+        import tempfile as _tf, shutil as _sh
+        tmp = _tf.mkdtemp(prefix='pst_fh_xgp_')
+        extracted = extract_save_to_temp(cpath, index, save_id, tmp)
+        level_path = extracted.get('Level.sav')
+        if not level_path or not os.path.isfile(level_path):
+            _sh.rmtree(tmp, ignore_errors=True)
+            show_critical(self, t('error.title'), f'Level.sav not found for {save_id}.')
+            return
+        self._xgp_tmp = tmp
+        fpath = level_path
+        players_dir = os.path.join(os.path.dirname(fpath), 'Players')
+        if not os.path.isdir(players_dir):
+            _sh.rmtree(tmp, ignore_errors=True)
+            show_critical(self, t('error.title'), t('character_transfer.no_players_folder'))
+            return
+        def task():
+            return background_load_task(fpath)
+        def on_task_complete(result):
+            global player_list_cache
+            player_data_list, level_json = result
+            self.level_json = level_json
+            self.level_sav_path = fpath
+            self.level_sav_entry.setText(fpath)
+            backup_whole_directory(tmp, 'Backups/Fix Host Save')
+            self.old_tree.clear()
+            self.new_tree.clear()
+            for uid, name, guild, level, pals_count, last_seen, sort_key in player_data_list:
+                old_item = _SortableItem([uid, name, guild, str(level), str(pals_count), last_seen])
+                old_item.setData(3, _SORT_ROLE, level)
+                old_item.setData(4, _SORT_ROLE, pals_count)
+                old_item.setData(5, _SORT_ROLE, sort_key)
+                new_item = _SortableItem([uid, name, guild, str(level), str(pals_count), last_seen])
+                new_item.setData(3, _SORT_ROLE, level)
+                new_item.setData(4, _SORT_ROLE, pals_count)
+                new_item.setData(5, _SORT_ROLE, sort_key)
+                self.old_tree.addTopLevelItem(old_item)
+                self.new_tree.addTopLevelItem(new_item)
+            self.old_tree.original_items = [self.old_tree.topLevelItem(i) for i in range(self.old_tree.topLevelItemCount())]
+            self.new_tree.original_items = [self.new_tree.topLevelItem(i) for i in range(self.new_tree.topLevelItemCount())]
+            player_list_cache = [(u, n, g, l, pc, ls, sk) for u, n, g, l, pc, ls, sk in player_data_list]
+        run_with_loading(on_task_complete, task)
     def update_source_selection(self):
         selected = self.old_tree.selectedItems()
         if selected:

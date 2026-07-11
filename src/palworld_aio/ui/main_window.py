@@ -268,6 +268,7 @@ class MainWindow(QMainWindow):
         self.header_widget.about_clicked.connect(self._show_about)
         self.header_widget.warn_btn.clicked.connect(self._show_warnings)
         self.header_widget.toolbox_clicked.connect(self._show_tab_guide)
+        self.header_widget.save_clicked.connect(self._save_changes)
         self.header_widget.show_warning(True)
         main_layout.addWidget(self.header_widget)
         body_layout = QHBoxLayout()

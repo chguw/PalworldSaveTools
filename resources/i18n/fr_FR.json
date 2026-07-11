@@ -1746,5 +1746,9 @@
     "base.reassign.same_guild": "La base appartient déjà à cette guilde.",
     "base.reassign.success": "Base réaffectée à la guilde \"{name}\"",
     "xgp.err.missing_files": "La sauvegarde est incomplète. Manquant requis : {fichiers}\n\nLe jeu ne reconnaîtra pas cette sauvegarde sans tous les composants requis. Ouvrez la sauvegarde dans PST pour exporter les fichiers manquants ou obtenez-les à partir d'une sauvegarde fonctionnelle.",
-    "menu.file.load_xgp_save": "Charger la sauvegarde GamePass"
+    "menu.file.load_xgp_save": "Charger la sauvegarde GamePass",
+    "character_transfer.source_btn": "Source Enregistrer",
+    "character_transfer.target_btn": "Sauvegarde de la cible",
+    "tools.btn_steam": "Vapeur",
+    "tools.btn_gamepass": "Passe-jeu"
 }

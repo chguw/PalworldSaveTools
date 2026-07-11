@@ -1762,5 +1762,9 @@
     "base.reassign.same_guild": "База уже принадлежит этой гильдии.",
     "base.reassign.success": "База переведена в гильдию \"{name}\"",
     "xgp.err.missing_files": "Сохранение неполное. Отсутствуют необходимые файлы: {файлы}\n\nИгра не распознает это сохранение без всех необходимых компонентов. Откройте сохранение в формате PST, чтобы экспортировать недостающие файлы, или получите их из рабочего сохранения.",
-    "menu.file.load_xgp_save": "Загрузить сохранение GamePass"
+    "menu.file.load_xgp_save": "Загрузить сохранение GamePass",
+    "character_transfer.source_btn": "Источник Сохранить",
+    "character_transfer.target_btn": "Целевое сохранение",
+    "tools.btn_steam": "Пар",
+    "tools.btn_gamepass": "GamePass"
 }

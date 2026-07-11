@@ -122,6 +122,12 @@ def restore_map():
             glass_layout.addWidget(self.result_label)
             button_layout = QHBoxLayout()
             button_layout.addStretch()
+            import nerdfont as nf
+            self.xgp_btn = QPushButton(f"{nf.icons['nf-fa-xbox']} Clear XGP Fog")
+            self.xgp_btn.setFont(QFont(constants.FONT_FAMILY, 12))
+            self.xgp_btn.setMinimumSize(140, 40)
+            self.xgp_btn.clicked.connect(self.on_xgp_clear_fog)
+            button_layout.addWidget(self.xgp_btn)
             self.yes_button = QPushButton(t('Yes'))
             self.yes_button.setFont(QFont(constants.FONT_FAMILY, 12))
             self.yes_button.setMinimumSize(120, 40)
@@ -142,6 +148,79 @@ def restore_map():
             if not event.spontaneous():
                 self.activateWindow()
                 self.raise_()
+        def on_xgp_clear_fog(self):
+            from palworld_xgp_import.gamepass_manager import (
+                pick_xgp_world, extract_save_to_temp, save_xgp_changes,
+            )
+            pick = pick_xgp_world(self, 'Clear XGP Fog')
+            if not pick:
+                return
+            cpath, save_id, index = pick
+            import tempfile as _tf, shutil as _sh
+            tmp = _tf.mkdtemp(prefix='pst_rm_xgp_')
+            extracted = extract_save_to_temp(cpath, index, save_id, tmp)
+            level_path = extracted.get('Level.sav')
+            local_path = extracted.get('LocalData.sav')
+            if not level_path or not local_path or not os.path.isfile(local_path):
+                _sh.rmtree(tmp, ignore_errors=True)
+                show_critical(self, t('Error'), 'Required save files not found.')
+                return
+            old_name = 'World'
+            _mp = extracted.get('LevelMeta.sav')
+            if _mp and os.path.isfile(_mp):
+                try:
+                    from palworld_aio.utils import sav_to_gvasfile
+                    old_name = sav_to_gvasfile(_mp).properties.get('SaveData', {}).get('value', {}).get('WorldName', {}).get('value', 'World')
+                except Exception:
+                    pass
+            new_name, ok = QInputDialog.getText(self, 'Save as New World',
+                f'World name (original: "{old_name}"):',
+                QLineEdit.Normal, f'{old_name} (cleared fog)')
+            if not ok or not new_name.strip():
+                _sh.rmtree(tmp, ignore_errors=True)
+                return
+            # Step 1: load save into GUI state (like File > Load GamePass Save)
+            old_level = constants.loaded_level_json
+            old_path = constants.current_save_path
+            old_xgp_path = constants.xgp_container_path
+            old_xgp_id = constants.xgp_save_id
+            old_xgp_flag = constants.xgp_loaded
+            from palworld_aio.utils import sav_to_gvas_wrapper
+            constants.loaded_level_json = sav_to_gvas_wrapper(level_path)
+            constants.current_save_path = tmp
+            constants.xgp_container_path = cpath
+            constants.xgp_save_id = save_id
+            constants.xgp_loaded = True
+            # Step 2: run restore map (like clicking Yes on Steam button)
+            backup_local_data(tmp)
+            clear_fog_in_all_subfolders()
+            # Step 3: save back (like File > Save Changes - but sync, no loading dialog)
+            from palworld_aio.utils import wrapper_to_sav
+            wrapper_to_sav(constants.loaded_level_json, level_path)
+            save_xgp_changes(
+                container_path=cpath,
+                current_save_path=tmp,
+                new_world_name=new_name.strip(),
+            )
+            # Restore old state
+            if old_level:
+                constants.loaded_level_json = old_level
+                constants.current_save_path = old_path
+                constants.xgp_container_path = old_xgp_path
+                constants.xgp_save_id = old_xgp_id
+                constants.xgp_loaded = old_xgp_flag
+            else:
+                constants.loaded_level_json = None
+                constants.current_save_path = None
+                constants.xgp_container_path = None
+                constants.xgp_save_id = None
+                constants.xgp_loaded = False
+            _sh.rmtree(tmp, ignore_errors=True)
+            self.result_label.setText(t('XGP fog cleared!'))
+            self.xgp_btn.setEnabled(False)
+            self.yes_button.setEnabled(False)
+            self.no_button.setEnabled(False)
+            QTimer.singleShot(2000, self.accept)
         def on_yes(self):
             QApplication.setOverrideCursor(Qt.WaitCursor)
             try:

@@ -490,6 +490,58 @@ def _create_container_entry_raw(container_path: str, name: str, data: bytes) -> 
     )
 
 
+def pick_xgp_world(parent=None, title='Select GamePass Save') -> tuple[str, str, ContainerIndex] | None:
+    """Show a scrollable world picker (5 items visible). Returns
+    (container_path, save_id, index) or None if cancelled."""
+    from PySide6.QtWidgets import QDialog, QVBoxLayout, QListWidget, QPushButton, QHBoxLayout
+    from PySide6.QtCore import Qt
+    containers = find_container_paths()
+    if not containers:
+        return None
+    cpath = containers[0]
+    try:
+        index = read_container_index(cpath)
+    except Exception:
+        return None
+    saves = get_save_names(index, cpath)
+    world_saves = [s for s in saves if s['save_id'] not in ('UserOption', 'GDKBackupTimestamps')]
+    if not world_saves:
+        return None
+    dlg = QDialog(parent)
+    dlg.setWindowTitle(title)
+    dlg.setMinimumWidth(480)
+    layout = QVBoxLayout(dlg)
+    lst = QListWidget()
+    lst.setSpacing(2)
+    item_height = 24
+    max_visible = 5
+    lst.setMinimumHeight(item_height * min(len(world_saves), max_visible) + 10)
+    lst.setMaximumHeight(item_height * max_visible + 10)
+    for s in world_saves:
+        lst.addItem(f"{s['world_name']} ({s['save_id']})")
+    layout.addWidget(lst)
+    btn_row = QHBoxLayout()
+    ok_btn = QPushButton('OK')
+    ok_btn.setEnabled(False)
+    cancel_btn = QPushButton('Cancel')
+    lst.itemClicked.connect(lambda: ok_btn.setEnabled(True))
+    lst.itemDoubleClicked.connect(lambda: dlg.accept() if lst.currentItem() else None)
+    ok_btn.clicked.connect(dlg.accept)
+    cancel_btn.clicked.connect(dlg.reject)
+    btn_row.addStretch()
+    btn_row.addWidget(ok_btn)
+    btn_row.addWidget(cancel_btn)
+    layout.addLayout(btn_row)
+    result = dlg.exec()
+    if result != QDialog.Accepted or not lst.currentItem():
+        return None
+    sel_text = lst.currentItem().text()
+    for s in world_saves:
+        if f"{s['world_name']} ({s['save_id']})" == sel_text:
+            return (cpath, s['save_id'], index)
+    return None
+
+
 def save_xgp_changes(
     container_path: str,
     current_save_path: str,

@@ -1788,5 +1788,9 @@
     "base.reassign.same_guild": "Base gehört bereits zu dieser Gilde.",
     "base.reassign.success": "Basis wurde der Gilde „{name}“ neu zugewiesen",
     "xgp.err.missing_files": "Speichern ist unvollständig. Fehlende erforderliche Dateien: {files}\n\nOhne alle erforderlichen Komponenten erkennt das Spiel diesen Speicherstand nicht. Öffnen Sie den Speicherstand im PST-Format, um die fehlenden Dateien zu exportieren, oder beziehen Sie sie aus einem funktionierenden Speicherstand.",
-    "menu.file.load_xgp_save": "GamePass-Speicher laden"
+    "menu.file.load_xgp_save": "GamePass-Speicher laden",
+    "character_transfer.source_btn": "Quelle speichern",
+    "character_transfer.target_btn": "Ziel speichern",
+    "tools.btn_steam": "Dampf",
+    "tools.btn_gamepass": "GamePass"
 }

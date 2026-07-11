@@ -1764,5 +1764,9 @@
     "base.reassign.same_guild": "拠点はすでにこのギルドに属しています。",
     "base.reassign.success": "拠点がギルド「{name}」に再割り当てされました",
     "xgp.err.missing_files": "保存が不完全です。必要なファイルがありません: {files}\n\n必要なコンポーネントがすべてないと、ゲームはこのセーブデータを認識しません。 PST で保存を開いて不足しているファイルをエクスポートするか、作業中の保存からファイルを取得します。",
-    "menu.file.load_xgp_save": "GamePass をロードして保存"
+    "menu.file.load_xgp_save": "GamePass をロードして保存",
+    "character_transfer.source_btn": "ソースの保存",
+    "character_transfer.target_btn": "ターゲットの保存",
+    "tools.btn_steam": "スチーム",
+    "tools.btn_gamepass": "ゲームパス"
 }

@@ -172,6 +172,7 @@ class SlotNumUpdaterApp(QDialog):
         self.load_styles()
         self.setup_ui()
         self.center_window()
+        self._update_xgp_button_state()
     def center_window(self):
         screen = QApplication.primaryScreen().availableGeometry()
         size = self.sizeHint()
@@ -198,13 +199,25 @@ class SlotNumUpdaterApp(QDialog):
         file_group.setObjectName('glass')
         file_layout = QHBoxLayout(file_group)
         file_layout.setContentsMargins(12, 8, 12, 8)
-        self.browse_button = QPushButton('📁 ' + t('browse'))
-        self.browse_button.setFixedWidth(120)
+        import nerdfont as nf
+        _nf_font = QFont(constants.FONT_FAMILY_NERD, 10)
+        self.browse_button = QPushButton(f"{nf.icons['nf-fa-steam']} " + t('browse'))
+        self.browse_button.setFont(_nf_font)
+        self.browse_button.setMinimumWidth(110)
+        self.browse_button.setMaximumWidth(150)
         self.browse_button.clicked.connect(self.browse_file)
+        self.xgp_load_btn = QPushButton(f"{nf.icons['nf-fa-xbox']} " + t('browse'))
+        self.xgp_load_btn.setFont(_nf_font)
+        self.xgp_load_btn.setMinimumWidth(110)
+        self.xgp_load_btn.setMaximumWidth(150)
+        self.xgp_load_btn.setToolTip('Load a GamePass save from the container')
+        self.xgp_load_btn.clicked.connect(self.load_xgp_save)
+        self.xgp_load_btn.setEnabled(True)
         self.file_entry = QLineEdit()
         self.file_entry.setPlaceholderText(t('slot.path_placeholder'))
         self.file_entry.setReadOnly(True)
         file_layout.addWidget(self.browse_button)
+        file_layout.addWidget(self.xgp_load_btn)
         file_layout.addWidget(self.file_entry)
         controls_group = QGroupBox(t('slotinjector.slot_configuration'))
         controls_group.setObjectName('glass')
@@ -333,6 +346,29 @@ class SlotNumUpdaterApp(QDialog):
         if not event.spontaneous():
             self.activateWindow()
             self.raise_()
+            self._update_xgp_button_state()
+    def _update_xgp_button_state(self):
+        self.xgp_load_btn.setEnabled(True)
+    def load_xgp_save(self):
+        from palworld_xgp_import.gamepass_manager import pick_xgp_world, extract_save_to_temp
+        pick = pick_xgp_world(self, 'Load GamePass Save')
+        if not pick:
+            return
+        cpath, save_id, index = pick
+        import tempfile as _tf
+        tmp = _tf.mkdtemp(prefix='pst_si_xgp_')
+        extracted = extract_save_to_temp(cpath, index, save_id, tmp)
+        level_path = extracted.get('Level.sav')
+        if not level_path or not os.path.isfile(level_path):
+            shutil.rmtree(tmp, ignore_errors=True)
+            show_critical(self, t('error.title'), 'Level.sav not found in extracted container.')
+            return
+        self._xgp_temp_dir = tmp
+        self._xgp_container_path = cpath
+        self._xgp_save_id = save_id
+        self.file_entry.setText(level_path)
+        self.save_folder = tmp
+        self.load_selected_save()
     def browse_file(self):
         file, _ = QFileDialog.getOpenFileName(self, t('slot.select_level_sav_title'), '', 'SAV Files(Level.sav)')
         if file:
@@ -728,18 +764,34 @@ class SlotNumUpdaterApp(QDialog):
             return
         filepath = self.file_entry.text()
         gvas_file = self.gvas_file
+        xgp_path = getattr(self, '_xgp_temp_dir', None)
+        new_name = None
+        if xgp_path and filepath.startswith(xgp_path):
+            old_name = 'World'
+            meta_p = os.path.join(xgp_path, 'LevelMeta.sav')
+            if os.path.isfile(meta_p):
+                try:
+                    from palworld_aio.utils import sav_to_gvasfile
+                    old_name = sav_to_gvasfile(meta_p).properties.get('SaveData', {}).get('value', {}).get('WorldName', {}).get('value', 'World')
+                except Exception:
+                    pass
+            from PySide6.QtWidgets import QInputDialog, QLineEdit
+            new_name, ok = QInputDialog.getText(self, 'Save as New World',
+                f'World name (original: "{old_name}"):',
+                QLineEdit.Normal, f'{old_name} (modified)')
+            if not ok or not new_name.strip():
+                return
+            new_name = new_name.strip()
         self.set_loading_state(True, 'Saving changes...')
         def task():
-            is_xgp = (constants.xgp_loaded and
-                      constants.current_save_path and
-                      filepath.startswith(constants.current_save_path))
-            if is_xgp:
-                level_dst = os.path.join(constants.current_save_path, 'Level.sav')
+            if xgp_path and filepath.startswith(xgp_path):
+                level_dst = os.path.join(xgp_path, 'Level.sav')
                 gvasfile_to_sav(gvas_file, level_dst)
                 from palworld_xgp_import.gamepass_manager import save_xgp_changes
                 save_xgp_changes(
-                    container_path=constants.xgp_container_path,
-                    current_save_path=constants.current_save_path,
+                    container_path=self._xgp_container_path,
+                    current_save_path=xgp_path,
+                    new_world_name=new_name,
                 )
             else:
                 gvasfile_to_sav(gvas_file, filepath)

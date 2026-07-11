@@ -2051,5 +2051,9 @@
     "base.reassign.no_other_guilds": "No other guilds available.",
     "base.reassign.same_guild": "Base already belongs to this guild.",
     "base.reassign.success": "Base reassigned to guild \"{name}\"",
-    "menu.file.load_xgp_save": "Load GamePass Save"
+    "menu.file.load_xgp_save": "Load GamePass Save",
+    "character_transfer.source_btn": "Source Save",
+    "character_transfer.target_btn": "Target Save",
+    "tools.btn_steam": "Steam",
+    "tools.btn_gamepass": "GamePass"
 }

@@ -17,6 +17,8 @@ from palsav.archive import UUID as PalUUID
 from palsav.io import load_sav
 _TRANSFER_STEPS = {'character': True, 'tech_data': True, 'inventory': True, 'guild': True, 'pals': True, 'dynamics': True, 'timestamps': True}
 player_list_cache = []
+_xgp_new_world_name: str | None = None
+_xgp_cpath: str | None = None
 _SORT_ROLE = Qt.UserRole + 1
 class _SortableItem(QTreeWidgetItem):
     def __lt__(self, other):
@@ -233,14 +235,38 @@ class CharacterTransferWindow(QWidget):
         glass_layout.setSpacing(12)
         file_row = QHBoxLayout()
         file_row.setSpacing(10)
-        src_btn = QPushButton(f"{t('Select Source Level File')}")
+        import nerdfont as nf
+        _nf_font = QFont(constants.FONT_FAMILY_NERD, 10)
+        src_btn = QPushButton(f"{nf.icons['nf-fa-steam']} {t('character_transfer.source_btn')}")
+        src_btn.setFont(_nf_font)
+        src_btn.setMinimumWidth(110)
+        src_btn.setMaximumWidth(160)
         src_btn.setToolTip(t('character_transfer.source_tooltip'))
         src_btn.clicked.connect(self.source_level_file)
         file_row.addWidget(src_btn)
-        tgt_btn = QPushButton(f"{t('Select Target Level File')}")
+        self.src_xgp_btn = QPushButton(f"{nf.icons['nf-fa-xbox']} {t('character_transfer.source_btn')}")
+        self.src_xgp_btn.setFont(_nf_font)
+        self.src_xgp_btn.setMinimumWidth(110)
+        self.src_xgp_btn.setMaximumWidth(160)
+        self.src_xgp_btn.setToolTip('Load a GamePass save from the container as source')
+        self.src_xgp_btn.clicked.connect(lambda: self._xgp_load('source'))
+        self.src_xgp_btn.setEnabled(True)
+        file_row.addWidget(self.src_xgp_btn)
+        tgt_btn = QPushButton(f"{nf.icons['nf-fa-steam']} {t('character_transfer.target_btn')}")
+        tgt_btn.setFont(_nf_font)
+        tgt_btn.setMinimumWidth(110)
+        tgt_btn.setMaximumWidth(160)
         tgt_btn.setToolTip(t('character_transfer.target_tooltip'))
         tgt_btn.clicked.connect(self.target_level_file)
         file_row.addWidget(tgt_btn)
+        self.tgt_xgp_btn = QPushButton(f"{nf.icons['nf-fa-xbox']} {t('character_transfer.target_btn')}")
+        self.tgt_xgp_btn.setFont(_nf_font)
+        self.tgt_xgp_btn.setMinimumWidth(110)
+        self.tgt_xgp_btn.setMaximumWidth(160)
+        self.tgt_xgp_btn.setToolTip('Load the GamePass save currently open in PST as target')
+        self.tgt_xgp_btn.clicked.connect(lambda: self._xgp_load('target'))
+        self.tgt_xgp_btn.setEnabled(True)
+        file_row.addWidget(self.tgt_xgp_btn)
         glass_layout.addLayout(file_row)
         paths_row = QHBoxLayout()
         self.source_level_path_label = QLabel(t('character_transfer.no_source_selected'))
@@ -424,6 +450,8 @@ class CharacterTransferWindow(QWidget):
         if not event.spontaneous():
             self.activateWindow()
             self.raise_()
+            self.src_xgp_btn.setEnabled(True)
+            self.tgt_xgp_btn.setEnabled(True)
     def load_styles(self):
         ThemeManager.load_styles(self)
     def filter_treeview(self, tree, query, is_source):
@@ -432,6 +460,56 @@ class CharacterTransferWindow(QWidget):
             item = tree.topLevelItem(i)
             visible = any((query in item.text(col).lower() for col in range(item.columnCount())))
             item.setHidden(not visible)
+    def _xgp_load(self, which: str):
+        from palworld_xgp_import.gamepass_manager import pick_xgp_world, extract_save_to_temp
+        pick = pick_xgp_world(self, f'Load {which.title()} GamePass Save')
+        if not pick:
+            return
+        cpath, save_id, index = pick
+        import tempfile as _tf, shutil as _sh
+        tmp = _tf.mkdtemp(prefix=f'pst_ct_{which}_')
+        extracted = extract_save_to_temp(cpath, index, save_id, tmp)
+        level_path = extracted.get('Level.sav')
+        if not level_path or not os.path.isfile(level_path):
+            _sh.rmtree(tmp, ignore_errors=True)
+            show_critical(self, t('error.title'), f'Level.sav not found for {save_id}.')
+            return
+        setattr(self, f'_xgp_{which}_tmp', tmp)
+        setattr(self, f'_xgp_{which}_cpath', cpath)
+        setattr(self, f'_xgp_{which}_save_id', save_id)
+        global _xgp_cpath
+        _xgp_cpath = cpath
+        print(f'Loading {which} from XGP save {save_id}...')
+        def task():
+            gvas_file = _load_sav(level_path)
+            wsd = gvas_file.properties['worldSaveData']['value']
+            return (level_path, gvas_file, wsd)
+        def on_finished(result):
+            if not result:
+                return
+            global level_sav_path, level_json, selected_source_player
+            global t_level_sav_path, target_gvas_file, targ_lvl
+            global modified_target_players, modified_targets_data, selected_target_player
+            path, gv, wsd = result
+            if which == 'source':
+                level_sav_path = path
+                level_json = wsd
+                source_level_path_label.setText(path)
+                selected_source_player = None
+                load_players(wsd, True)
+            else:
+                t_level_sav_path = path
+                target_gvas_file = gv
+                targ_lvl = wsd
+                target_level_path_label.setText(path)
+                backup_whole_directory(tmp, 'Backups/Character Transfer')
+                selected_target_player = None
+                load_players(wsd, False)
+                modified_target_players = set()
+                modified_targets_data = {}
+            current_selection_label.setText(
+                f'Source: {selected_source_player},Target: {selected_target_player}')
+        run_with_loading(on_finished, task)
     def source_level_file(self):
         try:
             source_level_file()
@@ -1224,6 +1302,13 @@ def finalize_save_task():
     if errors:
         print(f"[ERROR] Save errors: {'; '.join(errors)}")
         return False
+    if _xgp_new_world_name is not None and _xgp_cpath:
+        from palworld_xgp_import.gamepass_manager import save_xgp_changes
+        save_xgp_changes(
+            container_path=_xgp_cpath,
+            current_save_path=os.path.dirname(t_level_sav_path),
+            new_world_name=_xgp_new_world_name,
+        )
     return True
 def select_file():
     return QFileDialog.getOpenFileName(None, 'Select Palworld Save File', '', 'Palworld Saves(*.sav *.json);;All Files(*)')[0]
@@ -1365,6 +1450,24 @@ def on_selection_of_target_player():
         selected_target_player = selections[0].text(1)
         current_selection_label.setText(f'Source: {selected_source_player},Target: {selected_target_player}')
 def finalize_save(window):
+    global _xgp_new_world_name
+    _xgp_new_world_name = None
+    if _xgp_cpath:
+        from PySide6.QtWidgets import QInputDialog, QLineEdit
+        _old_name = 'World'
+        _meta_p = os.path.join(os.path.dirname(t_level_sav_path), 'LevelMeta.sav')
+        if os.path.isfile(_meta_p):
+            try:
+                from palworld_aio.utils import sav_to_gvasfile
+                _old_name = sav_to_gvasfile(_meta_p).properties.get('SaveData', {}).get('value', {}).get('WorldName', {}).get('value', 'World')
+            except Exception:
+                pass
+        _name, _ok = QInputDialog.getText(window, 'Save as New World',
+            f'World name (original: "{_old_name}"):',
+            QLineEdit.Normal, f'{_old_name} (modified)')
+        if not _ok or not _name.strip():
+            return
+        _xgp_new_world_name = _name.strip()
     try:
         def on_finished(success):
             if success:

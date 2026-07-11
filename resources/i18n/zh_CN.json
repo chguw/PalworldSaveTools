@@ -1766,5 +1766,9 @@
     "base.reassign.same_guild": "基地已经属于这个公会了。",
     "base.reassign.success": "基地重新分配给公会“{name}”",
     "xgp.err.missing_files": "保存不完整。缺少必需的：{文件}\n\n如果没有所有必需的组件，游戏将无法识别此保存。在 PST 中打开保存以导出丢失的文件，或从工作保存中获取它们。",
-    "menu.file.load_xgp_save": "加载 GamePass 保存"
+    "menu.file.load_xgp_save": "加载 GamePass 保存",
+    "character_transfer.source_btn": "源保存",
+    "character_transfer.target_btn": "目标保存",
+    "tools.btn_steam": "蒸汽",
+    "tools.btn_gamepass": "游戏通行证"
 }
