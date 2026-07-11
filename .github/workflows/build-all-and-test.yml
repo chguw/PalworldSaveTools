@@ -2,6 +2,15 @@ name: Build All & Test
 
 on:
   workflow_dispatch:
+    inputs:
+      draft_release:
+        description: "Draft a test release? (title: Testing_<version>)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
 
 concurrency:
   group: build-all-test-${{ github.ref }}
@@ -19,18 +28,21 @@ jobs:
             system_deps: ""
             extra_deps: ""
             artifact_name: windows-build
+            artifact_glob: "*.exe"
           - os: ubuntu-latest
             platform: linux
             build_mode: --onefile
             system_deps: "patchelf file"
             extra_deps: ""
             artifact_name: linux-build
+            artifact_glob: "*-linux"
           - os: macos-latest
             platform: macos
             build_mode: --onedir
             system_deps: ""
             extra_deps: "imageio"
             artifact_name: macos-build
+            artifact_glob: "*-macos.dmg"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
@@ -84,5 +96,43 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact_name }}
-          path: dist/${{ steps.app_info.outputs.app_name }}-*
+          path: dist/${{ steps.app_info.outputs.app_name }}-${{ matrix.artifact_glob }}
           if-no-files-found: error
+
+  draft-test-release:
+    needs: build
+    if: ${{ github.event.inputs.draft_release == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v8.3.2
+        with:
+          enable-cache: true
+          cache-dependency-glob: "requirements.txt"
+        continue-on-error: true
+      - name: Extract app info
+        id: app_info
+        run: |
+          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
+          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
+          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+      - name: List all artifacts
+        run: find artifacts -type f -ls
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: Testing_${{ steps.app_info.outputs.version }}
+          name: Testing_${{ steps.app_info.outputs.version }}
+          draft: true
+          prerelease: true
+          files: artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
