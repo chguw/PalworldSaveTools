@@ -3,6 +3,16 @@ name: Discord Release Notification
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      mock_release_name:
+        description: "Mock release name (for manual testing)"
+        required: false
+        default: "PalworldSaveTools v2.0.0"
+      mock_release_url:
+        description: "Mock release URL (for manual testing)"
+        required: false
+        default: "https://github.com/deafdudecomputers/PalworldSaveTools/releases"
 
 jobs:
   github-releases-to-discord:
@@ -15,6 +25,18 @@ jobs:
         run: |
           APP_NAME=$(python3 -c "import sys; sys.path.insert(0,'src'); from common import APP_NAME; print(APP_NAME)" 2>/dev/null || echo 'PalworldSaveTools')
           echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
+      - name: Prepare payload
+        id: payload
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "release_name=${{ github.event.release.name }}" >> "$GITHUB_OUTPUT"
+            echo "release_url=${{ github.event.release.html_url }}" >> "$GITHUB_OUTPUT"
+            echo "description=**${{ github.event.release.name }}** is now live!" >> "$GITHUB_OUTPUT"
+          else
+            echo "release_name=${{ github.event.inputs.mock_release_name }}" >> "$GITHUB_OUTPUT"
+            echo "release_url=${{ github.event.inputs.mock_release_url }}" >> "$GITHUB_OUTPUT"
+            echo "description=**[MOCK] ${{ github.event.inputs.mock_release_name }}** — test notification" >> "$GITHUB_OUTPUT"
+          fi
       - name: Github Releases To Discord
         uses: SethCohen/github-releases-to-discord@v1.13.1
         with:
@@ -22,7 +44,7 @@ jobs:
           color: "2105893"
           username: "${{ steps.app_info.outputs.app_name }}"
           avatar_url: "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
-          content: "**${{ github.event.release.name }}** is now live!\n\n${{ github.event.release.html_url }}"
+          content: "${{ steps.payload.outputs.description }}\n\n${{ steps.payload.outputs.release_url }}"
           footer_title: "Changelog"
           footer_icon_url: "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png"
           footer_timestamp: true
