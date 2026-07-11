@@ -106,7 +106,7 @@ jobs:
         with:
           body_path: release_notes.md
           tag_name: v${{ steps.app_info.outputs.version }}
-          name: "Linux Build ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}"
+          name: v${{ steps.app_info.outputs.version }}
           draft: true
           prerelease: true
           files: dist/${{ steps.app_info.outputs.app_name }}-*-linux
@@ -206,7 +206,7 @@ jobs:
         with:
           body_path: release_notes.md
           tag_name: v${{ steps.app_info.outputs.version }}
-          name: "MacOS Build ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}"
+          name: v${{ steps.app_info.outputs.version }}
           draft: true
           prerelease: true
           files: dist/${{ steps.app_info.outputs.app_name }}-*-macos.dmg
@@ -296,7 +296,7 @@ jobs:
         with:
           body_path: release_notes.md
           tag_name: v${{ steps.app_info.outputs.version }}
-          name: "Windows Build ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}"
+          name: v${{ steps.app_info.outputs.version }}
           draft: true
           prerelease: true
           files: dist/${{ steps.app_info.outputs.app_name }}-*.exe

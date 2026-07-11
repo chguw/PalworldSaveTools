@@ -254,7 +254,7 @@ jobs:
       - uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ steps.app_info.outputs.version }}
-          name: ${{ steps.app_info.outputs.app_name }} v${{ steps.app_info.outputs.version }}
+          name: v${{ steps.app_info.outputs.version }}
           body_path: release_notes.md
           draft: true
           prerelease: false
