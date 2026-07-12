@@ -1,15 +1,10 @@
 name: Nexus Mods Upload
 
-# Reusable workflow that uploads release assets to Nexus Mods.
-# Can be called from other workflows (workflow_call) or run manually (workflow_dispatch).
-# Pulls assets from an existing GitHub release by tag (draft or published).
+# Uploads release assets to Nexus Mods when a GitHub release is published.
+# Also supports manual workflow_dispatch for testing or re-uploads.
 on:
-  workflow_call:
-    inputs:
-      tag:
-        description: "Release tag to upload (e.g. v2.0.3)"
-        required: true
-        type: string
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       tag:
@@ -36,72 +31,69 @@ jobs:
             asset_glob: "PalworldSaveTools-V*-macos.dmg"
             file_id: "7648646"
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
+
       - name: Resolve tag and version
         id: meta
         run: |
-          tag="${{ inputs.tag || github.event.inputs.tag }}"
+          if [ "${{ github.event_name }}" = "release" ]; then
+            tag="${{ github.event.release.tag_name }}"
+          else
+            tag="${{ github.event.inputs.tag }}"
+          fi
           if [ -z "$tag" ]; then
-            echo "::error::No tag provided to nexus-upload workflow"
+            echo "::error::No tag resolved"
             exit 1
           fi
           version="${tag#v}"
-          {
-            echo "tag=$tag"
-            echo "version=$version"
-          } >> "$GITHUB_OUTPUT"
-      - name: List release assets
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Assets in release ${{ steps.meta.outputs.tag }}:"
-          gh release view "${{ steps.meta.outputs.tag }}" \
-            --repo "${{ github.repository }}" \
-            --json assets \
-            --jq '.assets[].name // "  (no assets found)"' \
-            || echo "  (draft — gh view may not work on drafts)"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "resolved tag=$tag version=$version"
+
       - name: Download release asset
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
-          echo "Attempting to download asset matching: ${{ matrix.asset_glob }}"
-          if ! gh release download "${{ steps.meta.outputs.tag }}" \
+          tag="${{ steps.meta.outputs.tag }}"
+          echo "Downloading asset matching '${{ matrix.asset_glob }}' from release '$tag'..."
+          mkdir -p "downloads/${{ matrix.variant }}"
+          if ! gh release download "$tag" \
               --repo "${{ github.repository }}" \
               --pattern "${{ matrix.asset_glob }}" \
-              --dir .; then
-            echo "::error:: Could not download '${{ matrix.asset_glob }}' from release '${{ steps.meta.outputs.tag }}'."
-            echo "Available release assets:"
-            gh release view "${{ steps.meta.outputs.tag }}" \
-              --repo "${{ github.repository }}" \
-              --json assets \
-              --jq '.assets[].name // "(none)"' || echo "(draft — gh view failed)"
+              --dir "downloads/${{ matrix.variant }}"; then
+            echo "::error:: Could not download '${{ matrix.asset_glob }}' from release '$tag'."
+            echo "Available assets:"
+            gh release view "$tag" --repo "${{ github.repository }}" \
+              --json assets --jq '.assets[].name // "(none)"' 2>&1 || true
             exit 1
           fi
-      - name: Ensure upload is a zip
+          echo "Downloaded:"
+          ls -la "downloads/${{ matrix.variant }}/"
+
+      - name: Find & zip asset
         id: package
         run: |
-          asset=$(ls ${{ matrix.asset_glob }} 2>/dev/null | head -1)
+          dir="downloads/${{ matrix.variant }}"
+          asset=$(find "$dir" -name "${{ matrix.asset_glob }}" -type f 2>/dev/null | head -1)
           if [ -z "$asset" ]; then
-            echo "::error::No asset matching '${{ matrix.asset_glob }}' found after download for ${{ matrix.variant }}."
+            echo "::error::No asset matching '${{ matrix.asset_glob }}' in $dir"
+            find downloads -type f 2>/dev/null || echo "(empty)"
             exit 1
           fi
+          echo "Found: $asset"
           case "$asset" in
             *.zip)
               echo "upload_file=$asset" >> "$GITHUB_OUTPUT"
               ;;
             *)
-              zip_name="${asset%.*}.zip"
-              zip -j "$zip_name" "$asset"
+              zip_name="${asset}.nexus.zip"
+              cp "$asset" "$zip_name"
               echo "upload_file=$zip_name" >> "$GITHUB_OUTPUT"
               ;;
           esac
+
       - name: Upload to Nexus Mods
         uses: Nexus-Mods/upload-action@v1.0.0-beta.8
         with:

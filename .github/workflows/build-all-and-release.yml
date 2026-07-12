@@ -13,11 +13,6 @@ on:
         required: false
         default: false
         type: boolean
-      upload_to_nexus:
-        description: "Upload to Nexus Mods"
-        required: false
-        default: true
-        type: boolean
 
 permissions:
   contents: write
@@ -229,10 +224,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  upload-nexus:
-    needs: create-release
-    if: ${{ github.event.inputs.upload_to_nexus == 'true' && github.event.inputs.skip_github_release != 'true' }}
-    uses: ./.github/workflows/nexus-upload.yml
-    with:
-      tag: v${{ needs.create-release.outputs.version }}
-    secrets: inherit
