@@ -24,12 +24,13 @@ jobs:
         include:
           - os: windows-latest
             platform: windows
-            build_mode: --onefile
+            build_mode: --onedir
             system_deps: ""
             extra_deps: ""
             artifact_name: windows-build
             artifact_glob: "*.exe"
             use_appimage: false
+            use_sfx: true
           - os: ubuntu-latest
             platform: linux
             build_mode: --onefile
@@ -38,6 +39,7 @@ jobs:
             artifact_name: linux-build
             artifact_glob: "*-linux.AppImage"
             use_appimage: true
+            use_sfx: false
           - os: macos-latest
             platform: macos
             build_mode: --onedir
@@ -46,6 +48,7 @@ jobs:
             artifact_name: macos-build
             artifact_glob: "*-macos.dmg"
             use_appimage: false
+            use_sfx: false
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -69,8 +72,15 @@ jobs:
         # GitHub runners lack a usable FUSE mount namespace, so appimagetool
         # runs in extract-and-run mode inside linux_build.py.
         run: uv run python build/linux_build.py --appimage-extract-and-run
-      - name: Build with Nuitka (Windows)
-        if: ${{ matrix.platform != 'macos' && !matrix.use_appimage }}
+      - name: Install 7-Zip (Windows SFX)
+        if: ${{ matrix.use_sfx }}
+        shell: powershell
+        run: choco install 7zip.install --no-progress -y
+      - name: Build & package Windows SFX
+        if: ${{ matrix.use_sfx }}
+        run: uv run python build/windows_build.py
+      - name: Build with Nuitka (Windows, legacy)
+        if: ${{ matrix.platform != 'macos' && !matrix.use_appimage && !matrix.use_sfx }}
         run: uv run python build/nuitka/build_nuitka.py ${{ matrix.build_mode }}
       - name: Build macOS DMG
         if: ${{ matrix.platform == 'macos' }}
