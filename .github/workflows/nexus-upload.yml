@@ -8,8 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag to upload (e.g. v2.0.3)"
-        required: true
+        description: "Release tag to upload (e.g. v2.0.3). Leave empty to use the latest published release."
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -41,14 +42,22 @@ jobs:
 
       - name: Resolve tag and version
         id: meta
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ "${{ github.event_name }}" = "release" ]; then
             tag="${{ github.event.release.tag_name }}"
           else
             tag="${{ github.event.inputs.tag }}"
+            if [ -z "$tag" ]; then
+              echo "No tag provided — fetching latest published release..."
+              tag=$(gh release list --repo "${{ github.repository }}" \
+                --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || true)
+              echo "Latest: $tag"
+            fi
           fi
           if [ -z "$tag" ]; then
-            echo "::error::No tag resolved"
+            echo "::error::No tag resolved and no published releases found"
             exit 1
           fi
           version="${tag#v}"
