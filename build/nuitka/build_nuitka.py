@@ -158,6 +158,10 @@ def build_with_nuitka(onefile: bool = True):
 
     if sys.platform == 'win32':
         cmd.append('--windows-console-mode=disable')
+        cmd.append('--company-name=Pylar')
+        cmd.append('--copyright=Copyright (c) 2026 Pylar')
+        cmd.append(f'--product-version={version}')
+        cmd.append('--file-description=Palworld Save Tools')
     cmd.append('--assume-yes-for-downloads')
 
     for mod in _INCLUDE_MODULES:
@@ -169,7 +173,7 @@ def build_with_nuitka(onefile: bool = True):
     version = get_app_version()
     platform_tag = {'win32': 'win', 'darwin': 'macos'}.get(sys.platform, 'linux')
     ext = '.exe' if sys.platform == 'win32' else ''
-    output_name = f'PalworldSaveTools-V{version}-nk-{platform_tag}{ext}'
+    output_name = f'PalworldSaveTools-V{version}-{platform_tag}{ext}'
     cmd.append(f'--output-filename={output_name}')
 
     if os.path.exists(ICON_PATH):
@@ -215,7 +219,7 @@ def main():
         version = get_app_version()
         platform_tag = {'win32': 'win', 'darwin': 'macos'}.get(sys.platform, 'linux')
         ext = '.exe' if sys.platform == 'win32' else ''
-        exe_name = f'PalworldSaveTools-V{version}-nk-{platform_tag}{ext}'
+        exe_name = f'PalworldSaveTools-V{version}-{platform_tag}{ext}'
 
         if not onefile:
             default_dist = os.path.join('dist', 'main.dist')

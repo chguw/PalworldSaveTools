@@ -1,0 +1,84 @@
+name: Nexus Mods Upload
+
+# Reusable workflow that uploads release assets to Nexus Mods.
+# Can be called from other workflows (workflow_call) or run manually (workflow_dispatch).
+# Pulls assets from an existing GitHub release by tag (draft or published).
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: "Release tag to upload (e.g. v2.0.3)"
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to upload (e.g. v2.0.3)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: windows
+            asset_glob: "PalworldSaveTools-V*-win.exe"
+            file_id: "7648655"
+          - variant: linux
+            asset_glob: "PalworldSaveTools-V*-linux"
+            file_id: "7648652"
+          - variant: macos
+            asset_glob: "PalworldSaveTools-V*-macos.dmg"
+            file_id: "7648646"
+    steps:
+      - name: Resolve tag and version
+        id: meta
+        run: |
+          tag="${{ inputs.tag || github.event.inputs.tag }}"
+          if [ -z "$tag" ]; then
+            echo "No tag provided" >&2
+            exit 1
+          fi
+          version="${tag#v}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Download release asset
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download "${{ steps.meta.outputs.tag }}" \
+            --repo "${{ github.repository }}" \
+            --pattern "${{ matrix.asset_glob }}" \
+            --dir .
+      - name: Ensure upload is a zip
+        id: package
+        run: |
+          asset=$(ls ${{ matrix.asset_glob }} 2>/dev/null | head -1)
+          if [ -z "$asset" ]; then
+            echo "No asset matching ${{ matrix.asset_glob }} in release ${{ steps.meta.outputs.tag }}" >&2
+            exit 1
+          fi
+          case "$asset" in
+            *.zip)
+              echo "upload_file=$asset" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              zip_name="${asset%.*}.zip"
+              zip -j "$zip_name" "$asset"
+              echo "upload_file=$zip_name" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+      - name: Upload to Nexus Mods
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.8
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_id: ${{ matrix.file_id }}
+          filename: ${{ steps.package.outputs.upload_file }}
+          version: ${{ steps.meta.outputs.version }}
+          display_name: ${{ steps.meta.outputs.tag }}_${{ matrix.variant }}
+          archive_existing_version: true
