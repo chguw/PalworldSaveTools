@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       append_only:
-        description: "Just append files to an existing draft (leave title/notes untouched)"
+        description: "Append to existing release (no title/notes edits)"
         required: false
         default: false
         type: boolean
       skip_github_release:
-        description: "Skip GitHub release upload (requires 'Upload to Nexus Mods' to be ON)"
+        description: "Skip GitHub release"
         required: false
         default: false
         type: boolean
       upload_to_nexus:
-        description: "Upload built files to Nexus Mods"
+        description: "Upload to Nexus Mods"
         required: false
         default: true
         type: boolean
@@ -27,18 +27,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Validate inputs
-        run: |
-          if [ "${{ github.event.inputs.skip_github_release }}" = "true" ] && \
-             [ "${{ github.event.inputs.upload_to_nexus }}" != "true" ]; then
-            echo "::error::'Skip GitHub release' requires 'Upload to Nexus Mods' to be enabled — otherwise nothing gets released anywhere."
-            exit 1
-          fi
-          echo "Inputs validated OK"
-
   prepare-source:
     runs-on: ubuntu-latest
     steps:
@@ -76,7 +64,6 @@ jobs:
           if-no-files-found: error
 
   build-windows:
-    needs: validate
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
@@ -118,7 +105,6 @@ jobs:
           if-no-files-found: error
 
   build-linux:
-    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -162,7 +148,6 @@ jobs:
           if-no-files-found: error
 
   build-mac:
-    needs: validate
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7
@@ -309,7 +294,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-nexus:
-    needs: [validate, build-windows, build-linux, build-mac]
+    needs: [build-windows, build-linux, build-mac]
     if: ${{ github.event.inputs.upload_to_nexus == 'true' }}
     runs-on: ubuntu-latest
     strategy:
