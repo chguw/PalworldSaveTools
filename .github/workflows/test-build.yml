@@ -30,6 +30,10 @@ jobs:
     if: ${{ github.event.inputs.os == 'linux' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
@@ -60,6 +64,10 @@ jobs:
     if: ${{ github.event.inputs.os == 'macos' }}
     runs-on: macos-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
@@ -91,6 +99,10 @@ jobs:
     if: ${{ github.event.inputs.os == 'windows' }}
     runs-on: windows-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env

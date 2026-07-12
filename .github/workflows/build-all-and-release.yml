@@ -34,6 +34,10 @@ jobs:
       version: ${{ steps.env.outputs.version }}
       game_version: ${{ steps.env.outputs.game_version }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
@@ -53,6 +57,10 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
@@ -74,6 +82,10 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
@@ -98,6 +110,10 @@ jobs:
   build-mac:
     runs-on: macos-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
@@ -122,6 +138,10 @@ jobs:
     outputs:
       version: ${{ steps.env.outputs.version }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env

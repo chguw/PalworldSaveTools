@@ -36,6 +36,10 @@ jobs:
             asset_glob: "PalworldSaveTools-V*-macos.dmg"
             file_id: "7648646"
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
