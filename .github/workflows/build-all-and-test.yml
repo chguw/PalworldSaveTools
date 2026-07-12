@@ -58,32 +58,39 @@ jobs:
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
+      - name: Restore cached dist
+        id: cache-dist
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: ${{ runner.os }}-pst-dist-${{ steps.env.outputs.version }}-${{ hashFiles('build/**') }}
       - name: Install system deps
-        if: ${{ matrix.system_deps != '' }}
+        if: ${{ matrix.system_deps != '' && steps.cache-dist.outputs.cache-hit != 'true' }}
         run: |
           sudo apt-get update
           sudo apt-get install -y ${{ matrix.system_deps }}
       - name: Install dependencies
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka ${{ matrix.extra_deps }}
       - name: Build AppImage (Linux)
-        if: ${{ matrix.use_appimage }}
+        if: ${{ matrix.use_appimage && steps.cache-dist.outputs.cache-hit != 'true' }}
         # GitHub runners lack a usable FUSE mount namespace, so appimagetool
         # runs in extract-and-run mode inside linux_build.py.
         run: uv run python build/linux_build.py --appimage-extract-and-run
       - name: Install Inno Setup (Windows installer)
-        if: ${{ matrix.use_sfx }}
+        if: ${{ matrix.use_sfx && steps.cache-dist.outputs.cache-hit != 'true' }}
         shell: powershell
         run: choco install innosetup --no-progress -y
       - name: Build & package Windows installer
-        if: ${{ matrix.use_sfx }}
+        if: ${{ matrix.use_sfx && steps.cache-dist.outputs.cache-hit != 'true' }}
         run: uv run python build/windows_build.py
       - name: Build with Nuitka (Windows, legacy)
-        if: ${{ matrix.platform != 'macos' && !matrix.use_appimage && !matrix.use_sfx }}
+        if: ${{ matrix.platform != 'macos' && !matrix.use_appimage && !matrix.use_sfx && steps.cache-dist.outputs.cache-hit != 'true' }}
         run: uv run python build/nuitka/build_nuitka.py ${{ matrix.build_mode }}
       - name: Build macOS DMG
-        if: ${{ matrix.platform == 'macos' }}
+        if: ${{ matrix.platform == 'macos' && steps.cache-dist.outputs.cache-hit != 'true' }}
         run: uv run python build/macos_build.py --ad-hoc
       - name: Verify build output
         shell: bash

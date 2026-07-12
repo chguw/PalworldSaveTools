@@ -64,13 +64,22 @@ jobs:
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
+      - name: Restore cached dist
+        id: cache-dist
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: ${{ runner.os }}-pst-dist-${{ steps.env.outputs.version }}-${{ hashFiles('build/**') }}
       - name: Install dependencies
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka
       - name: Install Inno Setup (for installer packaging)
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         run: choco install innosetup --no-progress -y
       - name: Build & package Windows installer
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         run: uv run python build/windows_build.py
       - name: List built files
         shell: bash
@@ -91,15 +100,24 @@ jobs:
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
+      - name: Restore cached dist
+        id: cache-dist
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: ${{ runner.os }}-pst-dist-${{ steps.env.outputs.version }}-${{ hashFiles('build/**') }}
       - name: Install system deps
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y patchelf file wget
       - name: Install dependencies
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka
       - name: Build AppImage
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         # GitHub runners lack a usable FUSE mount namespace, so appimagetool
         # runs in extract-and-run mode inside linux_build.py.
         run: uv run python build/linux_build.py --appimage-extract-and-run
@@ -121,11 +139,19 @@ jobs:
       - name: Bootstrap environment
         id: env
         uses: ./.github/actions/setup-build-env
+      - name: Restore cached dist
+        id: cache-dist
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: ${{ runner.os }}-pst-dist-${{ steps.env.outputs.version }}-${{ hashFiles('build/**') }}
       - name: Install dependencies
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka imageio
       - name: Build macOS DMG
+        if: steps.cache-dist.outputs.cache-hit != 'true'
         run: uv run python build/macos_build.py --ad-hoc
       - name: List built files
         run: ls -la dist/ || { echo "dist/ directory not found"; exit 1; }
