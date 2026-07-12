@@ -18,21 +18,21 @@ DisableProgramGroupPage=yes
 DisableDirPage=yes
 DisableWelcomePage=yes
 DisableFinishedPage=yes
-OutputDir=dist
+OutputDir=..\dist
 OutputBaseFilename={#AppName}-V{#AppVersion}-win
 Compression=lzma2/max
 SolidCompression=yes
 PrivilegesRequired=lowest
-SetupIconFile=resources\assets\icons\app\icon.ico
-UninstallDisplayIcon=resources\assets\icons\app\icon.ico
+SetupIconFile=..\resources\assets\icons\app\icon.ico
+UninstallDisplayIcon=..\resources\assets\icons\app\icon.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "dist\{#AppDirName}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "README.md"; DestDir: "{app}"; Flags: ignoreversion
-Source: "license"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\dist\{#AppDirName}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\README.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\license"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExeName}"
