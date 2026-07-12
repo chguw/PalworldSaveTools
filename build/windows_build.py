@@ -61,7 +61,7 @@ def get_app_name() -> str:
 
 def run(cmd: list, desc: str = ''):
     if desc:
-        print(f'── {desc} ──')
+        print(f'-- {desc} --')
     print(f'$ {" ".join(cmd)}')
     result = subprocess.run(cmd)
     if result.returncode != 0:
