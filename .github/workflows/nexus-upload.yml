@@ -101,8 +101,8 @@ jobs:
               echo "upload_file=$asset" >> "$GITHUB_OUTPUT"
               ;;
             *)
-              zip_name="${asset}.nexus.zip"
-              cp "$asset" "$zip_name"
+              zip_name="${asset%.*}.zip"
+              zip -j "$zip_name" "$asset"
               echo "upload_file=$zip_name" >> "$GITHUB_OUTPUT"
               ;;
           esac
