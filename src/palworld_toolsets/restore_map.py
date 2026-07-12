@@ -1,7 +1,7 @@
 from import_libs import *
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
 
-from loading_manager import show_critical
+from loading_manager import show_critical, run_with_loading
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame, QApplication
 from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
@@ -150,7 +150,7 @@ def restore_map():
                 self.raise_()
         def on_xgp_clear_fog(self):
             from palworld_xgp_import.gamepass_manager import (
-                pick_xgp_world, extract_save_to_temp, save_xgp_changes,
+                pick_xgp_world, extract_save_to_temp,
             )
             pick = pick_xgp_world(self, 'Clear XGP Fog')
             if not pick:
@@ -179,54 +179,63 @@ def restore_map():
             if not ok or not new_name.strip():
                 _sh.rmtree(tmp, ignore_errors=True)
                 return
-            # Step 1: load save into GUI state (like File > Load GamePass Save)
+            run_with_loading(
+                callback=lambda _: self._xgp_clear_done(),
+                func=self._xgp_clear_work,
+                tmp=tmp, cpath=cpath, level_path=level_path, new_name=new_name,
+                save_id=save_id,
+                parent=self,
+            )
+        def _xgp_clear_work(self, tmp, cpath, level_path, new_name, save_id):
+            from palworld_xgp_import.gamepass_manager import save_xgp_changes
+            from palworld_aio.utils import sav_to_gvas_wrapper, wrapper_to_sav
+            import shutil as _sh
             old_level = constants.loaded_level_json
             old_path = constants.current_save_path
             old_xgp_path = constants.xgp_container_path
             old_xgp_id = constants.xgp_save_id
             old_xgp_flag = constants.xgp_loaded
-            from palworld_aio.utils import sav_to_gvas_wrapper
             constants.loaded_level_json = sav_to_gvas_wrapper(level_path)
             constants.current_save_path = tmp
             constants.xgp_container_path = cpath
             constants.xgp_save_id = save_id
             constants.xgp_loaded = True
-            # Step 2: run restore map (like clicking Yes on Steam button)
-            backup_local_data(tmp)
-            clear_fog_in_all_subfolders()
-            # Step 3: save back (like File > Save Changes - but sync, no loading dialog)
-            from palworld_aio.utils import wrapper_to_sav
-            wrapper_to_sav(constants.loaded_level_json, level_path)
-            save_xgp_changes(
-                container_path=cpath,
-                current_save_path=tmp,
-                new_world_name=new_name.strip(),
-            )
-            # Restore old state
-            if old_level:
-                constants.loaded_level_json = old_level
-                constants.current_save_path = old_path
-                constants.xgp_container_path = old_xgp_path
-                constants.xgp_save_id = old_xgp_id
-                constants.xgp_loaded = old_xgp_flag
-            else:
-                constants.loaded_level_json = None
-                constants.current_save_path = None
-                constants.xgp_container_path = None
-                constants.xgp_save_id = None
-                constants.xgp_loaded = False
-            _sh.rmtree(tmp, ignore_errors=True)
+            try:
+                backup_local_data(tmp)
+                clear_fog_in_all_subfolders()
+                wrapper_to_sav(constants.loaded_level_json, level_path)
+                save_xgp_changes(
+                    container_path=cpath,
+                    current_save_path=tmp,
+                    new_world_name=new_name.strip(),
+                )
+            finally:
+                if old_level:
+                    constants.loaded_level_json = old_level
+                    constants.current_save_path = old_path
+                    constants.xgp_container_path = old_xgp_path
+                    constants.xgp_save_id = old_xgp_id
+                    constants.xgp_loaded = old_xgp_flag
+                else:
+                    constants.loaded_level_json = None
+                    constants.current_save_path = None
+                    constants.xgp_container_path = None
+                    constants.xgp_save_id = None
+                    constants.xgp_loaded = False
+                _sh.rmtree(tmp, ignore_errors=True)
+        def _xgp_clear_done(self):
             self.result_label.setText(t('XGP fog cleared!'))
             self.xgp_btn.setEnabled(False)
             self.yes_button.setEnabled(False)
             self.no_button.setEnabled(False)
             QTimer.singleShot(2000, self.accept)
         def on_yes(self):
-            QApplication.setOverrideCursor(Qt.WaitCursor)
-            try:
-                clear_fog_in_all_subfolders()
-            finally:
-                QApplication.restoreOverrideCursor()
+            run_with_loading(
+                callback=lambda _: self._on_clear_done(),
+                func=clear_fog_in_all_subfolders,
+                parent=self,
+            )
+        def _on_clear_done(self):
             self.result_label.setText(t('Fog cleared successfully!'))
             self.yes_button.setEnabled(False)
             self.no_button.setEnabled(False)
