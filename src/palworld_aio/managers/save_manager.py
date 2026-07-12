@@ -963,6 +963,33 @@ class SaveManager(QObject):
                 lastseen = 'Unknown' if last is None else format_duration_short(elapsed)
                 level = constants.player_levels.get(uid.replace('-', ''), '?') if uid else '?'
                 out.append((uid, name, gid, lastseen, level, elapsed))
+        # Fallback: also scan CharacterSaveParameterMap for player characters
+        # (IsPlayer=true) that aren't in any guild roster.  These orphaned
+        # players have been removed from guilds, but their character data
+        # (including NickName) still exists in the save file.
+        char_map = wsd.get('CharacterSaveParameterMap', {}).get('value', [])
+        existing_uids = {str(p[0]).replace('-', '').lower() for p in out if p[0]}
+        for entry in char_map:
+            try:
+                sp = entry['value']['RawData']['value']['object']['SaveParameter']
+                if sp['struct_type'] != 'PalIndividualCharacterSaveParameter':
+                    continue
+                sp_val = sp['value']
+                if not sp_val.get('IsPlayer', {}).get('value', False):
+                    continue
+                key = entry.get('key', {})
+                uid_obj = key.get('PlayerUId', {})
+                uid = str(uid_obj.get('value', '') if isinstance(uid_obj, dict) else uid_obj)
+                if not uid:
+                    continue
+                clean = uid.replace('-', '').lower()
+                if clean in existing_uids:
+                    continue
+                nick = sp_val.get('NickName', {}).get('value', 'Unknown')
+                level = constants.player_levels.get(clean, '?')
+                out.append((uid, nick, 'No Guild', 'Unknown', level, None))
+            except Exception:
+                continue
         return out
     def get_guild_name_by_id(self, target_gid):
         if not constants.loaded_level_json:
