@@ -90,9 +90,9 @@ jobs:
               "title": f"🚀 {title} is live!",
               "url": rel_url,
               "description": (
-                  f"**{app}** `{tag}` has been released.\n"
-                  f"\n".join(download_lines) + "\n\n"
-                  f"{links}"
+                  f"**{app}** `{tag}` has been released.\n\n"
+                  + "\n".join(download_lines) + "\n\n"
+                  + f"{links}"
               ),
               "color": color,
               "thumbnail": {"url": icon},
