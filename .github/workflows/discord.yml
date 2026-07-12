@@ -1,5 +1,7 @@
 name: Discord Release Notification
 
+# Fires when a GitHub release is published, OR on demand for testing.
+# Sends a rich embed to Discord with links to GitHub, Nexus Mods, and Discord.
 on:
   release:
     types: [published]
@@ -14,42 +16,122 @@ jobs:
   send-notification:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Extract app info
-        id: app_info
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
+      - name: Resolve release metadata
+        id: meta
+        env:
+          MOCK_VERSION: ${{ github.event.inputs.mock_version }}
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_NAME: ${{ github.event.release.name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+          REPO_URL: https://github.com/${{ github.repository }}
         run: |
-          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-      - name: Build payload
-        id: payload
-        run: |
-          REPO_URL="https://github.com/${{ github.repository }}"
-          if [ "${{ github.event_name }}" = "release" ]; then
-            TAG="${{ github.event.release.tag_name }}"
-            echo "release_name=${{ github.event.release.name }}" >> "$GITHUB_OUTPUT"
-            echo "release_url=${REPO_URL}/releases/tag/${TAG}" >> "$GITHUB_OUTPUT"
+          if [ "$EVENT_NAME" = "release" ]; then
+            echo "tag=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
+            echo "title=${RELEASE_NAME:-${RELEASE_TAG}}" >> "$GITHUB_OUTPUT"
+            echo "url=${RELEASE_URL}" >> "$GITHUB_OUTPUT"
+            echo "is_mock=false" >> "$GITHUB_OUTPUT"
           else
-            TAG="${{ github.event.inputs.mock_version }}"
-            echo "release_name=[MOCK-UP] ${{ steps.app_info.outputs.app_name }} ${TAG}" >> "$GITHUB_OUTPUT"
-            echo "release_url=${REPO_URL}/releases/tag/${TAG}" >> "$GITHUB_OUTPUT"
+            echo "tag=${MOCK_VERSION}" >> "$GITHUB_OUTPUT"
+            echo "title=[MOCK-UP] ${{ steps.env.outputs.app_name }} ${MOCK_VERSION}" >> "$GITHUB_OUTPUT"
+            echo "url=${REPO_URL}/releases/tag/${MOCK_VERSION}" >> "$GITHUB_OUTPUT"
+            echo "is_mock=true" >> "$GITHUB_OUTPUT"
           fi
-      - name: Send Discord notification
+      - name: Build & send Discord embed
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-          APP_NAME: ${{ steps.app_info.outputs.app_name }}
-          RELEASE_NAME: ${{ steps.payload.outputs.release_name }}
-          RELEASE_URL: ${{ steps.payload.outputs.release_url }}
+          APP_NAME: ${{ steps.env.outputs.app_name }}
+          VERSION: ${{ steps.env.outputs.version }}
+          GAME_VERSION: ${{ steps.env.outputs.game_version }}
+          TAG: ${{ steps.meta.outputs.tag }}
+          TITLE: ${{ steps.meta.outputs.title }}
+          RELEASE_URL: ${{ steps.meta.outputs.url }}
+          REPO_URL: https://github.com/${{ github.repository }}
+          DISCORD_URL: https://discord.gg/sYcZwcT4cT
+          NEXUS_URL: ${{ vars.NEXUS_MOD_URL || 'https://www.nexusmods.com/palworld/mods/3190' }}
+          ICON_URL: https://raw.githubusercontent.com/${{ github.repository }}/main/resources/assets/icons/app/icon.png
+          IS_MOCK: ${{ steps.meta.outputs.is_mock }}
         run: |
-          payload=$(cat <<ENDJSON
-          {
-            "username": "${APP_NAME}",
-            "avatar_url": "https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/resources/assets/icons/app/icon.png",
-            "content": "${RELEASE_NAME}\n${RELEASE_URL}"
-          }
-          ENDJSON
+          python3 - <<'PYEOF'
+          import json, os, sys, urllib.request
+
+          app       = os.environ["APP_NAME"]
+          version   = os.environ["VERSION"]
+          game_ver  = os.environ["GAME_VERSION"]
+          tag       = os.environ["TAG"]
+          title     = os.environ["TITLE"]
+          rel_url   = os.environ["RELEASE_URL"]
+          repo_url  = os.environ["REPO_URL"]
+          discord   = os.environ["DISCORD_URL"]
+          nexus     = os.environ["NEXUS_URL"]
+          icon      = os.environ["ICON_URL"]
+          is_mock   = os.environ["IS_MOCK"] == "true"
+
+          # Discord embed color: green (0x57F287) for real releases,
+          # orange (0xFEE440) for mock/test runs.
+          color = 0xFEE440 if is_mock else 0x57F287
+
+          download_lines = [
+              f"🪟 **Windows**: `{app}-V{version}-win.exe`",
+              f"🐧 **Linux**: `{app}-V{version}-linux`",
+              f"🍎 **macOS**: `{app}-V{version}-macos.dmg`",
+          ]
+
+          links = (
+              f"📥 [GitHub Release]({rel_url})  •  "
+              f"📦 [Nexus Mods]({nexus})  •  "
+              f"💬 [Discord]({discord})"
           )
-          curl -sf -X POST "$WEBHOOK_URL" \
-            -H "Content-Type: application/json" \
-            -d "$payload"
-          echo "Notification sent successfully"
+
+          embed = {
+              "title": f"🚀 {title} is live!",
+              "url": rel_url,
+              "description": (
+                  f"**{app}** `{tag}` has been released.\n"
+                  f"\n".join(download_lines) + "\n\n"
+                  f"{links}"
+              ),
+              "color": color,
+              "thumbnail": {"url": icon},
+              "fields": [
+                  {"name": "App Version", "value": f"`{version}`", "inline": True},
+                  {"name": "Game Version", "value": f"`{game_ver}`", "inline": True},
+                  {"name": "Platforms", "value": "Win / Linux / macOS", "inline": True},
+              ],
+              "footer": {
+                  "text": f"{app} • {'[MOCK TEST]' if is_mock else 'New release'}",
+                  "icon_url": icon,
+              },
+          }
+
+          payload = {
+              "username": app,
+              "avatar_url": icon,
+              "embeds": [embed],
+          }
+
+          webhook = os.environ["WEBHOOK_URL"]
+          if not webhook:
+              print("::error::WEBHOOK_URL secret is not set")
+              sys.exit(1)
+
+          data = json.dumps(payload).encode("utf-8")
+          req = urllib.request.Request(
+              webhook,
+              data=data,
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(req) as resp:
+                  body = resp.read().decode("utf-8", "replace")
+                  print(f"Discord responded: HTTP {resp.status} {body or '(empty)'}")
+          except urllib.error.HTTPError as e:
+              print(f"::error::Discord returned HTTP {e.code}: {e.read().decode('utf-8', 'replace')}")
+              sys.exit(1)
+
+          print("Notification sent successfully")
+          PYEOF

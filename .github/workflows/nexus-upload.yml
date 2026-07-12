@@ -36,31 +36,40 @@ jobs:
             asset_glob: "PalworldSaveTools-V*-macos.dmg"
             file_id: "7648646"
     steps:
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
       - name: Resolve tag and version
         id: meta
         run: |
           tag="${{ inputs.tag || github.event.inputs.tag }}"
           if [ -z "$tag" ]; then
-            echo "No tag provided" >&2
+            echo "::error::No tag provided to nexus-upload workflow"
             exit 1
           fi
           version="${tag#v}"
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          {
+            echo "tag=$tag"
+            echo "version=$version"
+          } >> "$GITHUB_OUTPUT"
       - name: Download release asset
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release download "${{ steps.meta.outputs.tag }}" \
-            --repo "${{ github.repository }}" \
-            --pattern "${{ matrix.asset_glob }}" \
-            --dir .
+          set -euo pipefail
+          if ! gh release download "${{ steps.meta.outputs.tag }}" \
+              --repo "${{ github.repository }}" \
+              --pattern "${{ matrix.asset_glob }}" \
+              --dir .; then
+            echo "::error::Could not download asset matching '${{ matrix.asset_glob }}' from release '${{ steps.meta.outputs.tag }}'. Check that the build for ${{ matrix.variant }} was uploaded."
+            exit 1
+          fi
       - name: Ensure upload is a zip
         id: package
         run: |
           asset=$(ls ${{ matrix.asset_glob }} 2>/dev/null | head -1)
           if [ -z "$asset" ]; then
-            echo "No asset matching ${{ matrix.asset_glob }} in release ${{ steps.meta.outputs.tag }}" >&2
+            echo "::error::No asset matching '${{ matrix.asset_glob }}' found after download for ${{ matrix.variant }}."
             exit 1
           fi
           case "$asset" in

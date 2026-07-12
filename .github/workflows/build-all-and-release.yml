@@ -29,64 +29,33 @@ concurrency:
 jobs:
   prepare-source:
     runs-on: ubuntu-latest
+    outputs:
+      app_name: ${{ steps.env.outputs.app_name }}
+      version: ${{ steps.env.outputs.version }}
+      game_version: ${{ steps.env.outputs.game_version }}
     steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - uses: astral-sh/setup-uv@v8.3.2
-        with:
-          enable-cache: true
-          cache-dependency-glob: "requirements.txt"
-        continue-on-error: true
-      - name: Extract app info
-        id: app_info
-        run: |
-          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
-          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
-          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
-          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
       - name: Create source tarball
+        env:
+          APP_NAME: ${{ steps.env.outputs.app_name }}
+          VERSION: ${{ steps.env.outputs.version }}
         run: |
-          APP_NAME="${{ steps.app_info.outputs.app_name }}"
-          VERSION="${{ steps.app_info.outputs.version }}"
           git archive --format=tar.gz -o "${APP_NAME}-v${VERSION}-source.tar.gz" HEAD
-      - name: List built files
-        run: ls -la *.tar.gz || echo "source tarball not found"
+          ls -la *.tar.gz
       - uses: actions/upload-artifact@v7
         with:
           name: source-tarball
-          path: ${{ steps.app_info.outputs.app_name }}-*-source.tar.gz
+          path: ${{ steps.env.outputs.app_name }}-*-source.tar.gz
           if-no-files-found: error
 
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - uses: astral-sh/setup-uv@v8.3.2
-        with:
-          enable-cache: true
-          cache-dependency-glob: "requirements.txt"
-        continue-on-error: true
-      - name: Extract app info
-        id: app_info
-        shell: bash
-        run: |
-          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
-          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
-          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
-          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
       - name: Install dependencies
         run: |
           uv venv --clear
@@ -95,38 +64,19 @@ jobs:
         run: uv run python build/nuitka/build_nuitka.py --onefile
       - name: List built files
         shell: bash
-        run: |
-          echo "=== Files in dist/ ==="
-          ls -la dist/ || echo "dist/ directory not found"
+        run: ls -la dist/ || { echo "dist/ directory not found"; exit 1; }
       - uses: actions/upload-artifact@v7
         with:
           name: windows-build
-          path: dist/${{ steps.app_info.outputs.app_name }}-*.exe
+          path: dist/${{ steps.env.outputs.app_name }}-*.exe
           if-no-files-found: error
 
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - uses: astral-sh/setup-uv@v8.3.2
-        with:
-          enable-cache: true
-          cache-dependency-glob: "requirements.txt"
-        continue-on-error: true
-      - name: Extract app info
-        id: app_info
-        run: |
-          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
-          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
-          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
-          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
       - name: Install system deps
         run: |
           sudo apt-get update
@@ -138,38 +88,19 @@ jobs:
       - name: Build with Nuitka
         run: uv run python build/nuitka/build_nuitka.py --onefile
       - name: List built files
-        run: |
-          echo "=== Files in dist/ ==="
-          ls -la dist/ || echo "dist/ directory not found"
+        run: ls -la dist/ || { echo "dist/ directory not found"; exit 1; }
       - uses: actions/upload-artifact@v7
         with:
           name: linux-build
-          path: dist/${{ steps.app_info.outputs.app_name }}-*-linux
+          path: dist/${{ steps.env.outputs.app_name }}-*-linux
           if-no-files-found: error
 
   build-mac:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - uses: astral-sh/setup-uv@v8.3.2
-        with:
-          enable-cache: true
-          cache-dependency-glob: "requirements.txt"
-        continue-on-error: true
-      - name: Extract app info
-        id: app_info
-        run: |
-          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
-          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
-          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
-          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
       - name: Install dependencies
         run: |
           uv venv --clear
@@ -177,13 +108,11 @@ jobs:
       - name: Build macOS DMG
         run: uv run python build/macos_build.py --ad-hoc
       - name: List built files
-        run: |
-          echo "=== Files in dist/ ==="
-          ls -la dist/ || echo "dist/ directory not found"
+        run: ls -la dist/ || { echo "dist/ directory not found"; exit 1; }
       - uses: actions/upload-artifact@v7
         with:
           name: macos-build
-          path: dist/${{ steps.app_info.outputs.app_name }}-*-macos.dmg
+          path: dist/${{ steps.env.outputs.app_name }}-*-macos.dmg
           if-no-files-found: error
 
   create-release:
@@ -191,28 +120,11 @@ jobs:
     if: ${{ github.event.inputs.skip_github_release != 'true' }}
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.app_info.outputs.version }}
+      version: ${{ steps.env.outputs.version }}
     steps:
-      - uses: actions/checkout@v7
-        with:
-          submodules: recursive
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - uses: astral-sh/setup-uv@v8.3.2
-        with:
-          enable-cache: true
-          cache-dependency-glob: "requirements.txt"
-        continue-on-error: true
-      - name: Extract app info
-        id: app_info
-        run: |
-          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
-          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
-          GAME_VERSION=$(grep -m1 '^GAME_VERSION' src/common.py | cut -d"'" -f2)
-          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
-          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
-          echo "game_version=$GAME_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
       - uses: actions/download-artifact@v8
         with:
           path: artifacts
@@ -223,11 +135,11 @@ jobs:
         id: find_release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: v${{ steps.app_info.outputs.version }}
+          TAG: v${{ steps.env.outputs.version }}
         run: |
           # Confirm a release with this tag already exists (draft or published)
           if ! gh release view "$TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            echo "ERROR: No release found with tag '$TAG'. Untick 'append_only' or create the release first."
+            echo "::error::No release found with tag '$TAG'. Untick 'append_only' or create the release first."
             gh release list --repo "${{ github.repository }}" --limit 10
             exit 1
           fi
@@ -237,57 +149,32 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "v${{ steps.app_info.outputs.version }}" \
+          gh release upload "v${{ steps.env.outputs.version }}" \
             --repo "${{ github.repository }}" \
             artifacts/**/* \
             --clobber
-      - name: Generate release notes
+      - name: Render release notes from template
         if: ${{ github.event.inputs.append_only != 'true' }}
-        id: notes
         env:
-          APP_NAME: ${{ steps.app_info.outputs.app_name }}
-          VERSION: ${{ steps.app_info.outputs.version }}
-          GAME_VERSION: ${{ steps.app_info.outputs.game_version }}
+          APP_NAME: ${{ steps.env.outputs.app_name }}
+          VERSION: ${{ steps.env.outputs.version }}
+          GAME_VERSION: ${{ steps.env.outputs.game_version }}
+          REPO_URL: https://github.com/${{ github.repository }}
+          RELEASE_URL: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.env.outputs.version }}
+          DISCORD_URL: https://discord.gg/sYcZwcT4cT
+          NEXUS_URL: ${{ vars.NEXUS_MOD_URL || 'https://www.nexusmods.com/palworld/mods/3190' }}
         run: |
-          cat > release_notes.md <<EOF
-          # 🚀 Release v${VERSION}
-
-          ### 🛠️ Compatibility & Versions
-
-          * **App Version:** \`${VERSION}\`
-          * **Game Version:** \`${GAME_VERSION}\`
-
-          ---
-
-          <details>
-          <summary>🛠️ All-in-One Tools Update</summary>
-
-          ### 🚀 Updated:
-
-          ### 🔧 Fixed:
-
-          </details>
-
-          ---
-
-          ### 🤝 Support
-
-          If you encounter any bugs or have feedback, please:
-
-          * Open a GitHub issue:
-            https://github.com/deafdudecomputers/PalworldSaveTools/issues
-          * Join our Discord:
-            https://discord.gg/sYcZwcT4cT
-          * DM **Pylar1991** on Discord
-
-          *Thank you for using the tool!* 🙏
-          EOF
+          # Substitute ${VAR} placeholders from the template into release_notes.md
+          # envsubst reads the env vars exported above by name.
+          envsubst < .github/templates/release_notes.md > release_notes.md
+          echo "=== Rendered release notes ==="
+          cat release_notes.md
       - name: Create draft release (with notes)
         if: ${{ github.event.inputs.append_only != 'true' }}
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: v${{ steps.app_info.outputs.version }}
-          name: v${{ steps.app_info.outputs.version }}
+          tag_name: v${{ steps.env.outputs.version }}
+          name: v${{ steps.env.outputs.version }}
           body_path: release_notes.md
           draft: true
           prerelease: false
