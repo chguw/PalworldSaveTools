@@ -101,15 +101,12 @@ jobs:
               "title": f"🚀 {title} is live!",
               "url": rel_url,
               "description": (
-                  f"**{app}** `{tag}` has dropped! 🎉\n"
-                  + f"{links}"
+                  f"**{app}** `{tag}` has dropped! 🎉\n\n"
+                  + f"{links}\n\n"
+                  + f"App Version `{version}` - Game Version `{game_ver}`"
               ),
               "color": color,
               "thumbnail": {"url": icon},
-              "fields": [
-                  {"name": "App Version", "value": f"`{version}`", "inline": True},
-                  {"name": "Game Version", "value": f"`{game_ver}`", "inline": True},
-              ],
               "footer": {
                   "text": f"{app} • {'[MOCK TEST]' if is_mock else 'New release'}",
                   "icon_url": icon,
