@@ -56,16 +56,32 @@ jobs:
             echo "tag=$tag"
             echo "version=$version"
           } >> "$GITHUB_OUTPUT"
+      - name: List release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Assets in release ${{ steps.meta.outputs.tag }}:"
+          gh release view "${{ steps.meta.outputs.tag }}" \
+            --repo "${{ github.repository }}" \
+            --json assets \
+            --jq '.assets[].name // "  (no assets found)"' \
+            || echo "  (draft — gh view may not work on drafts)"
       - name: Download release asset
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          echo "Attempting to download asset matching: ${{ matrix.asset_glob }}"
           if ! gh release download "${{ steps.meta.outputs.tag }}" \
               --repo "${{ github.repository }}" \
               --pattern "${{ matrix.asset_glob }}" \
               --dir .; then
-            echo "::error::Could not download asset matching '${{ matrix.asset_glob }}' from release '${{ steps.meta.outputs.tag }}'. Check that the build for ${{ matrix.variant }} was uploaded."
+            echo "::error:: Could not download '${{ matrix.asset_glob }}' from release '${{ steps.meta.outputs.tag }}'."
+            echo "Available release assets:"
+            gh release view "${{ steps.meta.outputs.tag }}" \
+              --repo "${{ github.repository }}" \
+              --json assets \
+              --jq '.assets[].name // "(none)"' || echo "(draft — gh view failed)"
             exit 1
           fi
       - name: Ensure upload is a zip
