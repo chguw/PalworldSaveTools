@@ -30,7 +30,6 @@ jobs:
             artifact_name: windows-build
             artifact_glob: "*.exe"
             use_appimage: false
-            use_sfx: true
           - os: ubuntu-latest
             platform: linux
             build_mode: --onefile
@@ -39,7 +38,6 @@ jobs:
             artifact_name: linux-build
             artifact_glob: "*-linux.AppImage"
             use_appimage: true
-            use_sfx: false
           - os: macos-latest
             platform: macos
             build_mode: --onedir
@@ -48,7 +46,6 @@ jobs:
             artifact_name: macos-build
             artifact_glob: "*-macos.dmg"
             use_appimage: false
-            use_sfx: false
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -79,16 +76,9 @@ jobs:
         # GitHub runners lack a usable FUSE mount namespace, so appimagetool
         # runs in extract-and-run mode inside linux_build.py.
         run: uv run python build/linux_build.py --appimage-extract-and-run
-      - name: Install Inno Setup (Windows installer)
-        if: ${{ matrix.use_sfx && steps.cache-dist.outputs.cache-hit != 'true' }}
-        shell: powershell
-        run: choco install innosetup --no-progress -y
-      - name: Build & package Windows installer
-        if: ${{ matrix.use_sfx && steps.cache-dist.outputs.cache-hit != 'true' }}
-        run: uv run python build/windows_build.py
-      - name: Build with Nuitka (Windows, legacy)
-        if: ${{ matrix.platform != 'macos' && !matrix.use_appimage && !matrix.use_sfx && steps.cache-dist.outputs.cache-hit != 'true' }}
-        run: uv run python build/nuitka/build_nuitka.py ${{ matrix.build_mode }}
+      - name: Build with Nuitka (Windows)
+        if: ${{ matrix.platform == 'windows' && steps.cache-dist.outputs.cache-hit != 'true' }}
+        run: uv run python build/nuitka/build_nuitka.py --onefile
       - name: Build macOS DMG
         if: ${{ matrix.platform == 'macos' && steps.cache-dist.outputs.cache-hit != 'true' }}
         run: uv run python build/macos_build.py --ad-hoc

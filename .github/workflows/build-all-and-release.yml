@@ -75,12 +75,9 @@ jobs:
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka
-      - name: Install Inno Setup (for installer packaging)
+      - name: Build with Nuitka
         if: steps.cache-dist.outputs.cache-hit != 'true'
-        run: choco install innosetup --no-progress -y
-      - name: Build & package Windows installer
-        if: steps.cache-dist.outputs.cache-hit != 'true'
-        run: uv run python build/windows_build.py
+        run: uv run python build/nuitka/build_nuitka.py --onefile
       - name: List built files
         shell: bash
         run: ls -la dist/ || { echo "dist/ directory not found"; exit 1; }
