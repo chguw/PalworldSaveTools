@@ -30,7 +30,7 @@ jobs:
             asset_glob: "PalworldSaveTools-V*-win.exe"
             file_id: "7648655"
           - variant: linux
-            asset_glob: "PalworldSaveTools-V*-linux"
+            asset_glob: "PalworldSaveTools-V*-linux.AppImage"
             file_id: "7648652"
           - variant: macos
             asset_glob: "PalworldSaveTools-V*-macos.dmg"

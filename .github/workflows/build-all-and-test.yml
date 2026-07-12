@@ -29,13 +29,15 @@ jobs:
             extra_deps: ""
             artifact_name: windows-build
             artifact_glob: "*.exe"
+            use_appimage: false
           - os: ubuntu-latest
             platform: linux
             build_mode: --onefile
-            system_deps: "patchelf file"
+            system_deps: "patchelf file wget libfuse2"
             extra_deps: ""
             artifact_name: linux-build
-            artifact_glob: "*-linux"
+            artifact_glob: "*-linux.AppImage"
+            use_appimage: true
           - os: macos-latest
             platform: macos
             build_mode: --onedir
@@ -43,6 +45,7 @@ jobs:
             extra_deps: "imageio"
             artifact_name: macos-build
             artifact_glob: "*-macos.dmg"
+            use_appimage: false
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -61,8 +64,13 @@ jobs:
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka ${{ matrix.extra_deps }}
-      - name: Build with Nuitka
-        if: ${{ matrix.platform != 'macos' }}
+      - name: Build AppImage (Linux)
+        if: ${{ matrix.use_appimage }}
+        # GitHub runners lack a usable FUSE mount namespace, so appimagetool
+        # runs in extract-and-run mode inside linux_build.py.
+        run: uv run python build/linux_build.py --appimage-extract-and-run
+      - name: Build with Nuitka (Windows)
+        if: ${{ matrix.platform != 'macos' && !matrix.use_appimage }}
         run: uv run python build/nuitka/build_nuitka.py ${{ matrix.build_mode }}
       - name: Build macOS DMG
         if: ${{ matrix.platform == 'macos' }}

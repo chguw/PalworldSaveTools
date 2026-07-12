@@ -1,0 +1,253 @@
+#!/usr/bin/env python3
+"""
+Linux build → AppImage, all in one command.
+
+Builds a Nuitka onefile executable, then wraps it (plus the app icon) into a
+portable AppImage using appimagetool. The AppImage runs on any modern x86_64
+Linux with FUSE; users without FUSE can `--appimage-extract-and-run`.
+
+Usage:
+    uv run python build/linux_build.py              # build AppImage
+    uv run python build/linux_build.py --appimage-extract-and-run
+                                                     # build + run appimagetool
+                                                     # in extracted mode (FUSE-less
+                                                     # CI environments)
+"""
+
+import os
+import sys
+import shutil
+import subprocess
+import argparse
+
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, '..'))
+os.chdir(ROOT_DIR)
+
+DIST_DIR = os.path.join(ROOT_DIR, 'dist')
+RES_DIR = os.path.join(ROOT_DIR, 'resources')
+ICON_SRC = os.path.join(RES_DIR, 'assets', 'icons', 'app', 'icon.png')
+
+APPIMAGETOOL_URL = (
+    'https://github.com/AppImage/AppImageKit/releases/download/continuous/'
+    'appimagetool-x86_64.AppImage'
+)
+
+
+# ── helpers ──────────────────────────────────────────────────────────────
+
+def get_app_version() -> str:
+    common_file = os.path.join('src', 'common.py')
+    if not os.path.exists(common_file):
+        return 'unknown'
+    with open(common_file, 'r') as f:
+        for line in f:
+            if line.strip().startswith('APP_VERSION'):
+                return line.split('=')[1].strip().strip('"').strip("'")
+    return 'unknown'
+
+
+def get_app_name() -> str:
+    common_file = os.path.join('src', 'common.py')
+    if not os.path.exists(common_file):
+        return 'PalworldSaveTools'
+    with open(common_file, 'r') as f:
+        for line in f:
+            if line.strip().startswith('APP_NAME'):
+                return line.split('=')[1].strip().strip('"').strip("'")
+    return 'PalworldSaveTools'
+
+
+def run(cmd: list, desc: str = ''):
+    if desc:
+        print(f'── {desc} ──')
+    print(f'$ {" ".join(cmd)}')
+    result = subprocess.run(cmd)
+    if result.returncode != 0:
+        print(f'ERROR: step failed with exit code {result.returncode}')
+        sys.exit(result.returncode)
+    return result
+
+
+# ── steps ────────────────────────────────────────────────────────────────
+
+def build_nuitka_onefile():
+    """Run the existing Nuitka build script in --onefile mode."""
+    run(['uv', 'run', 'python', 'build/nuitka/build_nuitka.py', '--onefile'],
+        'Building with Nuitka (onefile)')
+
+
+def find_onefile_binary(app_name: str, version: str) -> str:
+    """Locate the Nuitka onefile binary in dist/."""
+    candidate = os.path.join(DIST_DIR, f'{app_name}-V{version}-linux')
+    if os.path.exists(candidate) and os.access(candidate, os.X_OK):
+        return candidate
+    # Fallback: any executable matching the naming pattern
+    import glob
+    matches = glob.glob(os.path.join(DIST_DIR, f'{app_name}-V*-linux'))
+    matches = [m for m in matches if os.path.isfile(m) and os.access(m, os.X_OK)]
+    if not matches:
+        print(f'ERROR: No onefile binary found in dist/ matching '
+              f'{app_name}-V*-linux')
+        print(f'Contents of dist/: {os.listdir(DIST_DIR)}')
+        sys.exit(1)
+    return matches[0]
+
+
+def ensure_appimagetool(extract_and_run: bool) -> str:
+    """
+    Ensure appimagetool is available locally. Returns the command prefix
+    needed to invoke it (either the AppImage path directly, or a wrapper
+    that extracts-and-runs for FUSE-less environments).
+    """
+    cache_path = os.path.join(DIST_DIR, '.cache', 'appimagetool-x86_64.AppImage')
+    if not os.path.exists(cache_path):
+        os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+        print(f'Downloading appimagetool...')
+        run(['wget', '-q', '-O', cache_path, APPIMAGETOOL_URL],
+            'Fetching appimagetool')
+    os.chmod(cache_path, 0o755)
+
+    if extract_and_run:
+        # Extract once into a sibling dir; run the extracted AppRun.
+        extracted_dir = cache_path + '.extracted'
+        if not os.path.isdir(extracted_dir):
+            print('Extracting appimagetool (FUSE-less mode)...')
+            run([cache_path, '--appimage-extract'],
+                'Extracting appimagetool')
+            # --appimage-extract creates ./squashfs-root next to the AppImage
+            squashfs = os.path.join(os.path.dirname(cache_path), 'squashfs-root')
+            if os.path.isdir(squashfs):
+                shutil.move(squashfs, extracted_dir)
+        return [os.path.join(extracted_dir, 'AppRun')]
+    return [cache_path]
+
+
+def assemble_appdir(appdir: str, binary_path: str, app_name: str, version: str):
+    """
+    Build the AppDir structure that appimagetool packages:
+        AppDir/
+          AppRun                          (shell launcher)
+          {app_name}.desktop              (FreeDesktop entry)
+          {app_name}.png                  (icon)
+          usr/bin/{app_name}              (the onefile binary)
+    """
+    if os.path.exists(appdir):
+        shutil.rmtree(appdir)
+    os.makedirs(os.path.join(appdir, 'usr', 'bin'))
+
+    # 1. The onefile binary
+    dest_bin = os.path.join(appdir, 'usr', 'bin', app_name)
+    print(f'Copying onefile binary → {dest_bin}')
+    shutil.copy2(binary_path, dest_bin)
+    os.chmod(dest_bin, 0o755)
+
+    # 2. AppRun launcher (shell wrapper, exec's relative to $APPDIR)
+    apprun_path = os.path.join(appdir, 'AppRun')
+    apprun_content = f"""#!/usr/bin/env bash
+# AppRun launcher for {app_name} (generated by build/linux_build.py)
+# Resolves the bundled onefile binary relative to the mounted AppImage ($APPDIR).
+set -e
+APPDIR="${{APPDIR:-$(dirname "$(readlink -f "$0")")}}"
+exec "$APPDIR/usr/bin/{app_name}" "$@"
+"""
+    with open(apprun_path, 'w', encoding='utf-8', newline='\n') as f:
+        f.write(apprun_content)
+    os.chmod(apprun_path, 0o755)
+    print(f'Wrote AppRun → {apprun_path}')
+
+    # 3. .desktop entry (FreeDesktop spec)
+    desktop_path = os.path.join(appdir, f'{app_name}.desktop')
+    desktop_content = f"""[Desktop Entry]
+Type=Application
+Name=Palworld Save Tools
+Comment=All-in-one Palworld save file editor (v{version})
+Exec={app_name}
+Icon={app_name}
+Terminal=false
+Categories=Game;Utility;
+StartupWMClass={app_name}
+"""
+    with open(desktop_path, 'w', encoding='utf-8', newline='\n') as f:
+        f.write(desktop_content)
+    print(f'Wrote .desktop → {desktop_path}')
+
+    # 4. Icon (renamed to match the Icon= field above)
+    if not os.path.exists(ICON_SRC):
+        print(f'ERROR: icon not found at {ICON_SRC}')
+        sys.exit(1)
+    dest_icon = os.path.join(appdir, f'{app_name}.png')
+    shutil.copy2(ICON_SRC, dest_icon)
+    print(f'Copied icon → {dest_icon}')
+
+
+def package_appimage(appdir: str, app_name: str, version: str,
+                     appimagetool_cmd: list) -> str:
+    """
+    Run appimagetool against the AppDir, producing the final .AppImage.
+    Returns the output path.
+    """
+    out_name = f'{app_name}-V{version}-linux.AppImage'
+    out_path = os.path.join(DIST_DIR, out_name)
+    if os.path.exists(out_path):
+        os.remove(out_path)
+    cmd = appimagetool_cmd + [appdir, out_path]
+    run(cmd, f'Packaging AppImage → {out_name}')
+
+    size_mb = os.path.getsize(out_path) / (1024 * 1024)
+    print(f'AppImage created: {out_path} ({size_mb:.1f} MB)')
+    return out_path
+
+
+# ── main ─────────────────────────────────────────────────────────────────
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Linux build + AppImage packaging (one command)'
+    )
+    parser.add_argument(
+        '--appimage-extract-and-run', action='store_true',
+        help='Run appimagetool in extracted mode (for FUSE-less CI environments)'
+    )
+    args = parser.parse_args()
+
+    version = get_app_version()
+    app_name = get_app_name()
+    print(f'Building {app_name} v{version} for Linux (AppImage)')
+
+    # Step 1: Nuitka build → onefile binary
+    build_nuitka_onefile()
+
+    # Step 2: Locate the onefile binary
+    binary_path = find_onefile_binary(app_name, version)
+    print(f'Found onefile binary: {binary_path}')
+
+    # Step 3: Assemble the AppDir
+    appdir = os.path.join(DIST_DIR, '.appimage_staging', f'{app_name}.AppDir')
+    assemble_appdir(appdir, binary_path, app_name, version)
+
+    # Step 4: Ensure appimagetool is available
+    extract_and_run = args.appimage_extract_and_run
+    appimagetool_cmd = ensure_appimagetool(extract_and_run)
+
+    # Step 5: Package into AppImage
+    appimage_path = package_appimage(
+        appdir, app_name, version, appimagetool_cmd
+    )
+
+    # Step 6: Clean staging
+    staging_root = os.path.join(DIST_DIR, '.appimage_staging')
+    if os.path.isdir(staging_root):
+        shutil.rmtree(staging_root, ignore_errors=True)
+
+    # Also remove the raw onefile binary — AppImage is the sole Linux artifact
+    if os.path.exists(binary_path):
+        os.remove(binary_path)
+        print(f'Removed raw onefile binary ({os.path.basename(binary_path)}) — '
+              f'AppImage is the sole Linux artifact')
+
+    print(f'\n✓ Linux build complete: {appimage_path}')
+
+
+if __name__ == '__main__':
+    main()

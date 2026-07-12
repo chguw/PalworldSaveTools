@@ -30,7 +30,7 @@
 | Platform | File |
 |---|---|
 | 🪟 Windows | `${APP_NAME}-V${VERSION}-win.exe` |
-| 🐧 Linux   | `${APP_NAME}-V${VERSION}-linux` |
+| 🐧 Linux   | `${APP_NAME}-V${VERSION}-linux.AppImage` |
 | 🍎 macOS   | `${APP_NAME}-V${VERSION}-macos.dmg` |
 
 Full release: ${RELEASE_URL}

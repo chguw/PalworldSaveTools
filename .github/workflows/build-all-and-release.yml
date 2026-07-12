@@ -92,19 +92,21 @@ jobs:
       - name: Install system deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y patchelf file
+          sudo apt-get install -y patchelf file wget libfuse2
       - name: Install dependencies
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka
-      - name: Build with Nuitka
-        run: uv run python build/nuitka/build_nuitka.py --onefile
+      - name: Build AppImage
+        # GitHub runners lack a usable FUSE mount namespace, so appimagetool
+        # runs in extract-and-run mode inside linux_build.py.
+        run: uv run python build/linux_build.py --appimage-extract-and-run
       - name: List built files
         run: ls -la dist/ || { echo "dist/ directory not found"; exit 1; }
       - uses: actions/upload-artifact@v7
         with:
           name: linux-build
-          path: dist/${{ steps.env.outputs.app_name }}-*-linux
+          path: dist/${{ steps.env.outputs.app_name }}-*-linux.AppImage
           if-no-files-found: error
 
   build-mac:
