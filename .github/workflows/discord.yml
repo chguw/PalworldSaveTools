@@ -2,6 +2,12 @@ name: Discord Release Notification
 
 # Fires when a GitHub release is published, OR on demand for testing.
 # Sends a rich embed to Discord with links to GitHub, Nexus Mods, and Discord.
+#
+# Mock / dry-run behavior:
+#   - Real 'release: published' events ALWAYS send.
+#   - Manual 'workflow_dispatch' runs default to dry_run=true, which renders the
+#     full payload and prints it WITHOUT sending. Set dry_run=false to actually
+#     post the mock message to Discord.
 on:
   release:
     types: [published]
@@ -11,6 +17,11 @@ on:
         description: "Mock version tag for testing (e.g., v0.0.0)"
         required: false
         default: "v0.0.0"
+      dry_run:
+        description: "Dry run (render payload without sending)"
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   send-notification:
@@ -38,15 +49,22 @@ jobs:
             echo "title=${RELEASE_NAME:-${RELEASE_TAG}}" >> "$GITHUB_OUTPUT"
             echo "url=${RELEASE_URL}" >> "$GITHUB_OUTPUT"
             echo "is_mock=false" >> "$GITHUB_OUTPUT"
+            # Real releases always send.
+            echo "should_send=true" >> "$GITHUB_OUTPUT"
           else
             echo "tag=${MOCK_VERSION}" >> "$GITHUB_OUTPUT"
             echo "title=[MOCK-UP] ${{ steps.env.outputs.app_name }} ${MOCK_VERSION}" >> "$GITHUB_OUTPUT"
             echo "url=${REPO_URL}/releases/tag/${MOCK_VERSION}" >> "$GITHUB_OUTPUT"
             echo "is_mock=true" >> "$GITHUB_OUTPUT"
+            # Manual runs honor the dry_run input.
+            if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+              echo "should_send=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "should_send=true" >> "$GITHUB_OUTPUT"
+            fi
           fi
-      - name: Build & send Discord embed
+      - name: Build Discord payload
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
           APP_NAME: ${{ steps.env.outputs.app_name }}
           VERSION: ${{ steps.env.outputs.version }}
           GAME_VERSION: ${{ steps.env.outputs.game_version }}
@@ -60,9 +78,9 @@ jobs:
           IS_MOCK: ${{ steps.meta.outputs.is_mock }}
         run: |
           python3 - <<'PYEOF'
-          import json, os, sys, urllib.request
+          import json, os
 
-          app       = os.environ["APP_NAME"]
+          app      = os.environ["APP_NAME"]
           version   = os.environ["VERSION"]
           game_ver  = os.environ["GAME_VERSION"]
           tag       = os.environ["TAG"]
@@ -117,25 +135,38 @@ jobs:
               "embeds": [embed],
           }
 
-          webhook = os.environ["WEBHOOK_URL"]
-          if not webhook:
-              print("::error::WEBHOOK_URL secret is not set")
-              sys.exit(1)
+          with open("payload.json", "w", encoding="utf-8") as f:
+              json.dump(payload, f, ensure_ascii=False, indent=2)
 
-          data = json.dumps(payload).encode("utf-8")
-          req = urllib.request.Request(
-              webhook,
-              data=data,
-              headers={"Content-Type": "application/json"},
-              method="POST",
-          )
-          try:
-              with urllib.request.urlopen(req) as resp:
-                  body = resp.read().decode("utf-8", "replace")
-                  print(f"Discord responded: HTTP {resp.status} {body or '(empty)'}")
-          except urllib.error.HTTPError as e:
-              print(f"::error::Discord returned HTTP {e.code}: {e.read().decode('utf-8', 'replace')}")
-              sys.exit(1)
-
-          print("Notification sent successfully")
+          print("=== Rendered payload (payload.json) ===")
+          print(json.dumps(payload, ensure_ascii=False, indent=2))
           PYEOF
+      - name: Send to Discord (or skip in dry run)
+        if: always()
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          SHOULD_SEND: ${{ steps.meta.outputs.should_send }}
+        run: |
+          if [ "$SHOULD_SEND" != "true" ]; then
+            echo "::notice::Dry run — payload rendered but NOT sent. To send a manual test, re-run with dry_run=false."
+            exit 0
+          fi
+          if [ -z "$WEBHOOK_URL" ]; then
+            echo "::error::WEBHOOK_URL secret is not set"
+            exit 1
+          fi
+          # POST via curl: urllib's User-Agent is blocked by Cloudflare (HTTP 403 / error 1010).
+          # curl uses an accepted signature and lets us surface Discord's response clearly.
+          response=$(curl -sS -w "\n%{http_code}" -X POST "$WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            --data-binary @payload.json)
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          echo "Discord responded: HTTP $http_code"
+          echo "Body: ${body:-(empty)}"
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "Notification sent successfully"
+          else
+            echo "::error::Discord returned HTTP $http_code: $body"
+            exit 1
+          fi
