@@ -436,6 +436,14 @@ def coerce_bytes(value: Any) -> bytes:
     if isinstance(value, str):
         return base64.b64decode(value)
     return bytes(value)
+def without_custom_type(properties: dict[str, Any]) -> dict[str, Any]:
+    return {k: v for k, v in properties.items() if k != "custom_type"}
+def encoded_raw_data(
+    raw_data: dict[str, Any], encoder: Callable, *args: Any
+) -> dict[str, Any]:
+    if "values" in raw_data["value"]:
+        return raw_data
+    return {**raw_data, "value": {"values": encoder(raw_data["value"], *args)}}
 class FArchiveWriter:
     data: io.BytesIO
     size: int
