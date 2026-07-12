@@ -206,9 +206,25 @@ jobs:
           DISCORD_URL: https://discord.gg/sYcZwcT4cT
           NEXUS_URL: ${{ vars.NEXUS_MOD_URL || 'https://www.nexusmods.com/palworld/mods/3190' }}
         run: |
-          # Substitute ${VAR} placeholders from the template into release_notes.md
+          # --- Extract changelog entry for this version ---
+          # Finds content between '#<version>' and the next '#' or EOF.
+          awk '/^#[0-9]/{if (found) exit; if ($0 == "#'"${VERSION}"'") found=1; next} found' \
+            changelogs.md > /tmp/changelog_entry.md 2>/dev/null || true
+          if [ ! -s /tmp/changelog_entry.md ]; then
+            echo "No changelog entry for v${VERSION} yet." > /tmp/changelog_entry.md
+          fi
+
+          # --- Substitute ${VAR} placeholders ---
           # envsubst reads the env vars exported above by name.
-          envsubst < .github/templates/release_notes.md > release_notes.md
+          envsubst < .github/templates/release_notes.md > /tmp/notes_partial.md
+
+          # --- Inject changelog entry at the __ marker ---
+          sed -i '/__CHANGELOG_ENTRY__/{
+            r /tmp/changelog_entry.md
+            d
+          }' /tmp/notes_partial.md
+
+          mv /tmp/notes_partial.md release_notes.md
           echo "=== Rendered release notes ==="
           cat release_notes.md
       - name: Create draft release (with notes)

@@ -12,14 +12,14 @@
        ${RELEASE_URL}     direct link to this release's tag
        ${DISCORD_URL}     https://discord.gg/sYcZwcT4cT
        ${NEXUS_URL}       Nexus Mods mod page
-     Unused / blank sections can be deleted or left empty.
+       __CHANGELOG_ENTRY__ replaced from changelogs.md for this version
+       Uses __CHANGELOG_ENTRY__ as a literal marker for multiline insertion.
 -->
 <!-- ────────────────────────────────────────────────────────────────────────── -->
 
 # 🚀 ${APP_NAME} v${VERSION}
 
-### 🛠️ Compatibility & Versions
-
+### 🛠️ Compatibility
 * **App Version:** `${VERSION}`
 * **Game Version:** `${GAME_VERSION}`
 
@@ -33,36 +33,21 @@
 | 🐧 Linux   | `${APP_NAME}-V${VERSION}-linux.AppImage` |
 | 🍎 macOS   | `${APP_NAME}-V${VERSION}-macos.dmg` |
 
-Full release: ${RELEASE_URL}
+📥 Full release: ${RELEASE_URL}
 
 ---
 
-<details>
-<summary>🧰 All-in-One Tools Update</summary>
+### 📝 Changelog
 
-### 🚀 Added
-
--
-
-### ✨ Updated
-
--
-
-### 🔧 Fixed
-
--
-
-</details>
+__CHANGELOG_ENTRY__
 
 ---
 
 ### 🤝 Support
 
-If you encounter any bugs or have feedback, please:
-
-* 🐛 Open a GitHub issue: ${REPO_URL}/issues
-* 💬 Join our Discord: ${DISCORD_URL}
-* 📥 Also available on Nexus Mods: ${NEXUS_URL}
+* 🐛 [Open a GitHub issue](${REPO_URL}/issues)
+* 💬 [Join our Discord](${DISCORD_URL})
+* 📦 [Nexus Mods page](${NEXUS_URL})
 * 📩 DM **Pylar1991** on Discord
 
 *Thank you for using ${APP_NAME}!* 🙏
