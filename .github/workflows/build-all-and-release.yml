@@ -8,6 +8,11 @@ on:
         required: false
         default: false
         type: boolean
+      upload_to_nexus:
+        description: "Upload built files to Nexus Mods"
+        required: false
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -281,3 +286,65 @@ jobs:
           files: artifacts/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-nexus:
+    needs: create-release
+    if: ${{ github.event.inputs.upload_to_nexus == 'true' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: windows
+            artifact_name: windows-build
+            asset_glob: "PalworldSaveTools-V*-nk-win.exe"
+            file_id: "7648655"
+          - variant: linux
+            artifact_name: linux-build
+            asset_glob: "PalworldSaveTools-V*-nk-linux"
+            file_id: "7648652"
+          - variant: macos
+            artifact_name: macos-build
+            asset_glob: "PalworldSaveTools-V*-nk-macos.dmg"
+            file_id: "7648646"
+    steps:
+      - uses: actions/checkout@v7
+      - name: Extract app info
+        id: app_info
+        run: |
+          APP_NAME=$(grep -m1 '^APP_NAME' src/common.py | cut -d"'" -f2)
+          APP_VERSION=$(grep -m1 '^APP_VERSION' src/common.py | cut -d"'" -f2)
+          echo "app_name=$APP_NAME" >> "$GITHUB_OUTPUT"
+          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: dist
+      - name: Ensure upload is a zip
+        id: package
+        run: |
+          asset=$(ls dist/${{ matrix.asset_glob }} 2>/dev/null | head -1)
+          if [ -z "$asset" ]; then
+            echo "No asset matching ${{ matrix.asset_glob }} in ${{ matrix.artifact_name }}" >&2
+            exit 1
+          fi
+          case "$asset" in
+            *.zip)
+              echo "upload_file=$asset" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              zip_name="${asset%.*}.zip"
+              zip -j "$zip_name" "$asset"
+              echo "upload_file=$zip_name" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+      - name: Upload to Nexus Mods
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.8
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_id: ${{ matrix.file_id }}
+          filename: ${{ steps.package.outputs.upload_file }}
+          version: ${{ steps.app_info.outputs.version }}
+          display_name: v${{ steps.app_info.outputs.version }}_${{ matrix.variant }}
+          archive_existing_version: true
