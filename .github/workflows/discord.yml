@@ -116,6 +116,7 @@ jobs:
           payload = {
               "username": app,
               "avatar_url": icon,
+              "content": "" if is_mock else "<@&1525904392086356028>",
               "embeds": [embed],
           }
 
