@@ -311,7 +311,7 @@ jobs:
             file_id: "7648652"
           - variant: macos
             artifact_name: macos-build
-            asset_glob: "PalworldSaveTools-V*-nk-macos.dmg"
+            asset_glob: "PalworldSaveTools-*-macos.dmg"
             file_id: "7648646"
     steps:
       - uses: actions/checkout@v7
