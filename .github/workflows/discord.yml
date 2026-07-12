@@ -71,8 +71,6 @@ jobs:
           TAG: ${{ steps.meta.outputs.tag }}
           TITLE: ${{ steps.meta.outputs.title }}
           RELEASE_URL: ${{ steps.meta.outputs.url }}
-          REPO_URL: https://github.com/${{ github.repository }}
-          DISCORD_URL: https://discord.gg/sYcZwcT4cT
           NEXUS_URL: ${{ vars.NEXUS_MOD_URL || 'https://www.nexusmods.com/palworld/mods/3190' }}
           ICON_URL: https://raw.githubusercontent.com/${{ github.repository }}/main/resources/assets/icons/app/icon.png
           IS_MOCK: ${{ steps.meta.outputs.is_mock }}
@@ -86,8 +84,6 @@ jobs:
           tag       = os.environ["TAG"]
           title     = os.environ["TITLE"]
           rel_url   = os.environ["RELEASE_URL"]
-          repo_url  = os.environ["REPO_URL"]
-          discord   = os.environ["DISCORD_URL"]
           nexus     = os.environ["NEXUS_URL"]
           icon      = os.environ["ICON_URL"]
           is_mock   = os.environ["IS_MOCK"] == "true"
@@ -96,24 +92,16 @@ jobs:
           # orange (0xFEE440) for mock/test runs.
           color = 0xFEE440 if is_mock else 0x57F287
 
-          download_lines = [
-              f"🪟 **Windows**: `{app}-V{version}-win.exe`",
-              f"🐧 **Linux**: `{app}-V{version}-linux`",
-              f"🍎 **macOS**: `{app}-V{version}-macos.dmg`",
-          ]
-
           links = (
               f"📥 [GitHub Release]({rel_url})  •  "
-              f"📦 [Nexus Mods]({nexus})  •  "
-              f"💬 [Discord]({discord})"
+              f"📦 [Nexus Mods]({nexus})"
           )
 
           embed = {
               "title": f"🚀 {title} is live!",
               "url": rel_url,
               "description": (
-                  f"**{app}** `{tag}` has been released.\n\n"
-                  + "\n".join(download_lines) + "\n\n"
+                  f"**{app}** `{tag}` has dropped! 🎉\n"
                   + f"{links}"
               ),
               "color": color,
@@ -121,7 +109,6 @@ jobs:
               "fields": [
                   {"name": "App Version", "value": f"`{version}`", "inline": True},
                   {"name": "Game Version", "value": f"`{game_ver}`", "inline": True},
-                  {"name": "Platforms", "value": "Win / Linux / macOS", "inline": True},
               ],
               "footer": {
                   "text": f"{app} • {'[MOCK TEST]' if is_mock else 'New release'}",
