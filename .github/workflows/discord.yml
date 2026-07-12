@@ -89,8 +89,8 @@ jobs:
           is_mock   = os.environ["IS_MOCK"] == "true"
 
           # Discord embed color: green (0x57F287) for real releases,
-          # orange (0xFEE440) for mock/test runs.
-          color = 0xFEE440 if is_mock else 0x57F287
+          # light blue (0x7AB8E8) for mock/test runs.
+          color = 0x7AB8E8 if is_mock else 0x57F287
 
           links = (
               f"📥 [GitHub Release]({rel_url})  •  "
