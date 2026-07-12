@@ -112,9 +112,9 @@ jobs:
         run: |
           uv venv --clear
           uv pip install -r requirements.txt nuitka
-      - name: Install 7-Zip (for SFX packaging)
-        run: choco install 7zip.install --no-progress -y
-      - name: Build & package Windows SFX
+      - name: Install Inno Setup (for installer packaging)
+        run: choco install innosetup --no-progress -y
+      - name: Build & package Windows installer
         run: uv run python build/windows_build.py
       - name: Verify build output
         shell: bash

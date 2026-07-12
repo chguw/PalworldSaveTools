@@ -72,11 +72,11 @@ jobs:
         # GitHub runners lack a usable FUSE mount namespace, so appimagetool
         # runs in extract-and-run mode inside linux_build.py.
         run: uv run python build/linux_build.py --appimage-extract-and-run
-      - name: Install 7-Zip (Windows SFX)
+      - name: Install Inno Setup (Windows installer)
         if: ${{ matrix.use_sfx }}
         shell: powershell
-        run: choco install 7zip.install --no-progress -y
-      - name: Build & package Windows SFX
+        run: choco install innosetup --no-progress -y
+      - name: Build & package Windows installer
         if: ${{ matrix.use_sfx }}
         run: uv run python build/windows_build.py
       - name: Build with Nuitka (Windows, legacy)
