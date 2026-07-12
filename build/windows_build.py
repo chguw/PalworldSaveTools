@@ -80,15 +80,15 @@ def build_nuitka_onedir():
 
 def find_dist_dir(app_name: str, version: str) -> str:
     """Locate the Nuitka onedir dist directory in dist/."""
-    candidate = os.path.join(DIST_DIR, f'{app_name}-V{version}-win.dist')
+    candidate = os.path.join(DIST_DIR, f'{app_name}-V{version}-win.exe.dist')
     if os.path.isdir(candidate):
         return candidate
-    # Fallback: any .dist dir matching the pattern
+    # Fallback: any .dist dir matching the naming pattern
     import glob
-    matches = sorted(glob.glob(os.path.join(DIST_DIR, f'{app_name}-V*-win.dist')))
+    matches = sorted(glob.glob(os.path.join(DIST_DIR, f'{app_name}-V*-win.exe.dist')))
     if not matches:
         print(f'ERROR: No onedir dist directory found matching '
-              f'{app_name}-V*-win.dist')
+              f'{app_name}-V*-win.exe.dist')
         print(f'Contents of dist/: {os.listdir(DIST_DIR)}')
         sys.exit(1)
     return matches[0]
