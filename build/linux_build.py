@@ -94,12 +94,8 @@ def find_onefile_binary(app_name: str, version: str) -> str:
     return matches[0]
 
 
-def ensure_appimagetool(extract_and_run: bool) -> str:
-    """
-    Ensure appimagetool is available locally. Returns the command prefix
-    needed to invoke it (either the AppImage path directly, or a wrapper
-    that extracts-and-runs for FUSE-less environments).
-    """
+def ensure_appimagetool() -> str:
+    """Download appimagetool if not already cached. Returns the AppImage path."""
     cache_path = os.path.join(DIST_DIR, '.cache', 'appimagetool-x86_64.AppImage')
     if not os.path.exists(cache_path):
         os.makedirs(os.path.dirname(cache_path), exist_ok=True)
@@ -107,20 +103,7 @@ def ensure_appimagetool(extract_and_run: bool) -> str:
         run(['wget', '-q', '-O', cache_path, APPIMAGETOOL_URL],
             'Fetching appimagetool')
     os.chmod(cache_path, 0o755)
-
-    if extract_and_run:
-        # Extract once into a sibling dir; run the extracted AppRun.
-        extracted_dir = cache_path + '.extracted'
-        if not os.path.isdir(extracted_dir):
-            print('Extracting appimagetool (FUSE-less mode)...')
-            run([cache_path, '--appimage-extract'],
-                'Extracting appimagetool')
-            # --appimage-extract creates ./squashfs-root next to the AppImage
-            squashfs = os.path.join(os.path.dirname(cache_path), 'squashfs-root')
-            if os.path.isdir(squashfs):
-                shutil.move(squashfs, extracted_dir)
-        return [os.path.join(extracted_dir, 'AppRun')]
-    return [cache_path]
+    return cache_path
 
 
 def assemble_appdir(appdir: str, binary_path: str, app_name: str, version: str):
@@ -182,16 +165,24 @@ StartupWMClass={app_name}
 
 
 def package_appimage(appdir: str, app_name: str, version: str,
-                     appimagetool_cmd: list) -> str:
+                     extract_and_run: bool) -> str:
+    """Run appimagetool against the AppDir, producing the final .AppImage.
+
+    When extract_and_run is True (CI / FUSE-less environments), the
+    --appimage-extract-and-run flag is passed to appimagetool's static
+    runtime, which extracts the payload to a temp directory and runs the
+    underlying tool without needing FUSE.
     """
-    Run appimagetool against the AppDir, producing the final .AppImage.
-    Returns the output path.
-    """
+    appimagetool = ensure_appimagetool()
     out_name = f'{app_name}-V{version}-linux.AppImage'
     out_path = os.path.join(DIST_DIR, out_name)
     if os.path.exists(out_path):
         os.remove(out_path)
-    cmd = appimagetool_cmd + [appdir, out_path]
+
+    cmd = [appimagetool]
+    if extract_and_run:
+        cmd.append('--appimage-extract-and-run')
+    cmd += [appdir, out_path]
     run(cmd, f'Packaging AppImage → {out_name}')
 
     size_mb = os.path.getsize(out_path) / (1024 * 1024)
@@ -226,16 +217,12 @@ def main():
     appdir = os.path.join(DIST_DIR, '.appimage_staging', f'{app_name}.AppDir')
     assemble_appdir(appdir, binary_path, app_name, version)
 
-    # Step 4: Ensure appimagetool is available
-    extract_and_run = args.appimage_extract_and_run
-    appimagetool_cmd = ensure_appimagetool(extract_and_run)
-
-    # Step 5: Package into AppImage
+    # Step 4: Package into AppImage
     appimage_path = package_appimage(
-        appdir, app_name, version, appimagetool_cmd
+        appdir, app_name, version, args.appimage_extract_and_run
     )
 
-    # Step 6: Clean staging
+    # Step 5: Clean staging
     staging_root = os.path.join(DIST_DIR, '.appimage_staging')
     if os.path.isdir(staging_root):
         shutil.rmtree(staging_root, ignore_errors=True)

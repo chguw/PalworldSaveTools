@@ -33,7 +33,7 @@ jobs:
           - os: ubuntu-latest
             platform: linux
             build_mode: --onefile
-            system_deps: "patchelf file wget libfuse2"
+            system_deps: "patchelf file wget"
             extra_deps: ""
             artifact_name: linux-build
             artifact_glob: "*-linux.AppImage"

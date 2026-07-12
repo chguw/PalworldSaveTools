@@ -92,7 +92,7 @@ jobs:
       - name: Install system deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y patchelf file wget libfuse2
+          sudo apt-get install -y patchelf file wget
       - name: Install dependencies
         run: |
           uv venv --clear
