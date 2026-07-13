@@ -1185,7 +1185,6 @@ class MainWindow(QMainWindow):
     def _load_xgp_save(self):
         from palworld_xgp_import.gamepass_manager import (
             find_container_paths, read_container_index, get_save_names,
-            validate_xgp_save,
         )
         containers = find_container_paths()
         if not containers:
@@ -1194,34 +1193,12 @@ class MainWindow(QMainWindow):
             return
         cpath = containers[0]
         try:
-            idx_path = cpath
-            if not os.path.isfile(os.path.join(idx_path, 'containers.index')):
-                for root, _, files in os.walk(cpath):
-                    if 'containers.index' in files:
-                        idx_path = root
-                        break
-            index = read_container_index(idx_path)
-            xgp_missing = validate_xgp_save(idx_path, index)
-            if xgp_missing:
-                self._show_warning(t('error.title'),
-                    t('xgp.err.missing_files', files=', '.join(xgp_missing)))
-                return
+            index = read_container_index(cpath)
         except Exception as e:
             self._show_warning(t('error.title'), f'Failed to read containers.index: {e}')
             return
         saves = get_save_names(index, cpath)
-        def _has_required_containers(sid):
-            containers = index.get_save_containers(sid)
-            for req in ('Level', 'LevelMeta', 'LocalData'):
-                c = containers.get(req)
-                if not c:
-                    return False
-                if not os.path.isdir(os.path.join(cpath, c.container_uuid.bytes_le.hex().upper())):
-                    return False
-            return True
-        world_saves = [s for s in saves
-                       if s['save_id'] not in ('UserOption', 'GDKBackupTimestamps')
-                       and _has_required_containers(s['save_id'])]
+        world_saves = [s for s in saves if s['save_id'] not in ('UserOption', 'GDKBackupTimestamps')]
         if not world_saves:
             self._show_warning(t('error.title'), 'No world saves found in the container.')
             return

@@ -9,23 +9,6 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QC
 from PySide6.QtCore import Qt, Signal, QObject, QTimer, QMetaObject, Q_ARG
 from PySide6.QtGui import QIcon, QFont
 from palworld_aio import constants
-
-def find_valid_saves(base_path):
-    valid = []
-    if not os.path.isdir(base_path):
-        return valid
-    for root, dirs, files in os.walk(base_path):
-        if '01.sav' in files:
-            parent_dir = os.path.basename(root)
-            if parent_dir == 'Level':
-                save_root = os.path.dirname(root)
-                folder_name = os.path.basename(save_root)
-                if folder_name.lower().startswith('slot'):
-                    continue
-                if save_root not in valid:
-                    valid.append(save_root)
-    return valid
-
 saves = []
 save_info_map = {}
 save_extractor_done = threading.Event()
@@ -125,7 +108,20 @@ class GamePassSaveFixWidget(QWidget):
             self.activateWindow()
             self.raise_()
     def find_valid_saves(self, base_path):
-        return find_valid_saves(base_path)
+        valid = []
+        if not os.path.isdir(base_path):
+            return valid
+        for root, dirs, files in os.walk(base_path):
+            if '01.sav' in files:
+                parent_dir = os.path.basename(root)
+                if parent_dir == 'Level':
+                    save_root = os.path.dirname(root)
+                    folder_name = os.path.basename(save_root)
+                    if folder_name.lower().startswith('slot'):
+                        continue
+                    if save_root not in valid:
+                        valid.append(save_root)
+        return valid
     def handle_message(self, message_type: str, title: str, text: str):
         if message_type == 'info':
             show_information(self, title, text)
@@ -162,7 +158,6 @@ class GamePassSaveFixWidget(QWidget):
         if is_xgp_container(folder):
             from palworld_xgp_import.gamepass_manager import (
                 read_container_index, validate_xgp_save,
-                get_save_names, _read_container_data, _try_read_world_name,
             )
             try:
                 idx_path = folder
@@ -180,40 +175,7 @@ class GamePassSaveFixWidget(QWidget):
             except Exception as e:
                 self.message_signal.emit('critical', t('Error'), str(e))
                 return
-            save_list_display = []
-            save_info_map = {}
-            self.direct_saves_map = {}
-            for s in get_save_names(idx, idx_path):
-                sid = s['save_id']
-                if sid in ('UserOption', 'GDKBackupTimestamps'):
-                    continue
-                containers = idx.get_save_containers(sid)
-                has_all = True
-                for req in ('Level', 'LevelMeta', 'LocalData'):
-                    c = containers.get(req)
-                    if not c or not os.path.isdir(os.path.join(idx_path, c.container_uuid.bytes_le.hex().upper())):
-                        has_all = False
-                        break
-                if not has_all:
-                    continue
-                world_name = sid
-                meta_c = containers.get('LevelMeta')
-                if meta_c:
-                    try:
-                        data = _read_container_data(idx_path, meta_c)
-                        name = _try_read_world_name(data)
-                        if name:
-                            world_name = name
-                    except:
-                        pass
-                folder_name = sid
-                save_info_map[folder_name] = {'world_name': world_name, 'player_name': 'XGP'}
-                display_name = f"{folder_name} - {world_name}"
-                save_list_display.append(display_name)
-                self.direct_saves_map[display_name] = ('xgp', sid, idx_path, idx)
-            self.xgp_idx_path = idx_path
-            self.xgp_index = idx
-            self.update_combobox_signal.emit(save_list_display)
+            run_with_loading(None, self.run_save_extractor)
             return
         saves = self.find_valid_saves(folder)
         if not saves:
@@ -403,21 +365,7 @@ class GamePassSaveFixWidget(QWidget):
 
     def convert_JSON_sav(self, saveName):
         if hasattr(self, 'direct_saves_map') and saveName in self.direct_saves_map:
-            src = self.direct_saves_map[saveName]
-            if isinstance(src, tuple) and src[0] == 'xgp':
-                _, sid, idx_path, idx = src
-                from palworld_xgp_import.gamepass_manager import extract_save_to_temp
-                import tempfile
-                tmp = tempfile.mkdtemp(prefix='pst_xgp_conv_')
-                extracted = extract_save_to_temp(idx_path, idx, sid, tmp)
-                if not extracted.get('Level.sav'):
-                    self.message_signal.emit('critical', t('Error'), 'Failed to extract Level.sav from XGP container.')
-                    shutil.rmtree(tmp, ignore_errors=True)
-                    return
-                self._do_xgp_convert(tmp, extracted, saveName)
-                shutil.rmtree(tmp, ignore_errors=True)
-                return
-            source_base = src
+            source_base = self.direct_saves_map[saveName]
         else:
             parts = saveName.split(' - ', 1)
             folder_id = parts[0] if parts else saveName
@@ -474,26 +422,6 @@ class GamePassSaveFixWidget(QWidget):
             else:
                 self.message_signal.emit('critical', t('Error'), f'Conversion failed: {result}')
         run_with_loading(on_conversion_finished, run_conversion)
-    @staticmethod
-    def _do_xgp_convert(self, tmp, extracted, saveName):
-        try:
-            steam_default = os.path.expandvars('%localappdata%\\Pal\\Saved\\SaveGames')
-            initial = steam_default if os.path.isdir(steam_default) else root_dir
-            self.raise_()
-            self.activateWindow()
-            destination = QFileDialog.getExistingDirectory(self, t('xgp.ui.select_destination'), initial)
-            if not destination:
-                return
-            QApplication.setOverrideCursor(Qt.WaitCursor)
-            def ignore(_, names):
-                return {n for n in names if n in {'Level', 'Slot1', 'Slot2', 'Slot3'}}
-            new_name = self.generate_random_name()
-            shutil.copytree(tmp, os.path.join(destination, new_name), dirs_exist_ok=True, ignore=ignore)
-            self.message_signal.emit('info', t('Success'), t('xgp.msg.convert_copied', dest=destination))
-        except Exception as e:
-            self.message_signal.emit('critical', t('Error'), f'Conversion failed: {e}')
-        finally:
-            QApplication.restoreOverrideCursor()
     @staticmethod
     def generate_random_name(length=32):
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
