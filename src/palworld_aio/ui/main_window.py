@@ -18,7 +18,7 @@ from .tabs.tools_tab import center_on_parent
 GITHUB_RAW_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
 GITHUB_LATEST_ZIP = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 from palworld_aio import constants
-from palworld_aio.ui.chrome.styles import ThemeManager, MENU_STYLE, INPUT_DIALOG_STYLE
+from palworld_aio.ui.chrome.styles import ThemeManager, MENU_STYLE, DIALOG_STYLE as DARK_THEME_STYLE
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palworld_aio.utils import check_for_update, as_uuid
 from palworld_aio.managers.save_manager import save_manager
@@ -931,7 +931,7 @@ class MainWindow(QMainWindow):
             dlg.setIntValue(effigy_qty)
             dlg.setIntRange(1, 9999)
             dlg.setInputMode(QInputDialog.IntInput)
-            dlg.setStyleSheet(INPUT_DIALOG_STYLE)
+            dlg.setStyleSheet(DARK_THEME_STYLE)
             if dlg.exec() == QDialog.Accepted:
                 effigy_qty = dlg.intValue()
                 effigy_accepted = True

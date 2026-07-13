@@ -1221,7 +1221,7 @@ class PlayerInventoryTab(QWidget):
                 dlg.setIntValue(1)
                 dlg.setIntRange(1, 9999)
                 dlg.setInputMode(QInputDialog.IntInput)
-                dlg.setStyleSheet(INPUT_DIALOG_STYLE)
+                dlg.setStyleSheet(DARK_THEME_STYLE)
                 if dlg.exec() == QDialog.Accepted:
                     self.inventory.set_all_effigy_counts(dlg.intValue())
 
