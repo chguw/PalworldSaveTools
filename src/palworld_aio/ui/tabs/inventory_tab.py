@@ -5,7 +5,7 @@ from PySide6.QtCore import Qt, QSize, Signal, QPoint, QTimer, QThread
 from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen
 from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t
-from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE
+from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE, INPUT_DIALOG_STYLE
 from palsav import json_tools
 from palworld_aio import constants as _constants
 from palworld_aio.inventory.inventory_manager import PlayerInventory, ItemData, get_player_inventory, UI_SLOT_BINDINGS, FOOD_POUCH_ITEMS, ACCESSORY_UNLOCK_ITEMS, WEAPON_UNLOCK_ITEMS, INVENTORY_EXPANSION_ITEMS
@@ -1222,10 +1222,15 @@ class PlayerInventoryTab(QWidget):
             from palworld_aio.inventory.inventory_manager import is_effigy_item, ASSET_TO_RELIC_TYPE
             effigy_qty = 1
             if ASSET_TO_RELIC_TYPE:
-                from PySide6.QtWidgets import QInputDialog
-                qty, ok = QInputDialog.getInt(self, t('inventory.effigy_add_qty_title', default='Effigy Quantity'), t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'), value=effigy_qty, minValue=1, maxValue=9999)
-                if ok:
-                    effigy_qty = qty
+                dlg = QInputDialog(self)
+                dlg.setWindowTitle(t('inventory.effigy_add_qty_title', default='Effigy Quantity'))
+                dlg.setLabelText(t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'))
+                dlg.setIntValue(effigy_qty)
+                dlg.setIntRange(1, 9999)
+                dlg.setInputMode(QInputDialog.IntInput)
+                dlg.setStyleSheet(INPUT_DIALOG_STYLE)
+                if dlg.exec() == QDialog.Accepted:
+                    effigy_qty = dlg.intValue()
             self.inventory.set_all_effigy_counts(effigy_qty)
 
             reply = self._themed_message_box(QMessageBox.Question, t('inventory.add_all_key_items_confirm.title', default='Add All Key Items'), t('inventory.add_all_key_items_confirm.msg', count=total, default=f'Add all missing key items? ({total} items)'), QMessageBox.Yes | QMessageBox.No)

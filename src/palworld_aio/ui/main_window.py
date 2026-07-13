@@ -18,7 +18,7 @@ from .tabs.tools_tab import center_on_parent
 GITHUB_RAW_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
 GITHUB_LATEST_ZIP = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 from palworld_aio import constants
-from palworld_aio.ui.chrome.styles import ThemeManager, MENU_STYLE
+from palworld_aio.ui.chrome.styles import ThemeManager, MENU_STYLE, INPUT_DIALOG_STYLE
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palworld_aio.utils import check_for_update, as_uuid
 from palworld_aio.managers.save_manager import save_manager
@@ -930,10 +930,15 @@ class MainWindow(QMainWindow):
         from palworld_aio.inventory.inventory_manager import is_effigy_item, ASSET_TO_RELIC_TYPE
         effigy_qty = 1
         if ASSET_TO_RELIC_TYPE:
-            from PySide6.QtWidgets import QInputDialog
-            qty, ok = QInputDialog.getInt(self, t('inventory.effigy_add_qty_title', default='Effigy Quantity'), t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'), value=effigy_qty, minValue=1, maxValue=9999)
-            if ok:
-                effigy_qty = qty
+            dlg = QInputDialog(self)
+            dlg.setWindowTitle(t('inventory.effigy_add_qty_title', default='Effigy Quantity'))
+            dlg.setLabelText(t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'))
+            dlg.setIntValue(effigy_qty)
+            dlg.setIntRange(1, 9999)
+            dlg.setInputMode(QInputDialog.IntInput)
+            dlg.setStyleSheet(INPUT_DIALOG_STYLE)
+            if dlg.exec() == QDialog.Accepted:
+                effigy_qty = dlg.intValue()
         players_affected = 0
         for uid, item_ids in per_player_missing.items():
             try:
