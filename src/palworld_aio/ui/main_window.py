@@ -1183,32 +1183,11 @@ class MainWindow(QMainWindow):
     def _load_save(self):
         save_manager.load_save(parent=self)
     def _load_xgp_save(self):
-        from palworld_xgp_import.gamepass_manager import (
-            find_container_paths, read_container_index, get_save_names,
-        )
-        containers = find_container_paths()
-        if not containers:
-            self._show_warning(t('error.title'),
-                'No GamePass container found. Install Palworld via Xbox App first.')
+        from palworld_xgp_import.gamepass_manager import pick_xgp_world
+        pick = pick_xgp_world(self, 'Load GamePass Save')
+        if not pick:
             return
-        cpath = containers[0]
-        try:
-            index = read_container_index(cpath)
-        except Exception as e:
-            self._show_warning(t('error.title'), f'Failed to read containers.index: {e}')
-            return
-        saves = get_save_names(index, cpath)
-        world_saves = [s for s in saves if s['save_id'] not in ('UserOption', 'GDKBackupTimestamps')]
-        if not world_saves:
-            self._show_warning(t('error.title'), 'No world saves found in the container.')
-            return
-        items = [f"{s['world_name']} ({s['save_id']})" for s in world_saves]
-        from PySide6.QtWidgets import QInputDialog
-        chosen, ok = QInputDialog.getItem(self, 'Load GamePass Save', 'Select a save to load:', items, 0, False)
-        if not ok or not chosen:
-            return
-        idx = items.index(chosen)
-        save_id = world_saves[idx]['save_id']
+        cpath, save_id, _ = pick
         save_manager.load_xgp_save(cpath, save_id, parent=self)
     def _restart_program(self):
         import sys

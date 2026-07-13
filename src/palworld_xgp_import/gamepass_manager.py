@@ -504,7 +504,16 @@ def pick_xgp_world(parent=None, title='Select GamePass Save') -> tuple[str, str,
     except Exception:
         return None
     saves = get_save_names(index, cpath)
-    world_saves = [s for s in saves if s['save_id'] not in ('UserOption', 'GDKBackupTimestamps')]
+    def _has_required(sid):
+        containers = index.get_save_containers(sid)
+        for req in ('Level', 'LevelMeta', 'LocalData'):
+            c = containers.get(req)
+            if not c or not os.path.isdir(os.path.join(cpath, c.container_uuid.bytes_le.hex().upper())):
+                return False
+        return True
+    world_saves = [s for s in saves
+                   if s['save_id'] not in ('UserOption', 'GDKBackupTimestamps')
+                   and _has_required(s['save_id'])]
     if not world_saves:
         return None
     dlg = QDialog(parent)
