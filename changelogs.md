@@ -1,13 +1,9 @@
 #2.0.5
-- Update check now uses GitHub releases API (`/releases/latest`) instead of parsing `APP_VERSION` from `common.py` — changing the source code no longer triggers false update notifications
-- macOS: `.app` bundle always named `PalworldSaveTools.app` instead of Nuitka's default `main.app`
-- macOS: added `xattr -cr` before codesign to clear quarantine attributes (fewer Gatekeeper warnings)
-- Windows: icon now applied via `rcedit` post-processing for consistent icon across all Windows versions
-- Nexus Mods upload now creates proper ZIP archives (was just renaming files with `.zip` extension)
-- Nexus upload: manual trigger now accepts empty tag — auto-fetches the latest published release
-- Nexus upload decoupled from Build & Release workflow — triggers on `release: published` instead
-- Changelogs and release notes now pull from `changelogs.md` at the project root
-- macOS build script: forceful rename of `.app` bundle to expected name regardless of Nuitka output
+- `palsav` — fix `SetProperty` parsing + add missing type hint for `ValidatedStartPointIds`
+- Pal editor — apply passive stat modifiers (MaxHP) to display and save writes
+- Pal editor — scale current HP by passive multiplier for display consistency
+- Breeding formula — align with palcalc: ceiling average for odd sums (`floor((A+B+1)/2)`)
+- Update checker — use GitHub releases API instead of hardcoded `APP_VERSION`
 
 #2.0.4
 - Linux builds now produce a portable AppImage instead of a raw onefile binary
