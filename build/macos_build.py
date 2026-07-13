@@ -85,7 +85,13 @@ def sign_app(app_path: str, identity: str | None = None):
     Code sign the .app bundle.
     - identity=None       → ad-hoc signing
     - identity='My ID'   → real certificate
+
+    Always clears quarantine/extended attributes first (xattr -cr)
+    so Gatekeeper doesn't flag the app on first launch.
     """
+    # Clear extended attributes (quarantine flags, etc.)
+    run(['xattr', '-cr', app_path], 'Clearing extended attributes')
+
     sign_identity = identity if identity else '-'
     label = f'Signing with identity: {sign_identity}'
     run([
