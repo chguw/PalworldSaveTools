@@ -73,6 +73,7 @@ src/data/configs/user.cfg
 ppe_windows/
 Exports/
 Backups/
+XGP_converted_saves/
 *.sav
 *.savc
 *.7z
