@@ -928,6 +928,7 @@ class MainWindow(QMainWindow):
                 self.refresh_all()
             return
         from palworld_aio.inventory.inventory_manager import is_effigy_item, ASSET_TO_RELIC_TYPE
+        effigy_accepted = False
         effigy_qty = 1
         if ASSET_TO_RELIC_TYPE:
             dlg = QInputDialog(self)
@@ -939,13 +940,15 @@ class MainWindow(QMainWindow):
             dlg.setStyleSheet(INPUT_DIALOG_STYLE)
             if dlg.exec() == QDialog.Accepted:
                 effigy_qty = dlg.intValue()
+                effigy_accepted = True
         players_affected = 0
         for uid, item_ids in per_player_missing.items():
             try:
                 inv = PlayerInventory(uid)
                 if not inv.load():
                     continue
-                inv.set_all_effigy_counts(effigy_qty)
+                if effigy_accepted:
+                    inv.set_all_effigy_counts(effigy_qty)
                 key_container = inv.containers.get('key')
                 if key_container:
                     std_container = key_container._standardized_container

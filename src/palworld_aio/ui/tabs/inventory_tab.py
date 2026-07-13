@@ -1220,18 +1220,16 @@ class PlayerInventoryTab(QWidget):
                 return
 
             from palworld_aio.inventory.inventory_manager import is_effigy_item, ASSET_TO_RELIC_TYPE
-            effigy_qty = 1
             if ASSET_TO_RELIC_TYPE:
                 dlg = QInputDialog(self)
                 dlg.setWindowTitle(t('inventory.effigy_add_qty_title', default='Effigy Quantity'))
                 dlg.setLabelText(t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'))
-                dlg.setIntValue(effigy_qty)
+                dlg.setIntValue(1)
                 dlg.setIntRange(1, 9999)
                 dlg.setInputMode(QInputDialog.IntInput)
                 dlg.setStyleSheet(INPUT_DIALOG_STYLE)
                 if dlg.exec() == QDialog.Accepted:
-                    effigy_qty = dlg.intValue()
-            self.inventory.set_all_effigy_counts(effigy_qty)
+                    self.inventory.set_all_effigy_counts(dlg.intValue())
 
             reply = self._themed_message_box(QMessageBox.Question, t('inventory.add_all_key_items_confirm.title', default='Add All Key Items'), t('inventory.add_all_key_items_confirm.msg', count=total, default=f'Add all missing key items? ({total} items)'), QMessageBox.Yes | QMessageBox.No)
             if reply != QMessageBox.Yes:
