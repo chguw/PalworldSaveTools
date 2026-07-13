@@ -1,0 +1,81 @@
+name: Test Draft Release Notes
+
+# Renders the release notes template + changelog entry to preview what the
+# next release will look like, without building anything.  The result is
+# printed to the workflow summary; no actual release is created.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to preview (e.g. 2.0.5). Leave empty to use TESTING_VER from common.py."
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - name: Bootstrap environment
+        id: env
+        uses: ./.github/actions/setup-build-env
+
+      - name: Resolve version
+        id: version
+        run: |
+          VER="${{ github.event.inputs.version }}"
+          if [ -z "$VER" ]; then
+            VER="${{ steps.env.outputs.version }}"
+          fi
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $VER"
+
+      - name: Extract changelog entry
+        id: changelog
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          awk '/^#[0-9]/{if (found) exit; if ($0 == "#'"${VERSION}"'") found=1; next} found' \
+            changelogs.md > /tmp/changelog_entry.md 2>/dev/null || true
+          if [ ! -s /tmp/changelog_entry.md ]; then
+            echo "No changelog entry for v${VERSION} yet." > /tmp/changelog_entry.md
+          fi
+          echo "Changelog entry:"
+          cat /tmp/changelog_entry.md
+
+      - name: Render release notes
+        env:
+          APP_NAME: ${{ steps.env.outputs.app_name }}
+          VERSION: ${{ steps.version.outputs.version }}
+          GAME_VERSION: ${{ steps.env.outputs.game_version }}
+          REPO_URL: https://github.com/${{ github.repository }}
+          RELEASE_URL: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.version }}
+          DISCORD_URL: https://discord.gg/sYcZwcT4cT
+          NEXUS_URL: ${{ vars.NEXUS_MOD_URL || 'https://www.nexusmods.com/palworld/mods/3190' }}
+        run: |
+          envsubst < .github/templates/release_notes.md > /tmp/notes_partial.md
+          sed -i '/__CHANGELOG_ENTRY__/{
+            r /tmp/changelog_entry.md
+            d
+          }' /tmp/notes_partial.md
+          mv /tmp/notes_partial.md release_notes.md
+          echo "=== RELEASE NOTES PREVIEW ==="
+          cat release_notes.md
+          echo "=============================="
+
+      - name: Write workflow summary
+        run: |
+          {
+            echo "## Release Notes Preview (v${{ steps.version.outputs.version }})"
+            echo ""
+            echo '```markdown'
+            cat release_notes.md
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "Preview written to workflow summary."
