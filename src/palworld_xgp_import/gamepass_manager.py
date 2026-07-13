@@ -500,11 +500,31 @@ def pick_xgp_world(parent=None, title='Select GamePass Save') -> tuple[str, str,
         return None
     cpath = containers[0]
     try:
-        index = read_container_index(cpath)
+        idx_path = cpath
+        if not os.path.isfile(os.path.join(idx_path, 'containers.index')):
+            for root, _, files in os.walk(cpath):
+                if 'containers.index' in files:
+                    idx_path = root
+                    break
+        index = read_container_index(idx_path)
+        missing = validate_xgp_save(idx_path, index)
+        if missing or missing is None:
+            return None
     except Exception:
         return None
     saves = get_save_names(index, cpath)
-    world_saves = [s for s in saves if s['save_id'] not in ('UserOption', 'GDKBackupTimestamps')]
+    def has_required_containers(sid):
+        containers = index.get_save_containers(sid)
+        for req in ('Level', 'LevelMeta', 'LocalData'):
+            c = containers.get(req)
+            if not c:
+                return False
+            if not os.path.isdir(os.path.join(cpath, c.container_uuid.bytes_le.hex().upper())):
+                return False
+        return True
+    world_saves = [s for s in saves
+                   if s['save_id'] not in ('UserOption', 'GDKBackupTimestamps')
+                   and has_required_containers(s['save_id'])]
     if not world_saves:
         return None
     dlg = QDialog(parent)

@@ -7,6 +7,7 @@ from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
 from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
+from palworld_toolsets.game_pass_save_fix import find_valid_saves
 import os, time, shutil
 savegames_path = os.path.join(os.environ['LOCALAPPDATA'], 'Pal', 'Saved', 'SaveGames')
 restore_map_path = os.path.join('.', 'Backups', 'Restore Map')
@@ -43,14 +44,10 @@ def clear_fog_in_local_data(path):
     save_sav(ng, path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
 def clear_fog_in_all_subfolders():
     updated_count = 0
-    for folder in os.listdir(savegames_path):
-        folder_path = os.path.join(savegames_path, folder)
-        if os.path.isdir(folder_path):
-            subfolders = [subfolder for subfolder in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, subfolder))]
-            for subfolder in subfolders:
-                subfolder_path = os.path.join(folder_path, subfolder)
-                target_path = os.path.join(subfolder_path, 'LocalData.sav')
-                if os.path.exists(target_path):
+    valid_saves = find_valid_saves(savegames_path)
+    for subfolder_path in valid_saves:
+        target_path = os.path.join(subfolder_path, 'LocalData.sav')
+        if os.path.exists(target_path):
                     backup_local_data(subfolder_path)
                     print(t('Clearing fog in: {path}', path=subfolder_path))
                     clear_fog_in_local_data(target_path)
