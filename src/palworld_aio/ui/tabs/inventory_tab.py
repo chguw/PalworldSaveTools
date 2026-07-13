@@ -1226,9 +1226,7 @@ class PlayerInventoryTab(QWidget):
                 qty, ok = QInputDialog.getInt(self, t('inventory.effigy_add_qty_title', default='Effigy Quantity'), t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'), value=effigy_qty, minValue=1, maxValue=9999)
                 if ok:
                     effigy_qty = qty
-            all_relic_types = set(ASSET_TO_RELIC_TYPE.values())
-            for rtype in all_relic_types:
-                self.inventory.set_effigy_count(rtype, effigy_qty)
+            self.inventory.set_all_effigy_counts(effigy_qty)
 
             reply = self._themed_message_box(QMessageBox.Question, t('inventory.add_all_key_items_confirm.title', default='Add All Key Items'), t('inventory.add_all_key_items_confirm.msg', count=total, default=f'Add all missing key items? ({total} items)'), QMessageBox.Yes | QMessageBox.No)
             if reply != QMessageBox.Yes:

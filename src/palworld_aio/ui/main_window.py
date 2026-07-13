@@ -935,14 +935,12 @@ class MainWindow(QMainWindow):
             if ok:
                 effigy_qty = qty
         players_affected = 0
-        all_relic_types = set(ASSET_TO_RELIC_TYPE.values())
         for uid, item_ids in per_player_missing.items():
             try:
                 inv = PlayerInventory(uid)
                 if not inv.load():
                     continue
-                for rtype in all_relic_types:
-                    inv.set_effigy_count(rtype, effigy_qty)
+                inv.set_all_effigy_counts(effigy_qty)
                 key_container = inv.containers.get('key')
                 if key_container:
                     std_container = key_container._standardized_container

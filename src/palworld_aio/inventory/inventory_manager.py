@@ -319,7 +319,7 @@ class PlayerInventory:
                           'container_type': 'key', 'raw_data': None, 'is_effigy': True})
         return items
 
-    def set_effigy_count(self, relic_type: str, count: int) -> bool:
+    def set_effigy_count(self, relic_type: str, count: int, _save: bool = True) -> bool:
         if not self.player_gvas:
             return False
         props = self.player_gvas.properties if hasattr(self.player_gvas, 'properties') else self.player_gvas.get('properties', {})
@@ -336,9 +336,17 @@ class PlayerInventory:
                 break
         if not found and count > 0:
             rpm['value'].append({'key': relic_type, 'value': count})
+        if _save:
+            self._save_player_sav()
+            self._load_effigies()
+        return True
+
+    def set_all_effigy_counts(self, count: int):
+        all_types = set(ASSET_TO_RELIC_TYPE.values())
+        for rtype in all_types:
+            self.set_effigy_count(rtype, count, _save=False)
         self._save_player_sav()
         self._load_effigies()
-        return True
 
     def remove_effigy(self, relic_type: str) -> bool:
         return self.set_effigy_count(relic_type, 0)
