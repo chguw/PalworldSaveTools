@@ -67,6 +67,9 @@ pal-save/
 
 # External assets
 psp_windows/
+
+# User config
+src/data/configs/user.cfg
 ppe_windows/
 Exports/
 Backups/
