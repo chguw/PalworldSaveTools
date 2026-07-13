@@ -921,12 +921,6 @@ class MainWindow(QMainWindow):
                     per_player_missing[uid] = missing
             except:
                 continue
-        total_missing = sum((len(v) for v in per_player_missing.values()))
-        if not total_missing:
-            self._show_info(t('player_item.add_complete') if t else 'Add All Key Items', t('inventory.no_new_items') if t else 'All key items already present.')
-            if hasattr(self, 'refresh_all'):
-                self.refresh_all()
-            return
         from palworld_aio.inventory.inventory_manager import is_effigy_item, ASSET_TO_RELIC_TYPE
         effigy_accepted = False
         effigy_qty = 1
@@ -941,6 +935,12 @@ class MainWindow(QMainWindow):
             if dlg.exec() == QDialog.Accepted:
                 effigy_qty = dlg.intValue()
                 effigy_accepted = True
+        total_missing = sum((len(v) for v in per_player_missing.values()))
+        if not total_missing:
+            self._show_info(t('player_item.add_complete') if t else 'Add All Key Items', t('inventory.no_new_items') if t else 'All key items already present.')
+            if hasattr(self, 'refresh_all'):
+                self.refresh_all()
+            return
         players_affected = 0
         for uid, item_ids in per_player_missing.items():
             try:

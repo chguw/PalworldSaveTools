@@ -1214,11 +1214,6 @@ class PlayerInventoryTab(QWidget):
             for item_id in WEAPON_UNLOCK_ITEMS:
                 if item_id not in existing_ids:
                     missing_unlocks.append(item_id)
-            total = len(to_add) + len(missing_unlocks)
-            if not total:
-                self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items', default='Add All Key Items'), t('inventory.no_new_items', default='All key items already present.'))
-                return
-
             from palworld_aio.inventory.inventory_manager import is_effigy_item, ASSET_TO_RELIC_TYPE
             if ASSET_TO_RELIC_TYPE:
                 dlg = QInputDialog(self)
@@ -1230,6 +1225,11 @@ class PlayerInventoryTab(QWidget):
                 dlg.setStyleSheet(INPUT_DIALOG_STYLE)
                 if dlg.exec() == QDialog.Accepted:
                     self.inventory.set_all_effigy_counts(dlg.intValue())
+
+            total = len(to_add) + len(missing_unlocks)
+            if not total:
+                self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items', default='Add All Key Items'), t('inventory.no_new_items', default='All key items already present.'))
+                return
 
             reply = self._themed_message_box(QMessageBox.Question, t('inventory.add_all_key_items_confirm.title', default='Add All Key Items'), t('inventory.add_all_key_items_confirm.msg', count=total, default=f'Add all missing key items? ({total} items)'), QMessageBox.Yes | QMessageBox.No)
             if reply != QMessageBox.Yes:
