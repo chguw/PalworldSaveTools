@@ -927,6 +927,19 @@ class MainWindow(QMainWindow):
             if hasattr(self, 'refresh_all'):
                 self.refresh_all()
             return
+        from palworld_aio.inventory.inventory_manager import is_effigy_item
+        all_missing = set()
+        for ids in per_player_missing.values():
+            all_missing.update(ids)
+        effigy_count = sum(1 for iid in all_missing if is_effigy_item(iid))
+        effigy_qty = 1
+        if effigy_count > 0:
+            from PySide6.QtWidgets import QInputDialog
+            qty, ok = QInputDialog.getInt(self, t('inventory.effigy_add_qty_title', default='Effigy Quantity'), t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'), value=1, minValue=1, maxValue=9999)
+            if ok:
+                effigy_qty = qty
+            else:
+                return
         players_affected = 0
         for uid, item_ids in per_player_missing.items():
             try:
@@ -942,7 +955,8 @@ class MainWindow(QMainWindow):
                         std_container.expand_capacity(new_max)
                         std_container.container_data['value']['SlotNum']['value'] = new_max
                 for item_id in item_ids:
-                    inv.add_item('key', item_id, 1)
+                    qty = effigy_qty if is_effigy_item(item_id) else 1
+                    inv.add_item('key', item_id, qty)
                 wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
                 item_containers = wsd.get('ItemContainerSaveData', {}).get('value', [])
                 container_lookup = {}

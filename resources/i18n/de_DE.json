@@ -1786,7 +1786,7 @@
     "base.reassign_guild": "Der Gilde neu zuweisen",
     "base.reassign.no_other_guilds": "Keine anderen Gilden verfügbar.",
     "base.reassign.same_guild": "Base gehört bereits zu dieser Gilde.",
-    "base.reassign.success": "Basis wurde der Gilde „{name}“ neu zugewiesen",
+    "base.reassign.success": "Basis der Gilde „{name}“ neu zugewiesen",
     "xgp.err.missing_files": "Speichern ist unvollständig. Fehlende erforderliche Dateien: {files}\n\nOhne alle erforderlichen Komponenten erkennt das Spiel diesen Speicherstand nicht. Öffnen Sie den Speicherstand im PST-Format, um die fehlenden Dateien zu exportieren, oder beziehen Sie sie aus einem funktionierenden Speicherstand.",
     "menu.file.load_xgp_save": "GamePass-Speicher laden",
     "character_transfer.source_btn": "Quelle speichern",
@@ -1794,5 +1794,7 @@
     "tools.btn_steam": "Dampf",
     "tools.btn_gamepass": "GamePass",
     "fix_host_save.player_file_missing": "Player-Speicherdatei für {guid} nicht gefunden",
-    "character_transfer.player_file_missing": "Player-Speicherdatei für {guid} nicht gefunden"
+    "character_transfer.player_file_missing": "Player-Speicherdatei für {guid} nicht gefunden",
+    "inventory.effigy_add_qty_prompt": "Wie viele von jedem Bildnistyp müssen hinzugefügt werden?",
+    "inventory.effigy_add_qty_title": "Anzahl der Bildnisse"
 }

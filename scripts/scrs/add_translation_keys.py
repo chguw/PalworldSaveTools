@@ -46,6 +46,8 @@ NEW_TRANSLATIONS = {
     'tools.btn_gamepass': 'GamePass',
     'fix_host_save.player_file_missing': 'Player save file not found for {guid}',
     'character_transfer.player_file_missing': 'Player save file not found for {guid}',
+    'inventory.effigy_add_qty_prompt': 'How many of each effigy type to add?',
+    'inventory.effigy_add_qty_title': 'Effigy Quantity',
 }
 OLD_KEYS = []
 def _clean_uv_locks():

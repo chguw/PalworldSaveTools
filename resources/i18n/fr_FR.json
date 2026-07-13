@@ -1752,5 +1752,7 @@
     "tools.btn_steam": "Vapeur",
     "tools.btn_gamepass": "Passe-jeu",
     "fix_host_save.player_file_missing": "Fichier de sauvegarde du lecteur introuvable pour {guid}",
-    "character_transfer.player_file_missing": "Fichier de sauvegarde du lecteur introuvable pour {guid}"
+    "character_transfer.player_file_missing": "Fichier de sauvegarde du lecteur introuvable pour {guid}",
+    "inventory.effigy_add_qty_prompt": "Combien de chaque type d’effigie ajouter ?",
+    "inventory.effigy_add_qty_title": "Quantité d'effigie"
 }

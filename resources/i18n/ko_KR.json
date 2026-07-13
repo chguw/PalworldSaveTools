@@ -1769,5 +1769,7 @@
     "tools.btn_steam": "증기",
     "tools.btn_gamepass": "게임패스",
     "fix_host_save.player_file_missing": "{guid}에 대한 플레이어 저장 파일을 찾을 수 없습니다.",
-    "character_transfer.player_file_missing": "{guid}에 대한 플레이어 저장 파일을 찾을 수 없습니다."
+    "character_transfer.player_file_missing": "{guid}에 대한 플레이어 저장 파일을 찾을 수 없습니다.",
+    "inventory.effigy_add_qty_prompt": "추가할 각 인형 유형은 몇 개입니까?",
+    "inventory.effigy_add_qty_title": "인형 수량"
 }

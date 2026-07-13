@@ -1739,7 +1739,7 @@
     "breeding.tab": "育種",
     "breeding.mode.parents": "両親",
     "breeding.mode.children": "子供たち",
-    "breeding.search": "友達を検索...",
+    "breeding.search": "仲間を検索...",
     "breeding.egg_hint": "パルワールドの育成コンボ",
     "breeding.hint": "上のボタンをクリックして仲間を選択し、交配の組み合わせを表示します。",
     "breeding.type_to_search": "仲間の名前を入力すると交配の組み合わせが表示されます",
@@ -1770,5 +1770,7 @@
     "tools.btn_steam": "スチーム",
     "tools.btn_gamepass": "ゲームパス",
     "fix_host_save.player_file_missing": "{guid} のプレーヤー保存ファイルが見つかりません",
-    "character_transfer.player_file_missing": "{guid} のプレーヤー保存ファイルが見つかりません"
+    "character_transfer.player_file_missing": "{guid} のプレーヤー保存ファイルが見つかりません",
+    "inventory.effigy_add_qty_prompt": "各タイプの人形をいくつ追加しますか?",
+    "inventory.effigy_add_qty_title": "人形の数量"
 }

@@ -2057,5 +2057,7 @@
     "tools.btn_steam": "Steam",
     "tools.btn_gamepass": "GamePass",
     "fix_host_save.player_file_missing": "Player save file not found for {guid}",
-    "character_transfer.player_file_missing": "Player save file not found for {guid}"
+    "character_transfer.player_file_missing": "Player save file not found for {guid}",
+    "inventory.effigy_add_qty_prompt": "How many of each effigy type to add?",
+    "inventory.effigy_add_qty_title": "Effigy Quantity"
 }

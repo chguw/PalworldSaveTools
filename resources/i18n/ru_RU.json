@@ -1738,7 +1738,7 @@
     "breeding.mode.parents": "Родители",
     "breeding.mode.children": "Дети",
     "breeding.search": "Ищи, приятель...",
-    "breeding.egg_hint": "Комбинации для разведения Palworld",
+    "breeding.egg_hint": "Комбинации разведения Palworld",
     "breeding.hint": "Нажмите кнопку выше, чтобы выбрать приятеля и просмотреть племенные комбинации.",
     "breeding.type_to_search": "Введите имя приятеля, чтобы просмотреть племенные комбинации.",
     "breeding.not_found": "Пал не найден в данных разведения.",
@@ -1768,5 +1768,7 @@
     "tools.btn_steam": "Пар",
     "tools.btn_gamepass": "GamePass",
     "fix_host_save.player_file_missing": "Файл сохранения игрока не найден для {guid}",
-    "character_transfer.player_file_missing": "Файл сохранения игрока не найден для {guid}"
+    "character_transfer.player_file_missing": "Файл сохранения игрока не найден для {guid}",
+    "inventory.effigy_add_qty_prompt": "Сколько изображений каждого типа добавить?",
+    "inventory.effigy_add_qty_title": "Количество чучел"
 }

@@ -1772,5 +1772,7 @@
     "tools.btn_steam": "蒸汽",
     "tools.btn_gamepass": "游戏通行证",
     "fix_host_save.player_file_missing": "找不到 {guid} 的玩家保存文件",
-    "character_transfer.player_file_missing": "找不到 {guid} 的玩家保存文件"
+    "character_transfer.player_file_missing": "找不到 {guid} 的玩家保存文件",
+    "inventory.effigy_add_qty_prompt": "每种肖像类型要添加多少个？",
+    "inventory.effigy_add_qty_title": "雕像数量"
 }
