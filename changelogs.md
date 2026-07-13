@@ -1,3 +1,14 @@
+#2.0.6
+- **Effigies now display in key items grid** — read from player `.sav` `RelicPossessNumMap` (bounty-token pattern)
+- Edit/delete effigy count writes directly to `RelicPossessNumMap` (spendable at Statue of Power in-game)
+- Add All Key Items prompts for effigy quantity per relic type
+- Always show quantity badge on item/equip slots (count visible even at 1)
+- XGP save picker (`pick_xgp_world`, `_load_xgp_save`) filters invalid saves via Level+LevelMeta+LocalData directory check
+- Fixed `validate_xgp_save` `idx_path` resolution in `_load_xgp_save`
+- `find_valid_saves` extracted as module-level function in `game_pass_save_fix.py`, reused in `restore_map.py`
+- Theme/style consistency fixes for input dialogs
+- Bumped version to `2.0.6`
+
 #2.0.5
 - `palsav` — fix `SetProperty` parsing + add missing type hint for `ValidatedStartPointIds`
 - Pal editor — apply passive stat modifiers (MaxHP) to display and save writes
