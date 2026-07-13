@@ -1,3 +1,14 @@
+#2.0.5
+- Update check now uses GitHub releases API (`/releases/latest`) instead of parsing `APP_VERSION` from `common.py` — changing the source code no longer triggers false update notifications
+- macOS: `.app` bundle always named `PalworldSaveTools.app` instead of Nuitka's default `main.app`
+- macOS: added `xattr -cr` before codesign to clear quarantine attributes (fewer Gatekeeper warnings)
+- Windows: icon now applied via `rcedit` post-processing for consistent icon across all Windows versions
+- Nexus Mods upload now creates proper ZIP archives (was just renaming files with `.zip` extension)
+- Nexus upload: manual trigger now accepts empty tag — auto-fetches the latest published release
+- Nexus upload decoupled from Build & Release workflow — triggers on `release: published` instead
+- Changelogs and release notes now pull from `changelogs.md` at the project root
+- macOS build script: forceful rename of `.app` bundle to expected name regardless of Nuitka output
+
 #2.0.4
 - Linux builds now produce a portable AppImage instead of a raw onefile binary
 - Discord notifications upgraded to rich embeds with GitHub and Nexus Mods links
