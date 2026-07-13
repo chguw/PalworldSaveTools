@@ -165,6 +165,19 @@ def main():
     app_bundle = find_app_bundle()
     print(f'Found app bundle: {app_bundle}')
 
+    # Ensure the .app bundle is named {app_name}.app regardless of
+    # what Nuitka named it (sometimes "main.app" from main.py).
+    expected_name = f'{app_name}.app'
+    bundle_dir = os.path.dirname(app_bundle)
+    actual_name = os.path.basename(app_bundle)
+    if actual_name != expected_name:
+        target = os.path.join(bundle_dir, expected_name)
+        if os.path.exists(target):
+            shutil.rmtree(target)
+        print(f'Renaming .app bundle: {actual_name} -> {expected_name}')
+        os.rename(app_bundle, target)
+        app_bundle = target
+
     # Step 3: Signing
     sign_identity = None
     if args.sign is not None:
