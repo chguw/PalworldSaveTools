@@ -67,6 +67,7 @@ pal-save/
 
 # External assets
 psp_windows/
+ppe_windows/
 Exports/
 Backups/
 *.sav
