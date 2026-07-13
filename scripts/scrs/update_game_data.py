@@ -2821,7 +2821,7 @@ def update_breeding_data():
         p1 = breedable[i]
         for j in range(i, len(breedable)):
             p2 = breedable[j]
-            cp = (p1['rank'] + p2['rank']) // 2
+            cp = (p1['rank'] + p2['rank'] + 1) // 2
             pra = (p1.get('rarity', 0) + p2.get('rarity', 0)) / 2.0
             best = closest_pal(cp, pra)
             if best:
@@ -2838,7 +2838,7 @@ def update_breeding_data():
         for partner in pals:
             if partner['tribe'] == p['tribe']:
                 continue
-            cp = (p['rank'] + partner['rank']) // 2
+            cp = (p['rank'] + partner['rank'] + 1) // 2
             pra = (p.get('rarity', 0) + partner.get('rarity', 0)) / 2.0
             best = closest_pal(cp, pra)
             if best:
