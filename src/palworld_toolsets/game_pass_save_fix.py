@@ -1,7 +1,7 @@
 from import_libs import *
 from palworld_aio.utils import sav_to_json, json_to_sav, extract_value
 from palworld_toolsets.fix_host_save import ask_string_with_icon
-from common import get_base_directory, find_valid_saves
+from common import get_base_directory
 from palworld_aio.ui.chrome.styles import ThemeManager
 from loading_manager import run_with_loading, show_information, show_critical
 import nerdfont as nf
@@ -107,6 +107,21 @@ class GamePassSaveFixWidget(QWidget):
         if not event.spontaneous():
             self.activateWindow()
             self.raise_()
+    def find_valid_saves(self, base_path):
+        valid = []
+        if not os.path.isdir(base_path):
+            return valid
+        for root, dirs, files in os.walk(base_path):
+            if '01.sav' in files:
+                parent_dir = os.path.basename(root)
+                if parent_dir == 'Level':
+                    save_root = os.path.dirname(root)
+                    folder_name = os.path.basename(save_root)
+                    if folder_name.lower().startswith('slot'):
+                        continue
+                    if save_root not in valid:
+                        valid.append(save_root)
+        return valid
     def handle_message(self, message_type: str, title: str, text: str):
         if message_type == 'info':
             show_information(self, title, text)
@@ -162,7 +177,7 @@ class GamePassSaveFixWidget(QWidget):
                 return
             run_with_loading(None, self.run_save_extractor)
             return
-        saves = find_valid_saves(folder)
+        saves = self.find_valid_saves(folder)
         if not saves:
             self.message_signal.emit('critical', t('Error'), t('xgp.err.no_valid_saves'))
             return

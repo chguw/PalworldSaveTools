@@ -23,22 +23,6 @@ def get_python_executable():
         return sys.executable
     else:
         return sys.executable
-def find_valid_saves(base_path):
-    valid = []
-    if not os.path.isdir(base_path):
-        return valid
-    for root, dirs, files in os.walk(base_path):
-        if '01.sav' in files:
-            parent_dir = os.path.basename(root)
-            if parent_dir == 'Level':
-                save_root = os.path.dirname(root)
-                folder_name = os.path.basename(save_root)
-                if folder_name.lower().startswith('slot'):
-                    continue
-                if save_root not in valid:
-                    valid.append(save_root)
-    return valid
-
 def get_versions():
     return (APP_VERSION, GAME_VERSION)
 def get_display_version():
