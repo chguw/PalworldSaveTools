@@ -13,6 +13,11 @@ on:
         required: false
         default: false
         type: boolean
+      draft_only:
+        description: "Create as draft only (uncheck to publish immediately)"
+        required: false
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -234,14 +239,14 @@ jobs:
           mv /tmp/notes_partial.md release_notes.md
           echo "=== Rendered release notes ==="
           cat release_notes.md
-      - name: Create draft release (with notes)
+      - name: Create release (with notes)
         if: ${{ github.event.inputs.append_only != 'true' }}
         uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ steps.env.outputs.version }}
           name: v${{ steps.env.outputs.version }}
           body_path: release_notes.md
-          draft: true
+          draft: ${{ github.event.inputs.draft_only == 'true' }}
           prerelease: false
           files: artifacts/**/*
         env:
