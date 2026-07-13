@@ -18,6 +18,11 @@ on:
         required: false
         default: true
         type: boolean
+      skip_nexus_upload:
+        description: "Skip Nexus Mods upload"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -246,7 +251,7 @@ jobs:
           tag_name: v${{ steps.env.outputs.version }}
           name: v${{ steps.env.outputs.version }}
           body_path: release_notes.md
-          draft: ${{ github.event.inputs.draft_only == 'true' }}
+          draft: ${{ github.event.inputs.draft_only == 'true' || github.event.inputs.skip_nexus_upload == 'true' }}
           prerelease: false
           files: artifacts/**/*
         env:
