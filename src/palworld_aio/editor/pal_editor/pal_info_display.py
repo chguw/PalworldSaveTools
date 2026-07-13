@@ -146,6 +146,7 @@ class PalInfoDisplayMixin:
                 p_list = p_skills
             else:
                 p_list = []
+            passive_hp_bonus = 0
             passive_shot_bonus = 0
             passive_def_bonus = 0
             passive_craft_bonus = 0
@@ -159,12 +160,16 @@ class PalInfoDisplayMixin:
                         tt = str(p_info.get(f'target_type{ei}', '') or '')
                         if 'ToTrainer' in tt and 'ToSelf' not in tt and 'ToSelfAndTrainer' not in tt:
                             continue
+                        if 'MaxHP' in etype:
+                            passive_hp_bonus += float(ev)
                         if 'ShotAttack' in etype:
                             passive_shot_bonus += float(ev)
                         elif 'Defense' in etype and 'ElementResist' not in etype and 'Resist' not in etype and 'Rate' not in etype:
                             passive_def_bonus += float(ev)
                         elif 'CraftSpeed' in etype:
                             passive_craft_bonus += float(ev)
+            if base:
+                max_hp = calculate_max_hp(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake, passive_bonus=passive_hp_bonus / 100)
             talent_shot_tmp = extract_value(raw, 'Talent_Shot', 0)
             rank_atk_tmp = extract_value(raw, 'Rank_Attack', 0)
             condenser_atk_tmp = int(extract_value(raw, 'Rank', 0))
@@ -215,7 +220,7 @@ class PalInfoDisplayMixin:
             self.atk_lbl.setText(str(int(atk_val)))
             self.def_lbl.setText(str(int(def_val)))
             self.wspd_lbl.setText(str(int(wspd_val)))
-            bd_hp = _hp_breakdown(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake)
+            bd_hp = _hp_breakdown(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake, passive_bonus=passive_hp_bonus / 100)
             bd_atk = _atk_breakdown(base, level, talent_shot_tmp, rank_atk_tmp, trust_rank, condenser_atk_tmp, passive_bonus=passive_shot_bonus / 100, is_awake=is_awake_tmp)
             bd_def = _def_breakdown(base, level, extract_value(raw, 'Talent_Defense', 0), extract_value(raw, 'Rank_Defence', 0), trust_rank, condenser_atk_tmp, passive_bonus=passive_def_bonus / 100, is_awake=is_awake_tmp)
             bd_ws = _ws_breakdown(base, level, extract_value(raw, 'Rank_CraftSpeed', 0), passive_craft_bonus / 100, condenser_atk_tmp)

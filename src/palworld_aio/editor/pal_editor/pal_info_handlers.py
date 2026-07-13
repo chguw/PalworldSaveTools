@@ -221,7 +221,28 @@ class PalInfoHandlerMixin:
             rank_raw = extract_value(raw, 'Rank', 0)
             condenser_rank = int(rank_raw) if isinstance(rank_raw, (int, float)) else 0
             is_awake_val = bool(extract_value(raw, 'bIsAwakening', False))
-            new_max_hp = calculate_max_hp(base, value, talent_hp, rank_hp, is_boss, is_lucky, friendship_rank, condenser_rank, is_awake_val)
+            _ensure_passive_data()
+            p_skills = raw.get('PassiveSkillList', {})
+            if isinstance(p_skills, dict):
+                p_list = p_skills.get('value', {}).get('values', [])
+            elif isinstance(p_skills, list):
+                p_list = p_skills
+            else:
+                p_list = []
+            passive_hp_bonus = 0
+            for pv in p_list:
+                p_clean = str(pv.get('value', pv) if isinstance(pv, dict) else pv).lower() if pv else ''
+                if p_clean and p_clean in _data._PASSIVE_DATA:
+                    p_info = _data._PASSIVE_DATA[p_clean]
+                    for ei in range(1, 5):
+                        etype = str(p_info.get(f'efftype{ei}', ''))
+                        ev = p_info.get(f'effect{ei}', 0)
+                        tt = str(p_info.get(f'target_type{ei}', '') or '')
+                        if 'ToTrainer' in tt and 'ToSelf' not in tt and 'ToSelfAndTrainer' not in tt:
+                            continue
+                        if 'MaxHP' in etype:
+                            passive_hp_bonus += float(ev)
+            new_max_hp = calculate_max_hp(base, value, talent_hp, rank_hp, is_boss, is_lucky, friendship_rank, condenser_rank, is_awake_val, passive_bonus=passive_hp_bonus / 100)
             raw['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(new_max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
             raw['MaxHP'] = raw['Hp']
         self._refresh()

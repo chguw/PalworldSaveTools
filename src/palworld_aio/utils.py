@@ -339,7 +339,8 @@ def stat_breakdown_tooltip(label_key, bd, show_awake=True):
         lines.append(t('stat_tooltip.enhance_souls', percent=pct))
     if pm != 1.0:
         pct_p = round((pm - 1) * 100)
-        lines.append(f'Passive Skills +{pct_p}%')
+        sign = '+' if pct_p >= 0 else ''
+        lines.append(f'Passive Skills {sign}{pct_p}%')
     return '\n'.join(lines)
 
 def calculate_work_speed(pal_data=None, level=1, rank_craftspeed=0, passive_bonus=0, condenser_rank=1):
