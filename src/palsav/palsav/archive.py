@@ -250,7 +250,6 @@ class FArchiveReader:
         key_type = self.fstring()
         value_type = self.fstring()
         _id = self.optional_guid()
-        payload_start = self.data.tell()
         self.u32()
         count = self.u32()
         key_path = path + '.Key'
@@ -268,21 +267,19 @@ class FArchiveReader:
             key = self.prop_value(key_type, key_struct_type, key_path)
             v = self.prop_value(value_type, value_struct_type, value_path)
             values.append({'key': key, 'value': v})
-        remaining = size - (self.data.tell() - payload_start)
-        if remaining > 0:
-            self.data.read(remaining)
         return {'key_type': key_type, 'value_type': value_type, 'key_struct_type': key_struct_type, 'value_struct_type': value_struct_type, 'id': _id, 'value': values}
     def _read_SetProperty(self, size, path):
         set_type = self.fstring()
         _id = self.optional_guid()
-        payload_start = self.data.tell()
         self.u32()
         count = self.u32()
-        values = [self.properties_until_end() for _ in range(count)]
-        remaining = size - (self.data.tell() - payload_start)
-        if remaining > 0:
-            self.data.read(remaining)
-        return {'set_type': set_type, 'id': _id, 'value': values}
+        struct_type = None
+        if set_type == 'StructProperty':
+            struct_type = self.get_type_or(f'{path}.StructProperty', 'StructProperty')
+            values = [self.struct_value(struct_type, f'{path}.StructProperty') for _ in range(count)]
+        else:
+            values = [self.properties_until_end() for _ in range(count)]
+        return {'set_type': set_type, 'struct_type': struct_type, 'id': _id, 'value': values}
     _READ_PROPERTY_DISPATCH: dict[str, Any] = {'StructProperty': _read_StructProperty, 'IntProperty': _read_IntProperty, 'UInt16Property': _read_UInt16Property, 'UInt32Property': _read_UInt32Property, 'UInt64Property': _read_UInt64Property, 'Int64Property': _read_Int64Property, 'FixedPoint64Property': _read_FixedPoint64Property, 'FloatProperty': _read_FloatProperty, 'StrProperty': _read_StrProperty, 'NameProperty': _read_NameProperty, 'EnumProperty': _read_EnumProperty, 'BoolProperty': _read_BoolProperty, 'ByteProperty': _read_ByteProperty, 'ArrayProperty': _read_ArrayProperty, 'MapProperty': _read_MapProperty, 'SetProperty': _read_SetProperty}
     def property(self, type_name: str, size: int, path: str, nested_caller_path: str='') -> dict[str, Any]:
         if path in self.custom_properties and (path is not nested_caller_path or nested_caller_path == ''):
@@ -621,8 +618,12 @@ class FArchiveWriter:
         start = self.data.tell()
         self.u32(0)
         self.u32(len(property['value']))
+        struct_type = property.get('struct_type', None)
         for element in property['value']:
-            self.properties(element)
+            if property['set_type'] == 'StructProperty' and struct_type is not None:
+                self.struct_value(struct_type, element)
+            else:
+                self.properties(element)
         return self.data.tell() - start
     _WRITE_PROPERTY_DISPATCH: dict[str, Any] = {'StructProperty': _write_StructProperty, 'IntProperty': _write_IntProperty, 'UInt16Property': _write_UInt16Property, 'UInt32Property': _write_UInt32Property, 'UInt64Property': _write_UInt64Property, 'Int64Property': _write_Int64Property, 'FixedPoint64Property': _write_FixedPoint64Property, 'FloatProperty': _write_FloatProperty, 'StrProperty': _write_StrProperty, 'NameProperty': _write_NameProperty, 'EnumProperty': _write_EnumProperty, 'BoolProperty': _write_BoolProperty, 'ByteProperty': _write_ByteProperty, 'ArrayProperty': _write_ArrayProperty, 'MapProperty': _write_MapProperty, 'SetProperty': _write_SetProperty}
     def property_inner(self, property_type: str, property: dict[str, Any]) -> int:
