@@ -935,6 +935,14 @@ class MainWindow(QMainWindow):
             if dlg.exec() == QDialog.Accepted:
                 effigy_qty = dlg.intValue()
                 effigy_accepted = True
+        if effigy_accepted:
+            for uid in player_uids:
+                try:
+                    inv = PlayerInventory(uid)
+                    if inv.load():
+                        inv.set_all_effigy_counts(effigy_qty)
+                except:
+                    pass
         total_missing = sum((len(v) for v in per_player_missing.values()))
         if not total_missing:
             self._show_info(t('player_item.add_complete') if t else 'Add All Key Items', t('inventory.no_new_items') if t else 'All key items already present.')
@@ -947,8 +955,6 @@ class MainWindow(QMainWindow):
                 inv = PlayerInventory(uid)
                 if not inv.load():
                     continue
-                if effigy_accepted:
-                    inv.set_all_effigy_counts(effigy_qty)
                 key_container = inv.containers.get('key')
                 if key_container:
                     std_container = key_container._standardized_container
