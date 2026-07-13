@@ -1219,16 +1219,16 @@ class PlayerInventoryTab(QWidget):
                 self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items', default='Add All Key Items'), t('inventory.no_new_items', default='All key items already present.'))
                 return
 
-            from palworld_aio.inventory.inventory_manager import is_effigy_item
-            effigy_count = sum(1 for i in to_add if is_effigy_item(i['asset']))
+            from palworld_aio.inventory.inventory_manager import is_effigy_item, ASSET_TO_RELIC_TYPE
             effigy_qty = 1
-            if effigy_count > 0:
+            if ASSET_TO_RELIC_TYPE:
                 from PySide6.QtWidgets import QInputDialog
-                qty, ok = QInputDialog.getInt(self, t('inventory.effigy_add_qty_title', default='Effigy Quantity'), t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'), value=1, minValue=1, maxValue=9999)
+                qty, ok = QInputDialog.getInt(self, t('inventory.effigy_add_qty_title', default='Effigy Quantity'), t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'), value=effigy_qty, minValue=1, maxValue=9999)
                 if ok:
                     effigy_qty = qty
-                else:
-                    return
+            all_relic_types = set(ASSET_TO_RELIC_TYPE.values())
+            for rtype in all_relic_types:
+                self.inventory.set_effigy_count(rtype, effigy_qty)
 
             reply = self._themed_message_box(QMessageBox.Question, t('inventory.add_all_key_items_confirm.title', default='Add All Key Items'), t('inventory.add_all_key_items_confirm.msg', count=total, default=f'Add all missing key items? ({total} items)'), QMessageBox.Yes | QMessageBox.No)
             if reply != QMessageBox.Yes:
@@ -1242,8 +1242,7 @@ class PlayerInventoryTab(QWidget):
             for item_id in missing_unlocks:
                 self.inventory.add_item('key', item_id, 1)
             for item in to_add:
-                qty = effigy_qty if is_effigy_item(item['asset']) else 1
-                self.inventory.add_item('key', item['asset'], qty)
+                self.inventory.add_item('key', item['asset'], 1)
             self._update_raw_save_data('key', key_container)
             self._refresh_display()
             self._themed_message_box(QMessageBox.Information, t('inventory.add_all_key_items_success.title', default='Add All Key Items'), t('inventory.add_all_key_items_success.msg', count=total, default=f'Added {total} missing key items.'))

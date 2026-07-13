@@ -927,25 +927,22 @@ class MainWindow(QMainWindow):
             if hasattr(self, 'refresh_all'):
                 self.refresh_all()
             return
-        from palworld_aio.inventory.inventory_manager import is_effigy_item
-        all_missing = set()
-        for ids in per_player_missing.values():
-            all_missing.update(ids)
-        effigy_count = sum(1 for iid in all_missing if is_effigy_item(iid))
+        from palworld_aio.inventory.inventory_manager import is_effigy_item, ASSET_TO_RELIC_TYPE
         effigy_qty = 1
-        if effigy_count > 0:
+        if ASSET_TO_RELIC_TYPE:
             from PySide6.QtWidgets import QInputDialog
-            qty, ok = QInputDialog.getInt(self, t('inventory.effigy_add_qty_title', default='Effigy Quantity'), t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'), value=1, minValue=1, maxValue=9999)
+            qty, ok = QInputDialog.getInt(self, t('inventory.effigy_add_qty_title', default='Effigy Quantity'), t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'), value=effigy_qty, minValue=1, maxValue=9999)
             if ok:
                 effigy_qty = qty
-            else:
-                return
         players_affected = 0
+        all_relic_types = set(ASSET_TO_RELIC_TYPE.values())
         for uid, item_ids in per_player_missing.items():
             try:
                 inv = PlayerInventory(uid)
                 if not inv.load():
                     continue
+                for rtype in all_relic_types:
+                    inv.set_effigy_count(rtype, effigy_qty)
                 key_container = inv.containers.get('key')
                 if key_container:
                     std_container = key_container._standardized_container
@@ -955,8 +952,7 @@ class MainWindow(QMainWindow):
                         std_container.expand_capacity(new_max)
                         std_container.container_data['value']['SlotNum']['value'] = new_max
                 for item_id in item_ids:
-                    qty = effigy_qty if is_effigy_item(item_id) else 1
-                    inv.add_item('key', item_id, qty)
+                    inv.add_item('key', item_id, 1)
                 wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
                 item_containers = wsd.get('ItemContainerSaveData', {}).get('value', [])
                 container_lookup = {}
