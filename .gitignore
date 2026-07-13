@@ -66,6 +66,7 @@ pal-save/
 .hermes/plans/
 
 # External assets
+psp_windows/
 Exports/
 Backups/
 *.sav
