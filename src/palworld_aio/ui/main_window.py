@@ -1642,14 +1642,16 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'menu_bar'):
             self._setup_menus()
     def _add_exclusion(self, excl_type, value):
-        if value not in constants.exclusions[excl_type]:
-            constants.exclusions[excl_type].append(value)
+        exclusions = constants.exclusions.setdefault(excl_type, [])
+        if value not in exclusions:
+            exclusions.append(value)
             self._refresh_exclusions()
         else:
             self._show_info(t('Info'), t('deletion.info.already_in_exclusions', kind=excl_type[:-1].capitalize()))
     def _remove_exclusion(self, excl_type, value):
-        if value in constants.exclusions[excl_type]:
-            constants.exclusions[excl_type].remove(value)
+        exclusions = constants.exclusions.setdefault(excl_type, [])
+        if value in exclusions:
+            exclusions.remove(value)
             self._refresh_exclusions()
     def _delete_player(self, uid):
         if uid in constants.exclusions.get('players', []):
