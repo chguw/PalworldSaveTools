@@ -79,6 +79,13 @@ jobs:
       - name: Build with Nuitka (Windows)
         if: ${{ matrix.platform == 'windows' && steps.cache-dist.outputs.cache-hit != 'true' }}
         run: uv run python build/nuitka/build_nuitka.py --onefile
+      - name: Apply app icon (rcedit)
+        if: ${{ matrix.platform == 'windows' && steps.cache-dist.outputs.cache-hit != 'true' }}
+        shell: pwsh
+        run: |
+          curl.exe -sL https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -o rcedit.exe
+          $exe = (Get-Item "dist/PalworldSaveTools-*.exe").FullName
+          .\rcedit.exe $exe --set-icon "resources/assets/icons/app/icon.ico"
       - name: Build macOS DMG
         if: ${{ matrix.platform == 'macos' && steps.cache-dist.outputs.cache-hit != 'true' }}
         run: uv run python build/macos_build.py --ad-hoc

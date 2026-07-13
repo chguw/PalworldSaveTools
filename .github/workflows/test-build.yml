@@ -139,6 +139,13 @@ jobs:
       - name: Build with Nuitka
         if: steps.cache-dist.outputs.cache-hit != 'true'
         run: uv run python build/nuitka/build_nuitka.py --onefile
+      - name: Apply app icon (rcedit)
+        if: steps.cache-dist.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          curl.exe -sL https://github.com/electron/rcedit/releases/download/v2.0.0/rcedit-x64.exe -o rcedit.exe
+          $exe = (Get-Item "dist/PalworldSaveTools-*.exe").FullName
+          .\rcedit.exe $exe --set-icon "resources/assets/icons/app/icon.ico"
       - name: Verify build output
         shell: bash
         run: |
