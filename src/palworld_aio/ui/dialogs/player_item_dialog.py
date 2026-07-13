@@ -183,8 +183,6 @@ class PlayerItemActionDialog(QDialog):
                 if not desc or desc.lower() in ('', 'en text', 'en_text', 'none', '-', '---'):
                     continue
                 if is_essential:
-                    if 'Effigy' in name:
-                        continue
                     if asset in unlock_assets:
                         continue
                     if name == asset:
@@ -315,6 +313,18 @@ class PlayerItemActionDialog(QDialog):
                                 return 1
                 except:
                     pass
+                return 0
+            # For effigies, count from RelicPossessNumMap instead of containers
+            from palworld_aio.inventory.inventory_manager import ASSET_TO_RELIC_TYPE, is_effigy_item
+            if is_effigy_item(item_id):
+                relic_type = ASSET_TO_RELIC_TYPE.get(item_id, '')
+                if relic_type:
+                    record_data = save_data.get('RecordData', {}).get('value', {})
+                    if record_data:
+                        rpm = record_data.get('RelicPossessNumMap', {})
+                        for e in rpm.get('value', []):
+                            if e.get('key') == relic_type:
+                                return e.get('value', 0)
                 return 0
             inv_info = save_data.get('InventoryInfo', {}).get('value', {})
             if not inv_info:

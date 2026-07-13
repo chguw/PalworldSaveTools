@@ -893,7 +893,7 @@ class MainWindow(QMainWindow):
             boss_map = json.load(open(boss_map_path, encoding='utf-8')).get('boss_defeat_flag_map', {})
         except:
             boss_map = {}
-        candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
+        candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
         per_player_missing = {}
         for uid in player_uids:
             try:
@@ -903,6 +903,10 @@ class MainWindow(QMainWindow):
                 key_container = inv.containers.get('key')
                 existing = {s.get('item_id', '') for s in (key_container.slots if key_container else []) if s.get('item_id', '')}
                 existing.update(inv._bounty_tokens.keys())
+                from palworld_aio.inventory.inventory_manager import ASSET_TO_RELIC_TYPE
+                for asset, rtype in ASSET_TO_RELIC_TYPE.items():
+                    if inv._effigies.get(rtype, 0) > 0:
+                        existing.add(asset)
                 missing = [c['asset'] for c in candidates if c['asset'] not in existing]
                 for item_id in FOOD_POUCH_ITEMS:
                     if item_id not in existing:

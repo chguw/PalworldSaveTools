@@ -13,6 +13,26 @@ from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav, as_uuid, are_eq
 from palworld_aio.inventory.dynamic_item_manager import get_dynamic_item_manager, generate_dynamic_item_uuid
 from palworld_aio.inventory.standardized_container import StandardizedContainer, ContainerSlot
 TYPE_A_TO_CATEGORY = {'EPalItemTypeA::Weapon': 'weapon', 'EPalItemTypeA::MonsterEquipWeapon': 'weapon', 'EPalItemTypeA::SpecialWeapon': 'weapon', 'EPalItemTypeA::Armor': 'armor', 'EPalItemTypeA::Accessory': 'accessory', 'EPalItemTypeA::Food': 'food', 'EPalItemTypeA::Material': 'material', 'EPalItemTypeA::Ammo': 'ammo', 'EPalItemTypeA::Consume': 'consume', 'EPalItemTypeA::Glider': 'tool', 'EPalItemTypeA::CaptureItemModifier': 'sphere', 'EPalItemTypeA::Essential': 'key_item', 'EPalItemTypeA::Blueprint': 'blueprint'}
+EFFIGY_ASSETS = frozenset({'Relic', 'Relic_01', 'Relic_02', 'Relic_03', 'Relic_04', 'Relic_05',
+                           'Relic_06', 'Relic_07', 'Relic_08', 'Relic_09', 'Relic_10', 'Relic_11', 'Relic_12'})
+RELIC_TYPE_TO_EFFIGY = {
+    'EPalRelicType::CapturePower': 'Relic',
+    'EPalRelicType::ClimbSpeed': 'Relic_06',
+    'EPalRelicType::ExpBonus': 'Relic_10',
+    'EPalRelicType::FoodDecayReduction': 'Relic_03',
+    'EPalRelicType::GliderSpeed': 'Relic_05',
+    'EPalRelicType::HungerReduction': 'Relic_01',
+    'EPalRelicType::JumpPower': 'Relic_04',
+    'EPalRelicType::MoveSpeed': 'Relic_12',
+    'EPalRelicType::RainbowPassiveRate': 'Relic_11',
+    'EPalRelicType::SphereHoming': 'Relic_09',
+    'EPalRelicType::StaminaReduction': 'Relic_08',
+    'EPalRelicType::StatusAilmentResist': 'Relic_07',
+    'EPalRelicType::SwimSpeed': 'Relic_02',
+}
+ASSET_TO_RELIC_TYPE = {v: k for k, v in RELIC_TYPE_TO_EFFIGY.items()}
+def is_effigy_item(item_id):
+    return item_id in EFFIGY_ASSETS
 class ItemData:
     _instance = None
     _item_data = None
@@ -265,6 +285,66 @@ class PlayerInventory:
         self.is_loaded = False
         self.max_slots = 42
         self._bounty_tokens = {}
+    def _load_effigies(self) -> None:
+        self._effigies = {}
+        if not self.player_gvas:
+            return
+        props = self.player_gvas.properties if hasattr(self.player_gvas, 'properties') else self.player_gvas.get('properties', {})
+        save_data = props.get('SaveData', {}).get('value', {})
+        if not save_data:
+            return
+        record_data = save_data.get('RecordData', {}).get('value', {})
+        if not record_data:
+            return
+        rpm = record_data.get('RelicPossessNumMap', {})
+        entries = rpm.get('value', [])
+        for e in entries:
+            rtype = e.get('key', '')
+            count = e.get('value', 0)
+            if count > 0:
+                self._effigies[rtype] = count
+
+    def get_effigy_items(self, existing_slot_count: int = 0) -> list:
+        items = []
+        for i, (rtype, count) in enumerate(sorted(self._effigies.items())):
+            idx = existing_slot_count + i
+            effigy_asset = RELIC_TYPE_TO_EFFIGY.get(rtype, 'Relic')
+            info = ItemData.get_item_by_asset(effigy_asset)
+            items.append({'slot_index': idx, 'item_id': effigy_asset, 'relic_type': rtype,
+                          'item_name': info.get('name', 'Effigy'),
+                          'icon_path': info.get('icon', ''),
+                          'stack_count': count, 'category': 'key_item',
+                          'rarity': info.get('rarity', 0),
+                          'description': info.get('description', ''),
+                          'container_type': 'key', 'raw_data': None, 'is_effigy': True})
+        return items
+
+    def set_effigy_count(self, relic_type: str, count: int) -> bool:
+        if not self.player_gvas:
+            return False
+        props = self.player_gvas.properties if hasattr(self.player_gvas, 'properties') else self.player_gvas.get('properties', {})
+        save_data = props.get('SaveData', {}).get('value', {})
+        if not save_data:
+            return False
+        record_data = save_data.setdefault('RecordData', {'value': {}, 'type': 'StructProperty'})['value']
+        rpm = record_data.setdefault('RelicPossessNumMap', {'key_type': 'EnumProperty', 'value_type': 'IntProperty', 'key_struct_type': None, 'value_struct_type': None, 'id': None, 'value': [], 'type': 'MapProperty'})
+        found = False
+        for e in rpm['value']:
+            if e.get('key') == relic_type:
+                e['value'] = max(0, count)
+                found = True
+                break
+        if not found and count > 0:
+            rpm['value'].append({'key': relic_type, 'value': count})
+        self._save_player_sav()
+        self._load_effigies()
+        return True
+
+    def remove_effigy(self, relic_type: str) -> bool:
+        return self.set_effigy_count(relic_type, 0)
+
+    _EFFIGY_DEFAULT_RELIC_TYPE = 'EPalRelicType::CapturePower'
+
     def _load_bounty_tokens(self) -> None:
         self._bounty_tokens = {}
         if not self.player_gvas:
@@ -326,6 +406,7 @@ class PlayerInventory:
                 if container_id and container_id in container_lookup:
                     self.containers[container_type] = InventoryContainer(container_id, container_lookup[container_id], container_type=container_type)
             self._load_bounty_tokens()
+            self._load_effigies()
             self._calculate_max_slots()
             self.is_loaded = True
             return True
@@ -546,6 +627,12 @@ class PlayerInventory:
             container_type = ItemData.get_target_container(item_id)
         elif container_type == 'main' and ItemData.is_essential_item(item_id):
             container_type = 'key'
+        # Effigies: write to RelicPossessNumMap, never add to container
+        if item_id and is_effigy_item(item_id):
+            relic_type = ASSET_TO_RELIC_TYPE.get(item_id, self._EFFIGY_DEFAULT_RELIC_TYPE)
+            cur = self._effigies.get(relic_type, 0)
+            self.set_effigy_count(relic_type, cur + quantity)
+            return True
         # Bounty tokens: only update player save flags, never add to container
         if item_id and item_id.startswith('BossDefeatReward_'):
             for _ in range(quantity):

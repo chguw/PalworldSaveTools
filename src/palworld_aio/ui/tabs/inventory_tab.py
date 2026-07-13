@@ -1200,12 +1200,16 @@ class PlayerInventoryTab(QWidget):
             all_items = ItemData.get_all_items()
             unlock_assets = set(FOOD_POUCH_ITEMS + ACCESSORY_UNLOCK_ITEMS + WEAPON_UNLOCK_ITEMS)
             boss_map = self.inventory._build_boss_key_map()
-            key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and 'Effigy' not in i.get('name', '') and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
+            key_candidates = [i for i in all_items if i.get('type_a') == 'EPalItemTypeA::Essential' and (i['asset'] not in unlock_assets) and (i.get('sort_id', 0) != 9999) and (i.get('description', '').strip() not in ('', '-')) and (i.get('name', '') != i.get('asset', '')) and ('en_text' not in i.get('name', '').lower()) and (not i['asset'].startswith('BossDefeatReward_') or i['asset'] in boss_map)]
             key_container = self.inventory.get_container('key')
             if not key_container:
                 return
             existing_ids = {s.get('item_id') for s in key_container.slots}
             existing_ids.update(self.inventory._bounty_tokens.keys())
+            from palworld_aio.inventory.inventory_manager import ASSET_TO_RELIC_TYPE
+            for asset, rtype in ASSET_TO_RELIC_TYPE.items():
+                if self.inventory._effigies.get(rtype, 0) > 0:
+                    existing_ids.add(asset)
             to_add = [i for i in key_candidates if i['asset'] not in existing_ids]
             missing_unlocks = []
             for item_id in FOOD_POUCH_ITEMS:
@@ -1255,7 +1259,9 @@ class PlayerInventoryTab(QWidget):
             container_items = key_container.slots
             occupied = max((s.get('slot_index', -1) for s in container_items), default=-1) + 1
             bounty_items = self.inventory.get_bounty_token_items(existing_slot_count=occupied)
-            merged = container_items + bounty_items
+            occupied2 = occupied + len(bounty_items)
+            effigy_items = self.inventory.get_effigy_items(existing_slot_count=occupied2)
+            merged = container_items + bounty_items + effigy_items
             key_slot_count = max(50, len(merged) + 10)
             self.key_grid.load_items(merged, max_slots=key_slot_count)
         unlocked_food_slots = self.inventory.get_unlocked_food_slots() if self.inventory else 0
@@ -1632,7 +1638,16 @@ class PlayerInventoryTab(QWidget):
         if not self.inventory or not slot_data:
             return
         is_bounty = slot_data.get('is_bounty', False)
+        is_effigy = slot_data.get('is_effigy', False)
         item_id = slot_data.get('item_id', '')
+        if is_effigy and item_id:
+            relic_type = slot_data.get('relic_type', '')
+            if relic_type:
+                self.inventory.remove_effigy(relic_type)
+                self.inventory.save()
+                self.selected_item = None
+                self._refresh_display()
+            return
         if is_bounty and item_id:
             self.inventory.remove_bounty_item(item_id)
             self.inventory.save()
@@ -1897,11 +1912,16 @@ class PlayerInventoryTab(QWidget):
         slot_index = slot_data.get('slot_index', 0)
         item_name = slot_data.get('item_name', 'Unknown')
         is_bounty = slot_data.get('is_bounty', False)
+        is_effigy = slot_data.get('is_effigy', False)
         item_id = slot_data.get('item_id', '')
         msg = t('inventory.delete_confirm.msg', item=item_name, default=f'Delete "{item_name}"?')
         reply = self._themed_message_box(QMessageBox.Question, t('inventory.delete_confirm.title', default='Delete Item'), msg, QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
-            if is_bounty and item_id:
+            if is_effigy and item_id:
+                relic_type = slot_data.get('relic_type', '')
+                if relic_type:
+                    self.inventory.remove_effigy(relic_type)
+            elif is_bounty and item_id:
                 self.inventory.remove_bounty_item(item_id)
             else:
                 self.inventory.remove_item(container_type, slot_index)
@@ -1919,6 +1939,21 @@ class PlayerInventoryTab(QWidget):
         dialog = QuantityDialog(current_qty, self)
         if dialog.exec() == QDialog.Accepted:
             new_qty = dialog.get_quantity()
+            if slot_data.get('is_effigy'):
+                relic_type = slot_data.get('relic_type', '')
+                if relic_type:
+                    self.inventory.set_effigy_count(relic_type, new_qty)
+                    self._refresh_display()
+                return
+            if slot_data.get('is_bounty'):
+                item_id = slot_data.get('item_id', '')
+                if item_id:
+                    self.inventory.remove_bounty_item(item_id)
+                    for _ in range(new_qty - 1):
+                        self.inventory._ensure_boss_defeat_flags([item_id])
+                    self.inventory._save_player_sav()
+                    self._refresh_display()
+                return
             container_type = slot_data.get('container_type', 'main')
             slot_index = slot_data.get('slot_index', 0)
             if self.inventory.update_quantity(container_type, slot_index, new_qty):
