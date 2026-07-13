@@ -59,10 +59,7 @@ class ItemSlotWidget(QFrame):
             pixmap = ItemData.get_item_icon(icon_path, QSize(40, 40))
             self.icon_label.setPixmap(pixmap)
         stack_count = slot_data.get('stack_count', 1)
-        if stack_count > 1:
-            self.qty_label.setText(str(stack_count))
-        else:
-            self.qty_label.clear()
+        self.qty_label.setText(str(stack_count))
         rarity = slot_data.get('rarity', 0)
         self._apply_rarity_style(rarity)
     def _apply_rarity_style(self, rarity: int):
@@ -174,11 +171,7 @@ class EquipmentSlotWidget(QFrame):
             name = name[:8] + '..'
         self.name_label.setText(name)
         stack_count = slot_data.get('stack_count', 1)
-        category = slot_data.get('category', 'misc')
-        if stack_count > 1 or category == 'food':
-            self.qty_label.setText(str(stack_count))
-        else:
-            self.qty_label.clear()
+        self.qty_label.setText(str(stack_count))
         rarity = slot_data.get('rarity', 0)
         if rarity <= 0:
             color = '#aaaaaa'
