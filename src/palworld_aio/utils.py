@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import ssl
+import json
 import mmap
 import pickle
 from palsav import json_tools
@@ -34,12 +35,17 @@ def resolve_name(character_id: str, name_map: dict) -> str | None:
 def check_for_update():
     try:
         context = ssl._create_unverified_context()
-        req = urllib.request.Request(constants.GITHUB_RAW_URL)
-        req.add_header('Range', 'bytes=0-1024')
+        req = urllib.request.Request(
+            'https://api.github.com/repos/deafdudecomputers/PalworldSaveTools/releases/latest',
+            headers={
+                'User-Agent': 'PalworldSaveTools/2.0',
+                'Accept': 'application/vnd.github.v3+json',
+            },
+        )
         with urllib.request.urlopen(req, timeout=10, context=context) as r:
-            content = r.read().decode('utf-8')
-        match = re.search('APP_VERSION\\s*=\\s*"([^"]+)"', content)
-        latest = match.group(1) if match else None
+            data = json.loads(r.read().decode('utf-8'))
+        tag = data.get('tag_name', '') or ''
+        latest = tag.lstrip('v')
         local, _ = get_versions()
         if not latest:
             return None

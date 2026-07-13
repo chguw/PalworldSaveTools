@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import ssl
+import json
 from palsav import json_tools
 import subprocess
 import tempfile
@@ -14,7 +15,7 @@ from typing import Optional, Callable, Dict, Tuple
 from palworld_aio import constants
 GIT_REPO_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools.git'
 STABLE_BRANCH = 'main'
-STABLE_VERSION_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
+STABLE_VERSION_URL = 'https://api.github.com/repos/deafdudecomputers/PalworldSaveTools/releases/latest'
 RELEASE_DOWNLOAD_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/download/v{version}/PST_standalone_v{version}.7z'
 RELEASES_PAGE_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 CHANGELOG_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/CHANGELOG.md'
@@ -143,12 +144,17 @@ class StandaloneUpdater:
     def check_version(self) -> Dict:
         try:
             context = ssl._create_unverified_context()
-            req = urllib.request.Request(STABLE_VERSION_URL)
-            req.add_header('Range', 'bytes=0-2048')
+            req = urllib.request.Request(
+                STABLE_VERSION_URL,
+                headers={
+                    'User-Agent': 'PalworldSaveTools/2.0',
+                    'Accept': 'application/vnd.github.v3+json',
+                },
+            )
             with urllib.request.urlopen(req, timeout=10, context=context) as r:
-                content = r.read().decode('utf-8')
-            match = re.search('APP_VERSION\\s*=\\s*["\\\']([^"\\\']+)["\\\']', content)
-            latest = match.group(1) if match else None
+                data = json.loads(r.read().decode('utf-8'))
+            tag = data.get('tag_name', '') or ''
+            latest = tag.lstrip('v') or None
             try:
                 from common import get_versions
                 local, _ = get_versions()
@@ -256,11 +262,16 @@ def check_for_updates(branch: str=None) -> Dict:
 def get_version_from_remote(branch: str=None) -> Optional[str]:
     try:
         context = ssl._create_unverified_context()
-        req = urllib.request.Request(STABLE_VERSION_URL)
-        req.add_header('Range', 'bytes=0-2048')
+        req = urllib.request.Request(
+            STABLE_VERSION_URL,
+            headers={
+                'User-Agent': 'PalworldSaveTools/2.0',
+                'Accept': 'application/vnd.github.v3+json',
+            },
+        )
         with urllib.request.urlopen(req, timeout=10, context=context) as r:
-            content = r.read().decode('utf-8')
-        match = re.search('APP_VERSION\\s*=\\s*["\\\']([^"\\\']+)["\\\']', content)
-        return match.group(1) if match else None
+            data = json.loads(r.read().decode('utf-8'))
+        tag = data.get('tag_name', '') or ''
+        return tag.lstrip('v') or None
     except:
         return None
