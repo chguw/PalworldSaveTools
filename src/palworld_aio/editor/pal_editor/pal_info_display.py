@@ -170,6 +170,8 @@ class PalInfoDisplayMixin:
                             passive_craft_bonus += float(ev)
             if base:
                 max_hp = calculate_max_hp(base, level, talent_hp, rank_hp, is_boss, is_lucky, trust_rank, condenser_rank, is_awake, passive_bonus=passive_hp_bonus / 100)
+                if passive_hp_bonus != 0:
+                    hp_val = int(hp_val * (1 + passive_hp_bonus / 100))
             talent_shot_tmp = extract_value(raw, 'Talent_Shot', 0)
             rank_atk_tmp = extract_value(raw, 'Rank_Attack', 0)
             condenser_atk_tmp = int(extract_value(raw, 'Rank', 0))
