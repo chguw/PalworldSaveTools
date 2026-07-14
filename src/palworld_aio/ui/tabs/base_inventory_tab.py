@@ -1483,6 +1483,8 @@ class _BasePalIcon(QFrame):
                 self.rightClicked.emit(self.slot_index, 'learnt_skills')
             elif key == 'bulk_sync_pal':
                 self.rightClicked.emit(self.slot_index, 'bulk_sync_pal')
+            elif key == 'bulk_sync_all':
+                self.rightClicked.emit(self.slot_index, 'bulk_sync_all')
             elif key == 'clone':
                 self.rightClicked.emit(self.slot_index, 'clone')
             elif key == 'bulk_rename':
@@ -2360,6 +2362,13 @@ class BasePalsContentWidget(QFrame):
                 if 'found' in text.lower() or text.startswith(t('edit_pals.bulk_sync_found', count=0, name='').split('{')[0] if t else 'Found'):
                     child.setText(t('edit_pals.bulk_sync_found', count=len(affected), name=display_name) if t else f'Found {len(affected)} pals matching {display_name}')
                     break
+            if dlg.exec() == QDialog.Accepted:
+                for icon in self._icons:
+                    icon.update_display()
+        elif action == 'bulk_sync_all':
+            from palworld_aio.editor.edit_pals import _get_raw_from_item, BulkSyncAllDialog
+            stub = type('Stub', (), {'party_pals': {}, 'palbox_pal_dict': {}, 'pal_info': type('Stub', (), {'_refresh': lambda self: None})(), '_update_party_slots': lambda self: None, '_update_palbox_page': lambda self: None, '_update_dps_slots': lambda self: None, '_save_dps': lambda self: None})()
+            dlg = BulkSyncAllDialog(pal['character_entry'], stub, self)
             if dlg.exec() == QDialog.Accepted:
                 for icon in self._icons:
                     icon.update_display()
