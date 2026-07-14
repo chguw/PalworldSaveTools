@@ -629,7 +629,9 @@ def _migrate_configs():
     os.makedirs(str(USER_CONFIG_DIR), exist_ok=True)
     if CONFIG_DIR != USER_CONFIG_DIR and CONFIG_DIR.is_dir():
         import shutil
-        for fname in ['config.json', 'user.cfg']:
+        for fname in ['config.json', 'user.cfg',
+                       'passive_loadouts.json', 'inventory_loadouts.json',
+                       'equipment_loadouts.json', 'base_inventory_loadouts.json']:
             src = CONFIG_DIR / fname
             dst = USER_CONFIG_DIR / fname
             if src.is_file() and not dst.exists():
