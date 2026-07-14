@@ -17,7 +17,10 @@ def get_backup_directory(tool_name):
     return os.path.join(BACKUP_BASE_DIR, tool_name)
 BACKUP_DIRS = {'all_in_one_tools': 'AllinOneTools', 'slot_injector': 'Slot Injector', 'character_transfer': 'Character Transfer', 'fix_host_save': 'Fix Host Save', 'restore_map': 'Restore Map'}
 def is_frozen():
-    return getattr(sys, 'frozen', False)
+    if getattr(sys, 'frozen', False):
+        return True
+    _exe = getattr(sys, 'executable', '') or ''
+    return not os.path.basename(_exe).lower().startswith('python')
 def get_python_executable():
     if is_frozen():
         return sys.executable
@@ -98,7 +101,7 @@ def open_file_with_default_app(file_path):
         print(f'Error opening file {file_path}: {e}')
         return False
 def unlock_self_folder():
-    if getattr(sys, 'frozen', False):
+    if is_frozen():
         folder = os.path.dirname(os.path.abspath(sys.executable))
     else:
         script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))

@@ -32,14 +32,20 @@ sys._PST_BINARY_ROOT = _compute_binary_root()
 def get_base_dir():
     return sys._PST_BINARY_ROOT
 
-def get_data_base():
+def _frozen():
     if getattr(sys, 'frozen', False):
-        return os.path.abspath(os.path.dirname(sys.argv[0]))
+        return True
+    _exe = getattr(sys, 'executable', '') or ''
+    return not os.path.basename(_exe).lower().startswith('python')
+
+def get_data_base():
+    if _frozen():
+        return os.path.dirname(get_user_config_dir())
     return get_base_dir()
 
 
 def get_user_config_dir() -> str:
-    if getattr(sys, 'frozen', False):
+    if _frozen():
         if sys.platform == 'win32':
             base = os.environ.get('APPDATA', os.path.expanduser('~'))
         elif sys.platform == 'darwin':
