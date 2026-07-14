@@ -224,6 +224,7 @@ class MainWindow(QMainWindow):
         load_exclusions()
         self._load_user_settings()
         self._setup_ui()
+        self._refresh_exclusions()
         self._load_theme()
         self.sidebar.set_active('tools')
         self._setup_menus()
@@ -245,7 +246,7 @@ class MainWindow(QMainWindow):
                 self._stream = stream
             def emit(self, record):
                 try:
-                    self._stream.write(self.format(record) + self.terminator)
+                    self._stream.write(self.format(record) + '\n')
                 except Exception:
                     self.handleError(record)
         handler = _StatusBarLogHandler(self.status_stream)
