@@ -319,7 +319,8 @@ class SaveManager(QObject):
         constants.player_levels = dict(uid_level_map)
         constants.player_character_cache = uid_entry_map
     def _count_pals_found(self, data, player_pals_count, log_folder, current_save_path, guild_name_map, illegal_pals_by_owner=None):
-        base_dir = '.'
+        from resource_resolver import get_data_base
+        base_dir = get_data_base()
         if illegal_pals_by_owner is None:
             illegal_pals_by_owner = defaultdict(lambda: defaultdict(list))
         else:
