@@ -679,7 +679,7 @@ class ItemPickerDialog(QDialog):
         qty_layout = QHBoxLayout()
         self.qty_label = QLabel(t('inventory.quantity', default='Quantity:'))
         self.qty_spin = QSpinBox()
-        self.qty_spin.setRange(1, 9999)
+        self.qty_spin.setRange(1, constants.MAX_QUANTITY)
         self.qty_spin.setValue(1)
         qty_layout.addWidget(self.qty_label)
         qty_layout.addWidget(self.qty_spin)
@@ -774,6 +774,8 @@ class ItemPickerDialog(QDialog):
             self.qty_spin.setVisible(not is_singleton)
             if is_singleton:
                 self.qty_spin.setValue(1)
+            item_id = self.selected_item or ''
+            self.qty_spin.setMaximum(ItemData.get_effective_max_stack(item_id))
         if item_desc:
             self.desc_label.setText(_clean_desc_for_tooltip(item_desc))
             self.desc_label.setVisible(True)
@@ -1219,7 +1221,7 @@ class PlayerInventoryTab(QWidget):
                 dlg.setWindowTitle(t('inventory.effigy_add_qty_title', default='Effigy Quantity'))
                 dlg.setLabelText(t('inventory.effigy_add_qty_prompt', default='How many of each effigy type to add?'))
                 dlg.setIntValue(1)
-                dlg.setIntRange(1, 9999)
+                dlg.setIntRange(1, constants.MAX_QUANTITY)
                 dlg.setInputMode(QInputDialog.IntInput)
                 dlg.setStyleSheet(DARK_THEME_STYLE)
                 if dlg.exec() == QDialog.Accepted:
@@ -1772,7 +1774,9 @@ class PlayerInventoryTab(QWidget):
         self._refresh_display()
     def _edit_equip_item(self, slot_name: str, current_item: dict):
         current_qty = current_item.get('stack_count', 1)
-        dialog = QuantityDialog(current_qty, self)
+        item_id = current_item.get('item_id', '')
+        max_qty = ItemData.get_effective_max_stack(item_id)
+        dialog = QuantityDialog(current_qty, max_qty, self)
         if dialog.exec() == QDialog.Accepted:
             new_qty = dialog.get_quantity()
             container_type = self._get_equip_container_type(slot_name)
@@ -1943,7 +1947,9 @@ class PlayerInventoryTab(QWidget):
         if not self.inventory or not slot_data:
             return
         current_qty = slot_data.get('stack_count', 1)
-        dialog = QuantityDialog(current_qty, self)
+        item_id = slot_data.get('item_id', '')
+        max_qty = ItemData.get_effective_max_stack(item_id)
+        dialog = QuantityDialog(current_qty, max_qty, self)
         if dialog.exec() == QDialog.Accepted:
             new_qty = dialog.get_quantity()
             if slot_data.get('is_effigy'):
@@ -2122,14 +2128,14 @@ class PlayerInventoryTab(QWidget):
                     self.select_player(prev_uid, prev_name or p['name'], p['display'])
                     break
 class QuantityDialog(QDialog):
-    def __init__(self, current_qty: int=1, parent=None):
+    def __init__(self, current_qty: int=1, max_val: int = None, parent=None):
         super().__init__(parent)
         self.setWindowTitle(t('inventory.edit_qty', default='Edit Quantity'))
         self.setFixedSize(280, 120)
         self.setStyleSheet(DARK_THEME_STYLE)
         layout = QVBoxLayout(self)
         self.spin_box = QSpinBox()
-        self.spin_box.setRange(1, 9999)
+        self.spin_box.setRange(1, max_val if max_val is not None else constants.MAX_QUANTITY)
         self.spin_box.setValue(current_qty)
         layout.addWidget(self.spin_box)
         btn_layout = QHBoxLayout()
@@ -2167,12 +2173,12 @@ def _merge_or_add_items(inventory, container_type, item_id, quantity):
     container = inventory.get_container(container_type)
     if not container:
         return False
-    MAX_STACK = 9999
     remaining = quantity
+    max_stack = ItemData.get_effective_max_stack(item_id)
     for s in container.slots:
-        if s.get('item_id') == item_id and s.get('stack_count', 0) < MAX_STACK:
+        if s.get('item_id') == item_id and s.get('stack_count', 0) < max_stack:
             cur = s.get('stack_count', 0)
-            can_add = MAX_STACK - cur
+            can_add = max_stack - cur
             if can_add <= 0:
                 continue
             to_add = min(remaining, can_add)

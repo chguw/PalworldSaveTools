@@ -8,7 +8,7 @@ from i18n import t
 from typing import Optional, Dict, List, Any
 from palworld_aio import constants
 from palworld_aio.utils import are_equal_uuids, as_uuid, fast_deepcopy
-from palworld_aio.inventory.inventory_manager import InventoryContainer
+from palworld_aio.inventory.inventory_manager import InventoryContainer, ItemData
 from palworld_aio.inventory.dynamic_item_manager import get_dynamic_item_manager, generate_dynamic_item_uuid
 from palworld_aio.inventory.standardized_container import StandardizedContainer
 import threading
@@ -433,7 +433,7 @@ class BaseInventoryManager:
                         else:
                             return False
             dynamic_item_id = generate_dynamic_item_uuid()
-            success = self.inventory_container.add_item(item_id, min(count, 9999), slot_index, dynamic_item_id)
+            success = self.inventory_container.add_item(item_id, min(count, ItemData.get_effective_max_stack(item_id)), slot_index, dynamic_item_id)
             if not success:
                 return False
             result = self._update_container_contents_from_inventory()

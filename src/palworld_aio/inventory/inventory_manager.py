@@ -79,8 +79,16 @@ class ItemData:
             name = item.get('name', '')
             if not name or name == item.get('asset', ''):
                 name = cls._friendly_name(asset_name)
-            return {'name': name, 'asset': item.get('asset', asset_name), 'icon': item.get('icon', '/icons/items/T_icon_unknown.webp'), 'rarity': item.get('rarity', 0), 'type_a': item.get('type_a', ''), 'type_b': item.get('type_b', ''), 'description': item.get('description', '')}
+            return {'name': name, 'asset': item.get('asset', asset_name), 'icon': item.get('icon', '/icons/items/T_icon_unknown.webp'), 'rarity': item.get('rarity', 0), 'type_a': item.get('type_a', ''), 'type_b': item.get('type_b', ''), 'description': item.get('description', ''), 'max_stack': item.get('max_stack', 9999)}
         return {'name': cls._friendly_name(asset_name), 'asset': asset_name, 'icon': '/icons/items/T_icon_unknown.webp', 'rarity': 0, 'type_a': '', 'type_b': '', 'description': ''}
+    @classmethod
+    def get_effective_max_stack(cls, asset_name: str) -> int:
+        cls.load_item_data()
+        item = cls._asset_to_item.get(asset_name) or cls._asset_to_item_lower.get(asset_name.lower())
+        if item:
+            game_max = item.get('max_stack', 9999)
+            return 1 if game_max == 1 else constants.MAX_QUANTITY
+        return constants.MAX_QUANTITY
     @classmethod
     def _resolve_icon_path(cls, icon_path: str) -> str:
         base_path = constants.get_base_path()
@@ -663,7 +671,7 @@ class PlayerInventory:
             dynamic_item_data = dynamic_item_manager.create_dynamic_item(item_id, container_id, dynamic_item_id)
             if not dynamic_item_manager.register_item(item_id, container_id, dynamic_item_id):
                 return False
-        success = container._standardized_container.add_item(item_id, min(quantity, 9999), slot_index, dynamic_item_id)
+        success = container._standardized_container.add_item(item_id, min(quantity, ItemData.get_effective_max_stack(item_id)), slot_index, dynamic_item_id)
         if success:
             self.save()
         return success

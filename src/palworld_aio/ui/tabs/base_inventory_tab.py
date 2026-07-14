@@ -3635,11 +3635,13 @@ class BaseInventoryTab(QWidget):
             self._show_warning(t('base_inventory.select_container_first') if t else 'Please select a container first')
             return
         current_count = slot_data.get('stack_count', 0)
+        item_id = slot_data.get('item_id', '')
+        max_qty = ItemData.get_effective_max_stack(item_id) if item_id else constants.MAX_QUANTITY
         dlg = QInputDialog(self)
         dlg.setWindowTitle(t('base_inventory.edit_quantity') if t else 'Edit Quantity')
         dlg.setLabelText(t('base_inventory.current_count') if t else f'Current count: {current_count}')
         dlg.setIntValue(current_count)
-        dlg.setIntRange(0, 9999)
+        dlg.setIntRange(0, max_qty)
         dlg.setIntStep(1)
         dlg.setInputMode(QInputDialog.IntInput)
         dlg.setStyleSheet(INPUT_DIALOG_STYLE)

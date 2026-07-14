@@ -28,6 +28,7 @@ SPACE_MEDIUM = 10
 SPACE_LARGE = 15
 CORNER_RADIUS = 6
 FRAME_CORNER_RADIUS = 8
+MAX_QUANTITY = 999_999_999
 TREE_ROW_HEIGHT = 22
 GITHUB_RAW_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
 GIT_REPO_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools.git'

@@ -136,7 +136,7 @@ class PlayerItemActionDialog(QDialog):
         self.remove_btn.setEnabled(False)
         action_layout.addWidget(self.remove_btn)
         self.qty_spin = QSpinBox()
-        self.qty_spin.setRange(1, 9999)
+        self.qty_spin.setRange(1, constants.MAX_QUANTITY)
         self.qty_spin.setValue(1)
         self.qty_spin.setFixedWidth(70)
         self.qty_spin.setVisible(False)
@@ -233,12 +233,15 @@ class PlayerItemActionDialog(QDialog):
             self.item_desc_label.setVisible(True)
         else:
             self.item_desc_label.setVisible(False)
-        if type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject':
+        is_singleton = type_a in SINGLETON_TYPE_A and type_b != 'EPalItemTypeB::WeaponThrowObject'
+        if is_singleton:
             self.qty_spin.setValue(1)
             self.qty_spin.setVisible(False)
         else:
             self.qty_spin.setVisible(True)
-        self.add_btn.setEnabled(True)
+            self.add_btn.setEnabled(True)
+            item_id = self.selected_item_id or ''
+            self.qty_spin.setMaximum(ItemData.get_effective_max_stack(item_id))
         self.remove_btn.setEnabled(True)
         self.find_players_btn.setEnabled(True)
         self._update_player_list()
