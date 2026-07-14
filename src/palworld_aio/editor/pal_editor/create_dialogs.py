@@ -449,7 +449,7 @@ class BulkSyncPalDialog(FramelessDialog):
         show_information(self, 'Bulk Sync', t('edit_pals.bulk_sync_success', count=len(selected), name=pal_name))
         self.accept()
 class BulkSyncAllDialog(FramelessDialog):
-    def __init__(self, pal_item, pal_editor, parent=None):
+    def __init__(self, pal_item, pal_editor, parent=None, candidates=None):
         super().__init__('edit_pals.bulk_sync_all_title', parent)
         self.pal_editor = pal_editor
         raw = _get_raw_from_item(pal_item)
@@ -463,7 +463,11 @@ class BulkSyncAllDialog(FramelessDialog):
         self._from_party = True
         self._from_palbox = True
         self._from_dps = True
-        self._refresh_candidates()
+        self._external_candidates = candidates or []
+        if self._external_candidates:
+            self._all_candidates = list(self._external_candidates)
+        else:
+            self._refresh_candidates()
         inner = QWidget()
         inner.setStyleSheet('QWidget#bulkSyncAllInner { background: transparent; }')
         il = QVBoxLayout(inner)
@@ -472,25 +476,26 @@ class BulkSyncAllDialog(FramelessDialog):
         header = QLabel(t('edit_pals.bulk_sync_all_header'))
         header.setStyleSheet('font-size: 12px; font-weight: 700; color: #E2E8F0; background: transparent; border: none;')
         il.addWidget(header)
-        src_row = QHBoxLayout()
-        src_row.setSpacing(8)
-        src_lbl = QLabel(t('edit_pals.bulk_sync_sources'))
-        src_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #7DD3FC; background: transparent; border: none;')
-        src_row.addWidget(src_lbl)
-        self._party_chk = ToggleCheckBtn(t('edit_pals.party'))
-        self._party_chk.setChecked(True)
-        self._party_chk.toggled.connect(self._on_source_toggle)
-        src_row.addWidget(self._party_chk)
-        self._palbox_chk = ToggleCheckBtn(t('edit_pals.palbox'))
-        self._palbox_chk.setChecked(True)
-        self._palbox_chk.toggled.connect(self._on_source_toggle)
-        src_row.addWidget(self._palbox_chk)
-        self._dps_chk = ToggleCheckBtn(t('edit_pals.dps'))
-        self._dps_chk.setChecked(True)
-        self._dps_chk.toggled.connect(self._on_source_toggle)
-        src_row.addWidget(self._dps_chk)
-        src_row.addStretch()
-        il.addLayout(src_row)
+        if not self._external_candidates:
+            src_row = QHBoxLayout()
+            src_row.setSpacing(8)
+            src_lbl = QLabel(t('edit_pals.bulk_sync_sources'))
+            src_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #7DD3FC; background: transparent; border: none;')
+            src_row.addWidget(src_lbl)
+            self._party_chk = ToggleCheckBtn(t('edit_pals.party'))
+            self._party_chk.setChecked(True)
+            self._party_chk.toggled.connect(self._on_source_toggle)
+            src_row.addWidget(self._party_chk)
+            self._palbox_chk = ToggleCheckBtn(t('edit_pals.palbox'))
+            self._palbox_chk.setChecked(True)
+            self._palbox_chk.toggled.connect(self._on_source_toggle)
+            src_row.addWidget(self._palbox_chk)
+            self._dps_chk = ToggleCheckBtn(t('edit_pals.dps'))
+            self._dps_chk.setChecked(True)
+            self._dps_chk.toggled.connect(self._on_source_toggle)
+            src_row.addWidget(self._dps_chk)
+            src_row.addStretch()
+            il.addLayout(src_row)
         body = QHBoxLayout()
         body.setSpacing(6)
         left_col = QVBoxLayout()
@@ -552,6 +557,9 @@ class BulkSyncAllDialog(FramelessDialog):
         self._refresh_candidates()
         self._rebuild_pal_list()
     def _refresh_candidates(self):
+        if self._external_candidates:
+            self._all_candidates = list(self._external_candidates)
+            return
         self._all_candidates = []
         seen = set()
         def _extract_inst_id(pi):

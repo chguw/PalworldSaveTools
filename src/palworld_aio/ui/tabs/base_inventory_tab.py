@@ -2367,8 +2367,9 @@ class BasePalsContentWidget(QFrame):
                     icon.update_display()
         elif action == 'bulk_sync_all':
             from palworld_aio.editor.edit_pals import _get_raw_from_item, BulkSyncAllDialog
-            stub = type('Stub', (), {'party_pals': {}, 'palbox_pal_dict': {}, 'pal_info': type('Stub', (), {'_refresh': lambda self: None})(), '_update_party_slots': lambda self: None, '_update_palbox_page': lambda self: None, '_update_dps_slots': lambda self: None, '_save_dps': lambda self: None})()
-            dlg = BulkSyncAllDialog(pal['character_entry'], stub, self)
+            candidates = [p['character_entry'] for p in self._pals if p['character_entry'] is not pal['character_entry']]
+            stub = type('Stub', (), {'party_pals': {}, 'palbox_pal_dict': {}, 'pal_info': type('Stub', (), {'_refresh': lambda self: None})(), '_update_party_slots': lambda self: None, '_update_palbox_page': lambda self: None})()
+            dlg = BulkSyncAllDialog(pal['character_entry'], stub, self, candidates=candidates)
             if dlg.exec() == QDialog.Accepted:
                 for icon in self._icons:
                     icon.update_display()
