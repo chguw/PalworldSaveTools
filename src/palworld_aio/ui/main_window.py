@@ -1194,8 +1194,9 @@ class MainWindow(QMainWindow):
         item = panel.tree.itemAt(pos)
         if not item:
             return
+        val = item.text(0)
         menu = ScrollableContextMenu(self)
-        menu.add_action(self._create_action(t('deletion.ctx.remove_exclusion'), lambda: self._remove_exclusion(excl_type, item.text(0))))
+        menu.add_action(self._create_action(t('deletion.ctx.remove_exclusion'), lambda v=val: self._remove_exclusion(excl_type, v)))
         menu.exec(panel.tree.viewport().mapToGlobal(pos))
     def _load_save(self):
         save_manager.load_save(parent=self)
@@ -1670,17 +1671,24 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'menu_bar'):
             self._setup_menus()
     def _add_exclusion(self, excl_type, value):
+        print(f'[DEBUG] _add_exclusion: type={excl_type}, value={value!r}')
         exclusions = constants.exclusions.setdefault(excl_type, [])
         if value not in exclusions:
             exclusions.append(value)
+            print(f'[DEBUG] _add_exclusion: appended, exclusions now={exclusions}')
+            print(f'[DEBUG] _add_exclusion: calling save_exclusions(), path={constants.EXCLUSIONS_FILE}')
             save_exclusions()
             self._refresh_exclusions()
         else:
+            print(f'[DEBUG] _add_exclusion: value already in exclusions')
             self._show_info(t('Info'), t('deletion.info.already_in_exclusions', kind=excl_type[:-1].capitalize()))
     def _remove_exclusion(self, excl_type, value):
+        print(f'[DEBUG] _remove_exclusion: type={excl_type}, value={value!r}')
         exclusions = constants.exclusions.setdefault(excl_type, [])
         if value in exclusions:
             exclusions.remove(value)
+            print(f'[DEBUG] _remove_exclusion: removed, exclusions now={exclusions}')
+            print(f'[DEBUG] _remove_exclusion: calling save_exclusions(), path={constants.EXCLUSIONS_FILE}')
             save_exclusions()
             self._refresh_exclusions()
     def _delete_player(self, uid):
