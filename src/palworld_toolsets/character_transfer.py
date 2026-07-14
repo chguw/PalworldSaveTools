@@ -1075,7 +1075,7 @@ def transfer_guild(targ_lvl, targ_json, host_guid, targ_uid, source_guild_dict):
         raw['group_id'] = _new_guid()
         raw['group_name'] = 'Transferred Guild'
         raw['guild_name'] = 'Transferred Guild'
-        raw['players'] = [source_player] if source_player else [{'player_uid': targ_uid, 'player_info': {'last_online_real_time': target_world_tick, 'player_name': 'Player'}}]
+        raw['players'] = [source_player] if source_player else [{'player_uid': targ_uid, 'role': 1, 'player_info': {'last_online_real_time': target_world_tick, 'player_name': 'Player'}}]
         raw['admin_player_uid'] = targ_uid
         player_inst_id = targ_json['SaveData']['value']['IndividualId']['value']['InstanceId']['value']
         raw['individual_character_handle_ids'] = [{'guid': PalUUID.from_str('00000000-0000-0000-0000-000000000000'), 'instance_id': player_inst_id}]

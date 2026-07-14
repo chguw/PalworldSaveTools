@@ -258,7 +258,7 @@ def delete_inactive_players(days_threshold, parent=None):
                 raw['admin_player_uid'] = keep_players[0]['player_uid']
                 nu = str(raw['admin_player_uid']).replace('-', '').lower()
                 for p in keep_players:
-                    p['_u8_flag'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
+                    p['role'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
     if to_delete_uids:
         constants.files_to_delete.update(to_delete_uids)
         removed_pals = delete_player_pals(wsd, to_delete_uids)
@@ -364,7 +364,7 @@ def delete_duplicated_players(parent=None):
                 raw['admin_player_uid'] = players[0]['player_uid']
                 nu = str(raw['admin_player_uid']).replace('-', '').lower()
                 for p in players:
-                    p['_u8_flag'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
+                    p['role'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
     return len(deleted_players)
 def delete_unreferenced_data(parent=None):
     if not constants.loaded_level_json:
@@ -442,7 +442,7 @@ def delete_unreferenced_data(parent=None):
             raw['admin_player_uid'] = valid_players[0]['player_uid']
             nu = str(raw['admin_player_uid']).replace('-', '').lower()
             for p in valid_players:
-                p['_u8_flag'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
+                p['role'] = 1 if str(p.get('player_uid', '')).replace('-', '').lower() == nu else 3
     orphaned_pals = []
     for entry in char_map[:]:
         try:

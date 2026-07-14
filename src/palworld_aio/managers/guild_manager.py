@@ -69,10 +69,10 @@ def move_player_to_guild(player_uid, target_guild_id):
             found['player_info']['last_online_real_time'] = 0
         tplayers.append(found)
     target_raw['players'] = tplayers
-    found['_u8_flag'] = 3
+    found['role'] = 3
     if nu(target_raw.get('admin_player_uid', '')) not in tplayer_norm_set:
         target_raw['admin_player_uid'] = found['player_uid']
-        found['_u8_flag'] = 1
+        found['role'] = 1
     new_gid_obj = target_raw['group_id']
     # Update player .sav GroupId so the game recognizes guild membership
     try:
@@ -652,7 +652,7 @@ def make_member_leader(guild_id, player_uid):
             raw['admin_player_uid'] = player_uid
             for p in raw.get('players', []):
                 pp_norm = str(p.get('player_uid', '')).replace('-', '').lower()
-                p['_u8_flag'] = 1 if pp_norm == pu_norm else 3
+                p['role'] = 1 if pp_norm == pu_norm else 3
             return True
     return False
 def rename_guild(guild_id, new_name):
