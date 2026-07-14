@@ -1673,6 +1673,7 @@ class MainWindow(QMainWindow):
         exclusions = constants.exclusions.setdefault(excl_type, [])
         if value not in exclusions:
             exclusions.append(value)
+            save_exclusions()
             self._refresh_exclusions()
         else:
             self._show_info(t('Info'), t('deletion.info.already_in_exclusions', kind=excl_type[:-1].capitalize()))
@@ -1680,6 +1681,7 @@ class MainWindow(QMainWindow):
         exclusions = constants.exclusions.setdefault(excl_type, [])
         if value in exclusions:
             exclusions.remove(value)
+            save_exclusions()
             self._refresh_exclusions()
     def _delete_player(self, uid):
         if uid in constants.exclusions.get('players', []):
