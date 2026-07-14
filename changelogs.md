@@ -8,6 +8,7 @@
 - **Fixed standalone updater** — `StandaloneUpdater` now downloads Nuitka single-file assets (`PalworldSaveTools-V{version}-win.exe` etc.) instead of the old `PST_standalone_v{version}.7z` archive. Removed extract step (`py7zr` no longer needed). Simplified apply-and-restart for single-file replacement
 - **Updater unit tests** — 12 new tests for `_platform_asset_suffix`, `StandaloneUpdater.check_version` (asset lookup, no-update, HTTP failure), `download` (file write, cancel), `apply_and_restart` (helper script), and `get_update_settings`/`save_update_settings` roundtrip
 - **Open Data Folder button** — menu item under AIO Tools opens `%APPDATA%/PalworldSaveTools/` (or platform equivalent) in file manager. Cross-platform via `os.startfile`/`open`/`xdg-open`
+- **Removed auto-update feature** — deleted `updater.py` (StandaloneUpdater/SourceUpdater), removed update dialogs, menu entries, and settings. Kept startup version check + GitHub version chip pulse. Version chip click still opens releases page
 - Bumped version to 2.0.8
 
 #2.0.7
