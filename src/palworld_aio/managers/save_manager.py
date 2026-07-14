@@ -100,7 +100,8 @@ class SaveManager(QObject):
                 guild_name_map[gid.lower()] = guild_name
                 for base_id_uuid in gdata['value']['RawData']['value'].get('base_ids', []):
                     constants.base_guild_lookup[str(base_id_uuid)] = {'GuildName': guild_name, 'GuildID': gid}
-        base_path = '.'
+        from resource_resolver import get_base_dir
+        base_path = get_base_dir()
         log_folder = os.path.join(base_path, 'Logs', 'Scan Save Logger')
         os.makedirs(log_folder, exist_ok=True)
         player_pals_count = {}
@@ -149,7 +150,8 @@ class SaveManager(QObject):
         level_sav_path = os.path.join(constants.current_save_path, 'Level.sav')
         if not os.path.exists(level_sav_path):
             raise Exception(f'Level.sav not found at {level_sav_path}')
-        base_path = '.'
+        from resource_resolver import get_base_dir
+        base_path = get_base_dir()
         t0 = time.perf_counter()
         constants.loaded_level_json = sav_to_gvas_wrapper(level_sav_path)
         t1 = time.perf_counter()

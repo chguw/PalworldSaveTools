@@ -950,7 +950,8 @@ class PalDefenderDialog(ThemedDialog):
         if not kill_commands:
             self._log('No bases found for selected guilds.')
             return
-        output_dir = os.path.join('.', 'Logs', 'PalDefender')
+        from resource_resolver import get_base_dir
+        output_dir = os.path.join(get_base_dir(), 'Logs', 'PalDefender')
         os.makedirs(output_dir, exist_ok=True)
         commands_file = os.path.join(output_dir, 'paldefender_bases.log')
         with open(commands_file, 'w', encoding='utf-8') as f:

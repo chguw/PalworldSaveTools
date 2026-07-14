@@ -2,6 +2,7 @@
 - **`_u8_flag` → `role` migration** — `group.py` v2 guild encoder writes `p['role']` but all 4 managers were setting `p['_u8_flag']`, causing silent data loss. Fixed in `guild_manager.py`, `func_manager.py`, `data_manager.py`, `character_transfer.py`
 - **`character_transfer.py` — missing `role` on fallback player entry** — guild clone path could KeyError on v2 roundtrip when source player entry missing; added `'role': 1`
 - **Updated `pst-binary-schemas` skill** — documents v2 guild tail (`_read_guild_tail_v2`), role semantics (1=admin, 2=submaster, 3=member), and all fixed files
+- **Fixed cwd-dependent relative paths (system32 crash)** — all `base_path = '.'` and `'./saves'` hardcodes replaced with `get_base_dir()` from `resource_resolver`. 15 sites across 6 files: `import_libs.py`, `restore_map.py`, `dialogs.py`, `main.py`, `func_manager.py`, `save_manager.py`, `game_pass_save_fix.py`. Fixes `PermissionError: [WinError 5] Access is denied: 'C:\WINDOWS\system32\Backups'` when app runs elevated
 - Bumped version to 2.0.8
 
 #2.0.7

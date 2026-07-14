@@ -205,7 +205,8 @@ def run_aio():
                     constants.base_guild_lookup[str(base_id_uuid)] = {'GuildName': guild_name, 'GuildID': gid}
         print('Loading done')
         if options['logs']:
-            base_path = '.'
+            from resource_resolver import get_base_dir
+            base_path = get_base_dir()
             log_folder = os.path.join(base_path, 'Logs', 'Scan Save Logger')
             import shutil
             if os.path.exists(log_folder):

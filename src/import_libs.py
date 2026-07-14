@@ -38,11 +38,12 @@ from common import *
 from loading_manager import *
 def backup_whole_directory(source_folder, backup_folder):
     import os, sys, shutil, datetime as dt
+    from resource_resolver import get_base_dir
     def get_timestamp():
         return dt.datetime.now().strftime('%Y%m%d_%H%M%S')
     source_folder = os.path.abspath(source_folder)
     if not os.path.isabs(backup_folder):
-        base_path = '.'
+        base_path = get_base_dir()
         backup_folder = os.path.abspath(os.path.join(base_path, backup_folder))
     else:
         backup_folder = os.path.abspath(backup_folder)

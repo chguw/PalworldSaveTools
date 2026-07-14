@@ -251,7 +251,8 @@ class GamePassSaveFixWidget(QWidget):
             print(f'Error extracting zip file {zip_file_path}: {e}')
             return False
     def convert_save_files(self):
-        saveFolders = self.list_folders_in_directory('./saves')
+        save_dir = os.path.join(root_dir, 'saves')
+        saveFolders = self.list_folders_in_directory(save_dir)
         if not saveFolders:
             print('No save files found')
             return
@@ -266,12 +267,12 @@ class GamePassSaveFixWidget(QWidget):
         save_info_map = {}
         save_list_display = []
         for folder_name in saveList:
-            save_path = os.path.join('./saves', folder_name)
+            save_path = os.path.join(save_dir, folder_name)
             info = self.get_save_info(save_path)
             save_info_map[folder_name] = info
             display_name = f"{folder_name} - {info['world_name']} ({info['player_name']})"
             save_list_display.append(display_name)
-        self.direct_saves_map = {display: os.path.join('./saves', folder) for display, folder in zip(save_list_display, saveList)}
+        self.direct_saves_map = {display: os.path.join(save_dir, folder) for display, folder in zip(save_list_display, saveList)}
         self.update_combobox_signal.emit(save_list_display)
         print('Choose a save to convert:')
         total = len(saveFolders)
@@ -292,9 +293,10 @@ class GamePassSaveFixWidget(QWidget):
             if not zip_files:
                 return
             valid_zip_path = max([os.path.join(base_dir, f) for f in zip_files], key=os.path.getsize)
-            if os.path.exists('./saves'):
-                shutil.rmtree('./saves')
-            if not self.unzip_file(valid_zip_path, './saves'):
+            saves_dir = os.path.join(root_dir, 'saves')
+            if os.path.exists(saves_dir):
+                shutil.rmtree(saves_dir)
+            if not self.unzip_file(valid_zip_path, saves_dir):
                 return
             backup_dir = os.path.join(root_dir, 'XGP_converted_saves')
             os.makedirs(backup_dir, exist_ok=True)
@@ -306,7 +308,7 @@ class GamePassSaveFixWidget(QWidget):
                     shutil.move(os.path.join(base_dir, f), dest)
                 except:
                     pass
-            saves_found = self.find_valid_saves('./saves')
+            saves_found = self.find_valid_saves(os.path.join(root_dir, 'saves'))
             if not saves_found:
                 self.message_signal.emit('critical', t('Error'), t('xgp.err.no_valid_saves'))
                 return
