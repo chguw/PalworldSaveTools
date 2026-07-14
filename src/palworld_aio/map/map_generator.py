@@ -69,8 +69,10 @@ def generate_world_map(output_path=None, map_type='world'):
         return None
     start_time = time.time()
     base_dir = constants.get_base_path()
-    from boot_paths import CONFIG_DIR
-    user_cfg_path = os.path.join(str(CONFIG_DIR), 'user.cfg')
+    from boot_paths import CONFIG_DIR, USER_CONFIG_DIR
+    user_cfg_path = str(USER_CONFIG_DIR / 'user.cfg')
+    if not os.path.exists(user_cfg_path):
+        user_cfg_path = os.path.join(str(CONFIG_DIR), 'user.cfg')
     is_dark_mode = True
     if os.path.exists(user_cfg_path):
         try:

@@ -3171,7 +3171,8 @@ class BaseInventoryTab(QWidget):
             _consolidate_container_slots(self.manager.inventory_container, 'main', SINGLETON_TYPE_A)
             self.manager.save_changes()
             self._refresh_container_ui()
-        base_loadouts_path = os.path.join(constants.get_src_path(), 'data', 'configs', 'base_inventory_loadouts.json')
+        from resource_resolver import get_user_config_dir
+        base_loadouts_path = os.path.join(get_user_config_dir(), 'base_inventory_loadouts.json')
         dlg = InventoryLoadoutDialog(self, _get_items, _apply_items, loadouts_path=base_loadouts_path)
         dlg.exec()
     def _on_base_sort_requested(self):

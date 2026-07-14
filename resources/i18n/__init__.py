@@ -4,8 +4,20 @@ import os
 from typing import Dict, Any
 _LANG: str = 'zh_CN'
 _RES: Dict[str, Dict[str, str]] = {}
-_BASE: str = os.path.dirname(__file__)
-_CFG: str = os.path.join(os.path.dirname(os.path.dirname(_BASE)), 'src', 'data', 'configs', 'config.json')
+import sys as _sys
+import os as _os
+def _compute_user_config_dir():
+    if getattr(_sys, 'frozen', False):
+        if _sys.platform == 'win32':
+            _base = _os.environ.get('APPDATA', _os.path.expanduser('~'))
+        elif _sys.platform == 'darwin':
+            _base = _os.path.join(_os.path.expanduser('~'), 'Library', 'Application Support')
+        else:
+            _base = _os.path.join(_os.path.expanduser('~'), '.config')
+        return _os.path.join(_base, 'PalworldSaveTools', 'configs')
+    return _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.dirname(__file__))), 'src', 'data', 'configs')
+_BASE: str = _os.path.dirname(__file__)
+_CFG: str = _os.path.join(_compute_user_config_dir(), 'config.json')
 _SUPPORTED_LANGS = ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']
 def _load_json(path: str) -> Dict[str, Any]:
     try:
@@ -27,6 +39,7 @@ def set_language(lang: str) -> None:
         lang = 'zh_CN'
     _LANG = lang
     try:
+        os.makedirs(os.path.dirname(_CFG), exist_ok=True)
         cfg = _load_json(_CFG) if os.path.exists(_CFG) else {}
         cfg['lang'] = lang
         with open(_CFG, 'w', encoding='utf-8') as f:

@@ -7,10 +7,10 @@ from PySide6.QtGui import QIcon, QFont
 from PySide6.QtCore import Qt, QTimer
 from palworld_aio.ui.chrome.styles import ThemeManager
 from palworld_aio import constants
-from resource_resolver import get_base_dir
+from resource_resolver import get_data_base
 import os, time, shutil
 savegames_path = os.path.join(os.environ['LOCALAPPDATA'], 'Pal', 'Saved', 'SaveGames')
-restore_map_path = os.path.join(get_base_dir(), 'Backups', 'Restore Map')
+restore_map_path = os.path.join(get_data_base(), 'Backups', 'Restore Map')
 os.makedirs(restore_map_path, exist_ok=True)
 def backup_local_data(subfolder_path):
     timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')

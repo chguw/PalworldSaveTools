@@ -1,6 +1,6 @@
 import os, sys, subprocess, configparser
 from palsav import json_tools
-from resource_resolver import get_base_dir, get_src_dir, get_resources_dir, resource_path
+from resource_resolver import get_base_dir, get_src_dir, get_resources_dir, resource_path, get_user_config_dir
 APP_NAME = 'PalworldSaveTools'
 APP_VERSION = '2.0.8'
 TESTING_VER = '2.0.8'
@@ -48,21 +48,23 @@ def is_standalone():
 def get_current_version():
     return APP_VERSION
 def get_update_settings():
-    from boot_paths import CONFIG_DIR
-    cfg_path = os.path.join(str(CONFIG_DIR), 'config.json')
+    user_cfg = os.path.join(get_user_config_dir(), 'config.json')
+    if not os.path.exists(user_cfg):
+        from boot_paths import CONFIG_DIR
+        user_cfg = os.path.join(str(CONFIG_DIR), 'config.json')
     if is_standalone():
         defaults = {'auto_update': True, 'check_updates': True}
     else:
         defaults = {'git_pull': True, 'check_updates': True}
     try:
-        config = json_tools.load(cfg_path)
+        config = json_tools.load(user_cfg)
         defaults.update({k: config.get(k, v) for k, v in defaults.items()})
     except:
         pass
     return defaults
 def save_update_settings(settings):
-    from boot_paths import CONFIG_DIR
-    cfg_path = os.path.join(str(CONFIG_DIR), 'config.json')
+    cfg_path = os.path.join(get_user_config_dir(), 'config.json')
+    os.makedirs(os.path.dirname(cfg_path), exist_ok=True)
     config = {}
     try:
         config = json_tools.load(cfg_path)

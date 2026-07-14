@@ -600,8 +600,10 @@ class MainWindow(QMainWindow):
         page_index = {'tools': 0, 'base_inventory': 1, 'player_inventory': 2, 'pal_editor': 3, 'players': 4, 'guilds': 5, 'bases': 6, 'map': 7, 'exclusions': 8, 'json_editor': 9, 'docs': 10, 'breeding': 11}[button_id]
         self.stacked_widget.setCurrentIndex(page_index)
     def _load_user_settings(self):
-        from boot_paths import CONFIG_DIR
-        user_cfg_path = os.path.join(str(CONFIG_DIR), 'user.cfg')
+        from boot_paths import CONFIG_DIR, USER_CONFIG_DIR
+        user_cfg_path = str(USER_CONFIG_DIR / 'user.cfg')
+        if not os.path.exists(user_cfg_path):
+            user_cfg_path = os.path.join(str(CONFIG_DIR), 'user.cfg')
         default_settings = {'language': 'en_US', 'show_icons': True, 'boot_preference': 'menu', 'console_detached': False, 'console_window_geometry': None, 'right_panel_visible': True}
         if os.path.exists(user_cfg_path):
             try:
@@ -617,8 +619,8 @@ class MainWindow(QMainWindow):
             os.makedirs(os.path.dirname(user_cfg_path), exist_ok=True)
             self._save_user_settings()
     def _save_user_settings(self):
-        from boot_paths import CONFIG_DIR
-        user_cfg_path = os.path.join(str(CONFIG_DIR), 'user.cfg')
+        from boot_paths import USER_CONFIG_DIR
+        user_cfg_path = str(USER_CONFIG_DIR / 'user.cfg')
         try:
             os.makedirs(os.path.dirname(user_cfg_path), exist_ok=True)
             json_tools.dump(self.user_settings, user_cfg_path, indent=2)

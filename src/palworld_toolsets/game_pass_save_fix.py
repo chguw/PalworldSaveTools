@@ -1,7 +1,7 @@
 from import_libs import *
 from palworld_aio.utils import sav_to_json, json_to_sav, extract_value
 from palworld_toolsets.fix_host_save import ask_string_with_icon
-from common import get_base_directory
+from resource_resolver import get_data_base
 from palworld_aio.ui.chrome.styles import ThemeManager
 from loading_manager import run_with_loading, show_information, show_critical
 import nerdfont as nf
@@ -13,8 +13,7 @@ saves = []
 save_info_map = {}
 save_extractor_done = threading.Event()
 save_converter_done = threading.Event()
-base_dir = get_base_directory()
-root_dir = base_dir
+root_dir = get_data_base()
 class GamePassSaveFixWidget(QWidget):
     update_combobox_signal = Signal(list)
     extraction_complete_signal = Signal()
@@ -289,10 +288,10 @@ class GamePassSaveFixWidget(QWidget):
         try:
             from palworld_toolsets import xgp_save_extract as extractor
             extractor.main(self.xgp_source_folder)
-            zip_files = [f for f in os.listdir(base_dir) if f.startswith('palworld_') and f.endswith('.zip')]
+            zip_files = [f for f in os.listdir(root_dir) if f.startswith('palworld_') and f.endswith('.zip')]
             if not zip_files:
                 return
-            valid_zip_path = max([os.path.join(base_dir, f) for f in zip_files], key=os.path.getsize)
+            valid_zip_path = max([os.path.join(root_dir, f) for f in zip_files], key=os.path.getsize)
             saves_dir = os.path.join(root_dir, 'saves')
             if os.path.exists(saves_dir):
                 shutil.rmtree(saves_dir)
@@ -305,7 +304,7 @@ class GamePassSaveFixWidget(QWidget):
                     dest = os.path.join(backup_dir, f)
                     if os.path.exists(dest):
                         os.remove(dest)
-                    shutil.move(os.path.join(base_dir, f), dest)
+                    shutil.move(os.path.join(root_dir, f), dest)
                 except:
                     pass
             saves_found = self.find_valid_saves(os.path.join(root_dir, 'saves'))

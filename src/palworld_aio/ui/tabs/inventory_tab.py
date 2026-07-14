@@ -2299,8 +2299,9 @@ class QuantityDialog(QDialog):
         layout.addLayout(btn_layout)
     def get_quantity(self) -> int:
         return self.spin_box.value()
-_INV_LOADOUTS_PATH = os.path.join(_constants.get_src_path(), 'data', 'configs', 'inventory_loadouts.json')
-_EQ_LOADOUTS_PATH = os.path.join(_constants.get_src_path(), 'data', 'configs', 'equipment_loadouts.json')
+from resource_resolver import get_user_config_dir
+_INV_LOADOUTS_PATH = os.path.join(get_user_config_dir(), 'inventory_loadouts.json')
+_EQ_LOADOUTS_PATH = os.path.join(get_user_config_dir(), 'equipment_loadouts.json')
 def _group_inventory_items(slots):
     items = {}
     for s in slots:
@@ -2356,8 +2357,7 @@ class InventoryLoadoutDialog(QDialog):
         self._apply_fn = apply_loadout_fn
         self._get_extra_fn = get_extra_fn
         self._kp = key_prefix
-        base_dir = _constants.get_src_path()
-        self._loadouts_path = loadouts_path or os.path.join(base_dir, 'data', 'configs', 'inventory_loadouts.json')
+        self._loadouts_path = loadouts_path or os.path.join(get_user_config_dir(), 'inventory_loadouts.json')
         self.setWindowTitle(title or t(f'{key_prefix}.loadouts_title', default='Inventory Loadouts'))
         self.setMinimumSize(420, 400)
         self.setMaximumSize(520, 500)

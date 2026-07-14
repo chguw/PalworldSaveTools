@@ -32,6 +32,22 @@ sys._PST_BINARY_ROOT = _compute_binary_root()
 def get_base_dir():
     return sys._PST_BINARY_ROOT
 
+def get_data_base():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(os.path.realpath(sys.executable))
+    return get_base_dir()
+
+
+def get_user_config_dir() -> str:
+    if getattr(sys, 'frozen', False):
+        if sys.platform == 'win32':
+            base = os.environ.get('APPDATA', os.path.expanduser('~'))
+        elif sys.platform == 'darwin':
+            base = os.path.join(os.path.expanduser('~'), 'Library', 'Application Support')
+        else:
+            base = os.path.join(os.path.expanduser('~'), '.config')
+        return os.path.join(base, 'PalworldSaveTools', 'configs')
+    return os.path.join(get_base_dir(), 'src', 'data', 'configs')
 
 def get_resources_dir():
     return os.path.join(get_base_dir(), 'resources')

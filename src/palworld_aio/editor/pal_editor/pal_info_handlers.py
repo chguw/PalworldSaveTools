@@ -393,8 +393,8 @@ class PalInfoHandlerMixin:
         return result
 
     def _on_passive_loadout(self):
-        base_dir = constants.get_src_path()
-        loadouts_path = os.path.join(base_dir, 'data', 'configs', 'passive_loadouts.json')
+        from resource_resolver import get_user_config_dir
+        loadouts_path = os.path.join(get_user_config_dir(), 'passive_loadouts.json')
         _ensure_passive_data()
         if os.path.exists(loadouts_path):
             try:

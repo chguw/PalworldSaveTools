@@ -36,5 +36,9 @@ SRC_DIR: Path = ROOT_DIR / 'src'
 RESOURCES_DIR: Path = ROOT_DIR / 'resources'
 DATA_DIR: Path = SRC_DIR / 'data'
 CONFIG_DIR: Path = DATA_DIR / 'configs'
+
+import resource_resolver
+_USER_CONFIG = resource_resolver.get_user_config_dir()
+USER_CONFIG_DIR: Path = Path(_USER_CONFIG)
 GUI_DIR: Path = RESOURCES_DIR / 'ui' / 'themes'
 ASSETS_DIR: Path = RESOURCES_DIR / 'assets'

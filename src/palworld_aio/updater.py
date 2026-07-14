@@ -20,8 +20,11 @@ RELEASE_DOWNLOAD_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/r
 RELEASES_PAGE_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 CHANGELOG_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/CHANGELOG.md'
 def get_update_settings() -> Dict:
+    from resource_resolver import get_user_config_dir
     from common import get_src_directory, is_standalone
-    config_path = os.path.join(get_src_directory(), 'data', 'configs', 'config.json')
+    config_path = os.path.join(get_user_config_dir(), 'config.json')
+    if not os.path.exists(config_path):
+        config_path = os.path.join(get_src_directory(), 'data', 'configs', 'config.json')
     standalone = is_standalone()
     if standalone:
         defaults = {'auto_update': True, 'check_updates': True}
@@ -34,9 +37,15 @@ def get_update_settings() -> Dict:
         pass
     return defaults
 def save_update_settings(settings: Dict):
-    from common import get_src_directory, is_standalone
-    config_path = os.path.join(get_src_directory(), 'data', 'configs', 'config.json')
-    standalone = is_standalone()
+    from resource_resolver import get_user_config_dir
+    config_path = os.path.join(get_user_config_dir(), 'config.json')
+    os.makedirs(os.path.dirname(config_path), exist_ok=True)
+    standalone = False
+    try:
+        from common import is_standalone
+        standalone = is_standalone()
+    except:
+        pass
     config = {}
     try:
         config = json_tools.load(config_path)

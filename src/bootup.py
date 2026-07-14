@@ -12,7 +12,7 @@ from pathlib import Path
 from packaging.requirements import Requirement
 from importlib.metadata import version, PackageNotFoundError
 from typing import Optional, Tuple
-from boot_paths import ROOT_DIR, CONFIG_DIR, RESOURCES_DIR, GUI_DIR
+from boot_paths import ROOT_DIR, CONFIG_DIR, RESOURCES_DIR, GUI_DIR, USER_CONFIG_DIR
 PROJECT_DIR = ROOT_DIR
 _src = str(PROJECT_DIR / 'src')
 if _src not in sys.path:
@@ -183,7 +183,9 @@ def unlock_self_folder():
     except Exception:
         pass
 def get_config_value(key: str, default=None):
-    config_path = CONFIG_DIR / 'config.json'
+    config_path = USER_CONFIG_DIR / 'config.json'
+    if not config_path.is_file():
+        config_path = CONFIG_DIR / 'config.json'
     try:
         config = json_tools.load(str(config_path))
         return config.get(key, default)
@@ -231,7 +233,9 @@ def _get_dark_splash():
 
 
 def load_splash_styles():
-    user_cfg_path = os.path.join(str(CONFIG_DIR), 'user.cfg')
+    user_cfg_path = str(USER_CONFIG_DIR / 'user.cfg')
+    if not os.path.exists(user_cfg_path):
+        user_cfg_path = os.path.join(str(CONFIG_DIR), 'user.cfg')
     theme = 'dark'
     if os.path.exists(user_cfg_path):
         try:
@@ -619,8 +623,21 @@ def spawn_aio_and_exit(venv_py: Path):
         if DEBUG:
             traceback.print_exc()
         sys.exit(1)
+def _migrate_configs():
+    if not getattr(sys, 'frozen', False) and str(CONFIG_DIR) == str(USER_CONFIG_DIR):
+        return
+    os.makedirs(str(USER_CONFIG_DIR), exist_ok=True)
+    if CONFIG_DIR != USER_CONFIG_DIR and CONFIG_DIR.is_dir():
+        import shutil
+        for fname in ['config.json', 'user.cfg']:
+            src = CONFIG_DIR / fname
+            dst = USER_CONFIG_DIR / fname
+            if src.is_file() and not dst.exists():
+                shutil.copy2(str(src), str(dst))
+
 def main():
     global app, splash_window, short_label, gui_progress_bar, tiny_label, _target_pct, _worker_thread, _signals
+    _migrate_configs()
     unlock_self_folder()
     venv_py = Path(sys.executable)
     if GUI_AVAILABLE:
