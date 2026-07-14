@@ -451,6 +451,9 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         elif action == 'bulk_sync_pal':
             if raw:
                 self._bulk_sync_pal(raw)
+        elif action == 'bulk_sync_all':
+            if raw:
+                self._bulk_sync_all_pal(raw)
         elif action == 'clone':
             if raw:
                 if is_dps:

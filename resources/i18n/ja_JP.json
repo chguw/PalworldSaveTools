@@ -1799,5 +1799,10 @@
     "inventory.abilities_loaded": "{name} のロード済みアビリティ",
     "inventory.abilities_no_player_selected": "プレーヤーがロードされていません",
     "inventory.edit_abilities_current": "選択したプレーヤーからロード",
-    "aio.menu.open_data_folder": "データフォルダーを開く"
+    "aio.menu.open_data_folder": "データフォルダーを開く",
+    "edit_pals.ctx.bulk_sync_all": "一括同期 (すべての仲間)",
+    "edit_pals.bulk_sync_all_title": "すべての仲間を一括同期",
+    "edit_pals.bulk_sync_all_header": "統計/個体値/スキルをソース パルから選択したすべてのパルに同期します",
+    "edit_pals.bulk_sync_sources": "出典:",
+    "edit_pals.bulk_sync_all_success": "{count} 人の友達を一括同期しました!"
 }

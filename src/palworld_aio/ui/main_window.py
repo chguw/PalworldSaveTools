@@ -22,7 +22,7 @@ from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palworld_aio.utils import as_uuid
 from palworld_aio.managers.save_manager import save_manager
 from palworld_aio.managers.data_manager import get_guilds, get_guild_members, get_bases, delete_guild, delete_player, load_exclusions, save_exclusions, delete_base_camp
-from palworld_aio.managers.func_manager import delete_empty_guilds, delete_inactive_players, delete_inactive_bases, delete_duplicated_players, delete_unreferenced_data, delete_non_base_map_objects, delete_invalid_structure_map_objects, delete_all_skins, unlock_all_private_chests, remove_invalid_items_from_save, remove_invalid_pals_from_save, remove_invalid_passives_from_save, fix_missions, reset_anti_air_turrets, reset_dungeons, reset_oilrig, reset_invader, reset_supply, unlock_viewing_cage_for_player, fix_all_negative_timestamps, reset_selected_player_timestamp, detect_and_trim_overfilled_inventories, unlock_all_technologies_for_player, unlock_all_lab_research_for_guild, modify_container_slots, fix_unassigned_pals, restore_all_pals, max_all_pals, fix_illegal_pals_in_save, repair_structures, edit_game_days
+from palworld_aio.managers.func_manager import delete_empty_guilds, delete_inactive_players, delete_inactive_bases, delete_duplicated_players, delete_unreferenced_data, delete_non_base_map_objects, delete_invalid_structure_map_objects, delete_all_skins, unlock_all_private_chests, remove_invalid_items_from_save, remove_invalid_pals_from_save, remove_invalid_passives_from_save, fix_missions, reset_anti_air_turrets, reset_dungeons, reset_oilrig, reset_invader, reset_supply, unlock_viewing_cage_for_player, fix_all_negative_timestamps, reset_selected_player_timestamp, detect_and_trim_overfilled_inventories, unlock_all_technologies_for_player, unlock_all_lab_research_for_guild, modify_container_slots, fix_unassigned_pals, restore_all_pals, max_all_pals, fix_illegal_pals_in_save, repair_structures, edit_game_days, scan_illegal_pals_by_owner
 from palworld_aio.managers.guild_manager import move_player_to_guild, rebuild_all_guilds, make_member_leader, rename_guild, set_guild_level
 from palworld_aio.managers.base_manager import export_base_json, import_base_json, clone_base_complete, update_base_area_range
 from palworld_aio.managers.backup_manager import export_base_backup, load_base_file
@@ -1326,15 +1326,26 @@ class MainWindow(QMainWindow):
         if not constants.loaded_level_json:
             self._show_warning(t('Error'), t('error.no_save_loaded'))
             return
-        reply = show_question(self, t('Confirm') if t else 'Confirm', t('deletion.fix_illegal_pals_confirm') if t else 'This will fix all illegal pals by setting their stats to legal maximums (level 80, IVs 100, souls 20). Continue?')
-        if not reply:
-            return
-        def task():
-            return fix_illegal_pals_in_save(self)
-        def on_finished(fixed):
-            self.refresh_all()
-            self._show_info(t('Done') if t else 'Done', t('deletion.illegal_pals_fixed', count=fixed) if t else f'Fixed {fixed} illegal pals to legal maximums.')
-        run_with_loading(on_finished, task)
+        from palworld_aio.ui.dialogs.fix_illegal_pal_dialog import FixIllegalPalDialog
+        def scan_task():
+            return scan_illegal_pals_by_owner()
+        def on_scan_done(scan_data):
+            if not scan_data:
+                self._show_info(t('fix_illegal_pal.no_illegals_title') if t else 'No Illegal Pals', t('fix_illegal_pal.no_illegals_msg') if t else 'No illegal pals found in the save.')
+                return
+            dlg = FixIllegalPalDialog(scan_data, self)
+            if dlg.exec_() != QDialog.Accepted:
+                return
+            selected_uids = dlg._get_selected_uids()
+            if not selected_uids:
+                return
+            def fix_task():
+                return fix_illegal_pals_in_save(self, selected_uids=selected_uids)
+            def on_fix_done(fixed):
+                self.refresh_all()
+                self._show_info(t('Done') if t else 'Done', t('deletion.illegal_pals_fixed', count=fixed) if t else f'Fixed {fixed} illegal pals to legal maximums.')
+            run_with_loading(on_fix_done, fix_task)
+        run_with_loading(on_scan_done, scan_task)
     def _fix_unassigned_pals(self):
         if not constants.loaded_level_json:
             self._show_warning(t('Error'), t('error.no_save_loaded'))

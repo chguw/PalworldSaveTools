@@ -1823,5 +1823,10 @@
     "inventory.abilities_loaded": "Geladene Fähigkeiten für {name}",
     "inventory.abilities_no_player_selected": "Kein Player geladen",
     "inventory.edit_abilities_current": "Vom ausgewählten Player laden",
-    "aio.menu.open_data_folder": "Öffnen Sie den Datenordner"
+    "aio.menu.open_data_folder": "Öffnen Sie den Datenordner",
+    "edit_pals.ctx.bulk_sync_all": "Massensynchronisierung (alle Freunde)",
+    "edit_pals.bulk_sync_all_title": "Massensynchronisierung aller Freunde",
+    "edit_pals.bulk_sync_all_header": "Synchronisieren Sie Statistiken/IVs/Fähigkeiten vom Quellkumpel mit allen ausgewählten Kumpels",
+    "edit_pals.bulk_sync_sources": "Quellen:",
+    "edit_pals.bulk_sync_all_success": "Massensynchronisierung von {count} Freunden!"
 }

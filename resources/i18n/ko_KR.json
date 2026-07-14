@@ -1798,5 +1798,10 @@
     "inventory.abilities_loaded": "{name}에게 로드된 능력",
     "inventory.abilities_no_player_selected": "플레이어가 로드되지 않았습니다.",
     "inventory.edit_abilities_current": "선택한 플레이어에서 로드",
-    "aio.menu.open_data_folder": "데이터 폴더 열기"
+    "aio.menu.open_data_folder": "데이터 폴더 열기",
+    "edit_pals.ctx.bulk_sync_all": "대량 동기화(모든 친구)",
+    "edit_pals.bulk_sync_all_title": "모든 친구 일괄 동기화",
+    "edit_pals.bulk_sync_all_header": "소스 친구의 통계/iv/스킬을 선택한 모든 친구에게 동기화",
+    "edit_pals.bulk_sync_sources": "출처:",
+    "edit_pals.bulk_sync_all_success": "대량 동기화된 친구 수는 {count}명입니다!"
 }

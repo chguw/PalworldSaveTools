@@ -2086,5 +2086,10 @@
     "inventory.abilities_loaded": "Loaded abilities for {name}",
     "inventory.abilities_no_player_selected": "No player loaded",
     "inventory.edit_abilities_current": "Load from selected player",
-    "aio.menu.open_data_folder": "Open Data Folder"
+    "aio.menu.open_data_folder": "Open Data Folder",
+    "edit_pals.ctx.bulk_sync_all": "Bulk Sync (All Pals)",
+    "edit_pals.bulk_sync_all_title": "Bulk Sync All Pals",
+    "edit_pals.bulk_sync_all_header": "Sync stats/ivs/skills from source pal to all selected pals",
+    "edit_pals.bulk_sync_sources": "Sources:",
+    "edit_pals.bulk_sync_all_success": "Bulk synced {count} pals!"
 }

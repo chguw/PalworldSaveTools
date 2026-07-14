@@ -1781,5 +1781,10 @@
     "inventory.abilities_loaded": "Capacités chargées pour {name}",
     "inventory.abilities_no_player_selected": "Aucun lecteur chargé",
     "inventory.edit_abilities_current": "Charger depuis le joueur sélectionné",
-    "aio.menu.open_data_folder": "Ouvrir le dossier de données"
+    "aio.menu.open_data_folder": "Ouvrir le dossier de données",
+    "edit_pals.ctx.bulk_sync_all": "Bulk Sync (All Pals)",
+    "edit_pals.bulk_sync_all_title": "Synchroniser en masse tous les amis",
+    "edit_pals.bulk_sync_all_header": "Synchroniser les statistiques/ivs/compétences du copain source avec tous les copains sélectionnés",
+    "edit_pals.bulk_sync_sources": "Sources :",
+    "edit_pals.bulk_sync_all_success": "{count} amis synchronisés en masse !"
 }

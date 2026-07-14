@@ -31,6 +31,7 @@ from palworld_aio.editor.pal_editor import (
     _toggle_lucky_raw,
     _work_suit_short_key,
     build_pal_context_menu,
+    BulkSyncAllDialog,
     BulkSyncPalDialog,
     delete_pal_from_all,
     EditPalsDialog,

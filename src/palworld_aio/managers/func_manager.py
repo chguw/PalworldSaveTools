@@ -2219,7 +2219,170 @@ def max_all_pals(parent=None):
             continue
     count += _apply_to_dps_files(_max_one_pal)
     return count
-def fix_illegal_pals_in_save(parent=None):
+def _scan_dps_for_illegals(players_dir, NAMEMAP, valid_player_uids):
+    result = defaultdict(list)
+    dps_files = [f for f in os.listdir(players_dir) if f.endswith('.sav') and '_dps' in f and (f.replace('_dps.sav', '').lower() in valid_player_uids)]
+    if not dps_files:
+        return result
+    from palworld_aio.utils import resolve_name
+    for fname in dps_files:
+        file_path = os.path.join(players_dir, fname)
+        try:
+            from palworld_aio.utils import sav_to_gvasfile, resolve_name
+            gvas_file = sav_to_gvasfile(file_path)
+            arr = gvas_file.properties.get('SaveParameterArray', {}).get('value', {}).get('values', [])
+            if not arr:
+                continue
+            puid = fname.replace('.sav', '').replace('_dps', '').lower()
+            for entry in arr:
+                if not isinstance(entry, dict):
+                    continue
+                sp_entry = entry.get('SaveParameter')
+                if not isinstance(sp_entry, dict):
+                    continue
+                sp = sp_entry.get('value', {})
+                if not isinstance(sp, dict):
+                    continue
+                cid = sp.get('CharacterID', {}).get('value', 'None')
+                if cid == 'None':
+                    continue
+                is_illegal, illegal_markers = check_is_illegal_pal(entry)
+                if not is_illegal:
+                    continue
+                owner_uid = extract_value(sp, 'OwnerPlayerUId', '')
+                uid_str = str(owner_uid).replace('-', '').lower() if owner_uid else puid
+                nick = extract_value(sp, 'NickName', '')
+                pal_name = resolve_name(cid, NAMEMAP) or cid
+                result[uid_str].append({'name': pal_name, 'nickname': nick, 'cid': cid, 'location': 'DPS Storage', 'illegal_markers': illegal_markers})
+        except:
+            continue
+    return result
+def scan_illegal_pals_by_owner():
+    if not constants.current_save_path or not constants.loaded_level_json:
+        return {}
+    base_dir = constants.get_base_path()
+    PALMAP = load_game_data_map('characters.json', 'pals')
+    NPCMAP = load_game_data_map('characters.json', 'npcs')
+    NAMEMAP = {**PALMAP, **NPCMAP}
+    from palworld_aio.utils import resolve_name
+    owner_nicknames = {}
+    player_containers = {}
+    players_dir = os.path.join(constants.current_save_path, 'Players')
+    if os.path.exists(players_dir):
+        player_files = [f for f in os.listdir(players_dir) if f.endswith('.sav') and '_dps' not in f]
+        if player_files:
+            def load_player_file(filename):
+                try:
+                    from palworld_aio.utils import sav_to_gvasfile
+                    file_path = os.path.join(players_dir, filename)
+                    p_gvas = sav_to_gvasfile(file_path)
+                    p_prop = p_gvas.properties.get('SaveData', {}).get('value', {})
+                    p_uid_raw = filename.replace('.sav', '')
+                    p_uid = p_uid_raw.lower()
+                    p_box = p_prop.get('PalStorageContainerId', {}).get('value', {}).get('ID', {}).get('value')
+                    p_party = p_prop.get('OtomoCharacterContainerId', {}).get('value', {}).get('ID', {}).get('value')
+                    if p_box and p_party:
+                        return (p_uid, {'Party': str(p_party).lower(), 'PalBox': str(p_box).lower()})
+                except:
+                    pass
+                return None
+            from concurrent.futures import ThreadPoolExecutor
+            with ThreadPoolExecutor(max_workers=min(32, os.cpu_count() or 1) + 4) as executor:
+                for result in executor.map(load_player_file, player_files):
+                    if result:
+                        player_containers[result[0]] = result[1]
+    cmap = constants.loaded_level_json['properties']['worldSaveData']['value'].get('CharacterSaveParameterMap', {}).get('value', [])
+    for item in cmap:
+        try:
+            raw_p = item.get('value', {}).get('RawData', {}).get('value', {}).get('object', {}).get('SaveParameter', {}).get('value', {})
+            if 'IsPlayer' in raw_p:
+                uid = item.get('key', {}).get('PlayerUId', {}).get('value')
+                nn = raw_p.get('NickName', {}).get('value', 'Unknown')
+                if uid:
+                    owner_nicknames[str(uid).replace('-', '').lower()] = nn
+        except:
+            pass
+    players_by_uid = {}
+    valid_player_uids = set()
+    wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
+    group_data_list = wsd.get('GroupSaveDataMap', {}).get('value', [])
+    for group in group_data_list:
+        if group['value']['GroupType']['value']['value'] != 'EPalGroupType::Guild':
+            continue
+        for p in group['value']['RawData']['value'].get('players', []):
+            uid_obj = p.get('player_uid')
+            uid = str(uid_obj).replace('-', '').lower() if uid_obj else ''
+            if uid:
+                valid_player_uids.add(uid)
+                players_by_uid[uid] = {
+                    'name': p.get('player_info', {}).get('player_name', 'Unknown'),
+                    'guild_name': group['value']['RawData']['value'].get('guild_name', 'Unknown'),
+                    'level': constants.player_levels.get(uid, '?'),
+                }
+    result = defaultdict(lambda: {'illegals': [], 'pal_count': 0, 'player_name': 'Unknown', 'guild_name': 'Unknown', 'level': '?'})
+    for entry in cmap:
+        try:
+            is_illegal, illegal_markers = check_is_illegal_pal(entry)
+        except:
+            continue
+        if not is_illegal:
+            continue
+        try:
+            rawf = entry.get('value', {}).get('RawData', {}).get('value', {})
+            sp = rawf.get('object', {}).get('SaveParameter', {}).get('value', {})
+            owner_uid = extract_value(sp, 'OwnerPlayerUId', '')
+            uid_str = str(owner_uid).replace('-', '').lower() if owner_uid else '00000000000000000000000000000000'
+            is_worker = uid_str == '00000000000000000000000000000000'
+            container_id = 'Unknown'
+            slot_id_obj = sp.get('SlotId', {})
+            if isinstance(slot_id_obj, dict):
+                slot_id_val = slot_id_obj.get('value', slot_id_obj)
+                if isinstance(slot_id_val, dict):
+                    container_id_obj = slot_id_val.get('ContainerId', {})
+                    if isinstance(container_id_obj, dict):
+                        container_id_val = container_id_obj.get('value', container_id_obj)
+                        if isinstance(container_id_val, dict):
+                            container_id = container_id_val.get('ID', {}).get('value', 'Unknown')
+                        else:
+                            container_id = str(container_id_val) if container_id_val else 'Unknown'
+                    else:
+                        container_id = str(container_id_obj) if container_id_obj else 'Unknown'
+                else:
+                    container_id = str(slot_id_val) if slot_id_val else 'Unknown'
+            location = 'PalBox Storage'
+            if is_worker:
+                location = 'Base Worker'
+            elif owner_uid and uid_str in player_containers:
+                conts = player_containers[uid_str]
+                if str(container_id).lower() == conts['Party']:
+                    location = 'Current Party'
+                elif str(container_id).lower() == conts['PalBox']:
+                    location = 'PalBox Storage'
+            nick = extract_value(sp, 'NickName', '')
+            cid = extract_value(sp, 'CharacterID', '')
+            pal_name = resolve_name(cid, NAMEMAP) or cid
+            result[uid_str]['pal_count'] += 1
+            result[uid_str]['illegals'].append({'name': pal_name, 'nickname': nick, 'cid': cid, 'location': location, 'illegal_markers': illegal_markers})
+            if result[uid_str]['player_name'] == 'Unknown':
+                pinfo = players_by_uid.get(uid_str, {})
+                result[uid_str]['player_name'] = pinfo.get('name', owner_nicknames.get(uid_str, 'Unknown'))
+                result[uid_str]['guild_name'] = pinfo.get('guild_name', 'Unknown')
+                result[uid_str]['level'] = pinfo.get('level', '?')
+        except:
+            continue
+    if os.path.exists(players_dir):
+        dps_illegals = _scan_dps_for_illegals(players_dir, NAMEMAP, valid_player_uids)
+        for uid_str, pals in dps_illegals.items():
+            count = len(pals)
+            result[uid_str]['pal_count'] += count
+            result[uid_str]['illegals'].extend(pals)
+            if result[uid_str]['player_name'] == 'Unknown':
+                pinfo = players_by_uid.get(uid_str, {})
+                result[uid_str]['player_name'] = pinfo.get('name', owner_nicknames.get(uid_str, 'Unknown'))
+                result[uid_str]['guild_name'] = pinfo.get('guild_name', 'Unknown')
+                result[uid_str]['level'] = pinfo.get('level', '?')
+    return dict(result)
+def fix_illegal_pals_in_save(parent=None, selected_uids=None):
     if not constants.current_save_path or not constants.loaded_level_json:
         return 0
     from resource_resolver import get_data_base
@@ -2301,6 +2464,7 @@ def fix_illegal_pals_in_save(parent=None):
                         owner_nicknames[str(uid).replace('-', '').lower()] = nn
             except:
                 pass
+        selected_uids_set = {u.replace('-', '').lower() for u in (selected_uids or [])} if selected_uids else None
         illegal_pals_by_owner = defaultdict(list)
         illegal_pals_by_player_file = defaultdict(list)
         wsd = constants.loaded_level_json['properties']['worldSaveData']['value']
@@ -2348,6 +2512,8 @@ def fix_illegal_pals_in_save(parent=None):
                     owner_uid = extract_value(sp, 'OwnerPlayerUId', '')
                     uid_str = str(owner_uid).replace('-', '').lower() if owner_uid else '00000000000000000000000000000000'
                     is_worker = uid_str == '00000000000000000000000000000000'
+                    if selected_uids_set is not None and uid_str not in selected_uids_set:
+                        continue
                     guild_id = str(rawf.get('group_id', 'Unknown')).lower()
                     base_id = str(container_id).lower() if container_id != 'Unknown' else 'unknown'
                     location = 'PalBox Storage'

@@ -42,7 +42,7 @@ from .card_widgets import PalIcon, PalCardWidget
 from .party_slot_widget import PartySlotWidget
 from .palbox_slot_widget import PalboxSlotWidget, _PalSlotDelegate
 from .pal_info_widget import PalInfoWidget
-from .create_dialogs import BulkSyncPalDialog, PalCreateDialog, _show_learned_moves_dialog
+from .create_dialogs import BulkSyncAllDialog, BulkSyncPalDialog, PalCreateDialog, _show_learned_moves_dialog
 from .pal_editor_widget import PalEditorWidget, EditPalsDialog
 from .pal_editor_global_ops import delete_pal_from_all, remove_skill_from_all_pals
 from .pal_editor_bulk_ops import BulkOperationMixin
@@ -82,6 +82,7 @@ __all__ = [
     "_work_suit_short_key",
     "build_pal_context_menu",
     "BulkOperationMixin",
+    "BulkSyncAllDialog",
     "BulkSyncPalDialog",
     "delete_pal_from_all",
     "EditPalsDialog",

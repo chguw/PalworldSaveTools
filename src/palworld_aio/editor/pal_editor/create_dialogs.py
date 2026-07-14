@@ -442,6 +442,215 @@ class BulkSyncPalDialog(FramelessDialog):
         self.pal_editor._update_palbox_page()
         show_information(self, 'Bulk Sync', t('edit_pals.bulk_sync_success', count=len(selected), name=pal_name))
         self.accept()
+class BulkSyncAllDialog(FramelessDialog):
+    def __init__(self, pal_item, pal_editor, parent=None):
+        super().__init__('edit_pals.bulk_sync_all_title', parent)
+        self.pal_editor = pal_editor
+        raw = _get_raw_from_item(pal_item)
+        if not raw:
+            self.reject()
+            return
+        self._source_raw = raw
+        self.setModal(True)
+        self.setMinimumSize(740, 750)
+        self._all_candidates = []
+        self._from_party = True
+        self._from_palbox = True
+        self._from_dps = True
+        self._refresh_candidates()
+        inner = QWidget()
+        inner.setStyleSheet('QWidget#bulkSyncAllInner { background: transparent; }')
+        il = QVBoxLayout(inner)
+        il.setContentsMargins(8, 4, 8, 8)
+        il.setSpacing(6)
+        header = QLabel(t('edit_pals.bulk_sync_all_header'))
+        header.setStyleSheet('font-size: 12px; font-weight: 700; color: #E2E8F0; background: transparent; border: none;')
+        il.addWidget(header)
+        src_row = QHBoxLayout()
+        src_row.setSpacing(8)
+        src_lbl = QLabel(t('edit_pals.bulk_sync_sources'))
+        src_lbl.setStyleSheet('font-size: 11px; font-weight: 600; color: #7DD3FC; background: transparent; border: none;')
+        src_row.addWidget(src_lbl)
+        self._party_chk = ToggleCheckBtn(t('edit_pals.party'))
+        self._party_chk.setChecked(True)
+        self._party_chk.toggled.connect(self._on_source_toggle)
+        src_row.addWidget(self._party_chk)
+        self._palbox_chk = ToggleCheckBtn(t('edit_pals.palbox'))
+        self._palbox_chk.setChecked(True)
+        self._palbox_chk.toggled.connect(self._on_source_toggle)
+        src_row.addWidget(self._palbox_chk)
+        self._dps_chk = ToggleCheckBtn(t('edit_pals.dps'))
+        self._dps_chk.setChecked(True)
+        self._dps_chk.toggled.connect(self._on_source_toggle)
+        src_row.addWidget(self._dps_chk)
+        src_row.addStretch()
+        il.addLayout(src_row)
+        body = QHBoxLayout()
+        body.setSpacing(6)
+        left_col = QVBoxLayout()
+        left_col.setSpacing(3)
+        pal_list_label = QLabel(t('edit_pals.select_pals_to_sync'))
+        pal_list_label.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none; padding: 2px 0;')
+        left_col.addWidget(pal_list_label)
+        pal_scroll = QScrollArea()
+        pal_scroll.setWidgetResizable(True)
+        pal_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        pal_scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; }')
+        self._pal_list_inner = QWidget()
+        self._pal_list_inner.setStyleSheet('background: transparent; border: none;')
+        pal_scroll.setWidget(self._pal_list_inner)
+        left_col.addWidget(pal_scroll, 1)
+        body.addLayout(left_col, 1)
+        right_col = QVBoxLayout()
+        right_col.setSpacing(3)
+        preview_label = QLabel(t('edit_pals.bulk_sync_preview'))
+        preview_label.setStyleSheet('font-size: 10px; font-weight: 600; color: #7DD3FC; background: transparent; border: none; padding: 2px 0;')
+        right_col.addWidget(preview_label)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setStyleSheet('QScrollArea { background: transparent; border: 1px solid rgba(125,211,252,0.12); border-radius: 4px; }')
+        self._pal_info = PalInfoWidget()
+        self._pal_info.set_clicked_pal(pal_item)
+        self._pal_info.setStyleSheet(self._pal_info.styleSheet() + '\nQWidget#palInfoInner { border: none; }')
+        self._pal_info.setMinimumWidth(0)
+        scroll.setWidget(self._pal_info)
+        right_col.addWidget(scroll, 1)
+        body.addLayout(right_col, 1)
+        il.addLayout(body, 1)
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        cancel_btn = QPushButton(t('edit_pals.bulk_sync_cancel'))
+        cancel_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.05); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 16px; font-size: 12px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.1); color: #FFFFFF; }')
+        cancel_btn.clicked.connect(self.reject)
+        btn_row.addWidget(cancel_btn)
+        sel_all_btn = QPushButton(t('edit_pals.bulk_sync_all'))
+        sel_all_btn.setStyleSheet('QPushButton { background: rgba(125,211,252,0.08); color: #7DD3FC; border: 1px solid rgba(125,211,252,0.2); border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 600; } QPushButton:hover { background: rgba(125,211,252,0.15); color: #FFFFFF; }')
+        sel_all_btn.clicked.connect(lambda: self._set_all_checked(True))
+        btn_row.addWidget(sel_all_btn)
+        sel_none_btn = QPushButton(t('edit_pals.bulk_sync_none'))
+        sel_none_btn.setStyleSheet('QPushButton { background: rgba(255,255,255,0.04); color: #9CA3AF; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 600; } QPushButton:hover { background: rgba(255,255,255,0.08); color: #FFFFFF; }')
+        sel_none_btn.clicked.connect(lambda: self._set_all_checked(False))
+        btn_row.addWidget(sel_none_btn)
+        apply_btn = QPushButton(t('edit_pals.bulk_sync_apply'))
+        apply_btn.setStyleSheet('QPushButton { background: rgba(16,185,129,0.15); color: #4ADE80; border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 6px 20px; font-size: 12px; font-weight: 700; } QPushButton:hover { background: rgba(16,185,129,0.25); color: #FFFFFF; }')
+        apply_btn.clicked.connect(self._on_apply)
+        btn_row.addWidget(apply_btn)
+        il.addLayout(btn_row)
+        self.content_layout.addWidget(inner)
+        self._rebuild_pal_list()
+    def _on_source_toggle(self):
+        self._from_party = self._party_chk.isChecked()
+        self._from_palbox = self._palbox_chk.isChecked()
+        self._from_dps = self._dps_chk.isChecked()
+        self._refresh_candidates()
+        self._rebuild_pal_list()
+    def _refresh_candidates(self):
+        self._all_candidates = []
+        seen = set()
+        def _extract_inst_id(pi):
+            pr = _get_raw_from_item(pi)
+            if 'data' in pi:
+                return str(pr.get('InstanceId', {}).get('value', '')) if pr else ''
+            return str(pi.get('key', {}).get('InstanceId', {}).get('value', ''))
+        if self._from_party:
+            for pi in list(self.pal_editor.party_pals.values()):
+                pr = _get_raw_from_item(pi)
+                if pr:
+                    inst_id = _extract_inst_id(pi)
+                    if inst_id not in seen:
+                        seen.add(inst_id)
+                        self._all_candidates.append(pi)
+        if self._from_palbox:
+            for pi in self.pal_editor.palbox_pal_dict.values():
+                pr = _get_raw_from_item(pi)
+                if pr:
+                    inst_id = _extract_inst_id(pi)
+                    if inst_id not in seen:
+                        seen.add(inst_id)
+                        self._all_candidates.append(pi)
+        if self._from_dps and hasattr(self.pal_editor, 'dps_pals'):
+            for pi in self.pal_editor.dps_pals.values():
+                pr = _get_raw_from_item(pi)
+                if pr:
+                    self._all_candidates.append(pi)
+    def _rebuild_pal_list(self):
+        from .icons import _strip_prefix_label
+        from .legacy_frame import PalFrame
+        clayout = self._pal_list_inner.layout()
+        if clayout:
+            while clayout.count():
+                item = clayout.takeAt(0)
+                w = item.widget()
+                if w:
+                    w.deleteLater()
+        else:
+            clayout = QVBoxLayout(self._pal_list_inner)
+            clayout.setContentsMargins(2, 2, 2, 2)
+            clayout.setSpacing(2)
+            clayout.setAlignment(Qt.AlignTop)
+        self._checkboxes = []
+        for pi in self._all_candidates:
+            pr = _get_raw_from_item(pi)
+            cid = extract_value(pr, 'CharacterID', '') if pr else ''
+            nick = extract_value(pr, 'NickName', '') if pr else ''
+            lv = extract_value(pr, 'Level', 1) if pr else 1
+            pname = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
+            display = f'Lv.{lv} {nick}' if nick else f'Lv.{lv} {pname}'
+            cb = ToggleCheckBtn(display)
+            cb.setChecked(True)
+            clayout.addWidget(cb)
+            self._checkboxes.append(cb)
+        clayout.addStretch()
+    def _set_all_checked(self, checked):
+        for cb in self._checkboxes:
+            cb.setChecked(checked)
+    def _on_apply(self):
+        if not self._source_raw:
+            self.reject()
+            return
+        selected = []
+        for pi, cb in zip(self._all_candidates, self._checkboxes):
+            if cb.isChecked():
+                selected.append(pi)
+        if not selected:
+            show_warning(self, 'Bulk Sync All', t('edit_pals.bulk_sync_no_selection'))
+            return
+        count = 0
+        for pal_item in selected:
+            target_raw = _get_raw_from_item(pal_item)
+            if not target_raw:
+                continue
+            for key in _EDITABLE_KEYS:
+                if key in self._source_raw:
+                    target_raw[key] = copy.deepcopy(self._source_raw[key])
+                else:
+                    target_raw.pop(key, None)
+            if 'EquipWaza' in target_raw:
+                ew = target_raw['EquipWaza']
+                ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
+                if isinstance(ew_list, list):
+                    normalized = []
+                    for v in ew_list:
+                        if v and '::' not in v:
+                            normalized.append(f'EPalWazaID::{v}')
+                        else:
+                            normalized.append(v)
+                    if isinstance(ew, dict):
+                        ew['value']['values'] = normalized
+                    else:
+                        target_raw['EquipWaza'] = normalized
+            count += 1
+        self.pal_editor.pal_info._refresh()
+        self.pal_editor._update_party_slots()
+        self.pal_editor._update_palbox_page()
+        if hasattr(self.pal_editor, '_update_dps_slots'):
+            self.pal_editor._update_dps_slots()
+        if hasattr(self.pal_editor, '_save_dps'):
+            self.pal_editor._save_dps(force=True)
+        show_information(self, 'Bulk Sync All', t('edit_pals.bulk_sync_all_success', count=count))
+        self.accept()
+
 class PalCreateDialog(QDialog):
     def __init__(self, pal_editor, is_party, slot_index, parent=None, is_dps=False):
         super().__init__(parent)

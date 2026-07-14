@@ -1793,5 +1793,10 @@
     "inventory.abilities_loaded": "Habilidades cargadas para {nombre}",
     "inventory.abilities_no_player_selected": "Ningún jugador cargado",
     "inventory.edit_abilities_current": "Cargar desde el reproductor seleccionado",
-    "aio.menu.open_data_folder": "Abrir carpeta de datos"
+    "aio.menu.open_data_folder": "Abrir carpeta de datos",
+    "edit_pals.ctx.bulk_sync_all": "Sincronización masiva (todos los amigos)",
+    "edit_pals.bulk_sync_all_title": "Sincronización masiva de todos los amigos",
+    "edit_pals.bulk_sync_all_header": "Sincronizar estadísticas/ivs/habilidades del amigo de origen con todos los amigos seleccionados",
+    "edit_pals.bulk_sync_sources": "Fuentes:",
+    "edit_pals.bulk_sync_all_success": "¡{count} amigos sincronizados de forma masiva!"
 }

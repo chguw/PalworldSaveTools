@@ -1,4 +1,5 @@
 #2.0.8
+- **Bulk Sync (All Pals)** — right-click any pal → Bulk Sync (All Pals) syncs stats/IVs/skills to all pals across Party/Palbox/DPS regardless of species. Source toggles per container type. Candidate list with select-all/none controls.
 - **`_u8_flag` → `role` migration** — `group.py` v2 guild encoder writes `p['role']` but all 4 managers were setting `p['_u8_flag']`, causing silent data loss. Fixed in `guild_manager.py`, `func_manager.py`, `data_manager.py`, `character_transfer.py`
 - **`character_transfer.py` — missing `role` on fallback player entry** — guild clone path could KeyError on v2 roundtrip when source player entry missing; added `'role': 1`
 - **Updated `pst-binary-schemas` skill** — documents v2 guild tail (`_read_guild_tail_v2`), role semantics (1=admin, 2=submaster, 3=member), and all fixed files
@@ -9,6 +10,8 @@
 - **Updater unit tests** — 12 new tests for `_platform_asset_suffix`, `StandaloneUpdater.check_version` (asset lookup, no-update, HTTP failure), `download` (file write, cancel), `apply_and_restart` (helper script), and `get_update_settings`/`save_update_settings` roundtrip
 - **Open Data Folder button** — menu item under AIO Tools opens `%APPDATA%/PalworldSaveTools/` (or platform equivalent) in file manager. Cross-platform via `os.startfile`/`open`/`xdg-open`
 - **Removed auto-update feature** — deleted `updater.py` (StandaloneUpdater/SourceUpdater), removed update dialogs, menu entries, and settings. Kept startup version check + GitHub version chip pulse. Version chip click still opens releases page
+- **Fix Illegal Pals dialog** — replaces simple confirm box with player-selection dialog showing per-player illegal pal counts. Scan + fix both run under loading overlay (DPS files included). Select All / Deselect All bulk controls. Translations for all 8 languages
+- **Work suitability icon stale `_ws_key`** — `pal_info_display.py` cleared `val_lbl._ws_key` on dimmed icons but left `icon_lbl._ws_key` from previous pal. Clicking a visually dead icon fired the work-suitability editor, letting users inject suitabilities a pal should never have. Fixed by clearing both labels.
 - Bumped version to 2.0.8
 
 #2.0.7

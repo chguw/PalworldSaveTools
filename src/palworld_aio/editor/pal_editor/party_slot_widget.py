@@ -191,6 +191,10 @@ class PartySlotWidget(QFrame):
 
                 self.rightClicked.emit(self.slot_index, 'bulk_sync_pal')
 
+            elif key == 'bulk_sync_all':
+
+                self.rightClicked.emit(self.slot_index, 'bulk_sync_all')
+
             elif key == 'clone':
 
                 self.rightClicked.emit(self.slot_index, 'clone')

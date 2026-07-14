@@ -203,6 +203,7 @@ class PalInfoDisplayMixin:
                     val_lbl.setText('')
                     val_lbl.setStyleSheet('font-size: 9px; font-weight: 700; color: transparent; background: transparent; border: none;')
                     val_badge.setStyleSheet('background: transparent; border: none;')
+                    icon_lbl._ws_key = None
                     val_lbl._ws_key = None
             hunger_max = float(base_stomach) if base_stomach else 300.0
             hp_pct = int(min(hp_val / max_hp * 100, 100))

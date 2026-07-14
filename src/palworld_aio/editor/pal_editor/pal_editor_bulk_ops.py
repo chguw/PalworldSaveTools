@@ -10,6 +10,7 @@ from .legacy_frame import PalFrame
 from .data import _ensure_friendship_thresholds
 from .pal_ops import _get_raw_from_item, _set_work_suitability
 from .widgets import FramelessDialog
+from .create_dialogs import BulkSyncAllDialog
 
 
 class BulkOperationMixin:
@@ -44,6 +45,28 @@ class BulkOperationMixin:
                         seen.add(inst_id)
                         items.append(pi)
         return items
+
+    def _bulk_sync_all_pal(self, raw):
+        pal_item = None
+        for pi in list(self.party_pals.values()):
+            if _get_raw_from_item(pi) is raw:
+                pal_item = pi
+                break
+        if not pal_item:
+            for pi in self.palbox_pal_dict.values():
+                if _get_raw_from_item(pi) is raw:
+                    pal_item = pi
+                    break
+        if not pal_item and hasattr(self, 'dps_pals'):
+            for pi in self.dps_pals.values():
+                if _get_raw_from_item(pi) is raw:
+                    pal_item = pi
+                    break
+        if not pal_item:
+            show_information(self, 'Bulk Sync All', 'Pal not found.')
+            return
+        dlg = BulkSyncAllDialog(pal_item, self, self)
+        dlg.exec()
 
     def _bulk_rename_pal(self, sender):
         candidates = self._gather_same_species_items(sender)

@@ -1797,5 +1797,10 @@
     "inventory.abilities_loaded": "Загруженные способности для {name}",
     "inventory.abilities_no_player_selected": "Ни один плеер не загружен",
     "inventory.edit_abilities_current": "Загрузить из выбранного плеера",
-    "aio.menu.open_data_folder": "Открыть папку данных"
+    "aio.menu.open_data_folder": "Открыть папку данных",
+    "edit_pals.ctx.bulk_sync_all": "Массовая синхронизация (все друзья)",
+    "edit_pals.bulk_sync_all_title": "Массовая синхронизация всех друзей",
+    "edit_pals.bulk_sync_all_header": "Синхронизировать статистику/ivs/навыки исходного приятеля со всеми выбранными приятелями.",
+    "edit_pals.bulk_sync_sources": "Источники:",
+    "edit_pals.bulk_sync_all_success": "Массовая синхронизация: {count} друзей!"
 }
