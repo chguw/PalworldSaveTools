@@ -2,7 +2,7 @@ import os
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QGroupBox, QCheckBox, QMessageBox, QSpinBox, QFrame, QAbstractItemView, QListView, QTabWidget, QWidget, QInputDialog
 from PySide6.QtCore import Qt, Signal, QSize, QTimer
 from PySide6.QtGui import QPixmap, QIcon, QColor, QPainter, QPen
-from PySide6.QtWidgets import QStyledItemDelegate
+from PySide6.QtWidgets import QStyledItemDelegate, QSplitter
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.inventory.inventory_manager import ItemData
@@ -40,6 +40,7 @@ class PlayerItemActionDialog(QDialog):
     add_all_key_items_requested = Signal(list)
     add_all_effigies_requested = Signal(list)
     unlock_all_map_requested = Signal(list)
+    edit_abilities_requested = Signal(list, object)
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle(t('player_item.title') if t else 'Bulk Player Item Management')
@@ -49,6 +50,7 @@ class PlayerItemActionDialog(QDialog):
         self.players_data = []
         self.players_with_item = set()
         self._all_items = []
+        self._last_ability_player_uid = None
         self._setup_ui()
         self._load_items()
         self._load_players()
@@ -113,6 +115,8 @@ class PlayerItemActionDialog(QDialog):
         self.player_list.setSelectionMode(QAbstractItemView.NoSelection)
         players_layout.addWidget(self.player_list)
         self.item_tabs.addTab(self._players_tab, t('player_item.players') if t else 'Select Players')
+        self._abilities_tab = self._make_abilities_tab()
+        self.item_tabs.addTab(self._abilities_tab, t('inventory.edit_abilities', default='Edit Abilities'))
         layout.addWidget(self.item_tabs)
         self.item_info_label = QLabel(t('player_item.select_item') if t else 'Select an item to perform actions')
         self.item_info_label.setStyleSheet('color: #888; font-style: italic; padding: 5px;')
@@ -449,9 +453,237 @@ class PlayerItemActionDialog(QDialog):
             item.setSizeHint(QSize(0, 36))
             self.player_list.addItem(item)
             self.player_list.setItemWidget(item, checkbox)
+    def _make_abilities_tab(self):
+        from palworld_aio.managers.player_manager import RELIC_TO_STATUS_NAME, RELIC_CUMULATIVE_MAX
+        from palworld_aio.inventory.inventory_manager import ASSET_TO_RELIC_TYPE, RELIC_TYPE_TO_EFFIGY, ItemData
+        tab = QWidget()
+        layout = QVBoxLayout(tab)
+        layout.setSpacing(6)
+        columns = QHBoxLayout()
+        left = QWidget()
+        left_layout = QVBoxLayout(left)
+        left_layout.setContentsMargins(0, 0, 0, 0)
+        left_layout.setSpacing(4)
+        player_btn_row = QHBoxLayout()
+        self.ability_player_sel_all = QPushButton(t('player_item.select_all') if t else 'Select All')
+        self.ability_player_sel_all.clicked.connect(self._select_all_ability_players)
+        player_btn_row.addWidget(self.ability_player_sel_all)
+        self.ability_player_sel_none = QPushButton(t('player_item.deselect_all') if t else 'Deselect All')
+        self.ability_player_sel_none.clicked.connect(self._deselect_all_ability_players)
+        player_btn_row.addWidget(self.ability_player_sel_none)
+        player_btn_row.addStretch()
+        left_layout.addLayout(player_btn_row)
+        self.ability_player_list = QListWidget()
+        self.ability_player_list.setSelectionMode(QAbstractItemView.NoSelection)
+        left_layout.addWidget(self.ability_player_list)
+        right = QWidget()
+        right_layout = QVBoxLayout(right)
+        right_layout.setContentsMargins(0, 0, 0, 0)
+        right_layout.setSpacing(4)
+        ability_btn_row = QHBoxLayout()
+        self.ability_sel_all = QPushButton(t('player_item.select_all') if t else 'Select All')
+        self.ability_sel_all.clicked.connect(self._select_all_abilities)
+        ability_btn_row.addWidget(self.ability_sel_all)
+        self.ability_sel_none = QPushButton(t('player_item.deselect_all') if t else 'Deselect All')
+        self.ability_sel_none.clicked.connect(self._deselect_all_abilities)
+        ability_btn_row.addWidget(self.ability_sel_none)
+        ability_btn_row.addStretch()
+        right_layout.addLayout(ability_btn_row)
+        self.ability_playing_as = QLabel('')
+        self.ability_playing_as.setStyleSheet('color: #7dd3fc; font-weight: 600; font-size: 11px; padding: 2px 4px;')
+        right_layout.addWidget(self.ability_playing_as)
+        self.ability_scroll = QListWidget()
+        self.ability_scroll.setSelectionMode(QAbstractItemView.NoSelection)
+        self.ability_widgets = []
+        relic_types = sorted(ASSET_TO_RELIC_TYPE.items(), key=lambda x: x[0])
+        for asset, relic_type in relic_types:
+            jp_name = RELIC_TO_STATUS_NAME.get(relic_type, relic_type.split('::')[-1])
+            display = f'{jp_name} ({relic_type.split("::")[-1]})'
+            row = QWidget()
+            row_layout = QHBoxLayout(row)
+            row_layout.setContentsMargins(4, 2, 4, 2)
+            row_layout.setSpacing(8)
+            toggle = ToggleCheckBtn(display)
+            toggle.setProperty('relic_type', relic_type)
+            toggle.setProperty('cumulative_max', RELIC_CUMULATIVE_MAX.get(relic_type, 1))
+            row_layout.addWidget(toggle, 1)
+            icon_label = QLabel()
+            icon_label.setFixedSize(24, 24)
+            icon_label.setAlignment(Qt.AlignCenter)
+            effigy_asset = RELIC_TYPE_TO_EFFIGY.get(relic_type, 'Relic')
+            info = ItemData.get_item_by_asset(effigy_asset)
+            icon_path = info.get('icon', '') if info else ''
+            if icon_path:
+                pixmap = ItemData.get_item_icon(icon_path, QSize(24, 24))
+                if not pixmap.isNull():
+                    icon_label.setPixmap(pixmap)
+            row_layout.addWidget(icon_label)
+            cur_label = QLabel('0')
+            cur_label.setStyleSheet('color: #94a3b8; font-size: 11px; min-width: 30px;')
+            cur_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            row_layout.addWidget(cur_label)
+            spinner = QSpinBox()
+            max_val = RELIC_CUMULATIVE_MAX.get(relic_type, 9999)
+            spinner.setRange(0, max_val)
+            spinner.setValue(max_val)
+            spinner.setFixedWidth(80)
+            spinner.setMinimumWidth(70)
+            row_layout.addWidget(spinner, 0)
+            row_widget = QListWidgetItem()
+            row_widget.setSizeHint(QSize(0, 48))
+            self.ability_scroll.addItem(row_widget)
+            self.ability_scroll.setItemWidget(row_widget, row)
+            self.ability_widgets.append({
+                'toggle': toggle,
+                'spinner': spinner,
+                'cur_label': cur_label,
+                'icon_label': icon_label,
+                'relic_type': relic_type,
+                'asset': asset,
+                'cumulative_max': max_val,
+            })
+        right_layout.addWidget(self.ability_scroll)
+        columns.addWidget(left, 1)
+        columns.addWidget(right, 1)
+        layout.addLayout(columns)
+        apply_row = QHBoxLayout()
+        self.ability_apply_btn = QPushButton(t('inventory.edit_abilities_apply', default='Apply Ability Changes'))
+        self.ability_apply_btn.setStyleSheet('QPushButton { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 6px; padding: 6px 16px; font-weight: 600; font-size: 12px; } QPushButton:hover { background: rgba(74,222,128,0.25); border-color: rgba(74,222,128,0.5); color: #FFFFFF; }')
+        self.ability_apply_btn.setCursor(Qt.PointingHandCursor)
+        self.ability_apply_btn.clicked.connect(self._on_apply_abilities)
+        apply_row.addWidget(self.ability_apply_btn)
+        apply_row.addStretch()
+        layout.addLayout(apply_row)
+        self.ability_status = QLabel('')
+        self.ability_status.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
+        layout.addWidget(self.ability_status)
+        return tab
+    def _populate_ability_player_list(self):
+        self.ability_player_list.clear()
+        for player in self.players_data:
+            uid = player.get('uid', '')
+            if not uid:
+                continue
+            text = f"{player.get('name', 'Unknown')} (Lv.{player.get('level', '?')}) - {uid}"
+            checkbox = ToggleCheckBtn(text)
+            checkbox.setProperty('uid', uid)
+            checkbox.setChecked(True)
+            checkbox.toggled.connect(self._on_ability_player_toggled)
+            item = QListWidgetItem()
+            item.setSizeHint(QSize(0, 36))
+            self.ability_player_list.addItem(item)
+            self.ability_player_list.setItemWidget(item, checkbox)
+        if self.players_data:
+            self._last_ability_player_uid = self.players_data[0]['uid']
+        self._load_ability_values_from_player()
+    def _select_all_ability_players(self):
+        self._last_ability_player_uid = None
+        for i in range(self.ability_player_list.count()):
+            w = self.ability_player_list.itemWidget(self.ability_player_list.item(i))
+            if w:
+                w.setChecked(True)
+                if not self._last_ability_player_uid:
+                    self._last_ability_player_uid = w.property('uid')
+        self._load_ability_values_from_player()
+    def _deselect_all_ability_players(self):
+        self._last_ability_player_uid = None
+        for i in range(self.ability_player_list.count()):
+            w = self.ability_player_list.itemWidget(self.ability_player_list.item(i))
+            if w:
+                w.setChecked(False)
+        self._load_ability_values_from_player()
+    def _on_ability_player_toggled(self, checked=False):
+        sender = self.sender()
+        if sender:
+            uid = sender.property('uid')
+            if uid:
+                self._last_ability_player_uid = uid
+        self._load_ability_values_from_player()
+    def _get_checked_ability_players(self):
+        uids = []
+        for i in range(self.ability_player_list.count()):
+            w = self.ability_player_list.itemWidget(self.ability_player_list.item(i))
+            if w and w.isChecked():
+                uid = w.property('uid')
+                if uid:
+                    uids.append(uid)
+        return uids
+    def _select_all_abilities(self):
+        for w in self.ability_widgets:
+            w['toggle'].setChecked(True)
+    def _deselect_all_abilities(self):
+        for w in self.ability_widgets:
+            w['toggle'].setChecked(False)
+    def _load_ability_values_from_player(self):
+        uids = self._get_checked_ability_players()
+        if not uids:
+            for w in self.ability_widgets:
+                w['cur_label'].setText('0')
+                w['spinner'].setValue(w['cumulative_max'])
+            self.ability_playing_as.setText(t('inventory.edit_abilities_no_player', default='No player selected'))
+            self.ability_playing_as.setStyleSheet('color: #fbbf24; font-weight: 600; font-size: 11px; padding: 2px 4px;')
+            self.ability_status.setText('')
+            return
+        load_uid = self._last_ability_player_uid or uids[0]
+        if load_uid not in uids:
+            load_uid = uids[0]
+        uid = load_uid
+        pname = uid
+        for p in self.players_data:
+            if p.get('uid') == uid:
+                pname = f"{p.get('name', 'Unknown')} ({uid})"
+                break
+        self.ability_playing_as.setText(f'Showing: {pname}')
+        self.ability_playing_as.setStyleSheet('color: #7dd3fc; font-weight: 600; font-size: 11px; padding: 2px 4px;')
+        try:
+            import os
+            uid_clean = str(uid).replace('-', '').upper()
+            sav_path = os.path.join(constants.current_save_path, 'Players', f'{uid_clean}.sav')
+            if not os.path.exists(sav_path):
+                for w in self.ability_widgets:
+                    w['cur_label'].setText('?')
+                    w['spinner'].setValue(0)
+                return
+            gvas = sav_to_gvasfile(sav_path)
+            rd = gvas.properties['SaveData']['value']['RecordData']['value']
+            rmap = rd.get('RelicPossessNumMap', {}).get('value', [])
+            current_values = {e['key']: e['value'] for e in rmap}
+            for w in self.ability_widgets:
+                rt = w['relic_type']
+                val = current_values.get(rt, 0)
+                w['cur_label'].setText(str(val))
+                w['spinner'].setValue(val)
+        except Exception:
+            for w in self.ability_widgets:
+                w['cur_label'].setText('!')
+                w['spinner'].setValue(0)
+    def _on_apply_abilities(self):
+        uids = self._get_checked_ability_players()
+        if not uids:
+            QMessageBox.warning(self, t('player_item.no_players_selected') if t else 'No Players Selected', t('inventory.edit_abilities_select_first', default='Select players on the Players tab first.'))
+            return
+        ability_values = {}
+        checked_count = 0
+        for w in self.ability_widgets:
+            if w['toggle'].isChecked():
+                ability_values[w['relic_type']] = w['spinner'].value()
+                checked_count += 1
+        if not ability_values:
+            QMessageBox.warning(self, t('player_item.no_players_selected') if t else 'No Abilities Selected', t('inventory.edit_abilities_none_checked', default='No abilities selected. Check at least one ability.'))
+            return
+        reply = QMessageBox.question(self, t('inventory.edit_abilities_apply') if t else 'Apply Ability Changes', (t('inventory.edit_abilities_confirm.msg') if t else 'Apply ability changes to {count} player(s)?').format(count=len(uids)), QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            self.edit_abilities_requested.emit(uids, ability_values)
+            self.ability_status.setText(t('inventory.edit_abilities_done', default='Abilities updated successfully.'))
+            self.ability_status.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
     def _on_tab_changed(self, idx):
         if idx == 2 and self.player_list.count() == 0:
             self._load_all_players()
+        elif idx == 3:
+            if self.ability_player_list.count() == 0:
+                self._populate_ability_player_list()
+            else:
+                self._load_ability_values_from_player()
     def _on_add_all_clicked(self, is_effigies):
         uids = self._get_checked_player_uids()
         if not uids:

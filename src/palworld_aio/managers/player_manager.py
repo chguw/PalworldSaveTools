@@ -270,6 +270,60 @@ def max_all_abilities(player_uids):
     if level_changed:
         constants.dirty = True
     return True
+def set_ability_values(player_uids, ability_values):
+    if not constants.loaded_level_json:
+        return False
+    if not constants.current_save_path:
+        return False
+    from palworld_aio.utils import sav_to_gvasfile, gvasfile_to_sav
+    level_changed = False
+    for uid in player_uids:
+        uid_clean = str(uid).replace('-', '').upper()
+        players_dir = os.path.join(constants.current_save_path, 'Players')
+        if not os.path.isdir(players_dir):
+            continue
+        sav_path = os.path.join(players_dir, f'{uid_clean}.sav')
+        if not os.path.exists(sav_path):
+            continue
+        gvas = sav_to_gvasfile(sav_path)
+        rd = gvas.properties['SaveData']['value']['RecordData']['value']
+        if 'RelicPossessNumMap' not in rd:
+            rd['RelicPossessNumMap'] = {'key_type': 'EnumProperty', 'value_type': 'IntProperty', 'key_struct_type': None, 'value_struct_type': None, 'id': None, 'value': [], 'type': 'MapProperty'}
+        rmap = rd['RelicPossessNumMap']
+        existing = {e['key']: e for e in rmap['value']}
+        for rk, val in ability_values.items():
+            if rk in existing:
+                existing[rk]['value'] = val
+            else:
+                rmap['value'].append({'key': rk, 'value': val})
+        if 'RelicPossessNum' not in rd:
+            rd['RelicPossessNum'] = {'id': None, 'value': 0, 'type': 'IntProperty'}
+        rd['RelicPossessNum']['value'] = sum((e.get('value', 0) for e in rmap['value']))
+        gvasfile_to_sav(gvas, sav_path)
+        entry = constants.player_character_cache.get(uid_clean.lower())
+        if not entry:
+            continue
+        sv = entry['value']['RawData']['value']['object']['SaveParameter']['value']
+        sl = sv.setdefault('GotStatusPointList', {}).setdefault('value', {}).setdefault('values', [])
+        seen_names = {s.get('StatusName', {}).get('value', ''): s for s in sl}
+        for rk, val in ability_values.items():
+            stat_name = RELIC_TO_STATUS_NAME.get(rk)
+            if not stat_name:
+                continue
+            max_rank = RELIC_MAX_RANK.get(rk, 99)
+            if max_rank <= 0:
+                continue
+            status_point = max(1, round(val / (RELIC_CUMULATIVE_MAX.get(rk, 1) / max_rank)))
+            if stat_name in seen_names:
+                if seen_names[stat_name]['StatusPoint']['value'] != status_point:
+                    seen_names[stat_name]['StatusPoint']['value'] = status_point
+                    level_changed = True
+            else:
+                sl.append({'StatusName': {'id': None, 'value': stat_name, 'type': 'NameProperty'}, 'StatusPoint': {'id': None, 'value': status_point, 'type': 'IntProperty'}})
+                level_changed = True
+    if level_changed:
+        constants.dirty = True
+    return True
 def adjust_player_level(player_uid, target_level):
     if target_level < 1 or target_level > 80:
         return False

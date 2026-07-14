@@ -827,6 +827,7 @@ class MainWindow(QMainWindow):
         dialog.item_action_selected.connect(self._on_player_item_action)
         dialog.add_all_key_items_requested.connect(self._on_bulk_add_all_key_items)
         dialog.add_all_effigies_requested.connect(self._on_bulk_add_all_effigies)
+        dialog.edit_abilities_requested.connect(self._on_bulk_edit_abilities)
         dialog.unlock_all_map_requested.connect(self._on_bulk_unlock_all_map)
         dialog.exec()
     def _open_bulk_player_pal_dialog(self):
@@ -878,6 +879,12 @@ class MainWindow(QMainWindow):
         from palworld_aio.managers.player_manager import max_all_abilities
         max_all_abilities(player_uids)
         self._show_info(t('inventory.max_all_abilities_done', default='Abilities maxed.'), t('inventory.max_all_abilities_done', default='Abilities maxed to maximum rank.'))
+        if hasattr(self, 'refresh_all'):
+            self.refresh_all()
+    def _on_bulk_edit_abilities(self, player_uids, ability_values):
+        from palworld_aio.managers.player_manager import set_ability_values
+        set_ability_values(player_uids, ability_values)
+        self._show_info(t('inventory.edit_abilities_done', default='Abilities updated.'), t('inventory.edit_abilities_done', default='Ability values applied.'))
         if hasattr(self, 'refresh_all'):
             self.refresh_all()
     def _on_bulk_add_all_key_items(self, player_uids):

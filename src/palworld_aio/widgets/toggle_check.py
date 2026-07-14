@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel
-from PySide6.QtCore import Signal
-from PySide6.QtGui import QFont
+from PySide6.QtCore import Signal, Qt
+from PySide6.QtGui import QFont, QMouseEvent
 from palworld_aio import constants
 from palworld_aio.ui.chrome.sidebar_widget import NerdBtn
 try:
@@ -22,17 +22,23 @@ class ToggleCheckBtn(QWidget):
         self._icon_btn = NerdBtn('')
         self._icon_btn.setFixedSize(20, 20)
         self._icon_btn.setFont(QFont(constants.FONT_FAMILY_NERD, 12))
-        self._icon_btn.clicked.connect(self._toggle)
+        self._icon_btn.clicked.connect(lambda: self._toggle(True))
         layout.addWidget(self._icon_btn)
         self._label = QLabel(label)
         self._label.setStyleSheet('color: #e2e8f0; background: transparent;')
         layout.addWidget(self._label)
         self._update_style()
 
-    def _toggle(self):
+    def _toggle(self, from_btn=False):
         self._checked = not self._checked
         self._update_style()
         self.toggled.emit(self._checked)
+
+    def mousePressEvent(self, event: QMouseEvent):
+        child = self.childAt(event.pos())
+        if child is self._label:
+            self._toggle()
+        super().mousePressEvent(event)
 
     def _update_style(self):
         if self._checked:

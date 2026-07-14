@@ -1786,5 +1786,13 @@
     "edit_pals.max_all_confirm_cheat": "パーティーとすべてのパルボックスページのすべてのパルのすべてのステータス（IV：255、ソウル：255、ランク：255、レベル：255）を最大にしますか？",
     "base_inventory.max_all_confirm_cheat": "この基地内のすべての作業仲間のすべてのステータス (個体値: 255、ソウル: 255、ランク: 255、レベル: 255) を最大にしますか?",
     "func_manager.max_all_pals.confirm_cheat": "これにより、セーブ内のすべての仲間のすべてのステータス (レベル 255、個体値 255、ソウル 255、ランク 255) が最大になります。続く？",
-    "func_manager.max_all_pals.cheat_ask": "エクストリーム 255 キャップを使用しますか?"
+    "func_manager.max_all_pals.cheat_ask": "エクストリーム 255 キャップを使用しますか?",
+    "inventory.edit_abilities": "能力の編集",
+    "inventory.edit_abilities_apply": "能力の変更を適用する",
+    "inventory.edit_abilities_confirm.msg": "能力の変更を {count} 人のプレイヤーに適用しますか?",
+    "inventory.edit_abilities_done": "アビリティが正常に更新されました。",
+    "inventory.edit_abilities_select_first": "まず [プレーヤー] タブでプレーヤーを選択します。",
+    "inventory.edit_abilities_none_checked": "能力が選択されていません。少なくとも 1 つの能力を確認してください。",
+    "inventory.edit_abilities_current": "選択したプレーヤーからロード",
+    "inventory.edit_abilities_no_player": "プレイヤーが選択されていません"
 }

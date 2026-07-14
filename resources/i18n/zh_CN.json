@@ -1788,5 +1788,13 @@
     "edit_pals.max_all_confirm_cheat": "派对中所有好友和所有 palbox 页面的所有统计数据最大化（IV：255，灵魂：255，排名：255，等级：255）？",
     "base_inventory.max_all_confirm_cheat": "使该基地中所有工作伙伴的所有统计数据最大化（IV：255，灵魂：255，排名：255，等级：255）？",
     "func_manager.max_all_pals.confirm_cheat": "这将使保存中的所有好友的所有统计数据最大化（等级 255、IV 255、灵魂 255、排名 255）。继续？",
-    "func_manager.max_all_pals.cheat_ask": "使用极限 255 上限？"
+    "func_manager.max_all_pals.cheat_ask": "使用极限 255 上限？",
+    "inventory.edit_abilities": "编辑能力",
+    "inventory.edit_abilities_apply": "应用能力变更",
+    "inventory.edit_abilities_confirm.msg": "对 {count} 名玩家应用能力更改？",
+    "inventory.edit_abilities_done": "能力更新成功。",
+    "inventory.edit_abilities_select_first": "首先在“玩家”选项卡上选择玩家。",
+    "inventory.edit_abilities_none_checked": "没有选择任何能力。检查至少一项能力。",
+    "inventory.edit_abilities_current": "从选定的播放器加载",
+    "inventory.edit_abilities_no_player": "没有选择任何球员"
 }

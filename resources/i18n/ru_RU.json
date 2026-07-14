@@ -1784,5 +1784,13 @@
     "edit_pals.max_all_confirm_cheat": "Максимальные все характеристики (IV: 255, души: 255, ранг: 255, уровень: 255) для всех друзей в группе и на всех страницах палбокса?",
     "base_inventory.max_all_confirm_cheat": "Максимальные все характеристики (IV: 255, души: 255, ранг: 255, уровень: 255) для всех рабочих приятелей на этой базе?",
     "func_manager.max_all_pals.confirm_cheat": "Это максимально увеличит все характеристики (уровень 255, IV 255, души 255, ранг 255) для ВСЕХ друзей в сохранении. Продолжать?",
-    "func_manager.max_all_pals.cheat_ask": "Используете крайние колпачки 255?"
+    "func_manager.max_all_pals.cheat_ask": "Используете крайние колпачки 255?",
+    "inventory.edit_abilities": "Редактировать способности",
+    "inventory.edit_abilities_apply": "Применить изменения способностей",
+    "inventory.edit_abilities_confirm.msg": "Применить изменения способностей к игрокам ({count})?",
+    "inventory.edit_abilities_done": "Способности успешно обновлены.",
+    "inventory.edit_abilities_select_first": "Сначала выберите игроков на вкладке «Игроки».",
+    "inventory.edit_abilities_none_checked": "Способности не выбраны. Проверьте хотя бы одну способность.",
+    "inventory.edit_abilities_current": "Загрузить из выбранного плеера",
+    "inventory.edit_abilities_no_player": "Игрок не выбран"
 }

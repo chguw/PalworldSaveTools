@@ -1810,5 +1810,13 @@
     "edit_pals.max_all_confirm_cheat": "Alle Statistiken (IVs: 255, Seelen: 255, Rang: 255, Level: 255) für alle Freunde in der Gruppe und alle Palbox-Seiten maximieren?",
     "base_inventory.max_all_confirm_cheat": "Alle Statistiken (IVs: 255, Seelen: 255, Rang: 255, Level: 255) für alle Arbeitsfreunde in dieser Basis maximieren?",
     "func_manager.max_all_pals.confirm_cheat": "Dadurch werden alle Statistiken (Level 255, IVs 255, Seelen 255, Rang 255) für ALLE Freunde im Speicher maximiert. Weitermachen?",
-    "func_manager.max_all_pals.cheat_ask": "Extreme 255 Kapseln verwenden?"
+    "func_manager.max_all_pals.cheat_ask": "Extreme 255 Kapseln verwenden?",
+    "inventory.edit_abilities": "Fähigkeiten bearbeiten",
+    "inventory.edit_abilities_apply": "Wenden Sie Fähigkeitsänderungen an",
+    "inventory.edit_abilities_confirm.msg": "Fähigkeitsänderungen auf {count} Spieler(n) anwenden?",
+    "inventory.edit_abilities_done": "Fähigkeiten erfolgreich aktualisiert.",
+    "inventory.edit_abilities_select_first": "Wählen Sie zunächst Spieler auf der Registerkarte „Spieler“ aus.",
+    "inventory.edit_abilities_none_checked": "Keine Fähigkeiten ausgewählt. Überprüfen Sie mindestens eine Fähigkeit.",
+    "inventory.edit_abilities_current": "Vom ausgewählten Player laden",
+    "inventory.edit_abilities_no_player": "Kein Spieler ausgewählt"
 }

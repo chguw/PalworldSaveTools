@@ -1768,5 +1768,13 @@
     "edit_pals.max_all_confirm_cheat": "Maximiser toutes les statistiques (IV : 255, âmes : 255, rang : 255, niveau : 255) pour tous les copains du groupe et toutes les pages palbox ?",
     "base_inventory.max_all_confirm_cheat": "Maximiser toutes les statistiques (IV : 255, âmes : 255, rang : 255, niveau : 255) pour tous les copains qui travaillent dans cette base ?",
     "func_manager.max_all_pals.confirm_cheat": "Cela maximisera toutes les statistiques (niveau 255, IV 255, âmes 255, rang 255) pour TOUS les amis de la sauvegarde. Continuer?",
-    "func_manager.max_all_pals.cheat_ask": "Utiliser des capsules extrêmes 255 ?"
+    "func_manager.max_all_pals.cheat_ask": "Utiliser des capsules extrêmes 255 ?",
+    "inventory.edit_abilities": "Modifier les capacités",
+    "inventory.edit_abilities_apply": "Appliquer les changements de capacité",
+    "inventory.edit_abilities_confirm.msg": "Appliquer les changements de capacités à {count} joueur(s) ?",
+    "inventory.edit_abilities_done": "Capacités mises à jour avec succès.",
+    "inventory.edit_abilities_select_first": "Sélectionnez d'abord les joueurs dans l'onglet Joueurs.",
+    "inventory.edit_abilities_none_checked": "Aucune capacité sélectionnée. Cochez au moins une capacité.",
+    "inventory.edit_abilities_current": "Charger depuis le joueur sélectionné",
+    "inventory.edit_abilities_no_player": "Aucun joueur sélectionné"
 }

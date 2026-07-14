@@ -1785,5 +1785,13 @@
     "edit_pals.max_all_confirm_cheat": "파티의 모든 친구와 모든 팔박스 페이지에 대해 모든 통계(IV: 255, 영혼: 255, 순위: 255, 레벨: 255)를 최대화하시겠습니까?",
     "base_inventory.max_all_confirm_cheat": "이 기지에 있는 모든 일하는 친구의 모든 통계(IV: 255, 영혼: 255, 순위: 255, 레벨: 255)를 최대화하시겠습니까?",
     "func_manager.max_all_pals.confirm_cheat": "이렇게 하면 저장에 있는 모든 친구의 모든 통계(레벨 255, IV 255, 영혼 255, 순위 255)가 최대화됩니다. 계속하다?",
-    "func_manager.max_all_pals.cheat_ask": "익스트림 255 캡을 사용하시겠습니까?"
+    "func_manager.max_all_pals.cheat_ask": "익스트림 255 캡을 사용하시겠습니까?",
+    "inventory.edit_abilities": "능력 편집",
+    "inventory.edit_abilities_apply": "능력 변경 사항 적용",
+    "inventory.edit_abilities_confirm.msg": "{count}명의 플레이어에게 능력 변경 사항을 적용하시겠습니까?",
+    "inventory.edit_abilities_done": "능력이 성공적으로 업데이트되었습니다.",
+    "inventory.edit_abilities_select_first": "먼저 플레이어 탭에서 플레이어를 선택하세요.",
+    "inventory.edit_abilities_none_checked": "선택된 능력이 없습니다. 적어도 하나의 능력을 확인하십시오.",
+    "inventory.edit_abilities_current": "선택한 플레이어에서 로드",
+    "inventory.edit_abilities_no_player": "선택한 플레이어가 없습니다."
 }

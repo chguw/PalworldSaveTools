@@ -18,8 +18,16 @@ NEW_TRANSLATIONS = {
     'base_inventory.max_all_confirm_cheat': 'Max all stats (IVs: 255, souls: 255, rank: 255, level: 255) for all working pals in this base?',
     'func_manager.max_all_pals.confirm_cheat': 'This will max all stats (level 255, IVs 255, souls 255, rank 255) for ALL pals in the save. Continue?',
     'func_manager.max_all_pals.confirm': 'This will max all stats (level 80, IVs 100, souls 20, rank 5) for all pals. Continue?',
+    'inventory.edit_abilities': 'Edit Abilities',
+    'inventory.edit_abilities_apply': 'Apply Ability Changes',
+    'inventory.edit_abilities_confirm.msg': 'Apply ability changes to {count} player(s)?',
+    'inventory.edit_abilities_done': 'Abilities updated successfully.',
+    'inventory.edit_abilities_select_first': 'Select players on the Players tab first.',
+    'inventory.edit_abilities_none_checked': 'No abilities selected. Check at least one ability.',
+    'inventory.edit_abilities_current': 'Load from selected player',
+    'inventory.edit_abilities_no_player': 'No player selected',
 }
-OLD_KEYS = []
+OLD_KEYS = ['inventory.edit_abilities_current']
 def _clean_uv_locks():
     for p in [Path.cwd() / 'uv.lock', PROJECT_ROOT / 'uv.lock']:
         if p.exists():

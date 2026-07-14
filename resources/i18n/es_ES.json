@@ -1780,5 +1780,13 @@
     "edit_pals.max_all_confirm_cheat": "¿Maximizar todas las estadísticas (IV: 255, almas: 255, rango: 255, nivel: 255) para todos los amigos del grupo y todas las páginas de palbox?",
     "base_inventory.max_all_confirm_cheat": "¿Maximizar todas las estadísticas (IV: 255, almas: 255, rango: 255, nivel: 255) para todos los compañeros que trabajan en esta base?",
     "func_manager.max_all_pals.confirm_cheat": "Esto maximizará todas las estadísticas (nivel 255, IVs 255, almas 255, rango 255) para TODOS los amigos en el guardado. ¿Continuar?",
-    "func_manager.max_all_pals.cheat_ask": "¿Utiliza mayúsculas extremas de 255?"
+    "func_manager.max_all_pals.cheat_ask": "¿Utiliza mayúsculas extremas de 255?",
+    "inventory.edit_abilities": "Editar habilidades",
+    "inventory.edit_abilities_apply": "Aplicar cambios de habilidad",
+    "inventory.edit_abilities_confirm.msg": "¿Aplicar cambios de habilidad a {count} jugadores?",
+    "inventory.edit_abilities_done": "Habilidades actualizadas exitosamente.",
+    "inventory.edit_abilities_select_first": "Primero seleccione los jugadores en la pestaña Jugadores.",
+    "inventory.edit_abilities_none_checked": "No hay habilidades seleccionadas. Marca al menos una habilidad.",
+    "inventory.edit_abilities_current": "Cargar desde el reproductor seleccionado",
+    "inventory.edit_abilities_no_player": "Ningún jugador seleccionado"
 }
