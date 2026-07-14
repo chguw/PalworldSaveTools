@@ -12,6 +12,7 @@
 - **Removed auto-update feature** — deleted `updater.py` (StandaloneUpdater/SourceUpdater), removed update dialogs, menu entries, and settings. Kept startup version check + GitHub version chip pulse. Version chip click still opens releases page
 - **Fix Illegal Pals dialog** — replaces simple confirm box with player-selection dialog showing per-player illegal pal counts. Scan + fix both run under loading overlay (DPS files included). Select All / Deselect All bulk controls. Translations for all 8 languages
 - **Work suitability icon stale `_ws_key`** — `pal_info_display.py` cleared `val_lbl._ws_key` on dimmed icons but left `icon_lbl._ws_key` from previous pal. Clicking a visually dead icon fired the work-suitability editor, letting users inject suitabilities a pal should never have. Fixed by clearing both labels.
+- **Bulk Sync no longer copies work suitabilities across pals** — removed `GotWorkSuitabilityAddRankList` from `_EDITABLE_KEYS`. Instead, each target pal reads its own `CharacterID`, gets its natural work suitabilities from `characters.json`, and maxes those to level 10. Per-pal upgrades only, never cross-pal.
 - Bumped version to 2.0.8
 
 #2.0.7
