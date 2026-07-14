@@ -73,6 +73,12 @@ for sub in ['palworld_coord', 'palsav', 'palworld_xgp_import', 'resources', 'pal
         p = os.path.join(base_dir, 'resources')
         if os.path.isdir(p) and p not in sys.path:
             sys.path.insert(0, p)
+try:
+    from boot_paths import CONFIG_DIR, USER_CONFIG_DIR
+    from bootup import _migrate_configs
+    _migrate_configs()
+except Exception as _e:
+    pass
 import io
 from contextlib import redirect_stderr
 stderr_capture = io.StringIO()
