@@ -498,15 +498,9 @@ class MainWindow(QMainWindow):
         def progress_callback(msg, pct):
             self.progress_bar.setValue(pct)
             self.status_label.setText(msg)
-        archive_path = self.updater.download(version, progress_callback)
-        if not archive_path:
+        exe_path = self.updater.download(version, progress_callback)
+        if not exe_path:
             self._show_error(t('update.failed.title') if t else 'Update Failed', t('update.download_failed') if t else 'Failed to download update.')
-            self.progress_bar.setVisible(False)
-            self.status_label.setText('')
-            return
-        extracted = self.updater.extract(progress_callback)
-        if not extracted:
-            self._show_error(t('update.failed.title') if t else 'Update Failed', t('update.extract_failed') if t else 'Failed to extract update.')
             self.progress_bar.setVisible(False)
             self.status_label.setText('')
             return

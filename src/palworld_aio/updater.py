@@ -16,9 +16,16 @@ from palworld_aio import constants
 GIT_REPO_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools.git'
 STABLE_BRANCH = 'main'
 STABLE_VERSION_URL = 'https://api.github.com/repos/deafdudecomputers/PalworldSaveTools/releases/latest'
-RELEASE_DOWNLOAD_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/download/v{version}/PST_standalone_v{version}.7z'
 RELEASES_PAGE_URL = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 CHANGELOG_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/CHANGELOG.md'
+
+def _platform_asset_suffix():
+    if sys.platform == 'win32':
+        return 'win.exe'
+    elif sys.platform == 'darwin':
+        return 'macos.dmg'
+    else:
+        return 'linux.AppImage'
 def get_update_settings() -> Dict:
     from resource_resolver import get_user_config_dir
     from common import get_src_directory, is_standalone
@@ -148,7 +155,7 @@ class StandaloneUpdater:
         self.install_dir = Path(sys.executable).parent
         self.temp_dir = Path(tempfile.mkdtemp(prefix='pst_update_'))
         self.downloaded_file = None
-        self.extracted_dir = None
+        self.downloaded_name = None
         atexit.register(self.cleanup)
     def check_version(self) -> Dict:
         try:
@@ -164,6 +171,13 @@ class StandaloneUpdater:
                 data = json.loads(r.read().decode('utf-8'))
             tag = data.get('tag_name', '') or ''
             latest = tag.lstrip('v') or None
+            suffix = _platform_asset_suffix()
+            asset_name = None
+            for a in data.get('assets', []):
+                name = a.get('name', '')
+                if name.endswith(suffix):
+                    asset_name = name
+                    break
             try:
                 from common import get_versions
                 local, _ = get_versions()
@@ -173,12 +187,14 @@ class StandaloneUpdater:
                 return {'local': local, 'latest': None, 'update_available': False}
             local_tuple = tuple((int(x) for x in local.split('.')))
             latest_tuple = tuple((int(x) for x in latest.split('.')))
-            return {'local': local, 'latest': latest, 'update_available': latest_tuple > local_tuple}
+            return {'local': local, 'latest': latest, 'update_available': latest_tuple > local_tuple, 'asset_name': asset_name}
         except Exception as e:
             return {'local': None, 'latest': None, 'update_available': False, 'error': str(e)}
     def download(self, version: str, progress_callback: Callable=None, cancel_check: Callable=None) -> Optional[Path]:
-        url = RELEASE_DOWNLOAD_URL.format(version=version)
-        archive_path = self.temp_dir / f'PST_standalone_v{version}.7z'
+        suffix = _platform_asset_suffix()
+        asset_name = f'PalworldSaveTools-V{version}-{suffix}'
+        url = f'https://github.com/deafdudecomputers/PalworldSaveTools/releases/download/v{version}/{asset_name}'
+        exe_path = self.temp_dir / asset_name
         try:
             context = ssl._create_unverified_context()
             req = urllib.request.Request(url)
@@ -186,7 +202,7 @@ class StandaloneUpdater:
                 total_size = int(r.headers.get('Content-Length', 0))
                 downloaded = 0
                 chunk_size = 8192
-                with open(archive_path, 'wb') as f:
+                with open(exe_path, 'wb') as f:
                     while True:
                         if cancel_check and cancel_check():
                             return None
@@ -198,34 +214,12 @@ class StandaloneUpdater:
                         if progress_callback and total_size > 0:
                             pct = int(downloaded / total_size * 100)
                             progress_callback(f'Downloading... {downloaded / (1024 * 1024):.1f} MB', pct)
-            self.downloaded_file = archive_path
-            return archive_path
+            self.downloaded_file = exe_path
+            self.downloaded_name = asset_name
+            return exe_path
         except Exception as e:
             if progress_callback:
                 progress_callback(f'Download failed: {e}', 0)
-            return None
-    def extract(self, progress_callback: Callable=None) -> Optional[Path]:
-        if not self.downloaded_file or not self.downloaded_file.exists():
-            return None
-        try:
-            import py7zr
-            if progress_callback:
-                progress_callback('Extracting...', 0)
-            extract_dir = self.temp_dir / 'extracted'
-            extract_dir.mkdir(exist_ok=True)
-            with py7zr.SevenZipFile(self.downloaded_file, 'r') as z:
-                z.extractall(extract_dir)
-            if progress_callback:
-                progress_callback('Extraction complete!', 100)
-            self.extracted_dir = extract_dir
-            return extract_dir
-        except ImportError:
-            if progress_callback:
-                progress_callback('py7zr not installed', 0)
-            return None
-        except Exception as e:
-            if progress_callback:
-                progress_callback(f'Extraction failed: {e}', 0)
             return None
     def cleanup(self):
         try:
@@ -233,17 +227,54 @@ class StandaloneUpdater:
                 shutil.rmtree(self.temp_dir, ignore_errors=True)
         except:
             pass
-    def create_helper_script(self) -> Path:
-        helper_code = f'''import os\nimport sys\nimport time\nimport shutil\nimport subprocess\n\nPARENT_PID = {os.getpid()}\nINSTALL_DIR = r"{self.install_dir}"\nTEMP_DIR = r"{self.extracted_dir}"\nNEW_EXE = r"{self.extracted_dir / 'PalworldSaveTools.exe'}" if os.path.exists(r"{self.extracted_dir / 'PalworldSaveTools.exe'}") else None\n\ndef wait_for_parent():\n    """Wait for parent process to exit"""\n    while True:\n        try:\n            os.kill(PARENT_PID, 0)\n            time.sleep(0.5)\n        except OSError:\n            break\n        except Exception:\n            break\n\ndef copy_files():\n    """Copy new files to install directory"""\n    if not TEMP_DIR or not os.path.exists(TEMP_DIR):\n        return False\n    \n    for item in os.listdir(TEMP_DIR):\n        src = os.path.join(TEMP_DIR, item)\n        dst = os.path.join(INSTALL_DIR, item)\n        \n        try:\n            if os.path.isdir(src):\n                if os.path.exists(dst):\n                    shutil.rmtree(dst, ignore_errors=True)\n                shutil.copytree(src, dst)\n            else:\n                shutil.copy2(src, dst)\n        except Exception as e:\n            print(f"Error copying {{item}}: {{e}}")\n    \n    return True\n\ndef cleanup():\n    """Remove temp directory"""\n    try:\n        parent_temp = os.path.dirname(TEMP_DIR)\n        if os.path.exists(parent_temp):\n            shutil.rmtree(parent_temp, ignore_errors=True)\n    except:\n        pass\n\ndef launch_new():\n    """Launch the new executable"""\n    exe_path = NEW_EXE or os.path.join(INSTALL_DIR, 'PalworldSaveTools.exe')\n    if os.path.exists(exe_path):\n        subprocess.Popen([exe_path], cwd=INSTALL_DIR)\n\nif __name__ == '__main__':\n    print("Update helper started...")\n    wait_for_parent()\n    print("Parent process exited, applying update...")\n    time.sleep(1)\n    copy_files()\n    cleanup()\n    print("Update applied, launching...")\n    launch_new()\n'''
-        helper_path = self.temp_dir / 'update_helper.py'
-        with open(helper_path, 'w', encoding='utf-8') as f:
-            f.write(helper_code)
-        return helper_path
     def apply_and_restart(self) -> bool:
-        if not self.extracted_dir or not self.extracted_dir.exists():
+        if not self.downloaded_file or not self.downloaded_file.exists():
             return False
         try:
-            helper_path = self.create_helper_script()
+            current_exe = Path(sys.executable)
+            new_exe = self.downloaded_file
+            helper_code = f'''import os, sys, time, shutil, subprocess
+PARENT_PID = {os.getpid()}
+CURRENT = r"{current_exe}"
+NEW = r"{new_exe}"
+INSTALL_DIR = r"{self.install_dir}"
+def wait():
+    while True:
+        try:
+            os.kill(PARENT_PID, 0)
+            time.sleep(0.5)
+        except:
+            break
+def replace():
+    bak = str(CURRENT) + ".bak"
+    try:
+        if os.path.exists(bak):
+            os.remove(bak)
+    except:
+        pass
+    try:
+        os.rename(str(CURRENT), bak)
+    except:
+        pass
+    try:
+        shutil.copy2(NEW, str(CURRENT))
+        os.chmod(str(CURRENT), 0o755)
+    except Exception as e:
+        os.rename(bak, str(CURRENT))
+        return False
+    return True
+def launch():
+    if os.path.exists(str(CURRENT)):
+        subprocess.Popen([str(CURRENT)], cwd=INSTALL_DIR)
+if __name__ == '__main__':
+    wait()
+    time.sleep(1)
+    if replace():
+        launch()
+'''
+            helper_path = self.temp_dir / 'update_helper.py'
+            with open(helper_path, 'w', encoding='utf-8') as f:
+                f.write(helper_code)
             if os.name == 'nt':
                 creationflags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS
                 si = subprocess.STARTUPINFO()
