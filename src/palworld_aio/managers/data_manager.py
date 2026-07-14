@@ -352,17 +352,12 @@ def delete_player(uid, delete_files=True):
     return True
 def load_exclusions():
     try:
-        print(f'[DEBUG] load_exclusions: loading from {constants.EXCLUSIONS_FILE}')
         data = json_tools.load(constants.EXCLUSIONS_FILE)
         constants.exclusions = {'guilds': data.get('guilds', []), 'players': data.get('players', []), 'bases': data.get('bases', [])}
-        print(f'[DEBUG] load_exclusions: loaded {constants.exclusions}')
-    except Exception as e:
-        print(f'[DEBUG] load_exclusions: failed ({e}), using empty')
+    except:
         constants.exclusions = {'guilds': [], 'players': [], 'bases': []}
 def save_exclusions():
-    print(f'[DEBUG] save_exclusions: writing to {constants.EXCLUSIONS_FILE}, data={constants.exclusions}')
     json_tools.dump(constants.exclusions, constants.EXCLUSIONS_FILE)
-    print(f'[DEBUG] save_exclusions: done')
 def get_base_containers(base_id):
     if not constants.loaded_level_json:
         return []

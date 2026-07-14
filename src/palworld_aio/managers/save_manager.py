@@ -13,7 +13,7 @@ from PySide6.QtCore import QObject, Signal
 from loading_manager import show_critical
 from palsav.gvas import GvasFile
 from palsav.core import decompress_sav_to_gvas
-from palworld_aio.managers.data_manager import load_exclusions, load_game_data_map
+from palworld_aio.managers.data_manager import load_game_data_map
 from palsav.paltypes import PALWORLD_TYPE_HINTS
 from palobject import SKP_PALWORLD_CUSTOM_PROPERTIES
 from palobject import MappingCacheObject, toUUID
@@ -48,7 +48,6 @@ class SaveManager(QObject):
         constants.player_character_cache = {}
         constants.PLAYER_DETAILS_CACHE = {}
         constants.PLAYER_REMAPS = {}
-        load_exclusions()
         constants.death_bag_protected_instance_ids.clear()
         constants.death_bag_protected_container_ids.clear()
         constants.selected_source_player = None

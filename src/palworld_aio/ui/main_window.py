@@ -150,7 +150,8 @@ class StatusBarStream(QObject):
     def write(self, text):
         self.stringio.write(text)
         if text.strip():
-            self.text_written.emit(text.strip())
+            if QThread.currentThread() == QApplication.instance().thread():
+                self.text_written.emit(text.strip())
     def flush(self):
         pass
     def detach(self):
@@ -240,20 +241,28 @@ class MainWindow(QMainWindow):
         sys.stdout = self.status_stream
         sys.stderr = self.status_stream
         from palsav import setup_logging
-        class _StatusBarLogHandler(logging.Handler):
+        class _StatusBarLogHandler(logging.StreamHandler):
             def __init__(self, stream):
-                super().__init__()
-                self._stream = stream
+                super().__init__(stream)
             def emit(self, record):
                 try:
-                    self._stream.write(self.format(record) + '\n')
+                    self.stream.write(self.format(record) + '\n')
                 except Exception:
                     self.handleError(record)
         handler = _StatusBarLogHandler(self.status_stream)
         handler.setLevel(logging.INFO)
+        handler.raiseExceptions = False
         handler.setFormatter(logging.Formatter('{message}', style='{'))
-        logging.getLogger().addHandler(handler)
+        root_logger = logging.getLogger()
+        root_logger.addHandler(handler)
         setup_logging()
+        for h in list(root_logger.handlers):
+            if h is handler:
+                continue
+            if isinstance(h, logging.StreamHandler) and (h.stream is None or h.stream is sys.stderr):
+                root_logger.removeHandler(h)
+                h.close()
+        logging.lastResort = None
         if self.user_settings.get('console_detached', False):
             self.status_stream.detach()
             self.sidebar.set_console_visible(True)
@@ -1681,24 +1690,17 @@ class MainWindow(QMainWindow):
         if hasattr(self, 'menu_bar'):
             self._setup_menus()
     def _add_exclusion(self, excl_type, value):
-        print(f'[DEBUG] _add_exclusion: type={excl_type}, value={value!r}')
         exclusions = constants.exclusions.setdefault(excl_type, [])
         if value not in exclusions:
             exclusions.append(value)
-            print(f'[DEBUG] _add_exclusion: appended, exclusions now={exclusions}')
-            print(f'[DEBUG] _add_exclusion: calling save_exclusions(), path={constants.EXCLUSIONS_FILE}')
             save_exclusions()
             self._refresh_exclusions()
         else:
-            print(f'[DEBUG] _add_exclusion: value already in exclusions')
             self._show_info(t('Info'), t('deletion.info.already_in_exclusions', kind=excl_type[:-1].capitalize()))
     def _remove_exclusion(self, excl_type, value):
-        print(f'[DEBUG] _remove_exclusion: type={excl_type}, value={value!r}')
         exclusions = constants.exclusions.setdefault(excl_type, [])
         if value in exclusions:
             exclusions.remove(value)
-            print(f'[DEBUG] _remove_exclusion: removed, exclusions now={exclusions}')
-            print(f'[DEBUG] _remove_exclusion: calling save_exclusions(), path={constants.EXCLUSIONS_FILE}')
             save_exclusions()
             self._refresh_exclusions()
     def _delete_player(self, uid):

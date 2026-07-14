@@ -78,5 +78,8 @@ XGP_converted_saves/
 
 # Per-user config (check_updates, lang, etc.)
 src/data/configs/config.json
+src/data/configs/deletion_exclusions.json
+src/data/configs/zone_exclusions.json
+src/data/configs/user.cfg
 *.7z
 .pytest_cache/

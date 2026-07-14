@@ -146,8 +146,6 @@ def run_aio():
             constants.player_character_cache = {}
             constants.PLAYER_DETAILS_CACHE = {}
             constants.PLAYER_REMAPS = {}
-            from palworld_aio.managers.data_manager import load_exclusions
-            load_exclusions()
             constants.death_bag_protected_instance_ids.clear()
             constants.death_bag_protected_container_ids.clear()
             constants.selected_source_player = None
