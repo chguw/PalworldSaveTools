@@ -1791,6 +1791,10 @@
     "inventory.edit_abilities_done": "Способности успешно обновлены.",
     "inventory.edit_abilities_select_first": "Сначала выберите игроков на вкладке «Игроки».",
     "inventory.edit_abilities_none_checked": "Способности не выбраны. Проверьте хотя бы одну способность.",
-    "inventory.edit_abilities_current": "Загрузить из выбранного плеера",
-    "inventory.edit_abilities_no_player": "Игрок не выбран"
+    "inventory.edit_abilities_no_player": "Игрок не выбран",
+    "inventory.abilities": "Способности",
+    "inventory.abilities_apply": "Применить способности",
+    "inventory.abilities_loaded": "Загруженные способности для {name}",
+    "inventory.abilities_no_player_selected": "Ни один плеер не загружен",
+    "inventory.edit_abilities_current": "Загрузить из выбранного плеера"
 }

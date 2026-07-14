@@ -2080,6 +2080,10 @@
     "inventory.edit_abilities_done": "Abilities updated successfully.",
     "inventory.edit_abilities_select_first": "Select players on the Players tab first.",
     "inventory.edit_abilities_none_checked": "No abilities selected. Check at least one ability.",
-    "inventory.edit_abilities_current": "Load from selected player",
-    "inventory.edit_abilities_no_player": "No player selected"
+    "inventory.edit_abilities_no_player": "No player selected",
+    "inventory.abilities": "Abilities",
+    "inventory.abilities_apply": "Apply Abilities",
+    "inventory.abilities_loaded": "Loaded abilities for {name}",
+    "inventory.abilities_no_player_selected": "No player loaded",
+    "inventory.edit_abilities_current": "Load from selected player"
 }

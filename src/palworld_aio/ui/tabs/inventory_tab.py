@@ -6,6 +6,7 @@ from PySide6.QtGui import QPixmap, QIcon, QFont, QCursor, QColor, QPainter, QPen
 from PySide6.QtWidgets import QStyledItemDelegate
 from i18n import t
 from palworld_aio.ui.chrome.styles import DIALOG_STYLE as DARK_THEME_STYLE, STATS_PANEL_STYLE, MENU_STYLE, PICKER_BG_STYLE, PICKER_SEARCH_STYLE, PICKER_LIST_STYLE, wrap_tooltip_text, slot_full, slot_rarity, slot_selected, CONTENT_PANEL_STYLE, SLOT_EMPTY_STYLE, SLOT_HOVER_STYLE, INPUT_DIALOG_STYLE
+from palworld_aio.widgets.toggle_check import ToggleCheckBtn
 from palsav import json_tools
 from palworld_aio import constants as _constants
 from palworld_aio.inventory.inventory_manager import PlayerInventory, ItemData, get_player_inventory, UI_SLOT_BINDINGS, FOOD_POUCH_ITEMS, ACCESSORY_UNLOCK_ITEMS, WEAPON_UNLOCK_ITEMS, INVENTORY_EXPANSION_ITEMS
@@ -883,14 +884,16 @@ class PlayerInventoryTab(QWidget):
         self.key_grid.sort_requested.connect(self._on_sort_requested)
         self.inv_tabs.addTab(self.key_grid, t('inventory.key_items', default='Key Items'))
         self.stats_tab = QWidget()
-        stats_tab_layout = QVBoxLayout(self.stats_tab)
-        stats_tab_layout.setContentsMargins(0, 0, 0, 0)
-        stats_tab_layout.addStretch()
+        stats_tab_layout = QHBoxLayout(self.stats_tab)
+        stats_tab_layout.setContentsMargins(6, 6, 6, 6)
+        stats_tab_layout.setSpacing(10)
         self.stats_panel = StatsPanelWidget()
         self.stats_panel.stats_changed.connect(self._on_stats_changed)
-        stats_tab_layout.addWidget(self.stats_panel, alignment=Qt.AlignCenter)
-        stats_tab_layout.addStretch()
+        stats_tab_layout.addWidget(self.stats_panel)
+        self._build_abilities_panel()
+        stats_tab_layout.addWidget(self.abilities_panel, 1)
         self.inv_tabs.addTab(self.stats_tab, t('inventory.stats', default='Stats'))
+        self.inv_tabs.currentChanged.connect(self._on_inv_tab_changed)
         inner_content.addWidget(self.inv_tabs, 2)
         equip_wrapper = QWidget()
         self.equip_wrapper = equip_wrapper
@@ -1603,6 +1606,145 @@ class PlayerInventoryTab(QWidget):
                 break
         self.stats_panel.update_stats(stats)
         self.stats_panel.set_level(level, 0)
+        self._load_abilities_from_current_player()
+    def _build_abilities_panel(self):
+        from palworld_aio.managers.player_manager import RELIC_TO_STATUS_NAME, RELIC_CUMULATIVE_MAX
+        from palworld_aio.inventory.inventory_manager import ASSET_TO_RELIC_TYPE, RELIC_TYPE_TO_EFFIGY
+        self.abilities_panel = QFrame()
+        self.abilities_panel.setObjectName('abilitiesPanel')
+        self.abilities_panel.setStyleSheet('QFrame#abilitiesPanel { background: rgba(18,20,24,0.95); border: 1px solid rgba(125,211,252,0.2); border-radius: 8px; }')
+        panel_layout = QVBoxLayout(self.abilities_panel)
+        panel_layout.setContentsMargins(8, 6, 8, 6)
+        panel_layout.setSpacing(4)
+        self.abilities_title = QLabel(t('inventory.abilities', default='Abilities'))
+        self.abilities_title.setStyleSheet('font-size: 11px; font-weight: bold; color: #fff;')
+        self.abilities_title.setAlignment(Qt.AlignCenter)
+        panel_layout.addWidget(self.abilities_title)
+        btn_row = QHBoxLayout()
+        self.abilities_sel_all = QPushButton(t('player_item.select_all', default='All'))
+        self.abilities_sel_all.setFixedHeight(24)
+        self.abilities_sel_all.setStyleSheet('QPushButton { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(74,222,128,0.2); border-color: rgba(74,222,128,0.4); color: #FFFFFF; }')
+        self.abilities_sel_all.setCursor(Qt.PointingHandCursor)
+        self.abilities_sel_all.clicked.connect(lambda: [w['toggle'].setChecked(True) for w in self.ability_widgets])
+        btn_row.addWidget(self.abilities_sel_all)
+        self.abilities_sel_none = QPushButton(t('player_item.deselect_all', default='None'))
+        self.abilities_sel_none.setFixedHeight(24)
+        self.abilities_sel_none.setStyleSheet('QPushButton { background: rgba(251,113,133,0.12); color: #FB7185; border: 1px solid rgba(251,113,133,0.2); border-radius: 6px; padding: 4px 8px; font-weight: 600; font-size: 10px; } QPushButton:hover { background: rgba(251,113,133,0.2); border-color: rgba(251,113,133,0.4); color: #FFFFFF; }')
+        self.abilities_sel_none.setCursor(Qt.PointingHandCursor)
+        self.abilities_sel_none.clicked.connect(lambda: [w['toggle'].setChecked(False) for w in self.ability_widgets])
+        btn_row.addWidget(self.abilities_sel_none)
+        panel_layout.addLayout(btn_row)
+        self.ability_status = QLabel('')
+        self.ability_status.setStyleSheet('color: #94a3b8; font-size: 10px; padding: 2px 4px;')
+        panel_layout.addWidget(self.ability_status)
+        scroll = QListWidget()
+        scroll.setSelectionMode(QAbstractItemView.NoSelection)
+        self.ability_widgets = []
+        relic_types = sorted(ASSET_TO_RELIC_TYPE.items(), key=lambda x: x[0])
+        for asset, relic_type in relic_types:
+            jp_name = RELIC_TO_STATUS_NAME.get(relic_type, relic_type.split('::')[-1])
+            display = f'{jp_name} ({relic_type.split("::")[-1]})'
+            row = QWidget()
+            row_layout = QHBoxLayout(row)
+            row_layout.setContentsMargins(4, 2, 4, 2)
+            row_layout.setSpacing(6)
+            toggle = ToggleCheckBtn(display)
+            toggle.setProperty('relic_type', relic_type)
+            toggle.setProperty('cumulative_max', RELIC_CUMULATIVE_MAX.get(relic_type, 1))
+            row_layout.addWidget(toggle, 1)
+            icon_label = QLabel()
+            icon_label.setFixedSize(20, 20)
+            icon_label.setAlignment(Qt.AlignCenter)
+            effigy_asset = RELIC_TYPE_TO_EFFIGY.get(relic_type, 'Relic')
+            info = ItemData.get_item_by_asset(effigy_asset)
+            icon_path = info.get('icon', '') if info else ''
+            if icon_path:
+                pixmap = ItemData.get_item_icon(icon_path, QSize(20, 20))
+                if not pixmap.isNull():
+                    icon_label.setPixmap(pixmap)
+            row_layout.addWidget(icon_label)
+            cur_label = QLabel('0')
+            cur_label.setStyleSheet('color: #94a3b8; font-size: 10px; min-width: 24px;')
+            cur_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            row_layout.addWidget(cur_label)
+            spinner = QSpinBox()
+            max_val = RELIC_CUMULATIVE_MAX.get(relic_type, 999999)
+            spinner.setRange(0, max_val)
+            spinner.setValue(max_val)
+            spinner.setFixedWidth(70)
+            row_layout.addWidget(spinner)
+            row_layout.addSpacing(16)
+            row_widget = QListWidgetItem()
+            row_widget.setSizeHint(QSize(0, 36))
+            scroll.addItem(row_widget)
+            scroll.setItemWidget(row_widget, row)
+            self.ability_widgets.append({
+                'toggle': toggle,
+                'spinner': spinner,
+                'cur_label': cur_label,
+                'icon_label': icon_label,
+                'relic_type': relic_type,
+                'asset': asset,
+                'cumulative_max': max_val,
+            })
+        panel_layout.addWidget(scroll, 1)
+        self.abilities_apply_btn = QPushButton(t('inventory.edit_abilities_apply', default='Apply Ability Changes'))
+        self.abilities_apply_btn.setStyleSheet('QPushButton { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); border-radius: 6px; padding: 6px 16px; font-weight: 600; font-size: 11px; } QPushButton:hover { background: rgba(74,222,128,0.25); border-color: rgba(74,222,128,0.5); color: #FFFFFF; }')
+        self.abilities_apply_btn.setCursor(Qt.PointingHandCursor)
+        self.abilities_apply_btn.clicked.connect(self._on_apply_abilities_from_stats)
+        panel_layout.addWidget(self.abilities_apply_btn)
+    def _on_inv_tab_changed(self, idx):
+        if idx == 3:
+            self._load_abilities_from_current_player()
+    def _load_abilities_from_current_player(self):
+        for w in self.ability_widgets:
+            w['cur_label'].setText('0')
+            w['spinner'].setValue(0)
+        if not self.current_player_uid or not constants.current_save_path:
+            self.ability_status.setText(t('inventory.abilities_no_player_selected', default='No player loaded'))
+            self.ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
+            return
+        from palworld_aio.utils import sav_to_gvasfile
+        try:
+            uid_clean = str(self.current_player_uid).replace('-', '').upper()
+            sav_path = os.path.join(constants.current_save_path, 'Players', f'{uid_clean}.sav')
+            if not os.path.exists(sav_path):
+                self.ability_status.setText(t('inventory.abilities_no_player_selected', default='No player loaded'))
+                self.ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
+                return
+            gvas = sav_to_gvasfile(sav_path)
+            rd = gvas.properties['SaveData']['value']['RecordData']['value']
+            rmap = rd.get('RelicPossessNumMap', {}).get('value', [])
+            current_values = {e['key']: e['value'] for e in rmap}
+            for w in self.ability_widgets:
+                rt = w['relic_type']
+                val = current_values.get(rt, 0)
+                w['cur_label'].setText(str(val))
+                w['spinner'].setValue(val)
+            name = self.current_player_name or str(self.current_player_uid)
+            self.ability_status.setText(t('inventory.abilities_loaded', default='Loaded abilities for {name}').format(name=name))
+            self.ability_status.setStyleSheet('color: #7dd3fc; font-size: 10px; padding: 2px 4px;')
+        except Exception as e:
+            self.ability_status.setText(f'Error: {e}')
+            self.ability_status.setStyleSheet('color: #f87171; font-size: 10px; padding: 2px 4px;')
+    def _on_apply_abilities_from_stats(self):
+        if not self.current_player_uid:
+            return
+        ability_values = {}
+        checked_count = 0
+        for w in self.ability_widgets:
+            if w['toggle'].isChecked():
+                ability_values[w['relic_type']] = w['spinner'].value()
+                checked_count += 1
+        if not ability_values:
+            self.ability_status.setText(t('inventory.edit_abilities_none_checked', default='No abilities selected'))
+            self.ability_status.setStyleSheet('color: #fbbf24; font-size: 10px; padding: 2px 4px;')
+            return
+        from palworld_aio.managers.player_manager import set_ability_values
+        if set_ability_values([self.current_player_uid], ability_values):
+            self.ability_status.setText(t('inventory.edit_abilities_done', default='Abilities updated successfully.'))
+            self.ability_status.setStyleSheet('color: #4ade80; font-size: 10px; padding: 2px 4px;')
+            self._load_abilities_from_current_player()
     def _on_item_selected(self, slot_data):
         self.selected_item = slot_data
     def _show_item_context_menu(self, slot_data, pos):
@@ -2108,6 +2250,15 @@ class PlayerInventoryTab(QWidget):
         self.inv_tabs.setTabText(0, t('inventory.main', default='Inventory'))
         self.inv_tabs.setTabText(1, t('inventory.key_items', default='Key Items'))
         self.inv_tabs.setTabText(2, t('inventory.stats', default='Stats'))
+        if hasattr(self, 'abilities_title'):
+            self.abilities_title.setText(t('inventory.abilities', default='Abilities'))
+        if hasattr(self, 'abilities_sel_all'):
+            self.abilities_sel_all.setText(t('player_item.select_all', default='All'))
+        if hasattr(self, 'abilities_sel_none'):
+            self.abilities_sel_none.setText(t('player_item.deselect_all', default='None'))
+        if hasattr(self, 'abilities_apply_btn'):
+            self.abilities_apply_btn.setText(t('inventory.edit_abilities_apply', default='Apply Ability Changes'))
+        self._load_abilities_from_current_player()
         if not self.current_player_uid:
             self.player_select_btn.setText(t('inventory.select_player', default='Select Player...'))
         self.equip_title.setText(t('inventory.equipment', default='Equipment'))

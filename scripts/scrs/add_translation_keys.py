@@ -13,6 +13,10 @@ except ImportError:
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 LANGUAGES = {'zh_CN': {'name': 'Simplified Chinese', 'code': 'zh-CN'}, 'de_DE': {'name': 'German', 'code': 'de'}, 'es_ES': {'name': 'Spanish', 'code': 'es'}, 'fr_FR': {'name': 'French', 'code': 'fr'}, 'ru_RU': {'name': 'Russian', 'code': 'ru'}, 'ja_JP': {'name': 'Japanese', 'code': 'ja'}, 'ko_KR': {'name': 'Korean', 'code': 'ko'}}
 NEW_TRANSLATIONS = {
+    'inventory.abilities': 'Abilities',
+    'inventory.abilities_apply': 'Apply Abilities',
+    'inventory.abilities_loaded': 'Loaded abilities for {name}',
+    'inventory.abilities_no_player_selected': 'No player loaded',
     'func_manager.max_all_pals.cheat_ask': 'Use extreme 255 caps?',
     'edit_pals.max_all_confirm_cheat': 'Max all stats (IVs: 255, souls: 255, rank: 255, level: 255) for all pals in party & all palbox pages?',
     'base_inventory.max_all_confirm_cheat': 'Max all stats (IVs: 255, souls: 255, rank: 255, level: 255) for all working pals in this base?',

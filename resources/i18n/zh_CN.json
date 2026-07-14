@@ -1795,6 +1795,10 @@
     "inventory.edit_abilities_done": "能力更新成功。",
     "inventory.edit_abilities_select_first": "首先在“玩家”选项卡上选择玩家。",
     "inventory.edit_abilities_none_checked": "没有选择任何能力。检查至少一项能力。",
-    "inventory.edit_abilities_current": "从选定的播放器加载",
-    "inventory.edit_abilities_no_player": "没有选择任何球员"
+    "inventory.edit_abilities_no_player": "没有选择任何球员",
+    "inventory.abilities": "能力",
+    "inventory.abilities_apply": "应用能力",
+    "inventory.abilities_loaded": "已加载 {name} 的能力",
+    "inventory.abilities_no_player_selected": "没有加载播放器",
+    "inventory.edit_abilities_current": "从选定的播放器加载"
 }

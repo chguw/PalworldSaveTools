@@ -1793,6 +1793,10 @@
     "inventory.edit_abilities_done": "アビリティが正常に更新されました。",
     "inventory.edit_abilities_select_first": "まず [プレーヤー] タブでプレーヤーを選択します。",
     "inventory.edit_abilities_none_checked": "能力が選択されていません。少なくとも 1 つの能力を確認してください。",
-    "inventory.edit_abilities_current": "選択したプレーヤーからロード",
-    "inventory.edit_abilities_no_player": "プレイヤーが選択されていません"
+    "inventory.edit_abilities_no_player": "プレイヤーが選択されていません",
+    "inventory.abilities": "能力",
+    "inventory.abilities_apply": "アビリティを適用する",
+    "inventory.abilities_loaded": "{name} のロード済みアビリティ",
+    "inventory.abilities_no_player_selected": "プレーヤーがロードされていません",
+    "inventory.edit_abilities_current": "選択したプレーヤーからロード"
 }

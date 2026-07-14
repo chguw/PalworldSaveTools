@@ -1775,6 +1775,10 @@
     "inventory.edit_abilities_done": "Capacités mises à jour avec succès.",
     "inventory.edit_abilities_select_first": "Sélectionnez d'abord les joueurs dans l'onglet Joueurs.",
     "inventory.edit_abilities_none_checked": "Aucune capacité sélectionnée. Cochez au moins une capacité.",
-    "inventory.edit_abilities_current": "Charger depuis le joueur sélectionné",
-    "inventory.edit_abilities_no_player": "Aucun joueur sélectionné"
+    "inventory.edit_abilities_no_player": "Aucun joueur sélectionné",
+    "inventory.abilities": "Capacités",
+    "inventory.abilities_apply": "Appliquer les capacités",
+    "inventory.abilities_loaded": "Capacités chargées pour {name}",
+    "inventory.abilities_no_player_selected": "Aucun lecteur chargé",
+    "inventory.edit_abilities_current": "Charger depuis le joueur sélectionné"
 }

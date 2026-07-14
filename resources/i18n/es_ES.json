@@ -1787,6 +1787,10 @@
     "inventory.edit_abilities_done": "Habilidades actualizadas exitosamente.",
     "inventory.edit_abilities_select_first": "Primero seleccione los jugadores en la pestaña Jugadores.",
     "inventory.edit_abilities_none_checked": "No hay habilidades seleccionadas. Marca al menos una habilidad.",
-    "inventory.edit_abilities_current": "Cargar desde el reproductor seleccionado",
-    "inventory.edit_abilities_no_player": "Ningún jugador seleccionado"
+    "inventory.edit_abilities_no_player": "Ningún jugador seleccionado",
+    "inventory.abilities": "Talento",
+    "inventory.abilities_apply": "Aplicar habilidades",
+    "inventory.abilities_loaded": "Habilidades cargadas para {nombre}",
+    "inventory.abilities_no_player_selected": "Ningún jugador cargado",
+    "inventory.edit_abilities_current": "Cargar desde el reproductor seleccionado"
 }
