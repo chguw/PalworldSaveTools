@@ -1,13 +1,9 @@
 import os
-import sys
 import re
-import ssl
-import json
 import mmap
 import pickle
 from palsav import json_tools
 import math
-import urllib.request
 from palsav.archive import UUID
 from palsav.gvas import GvasFile
 from palsav.core import decompress_sav_to_gvas, compress_gvas_to_sav
@@ -32,29 +28,6 @@ def resolve_name(character_id: str, name_map: dict) -> str | None:
         if name is not None:
             return name
     return None
-def check_for_update():
-    try:
-        context = ssl._create_unverified_context()
-        req = urllib.request.Request(
-            'https://api.github.com/repos/deafdudecomputers/PalworldSaveTools/releases/latest',
-            headers={
-                'User-Agent': 'PalworldSaveTools/2.0',
-                'Accept': 'application/vnd.github.v3+json',
-            },
-        )
-        with urllib.request.urlopen(req, timeout=10, context=context) as r:
-            data = json.loads(r.read().decode('utf-8'))
-        tag = data.get('tag_name', '') or ''
-        latest = tag.lstrip('v')
-        local, _ = get_versions()
-        if not latest:
-            return None
-        local_tuple = tuple((int(x) for x in local.split('.')))
-        latest_tuple = tuple((int(x) for x in latest.split('.')))
-        return {'local': local, 'latest': latest, 'update_available': latest_tuple > local_tuple}
-    except Exception as e:
-        print('Update check error:', e)
-        return None
 def as_uuid(val):
     return str(val).lower() if val else ''
 def are_equal_uuids(a, b):
@@ -155,9 +128,6 @@ def toUUID(val):
     if len(s) == 32:
         return UUID.from_str(f'{s[:8]}-{s[8:12]}-{s[12:16]}-{s[16:20]}-{s[20:]}')
     return val
-def restart_program():
-    python = sys.executable
-    os.execl(python, python, *sys.argv)
 _pal_data_cache = None
 def get_pal_data(character_key):
     global _pal_data_cache

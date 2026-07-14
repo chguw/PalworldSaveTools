@@ -50,38 +50,6 @@ def is_standalone():
         return False
 def get_current_version():
     return APP_VERSION
-def get_update_settings():
-    user_cfg = os.path.join(get_user_config_dir(), 'config.json')
-    if not os.path.exists(user_cfg):
-        from boot_paths import CONFIG_DIR
-        user_cfg = os.path.join(str(CONFIG_DIR), 'config.json')
-    if is_standalone():
-        defaults = {'auto_update': True, 'check_updates': True}
-    else:
-        defaults = {'git_pull': True, 'check_updates': True}
-    try:
-        config = json_tools.load(user_cfg)
-        defaults.update({k: config.get(k, v) for k, v in defaults.items()})
-    except:
-        pass
-    return defaults
-def save_update_settings(settings):
-    cfg_path = os.path.join(get_user_config_dir(), 'config.json')
-    os.makedirs(os.path.dirname(cfg_path), exist_ok=True)
-    config = {}
-    try:
-        config = json_tools.load(cfg_path)
-    except:
-        pass
-    if is_standalone():
-        for key in ['auto_update', 'check_updates']:
-            if key in settings:
-                config[key] = settings[key]
-    else:
-        for key in ['git_pull', 'check_updates']:
-            if key in settings:
-                config[key] = settings[key]
-    json_tools.dump(config, cfg_path)
 def open_file_with_default_app(file_path):
     import platform
     if not os.path.exists(file_path):

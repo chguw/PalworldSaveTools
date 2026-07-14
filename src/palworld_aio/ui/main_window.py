@@ -11,16 +11,15 @@ from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QL
 from PySide6.QtCore import Qt, QTimer, Signal, QObject, QPoint, QPropertyAnimation, QEasingCurve, QByteArray, QThread
 from PySide6.QtGui import QIcon, QFont, QAction, QPixmap, QCloseEvent, QTextCursor
 from i18n import t, set_language, load_resources
-from common import get_versions, get_current_version, get_display_version, is_standalone, get_update_settings, save_update_settings
+from common import get_versions, get_current_version, get_display_version, is_standalone
 from import_libs import run_with_loading
 from loading_manager import show_question
 from .tabs.tools_tab import center_on_parent
-GITHUB_RAW_URL = 'https://raw.githubusercontent.com/deafdudecomputers/PalworldSaveTools/main/src/common.py'
 GITHUB_LATEST_ZIP = 'https://github.com/deafdudecomputers/PalworldSaveTools/releases/latest'
 from palworld_aio import constants
 from palworld_aio.ui.chrome.styles import ThemeManager, MENU_STYLE, DIALOG_STYLE as DARK_THEME_STYLE
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
-from palworld_aio.utils import check_for_update, as_uuid
+from palworld_aio.utils import as_uuid
 from palworld_aio.managers.save_manager import save_manager
 from palworld_aio.managers.data_manager import get_guilds, get_guild_members, get_bases, delete_guild, delete_player, load_exclusions, save_exclusions, delete_base_camp
 from palworld_aio.managers.func_manager import delete_empty_guilds, delete_inactive_players, delete_inactive_bases, delete_duplicated_players, delete_unreferenced_data, delete_non_base_map_objects, delete_invalid_structure_map_objects, delete_all_skins, unlock_all_private_chests, remove_invalid_items_from_save, remove_invalid_pals_from_save, remove_invalid_passives_from_save, fix_missions, reset_anti_air_turrets, reset_dungeons, reset_oilrig, reset_invader, reset_supply, unlock_viewing_cage_for_player, fix_all_negative_timestamps, reset_selected_player_timestamp, detect_and_trim_overfilled_inventories, unlock_all_technologies_for_player, unlock_all_lab_research_for_guild, modify_container_slots, fix_unassigned_pals, restore_all_pals, max_all_pals, fix_illegal_pals_in_save, repair_structures, edit_game_days
@@ -185,33 +184,31 @@ class UpdateChecker(QThread):
     def __init__(self, force_test=False, branch=None):
         super().__init__()
         self.force_test = force_test
-        self.branch = branch
+        self.branch = branch or 'stable'
     def run(self):
         try:
-            from palworld_aio.updater import check_for_updates, SourceUpdater, StandaloneUpdater, get_version_from_remote
-            if is_standalone():
-                updater = StandaloneUpdater()
-                result = updater.check_version()
-                local = result.get('local', '0.0.0')
-                latest = result.get('latest')
-                available = result.get('update_available', False)
-            else:
-                branch = self.branch or SourceUpdater.get_current_branch()
-                remote_version = get_version_from_remote(branch)
-                local, _ = get_versions()
-                latest = remote_version
-                available = False
-                if latest:
-                    try:
-                        local_tuple = tuple((int(x) for x in local.split('.')))
-                        latest_tuple = tuple((int(x) for x in latest.split('.')))
-                        available = latest_tuple > local_tuple
-                    except:
-                        pass
+            import ssl, json
+            context = ssl._create_unverified_context()
+            req = urllib.request.Request(
+                'https://api.github.com/repos/deafdudecomputers/PalworldSaveTools/releases/latest',
+                headers={
+                    'User-Agent': 'PalworldSaveTools/2.0',
+                    'Accept': 'application/vnd.github.v3+json',
+                },
+            )
+            with urllib.request.urlopen(req, timeout=10, context=context) as r:
+                data = json.loads(r.read().decode('utf-8'))
+            tag = data.get('tag_name', '') or ''
+            latest = tag.lstrip('v') or None
+            local, _ = get_versions()
+            available = False
+            if latest:
+                local_tuple = tuple((int(x) for x in local.split('.')))
+                latest_tuple = tuple((int(x) for x in latest.split('.')))
+                available = latest_tuple > local_tuple
             if self.force_test:
-                local = '0.0.0'
                 available = True
-            self.update_checked.emit(not available, latest, branch if not is_standalone() else 'stable')
+            self.update_checked.emit(not available, latest, self.branch)
         except Exception as e:
             print(f'Update check error: {e}')
             self.update_checked.emit(True, None, None)
@@ -438,144 +435,8 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.excl_bases_panel)
         self.stacked_widget.addWidget(exclusions_tab)
     def _setup_menus(self):
-        menu_actions = {'file': [(t('menu.file.load_save') if t else 'Load Save', self._load_save), (t('menu.file.load_xgp_save') if t else 'Load GamePass Save', self._load_xgp_save), (t('menu.file.load_worldoption') if t else 'Load WorldOption', self._load_worldoption), (t('menu.file.save_changes') if t else 'Save Changes', self._save_changes), (t('menu.file.rename_world') if t else 'Rename World', self._rename_world)], 'functions': [(t('deletion.menu.delete_empty_guilds') if t else 'Delete Empty Guilds', self._delete_empty_guilds), (t('deletion.menu.delete_inactive_bases') if t else 'Delete Inactive Bases', self._delete_inactive_bases), (t('deletion.menu.delete_duplicate_players') if t else 'Delete Duplicate Players', self._delete_duplicate_players), (t('deletion.menu.delete_inactive_players') if t else 'Delete Inactive Players', self._delete_inactive_players), (t('deletion.menu.delete_unreferenced') if t else 'Delete Unreferenced Data', self._delete_unreferenced), (t('deletion.menu.delete_non_base_map_objs') if t else 'Delete Non-Base Map Objects', self._delete_non_base_map_objs), (t('deletion.menu.delete_all_skins') if t else 'Delete All Skins', self._delete_all_skins), (t('deletion.menu.unlock_private_chests') if t else 'Unlock Private Chests', self._unlock_private_chests), (t('deletion.menu.remove_invalid_items') if t else 'Remove Invalid Items', self._remove_invalid_items), (t('deletion.menu.remove_invalid_structures') if t else 'Remove Invalid Structures', self._remove_invalid_structures), (t('deletion.menu.repair_structures') if t else 'Repair All Structures', self._repair_structures), (t('deletion.menu.remove_invalid_pals') if t else 'Remove Invalid Pals', self._remove_invalid_pals), (t('deletion.menu.remove_invalid_passives') if t else 'Remove Invalid Passives', self._remove_invalid_passives), (t('deletion.menu.restore_all_pals') if t else 'Restore All Pals', self._restore_all_pals), (t('deletion.menu.max_all_pals') if t else 'Max All Pals', self._max_all_pals), (t('deletion.menu.fix_illegal_pals') if t else 'Fix Illegal Pals', self._fix_illegal_pals), (t('func_manager.fix_unassigned_pals.title') if t else 'Fix Unassigned Pals', self._fix_unassigned_pals), (t('deletion.menu.reset_missions') if t else 'Reset Missions', self._reset_missions), (t('deletion.menu.reset_anti_air') if t else 'Reset Anti-Air Turrets', self._reset_anti_air), (t('deletion.menu.reset_oilrig') if t else 'Reset Oil Rigs', self._reset_oilrig), (t('deletion.menu.reset_invader') if t else 'Reset Invaders', self._reset_invader), (t('deletion.menu.reset_supply') if t else 'Reset Supply', self._reset_supply), (t('deletion.menu.reset_dungeons') if t else 'Reset Dungeons', self._reset_dungeons), (t('deletion.menu.paldefender') if t else 'PalDefender Commands', self._open_paldefender, 'separator_after'), (t('deletion.menu.fix_timestamps') if t else 'Fix All Negative Timestamps', self._fix_all_timestamps, 'separator_after'), (t('base.export_all') if t else 'Export All Bases', self._export_all_bases), (t('guild.menu.rebuild_all_guilds') if t else 'Rebuild All Guilds', self._rebuild_all_guilds), (t('guild.menu.move_selected_player_to_selected_guild') if t else 'Move Player to Guild', self._move_player_to_guild), (t('deletion.menu.trim_overfilled_inventories') if t else 'Trim Overfilled Inventories', self._trim_overfilled_inventories), (t('modify_container_slots') if t else 'Modify Container Slots', self._modify_container_slots), (t('gamedays.menu') if t else 'Edit Game Days', self._edit_game_days), 'separator_after'], 'player_editing': [(t('player.edit_tech_points') if t else 'Edit Tech Points', self._edit_player_tech_points), (t('player.edit_stats') if t else 'Edit Player Stats', self._edit_player_stats), 'separator_after'], 'maps': [(t('deletion.menu.show_map') if t else 'Show Map', self._show_map), (t('deletion.menu.generate_map') if t else 'Generate Map', self._generate_map)], 'exclusions': [(t('deletion.menu.save_exclusions') if t else 'Save Exclusions', self._save_exclusions)], 'languages': [(t(f'lang.{code}') if t else code, partial(self._change_language, code), {'en_US': '🇺🇸', 'zh_CN': '🇨🇳', 'ru_RU': '🇷', 'fr_FR': '🇫🇷', 'es_ES': '🇪🇸', 'de_DE': '🇩🇪', 'ja_JP': '🇯🇵', 'ko_KR': '🇰🇷'}[code]) for code in ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']], 'aio': self._build_aio_menu()}
+        menu_actions = {'file': [(t('menu.file.load_save') if t else 'Load Save', self._load_save), (t('menu.file.load_xgp_save') if t else 'Load GamePass Save', self._load_xgp_save), (t('menu.file.load_worldoption') if t else 'Load WorldOption', self._load_worldoption), (t('menu.file.save_changes') if t else 'Save Changes', self._save_changes), (t('menu.file.rename_world') if t else 'Rename World', self._rename_world)], 'functions': [(t('deletion.menu.delete_empty_guilds') if t else 'Delete Empty Guilds', self._delete_empty_guilds), (t('deletion.menu.delete_inactive_bases') if t else 'Delete Inactive Bases', self._delete_inactive_bases), (t('deletion.menu.delete_duplicate_players') if t else 'Delete Duplicate Players', self._delete_duplicate_players), (t('deletion.menu.delete_inactive_players') if t else 'Delete Inactive Players', self._delete_inactive_players), (t('deletion.menu.delete_unreferenced') if t else 'Delete Unreferenced Data', self._delete_unreferenced), (t('deletion.menu.delete_non_base_map_objs') if t else 'Delete Non-Base Map Objects', self._delete_non_base_map_objs), (t('deletion.menu.delete_all_skins') if t else 'Delete All Skins', self._delete_all_skins), (t('deletion.menu.unlock_private_chests') if t else 'Unlock Private Chests', self._unlock_private_chests), (t('deletion.menu.remove_invalid_items') if t else 'Remove Invalid Items', self._remove_invalid_items), (t('deletion.menu.remove_invalid_structures') if t else 'Remove Invalid Structures', self._remove_invalid_structures), (t('deletion.menu.repair_structures') if t else 'Repair All Structures', self._repair_structures), (t('deletion.menu.remove_invalid_pals') if t else 'Remove Invalid Pals', self._remove_invalid_pals), (t('deletion.menu.remove_invalid_passives') if t else 'Remove Invalid Passives', self._remove_invalid_passives), (t('deletion.menu.restore_all_pals') if t else 'Restore All Pals', self._restore_all_pals), (t('deletion.menu.max_all_pals') if t else 'Max All Pals', self._max_all_pals), (t('deletion.menu.fix_illegal_pals') if t else 'Fix Illegal Pals', self._fix_illegal_pals), (t('func_manager.fix_unassigned_pals.title') if t else 'Fix Unassigned Pals', self._fix_unassigned_pals), (t('deletion.menu.reset_missions') if t else 'Reset Missions', self._reset_missions), (t('deletion.menu.reset_anti_air') if t else 'Reset Anti-Air Turrets', self._reset_anti_air), (t('deletion.menu.reset_oilrig') if t else 'Reset Oil Rigs', self._reset_oilrig), (t('deletion.menu.reset_invader') if t else 'Reset Invaders', self._reset_invader), (t('deletion.menu.reset_supply') if t else 'Reset Supply', self._reset_supply), (t('deletion.menu.reset_dungeons') if t else 'Reset Dungeons', self._reset_dungeons), (t('deletion.menu.paldefender') if t else 'PalDefender Commands', self._open_paldefender, 'separator_after'), (t('deletion.menu.fix_timestamps') if t else 'Fix All Negative Timestamps', self._fix_all_timestamps, 'separator_after'), (t('base.export_all') if t else 'Export All Bases', self._export_all_bases), (t('guild.menu.rebuild_all_guilds') if t else 'Rebuild All Guilds', self._rebuild_all_guilds), (t('guild.menu.move_selected_player_to_selected_guild') if t else 'Move Player to Guild', self._move_player_to_guild), (t('deletion.menu.trim_overfilled_inventories') if t else 'Trim Overfilled Inventories', self._trim_overfilled_inventories), (t('modify_container_slots') if t else 'Modify Container Slots', self._modify_container_slots), (t('gamedays.menu') if t else 'Edit Game Days', self._edit_game_days), 'separator_after'], 'player_editing': [(t('player.edit_tech_points') if t else 'Edit Tech Points', self._edit_player_tech_points), (t('player.edit_stats') if t else 'Edit Player Stats', self._edit_player_stats), 'separator_after'], 'maps': [(t('deletion.menu.show_map') if t else 'Show Map', self._show_map), (t('deletion.menu.generate_map') if t else 'Generate Map', self._generate_map)], 'exclusions': [(t('deletion.menu.save_exclusions') if t else 'Save Exclusions', self._save_exclusions)], 'languages': [(t(f'lang.{code}') if t else code, partial(self._change_language, code), {'en_US': '🇺🇸', 'zh_CN': '🇨🇳', 'ru_RU': '🇷', 'fr_FR': '🇫🇷', 'es_ES': '🇪🇸', 'de_DE': '🇩🇪', 'ja_JP': '🇯🇵', 'ko_KR': '🇰🇷'}[code]) for code in ['en_US', 'zh_CN', 'ru_RU', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR']]}
         self.header_widget.set_menu_actions(menu_actions)
-    def _build_aio_menu(self):
-        menu_items = [(t('aio.menu.check_updates') if t else 'Check for Updates...', self._check_for_updates), (t('aio.menu.update_settings') if t else 'Update Settings...', self._show_update_settings), (t('aio.menu.open_data_folder') if t else 'Open Data Folder', self._open_data_folder)]
-        return menu_items
-    def _check_for_updates(self):
-        self.update_checker = UpdateChecker(force_test=False)
-        self.update_checker.update_checked.connect(self._on_manual_update_check)
-        self.update_checker.start()
-    def _on_manual_update_check(self, ok, latest, branch):
-        if ok and latest is None:
-            self._show_info(t('update.error.title') if t else 'Update Check Failed', t('update.error.network') if t else 'Could not check for updates. Please try again later.')
-        elif ok:
-            self._show_info(t('update.up_to_date.title') if t else 'Up to Date', t('update.up_to_date.message') if t else 'You are running the latest version.')
-        else:
-            self._show_update_dialog(latest, branch)
-    def _show_update_dialog(self, latest, branch):
-        from PySide6.QtWidgets import QProgressBar
-        from palworld_aio.updater import SourceUpdater, StandaloneUpdater
-        dialog = QDialog(self)
-        dialog.setWindowTitle(t('update.available.title') if t else 'Update Available')
-        dialog.setFixedSize(450, 280)
-        dialog.setWindowFlags(Qt.Dialog | Qt.WindowStaysOnTopHint)
-        layout = QVBoxLayout(dialog)
-        current_version = get_display_version()
-        info_label = QLabel(f"{(t('update.current') if t else 'Current')}: {current_version}\n{(t('update.latest') if t else 'Latest')}: {latest}")
-        info_label.setStyleSheet('font-size: 14px; margin: 10px;')
-        layout.addWidget(info_label)
-        self.progress_bar = QProgressBar()
-        self.progress_bar.setVisible(False)
-        self.progress_bar.setTextVisible(True)
-        layout.addWidget(self.progress_bar)
-        self.status_label = QLabel('')
-        layout.addWidget(self.status_label)
-        btn_layout = QHBoxLayout()
-        update_btn = QPushButton(t('update.now') if t else 'Update Now')
-        update_btn.clicked.connect(lambda: self._perform_update(dialog, latest))
-        btn_layout.addWidget(update_btn)
-        close_btn = QPushButton(t('button.close') if t else 'Close')
-        close_btn.clicked.connect(dialog.close)
-        btn_layout.addWidget(close_btn)
-        layout.addLayout(btn_layout)
-        dialog.exec()
-    def _perform_update(self, dialog, latest):
-        from palworld_aio.updater import SourceUpdater, StandaloneUpdater
-        self.progress_bar.setVisible(True)
-        self.status_label.setText(t('update.checking') if t else 'Checking...')
-        if is_standalone():
-            self._perform_standalone_update(dialog, latest)
-        else:
-            self._perform_source_update(dialog)
-    def _perform_source_update(self, dialog):
-        from palworld_aio.updater import SourceUpdater
-        def progress_callback(msg, pct):
-            self.progress_bar.setValue(pct)
-            self.status_label.setText(msg)
-        success, message = SourceUpdater.git_pull(progress_callback=progress_callback)
-        if success:
-            self.progress_bar.setValue(100)
-            self.status_label.setText(t('update.complete') if t else 'Update complete!')
-            msg_box = self._create_message_box(QMessageBox.Information)
-            msg_box.setWindowTitle(t('update.complete.title') if t else 'Update Complete')
-            msg_box.setText(t('update.restart_prompt') if t else 'The application needs to restart to apply the update. Restart now?')
-            msg_box.addButton(t('button.restart') if t else 'Restart Now', QMessageBox.AcceptRole)
-            msg_box.addButton(t('button.later') if t else 'Later', QMessageBox.RejectRole)
-            if msg_box.exec() == QMessageBox.AcceptRole:
-                from palworld_aio.utils import restart_program
-                restart_program()
-            dialog.close()
-        else:
-            self._show_error(t('update.failed.title') if t else 'Update Failed', message)
-            self.progress_bar.setVisible(False)
-            self.status_label.setText('')
-    def _perform_standalone_update(self, dialog, version):
-        from palworld_aio.updater import StandaloneUpdater
-        self.updater = StandaloneUpdater()
-        def progress_callback(msg, pct):
-            self.progress_bar.setValue(pct)
-            self.status_label.setText(msg)
-        exe_path = self.updater.download(version, progress_callback)
-        if not exe_path:
-            self._show_error(t('update.failed.title') if t else 'Update Failed', t('update.download_failed') if t else 'Failed to download update.')
-            self.progress_bar.setVisible(False)
-            self.status_label.setText('')
-            return
-        self.progress_bar.setValue(100)
-        self.status_label.setText(t('update.ready') if t else 'Update ready!')
-        msg_box = self._create_message_box(QMessageBox.Information)
-        msg_box.setWindowTitle(t('update.ready.title') if t else 'Update Ready')
-        msg_box.setText(t('update.restart_prompt') if t else 'The application needs to restart to apply the update. Restart now?')
-        msg_box.addButton(t('button.restart') if t else 'Restart Now', QMessageBox.AcceptRole)
-        msg_box.addButton(t('button.later') if t else 'Later', QMessageBox.RejectRole)
-        if msg_box.exec() == QMessageBox.AcceptRole:
-            if self.updater.apply_and_restart():
-                import sys
-                sys.exit(0)
-            else:
-                self._show_error(t('update.failed.title') if t else 'Update Failed', t('update.apply_failed') if t else 'Failed to apply update.')
-        else:
-            self.updater.cleanup()
-        dialog.close()
-    def _show_update_settings(self):
-        from PySide6.QtWidgets import QRadioButton, QGroupBox, QVBoxLayout as QVBox
-        dialog = QDialog(self)
-        dialog.setWindowTitle(t('aio.menu.update_settings') if t else 'Update Settings')
-        dialog.setWindowFlags(Qt.Dialog | Qt.WindowStaysOnTopHint)
-        layout = QVBoxLayout(dialog)
-        settings = get_update_settings()
-        self.check_updates_cb = ToggleCheckBtn(t('update.check_auto') if t else 'Automatically check for updates')
-        self.check_updates_cb.setChecked(settings.get('check_updates', True))
-        layout.addWidget(self.check_updates_cb)
-        if is_standalone():
-            dialog.setFixedSize(400, 250)
-            self.auto_update_cb = ToggleCheckBtn(t('update.auto_update') if t else 'Auto-update when available')
-            self.auto_update_cb.setChecked(settings.get('auto_update', True))
-            layout.addWidget(self.auto_update_cb)
-        else:
-            dialog.setFixedSize(400, 200)
-            self.git_pull_cb = ToggleCheckBtn(t('update.git_pull') if t else 'Allow git pull updates')
-            self.git_pull_cb.setChecked(settings.get('git_pull', True))
-            layout.addWidget(self.git_pull_cb)
-        btn_layout = QHBoxLayout()
-        save_btn = QPushButton(t('button.save') if t else 'Save')
-        save_btn.clicked.connect(lambda: self._save_update_settings_dialog(dialog))
-        btn_layout.addWidget(save_btn)
-        cancel_btn = QPushButton(t('button.cancel') if t else 'Cancel')
-        cancel_btn.clicked.connect(dialog.close)
-        btn_layout.addWidget(cancel_btn)
-        layout.addLayout(btn_layout)
-        dialog.exec()
-    def _save_update_settings_dialog(self, dialog):
-        if is_standalone():
-            settings = {'check_updates': self.check_updates_cb.isChecked(), 'auto_update': self.auto_update_cb.isChecked()}
-        else:
-            settings = {'check_updates': self.check_updates_cb.isChecked(), 'git_pull': self.git_pull_cb.isChecked()}
-        save_update_settings(settings)
-        dialog.close()
-        self._show_info(t('settings.saved.title') if t else 'Settings Saved', t('settings.saved.message') if t else 'Update settings saved.')
     def _open_data_folder(self):
         from resource_resolver import get_user_config_dir
         _p = os.path.dirname(get_user_config_dir())
@@ -684,9 +545,6 @@ class MainWindow(QMainWindow):
     def _on_detach_state_changed(self, detached):
         self.sidebar.set_console_visible(detached)
     def _check_update(self):
-        settings = get_update_settings()
-        if not settings.get('check_updates', True):
-            return
         self.update_checker = UpdateChecker()
         self.update_checker.update_checked.connect(self._on_update_checked)
         self.update_checker.start()

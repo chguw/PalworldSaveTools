@@ -164,7 +164,7 @@ class MenuPopup(QWidget):
         inner_layout.setContentsMargins(8, 8, 8, 8)
         inner_layout.setSpacing(4)
         self.menu_buttons = {}
-        categories = [('file', 'nf-md-file', t('deletion.menu.file') if t else 'File'), ('functions', 'nf-md-function', t('deletion.menu.delete') if t else 'Functions'), ('maps', 'nf-md-map', t('deletion.menu.view') if t else 'Maps'), ('exclusions', 'nf-md-playlist_remove', t('deletion.menu.exclusions') if t else 'Exclusions'), ('aio', 'nf-md-update', t('aio.menu.updates') if t else 'Updates'), ('languages', 'nf-md-translate', t('lang.label') if t else 'Languages')]
+        categories = [('file', 'nf-md-file', t('deletion.menu.file') if t else 'File'), ('functions', 'nf-md-function', t('deletion.menu.delete') if t else 'Functions'), ('maps', 'nf-md-map', t('deletion.menu.view') if t else 'Maps'), ('exclusions', 'nf-md-playlist_remove', t('deletion.menu.exclusions') if t else 'Exclusions'), ('languages', 'nf-md-translate', t('lang.label') if t else 'Languages')]
         for key, icon_key, label in categories:
             btn = self._create_menu_button(key, icon_key, label)
             inner_layout.addWidget(btn)
@@ -242,8 +242,8 @@ class MenuPopup(QWidget):
         self._clear_all_highlights()
         super().hideEvent(event)
     def refresh_labels(self):
-        labels = {'file': t('deletion.menu.file') if t else 'File', 'functions': t('deletion.menu.delete') if t else 'Functions', 'maps': t('deletion.menu.view') if t else 'Maps', 'exclusions': t('deletion.menu.exclusions') if t else 'Exclusions', 'aio': t('aio.menu.updates') if t else 'Updates', 'languages': t('lang.label') if t else 'Languages'}
-        icon_map = {'file': 'nf-md-file', 'functions': 'nf-md-function', 'maps': 'nf-md-map', 'exclusions': 'nf-md-playlist_remove', 'aio': 'nf-md-update', 'languages': 'nf-md-translate'}
+        labels = {'file': t('deletion.menu.file') if t else 'File', 'functions': t('deletion.menu.delete') if t else 'Functions', 'maps': t('deletion.menu.view') if t else 'Maps', 'exclusions': t('deletion.menu.exclusions') if t else 'Exclusions', 'languages': t('lang.label') if t else 'Languages'}
+        icon_map = {'file': 'nf-md-file', 'functions': 'nf-md-function', 'maps': 'nf-md-map', 'exclusions': 'nf-md-playlist_remove', 'languages': 'nf-md-translate'}
         for category, btn in self.menu_buttons.items():
             if category in labels:
                 try:
