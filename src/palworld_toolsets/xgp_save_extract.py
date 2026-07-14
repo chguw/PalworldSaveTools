@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path, PurePath
 from typing import Any, Dict, List, Tuple
 from common import get_base_directory
+from resource_resolver import get_data_base
 filetime_epoch = datetime(1601, 1, 1, tzinfo=timezone.utc)
 packages_root = Path(os.path.expandvars(f'%LOCALAPPDATA%\\Packages'))
 def read_game_list() -> Dict[str, Any] | None:
@@ -214,7 +215,7 @@ def main(wgs_path=None):
                 formatted_game_name = name.replace(' ', '_').replace(':', '_').replace("'", '').replace('!', '').lower()
                 timestamp = datetime.now().strftime('%Y-%m-%d_%H_%M_%S')
                 zip_name = '{}_{}_{}.zip'.format(formatted_game_name, xbox_username_or_id, timestamp)
-                zip_path = os.path.join(get_base_directory(), zip_name)
+                zip_path = os.path.join(get_data_base(), zip_name)
                 with zipfile.ZipFile(zip_path, 'x', zipfile.ZIP_DEFLATED) as save_zip:
                     for file_name, file_path in save_paths:
                         save_zip.write(file_path, arcname=file_name)
@@ -222,7 +223,6 @@ def main(wgs_path=None):
                 temp_dir.cleanup()
                 print()
                 print(' Save files written to "%s"' % zip_name)
-                print()
         except Exception:
             print(f'Failed to extract saves:')
             traceback.print_exc()
@@ -259,7 +259,7 @@ def main(wgs_path=None):
                 formatted_game_name = name.replace(' ', '_').replace(':', '_').replace("'", '').replace('!', '').lower()
                 timestamp = datetime.now().strftime('%Y-%m-%d_%H_%M_%S')
                 zip_name = '{}_{}_{}.zip'.format(formatted_game_name, xbox_username_or_id, timestamp)
-                zip_path = os.path.join(get_base_directory(), zip_name)
+                zip_path = os.path.join(get_data_base(), zip_name)
                 with zipfile.ZipFile(zip_path, 'x', zipfile.ZIP_DEFLATED) as save_zip:
                     for file_name, file_path in save_paths:
                         save_zip.write(file_path, arcname=file_name)
