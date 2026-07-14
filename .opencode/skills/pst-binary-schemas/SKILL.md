@@ -44,21 +44,43 @@ Newer Palworld versions prepend ~480 bytes BEFORE the known `V1_MARKER` (`02 00 
 - Pre-marker bytes saved as `_pre_v1_bytes` for roundtrip
 - `_raw_tail` fallback uses `original_tail` (unmodified)
 
-### `_u8_flag` Bug (commit 343d5abb)
-Decoder unconditionally read a `_u8_flag` byte after each player entry. In pre-V1 format these flag bytes don't exist — byte after each player's fstring is the FIRST byte of the next player's GUID. Caused 1-byte shift per player -> parser overran -> 0 players parsed.
+### v2 Guild Tail (2026-07 update, `group.py`)
+New decoder `_read_guild_tail_v2` (line 62) replaces the old `_u8_flag`‑based player entries with a `role` field and a `role_permissions` array. The decoder tries v2 first; if it overshoots EOF, falls back to v1.
 
-**Fix:** Changed `if not sub.eof():` -> `if group_data.get('_has_v1_marker') and not sub.eof():`. Encoder already conditional (`if '_u8_flag' in p`).
+#### v2 player entry (`guild_player_info_reader`)
+- `player_uid`: guid
+- `player_info`: `{last_online_real_time: i64, player_name: fstring}`
+- `role`: byte — `1`=admin/leader, `2`=submaster/officer, `3`=member, `4`=unknown
 
-### `_u8_flag` values
+#### v2 guild tail fields
+- `guild_chest_allowed_roles`: `tarray(byte)` — which roles can access chests
+- `unknown_i32`: i32
+- `admin_player_uid`: guid
+- `players`: `tarray(guild_player_info_reader)`
+- `role_permissions`: `tarray({role: byte, permissions: tarray(byte)})`
+- `trailing_bytes`: 4 bytes
+
+#### Encoder key (line 224)
+```python
+if "role_permissions" in p:
+    # writes v2 format with role per player
+else:
+    # writes v1 format (no role field)
+```
+
+### `_u8_flag` → `role` migration (commit b5eac6bd)
+The v2 encoder writes `p['role']` via `guild_player_info_writer`, but all manager functions were setting `p['_u8_flag']` — a key the encoder never reads. Silent data loss on every roundtrip.
+
+**Files fixed:**
+- `guild_manager.py`: `move_player_to_guild` + `make_member_leader` — `_u8_flag` → `role`
+- `func_manager.py`: `delete_inactive_players`, `delete_duplicated_players`, `delete_unreferenced_data` — `_u8_flag` → `role`
+- `data_manager.py`: `delete_player` — `_u8_flag` → `role`
+- `character_transfer.py:1078`: fallback player entry missing `role` → added `'role': 1` to prevent KeyError on v2 roundtrip
+
+**Role values** (same as old `_u8_flag`):
 - `1` = guild master/admin
+- `2` = submaster/officer
 - `3` = regular member
-- `2` = never observed
-
-### Guild Move Bug (commit 343d5abb)
-`move_player_to_guild()` left stale `_u8_flag=1` on moved players -> multiple admins. Fix: reset `found['_u8_flag'] = 3` after appending to target guild.
-
-### `make_member_leader` (commit 36522918)
-Iterates all guild players: `_u8_flag=1` on new leader, `3` on everyone else.
 
 ## Debug Pattern
 To inspect guild binary tail: convert Level.sav to JSON, load with `json_tools.load()`, search for `V1_MARKER` in `_raw_tail` hex. If at offset > 0, guild format was extended.
