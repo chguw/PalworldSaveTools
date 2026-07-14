@@ -34,7 +34,7 @@ def get_base_dir():
 
 def get_data_base():
     if getattr(sys, 'frozen', False):
-        return os.path.dirname(os.path.realpath(sys.executable))
+        return os.path.abspath(os.path.dirname(sys.argv[0]))
     return get_base_dir()
 
 

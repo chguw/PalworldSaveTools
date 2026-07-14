@@ -142,7 +142,7 @@ class TestStandaloneUpdater:
         assert result is None
 
     def test_apply_and_restart_creates_helper(self, monkeypatch, tmp_path):
-        monkeypatch.setattr(sys, 'executable', str(tmp_path / 'pst.exe'))
+        monkeypatch.setattr(sys, 'argv', [str(tmp_path / 'pst.exe')])
         monkeypatch.setattr(tempfile, 'mkdtemp', lambda **kw: str(tmp_path / 'temp'))
         (tmp_path / 'temp').mkdir(exist_ok=True)
         new_exe = tmp_path / 'temp' / 'PalworldSaveTools-V2.0.9-win.exe'

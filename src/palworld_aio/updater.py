@@ -152,7 +152,7 @@ class SourceUpdater:
         return {'branch': branch, 'local_commit': local_commit, 'remote_commit': remote_commit, 'update_available': has_update}
 class StandaloneUpdater:
     def __init__(self):
-        self.install_dir = Path(sys.executable).parent
+        self.install_dir = Path(os.path.abspath(sys.argv[0])).parent
         self.temp_dir = Path(tempfile.mkdtemp(prefix='pst_update_'))
         self.downloaded_file = None
         self.downloaded_name = None
@@ -231,7 +231,7 @@ class StandaloneUpdater:
         if not self.downloaded_file or not self.downloaded_file.exists():
             return False
         try:
-            current_exe = Path(sys.executable)
+            current_exe = Path(os.path.abspath(sys.argv[0]))
             new_exe = self.downloaded_file
             helper_code = f'''import os, sys, time, shutil, subprocess
 PARENT_PID = {os.getpid()}
