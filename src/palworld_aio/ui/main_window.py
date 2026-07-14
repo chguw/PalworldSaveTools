@@ -239,7 +239,16 @@ class MainWindow(QMainWindow):
         sys.stdout = self.status_stream
         sys.stderr = self.status_stream
         from palsav import setup_logging
-        handler = logging.StreamHandler(self.status_stream)
+        class _StatusBarLogHandler(logging.Handler):
+            def __init__(self, stream):
+                super().__init__()
+                self._stream = stream
+            def emit(self, record):
+                try:
+                    self._stream.write(self.format(record) + self.terminator)
+                except Exception:
+                    self.handleError(record)
+        handler = _StatusBarLogHandler(self.status_stream)
         handler.setLevel(logging.INFO)
         handler.setFormatter(logging.Formatter('{message}', style='{'))
         logging.getLogger().addHandler(handler)
