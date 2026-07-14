@@ -1,6 +1,3 @@
-#2.0.9
-- **Removed auto-update feature** — deleted `updater.py` (StandaloneUpdater/SourceUpdater), removed update dialogs, menu entries, and settings. Kept startup version check + GitHub version chip pulse. Version chip click still opens releases page
-
 #2.0.8
 - **`_u8_flag` → `role` migration** — `group.py` v2 guild encoder writes `p['role']` but all 4 managers were setting `p['_u8_flag']`, causing silent data loss. Fixed in `guild_manager.py`, `func_manager.py`, `data_manager.py`, `character_transfer.py`
 - **`character_transfer.py` — missing `role` on fallback player entry** — guild clone path could KeyError on v2 roundtrip when source player entry missing; added `'role': 1`
