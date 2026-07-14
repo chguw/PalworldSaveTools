@@ -1798,5 +1798,6 @@
     "inventory.abilities_apply": "アビリティを適用する",
     "inventory.abilities_loaded": "{name} のロード済みアビリティ",
     "inventory.abilities_no_player_selected": "プレーヤーがロードされていません",
-    "inventory.edit_abilities_current": "選択したプレーヤーからロード"
+    "inventory.edit_abilities_current": "選択したプレーヤーからロード",
+    "aio.menu.open_data_folder": "データフォルダーを開く"
 }

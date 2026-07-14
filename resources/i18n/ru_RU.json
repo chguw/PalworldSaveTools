@@ -1796,5 +1796,6 @@
     "inventory.abilities_apply": "Применить способности",
     "inventory.abilities_loaded": "Загруженные способности для {name}",
     "inventory.abilities_no_player_selected": "Ни один плеер не загружен",
-    "inventory.edit_abilities_current": "Загрузить из выбранного плеера"
+    "inventory.edit_abilities_current": "Загрузить из выбранного плеера",
+    "aio.menu.open_data_folder": "Открыть папку данных"
 }

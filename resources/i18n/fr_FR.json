@@ -1780,5 +1780,6 @@
     "inventory.abilities_apply": "Appliquer les capacités",
     "inventory.abilities_loaded": "Capacités chargées pour {name}",
     "inventory.abilities_no_player_selected": "Aucun lecteur chargé",
-    "inventory.edit_abilities_current": "Charger depuis le joueur sélectionné"
+    "inventory.edit_abilities_current": "Charger depuis le joueur sélectionné",
+    "aio.menu.open_data_folder": "Ouvrir le dossier de données"
 }

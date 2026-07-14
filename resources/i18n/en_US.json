@@ -2085,5 +2085,6 @@
     "inventory.abilities_apply": "Apply Abilities",
     "inventory.abilities_loaded": "Loaded abilities for {name}",
     "inventory.abilities_no_player_selected": "No player loaded",
-    "inventory.edit_abilities_current": "Load from selected player"
+    "inventory.edit_abilities_current": "Load from selected player",
+    "aio.menu.open_data_folder": "Open Data Folder"
 }

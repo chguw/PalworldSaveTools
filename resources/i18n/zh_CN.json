@@ -1800,5 +1800,6 @@
     "inventory.abilities_apply": "应用能力",
     "inventory.abilities_loaded": "已加载 {name} 的能力",
     "inventory.abilities_no_player_selected": "没有加载播放器",
-    "inventory.edit_abilities_current": "从选定的播放器加载"
+    "inventory.edit_abilities_current": "从选定的播放器加载",
+    "aio.menu.open_data_folder": "打开数据文件夹"
 }

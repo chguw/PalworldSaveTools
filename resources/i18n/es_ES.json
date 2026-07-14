@@ -1792,5 +1792,6 @@
     "inventory.abilities_apply": "Aplicar habilidades",
     "inventory.abilities_loaded": "Habilidades cargadas para {nombre}",
     "inventory.abilities_no_player_selected": "Ningún jugador cargado",
-    "inventory.edit_abilities_current": "Cargar desde el reproductor seleccionado"
+    "inventory.edit_abilities_current": "Cargar desde el reproductor seleccionado",
+    "aio.menu.open_data_folder": "Abrir carpeta de datos"
 }

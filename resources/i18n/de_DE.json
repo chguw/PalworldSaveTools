@@ -1822,5 +1822,6 @@
     "inventory.abilities_apply": "Wenden Sie Fähigkeiten an",
     "inventory.abilities_loaded": "Geladene Fähigkeiten für {name}",
     "inventory.abilities_no_player_selected": "Kein Player geladen",
-    "inventory.edit_abilities_current": "Vom ausgewählten Player laden"
+    "inventory.edit_abilities_current": "Vom ausgewählten Player laden",
+    "aio.menu.open_data_folder": "Öffnen Sie den Datenordner"
 }
