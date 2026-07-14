@@ -1771,5 +1771,19 @@
     "fix_host_save.player_file_missing": "{guid}에 대한 플레이어 저장 파일을 찾을 수 없습니다.",
     "character_transfer.player_file_missing": "{guid}에 대한 플레이어 저장 파일을 찾을 수 없습니다.",
     "inventory.effigy_add_qty_prompt": "추가할 각 인형 유형은 몇 개입니까?",
-    "inventory.effigy_add_qty_title": "인형 수량"
+    "inventory.effigy_add_qty_title": "인형 수량",
+    "edit_pals.show_predator": "포식자",
+    "edit_pals.tip.gender": "성별 전환",
+    "edit_pals.tip.predator": "포식자 변종 전환",
+    "edit_pals.tip.boss": "보스 전환(알파)",
+    "edit_pals.tip.lucky": "행운(반짝이는) 전환",
+    "edit_pals.tip.awake": "각성 전환",
+    "edit_pals.tip.cheat": "치트 모드 전환",
+    "edit_pals.tip.max_stats": "모든 통계 최대화",
+    "edit_pals.tip.dna": "가져온 캐릭터 전환",
+    "edit_pals.tip.fav": "즐겨찾는 레벨 설정",
+    "edit_pals.max_all_confirm_cheat": "파티의 모든 친구와 모든 팔박스 페이지에 대해 모든 통계(IV: 255, 영혼: 255, 순위: 255, 레벨: 255)를 최대화하시겠습니까?",
+    "base_inventory.max_all_confirm_cheat": "이 기지에 있는 모든 일하는 친구의 모든 통계(IV: 255, 영혼: 255, 순위: 255, 레벨: 255)를 최대화하시겠습니까?",
+    "func_manager.max_all_pals.confirm_cheat": "이렇게 하면 저장에 있는 모든 친구의 모든 통계(레벨 255, IV 255, 영혼 255, 순위 255)가 최대화됩니다. 계속하다?",
+    "func_manager.max_all_pals.cheat_ask": "익스트림 255 캡을 사용하시겠습니까?"
 }

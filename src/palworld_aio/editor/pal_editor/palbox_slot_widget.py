@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QFrame, QLabel, QMenu, QSizePolicy, QStyledItemDelegate, QStyle
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QColor
+from PySide6.QtGui import QColor, QPainter
 from i18n import t
 from palworld_aio.ui.chrome.styles import slot_full, slot_selected
 from palworld_aio.utils import extract_value, resolve_name, safe_nested_get
@@ -273,6 +273,8 @@ class PalboxSlotWidget(QFrame):
 
         is_boss = cid.upper().startswith('BOSS_')
 
+        is_predator = cid.upper().startswith('PREDATOR_')
+
         is_lucky = extract_value(raw, 'IsRarePal', False)
 
         is_awake = extract_value(raw, 'bIsAwakening', False)
@@ -392,6 +394,21 @@ class PalboxSlotWidget(QFrame):
                 badge.show()
 
                 self._children.append(badge)
+
+        if is_predator:
+            pred_badge = QLabel(self)
+            pred_badge.setFixedSize(14, 14)
+            pred_badge.setAlignment(Qt.AlignCenter)
+            pred_badge.setStyleSheet('background: transparent; border: none; font-size: 9px; font-weight: bold; color: #EF4444;')
+            try:
+                import nerdfont as _nf
+                pred_badge.setText(_nf.icons.get('nf-fa-paw', '🐾'))
+            except Exception:
+                pred_badge.setText('🐾')
+            pred_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
+            pred_badge._slot_child_kind = 'predator'
+            pred_badge.show()
+            self._children.append(pred_badge)
 
         if is_awake:
 
@@ -566,11 +583,27 @@ class _PalSlotDelegate(QStyledItemDelegate):
 
         if has_badge:
 
-            badge = _get_boss_alpha_pixmap(14)
+            is_predator_badge = index.data(Qt.UserRole + 3)
 
-            if badge and (not badge.isNull()):
-
-                painter.drawPixmap(option.rect.x() + 6, option.rect.y() + 6, badge)
+            if is_predator_badge:
+                try:
+                    import nerdfont as _nf2
+                    paw = _nf2.icons.get('nf-fa-paw', '🐾')
+                except Exception:
+                    paw = '🐾'
+                painter.save()
+                painter.setRenderHint(QPainter.TextAntialiasing)
+                painter.setPen(QColor('#EF4444'))
+                font = painter.font()
+                font.setPointSize(10)
+                font.setBold(True)
+                painter.setFont(font)
+                painter.drawText(option.rect.x() + 6, option.rect.y() + 6, 18, 18, Qt.AlignCenter, paw)
+                painter.restore()
+            else:
+                badge = _get_boss_alpha_pixmap(14)
+                if badge and (not badge.isNull()):
+                    painter.drawPixmap(option.rect.x() + 6, option.rect.y() + 6, badge)
 
         elem_keys = index.data(Qt.UserRole + 2)
 

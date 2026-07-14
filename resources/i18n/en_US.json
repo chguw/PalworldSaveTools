@@ -2059,5 +2059,19 @@
     "fix_host_save.player_file_missing": "Player save file not found for {guid}",
     "character_transfer.player_file_missing": "Player save file not found for {guid}",
     "inventory.effigy_add_qty_prompt": "How many of each effigy type to add?",
-    "inventory.effigy_add_qty_title": "Effigy Quantity"
+    "inventory.effigy_add_qty_title": "Effigy Quantity",
+    "edit_pals.show_predator": "Predator",
+    "edit_pals.tip.gender": "Toggle gender",
+    "edit_pals.tip.predator": "Toggle predator variant",
+    "edit_pals.tip.boss": "Toggle boss (alpha)",
+    "edit_pals.tip.lucky": "Toggle lucky (shiny)",
+    "edit_pals.tip.awake": "Toggle awakening",
+    "edit_pals.tip.cheat": "Toggle cheat mode",
+    "edit_pals.tip.max_stats": "Max all stats",
+    "edit_pals.tip.dna": "Toggle imported character",
+    "edit_pals.tip.fav": "Set favorite level",
+    "edit_pals.max_all_confirm_cheat": "Max all stats (IVs: 255, souls: 255, rank: 255, level: 255) for all pals in party & all palbox pages?",
+    "base_inventory.max_all_confirm_cheat": "Max all stats (IVs: 255, souls: 255, rank: 255, level: 255) for all working pals in this base?",
+    "func_manager.max_all_pals.confirm_cheat": "This will max all stats (level 255, IVs 255, souls 255, rank 255) for ALL pals in the save. Continue?",
+    "func_manager.max_all_pals.cheat_ask": "Use extreme 255 caps?"
 }

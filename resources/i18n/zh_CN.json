@@ -1774,5 +1774,19 @@
     "fix_host_save.player_file_missing": "找不到 {guid} 的玩家保存文件",
     "character_transfer.player_file_missing": "找不到 {guid} 的玩家保存文件",
     "inventory.effigy_add_qty_prompt": "每种肖像类型要添加多少个？",
-    "inventory.effigy_add_qty_title": "雕像数量"
+    "inventory.effigy_add_qty_title": "雕像数量",
+    "edit_pals.show_predator": "掠夺者",
+    "edit_pals.tip.gender": "切换性别",
+    "edit_pals.tip.predator": "切换捕食者变体",
+    "edit_pals.tip.boss": "切换老板（阿尔法）",
+    "edit_pals.tip.lucky": "切换幸运（闪亮）",
+    "edit_pals.tip.awake": "切换觉醒",
+    "edit_pals.tip.cheat": "切换作弊模式",
+    "edit_pals.tip.max_stats": "最大化所有统计数据",
+    "edit_pals.tip.dna": "切换导入的角色",
+    "edit_pals.tip.fav": "设置最喜欢的级别",
+    "edit_pals.max_all_confirm_cheat": "派对中所有好友和所有 palbox 页面的所有统计数据最大化（IV：255，灵魂：255，排名：255，等级：255）？",
+    "base_inventory.max_all_confirm_cheat": "使该基地中所有工作伙伴的所有统计数据最大化（IV：255，灵魂：255，排名：255，等级：255）？",
+    "func_manager.max_all_pals.confirm_cheat": "这将使保存中的所有好友的所有统计数据最大化（等级 255、IV 255、灵魂 255、排名 255）。继续？",
+    "func_manager.max_all_pals.cheat_ask": "使用极限 255 上限？"
 }

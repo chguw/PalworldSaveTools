@@ -640,79 +640,114 @@ def update_pal_data():
     result = {'pals': updated_pals}
     save_resource_json('paldata.json', result)
     print(f'  Total pals: {len(updated_pals)}')
+def _collect_export_rows(data):
+    rows = {}
+    if data:
+        if isinstance(data, list):
+            for table in data:
+                if isinstance(table, dict):
+                    r = table.get('Rows', {})
+                    if r:
+                        rows.update(r)
+        elif isinstance(data, dict):
+            r = data.get('Rows', {})
+            if r:
+                rows.update(r)
+    return rows
+
+_NPC_ID_CLEANUP = re.compile(r'^(BOSS_|NPC_|PREDATOR_|GYM_|RAID_|SUMMON_|QUEST_|POLICE_)', re.IGNORECASE)
+
+def _make_npc_name_fallback(npc_id):
+    cleaned = _NPC_ID_CLEANUP.sub('', npc_id)
+    cleaned = cleaned.replace('_v', ' v')
+    cleaned = cleaned.replace('_', ' ')
+    cleaned = re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', cleaned)
+    cleaned = cleaned.strip()
+    if not cleaned:
+        return npc_id
+    return cleaned[0].upper() + cleaned[1:]
+
+def _make_npc_entry(npc_id, row_data, human_rows, human_rows_ci, npc_name_l10n, npc_l10n_lower, npc_icon_subdirs):
+    npc_id_lower = npc_id.lower()
+    icon_data = row_data.get('Icon', {})
+    icon_path = icon_data.get('AssetPathName', '') if isinstance(icon_data, dict) else ''
+    copied_icon = None
+    if icon_path:
+        icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
+        copied_icon = find_and_copy_icon(icon_filename, 'npcs', npc_icon_subdirs)
+    key = f'NAME_{npc_id}'
+    l10n_name = npc_name_l10n.get(key)
+    if not l10n_name or l10n_name.lower() in ('en_text', 'none', ''):
+        l10n_name = npc_l10n_lower.get(key.lower())
+    if not l10n_name or l10n_name.lower() in ('en_text', 'none', ''):
+        l10n_name = None
+    display_name = l10n_name or _make_npc_name_fallback(npc_id)
+    npc_entry = {'name': display_name, 'asset': npc_id, 'icon': copied_icon or f'/icons/npcs/{npc_id}_icon_normal.webp'}
+    hrow = human_rows.get(npc_id) or human_rows_ci.get(npc_id_lower)
+    if not hrow:
+        base_id = re.sub(r'_v\d+$', '', npc_id)
+        if base_id != npc_id:
+            hrow = human_rows.get(base_id) or human_rows_ci.get(base_id.lower())
+    if hrow and isinstance(hrow, dict):
+        ws = {}
+        for w in ['EmitFlame', 'Watering', 'Seeding', 'GenerateElectricity', 'Handcraft', 'Collection', 'Deforest', 'Mining', 'OilExtraction', 'ProductMedicine', 'Cool', 'Transport', 'MonsterFarm']:
+            key = f'WorkSuitability_{w}'
+            val = hrow.get(key, 0)
+            if isinstance(val, dict):
+                val = val.get('value', 0)
+            ws[w] = int(val) if val else 0
+        npc_entry['stats'] = {'hp': hrow.get('Hp', 100), 'melee_attack': hrow.get('MeleeAttack', 100), 'shot_attack': hrow.get('ShotAttack', 100), 'defense': hrow.get('Defense', 100), 'support': hrow.get('Support', 100), 'craft_speed': hrow.get('CraftSpeed', 100), 'max_full_stomach': hrow.get('MaxFullStomach', 300), 'food_amount': hrow.get('FoodAmount', 5), 'run_speed': hrow.get('RunSpeed', 400), 'ride_sprint_speed': hrow.get('RideSprintSpeed', 700)}
+        npc_entry['work_suitabilities'] = ws
+    return npc_entry
+
 def update_npc_data():
     print('\n=== Updating NPC Data ===')
-    npc_icon_data = load_export_json('Character/DT_PalBossNPCIcon.json')
     npc_name_l10n = load_l10n_table('DT_HumanNameText_Common.json')
-    _npc_l10n_lower = {k.lower(): v for k, v in npc_name_l10n.items()}
-    def _resolve_npc_name(npc_id: str) -> str:
-        key = f'NAME_{npc_id}'
-        val = npc_name_l10n.get(key)
-        if val and val.lower() not in ('en_text', 'none', ''):
-            return val
-        val = _npc_l10n_lower.get(key.lower())
-        if val and val.lower() not in ('en_text', 'none', ''):
-            return val
-        return None
-    all_rows = {}
-    for data in [npc_icon_data]:
-        if data:
-            if isinstance(data, list):
-                for table in data:
-                    if isinstance(table, dict):
-                        rows = table.get('Rows', {})
-                        if rows:
-                            all_rows.update(rows)
-            elif isinstance(data, dict):
-                rows = data.get('Rows', {})
-                if rows:
-                    all_rows.update(rows)
-    if not all_rows:
-        print('  No NPC rows found. Skipping.')
-        return
+    npc_l10n_lower = {k.lower(): v for k, v in npc_name_l10n.items()}
     human_param = load_export_json('Character/DT_PalHumanParameter.json')
     human_param_common = load_export_json('Character/DT_PalHumanParameter_Common.json')
     human_rows = {}
     for d in [human_param, human_param_common]:
-        if d:
-            if isinstance(d, list):
-                for table in d:
-                    if isinstance(table, dict):
-                        rows = table.get('Rows', {})
-                        if rows:
-                            human_rows.update(rows)
-            elif isinstance(d, dict):
-                rows = d.get('Rows', {})
-                if rows:
-                    human_rows.update(rows)
-    _human_rows_ci = {k.lower(): v for k, v in human_rows.items()}
-    _WS_FIELDS = ['EmitFlame', 'Watering', 'Seeding', 'GenerateElectricity', 'Handcraft', 'Collection', 'Deforest', 'Mining', 'OilExtraction', 'ProductMedicine', 'Cool', 'Transport', 'MonsterFarm']
+        r = _collect_export_rows(d)
+        human_rows.update(r)
+    human_rows_ci = {k.lower(): v for k, v in human_rows.items()}
     npc_icon_subdirs = [EXPORT_TEXTURES_DIR / 'PalIcon' / 'NPC', EXPORT_TEXTURES_DIR / 'PalIcon' / 'Normal']
+    boss_icon_data = load_export_json('Character/DT_PalBossNPCIcon.json')
+    boss_rows = _collect_export_rows(boss_icon_data)
+    char_icon_data = load_export_json('Character/DT_PalCharacterIconDataTable.json')
+    char_icon_common = load_export_json('Character/DT_PalCharacterIconDataTable_Common.json')
+    char_rows = {}
+    for d in [char_icon_data, char_icon_common]:
+        r = _collect_export_rows(d)
+        char_rows.update(r)
+    seen = set()
     updated_npcs = []
-    for npc_id, row_data in sorted(all_rows.items()):
+    for npc_id, row_data in sorted(boss_rows.items()):
+        seen.add(npc_id.lower())
+        updated_npcs.append(_make_npc_entry(npc_id, row_data, human_rows, human_rows_ci, npc_name_l10n, npc_l10n_lower, npc_icon_subdirs))
+    for npc_id, row_data in sorted(char_rows.items()):
         npc_id_lower = npc_id.lower()
-        icon_data = row_data.get('Icon', {})
-        icon_path = icon_data.get('AssetPathName', '') if isinstance(icon_data, dict) else ''
-        copied_icon = None
-        if icon_path:
-            icon_filename = icon_path.split('/')[-1].split('.')[0] if '.' in icon_path else icon_path.split('/')[-1]
-            copied_icon = find_and_copy_icon(icon_filename, 'npcs', npc_icon_subdirs)
-        l10n_name = _resolve_npc_name(npc_id)
-        npc_entry = {'name': l10n_name or npc_id, 'asset': npc_id, 'icon': copied_icon or f'/icons/npcs/{npc_id}_icon_normal.webp'}
-        hrow = human_rows.get(npc_id) or _human_rows_ci.get(npc_id_lower)
+        if npc_id_lower in seen:
+            continue
+        hrow = human_rows.get(npc_id) or human_rows_ci.get(npc_id_lower)
+        if not hrow:
+            base_id = re.sub(r'_v\d+$', '', npc_id)
+            if base_id != npc_id:
+                hrow = human_rows.get(base_id) or human_rows_ci.get(base_id.lower())
+        if not hrow:
+            base_id = re.sub(r'BOSS_', '', npc_id, flags=re.IGNORECASE)
+            if base_id != npc_id:
+                hrow = human_rows.get(base_id) or human_rows_ci.get(base_id.lower())
         if hrow and isinstance(hrow, dict):
-            ws = {}
-            for w in _WS_FIELDS:
-                key = f'WorkSuitability_{w}'
-                val = hrow.get(key, 0)
-                if isinstance(val, dict):
-                    val = val.get('value', 0)
-                ws[w] = int(val) if val else 0
-            npc_entry['stats'] = {'hp': hrow.get('Hp', 100), 'melee_attack': hrow.get('MeleeAttack', 100), 'shot_attack': hrow.get('ShotAttack', 100), 'defense': hrow.get('Defense', 100), 'support': hrow.get('Support', 100), 'craft_speed': hrow.get('CraftSpeed', 100), 'max_full_stomach': hrow.get('MaxFullStomach', 300), 'food_amount': hrow.get('FoodAmount', 5), 'run_speed': hrow.get('RunSpeed', 400), 'ride_sprint_speed': hrow.get('RideSprintSpeed', 700)}
-            npc_entry['work_suitabilities'] = ws
-        updated_npcs.append(npc_entry)
+            is_pal = hrow.get('IsPal', True)
+            if isinstance(is_pal, dict):
+                is_pal = is_pal.get('value', True)
+            if not is_pal:
+                seen.add(npc_id_lower)
+                updated_npcs.append(_make_npc_entry(npc_id, row_data, human_rows, human_rows_ci, npc_name_l10n, npc_l10n_lower, npc_icon_subdirs))
     result = {'npcs': updated_npcs}
     save_resource_json('npcdata.json', result)
+    print(f'  Total NPCs: {len(updated_npcs)}')
 def update_item_data():
     print('\n=== Updating Item Data ===')
     item_table = load_export_json('Item/DT_ItemDataTable.json')
@@ -1507,10 +1542,12 @@ def update_skill_data():
     raw_skill_l10n = load_l10n_table('DT_SkillNameText_Common.json')
     raw_skill_desc = load_l10n_table('DT_SkillDescText_Common.json')
     skill_name_l10n = {}
+    skill_name_l10n_ci = {}
     for uid_key, display_name in raw_skill_l10n.items():
         if uid_key.startswith('ACTION_SKILL_'):
             skill_asset = uid_key[len('ACTION_SKILL_'):]
             skill_name_l10n[skill_asset] = display_name
+            skill_name_l10n_ci[skill_asset.lower()] = display_name
     skill_desc_l10n = {}
     for uid_key, desc_text in raw_skill_desc.items():
         if uid_key.startswith('ACTION_SKILL_'):
@@ -1522,6 +1559,15 @@ def update_skill_data():
         v = re.sub('<characterName\\s+id=\\|(\\w+)\\|\\s*/>', lambda m: _char_name_map.get(m.group(1), m.group(0)), v)
         v = re.sub('<[^>]+>', '', v).strip()
         skill_desc_l10n[k] = v
+    _partner_skill_map = {}
+    try:
+        _pd = load_resource_json('characters.json')
+        for _p in _pd.get('pals', []):
+            if isinstance(_p, dict) and _p.get('partner_skill'):
+                _psk = f"{_p['asset']}_PartnerSkill"
+                _partner_skill_map[_psk.lower()] = _p['partner_skill']
+    except Exception:
+        pass
     if not all_rows:
         print('  No skill rows found. Skipping.')
         return
@@ -1565,7 +1611,7 @@ def update_skill_data():
         entry = skill_map[skill_asset]
         rd = entry.get('row_data', {})
         skill_lower = entry['asset'].lower()
-        l10n_name = skill_name_l10n.get(entry['asset'], None)
+        l10n_name = skill_name_l10n.get(entry['asset']) or skill_name_l10n_ci.get(entry['asset'].lower()) or _partner_skill_map.get(entry['asset'].lower())
         waza_type_raw = rd.get('WazaType', '')
         if isinstance(waza_type_raw, str) and waza_type_raw.startswith('EPalWazaID::'):
             waza_type_raw = waza_type_raw.replace('EPalWazaID::', '')

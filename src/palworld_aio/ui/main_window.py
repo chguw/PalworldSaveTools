@@ -1412,12 +1412,18 @@ class MainWindow(QMainWindow):
         if not constants.loaded_level_json:
             self._show_warning(t('Error'), t('error.no_save_loaded'))
             return
-        reply = show_question(self, t('func_manager.max_all_pals.title') if t else 'Max All Pals', t('func_manager.max_all_pals.confirm') if t else 'This will max all stats (level 80, IVs 100, souls 20, rank 5) for all pals. Continue?')
+        from palworld_aio.editor.pal_editor.legacy_frame import PalFrame
+        cheat_q = show_question(self, t('func_manager.max_all_pals.title') if t else 'Max All Pals', t('func_manager.max_all_pals.cheat_ask') if t else 'Use extreme 255 caps?')
+        PalFrame._cheat_mode = cheat_q
+        msg = t('func_manager.max_all_pals.confirm_cheat') if cheat_q else (t('func_manager.max_all_pals.confirm') if t else 'This will max all stats (level 80, IVs 100, souls 20, rank 5) for all pals. Continue?')
+        reply = show_question(self, t('func_manager.max_all_pals.title') if t else 'Max All Pals', msg)
         if not reply:
+            PalFrame._cheat_mode = False
             return
         def task():
             return max_all_pals(self)
         def on_finished(count):
+            PalFrame._cheat_mode = False
             self.refresh_all()
             self._show_info(t('func_manager.max_all_pals.title') if t else 'Max All Pals', t('func_manager.max_all_pals.success', count=count) if t else f'Maxed {count} pals.')
         run_with_loading(on_finished, task)

@@ -1754,5 +1754,19 @@
     "fix_host_save.player_file_missing": "Fichier de sauvegarde du lecteur introuvable pour {guid}",
     "character_transfer.player_file_missing": "Fichier de sauvegarde du lecteur introuvable pour {guid}",
     "inventory.effigy_add_qty_prompt": "Combien de chaque type d’effigie ajouter ?",
-    "inventory.effigy_add_qty_title": "Quantité d'effigie"
+    "inventory.effigy_add_qty_title": "Quantité d'effigie",
+    "edit_pals.show_predator": "Prédateur",
+    "edit_pals.tip.gender": "Changer de sexe",
+    "edit_pals.tip.predator": "Basculer la variante du prédateur",
+    "edit_pals.tip.boss": "Basculer le boss (alpha)",
+    "edit_pals.tip.lucky": "Basculer chanceux (brillant)",
+    "edit_pals.tip.awake": "Activer/désactiver l'éveil",
+    "edit_pals.tip.cheat": "Activer le mode triche",
+    "edit_pals.tip.max_stats": "Maximiser toutes les statistiques",
+    "edit_pals.tip.dna": "Basculer le caractère importé",
+    "edit_pals.tip.fav": "Définir le niveau favori",
+    "edit_pals.max_all_confirm_cheat": "Maximiser toutes les statistiques (IV : 255, âmes : 255, rang : 255, niveau : 255) pour tous les copains du groupe et toutes les pages palbox ?",
+    "base_inventory.max_all_confirm_cheat": "Maximiser toutes les statistiques (IV : 255, âmes : 255, rang : 255, niveau : 255) pour tous les copains qui travaillent dans cette base ?",
+    "func_manager.max_all_pals.confirm_cheat": "Cela maximisera toutes les statistiques (niveau 255, IV 255, âmes 255, rang 255) pour TOUS les amis de la sauvegarde. Continuer?",
+    "func_manager.max_all_pals.cheat_ask": "Utiliser des capsules extrêmes 255 ?"
 }

@@ -61,8 +61,10 @@ def _learn_all_skills_raw(raw):
         e_list = ew_data.get('value', {}).get('values', []) if isinstance(ew_data, dict) else ew_data if isinstance(ew_data, list) else []
         if not isinstance(e_list, list):
             e_list = []
+        from .legacy_frame import PalFrame
+        as_cap = 255 if PalFrame._cheat_mode else 3
         filled = [s for s in e_list if s]
-        if len(filled) < 3:
+        if len(filled) < as_cap:
             matching = []
             elem_lower = [e.lower() for e in elements]
             for asset_lower, skill_info in _data._SKILL_DATA.items():
@@ -78,10 +80,10 @@ def _learn_all_skills_raw(raw):
                     if entry not in filled:
                         matching.append((entry, skill_info.get('power', 0)))
             matching.sort(key=lambda x: x[1], reverse=True)
-            need = 3 - len(filled)
+            need = as_cap - len(filled)
             for entry, _ in matching[:need]:
                 filled.append(entry)
-            raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': filled[:3]}, 'type': 'ArrayProperty'}
+            raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': filled[:as_cap]}, 'type': 'ArrayProperty'}
 
 def _toggle_boss_raw(raw, enable):
     cid = extract_value(raw, 'CharacterID', '')
@@ -93,6 +95,21 @@ def _toggle_boss_raw(raw, enable):
             raw['IsRarePal'] = {'id': None, 'type': 'BoolProperty', 'value': False}
         if cid.upper().startswith('BOSS_'):
             raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': cid[5:]}
+
+def _toggle_predator_raw(raw, enable):
+    cid = extract_value(raw, 'CharacterID', '')
+    cid_upper = cid.upper()
+    if enable:
+        if not cid_upper.startswith('PREDATOR_'):
+            base = cid
+            for pfx in ('BOSS_', 'PREDATOR_', 'GYM_', 'RAID_', 'POLICE_', 'SUMMON_', 'QUEST_'):
+                if base.upper().startswith(pfx):
+                    base = base[len(pfx):]
+                    break
+            raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': 'PREDATOR_' + base}
+    else:
+        if cid_upper.startswith('PREDATOR_'):
+            raw['CharacterID'] = {'id': None, 'type': 'NameProperty', 'value': cid[9:]}
 
 def _toggle_lucky_raw(raw, enable):
     raw['IsRarePal'] = {'id': None, 'type': 'BoolProperty', 'value': enable}
@@ -194,18 +211,23 @@ def _set_work_suitability(raw: dict, ws_key: str, target_level: int):
                 raw.pop('GotWorkSuitabilityAddRankList', None)
 
 def _max_stats_raw(raw):
-    raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-    raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-    raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-    raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-    raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-    raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-    raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-    raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+    from .legacy_frame import PalFrame
+    cap = 255 if PalFrame._cheat_mode else 100
+    soul_cap = 255 if PalFrame._cheat_mode else 20
+    lv_cap = 255 if PalFrame._cheat_mode else 80
+    rank_cap = 255 if PalFrame._cheat_mode else 5
+    raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+    raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+    raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+    raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+    raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+    raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+    raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+    raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': rank_cap}}
     raw['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
     raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
-    raw['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 80}}
-    exp_val = _data.PAL_EXP_TABLE.get('80', {}).get('PalTotalEXP', 0)
+    raw['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': lv_cap}}
+    exp_val = _data.PAL_EXP_TABLE.get(str(lv_cap), {}).get('PalTotalEXP', 0)
     raw['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp_val}
     cid = extract_value(raw, 'CharacterID', '')
     base_data = _data.get_pal_base_data(cid)

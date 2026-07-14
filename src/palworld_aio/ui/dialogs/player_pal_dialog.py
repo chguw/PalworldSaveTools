@@ -3,7 +3,7 @@ import re
 from palsav import json_tools
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QLineEdit, QListWidget, QListWidgetItem, QGroupBox, QMessageBox, QAbstractItemView, QListView, QTabWidget, QWidget, QStyledItemDelegate, QFrame, QSizePolicy
 from PySide6.QtCore import Qt, Signal, QSize, QTimer, QPoint
-from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor, QFont
+from PySide6.QtGui import QPixmap, QIcon, QPainter, QColor, QCursor, QFont, QFontMetrics
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.editor.edit_pals import PalFrame, _get_boss_alpha_pixmap, _composite_badge, _BOSS_PREFIXES, _get_element_pixmap, _ensure_element_data, _resolve_partner_desc, _partner_desc_to_html, _get_cached_pixmap, PalInfoWidget
@@ -25,9 +25,26 @@ class PalSlotDelegate(QStyledItemDelegate):
         super().paint(painter, option, index)
         has_badge = index.data(Qt.UserRole + 1)
         if has_badge:
-            badge = _get_boss_alpha_pixmap(14)
-            if badge and (not badge.isNull()):
-                painter.drawPixmap(option.rect.x() + 6, option.rect.y() + 6, badge)
+            is_predator_badge = index.data(Qt.UserRole + 3)
+            if is_predator_badge:
+                try:
+                    import nerdfont as _nf2
+                    paw = _nf2.icons.get('nf-fa-paw', '🐾')
+                except Exception:
+                    paw = '🐾'
+                painter.save()
+                painter.setRenderHint(QPainter.TextAntialiasing)
+                painter.setPen(QColor('#EF4444'))
+                f = painter.font()
+                f.setPointSize(10)
+                f.setBold(True)
+                painter.setFont(f)
+                painter.drawText(option.rect.x() + 6, option.rect.y() + 6, 18, 18, Qt.AlignCenter, paw)
+                painter.restore()
+            else:
+                badge = _get_boss_alpha_pixmap(14)
+                if badge and (not badge.isNull()):
+                    painter.drawPixmap(option.rect.x() + 6, option.rect.y() + 6, badge)
         elem_keys = index.data(Qt.UserRole + 2)
         if elem_keys:
             ix = option.rect.right() - 16
@@ -88,7 +105,12 @@ class PlayerPalActionDialog(QDialog):
         self._show_standard_chk.setChecked(True)
         self._show_standard_chk.toggled.connect(self._search_pals)
         search_bar_layout.addWidget(self._show_standard_chk)
+        self._show_predator_chk = ToggleCheckBtn(t('edit_pals.show_predator') if t else 'Predator')
+        self._show_predator_chk.setChecked(True)
+        self._show_predator_chk.toggled.connect(self._search_pals)
+        search_bar_layout.addWidget(self._show_predator_chk)
         self._show_boss_chk = ToggleCheckBtn(t('edit_pals.show_boss') if t else 'Boss')
+        self._show_boss_chk.setChecked(True)
         self._show_boss_chk.toggled.connect(self._search_pals)
         search_bar_layout.addWidget(self._show_boss_chk)
         search_bar_layout.addStretch()
@@ -272,39 +294,13 @@ class PlayerPalActionDialog(QDialog):
         self.pal_list.clear()
         for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda x: x[1]):
             asset_lower = asset.lower()
-            if any((asset_lower.startswith(p) for p in ('summon_', 'quest_', 'raid_', 'predator_', 'police_'))):
+            is_predator = asset.upper().startswith('PREDATOR_')
+            is_boss = any((asset.upper().startswith(p) for p in _BOSS_PREFIXES)) and not is_predator
+            if is_predator and not self._show_predator_chk.isChecked():
                 continue
-            if 'worldtreedragon' in asset_lower:
+            if is_boss and not self._show_boss_chk.isChecked():
                 continue
-            if 'oilrig' in asset_lower:
-                continue
-            if 'tower' in asset_lower:
-                continue
-            if '_bossrush' in asset_lower:
-                continue
-            if asset_lower.startswith('gym_') and (not asset_lower.endswith('_otomo')):
-                continue
-            otomo_key = asset_lower + '_otomo'
-            if otomo_key in PalFrame._NAMEMAP:
-                continue
-            boss_otomo_key = 'boss_' + asset_lower + '_otomo'
-            if boss_otomo_key in PalFrame._NAMEMAP:
-                continue
-            base_id = asset_lower
-            for prefix in ('boss_', 'gym_'):
-                if base_id.startswith(prefix):
-                    base_id = base_id[len(prefix):]
-            base_id = re.sub('_\\d+$', '', base_id)
-            base_id = re.sub('_avatar|_servant|_otomo', '', base_id)
-            zukan = PalFrame._PAL_ZUKAN.get(base_id, -99)
-            if zukan == -99:
-                pass
-            elif zukan < 0 and 'Yakushima' not in asset and not base_id.startswith('yakushima'):
-                continue
-            is_variant = any((asset.upper().startswith(p) for p in _BOSS_PREFIXES))
-            if is_variant and not self._show_boss_chk.isChecked():
-                continue
-            if (not is_variant) and not self._show_standard_chk.isChecked():
+            if (not is_predator and not is_boss) and not self._show_standard_chk.isChecked():
                 continue
             if query_lower and query_lower not in name.lower() and (query_lower not in asset.lower()):
                 continue
@@ -322,7 +318,10 @@ class PlayerPalActionDialog(QDialog):
             pixmap = self._get_pal_icon(asset)
             if pixmap and (not pixmap.isNull()):
                 list_item.setIcon(QIcon(pixmap))
-            if any((asset.upper().startswith(p) for p in _BOSS_PREFIXES)):
+            if asset.upper().startswith('PREDATOR_'):
+                list_item.setData(Qt.UserRole + 1, True)
+                list_item.setData(Qt.UserRole + 3, True)
+            elif any((asset.upper().startswith(p) for p in _BOSS_PREFIXES)):
                 list_item.setData(Qt.UserRole + 1, True)
             elems = self._pal_elements_map.get(asset_lower, {})
             if elems:

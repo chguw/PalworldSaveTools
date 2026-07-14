@@ -308,6 +308,8 @@ class PartySlotWidget(QFrame):
 
         is_boss = cid.upper().startswith('BOSS_')
 
+        is_predator = cid.upper().startswith('PREDATOR_')
+
         is_lucky = extract_value(raw, 'IsRarePal', False)
 
         is_imported = extract_value(raw, 'bImportedCharacter', False)
@@ -635,6 +637,22 @@ class PartySlotWidget(QFrame):
                 self._badges.append(boss_badge)
 
                 badge_x -= 16
+
+        if is_predator:
+            pred_badge = QLabel(self)
+            pred_badge.setFixedSize(14, 14)
+            pred_badge.setAlignment(Qt.AlignCenter)
+            pred_badge.setStyleSheet('background: transparent; border: none; font-size: 9px; font-weight: bold; color: #EF4444;')
+            try:
+                import nerdfont as _nf
+                pred_badge.setText(_nf.icons.get('nf-fa-paw', '🐾'))
+            except Exception:
+                pred_badge.setText('🐾')
+            pred_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
+            pred_badge.move(badge_x - 14, badge_y)
+            pred_badge.show()
+            self._badges.append(pred_badge)
+            badge_x -= 16
 
         base_el_data = get_pal_base_data(cid)
 

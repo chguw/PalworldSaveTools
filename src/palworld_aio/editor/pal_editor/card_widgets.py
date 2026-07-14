@@ -226,6 +226,21 @@ class PalIcon(QFrame):
 
             badge.show()
 
+        is_predator = cid.upper().startswith('PREDATOR_')
+        if is_predator:
+            pred_badge = QLabel(self)
+            pred_badge.setStyleSheet('color: #EF4444; font-size: 11px; font-weight: bold; background: transparent; border: none;')
+            pred_badge.setFixedSize(18, 18)
+            pred_badge.setAlignment(Qt.AlignCenter)
+            pred_badge.move(22, 2)
+            pred_badge.setAttribute(Qt.WA_TransparentForMouseEvents)
+            try:
+                import nerdfont as _nf
+                pred_badge.setText(_nf.icons.get('nf-fa-paw', '🐾'))
+            except Exception:
+                pred_badge.setText('🐾')
+            pred_badge.show()
+
         pal_name = _strip_prefix_label(resolve_name(cid, PalFrame._NAMEMAP) or cid)
 
         if nick:

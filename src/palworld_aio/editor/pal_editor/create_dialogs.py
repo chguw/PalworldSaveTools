@@ -467,7 +467,12 @@ class PalCreateDialog(QDialog):
         self._show_standard_chk.setChecked(True)
         self._show_standard_chk.toggled.connect(self._filter_pal_list)
         filter_layout.addWidget(self._show_standard_chk)
+        self._show_predator_chk = ToggleCheckBtn(t('edit_pals.show_predator') if t else 'Predator')
+        self._show_predator_chk.setChecked(True)
+        self._show_predator_chk.toggled.connect(self._filter_pal_list)
+        filter_layout.addWidget(self._show_predator_chk)
         self._show_boss_chk = ToggleCheckBtn(t('edit_pals.show_boss') if t else 'Boss')
+        self._show_boss_chk.setChecked(True)
         self._show_boss_chk.toggled.connect(self._filter_pal_list)
         filter_layout.addWidget(self._show_boss_chk)
         filter_layout.addStretch()
@@ -569,45 +574,20 @@ class PalCreateDialog(QDialog):
     def _filter_pal_list(self):
         search_text = self._search_edit.text().lower() if hasattr(self, '_search_edit') else ''
         show_standard = self._show_standard_chk.isChecked() if hasattr(self, '_show_standard_chk') else True
+        show_predator = self._show_predator_chk.isChecked() if hasattr(self, '_show_predator_chk') else False
         show_boss = self._show_boss_chk.isChecked() if hasattr(self, '_show_boss_chk') else False
         self.pal_list.clear()
         for asset, name in sorted(PalFrame._NAMEMAP.items(), key=lambda kv: (kv[1], kv[0])):
             asset_lower = asset.lower()
-            if any((asset_lower.startswith(p) for p in ('summon_', 'quest_', 'raid_', 'predator_', 'police_'))):
-                continue
-            if 'worldtreedragon' in asset_lower:
-                continue
-            if 'oilrig' in asset_lower:
-                continue
-            if 'tower' in asset_lower:
-                continue
-            if '_bossrush' in asset_lower:
-                continue
-            if asset_lower.startswith('gym_') and (not asset_lower.endswith('_otomo')):
-                continue
-            otomo_key = asset_lower + '_otomo'
-            if otomo_key in PalFrame._NAMEMAP:
-                continue
-            boss_otomo_key = 'boss_' + asset_lower + '_otomo'
-            if boss_otomo_key in PalFrame._NAMEMAP:
-                continue
-            base_id = asset_lower
-            for prefix in ('boss_', 'gym_'):
-                if base_id.startswith(prefix):
-                    base_id = base_id[len(prefix):]
-            base_id = re.sub('_\\d+$', '', base_id)
-            base_id = re.sub('_avatar|_servant|_otomo', '', base_id)
-            zukan = PalFrame._PAL_ZUKAN.get(base_id, -99)
-            if zukan == -99:
-                pass
-            elif zukan < 0 and 'Yakushima' not in asset and not base_id.startswith('yakushima'):
-                continue
             if search_text and search_text not in name.lower() and (search_text not in asset.lower()):
                 continue
-            is_variant = any((asset.upper().startswith(p) for p in _data._BOSS_PREFIXES))
-            if is_variant and not show_boss:
+            is_predator = asset.upper().startswith('PREDATOR_')
+            is_boss = any((asset.upper().startswith(p) for p in _data._BOSS_PREFIXES)) and not is_predator
+            if is_predator and not show_predator:
                 continue
-            if (not is_variant) and not show_standard:
+            if is_boss and not show_boss:
+                continue
+            if (not is_predator and not is_boss) and not show_standard:
                 continue
             li = QListWidgetItem(name)
             li.setData(Qt.UserRole, asset)
@@ -624,10 +604,13 @@ class PalCreateDialog(QDialog):
                 tip += f'<br><br>{html_desc}'
             li.setToolTip(tip)
             li.setSizeHint(QSize(80, 80))
-            if is_variant:
+            if is_boss:
                 badge = _icons._get_boss_alpha_pixmap(14)
                 if badge and (not badge.isNull()):
                     li.setData(Qt.UserRole + 1, True)
+            if is_predator:
+                li.setData(Qt.UserRole + 1, True)
+                li.setData(Qt.UserRole + 3, True)
             elems = self._pal_elements_cache.get(asset.lower(), {})
             if elems:
                 li.setData(Qt.UserRole + 2, list(elems.keys())[:2])

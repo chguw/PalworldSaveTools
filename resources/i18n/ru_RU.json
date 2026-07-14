@@ -1770,5 +1770,19 @@
     "fix_host_save.player_file_missing": "Файл сохранения игрока не найден для {guid}",
     "character_transfer.player_file_missing": "Файл сохранения игрока не найден для {guid}",
     "inventory.effigy_add_qty_prompt": "Сколько изображений каждого типа добавить?",
-    "inventory.effigy_add_qty_title": "Количество чучел"
+    "inventory.effigy_add_qty_title": "Количество чучел",
+    "edit_pals.show_predator": "Хищник",
+    "edit_pals.tip.gender": "Переключить пол",
+    "edit_pals.tip.predator": "Переключить вариант хищника",
+    "edit_pals.tip.boss": "Переключить босса (альфа)",
+    "edit_pals.tip.lucky": "Переключить счастливый (блестящий)",
+    "edit_pals.tip.awake": "Переключить пробуждение",
+    "edit_pals.tip.cheat": "Переключить режим читов",
+    "edit_pals.tip.max_stats": "Максимум всех характеристик",
+    "edit_pals.tip.dna": "Переключить импортированный персонаж",
+    "edit_pals.tip.fav": "Установить любимый уровень",
+    "edit_pals.max_all_confirm_cheat": "Максимальные все характеристики (IV: 255, души: 255, ранг: 255, уровень: 255) для всех друзей в группе и на всех страницах палбокса?",
+    "base_inventory.max_all_confirm_cheat": "Максимальные все характеристики (IV: 255, души: 255, ранг: 255, уровень: 255) для всех рабочих приятелей на этой базе?",
+    "func_manager.max_all_pals.confirm_cheat": "Это максимально увеличит все характеристики (уровень 255, IV 255, души 255, ранг 255) для ВСЕХ друзей в сохранении. Продолжать?",
+    "func_manager.max_all_pals.cheat_ask": "Используете крайние колпачки 255?"
 }

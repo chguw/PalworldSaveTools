@@ -2183,51 +2183,15 @@ def _merge_or_add_items(inventory, container_type, item_id, quantity):
     return inventory.add_item(container_type, item_id, remaining)
 def _consolidate_container_slots(container, container_type, singleton_set):
     slots = container.slots
-    merged = {}
-    singletons = []
-    preserved = []
-    for s in slots:
+    sorted_slots = sorted(slots, key=lambda x: (ItemData.get_item_category(x.get('item_id', '')), ItemData.get_item_by_asset(x.get('item_id', '')).get('name', x.get('item_id', ''))))
+    new_slots = []
+    for idx, s in enumerate(sorted_slots):
         item_id = s.get('item_id', '')
         if not item_id:
             continue
-        qty = s.get('stack_count', 1)
-        item_info = ItemData.get_item_by_asset(item_id)
-        if item_info.get('type_a') in singleton_set:
-            singletons.append(s)
-        elif item_id == 'Money' and qty > 9999:
-            preserved.append(s)
-        else:
-            merged[item_id] = merged.get(item_id, 0) + qty
-    new_slots = []
-    idx = 0
-    for s in singletons:
-        item_id = s.get('item_id', '')
         item_info = ItemData.get_item_by_asset(item_id)
         new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': s.get('stack_count', 1), 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': s.get('raw_data')})
-        idx += 1
-    for item_id, total_qty in merged.items():
-        item_info = ItemData.get_item_by_asset(item_id)
-        while total_qty > 0:
-            stack = min(total_qty, 9999)
-            new_slots.append({'slot_index': idx, 'item_id': item_id, 'item_name': item_info.get('name', item_id), 'icon_path': item_info.get('icon', ''), 'stack_count': stack, 'category': ItemData.get_item_category(item_id), 'container_type': container_type, 'raw_data': None})
-            idx += 1
-            total_qty -= stack
     container.update_slots(new_slots)
-    if preserved:
-        sc = container._standardized_container
-        from palworld_aio.inventory.standardized_container import ContainerSlot
-        for s in preserved:
-            item_id = s.get('item_id', '')
-            qty = s.get('stack_count', 1)
-            empty_idx = sc._find_empty_slot()
-            if empty_idx is not None:
-                while len(sc.slots) <= empty_idx:
-                    sc.slots.append(ContainerSlot(slot_index=len(sc.slots)))
-                slot = sc.slots[empty_idx]
-                slot.item_id = item_id
-                slot.count = qty
-                slot.dynamic_id = None
-                slot.raw_data = slot._create_raw_data()
 class InventoryLoadoutDialog(QDialog):
     def __init__(self, parent, get_current_items_fn, apply_loadout_fn, title=None, get_extra_fn=None, loadouts_path=None, key_prefix='inventory'):
         super().__init__(parent)

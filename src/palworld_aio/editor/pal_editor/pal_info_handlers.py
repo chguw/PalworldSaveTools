@@ -15,7 +15,7 @@ from palsav import json_tools
 from . import data as _data
 from . import icons as _icons
 from .data import _ensure_passive_data, _ensure_friendship_thresholds, _ensure_skill_data
-from .pal_ops import _get_effective_work_suitabilities, _set_work_suitability, _learn_all_skills_raw, _toggle_boss_raw, _toggle_lucky_raw
+from .pal_ops import _get_effective_work_suitabilities, _set_work_suitability, _learn_all_skills_raw, _toggle_boss_raw, _toggle_lucky_raw, _toggle_predator_raw
 from .widgets import PassiveEffectOverlay
 from .legacy_frame import PalFrame
 from .icons import _strip_prefix_label
@@ -53,8 +53,9 @@ class PalInfoHandlerMixin:
                 if hasattr(obj, '_skill_slot_idx'):
                     self._set_active_skill(obj._skill_slot_idx, '')
                     return True
-                if hasattr(obj, '_passive_index'):
-                    self._set_passive_skill(obj._passive_index, '')
+                if hasattr(obj, '_pal_info') and obj in self.passive_cards:
+                    pidx = self.passive_cards.index(obj) + self._ps_page * 4
+                    self._set_passive_skill(pidx, '')
                     return True
         if event.type() == QEvent.Type.Enter and hasattr(obj, '_stat_tip_text') and hasattr(self, '_stat_tip'):
             self._stat_tip.setText(obj._stat_tip_text)
@@ -66,6 +67,15 @@ class PalInfoHandlerMixin:
             self._stat_tip.move(g)
             self._stat_tip.show()
             return True
+        if event.type() == QEvent.Type.Wheel:
+            if obj is self.active_skills_frame and hasattr(self, '_as_page_lbl') and self._as_page_lbl.isVisible():
+                delta = -1 if event.angleDelta().y() > 0 else 1
+                self._page_as(delta)
+                return True
+            if obj is self.passive_container and hasattr(self, '_ps_page_lbl') and self._ps_page_lbl.isVisible():
+                delta = -1 if event.angleDelta().y() > 0 else 1
+                self._page_ps(delta)
+                return True
         if event.type() == QEvent.Type.Leave:
             if hasattr(self, '_stat_tip') and self._stat_tip.isVisible():
                 self._stat_tip.hide()
@@ -137,11 +147,12 @@ class PalInfoHandlerMixin:
             cur = int(cur)
         except (TypeError, ValueError):
             cur = 1
+        max_lv = 255 if PalFrame._cheat_mode else 80
         dlg = QInputDialog(self)
         dlg.setWindowTitle('Set Level')
-        dlg.setLabelText('Level (1-80):')
+        dlg.setLabelText(f'Level (1-{max_lv}):')
         dlg.setInputMode(QInputDialog.IntInput)
-        dlg.setIntRange(1, 80)
+        dlg.setIntRange(1, max_lv)
         dlg.setIntValue(cur)
         dlg.setStyleSheet(INPUT_DIALOG_STYLE)
         if dlg.exec() == QDialog.Accepted:
@@ -246,16 +257,18 @@ class PalInfoHandlerMixin:
             raw['Hp'] = {'struct_type': 'FixedPoint64', 'struct_id': '00000000-0000-0000-0000-000000000000', 'id': None, 'value': {'Value': {'id': None, 'value': int(new_max_hp), 'type': 'Int64Property'}}, 'type': 'StructProperty'}
             raw['MaxHP'] = raw['Hp']
         self._refresh()
-
     def _on_talent_click(self, lbl):
         if not self._raw:
             return
-        mapping = {self.ivs_hp_lbl: ('Talent_HP', 0, 100), self.ivs_atk_lbl: ('Talent_Shot', 0, 100), self.ivs_def_lbl: ('Talent_Defense', 0, 100)}
-        key, lo, hi = mapping.get(lbl, ('Talent_HP', 0, 100))
+        cap = 255 if PalFrame._cheat_mode else 100
+        mapping = {self.ivs_hp_lbl: ('Talent_HP', 0, cap),
+                   self.ivs_atk_lbl: ('Talent_Shot', 0, cap),
+                   self.ivs_def_lbl: ('Talent_Defense', 0, cap)}
+        key, lo, hi = mapping.get(lbl, ('Talent_HP', 0, cap))
         cur = int(extract_value(self._raw, key, 0))
         dlg = QInputDialog(self)
         dlg.setWindowTitle('Set Talent')
-        dlg.setLabelText(f'{key} (0-100):')
+        dlg.setLabelText(f'{key} (0-{cap}):')
         dlg.setInputMode(QInputDialog.IntInput)
         dlg.setIntRange(lo, hi)
         dlg.setIntValue(cur)
@@ -263,16 +276,16 @@ class PalInfoHandlerMixin:
         if dlg.exec() == QDialog.Accepted:
             self._raw[key] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': dlg.intValue()}}
             self._recalc_hp()
-
     def _on_soul_click(self, lbl):
         if not self._raw:
             return
-        mapping = {self.soul_hp_lbl: ('Rank_HP', 0, 20), self.soul_atk_lbl: ('Rank_Attack', 0, 20), self.soul_def_lbl: ('Rank_Defence', 0, 20), self.soul_craft_lbl: ('Rank_CraftSpeed', 0, 20)}
-        key, lo, hi = mapping.get(lbl, ('Rank_HP', 0, 20))
+        cap = 255 if PalFrame._cheat_mode else 20
+        mapping = {self.soul_hp_lbl: ('Rank_HP', 0, cap), self.soul_atk_lbl: ('Rank_Attack', 0, cap), self.soul_def_lbl: ('Rank_Defence', 0, cap), self.soul_craft_lbl: ('Rank_CraftSpeed', 0, cap)}
+        key, lo, hi = mapping.get(lbl, ('Rank_HP', 0, cap))
         cur = int(extract_value(self._raw, key, 0))
         dlg = QInputDialog(self)
         dlg.setWindowTitle('Set Soul')
-        dlg.setLabelText(f'{key} (0-20):')
+        dlg.setLabelText(f'{key} (0-{cap}):')
         dlg.setInputMode(QInputDialog.IntInput)
         dlg.setIntRange(lo, hi)
         dlg.setIntValue(cur)
@@ -299,24 +312,25 @@ class PalInfoHandlerMixin:
         except Exception:
             cur_val = ''
         skip_items = set()
-        try:
-            if is_active:
-                ew = self._raw.get('EquipWaza', {})
-                ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
-                for v in ew_list:
-                    if v:
-                        key = v.split('::')[-1].lower() if '::' in v else v.lower()
-                        skip_items.add(key)
-            else:
-                ps = self._raw.get('PassiveSkillList', {})
-                ps_list = ps.get('value', {}).get('values', []) if isinstance(ps, dict) else ps if isinstance(ps, list) else []
-                for v in ps_list:
-                    clean = v['value'] if isinstance(v, dict) else v
-                    if clean:
-                        skip_items.add(clean.lower())
-        except Exception:
-            pass
-        result = picker.pick(skill_map, is_active, pos=pos, current_value=cur_val if isinstance(cur_val, str) else '', skip_items=skip_items, pal_asset=pal_asset)
+        if not PalFrame._cheat_mode:
+            try:
+                if is_active:
+                    ew = self._raw.get('EquipWaza', {})
+                    ew_list = ew.get('value', {}).get('values', []) if isinstance(ew, dict) else ew if isinstance(ew, list) else []
+                    for v in ew_list:
+                        if v:
+                            key = v.split('::')[-1].lower() if '::' in v else v.lower()
+                            skip_items.add(key)
+                else:
+                    ps = self._raw.get('PassiveSkillList', {})
+                    ps_list = ps.get('value', {}).get('values', []) if isinstance(ps, dict) else ps if isinstance(ps, list) else []
+                    for v in ps_list:
+                        clean = v['value'] if isinstance(v, dict) else v
+                        if clean:
+                            skip_items.add(clean.lower())
+            except Exception:
+                pass
+        result = picker.pick(skill_map, is_active, pos=pos, current_value=cur_val if isinstance(cur_val, str) else '', skip_items=skip_items, pal_asset=pal_asset, use_exclusions=not PalFrame._cheat_mode)
         if result is None:
             return
         if result == '':
@@ -338,6 +352,7 @@ class PalInfoHandlerMixin:
     def _set_active_skill(self, slot_idx, asset):
         if not self._raw:
             return
+        as_cap = 255 if PalFrame._cheat_mode else 3
         ew_data = self._raw.get('EquipWaza', {})
         cur = ew_data.get('value', {}).get('values', []) if isinstance(ew_data, dict) else ew_data if isinstance(ew_data, list) else []
         if not isinstance(cur, list):
@@ -347,13 +362,15 @@ class PalInfoHandlerMixin:
         if asset and '::' not in asset:
             asset = f'EPalWazaID::{asset}'
         cur[slot_idx] = asset
-        cur = [s for s in cur if s]
-        self._raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': cur[:3]}, 'type': 'ArrayProperty'}
+        if not PalFrame._cheat_mode:
+            cur = [s for s in cur if s]
+        self._raw['EquipWaza'] = {'array_type': 'EnumProperty', 'id': None, 'value': {'values': cur[:as_cap]}, 'type': 'ArrayProperty'}
         self._refresh()
 
     def _set_passive_skill(self, slot_idx, asset):
         if not self._raw:
             return
+        ps_cap = 255 if PalFrame._cheat_mode else 4
         ps_data = self._raw.get('PassiveSkillList', {})
         cur = ps_data.get('value', {}).get('values', []) if isinstance(ps_data, dict) else ps_data if isinstance(ps_data, list) else []
         if not isinstance(cur, list):
@@ -361,7 +378,7 @@ class PalInfoHandlerMixin:
         while len(cur) <= slot_idx:
             cur.append('')
         cur[slot_idx] = asset
-        self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': cur[:4]}, 'type': 'ArrayProperty'}
+        self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': cur[:ps_cap]}, 'type': 'ArrayProperty'}
         self._refresh()
 
     def _get_current_passive_list(self):
@@ -502,7 +519,8 @@ class PalInfoHandlerMixin:
             if not self._raw:
                 show_warning(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_no_pal'))
                 return
-            self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': passive_list[:4]}, 'type': 'ArrayProperty'}
+            ps_cap = 255 if PalFrame._cheat_mode else 4
+            self._raw['PassiveSkillList'] = {'array_type': 'NameProperty', 'id': None, 'value': {'values': passive_list[:ps_cap]}, 'type': 'ArrayProperty'}
             self._refresh()
             show_information(dlg, t('edit_pals.passive_loadouts'), t('edit_pals.loadouts_applied', name=name))
         def _do_delete():
@@ -612,6 +630,20 @@ class PalInfoHandlerMixin:
         _learn_all_skills_raw(self._raw)
         self._refresh()
 
+    def _on_predator_toggle(self):
+        if not self._raw:
+            return
+        cid = extract_value(self._raw, 'CharacterID', '')
+        can_enable, can_disable = _data._pal_can_toggle_predator(cid)
+        is_pred = cid.upper().startswith('PREDATOR_')
+        if (is_pred and not can_disable) or (not is_pred and not can_enable):
+            self.info_predator_btn.blockSignals(True)
+            self.info_predator_btn.setChecked(is_pred)
+            self.info_predator_btn.blockSignals(False)
+            return
+        _toggle_predator_raw(self._raw, self.info_predator_btn.isChecked())
+        self._recalc_hp()
+
     def _on_boss_toggle(self):
         if not self._raw:
             return
@@ -654,6 +686,20 @@ class PalInfoHandlerMixin:
         self.info_boss_btn.blockSignals(False)
         self._recalc_hp()
 
+    def _page_as(self, delta):
+        self._as_page = max(0, self._as_page + delta)
+        self._refresh()
+
+    def _page_ps(self, delta):
+        self._ps_page = max(0, self._ps_page + delta)
+        self._refresh()
+
+    def _on_cheat_toggle(self):
+        PalFrame._cheat_mode = self.info_cheat_btn.isChecked()
+        self._as_page = 0
+        self._ps_page = 0
+        self._refresh()
+
     def _on_awake_toggle(self):
         if not self._raw:
             return
@@ -683,14 +729,18 @@ class PalInfoHandlerMixin:
     def _on_max_click(self):
         if not self._raw:
             return
-        self._raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-        self._raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-        self._raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-        self._raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-        self._raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-        self._raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-        self._raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-        self._raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+        cap = 255 if PalFrame._cheat_mode else 100
+        soul_cap = 255 if PalFrame._cheat_mode else 20
+        lv_cap = 255 if PalFrame._cheat_mode else 80
+        rank_cap = 255 if PalFrame._cheat_mode else 5
+        self._raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+        self._raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+        self._raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+        self._raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+        self._raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+        self._raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+        self._raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+        self._raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': rank_cap}}
         self._raw['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
         self._raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
         cid = extract_value(self._raw, 'CharacterID', '')
@@ -699,7 +749,7 @@ class PalInfoHandlerMixin:
         for k, v in ws_base.items():
             if v > 0:
                 _set_work_suitability(self._raw, k, 10)
-        self._set_level(80)
+        self._set_level(lv_cap)
 
     def _refresh(self):
         if self.last_clicked_data:
@@ -755,5 +805,6 @@ class PalInfoHandlerMixin:
             self._c_icon.setToolTip(t('edit_pals.toggle_skills_hint'))
         if hasattr(self, '_as_c_icon'):
             self._as_c_icon.setToolTip(t('edit_pals.toggle_skills_hint'))
+
         if hasattr(self, '_l_icon'):
             self._l_icon.setToolTip(t('edit_pals.loadouts_hint'))

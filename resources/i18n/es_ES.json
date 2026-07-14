@@ -1766,5 +1766,19 @@
     "fix_host_save.player_file_missing": "No se encontró el archivo guardado del reproductor para {guid}",
     "character_transfer.player_file_missing": "No se encontró el archivo guardado del reproductor para {guid}",
     "inventory.effigy_add_qty_prompt": "¿Cuántas de cada tipo de efigie agregar?",
-    "inventory.effigy_add_qty_title": "Cantidad de efigie"
+    "inventory.effigy_add_qty_title": "Cantidad de efigie",
+    "edit_pals.show_predator": "Depredador",
+    "edit_pals.tip.gender": "Alternar género",
+    "edit_pals.tip.predator": "Alternar variante de depredador",
+    "edit_pals.tip.boss": "Alternar jefe (alfa)",
+    "edit_pals.tip.lucky": "Alternar suerte (brillante)",
+    "edit_pals.tip.awake": "Alternar despertar",
+    "edit_pals.tip.cheat": "Alternar modo trampa",
+    "edit_pals.tip.max_stats": "Max todas las estadísticas",
+    "edit_pals.tip.dna": "Alternar carácter importado",
+    "edit_pals.tip.fav": "Establecer nivel favorito",
+    "edit_pals.max_all_confirm_cheat": "¿Maximizar todas las estadísticas (IV: 255, almas: 255, rango: 255, nivel: 255) para todos los amigos del grupo y todas las páginas de palbox?",
+    "base_inventory.max_all_confirm_cheat": "¿Maximizar todas las estadísticas (IV: 255, almas: 255, rango: 255, nivel: 255) para todos los compañeros que trabajan en esta base?",
+    "func_manager.max_all_pals.confirm_cheat": "Esto maximizará todas las estadísticas (nivel 255, IVs 255, almas 255, rango 255) para TODOS los amigos en el guardado. ¿Continuar?",
+    "func_manager.max_all_pals.cheat_ask": "¿Utiliza mayúsculas extremas de 255?"
 }

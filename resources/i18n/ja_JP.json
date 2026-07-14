@@ -1772,5 +1772,19 @@
     "fix_host_save.player_file_missing": "{guid} のプレーヤー保存ファイルが見つかりません",
     "character_transfer.player_file_missing": "{guid} のプレーヤー保存ファイルが見つかりません",
     "inventory.effigy_add_qty_prompt": "各タイプの人形をいくつ追加しますか?",
-    "inventory.effigy_add_qty_title": "人形の数量"
+    "inventory.effigy_add_qty_title": "人形の数量",
+    "edit_pals.show_predator": "プレデター",
+    "edit_pals.tip.gender": "性別の切り替え",
+    "edit_pals.tip.predator": "プレデターのバリエーションを切り替えます",
+    "edit_pals.tip.boss": "トグルボス (アルファ)",
+    "edit_pals.tip.lucky": "ラッキー（光沢）を切り替えます",
+    "edit_pals.tip.awake": "覚醒の切り替え",
+    "edit_pals.tip.cheat": "チートモードを切り替える",
+    "edit_pals.tip.max_stats": "すべてのステータスを最大化する",
+    "edit_pals.tip.dna": "インポートされた文字を切り替えます",
+    "edit_pals.tip.fav": "好みのレベルを設定する",
+    "edit_pals.max_all_confirm_cheat": "パーティーとすべてのパルボックスページのすべてのパルのすべてのステータス（IV：255、ソウル：255、ランク：255、レベル：255）を最大にしますか？",
+    "base_inventory.max_all_confirm_cheat": "この基地内のすべての作業仲間のすべてのステータス (個体値: 255、ソウル: 255、ランク: 255、レベル: 255) を最大にしますか?",
+    "func_manager.max_all_pals.confirm_cheat": "これにより、セーブ内のすべての仲間のすべてのステータス (レベル 255、個体値 255、ソウル 255、ランク 255) が最大になります。続く？",
+    "func_manager.max_all_pals.cheat_ask": "エクストリーム 255 キャップを使用しますか?"
 }

@@ -93,6 +93,7 @@ class PalInfoDisplayMixin:
             talent_hp = extract_value(raw, 'Talent_HP', 0)
             rank_hp = extract_value(raw, 'Rank_HP', 0)
             is_boss = cid.upper().startswith('BOSS_')
+            is_predator = cid.upper().startswith('PREDATOR_')
             is_lucky = extract_value(raw, 'IsRarePal', False)
             is_imported = extract_value(raw, 'bImportedCharacter', False)
             fav_idx = extract_value(raw, 'FavoriteIndex', 0)
@@ -265,6 +266,7 @@ class PalInfoDisplayMixin:
                 self.dna_overlay.show()
             else:
                 self.dna_overlay.hide()
+            self.predator_overlay.setVisible(is_predator)
             if is_lucky:
                 sp = _get_boss_shiny_pixmap(16)
                 if sp:
@@ -292,6 +294,12 @@ class PalInfoDisplayMixin:
             else:
                 self.lock_overlay.hide()
             self.portrait_ring.set_awakened(bool(is_awakening))
+            is_predator = cid.upper().startswith('PREDATOR_')
+            self.info_predator_btn.blockSignals(True)
+            self.info_predator_btn.setChecked(is_predator)
+            self.info_predator_btn.blockSignals(False)
+            can_enable_pred, can_disable_pred = _data._pal_can_toggle_predator(cid)
+            self.info_predator_btn.setEnabled(can_disable_pred if is_predator else can_enable_pred)
             self.info_boss_btn.blockSignals(True)
             self.info_boss_btn.setChecked(is_boss)
             self.info_boss_btn.blockSignals(False)
@@ -371,7 +379,13 @@ class PalInfoDisplayMixin:
                 item = self.active_skills_list.takeAt(0)
                 if item and item.widget():
                     item.widget().deleteLater()
-            for i in range(3):
+            as_total = 255 if PalFrame._cheat_mode else 3
+            as_pp = 3
+            as_pages = max(1, (as_total + as_pp - 1) // as_pp)
+            if self._as_page >= as_pages:
+                self._as_page = as_pages - 1
+            as_start = self._as_page * as_pp
+            for i in range(as_start, min(as_start + as_pp, as_total)):
                 e = e_list[i] if i < len(e_list) else ''
                 if isinstance(e, dict):
                     e = e.get('value', '')
@@ -432,8 +446,21 @@ class PalInfoDisplayMixin:
                         tip_parts.append(desc)
                     slot.setToolTip('<br>'.join(tip_parts))
                 self.active_skills_list.addWidget(slot)
+            if hasattr(self, '_as_page_lbl'):
+                self._as_page_lbl.setText(f'{self._as_page + 1}/{as_pages}')
+                self._as_prev_btn.setEnabled(self._as_page > 0)
+                self._as_next_btn.setEnabled(self._as_page < as_pages - 1)
+                self._as_prev_btn.setVisible(as_pages > 1)
+                self._as_page_lbl.setVisible(as_pages > 1)
+                self._as_next_btn.setVisible(as_pages > 1)
             _ensure_passive_data()
-            for i in range(4):
+            ps_total = 255 if PalFrame._cheat_mode else 4
+            ps_pp = 4
+            ps_pages = max(1, (ps_total + ps_pp - 1) // ps_pp)
+            if self._ps_page >= ps_pages:
+                self._ps_page = ps_pages - 1
+            ps_start = self._ps_page * ps_pp
+            for i in range(ps_start, min(ps_start + ps_pp, ps_total)):
                 display_name = '--'
                 tc = 'rgba(255,255,255,0.3)'
                 bg = 'rgba(255,255,255,0.03)'
@@ -456,28 +483,29 @@ class PalInfoDisplayMixin:
                         anim_mode = 'world_tree'
                     elif rank >= 4:
                         anim_mode = 'legend'
-                self.passive_slots[i].setText(display_name)
-                self.passive_slots[i].setStyleSheet(f'font-size: 10px; font-weight: 700; color: {tc}; background: transparent; border: none;')
-                parent_frame = self.passive_slots[i].parentWidget()
+                si = i - ps_start
+                self.passive_slots[si].setText(display_name)
+                self.passive_slots[si].setStyleSheet(f'font-size: 10px; font-weight: 700; color: {tc}; background: transparent; border: none;')
+                parent_frame = self.passive_slots[si].parentWidget()
                 if parent_frame and parent_frame.objectName() == 'passiveCard':
                     parent_frame.setStyleSheet(f'QFrame#passiveCard {{ background: {bg}; border: 1.5px solid {bd}; border-radius: 4px; padding: 3px 6px; }}')
-                if i < len(self.passive_cards):
-                    self._set_passive_overlay(i, anim_mode)
+                if si < len(self.passive_cards):
+                    self._set_passive_overlay(si, anim_mode)
                 parent_frame.setStyleSheet(parent_frame.styleSheet() + '\nQToolTip { background: rgba(18,20,24,0.98); color: #E2E8F0; border: 1px solid rgba(125,211,252,0.25); border-radius: 6px; padding: 6px 10px; font-size: 11px; }')
                 if p_clean:
                     p_info = _data._PASSIVE_DATA.get(p_clean, {}) if isinstance(_data._PASSIVE_DATA, dict) else {}
                     icon_path = p_info.get('icon', '') if isinstance(p_info, dict) else ''
-                    if icon_path and i < len(self.passive_rank_icons):
+                    if icon_path and si < len(self.passive_rank_icons):
                         base_dir = constants.get_base_path()
                         full_path = resource_path(base_dir, 'game_data', icon_path.lstrip('/'))
                         pix = _icons._get_cached_pixmap(full_path, 14)
                         if pix:
-                            self.passive_rank_icons[i].setPixmap(pix)
-                            self.passive_rank_icons[i].show()
+                            self.passive_rank_icons[si].setPixmap(pix)
+                            self.passive_rank_icons[si].show()
                         else:
-                            self.passive_rank_icons[i].hide()
-                    elif i < len(self.passive_rank_icons):
-                        self.passive_rank_icons[i].hide()
+                            self.passive_rank_icons[si].hide()
+                    elif si < len(self.passive_rank_icons):
+                        self.passive_rank_icons[si].hide()
                     p_desc = p_info.get('description', '')
                     tip_parts = [f'<b style="color:{tc}">{display_name}</b>']
                     rank_labels = {1: 'Common', 2: 'Rare', 3: 'Rare', 4: 'Epic', 5: 'Epic', -99: 'Negative'}
@@ -491,8 +519,15 @@ class PalInfoDisplayMixin:
                         tip_parts.append('')
                         tip_parts.append(p_desc)
                     parent_frame.setToolTip('<br>'.join(tip_parts))
-                elif i < len(self.passive_rank_icons):
-                    self.passive_rank_icons[i].hide()
+                elif si < len(self.passive_rank_icons):
+                    self.passive_rank_icons[si].hide()
+            if hasattr(self, '_ps_page_lbl'):
+                self._ps_page_lbl.setText(f'{self._ps_page + 1}/{ps_pages}')
+                self._ps_prev_btn.setEnabled(self._ps_page > 0)
+                self._ps_next_btn.setEnabled(self._ps_page < ps_pages - 1)
+                self._ps_prev_btn.setVisible(ps_pages > 1)
+                self._ps_page_lbl.setVisible(ps_pages > 1)
+                self._ps_next_btn.setVisible(ps_pages > 1)
             pskill_name = base.get('partner_skill', '') if base else ''
             pal_desc = base.get('description', '') if base else ''
             self.partner_name_lbl.setText(pskill_name or pal_name)

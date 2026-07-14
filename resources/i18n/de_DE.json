@@ -1796,5 +1796,19 @@
     "fix_host_save.player_file_missing": "Player-Speicherdatei für {guid} nicht gefunden",
     "character_transfer.player_file_missing": "Player-Speicherdatei für {guid} nicht gefunden",
     "inventory.effigy_add_qty_prompt": "Wie viele von jedem Bildnistyp müssen hinzugefügt werden?",
-    "inventory.effigy_add_qty_title": "Anzahl der Bildnisse"
+    "inventory.effigy_add_qty_title": "Anzahl der Bildnisse",
+    "edit_pals.show_predator": "Raubtier",
+    "edit_pals.tip.gender": "Geschlecht umschalten",
+    "edit_pals.tip.predator": "Raubtiervariante umschalten",
+    "edit_pals.tip.boss": "Boss umschalten (Alpha)",
+    "edit_pals.tip.lucky": "Glück umschalten (glänzend)",
+    "edit_pals.tip.awake": "Erwachen umschalten",
+    "edit_pals.tip.cheat": "Cheat-Modus umschalten",
+    "edit_pals.tip.max_stats": "Maximieren Sie alle Statistiken",
+    "edit_pals.tip.dna": "Importierten Charakter umschalten",
+    "edit_pals.tip.fav": "Lieblingsstufe festlegen",
+    "edit_pals.max_all_confirm_cheat": "Alle Statistiken (IVs: 255, Seelen: 255, Rang: 255, Level: 255) für alle Freunde in der Gruppe und alle Palbox-Seiten maximieren?",
+    "base_inventory.max_all_confirm_cheat": "Alle Statistiken (IVs: 255, Seelen: 255, Rang: 255, Level: 255) für alle Arbeitsfreunde in dieser Basis maximieren?",
+    "func_manager.max_all_pals.confirm_cheat": "Dadurch werden alle Statistiken (Level 255, IVs 255, Seelen 255, Rang 255) für ALLE Freunde im Speicher maximiert. Weitermachen?",
+    "func_manager.max_all_pals.cheat_ask": "Extreme 255 Kapseln verwenden?"
 }

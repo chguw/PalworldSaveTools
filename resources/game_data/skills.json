@@ -53543,7 +53543,7 @@
             "HitInterval": null
         },
         {
-            "name": "BlueThunderHorse_PartnerSkill",
+            "name": "Plasma Dash",
             "asset": "BlueThunderHorse_PartnerSkill",
             "element": "Electricity",
             "power": 30,
@@ -54468,7 +54468,7 @@
             "HitInterval": 1.0
         },
         {
-            "name": "GrassGolem_Dark_PartnerSkill",
+            "name": "Corruption Laser",
             "asset": "GrassGolem_Dark_PartnerSkill",
             "element": "Dark",
             "power": 600,
@@ -54493,7 +54493,7 @@
             "HitInterval": null
         },
         {
-            "name": "GrassGolem_PartnerSkill",
+            "name": "Forest Laser",
             "asset": "GrassGolem_PartnerSkill",
             "element": "Leaf",
             "power": 600,
@@ -55093,7 +55093,7 @@
             "HitInterval": 0.25
         },
         {
-            "name": "PoseidonOrca_PartnerSkill",
+            "name": "Sentinel of the Great Sea",
             "asset": "PoseidonOrca_PartnerSkill",
             "element": "Water",
             "power": 60,
@@ -55343,7 +55343,7 @@
             "HitInterval": null
         },
         {
-            "name": "Railbolt",
+            "name": "Thunder Rail",
             "asset": "Railbolt",
             "element": "Electricity",
             "power": 600,
@@ -59968,7 +59968,7 @@
             "HitInterval": null
         },
         {
-            "name": "Unique_OctopursGirl_InkJet",
+            "name": "Smoke Jet",
             "asset": "Unique_OctopursGirl_InkJet",
             "element": "Water",
             "power": 120,
@@ -60493,7 +60493,7 @@
             "HitInterval": null
         },
         {
-            "name": "Unique_ScorpionMan_Uppercut",
+            "name": "Upper Smash",
             "asset": "Unique_ScorpionMan_Uppercut",
             "element": "Dark",
             "power": 350,

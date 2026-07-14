@@ -162,6 +162,25 @@ def _ensure_ui_icons_data():
         pass
     return _UI_ICONS_DATA
 
+_PREDATOR_SET = None
+def _ensure_predator_set():
+    global _PREDATOR_SET
+    if _PREDATOR_SET is not None:
+        return _PREDATOR_SET
+    _PREDATOR_SET = set()
+    try:
+        base_dir = constants.get_base_path()
+        path = resource_path(base_dir, 'game_data', 'characters.json')
+        data = json_tools.load(path)
+        for p in data.get('pals', []):
+            a = p.get('asset', '').lower()
+            if a.startswith('predator_'):
+                base = a[9:]
+                _PREDATOR_SET.add(base)
+    except Exception:
+        pass
+    return _PREDATOR_SET
+
 def _pal_can_toggle_boss(cid: str) -> tuple[bool, bool]:
     cache = _load_pal_base_data()
     cid_lower = cid.lower()
@@ -174,6 +193,17 @@ def _pal_can_toggle_boss(cid: str) -> tuple[bool, bool]:
     has_base = bool(base) and base in cache
     has_boss = boss_key in cache
     return (has_boss, has_base)
+
+def _pal_can_toggle_predator(cid: str) -> tuple[bool, bool]:
+    cache = _load_pal_base_data()
+    cid_lower = cid.lower()
+    base = cid_lower
+    if base.startswith('predator_'):
+        base = base[9:]
+    pred_key = 'predator_' + base
+    has_base = bool(base) and base in cache
+    has_pred = pred_key in cache
+    return (has_pred, has_base)
 
 def _ensure_skill_data():
     global _SKILL_DATA

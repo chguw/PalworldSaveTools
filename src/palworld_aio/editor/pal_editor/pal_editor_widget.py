@@ -795,7 +795,12 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
         self._update_dashboard_stats()
         show_information(self, t('edit_pals.ctx.bulk_heal'), t('edit_pals.restore_all_success', count=count))
     def _max_all_pals(self):
-        reply = show_question(self, t('edit_pals.ctx.max_all_stats'), t('edit_pals.max_all_confirm'))
+        cheat = PalFrame._cheat_mode
+        cap = 255 if cheat else 100
+        soul_cap = 255 if cheat else 20
+        lv_cap = 255 if cheat else 80
+        msg = t('edit_pals.max_all_confirm_cheat') if cheat else t('edit_pals.max_all_confirm')
+        reply = show_question(self, t('edit_pals.ctx.max_all_stats'), msg)
         if not reply:
             return
         pals = list(self.party_pals.values())
@@ -811,22 +816,23 @@ class PalEditorWidget(QWidget, BulkOperationMixin):
                 continue
             cid_i = extract_value(tr, 'CharacterID', '')
             base_i = _data.get_pal_base_data(cid_i)
-            tr['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-            tr['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-            tr['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-            tr['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-            tr['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-            tr['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-            tr['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-            tr['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+            tr['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+            tr['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+            tr['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': cap}}
+            tr['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+            tr['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+            tr['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+            tr['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+            rank_cap = 255 if cheat else 5
+            tr['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': rank_cap}}
             tr['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
             tr['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
             ws_base = base_i.get('work_suitabilities', {}) if base_i else {}
             for k, v in ws_base.items():
                 if v > 0:
                     _set_work_suitability(tr, k, 10)
-            tr['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 80}}
-            exp_val = _data.PAL_EXP_TABLE.get('80', {}).get('PalTotalEXP', 0)
+            tr['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': lv_cap}}
+            exp_val = _data.PAL_EXP_TABLE.get(str(lv_cap), {}).get('PalTotalEXP', 0)
             tr['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp_val}
             count += 1
         for pi in pals:

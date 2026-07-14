@@ -9,6 +9,7 @@ from palworld_aio.utils import extract_value, format_character_key, json_tools, 
 from .icons import _strip_prefix_label
 
 class PalFrame(QFrame):
+    _cheat_mode = False
     _maps_loaded = False
     _NAMEMAP = {}
     _PASSMAP = {}

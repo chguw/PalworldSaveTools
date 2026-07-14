@@ -2139,24 +2139,30 @@ def restore_all_pals(parent=None):
     return count
 def _max_one_pal(raw):
     from palworld_aio.editor.pal_editor.data import get_pal_base_data, _ensure_friendship_thresholds
+    from palworld_aio.editor.pal_editor.legacy_frame import PalFrame
+    cheat = PalFrame._cheat_mode
+    iv_cap = 255 if cheat else 100
+    soul_cap = 255 if cheat else 20
+    lv_cap = 255 if cheat else 80
+    rank_cap = 255 if cheat else 5
     cid = extract_value(raw, 'CharacterID', '')
     base = get_pal_base_data(cid)
-    raw['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 80}}
+    raw['Level'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': lv_cap}}
     try:
         base_dir = constants.get_base_path()
         PAL_EXP_TABLE = json_tools.load(resource_path(base_dir, 'game_data', 'pal_exp_table.json'))
-        exp = PAL_EXP_TABLE['80']['PalTotalEXP']
+        exp = PAL_EXP_TABLE.get(str(lv_cap), {}).get('PalTotalEXP', 0)
     except:
         exp = 0
     raw['Exp'] = {'id': None, 'type': 'Int64Property', 'value': exp}
-    raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-    raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-    raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 100}}
-    raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-    raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-    raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-    raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 20}}
-    raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': 5}}
+    raw['Talent_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': iv_cap}}
+    raw['Talent_Shot'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': iv_cap}}
+    raw['Talent_Defense'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': iv_cap}}
+    raw['Rank_HP'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+    raw['Rank_Attack'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+    raw['Rank_Defence'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+    raw['Rank_CraftSpeed'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': soul_cap}}
+    raw['Rank'] = {'id': None, 'type': 'ByteProperty', 'value': {'type': 'None', 'value': rank_cap}}
     raw['FriendshipPoint'] = {'id': None, 'type': 'IntProperty', 'value': 200000}
     raw['bIsAwakening'] = {'id': None, 'type': 'BoolProperty', 'value': True}
     if base:
@@ -2167,9 +2173,9 @@ def _max_one_pal(raw):
                 _set_work_suitability(raw, k, 10)
         is_boss = cid.upper().startswith('BOSS_')
         is_lucky = extract_value(raw, 'IsRarePal', False)
-        lv = 80
-        talent_hp = 100
-        rank_hp = 20
+        lv = lv_cap
+        talent_hp = iv_cap
+        rank_hp = soul_cap
         trust = 200000
         rank = 5
         is_awake = True
