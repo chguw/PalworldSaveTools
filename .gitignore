@@ -75,5 +75,8 @@ Backups/
 XGP_converted_saves/
 *.sav
 *.savc
+
+# Per-user config (check_updates, lang, etc.)
+src/data/configs/config.json
 *.7z
 .pytest_cache/
