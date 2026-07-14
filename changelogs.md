@@ -6,6 +6,7 @@
 - **`get_data_base()` split from `get_base_dir()`** — `get_base_dir()` continues resolving to repo root / Nuitka temp dir (for resources); new `get_data_base()` returns exe dir when frozen (persistent), repo root in dev. Prevents Backups/Logs from being lost in Nuitka onefile builds
 - **Config persistence for frozen builds** — added `get_user_config_dir()` resolving to `%APPDATA%\PalworldSaveTools\configs\` (Win), `~/.config/PalworldSaveTools/configs/` (Linux), or `~/Library/Application Support/PalworldSaveTools/configs/` (macOS) when frozen. Dev mode unchanged. Affected files: `config.json`, `user.cfg`, `passive_loadouts.json`, `inventory_loadouts.json`, `equipment_loadouts.json`, `base_inventory_loadouts.json`. Defaults auto-migrated from bundled configs on first run via `_migrate_configs()` in `bootup.py`. Fixes Nuitka onefile losing settings (console detach, language, loadouts) on restart
 - **Fixed standalone updater** — `StandaloneUpdater` now downloads Nuitka single-file assets (`PalworldSaveTools-V{version}-win.exe` etc.) instead of the old `PST_standalone_v{version}.7z` archive. Removed extract step (`py7zr` no longer needed). Simplified apply-and-restart for single-file replacement
+- **Updater unit tests** — 12 new tests for `_platform_asset_suffix`, `StandaloneUpdater.check_version` (asset lookup, no-update, HTTP failure), `download` (file write, cancel), `apply_and_restart` (helper script), and `get_update_settings`/`save_update_settings` roundtrip
 - Bumped version to 2.0.8
 
 #2.0.7
