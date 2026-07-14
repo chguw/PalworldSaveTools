@@ -8,8 +8,8 @@ ZONE_EXCLUSIONS_FILE = None
 def _get_zone_file():
     global ZONE_EXCLUSIONS_FILE
     if ZONE_EXCLUSIONS_FILE is None:
-        from palworld_aio.constants import get_src_path
-        ZONE_EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'zone_exclusions.json')
+        from resource_resolver import get_user_config_dir
+        ZONE_EXCLUSIONS_FILE = os.path.join(get_user_config_dir(), 'zone_exclusions.json')
     return ZONE_EXCLUSIONS_FILE
 _zones: List[Dict] = []
 def load_zones() -> List[Dict]:

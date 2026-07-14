@@ -1,6 +1,6 @@
 import os
 import sys
-from resource_resolver import get_base_dir, get_src_dir, resource_path
+from resource_resolver import get_base_dir, get_src_dir, get_user_config_dir, resource_path
 BG = '#0A0B0E'
 GLASS = '#121418'
 ACCENT = '#3B8ED0'
@@ -43,8 +43,8 @@ def get_src_path():
 def get_icon_path():
     return resource_path(get_base_dir(), 'icon.ico')
 ICON_PATH = get_icon_path()
-EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'deletion_exclusions.json')
-ZONE_EXCLUSIONS_FILE = os.path.join(get_src_path(), 'data', 'configs', 'zone_exclusions.json')
+EXCLUSIONS_FILE = os.path.join(get_user_config_dir(), 'deletion_exclusions.json')
+ZONE_EXCLUSIONS_FILE = os.path.join(get_user_config_dir(), 'zone_exclusions.json')
 current_save_path: str | None = None
 loaded_level_json = None
 original_loaded_level_json = None
