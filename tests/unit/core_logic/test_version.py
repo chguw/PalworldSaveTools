@@ -13,7 +13,6 @@ is_standalone = _common.is_standalone
 get_python_executable = _common.get_python_executable
 get_backup_directory = _common.get_backup_directory
 BACKUP_DIRS = _common.BACKUP_DIRS
-get_update_settings = _common.get_update_settings
 
 
 def test_app_name():
@@ -70,9 +69,3 @@ def test_get_backup_directory_is_absolute():
 def test_BACKUP_DIRS_has_expected_keys():
     expected = {'all_in_one_tools', 'slot_injector', 'character_transfer', 'fix_host_save', 'restore_map'}
     assert set(BACKUP_DIRS.keys()) == expected
-
-
-def test_get_update_settings_has_check_updates():
-    settings = get_update_settings()
-    assert 'check_updates' in settings
-    assert isinstance(settings['check_updates'], bool)

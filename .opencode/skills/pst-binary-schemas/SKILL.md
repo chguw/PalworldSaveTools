@@ -84,3 +84,87 @@ The v2 encoder writes `p['role']` via `guild_player_info_writer`, but all manage
 
 ## Debug Pattern
 To inspect guild binary tail: convert Level.sav to JSON, load with `json_tools.load()`, search for `V1_MARKER` in `_raw_tail` hex. If at offset > 0, guild format was extended.
+
+## Type Hints & Binary Schema Debugging
+
+### How type hints work (`src/palsav/palsav/paltypes.py`)
+
+`PALWORLD_TYPE_HINTS` maps GVAS property paths to struct type names. Used by `FArchiveReader.get_type_or()` when decoding `MapProperty`/`ArrayProperty` entries:
+
+```python
+# In _read_MapProperty:
+if key_type == 'StructProperty':
+    key_struct_type = self.get_type_or(key_path, 'Guid')  # default Guid for keys
+if value_type == 'StructProperty':
+    value_struct_type = self.get_type_or(value_path, 'StructProperty')  # default property bag
+```
+
+The default fallback differs:
+- **Map keys** default to `Guid` (16 bytes) — most common key type
+- **Map values** default to `StructProperty` (property bag until `None`) — most common value type
+- **Array elements** default to `Guid` (set via struct type hint in array header)
+
+### Debugging wrong type hints — step by step
+
+When a save partially parses (some properties missing), the root cause is often a wrong type hint causing under/over-consumption.
+
+**1. Convert to JSON, check which properties are missing**
+```bash
+uv run python -m palsav.cli convert save.sav --force
+python -c "import json; d=json.load(open('save.sav.json')); print(list(d['properties']))"
+```
+
+**2. Trace the parser with a monkey-patch**
+Add debug to `properties_until_end` to log every property read:
+```python
+_orig = FArchiveReader.properties_until_end
+def _trace(self, path=''):
+    pos = self.data.tell()
+    name = self.fstring()
+    if name in ('None',''): return {}
+    tn = self.fstring()
+    sz = self.u64()
+    print(f'  [{pos}] name={name!r} type={tn!r} size={sz}')
+    self.data.seek(pos)  # rewind for real read
+    return _orig(self, path)
+FArchiveReader.properties_until_end = _trace
+```
+
+**3. Find the map/array entry where over-consumption starts**
+The last successfully-read property before the gap reveals which container has wrong hints. Dump entry count and first few keys:
+```python
+mp = save['SomeMap']
+print(len(mp['value']), mp['value'][0]['key'])
+```
+Garbage keys (binary-looking UUIDs or mid-string fragments) indicate desync.
+
+**4. Dump raw bytes of the failing map header + first entry**
+```python
+pos = <map start offset>
+# skip property header (name + type + size)
+nlen = struct.unpack('<i', data[pos:pos+4])[0]; pos += 4 + nlen
+tlen = struct.unpack('<i', data[pos:pos+4])[0]; pos += 4 + tlen
+psize = struct.unpack('<Q', data[pos:pos+8])[0]; pos += 8
+# now at map header
+klen = struct.unpack('<i', data[pos:pos+4])[0]
+key_type = data[pos+4:pos+4+klen-1].decode('ascii')
+vlen = struct.unpack('<i', data[pos+4+klen:pos+8+klen])[0]
+val_type = data[pos+8+klen:pos+8+klen+vlen-1].decode('ascii')
+print(f'key_type={key_type!r} value_type={val_type!r}')
+```
+
+**5. Compare actual data against hint assumption**
+- If key_type='StructProperty' but hint says 'Guid': the struct WILL be read as 16 bytes. The rest of the struct's properties leak into the value field and subsequent entries → cascade failure.
+- Fix: change hint to 'StructProperty' in `paltypes.py`.
+
+### Known cases
+
+| Path | Old hint | Correct hint | Reason |
+|---|---|---|---|
+| `.SaveData.Local_MaxFriendshipPalIds.Key` | `Guid` | `StructProperty` | Key contains `PlayerUId` property bag, not a bare 16-byte GUID |
+| `.SaveData.Local_MaxFriendshipPalIds.Value` | `StructProperty` | (unused — data says `IntProperty`) | Value type from data is `IntProperty`, hint only applies when data says `StructProperty` |
+
+### Key insight
+
+The map HEADER (written by UE) stores actual `key_type`/`value_type` as fstrings. The type HINT in `paltypes.py` only matters when the header says `StructProperty` — it tells the parser WHICH struct type to use. A wrong hint causes the fixed-size reader (Guid = 16B) to under-consume while a property-bag reader (properties_until_end) would correctly consume the full structure, or vice versa.
+

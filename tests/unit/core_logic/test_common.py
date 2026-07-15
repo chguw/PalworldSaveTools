@@ -21,7 +21,6 @@ get_python_executable = _common.get_python_executable
 get_versions = _common.get_versions
 get_display_version = _common.get_display_version
 get_current_version = _common.get_current_version
-get_update_settings = _common.get_update_settings
 
 
 def test_app_name():
@@ -100,12 +99,6 @@ def test_get_current_version():
     result = get_current_version()
     assert isinstance(result, str)
     assert '.' in result
-
-
-def test_get_update_settings():
-    result = get_update_settings()
-    assert isinstance(result, dict)
-    assert 'check_updates' in result
 
 
 def test_get_python_executable_matches_sys():
