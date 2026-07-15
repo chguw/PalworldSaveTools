@@ -12,8 +12,8 @@
        ${RELEASE_URL}     direct link to this release's tag
        ${DISCORD_URL}     https://discord.gg/sYcZwcT4cT
        ${NEXUS_URL}       Nexus Mods mod page
-       __CHANGELOG_ENTRY__ replaced from changelogs.md for this version
-       Uses __CHANGELOG_ENTRY__ as a literal marker for multiline insertion.
+        __CHANGELOG_ENTRY__ replaced from changelogs.md for this version
+        Uses __CHANGELOG_ENTRY__ as a literal marker for multiline insertion.
 -->
 <!-- ────────────────────────────────────────────────────────────────────────── -->
 
