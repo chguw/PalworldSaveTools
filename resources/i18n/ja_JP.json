@@ -1804,5 +1804,12 @@
     "edit_pals.bulk_sync_all_title": "すべての仲間を一括同期",
     "edit_pals.bulk_sync_all_header": "統計/個体値/スキルをソース パルから選択したすべてのパルに同期します",
     "edit_pals.bulk_sync_sources": "出典:",
-    "edit_pals.bulk_sync_all_success": "{count} 人の友達を一括同期しました!"
+    "edit_pals.bulk_sync_all_success": "{count} 人の友達を一括同期しました!",
+    "fix_illegal_pal.title": "違法な仲間を修正する",
+    "fix_illegal_pal.description": "不法な仲間が修正されるプレイヤーを選択してください:",
+    "fix_illegal_pal.summary": "{players} 人のプレーヤーと {pals} 人の違法な仲間が見つかりました",
+    "fix_illegal_pal.fix_selected": "選択したものを修正",
+    "fix_illegal_pal.no_selection": "選手が選択されていません。",
+    "fix_illegal_pal.no_illegals_title": "不法な友達はいません",
+    "fix_illegal_pal.no_illegals_msg": "セーブに違法な仲間は見つかりませんでした。"
 }

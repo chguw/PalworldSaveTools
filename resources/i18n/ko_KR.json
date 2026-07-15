@@ -1803,5 +1803,12 @@
     "edit_pals.bulk_sync_all_title": "모든 친구 일괄 동기화",
     "edit_pals.bulk_sync_all_header": "소스 친구의 통계/iv/스킬을 선택한 모든 친구에게 동기화",
     "edit_pals.bulk_sync_sources": "출처:",
-    "edit_pals.bulk_sync_all_success": "대량 동기화된 친구 수는 {count}명입니다!"
+    "edit_pals.bulk_sync_all_success": "대량 동기화된 친구 수는 {count}명입니다!",
+    "fix_illegal_pal.title": "불법친구 고치기",
+    "fix_illegal_pal.description": "불법 친구를 고칠 플레이어를 선택하세요:",
+    "fix_illegal_pal.summary": "{pals} 불법 친구와 함께 있는 {players} 플레이어를 찾았습니다.",
+    "fix_illegal_pal.fix_selected": "선택한 항목 수정",
+    "fix_illegal_pal.no_selection": "선택한 플레이어가 없습니다.",
+    "fix_illegal_pal.no_illegals_title": "불법적인 친구는 없습니다",
+    "fix_illegal_pal.no_illegals_msg": "저장 파일에는 불법적인 친구가 없습니다."
 }

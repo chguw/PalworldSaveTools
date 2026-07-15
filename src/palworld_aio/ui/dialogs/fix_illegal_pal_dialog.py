@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QAbstractItemView, QFrame
-from PySide6.QtCore import Qt, Signal, QTimer, QSize
+from PySide6.QtCore import Qt, Signal, QSize
 from i18n import t
 from palworld_aio import constants
 from palworld_aio.widgets.toggle_check import ToggleCheckBtn
@@ -18,10 +18,10 @@ class FixIllegalPalDialog(QDialog):
         self.setStyleSheet(DARK_THEME_STYLE)
         layout = QVBoxLayout(self)
         layout.setSpacing(10)
-        header = QLabel(t('fix_illegal_pal.description') if t else 'Select players whose illegal pals will be fixed:')
-        header.setStyleSheet('color: #e2e8f0; font-size: 13px; font-weight: 600; padding: 4px 0;')
-        header.setWordWrap(True)
-        layout.addWidget(header)
+        self._header = QLabel(t('fix_illegal_pal.description') if t else 'Select players whose illegal pals will be fixed:')
+        self._header.setStyleSheet('color: #e2e8f0; font-size: 13px; font-weight: 600; padding: 4px 0;')
+        self._header.setWordWrap(True)
+        layout.addWidget(self._header)
         self.summary_label = QLabel('')
         self.summary_label.setStyleSheet('color: #fbbf24; font-size: 12px; padding: 2px 0;')
         layout.addWidget(self.summary_label)
@@ -51,14 +51,26 @@ class FixIllegalPalDialog(QDialog):
         self.fix_btn.setEnabled(False)
         action_row.addWidget(self.fix_btn)
         action_row.addStretch()
-        close_btn = QPushButton(t('button.close') if t else 'Close')
-        close_btn.setStyleSheet('QPushButton { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); border-radius: 6px; padding: 8px 24px; } QPushButton:hover { background: rgba(239,68,68,0.2); }')
-        close_btn.clicked.connect(self.reject)
-        action_row.addWidget(close_btn)
+        self._close_btn = QPushButton(t('button.close') if t else 'Close')
+        self._close_btn.setStyleSheet('QPushButton { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); border-radius: 6px; padding: 8px 24px; } QPushButton:hover { background: rgba(239,68,68,0.2); }')
+        self._close_btn.clicked.connect(self.reject)
+        action_row.addWidget(self._close_btn)
         layout.addLayout(action_row)
         self.status_label = QLabel('')
         self.status_label.setStyleSheet('color: #4ade80; font-weight: bold; padding: 5px;')
         layout.addWidget(self.status_label)
+    def refresh_labels(self):
+        self.setWindowTitle(t('fix_illegal_pal.title') if t else 'Fix Illegal Pals')
+        self._header.setText(t('fix_illegal_pal.description') if t else 'Select players whose illegal pals will be fixed:')
+        self.select_all_btn.setText(t('player_item.select_all') if t else 'Select All')
+        self.deselect_all_btn.setText(t('player_item.deselect_all') if t else 'Deselect All')
+        self.fix_btn.setText(t('fix_illegal_pal.fix_selected') if t else 'Fix Selected')
+        self._close_btn.setText(t('button.close') if t else 'Close')
+        self._update_summary()
+    def _update_summary(self):
+        total_players = sum(1 for d in self.scan_data.values() if d['pal_count'] > 0)
+        total_illegals = sum(d['pal_count'] for d in self.scan_data.values() if d['pal_count'] > 0)
+        self.summary_label.setText(t('fix_illegal_pal.summary').format(players=total_players, pals=total_illegals) if t else f'Found {total_players} player(s) with {total_illegals} illegal pal(s)')
     def _populate_players(self):
         self.player_list.clear()
         self._player_widgets = {}
@@ -80,7 +92,7 @@ class FixIllegalPalDialog(QDialog):
             self.player_list.addItem(item)
             self.player_list.setItemWidget(item, checkbox)
             self._player_widgets[uid_clean] = checkbox
-        self.summary_label.setText(t('fix_illegal_pal.summary').format(players=total_players, pals=total_illegals) if t else f'Found {total_players} player(s) with {total_illegals} illegal pal(s)')
+        self._update_summary()
         if total_players > 0:
             self.select_all_btn.setEnabled(True)
             self.deselect_all_btn.setEnabled(True)

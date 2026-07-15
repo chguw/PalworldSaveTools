@@ -1828,5 +1828,12 @@
     "edit_pals.bulk_sync_all_title": "Massensynchronisierung aller Freunde",
     "edit_pals.bulk_sync_all_header": "Synchronisieren Sie Statistiken/IVs/Fähigkeiten vom Quellkumpel mit allen ausgewählten Kumpels",
     "edit_pals.bulk_sync_sources": "Quellen:",
-    "edit_pals.bulk_sync_all_success": "Massensynchronisierung von {count} Freunden!"
+    "edit_pals.bulk_sync_all_success": "Massensynchronisierung von {count} Freunden!",
+    "fix_illegal_pal.title": "Beheben Sie illegale Freunde",
+    "fix_illegal_pal.description": "Wählen Sie Spieler aus, deren illegale Kumpels behoben werden:",
+    "fix_illegal_pal.summary": "{players} Spieler mit {pals} illegalen Kumpels gefunden",
+    "fix_illegal_pal.fix_selected": "Ausgewählte reparieren",
+    "fix_illegal_pal.no_selection": "Keine Spieler ausgewählt.",
+    "fix_illegal_pal.no_illegals_title": "Keine illegalen Freunde",
+    "fix_illegal_pal.no_illegals_msg": "Im Speicher wurden keine illegalen Freunde gefunden."
 }

@@ -1802,5 +1802,12 @@
     "edit_pals.bulk_sync_all_title": "Массовая синхронизация всех друзей",
     "edit_pals.bulk_sync_all_header": "Синхронизировать статистику/ivs/навыки исходного приятеля со всеми выбранными приятелями.",
     "edit_pals.bulk_sync_sources": "Источники:",
-    "edit_pals.bulk_sync_all_success": "Массовая синхронизация: {count} друзей!"
+    "edit_pals.bulk_sync_all_success": "Массовая синхронизация: {count} друзей!",
+    "fix_illegal_pal.title": "Исправить нелегальных друзей",
+    "fix_illegal_pal.description": "Выберите игроков, чьи нелегальные друзья будут исправлены:",
+    "fix_illegal_pal.summary": "Найдено игроков(ов): {players} с нелегальными приятелями ({pals})",
+    "fix_illegal_pal.fix_selected": "Исправить выбранное",
+    "fix_illegal_pal.no_selection": "Игроки не выбраны.",
+    "fix_illegal_pal.no_illegals_title": "Никаких нелегальных друзей",
+    "fix_illegal_pal.no_illegals_msg": "В сохранении не обнаружено незаконных приятелей."
 }

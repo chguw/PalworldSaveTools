@@ -1806,5 +1806,12 @@
     "edit_pals.bulk_sync_all_title": "批量同步所有好友",
     "edit_pals.bulk_sync_all_header": "将统计数据/ivs/技能从源好友同步到所有选定的好友",
     "edit_pals.bulk_sync_sources": "资料来源：",
-    "edit_pals.bulk_sync_all_success": "批量同步 {count} 个好友！"
+    "edit_pals.bulk_sync_all_success": "批量同步 {count} 个好友！",
+    "fix_illegal_pal.title": "修复非法好友",
+    "fix_illegal_pal.description": "选择将修复非法好友的玩家：",
+    "fix_illegal_pal.summary": "发现 {players} 个玩家与 {pals} 个非法好友在一起",
+    "fix_illegal_pal.fix_selected": "修复选定的",
+    "fix_illegal_pal.no_selection": "没有选择任何球员。",
+    "fix_illegal_pal.no_illegals_title": "没有非法好友",
+    "fix_illegal_pal.no_illegals_msg": "保存中未发现非法好友。"
 }

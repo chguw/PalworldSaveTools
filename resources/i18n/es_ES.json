@@ -1798,5 +1798,12 @@
     "edit_pals.bulk_sync_all_title": "Sincronización masiva de todos los amigos",
     "edit_pals.bulk_sync_all_header": "Sincronizar estadísticas/ivs/habilidades del amigo de origen con todos los amigos seleccionados",
     "edit_pals.bulk_sync_sources": "Fuentes:",
-    "edit_pals.bulk_sync_all_success": "¡{count} amigos sincronizados de forma masiva!"
+    "edit_pals.bulk_sync_all_success": "¡{count} amigos sincronizados de forma masiva!",
+    "fix_illegal_pal.title": "Arreglar amigos ilegales",
+    "fix_illegal_pal.description": "Selecciona jugadores cuyos amigos ilegales serán reparados:",
+    "fix_illegal_pal.summary": "Se encontraron {jugadores} jugadores con {pals} amigos ilegales",
+    "fix_illegal_pal.fix_selected": "Arreglar seleccionado",
+    "fix_illegal_pal.no_selection": "No hay jugadores seleccionados.",
+    "fix_illegal_pal.no_illegals_title": "Sin amigos ilegales",
+    "fix_illegal_pal.no_illegals_msg": "No se encontraron amigos ilegales en el guardado."
 }
