@@ -23,6 +23,11 @@ on:
         required: false
         default: false
         type: boolean
+      force_rebuild:
+        description: "Force Rebuild"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -70,6 +75,7 @@ jobs:
         id: env
         uses: ./.github/actions/setup-build-env
       - name: Restore cached dist
+        if: github.event.inputs.force_rebuild != 'true'
         id: cache-dist
         uses: actions/cache@v4
         with:
@@ -110,6 +116,7 @@ jobs:
         id: env
         uses: ./.github/actions/setup-build-env
       - name: Restore cached dist
+        if: github.event.inputs.force_rebuild != 'true'
         id: cache-dist
         uses: actions/cache@v4
         with:
@@ -149,6 +156,7 @@ jobs:
         id: env
         uses: ./.github/actions/setup-build-env
       - name: Restore cached dist
+        if: github.event.inputs.force_rebuild != 'true'
         id: cache-dist
         uses: actions/cache@v4
         with:
