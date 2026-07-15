@@ -39,6 +39,8 @@ def clear_fog_in_local_data(path):
     for entry in hl:
         entry['value'] = False
     print(f'  Hidden locations set: {len(hl)} entries')
+    sd['Local_ShowSkyIslandCloudOnWorldMapUI'] = {'value': False, 'id': None, 'type': 'BoolProperty'}
+    print('  Sky island cloud overlay disabled')
     ng = GvasFile.load(d)
     from palsav.io import save_sav
     save_sav(ng, path, custom_properties=SKP_PALWORLD_CUSTOM_PROPERTIES)
